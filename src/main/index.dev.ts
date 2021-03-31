@@ -5,7 +5,7 @@ import installExtension, {
   REDUX_DEVTOOLS,
   REACT_DEVELOPER_TOOLS
 } from "electron-devtools-installer";
-import createWindow from "./createWindow";
+import { mainWindow } from "./windows";
 
 // 用于添加Chromium插件
 async function setupDevTools() {
@@ -14,7 +14,7 @@ async function setupDevTools() {
 }
 
 app.on("ready", () => {
-  const win = createWindow();
+  const win = mainWindow();
   const html = `${path.resolve(
     app.getAppPath(),
     "../release.renderer/index.html"

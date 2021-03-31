@@ -23,7 +23,7 @@ const windowNormalizeOptions: BrowserWindowConstructorOptions = {
   backgroundColor: "white"
 };
 
-export default function createWindow(): BrowserWindow {
+export function mainWindow(): BrowserWindow {
   const win = new BrowserWindow({
     ...windowNormalizeOptions
     // titleBarStyle: "hidden",
