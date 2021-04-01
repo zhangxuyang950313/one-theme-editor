@@ -1,84 +1,101 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { PlusOutlined } from "@ant-design/icons";
 
-const handleNewProduct = () => {
-  // modal.templateSelector();
-  // Modal.confirm({
-  //   title: "选择模板",
-  //   onOk: () => {
-  //     store.dispatch({
-  //       type: UPDATE_SELECTED_TEMPLATE,
-  //       payload: {
-  //         template: templateList[0], // 暂选第1个模板
-  //         uiVersion: templateList[0].uiVersions[1], // 暂选miui12
-  //       },
-  //     });
-  //     history.push("editor");
-  //   },
-  // });
-};
+import { addProject, getProjects, TypeProjectInfo } from "@/core/data";
+
+import { Button } from "antd";
+import ProjectCard from "./ProjectCard";
 
 function ProjectManager(): JSX.Element {
+  const [projects, setProjects] = useState<TypeProjectInfo[]>([]);
+
+  useEffect(() => {
+    refreshList();
+  }, []);
+
+  // 刷新工程列表
+  const refreshList = async () => {
+    const p = await getProjects();
+    setProjects(p);
+  };
+  const handleNewProduct = async () => {
+    const info: TypeProjectInfo = {
+      name: "我的主题",
+      description: "描述",
+      designer: "默认",
+      author: "默认",
+      uiVersion: "V12"
+    };
+    await addProject(info);
+    refreshList();
+    // modal.templateSelector();
+    // Modal.confirm({
+    //   title: "选择模板",
+    //   onOk: () => {
+    //     store.dispatch({
+    //       type: UPDATE_SELECTED_TEMPLATE,
+    //       payload: {
+    //         template: templateList[0], // 暂选第1个模板
+    //         uiVersion: templateList[0].uiVersions[1], // 暂选miui12
+    //       },
+    //     });
+    //     history.push("editor");
+    //   },
+    // });
+  };
   return (
     <StyleProjectManager>
-      <div className="title">
-        <h2>主题列表</h2>
-        <p>新建、选择一个主题开始制作</p>
+      <div className="top-container">
+        <div className="title">
+          <h2>主题列表</h2>
+          <p>新建{projects.length > 0 ? "、选择" : ""}一个主题开始制作</p>
+        </div>
+        {/* 新建工程 */}
+        <Button type="primary" onClick={handleNewProduct}>
+          新建主题
+        </Button>
       </div>
-      {/* 新建 */}
-      <StyleAddProject onClick={handleNewProduct}>
-        <PlusOutlined className="plus-icon" />
-      </StyleAddProject>
-      {/* 历史 */}
-      <div className="product-list">
-        <div className="product"></div>
-      </div>
+      {/* 工程列表 */}
+      <StyleProjectList>
+        {projects.map((item, key) => (
+          <ProjectCard projectInfo={item} key={key} />
+        ))}
+      </StyleProjectList>
     </StyleProjectManager>
   );
 }
 
 const StyleProjectManager = styled.div`
-  padding: 30px;
-  .title {
-    h2 {
-      color: ${({ theme }) => theme["@text-color"]};
-    }
-    p {
-      margin-top: 10px;
-      font-size: 14px;
-      color: ${({ theme }) => theme["@text-color-secondary"]};
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  padding: 30px 30px 10px 30px;
+  box-sizing: border-box;
+  .top-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .title {
+      h2 {
+        color: ${({ theme }) => theme["@text-color"]};
+      }
+      p {
+        margin-top: 10px;
+        font-size: 14px;
+        color: ${({ theme }) => theme["@text-color-secondary"]};
+      }
     }
   }
 `;
 
-// 新建项目
-const StyleAddProject = styled.div`
-  position: relative;
-  margin-top: 30px;
-  width: 160px;
-  height: 274px;
-  border-radius: 10px;
-  border: 1px solid;
-  border-color: ${({ theme }) => theme["@disabled-color"]};
-  background: ${({ theme }) => theme["@background-color"]};
-  .plus-icon {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate3d(-50%, -50%, 0);
-    line-height: 100%;
-    font-size: 30px;
-    text-align: center;
-    vertical-align: 50%;
-    color: ${({ theme }) => theme["@text-color-secondary"]};
-  }
-  transition: 0.3s all;
-  cursor: pointer;
-  &:hover {
-    transform: scale(1.02);
-    transition: 0.3s all;
-  }
+// 历史项目
+const StyleProjectList = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  flex-grow: 0;
+  padding: 10px 0;
+  height: 100%;
+  overflow-y: auto;
 `;
 
 export default ProjectManager;

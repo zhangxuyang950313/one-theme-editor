@@ -6,8 +6,7 @@ import { brandConfig } from "@/config";
 import { getBrandInfo } from "@/store/modules/normalized/selector";
 
 import { Menu } from "antd";
-
-import Logo from "@/assets/logo.png";
+import TopInfo from "./TopInfo";
 
 // 欢迎页侧边栏
 function Sidebar(): JSX.Element {
@@ -15,11 +14,7 @@ function Sidebar(): JSX.Element {
   return (
     <StyleSidebar>
       {/*  编辑器信息展示 */}
-      <StyleEditorInfo>
-        <img className="logo" alt="logo" src={Logo} />
-        <p className="title">一个主题编辑器</p>
-        <p className="version">版本：{process.env.VERSION}</p>
-      </StyleEditorInfo>
+      <TopInfo />
       {/* 厂商选择 */}
       <StyleMenu>
         <Menu
@@ -40,26 +35,12 @@ function Sidebar(): JSX.Element {
 }
 
 const StyleSidebar = styled.div`
-  width: 200px;
+  flex-shrink: 0;
+  min-width: 200px;
   height: 100%;
-  border-right: 1px rgba(0, 0, 0, 0.1) solid;
+  border-right: 1px solid;
+  border-right-color: ${({ theme }) => theme["@border-color-base"]};
   background-color: ${({ theme }) => theme["@sidebar-color"]};
-`;
-
-// 编辑器信息
-const StyleEditorInfo = styled.div`
-  text-align: center;
-  margin: 30px;
-  .logo {
-    width: 60px;
-    margin: 10px;
-  }
-  .title {
-    font-size: 14px;
-  }
-  .version {
-    font-size: 12px;
-  }
 `;
 
 // 厂商菜单

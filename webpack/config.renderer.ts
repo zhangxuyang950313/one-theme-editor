@@ -231,9 +231,9 @@ const config: webpack.ConfigurationFactory = (env, args) => {
           // }
         ]
       }),
-      new EslintPlugin({
-        overrideConfigFile: eslintConfigFile
-      }),
+      // new EslintPlugin({
+      //   overrideConfigFile: eslintConfigFile
+      // }),
       new HtmlWebpackPlugin({
         template: path.resolve(rootDir, "public/index.html"), // 指定模板路径
         filename: "index.html", // 最终创建的文件名

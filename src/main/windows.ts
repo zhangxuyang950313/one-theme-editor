@@ -33,7 +33,7 @@ export function mainWindow(): BrowserWindow {
     // minHeight: 680
   });
 
-  // const menu = Menu.buildFromTemplate(menuTemplate);
+  const menu = Menu.buildFromTemplate(menuTemplate);
   // Menu.setApplicationMenu(menu);
 
   // 监听状态栏最大化和最小化事件

@@ -3,11 +3,11 @@ import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import styled, { createGlobalStyle, ThemeProvider } from "styled-components";
 
+import "antd/dist/antd.css";
+
 import Router from "./router";
 import store from "./store";
 import LightTheme from "./theme/light";
-
-import "antd/dist/antd.css";
 
 function Root(): JSX.Element {
   return (
