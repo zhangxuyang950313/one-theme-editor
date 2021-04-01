@@ -1,9 +1,13 @@
 import { createStore, combineReducers } from "redux";
 
-import BASE from "./modules/base/reducer";
+// 模块切片
+import baseState from "./modules/base/reducer";
+import normalizedState from "./modules/normalized/reducer";
 
-const rootReducers = combineReducers({ BASE });
-
+// 合并导出
+const rootReducers = combineReducers({ baseState, normalizedState });
 export default rootReducers;
 
-export const baseStore = createStore(BASE);
+// 分别导出
+export const baseStore = createStore(baseState);
+export const normalized = createStore(normalizedState);

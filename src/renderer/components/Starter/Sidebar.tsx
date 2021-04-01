@@ -1,21 +1,17 @@
 import React from "react";
 import styled from "styled-components";
+import { useSelector } from "react-redux";
+
+import { brandConfig } from "@/config";
+import { getBrandInfo } from "@/store/modules/normalized/selector";
 
 import { Menu } from "antd";
 
-import { TypeBrandInfo } from "@/types/project";
-
 import Logo from "@/assets/logo.png";
-
-export const brandConfig: TypeBrandInfo[] = [
-  {
-    key: "xm",
-    name: "小米"
-  }
-];
 
 // 欢迎页侧边栏
 function Sidebar(): JSX.Element {
+  const [selectiveBrandInfo, setBrandInfo] = useSelector(getBrandInfo);
   return (
     <StyleSidebar>
       {/*  编辑器信息展示 */}
@@ -26,7 +22,10 @@ function Sidebar(): JSX.Element {
       </StyleEditorInfo>
       {/* 厂商选择 */}
       <StyleMenu>
-        <Menu defaultSelectedKeys={["xm"]}>
+        <Menu
+          defaultSelectedKeys={[selectiveBrandInfo.key]}
+          onSelect={e => console.log(e)}
+        >
           {brandConfig.map(item => (
             <Menu.Item key={item.key}>{item.name}</Menu.Item>
           ))}
