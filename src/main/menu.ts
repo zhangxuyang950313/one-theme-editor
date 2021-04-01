@@ -5,7 +5,7 @@ const template = [
     label: "菜单",
     submenu: [
       {
-        label: `版本：${app.getVersion()}`
+        label: app.getName()
       },
       {
         label: "退出",

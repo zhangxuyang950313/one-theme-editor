@@ -7,6 +7,8 @@ import Router from "./router";
 import store from "./store";
 import LightTheme from "./theme/light";
 
+import "antd/dist/antd.css";
+
 function Root(): JSX.Element {
   return (
     <React.StrictMode>
