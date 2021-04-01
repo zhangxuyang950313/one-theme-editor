@@ -33,6 +33,8 @@ export const reactOutputDir = path.resolve(rootDir, "release.renderer");
 export const electronOutputDir = path.resolve(rootDir, "release.main");
 export const serverOutputDir = path.resolve(rootDir, "release.server");
 
+export const eslintConfigFile = path.resolve(rootDir, ".eslintrc.js");
+
 export const extensions = [
   ".js",
   ".jsx",

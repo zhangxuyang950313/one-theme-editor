@@ -6,11 +6,17 @@ import HtmlWebpackPlugin from "html-webpack-plugin";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import CopyWebpackPlugin from "copy-webpack-plugin";
 import DotEnvPlugin from "dotenv-webpack";
+import EslintPlugin from "eslint-webpack-plugin";
 // import WorkboxPlugin from "workbox-webpack-plugin"; // 引入 PWA 插件
 // import postCssPresetEnv from "postcss-preset-env";
 // import FriendlyErrorsWebpackPlugin from "friendly-errors-webpack-plugin";
 import { CleanWebpackPlugin } from "clean-webpack-plugin";
-import { rootDir, extensions, reactOutputDir } from "./constant";
+import {
+  rootDir,
+  extensions,
+  reactOutputDir,
+  eslintConfigFile
+} from "./constant";
 
 // const isDev = process.env.NODE_ENV !== "production";
 
@@ -162,29 +168,25 @@ const config: webpack.ConfigurationFactory = (env, args) => {
         },
         {
           test: /\.(png|svg|jpg|jpeg|gif)$/i,
-          use: [
-            {
-              loader: "url-loader",
-              options: {
-                limit: 10 * 1024,
-                name: "[name].[contenthash:8].[ext]",
-                outputPath: "assets/images"
-              }
+          use: {
+            loader: "url-loader",
+            options: {
+              limit: 10 * 1024,
+              name: "[name].[contenthash:8].[ext]",
+              outputPath: "assets/images"
             }
-          ]
+          }
         },
         {
           test: /\.(woff|woff2|eot|ttf|otf)$/,
-          use: [
-            {
-              loader: "file-loader",
-              options: {
-                limit: 10 * 1024,
-                name: "[name].[contenthash:8].[ext]",
-                outputPath: "assets/fonts"
-              }
+          use: {
+            loader: "file-loader",
+            options: {
+              limit: 10 * 1024,
+              name: "[name].[contenthash:8].[ext]",
+              outputPath: "assets/fonts"
             }
-          ]
+          }
         },
         {
           test: /\.css$/,
@@ -193,7 +195,7 @@ const config: webpack.ConfigurationFactory = (env, args) => {
            * 启用/禁用或设置在CSS加载程序之前应用的加载程序的数量。
            * importLoaders 选项允许你配置在 css-loader 之前有多少 loader 应用于@imported 资源。
            */
-          use: [...getCssLoaders({ importLoaders: 1, isDev })]
+          use: getCssLoaders({ importLoaders: 1, isDev })
         },
         {
           test: /\.(sc|sa)ss$/,
@@ -228,6 +230,9 @@ const config: webpack.ConfigurationFactory = (env, args) => {
           //   force: true
           // }
         ]
+      }),
+      new EslintPlugin({
+        overrideConfigFile: eslintConfigFile
       }),
       new HtmlWebpackPlugin({
         template: path.resolve(rootDir, "public/index.html"), // 指定模板路径

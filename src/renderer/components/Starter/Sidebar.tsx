@@ -23,8 +23,12 @@ function Sidebar(): JSX.Element {
       {/* 厂商选择 */}
       <StyleMenu>
         <Menu
+          className="menu"
           defaultSelectedKeys={[selectiveBrandInfo.key]}
-          onSelect={e => console.log(e)}
+          onSelect={e => {
+            const brandInfo = brandConfig.find(o => e.key === o.key);
+            if (brandInfo) setBrandInfo(brandInfo);
+          }}
         >
           {brandConfig.map(item => (
             <Menu.Item key={item.key}>{item.name}</Menu.Item>
@@ -59,6 +63,12 @@ const StyleEditorInfo = styled.div`
 `;
 
 // 厂商菜单
-const StyleMenu = styled.div``;
+const StyleMenu = styled.div`
+  .ant-menu-inline,
+  .ant-menu-vertical,
+  .ant-menu-vertical-left {
+    border-right: 0px transparent !important;
+  }
+`;
 
 export default Sidebar;
