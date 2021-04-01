@@ -6,4 +6,4 @@ const rootReducers = combineReducers({ BASE });
 
 export default rootReducers;
 
-export const interfaceStore = createStore(BASE);
+export const baseStore = createStore(BASE);
