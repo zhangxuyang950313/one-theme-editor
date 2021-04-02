@@ -33,7 +33,7 @@
     "build:linux": "npm run build:render && npm run build:main:pro && npm run build:electron:linux",
     "build:mac": "npm run build:render && npm run build:main:pro && npm run build:electron:mac",
     "build": "npm run build:render && npm run build:main:pro && npm run build:electron",
-    "start": "concurrently \"npm run start:render\" \"npm run start:electron\"",
+    "start": "concurrently \"npm run start:render\" \"wait-on http://localhost:3000 && npm run start:electron\"",
     "render:analyzer": "npm run build:webpack && npm run webpack:render:pro:analyze",
     "lint:eslint": "eslint --config .eslintrc.js --fix --ext .js,.jsx,.ts,.tsx,.less",
     "lint:style": "stylelint --config .stylelintrc.js **/*"
@@ -105,6 +105,7 @@
     "prettier": "^2.2.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-hot-loader": "^4.13.0",
     "react-redux": "^7.2.3",
     "react-router-dom": "^5.2.0",
     "redux": "^4.0.5",

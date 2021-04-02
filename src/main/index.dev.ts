@@ -21,7 +21,7 @@ app.on("ready", () => {
     "../release.renderer/index.html"
   )}`;
   win.loadFile(html);
-  // win.loadURL("http://localhost:3000 ");
+  // win.loadURL(`http://localhost:${process.env.PORT || 3000}`);
   win.webContents.openDevTools(); // 创建并打开 dev 工具
   setupDevTools().then(() => {
     // 利用 electron-debug，添加和Chrome类似的快捷键

@@ -46,8 +46,8 @@ const getCssLoaders = (options: { isDev: boolean; importLoaders: number }) => {
 
 const devServer: WebpackDevServer.Configuration = {
   host: "localhost",
-  contentBase: "./release.renderer",
-  port: 3000,
+  // contentBase: "./release.renderer",
+  port: Number(process.env.PORT) || 3000,
   compress: true, // 是否启用 gzip 压缩
   open: false, // 打开默认浏览器
   hot: true, // 热更新
@@ -231,9 +231,9 @@ const config: webpack.ConfigurationFactory = (env, args) => {
           // }
         ]
       }),
-      // new EslintPlugin({
-      //   overrideConfigFile: eslintConfigFile
-      // }),
+      new EslintPlugin({
+        overrideConfigFile: eslintConfigFile
+      }),
       new HtmlWebpackPlugin({
         template: path.resolve(rootDir, "public/index.html"), // 指定模板路径
         filename: "index.html", // 最终创建的文件名
@@ -280,7 +280,7 @@ const config: webpack.ConfigurationFactory = (env, args) => {
       // 环境区分
       ...(isDev
         ? [
-            new HotModuleReplacementPlugin()
+            // new HotModuleReplacementPlugin()
             // new FriendlyErrorsWebpackPlugin({
             //   compilationSuccessInfo: {
             //     messages: [

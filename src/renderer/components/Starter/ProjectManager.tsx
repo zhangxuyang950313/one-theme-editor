@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
-import { addProject, getProjects, TypeProjectInfo } from "@/core/data";
+import { getProjects, TypeProjectInfo } from "@/core/data";
 
 import { getBrandInfo } from "@/store/modules/normalized/selector";
 
-import { Button, Spin } from "antd";
+import { Spin } from "antd";
 import { useSelector } from "react-redux";
 import ProjectCard from "./ProjectCard";
+import CreateProject from "./CreateProject";
 
 function ProjectManager(): JSX.Element {
   const [loading, setLoading] = useState(true);
@@ -26,42 +27,15 @@ function ProjectManager(): JSX.Element {
       setLoading(false);
     }, 500);
   };
-  const handleNewProduct = async () => {
-    const info: TypeProjectInfo = {
-      name: "我的主题",
-      description: "描述",
-      designer: "默认",
-      author: "默认",
-      uiVersion: "V12"
-    };
-    await addProject(info);
-    refreshList();
-    // modal.templateSelector();
-    // Modal.confirm({
-    //   title: "选择模板",
-    //   onOk: () => {
-    //     store.dispatch({
-    //       type: UPDATE_SELECTED_TEMPLATE,
-    //       payload: {
-    //         template: templateList[0], // 暂选第1个模板
-    //         uiVersion: templateList[0].uiVersions[1], // 暂选miui12
-    //       },
-    //     });
-    //     history.push("editor");
-    //   },
-    // });
-  };
   return (
     <StyleProjectManager>
       <div className="top-container">
         <div className="title">
           <h2>{brandInfo.name}主题列表</h2>
-          <p>新建{projects.length > 0 ? "、选择" : ""}一个主题开始制作</p>
+          <p>新建{projects.length > 0 ? "或选择" : ""}一个主题开始创作</p>
         </div>
         {/* 新建工程 */}
-        <Button type="primary" onClick={handleNewProduct}>
-          新建主题
-        </Button>
+        <CreateProject refreshList={refreshList} />
       </div>
       {/* 工程列表 */}
       <StyleProjectList>

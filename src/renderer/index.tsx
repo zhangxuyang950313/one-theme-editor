@@ -3,24 +3,28 @@ import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import styled, { createGlobalStyle, ThemeProvider } from "styled-components";
 
-import "antd/dist/antd.css";
+import "antd/dist/antd.css"; // antd 样式
+import zhCN from "antd/lib/locale/zh_CN"; // antd 中文
 
+import { ConfigProvider } from "antd";
 import Router from "./router";
 import store from "./store";
 import LightTheme from "./theme/light";
 
 function Root(): JSX.Element {
   return (
-    <React.StrictMode>
+    <>
       <StyleGlobal />
       <Provider store={store}>
         <ThemeProvider theme={LightTheme}>
           <StyleContainer>
-            <Router />
+            <ConfigProvider locale={zhCN}>
+              <Router />
+            </ConfigProvider>
           </StyleContainer>
         </ThemeProvider>
       </Provider>
-    </React.StrictMode>
+    </>
   );
 }
 

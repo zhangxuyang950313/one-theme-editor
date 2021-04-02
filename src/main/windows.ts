@@ -25,12 +25,12 @@ const windowNormalizeOptions: BrowserWindowConstructorOptions = {
 
 export function mainWindow(): BrowserWindow {
   const win = new BrowserWindow({
-    ...windowNormalizeOptions
+    ...windowNormalizeOptions,
     // titleBarStyle: "hidden",
-    // width: 800,
-    // height: 680,
-    // minWidth: 800,
-    // minHeight: 680
+    width: 1000,
+    height: 680,
+    minWidth: 1000,
+    minHeight: 680
   });
 
   const menu = Menu.buildFromTemplate(menuTemplate);
