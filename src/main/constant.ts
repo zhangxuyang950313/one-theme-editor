@@ -8,7 +8,8 @@ export const devtoolsPath = path.resolve(
   "devtools/8921.104.0.3_0"
 );
 
-export const htmlFile = `${path.join(
+export const htmlFile = path.join(
   app.getAppPath(),
+  isDev ? ".." : "",
   "release.renderer/index.html"
-)}`;
+);

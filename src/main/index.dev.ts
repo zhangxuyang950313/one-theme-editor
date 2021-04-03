@@ -16,6 +16,7 @@ app.allowRendererProcessReuse = true;
 
 app.on("ready", () => {
   const win = mainWindow();
+  console.log(htmlFile);
   win.loadFile(htmlFile);
   // win.loadURL(`http://localhost:${process.env.PORT || 3000}`);
   win.webContents.openDevTools(); // 创建并打开 dev 工具

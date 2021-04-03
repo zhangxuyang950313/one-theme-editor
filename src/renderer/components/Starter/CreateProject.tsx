@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { getBrandInfo } from "@/store/modules/normalized/selector";
 
 import { Modal, Button } from "antd";
+import { getTemplateConfigList } from "@/core/template-compiler";
 import Steps from "../Steps";
 
 type TypeProps = {
@@ -31,7 +32,13 @@ function CreateProject(props: TypeProps): JSX.Element {
   };
   return (
     <StyleCreateProject>
-      <Button type="primary" onClick={() => setModalVisible(true)}>
+      <Button
+        type="primary"
+        onClick={() => {
+          getTemplateConfigList().then(console.log);
+          setModalVisible(true);
+        }}
+      >
         新建主题
       </Button>
       <Modal

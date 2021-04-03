@@ -14,8 +14,9 @@ import { CleanWebpackPlugin } from "clean-webpack-plugin";
 import {
   rootDir,
   extensions,
-  reactOutputDir,
-  eslintConfigFile
+  outputDir,
+  eslintConfigFile,
+  entryFile
 } from "./constant";
 
 // const isDev = process.env.NODE_ENV !== "production";
@@ -70,10 +71,10 @@ const config: webpack.ConfigurationFactory = (env, args) => {
      * https://www.webpackjs.com/configuration/stats/
      */
     stats: "errors-warnings",
-    entry: path.resolve(rootDir, "src/renderer/index.tsx"),
+    entry: entryFile.render,
     output: {
       // 输出目录
-      path: reactOutputDir,
+      path: outputDir.render,
       // publicPath: "/",
       filename: isDev ? "js/[name].js" : "js/[name].[contenthash:8].js",
       chunkFilename: isDev
@@ -219,7 +220,7 @@ const config: webpack.ConfigurationFactory = (env, args) => {
         patterns: [
           {
             from: path.resolve(rootDir, "public"),
-            to: reactOutputDir,
+            to: outputDir.render,
             toType: "dir"
             // filter: file => path.basename(file) !== "index.html"
           }

@@ -29,9 +29,20 @@ export type DevServerConfiguration = WebpackDevServer.Configuration & {
 
 export const rootDir = path.resolve(__dirname, "..");
 
-export const reactOutputDir = path.resolve(rootDir, "release.renderer");
-export const electronOutputDir = path.resolve(rootDir, "release.main");
-export const serverOutputDir = path.resolve(rootDir, "release.server");
+export const entryFile = {
+  main: {
+    dev: path.resolve(rootDir, "src/main/index.dev.ts"),
+    pro: path.resolve(rootDir, "src/main/index.ts")
+  },
+  server: path.resolve(rootDir, "src/server/index.ts"),
+  render: path.resolve(rootDir, "src/renderer/index.tsx")
+};
+
+export const outputDir = {
+  main: path.resolve(rootDir, "release.main"),
+  server: path.resolve(rootDir, "release.server"),
+  render: path.resolve(rootDir, "release.renderer")
+};
 
 export const eslintConfigFile = path.resolve(rootDir, ".eslintrc.js");
 

@@ -8,17 +8,17 @@ import { extensions, entryFile, outputDir } from "./constant";
 const config: webpack.ConfigurationFactory = (env, args) => {
   const isDev = args.mode !== "production";
   return {
-    target: "electron-main",
+    target: "node",
     devtool: false,
     watchOptions: {
       ignored: "**/node_modules"
     },
     profile: false, // 选项捕获编译时每个步骤的时间信息，并且将这些信息包含在输出中
     stats: "errors-warnings", // 构建时控制台信息
-    entry: { index: entryFile.main[isDev ? "dev" : "pro"] },
+    entry: { index: entryFile.server },
     output: {
       // 输出目录: release.main
-      path: outputDir.main,
+      path: outputDir.server,
       filename: "[name].js"
     },
     optimization: {
@@ -49,7 +49,7 @@ const config: webpack.ConfigurationFactory = (env, args) => {
     plugins: [
       new CleanWebpackPlugin(),
       new WebpackBar({
-        name: `主进程编译中...(${args.mode})`,
+        name: `服务进程编译中...(${args.mode})`,
         color: "yellow",
         profile: true,
         fancy: true
