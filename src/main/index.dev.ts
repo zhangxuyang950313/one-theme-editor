@@ -1,4 +1,3 @@
-import path from "path";
 import { app, BrowserWindow } from "electron";
 import electronDebug from "electron-debug";
 import installExtension, {
@@ -6,6 +5,7 @@ import installExtension, {
   REACT_DEVELOPER_TOOLS
 } from "electron-devtools-installer";
 import { mainWindow } from "./windows";
+import { htmlFile } from "./constant";
 
 // 用于添加Chromium插件
 async function setupDevTools() {
@@ -16,11 +16,7 @@ app.allowRendererProcessReuse = true;
 
 app.on("ready", () => {
   const win = mainWindow();
-  const html = `${path.resolve(
-    app.getAppPath(),
-    "../release.renderer/index.html"
-  )}`;
-  win.loadFile(html);
+  win.loadFile(htmlFile);
   // win.loadURL(`http://localhost:${process.env.PORT || 3000}`);
   win.webContents.openDevTools(); // 创建并打开 dev 工具
   setupDevTools().then(() => {

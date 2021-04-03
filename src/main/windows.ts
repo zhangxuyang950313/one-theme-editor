@@ -34,7 +34,7 @@ export function mainWindow(): BrowserWindow {
   });
 
   const menu = Menu.buildFromTemplate(menuTemplate);
-  // Menu.setApplicationMenu(menu);
+  Menu.setApplicationMenu(menu);
 
   // 监听状态栏最大化和最小化事件
   ipcMain.on("handle-window-max-min", () => {
