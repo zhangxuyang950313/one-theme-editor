@@ -6,6 +6,7 @@ export type TypeBrandInfo = {
 
 // 模板配置信息
 export type TypeTemplateConfig = {
+  key: string; // 随机键值
   name?: string; // 模板名称
   poster?: string; // 模板缩略图
   version?: string; //

@@ -4,6 +4,7 @@ import { xml2js, Options, Element, ElementCompact } from "xml-js";
 import { templateDescriptionList } from "@/config";
 import { TypeTemplateConfig } from "@/types/project";
 import { TypeTemplateConfigResult } from "@/types/xml-result";
+import { getRandomStr } from "./utils";
 
 const config: Options.XML2JS = {
   trim: true,
@@ -64,6 +65,7 @@ export async function getTemplateConfigList(): Promise<TypeTemplateConfig[]> {
   return templateConfigList.map<TypeTemplateConfig>(item => {
     const { description, poster, uiVersion, module: modules } = item;
     return {
+      key: getRandomStr(),
       name: description?.[0]?._attributes?.name,
       version: description?.[0]._attributes?.version,
       poster: poster?.[0]._attributes?.src,

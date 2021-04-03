@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 import { addProject, TypeProjectInfo } from "@/core/data";
@@ -18,9 +18,16 @@ type TypeProps = {
 
 function CreateProject(props: TypeProps): JSX.Element {
   const [brandInfo] = useSelector(getBrandInfo);
+  const [templateList, setTemplateList] = useState<TypeTemplateConfig[]>([]);
+
   const [modalVisible, setModalVisible] = useState(false);
   const [selectiveTemp, setSelectiveTemp] = useState<TypeTemplateConfig>();
   const [curStep, setCurStep] = useState(0);
+
+  // 获取模板列表
+  useEffect(() => {
+    getTemplateConfigList().then(setTemplateList);
+  }, []);
 
   // 创建新工程
   const handleAddProduct = async () => {
@@ -37,14 +44,23 @@ function CreateProject(props: TypeProps): JSX.Element {
     });
   };
 
-  // 下一步
-  const handleNext = () => {
-    if (curStep < 2) {
-      setCurStep(curStep + 1);
+  // 上一步
+  const handlePrev = () => {
+    if (curStep === 0) {
+      setModalVisible(false);
       return;
     }
-    // 创建工程
-    handleAddProduct();
+    setCurStep(curStep - 1);
+  };
+
+  // 下一步
+  const handleNext = () => {
+    if (curStep === 2) {
+      // 创建工程
+      handleAddProduct();
+      return;
+    }
+    setCurStep(curStep + 1);
   };
   return (
     <StyleCreateProject>
@@ -61,15 +77,24 @@ function CreateProject(props: TypeProps): JSX.Element {
         width="80%"
         visible={modalVisible}
         title={`创建${brandInfo.name}主题`}
+        destroyOnClose={true}
         okButtonProps={{ disabled: !selectiveTemp }}
         okText={curStep < 2 ? "下一步" : "开始"}
+        cancelText={curStep > 0 ? "上一步" : "取消"}
         onOk={handleNext}
-        onCancel={() => setModalVisible(false)}
+        onCancel={handlePrev}
+        afterClose={() => setCurStep(0)}
       >
         <Steps steps={["选择模板", "填写信息", "开始制作"]} current={curStep} />
         <StyleStepContainer>
           {/* 选择模板 */}
-          {curStep === 0 && <TemplateManager onSelected={setSelectiveTemp} />}
+          {curStep === 0 && (
+            <TemplateManager
+              templateList={templateList}
+              selective={selectiveTemp}
+              onSelected={setSelectiveTemp}
+            />
+          )}
         </StyleStepContainer>
       </Modal>
     </StyleCreateProject>
@@ -80,6 +105,7 @@ const StyleCreateProject = styled.div``;
 
 const StyleStepContainer = styled.div`
   padding: 10px 0;
+  height: 50vh;
 `;
 
 export default CreateProject;
