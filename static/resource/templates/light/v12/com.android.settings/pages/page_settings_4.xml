@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ThemeConfig tag="设置" description="字体大小与粗细" version="12.0" order="14">
+	
+	<image description="右箭头 常态" src="res/drawable-xxhdpi/btn_inline_detail_normal_light.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="右箭头 二态" src="res/drawable-xxhdpi/btn_inline_detail_pressed_light.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="字体大小与粗细 大" src="res/drawable-xxhdpi/ic_a_big.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="字体大小与粗细 小" src="res/drawable-xxhdpi/ic_a_small.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="字体大小与粗细 粗" src="res/drawable-xxhdpi/textIcon_thick.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="字体大小与粗细 细" src="res/drawable-xxhdpi/textIcon_thin.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="字体大小 列表背景 xxhdpi（调节至巨无霸大时“无障碍-显示大小”文字视图预览背景）" src="res/drawable-xxhdpi/font_view_call_background.9.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="字体大小 列表背景 nxhdpi" src="res/drawable-nxhdpi/font_view_call_background.9.png">
+		<path>com.android.settings/res/drawable-nxhdpi</path>
+	</image>
+	
+	<image description="字体大小 更小（无障碍-显示大小）" src="res/drawable-xxhdpi/ic_zoom_smaller.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="字体大小 更大（无障碍-显示大小）" src="res/drawable-xxhdpi/ic_zoom_bigger.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	
+</ThemeConfig>

@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='utf-8' standalone='yes' ?>
+<MIUI_Theme_Values>
+	
+	<!-- 【MIUI12】版本icon名 -->
+	<drawable name="miui_version_logo_dev.png">miui_version_logo.png</drawable>
+	
+	<!-- 设置大背景 -->
+	<drawable name="settings_window_bg_light.9.png">window_bg_light.9.png</drawable>
+	<drawable name="window_search_mask.9.png">window_bg_light.9.png</drawable>
+	
+	<!-- 编辑模式	底栏-更多-展开后的底部背景 -->
+	<drawable name="action_bar_split_bg_expanded_light.9.png">action_bar_split_bg_light.9.png</drawable>
+	
+</MIUI_Theme_Values>

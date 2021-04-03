@@ -9,7 +9,7 @@ function TopInfo(): JSX.Element {
   return (
     <StyleEditorInfo>
       <img className="logo" alt="logo" src={Logo} />
-      <p className="title">1一个主题编辑器</p>
+      <p className="title">一个主题编辑器</p>
       <p className="version">版本：{process.env.VERSION}</p>
     </StyleEditorInfo>
   );

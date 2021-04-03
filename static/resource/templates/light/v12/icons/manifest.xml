@@ -1,0 +1,145 @@
+<?xml version='1.0' encoding='utf-8' standalone='yes' ?>
+<MIUI_Theme_Values>
+	<!-- 多包名图标 -->
+	<icons description="拨号">
+		<icon name="com.android.contacts.activities.TwelveKeyDialer"/>
+		<icon name="com.android.providers.contacts.CallLogProvider"/>
+	</icons>
+	<icons description="短信">
+		<icon name="com.android.mms"/>
+		<icon name="com.android.providers.telephony"/>
+		<icon name="com.xiaomi.xmsf.CloudMessaging"/>
+	</icons>
+	<icons description="相机">
+		<icon name="com.android.camera"/>
+		<icon name="com.mlab.cam"/>
+	</icons>
+	<icons description="相册">
+		<icon name="com.miui.gallery" />
+		<icon name="com.android.gallery3d"/>
+	</icons>
+	<icons description="音乐">
+		<icon name="com.miui.player"/>
+		<icon name="com.android.music"/>
+	</icons>
+	<icons description="应用商店">
+		<icon name="com.miui.supermarket"/>
+		<icon name="com.xiaomi.market"/>
+	</icons>
+	<icons description="安全中心">
+		<icon name="com.miui.securitycenter"/>
+		<icon name="com.miui.securitycenter.MainActivity"/>
+		<icon name="com.miui.securitycenter.Main"/>
+	</icons>
+	<icons description="联系人">
+		<icon name="com.android.contacts"/>
+		<icon name="com.android.providers.contacts"/>
+	</icons>
+	<icons description="小米视频">
+		<icon name="com.miui.video"/>
+		<icon name="com.miui.videoplayer"/>
+	</icons>
+	<icons description="小米商城">
+		<icon name="com.xiaomi.shop.activity.MainTabActivity"/>
+		<icon name="com.xiaomi.shop"/>
+		<icon name="com.xiaomi.padshop"/>
+	</icons>
+	<icons description="计算器">
+		<icon name="com.miui.calculator"/>
+		<icon name="com.android.calculator2"/>
+	</icons>
+	<icons description="游戏中心">
+		<icon name="com.xiaomi.gamecenter"/>
+		<icon name="com.xiaomi.gamecenter.pad"/>
+	</icons>
+	<icons description="下载管理">
+		<icon name="com.android.providers.downloads" />
+		<icon name="com.android.providers.downloads.ui"/>
+	</icons>
+	<icons description="小米社区">
+		<icon name="com.xiaomi.bbs"/>
+		<icon name="com.xiaomi.vipaccount"/>
+	</icons>
+	<icons description="小爱同学">
+		<icon name="com.miui.voiceassist"/>
+		<icon name="com.android.voicedialer"/>
+	</icons>
+	<icons description="收音机">
+		<icon name="com.miui.fmradio"/>
+		<icon name="com.miui.fm"/>
+		<icon name="com.miui.fmservice"/>
+	</icons>
+	<icons description="扫一扫">
+		<icon name="com.xiaomi.scanner"/>
+		<icon name="com.miui.barcodescanner"/>
+	</icons>
+	<icons description="服务与反馈">
+		<icon name="com.miui.miservice"/>
+		<icon name="com.miui.bugreport"/>
+	</icons>
+	<icons description="QQ">
+		<icon name="com.tencent.qq"/>
+		<icon name="com.tencent.mobileqq"/>
+		<icon name="com.tencent.android.pad"/>
+	</icons>
+
+	<!-- 单一图标 -->
+	<icon description="浏览器" name="com.android.browser"/>
+	<icon description="天气" name="com.miui.weather2"/>
+	<icon description="个性主题" name="com.android.thememanager"/>
+	<icon description="设置" name="com.android.settings"/>
+	<icon description="日历" name="com.android.calendar"/>
+	<icon description="便签" name="com.miui.notes"/>
+	<icon description="电子邮件" name="com.android.email"/>
+	<icon description="文件管理" name="com.android.fileexplorer"/>
+	<icon description="时钟" name="com.android.deskclock"/>
+	<icon description="录音机" name="com.android.soundrecorder"/>
+	<icon description="指南针" name="com.miui.compass"/>
+	<icon description="小米钱包" name="com.mipay.wallet"/>
+	<icon description="阅读" name="com.duokan.reader"/>
+	<icon description="屏幕录制" name="com.miui.screenrecorder"/>
+	<icon description="小米运动" name="com.xiaomi.hm.health"/>
+	<icon description="小米直播" name="com.wali.live"/>
+	<icon description="小米金融" name="com.xiaomi.jr"/>
+	<icon description="小爱音箱" name="com.xiaomi.mico"/>
+	<icon description="米家" name="om.xiaomi.smarthome"/>
+	<icon description="万能遥控" name="com.duokan.phone.remotecontroller"/>
+	<icon description="微信" name="com.tencent.mm"/>
+	<icon description="支付宝" name="com.eg.android.AlipayGphone"/>
+	<icon description="抖音" name="com.ss.android.ugc.aweme"/>
+	<icon description="腾讯视频" name="com.tencent.qqlive"/>
+	<icon description="微博" name="com.sina.weibo"/>
+	<icon description="网易云音乐" name="com.netease.cloudmusic"/>
+	<icon description="手机淘宝" name="com.taobao.taobao"/>
+	<icon description="拼多多" name="com.xunmeng.pinduoduo"/>
+	<icon description="快手" name="com.smile.gifmaker"/>
+	<icon description="今日头条" name="com.ss.android.article.news"/>
+	<icon description="百度" name="com.baidu.searchbox"/>
+	<icon description="爱奇艺" name="com.qiyi.video"/>
+	<icon description="小米换机" name="com.miui.huanji"/>
+	<icon description="安卓通知" name="android"/>
+	<icon description="全球上网" name="com.miui.virtualsim"/>
+	<icon description="图标背板" name="icon_pattern"/>
+	<icon description="图标遮罩" name="icon_mask"/>
+	<icon description="图标上层" name="icon_border"/>
+	<icon description="文件夹" name="icon_folder"/>
+	<icon description="文件夹浅" name="icon_folder_light"/>
+	<icon description="文件夹盖板" name="folder_icon_cover"/>
+	<icon description="清理背景" name="com.miui.home.clear_bg"/>
+	<icon description="快捷开关" name="com.miui.home.toggle_bg"/>
+	<icon description="数据" name="status_bar_toggle_data_off"/>
+	<icon description="数据" name="status_bar_toggle_data_on"/>
+	<icon description="WiFi" name="status_bar_toggle_wifi_off"/>
+	<icon description="WiFi" name="status_bar_toggle_wifi_on"/>
+	<icon description="飞行模式" name="status_bar_toggle_flight_mode_off"/>
+	<icon description="飞行模式" name="status_bar_toggle_flight_mode_on"/>
+	<icon description="手电筒" name="status_bar_toggle_torch_off"/>
+	<icon description="手电筒" name="status_bar_toggle_torch_on"/>
+	<icon description="蓝牙" name="status_bar_toggle_bluetooth_off"/>
+	<icon description="蓝牙" name="status_bar_toggle_bluetooth_on"/>
+	<icon description="WLAN热点" name="status_bar_toggle_wifi_ap_off"/>
+	<icon description="WLAN热点" name="status_bar_toggle_wifi_ap_on"/>
+	<icon description="锁屏" name="status_bar_toggle_lock"/>
+
+	<!-- <Image description="WLAN热点" name="status_bar_toggle_lock" to="com.mms.miui/aaa.png" /> -->
+</MIUI_Theme_Values>

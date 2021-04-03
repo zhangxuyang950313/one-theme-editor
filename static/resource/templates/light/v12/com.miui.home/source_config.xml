@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ThemeConfig>
+	<ModuleInfo package="com.miui.home" description="桌面" order="0"/>
+	<baseColors>
+		<color name="com_miui_home" package="miui" priority="1"/>
+	</baseColors>
+	
+	<colors>
+		<color name="class_color_icon_title_text_light" description="桌面图标文字（深色壁纸）">#e6ffffff</color>
+		<color name="class_color_icon_title_text_dark" description="桌面图标文字（浅色壁纸）">#80000000</color>
+		
+		<color name="class_color_icon_message_text" description="桌面图标角标 通知数字颜色">#ffffffff</color>
+		
+		<color name="class_color_checkbox_btn_on" description="复选框 已选背景 颜色（不支持修改透明度）">#ff0d84ff</color>
+		
+		<color name="class_color_search_bg_dark_bg" description="搜索框背景 颜色（深色壁纸）">#16ffffff</color>
+		<color name="class_color_search_bg_dark_stroke" description="搜索框背景 描边 颜色（深色壁纸）">#00ffffff</color>
+		<color name="class_color_search_bg_light_bg" description="搜索框背景 颜色（浅色壁纸）">#1a000000</color>
+		<color name="class_color_search_bg_light_stroke" description="搜索框背景 描边 颜色（浅色壁纸）">#1c000000</color>
+		
+		<color name="class_color_task_manager_window_bg" description=" 任务管理 小窗应用 按钮背景 颜色">#42ffffff</color>
+		<color name="class_color_task_manager_window_text" description="任务管理 小窗应用 按钮文字 颜色">#ffffffff</color>
+		<color name="class_color_task_manager_app_name" description="任务管理 app名称 颜色">#ffffffff</color>
+		<color name="class_color_task_manager_recents_tips" description="任务管理 “近期没有任何内容” 提示文字颜色">#66ffffff</color>
+		<color name="class_color_task_manager_recent_menu_bg" description="任务管理 应用菜单按钮背景 颜色">#ffffffff</color>
+		<color name="class_color_task_manager_tick_anim" description="任务管理 完成清理勾 √ 动画 颜色">#ff43c773</color>
+		
+	</colors>
+	
+	<dimens>
+		<dimen name="class_dimen_folder_preview_width" description="文件夹缩略图宽度（默认：45.0dp）"></dimen>
+		<dimen name="class_dimen_folder_preview_height" description="文件夹缩略图高度（默认：45.0dp）"></dimen>
+		<dimen name="class_dimen_folder_preview_item_padding" description="文件夹缩略图中图标的间隔（默认：0.3dp）"></dimen>
+		<!-- <dimen name="class_dimen_workspace_icon_text_size" description="图标文字大小">12.000000sp</dimen> -->
+		<!-- <dimen name="class_dimen_search_stroke_width_dark" description="搜索框 边框大小（深色壁纸）">1.000000dp</dimen> -->
+		<!-- <dimen name="class_dimen_search_stroke_width_light" description="搜索框 边框大小（浅色壁纸）">1.000000dp</dimen> -->
+	</dimens>
+	
+</ThemeConfig>

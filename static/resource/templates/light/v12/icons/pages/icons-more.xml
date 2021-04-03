@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config version="1.0.0" description="系统图标" screenWidth="1080" screenHeight="2340">
+    <category tag="source" description="桌面壁纸效果" type="image"/>
+
+    <source description="桌面壁纸">
+        <layout x="0" y="0" w="1080" h="2340">../../wallpaper/default_wallpaper.jpg</layout>
+        <to>wallpaper/default_wallpaper.jpg</to>
+    </source>
+
+    
+    <source description="图标1111">
+        <layout x="80" y="1000" w="300" h="300">../../../../../more-icons/res/air.tv.douyu.android.png</layout>
+        <to>icons/res/air.tv.douyu.android</to>
+    </source>
+
+    <source description="图标1">
+        <layout x="80" y="2000" w="186" h="186">../../../../../more-icons/res/com.autonavi.minimap.png</layout>
+        <to>icons/res/com.autonavi.minimap.png</to>
+    </source>
+    <source description="图标2">
+        <layout x="320" y="2000" w="186" h="186">../../../../../more-icons/res/com.baidu.BaiduMap.png</layout>
+        <to>icons/res/com.baidu.BaiduMap.png</to>
+    </source>
+    <source description="图标2">
+        <layout x="560" y="2000" w="186" h="186">../../../../../more-icons/res/com.chinamworld.main.png</layout>
+        <to>icons/res/com.chinamworld.mainpng</to>
+    </source>
+    <source description="图标2">
+        <layout x="800" y="2000" w="186" h="186">../../../../../more-icons/res/com.eg.android.AlipayGphone.png</layout>
+        <to>icons/res/com.eg.android.AlipayGphone.png</to>
+    </source>
+
+
+    <source description="图标1111">
+        <layout x="80" y="1000" w="300" h="300">../../../../../more-icons/res/air.tv.douyu.android.png</layout>
+        <to>icons/res/air.tv.douyu.android</to>
+    </source>
+
+    <source description="图标1">
+        <layout x="80" y="1700" w="186" h="186">../../../../../more-icons/res/com.autonavi.minimap.png</layout>
+        <to>icons/res/com.autonavi.minimap.png</to>
+    </source>
+    <source description="图标2">
+        <layout x="320" y="1700" w="186" h="186">../../../../../more-icons/res/com.baidu.BaiduMap.png</layout>
+        <to>icons/res/com.baidu.BaiduMap.png</to>
+    </source>
+    <source description="图标2">
+        <layout x="560" y="1700" w="186" h="186">../../../../../more-icons/res/com.chinamworld.main.png</layout>
+        <to>icons/res/com.chinamworld.mainpng</to>
+    </source>
+    <source description="图标2">
+        <layout x="800" y="1700" w="186" h="186">../../../../../more-icons/res/com.eg.android.AlipayGphone.png</layout>
+        <to>icons/res/com.eg.android.AlipayGphone.png</to>
+    </source>
+</config>

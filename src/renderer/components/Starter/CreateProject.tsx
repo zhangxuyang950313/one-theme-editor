@@ -35,10 +35,11 @@ function CreateProject(props: TypeProps): JSX.Element {
         新建主题
       </Button>
       <Modal
-        className="modal"
+        width="80%"
         visible={modalVisible}
         title={`创建${brandInfo.name}主题`}
         onOk={handleAddProduct}
+        onCancel={() => setModalVisible(false)}
       >
         <Steps steps={["选择模板", "填写信息", "开始制作"]} current={1} />
       </Modal>
@@ -46,10 +47,6 @@ function CreateProject(props: TypeProps): JSX.Element {
   );
 }
 
-const StyleCreateProject = styled.div`
-  .modal {
-    width: 80%;
-  }
-`;
+const StyleCreateProject = styled.div``;
 
 export default CreateProject;

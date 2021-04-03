@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ThemeConfig tag="设置-全局" description="二级设置列表" version="12.0" order="4">
+	
+	<image description="二级设置列表 右箭头" src="res/drawable-xxhdpi/miuix_preference_arrow_right.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="选项列表卡片背景 上（显示-当设备处于VR模式时、声音与振动-静音/勿扰）" src="res/drawable-xxhdpi/miuix_preference_first_item_radio_two_state_bg.9.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="选项列表卡片背景 中" src="res/drawable-xxhdpi/miuix_preference_middle_item_radio_two_state_bg.9.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="选项列表卡片背景 下" src="res/drawable-xxhdpi/miuix_preference_last_item_radio_two_state_bg.9.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="选项列表卡片背景 选中" src="res/drawable-xxhdpi/miuix_preference_single_item_radio_two_state_bg.9.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="眼睛icon（护眼模式-调整护眼屏幕效果）" src="res/drawable-xxhdpi/ic_paper_mode.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="调节色温icon（护眼模式-经典护眼）" src="res/drawable-xxhdpi/temperature_icon.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="纸质纹理icon（护眼模式-经典护眼）" src="res/drawable-xxhdpi/texture_icon.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	
+	<!-- miuiX全局（素材位于当前模块的res/drawable-xxhdpi/目录内） -->
+	<image description="列表类型 有标题 第一条" src="res/drawable-xxhdpi/miuix_preference_category_bg_first_light.9.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="列表类型 有标题 非第一条" src="res/drawable-xxhdpi/miuix_preference_category_bg_light.9.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="列表类型 无标题 第一条" src="res/drawable-xxhdpi/miuix_preference_category_bg_first_no_title_light.9.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="列表类型 无标题 非第一条（分割线）" src="res/drawable-xxhdpi/miuix_preference_category_bg_no_title_light.9.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="设置列表 无图标 上" src="res/drawable-xxhdpi/miuix_preference_first_item_bg_light_normal.9.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="设置列表 无图标 中" src="res/drawable-xxhdpi/miuix_preference_middle_item_bg_light_normal.9.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="设置列表 无图标 下" src="res/drawable-xxhdpi/miuix_preference_last_item_bg_light_normal.9.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="设置列表 无图标 单列" src="res/drawable-xxhdpi/miuix_preference_single_item_bg_light_normal.9.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="设置列表 有图标 上" src="res/drawable-xxhdpi/miuix_preference_first_item_with_icon_bg_normal.9.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="设置列表 有图标 中" src="res/drawable-xxhdpi/miuix_preference_middle_item_with_icon_bg_normal.9.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="设置列表 有图标 下" src="res/drawable-xxhdpi/miuix_preference_last_item_with_icon_bg_normal.9.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="设置列表 有图标 单列" src="res/drawable-xxhdpi/miuix_preference_single_item_with_icon_bg_normal.9.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	
+	<!-- <image description="页面复选框按钮 未选 禁用" src="framework-miui-res/res/drawable-xxhdpi/btn_checkbox_off_disabled_light.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="页面复选框按钮 未选 常态" src="framework-miui-res/res/drawable-xxhdpi/btn_checkbox_off_normal_light.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="页面复选框按钮 已选 禁用" src="framework-miui-res/res/drawable-xxhdpi/btn_checkbox_on_disabled_light.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="页面复选框按钮 已选 常态" src="framework-miui-res/res/drawable-xxhdpi/btn_checkbox_on_normal_light.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="页面 复选框 按钮（透明图片，暂停动画使用）" src="framework-miui-res/res/drawable-xxhdpi/btn_checkbox_off_to_on_light.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="页面 复选框 按钮（透明图片，暂停动画使用）" src="framework-miui-res/res/drawable-xxhdpi/btn_checkbox_on_to_off_light.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image> -->
+	
+</ThemeConfig>

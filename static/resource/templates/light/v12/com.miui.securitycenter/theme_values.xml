@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8' standalone='yes' ?>
+<MIUI_Theme_Values>
+	<!-- 图标分割线 -->
+	<color name="notification_title_divide_color">class_color_securitycenter_line</color>
+	<!-- 文字颜色 -->
+	<color name="notification_title_text_color">class_color_securitycenter_title</color>
+	<!-- 待清理状态文字颜色 -->
+	<color name="notification_title_text_red_color">class_color_securitycenter_red</color>
+</MIUI_Theme_Values>

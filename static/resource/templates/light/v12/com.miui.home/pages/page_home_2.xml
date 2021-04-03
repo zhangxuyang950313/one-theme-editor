@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ThemeConfig tag="桌面" description="底部搜索框" version="12.0" order="2">
+
+	<image description="搜索框背景 xxhdpi（深色壁纸）（支持调整颜色值）" src="res/drawable-xxhdpi/bg_search_bar_dark.9.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="搜索框背景 nxhdpi（深色壁纸）" src="res/drawable-nxhdpi/bg_search_bar_dark.9.png">
+		<path>com.miui.home/res/drawable-nxhdpi</path>
+	</image>
+
+	<image description="搜索框背景 xxhdpi（浅色壁纸）（支持调整颜色值）" src="res/drawable-xxhdpi/bg_search_bar_light.9.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="搜索框背景 nxhdpi（浅色壁纸）" src="res/drawable-nxhdpi/bg_search_bar_light.9.png">
+		<path>com.miui.home/res/drawable-nxhdpi</path>
+	</image>
+
+
+	<image description="搜索icon xxhdpi（深色壁纸）" src="res/drawable-xxhdpi/icon_search_dark.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="搜索icon 440dpi（深色壁纸）" src="res/drawable-440dpi/icon_search_dark.png">
+		<path>com.miui.home/res/drawable-440dpi</path>
+	</image>
+	<image description="搜索icon xxhdpi（浅色壁纸）" src="res/drawable-xxhdpi/icon_search_light.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="搜索icon 440dpi（浅色壁纸）" src="res/drawable-440dpi/icon_search_light.png">
+		<path>com.miui.home/res/drawable-440dpi</path>
+	</image>
+
+	<image description="小爱icon xxhdpi（深色壁纸）" src="res/drawable-xxhdpi/icon_xiaoai_dark.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="小爱icon 440dpi（深色壁纸）" src="res/drawable-440dpi/icon_xiaoai_dark.png">
+		<path>com.miui.home/res/drawable-440dpi</path>
+	</image>
+	<image description="小爱icon xxhdpi（浅色壁纸）" src="res/drawable-xxhdpi/icon_xiaoai_light.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="小爱icon 440dpi（浅色壁纸）" src="res/drawable-440dpi/icon_xiaoai_light.png">
+		<path>com.miui.home/res/drawable-440dpi</path>
+	</image>
+
+</ThemeConfig>

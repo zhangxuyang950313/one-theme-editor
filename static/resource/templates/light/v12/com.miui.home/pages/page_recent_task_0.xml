@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ThemeConfig tag="任务管理" description="任务管理" version="12.1" order="10">
+	
+	<!-- <image description="任务管理器大背景" src="res/drawable-xxhdpi/recent_task_bg.9.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image> -->
+	<image description="小窗应用按钮内icon" src="res/drawable-xxhdpi/recent_tv_small_window_icon.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="应用菜单按钮圆背景 xxhdpi" src="res/drawable-xxhdpi/recent_menu_bg.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="应用菜单按钮圆背景 nxhdpi" src="res/drawable-nxhdpi/recent_menu_bg.png">
+		<path>com.miui.home/res/drawable-nxhdpi</path>
+	</image>
+	
+	<image description="锁定（建议将下列图标在 drawable-nxhdpi 文件夹放置一份）" src="res/drawable-xxhdpi/ic_task_lock.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="取消锁定" src="res/drawable-xxhdpi/ic_task_unlock.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="分屏" src="res/drawable-xxhdpi/ic_task_multi.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+    <image description="小窗" src="res/drawable-xxhdpi/ic_task_small_window.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="设置" src="res/drawable-xxhdpi/ic_task_setting.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="任务锁定icon" src="res/drawable-xxhdpi/icon_task_lock.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="清除按钮背景" src="res/drawable-xxhdpi/btn_clear_all.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="清除按钮" src="res/drawable-xxhdpi/notifications_clear_all.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	
+</ThemeConfig>

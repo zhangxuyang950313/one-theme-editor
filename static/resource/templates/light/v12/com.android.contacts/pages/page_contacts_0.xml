@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ThemeConfig tag="联系人" description="联系人列表" version="12.0" order="20">
+
+	<image description="（旧）云服务 背景" src="res/drawable-xxhdpi/cloud_recommend_bar_bg.9.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="（旧）云服务 关闭按钮" src="res/drawable-xxhdpi/cloud_recommend_close.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="字母索引 背景" src="res/drawable-xxhdpi/miuix_appcompat_alphabet_indexer_overlay.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	
+	<!-- <image description="列表小标题top 背景" src="res/drawable-xxhdpi/list_view_item_group_header_top_bg_light.9.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image> -->
+	<image description="联系人首页列表小标题 背景" src="res/drawable-xxhdpi/list_view_item_group_header_bg_light.9.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="首页列表背景 常态" src="framework-miui-res/res/drawable-xxhdpi/list_item_bg_normal_light.9.png">
+		<path>com.android.contacts/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="首页列表背景 二态" src="framework-miui-res/res/drawable-xxhdpi/list_item_bg_pressed_light.9.png">
+		<path>com.android.contacts/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="首页列表背景 选中" src="framework-miui-res/res/drawable-xxhdpi/list_item_bg_selected_light.9.png">
+		<path>com.android.contacts/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="项目列表 收起 常态" src="framework-miui-res/res/drawable-xxhdpi/expander_close_normal_light.9.png">
+		<path>com.android.contacts/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="项目列表 收起 二态" src="framework-miui-res/res/drawable-xxhdpi/expander_close_pressed_light.9.png">
+		<path>com.android.contacts/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="项目列表 展开 常态" src="framework-miui-res/res/drawable-xxhdpi/expander_open_normal_light.9.png">
+		<path>com.android.contacts/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="项目列表 展开 二态" src="framework-miui-res/res/drawable-xxhdpi/expander_open_pressed_light.9.png">
+		<path>com.android.contacts/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="详情页按钮 常态 xxhdpi" src="framework-miui-res/res/drawable-xxhdpi/btn_inline_detail_normal_light.png">
+		<path>com.android.contacts/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="详情页按钮 二态 xxhdpi" src="framework-miui-res/res/drawable-xxhdpi/btn_inline_detail_pressed_light.png">
+		<path>com.android.contacts/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="详情页按钮 常态 nxhdpi" src="framework-miui-res/res/drawable-nxhdpi/btn_inline_detail_normal_light.png">
+		<path>com.android.contacts/framework-miui-res/res/drawable-nxhdpi</path>
+	</image>
+	<image description="详情页按钮 二态 nxhdpi" src="framework-miui-res/res/drawable-nxhdpi/btn_inline_detail_pressed_light.png">
+		<path>com.android.contacts/framework-miui-res/res/drawable-nxhdpi</path>
+	</image>
+	
+	<image description="列表头像（二维码名片卡片内头像）" src="framework-miui-res/res/drawable-xxhdpi/ic_contact_list_picture.png">
+		<path>com.android.contacts/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="列表文字头像背景" src="framework-miui-res/res/drawable-xxhdpi/word_photo_bg.png">
+		<path>com.android.contacts/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="列表头像 边框" src="framework-miui-res/res/drawable-xxhdpi/ic_contact_photo_fg.png">
+		<path>com.android.contacts/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="列表头像 遮罩mask" src="framework-miui-res/res/drawable-xxhdpi/ic_contact_photo_mask.png">
+		<path>com.android.contacts/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="拨号盘展开 图标 xxhdpi" src="res/drawable-xxhdpi/action_button_open_dialpad_normal_light.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="拨号盘展开 图标 nxhdpi" src="res/drawable-nxhdpi/action_button_open_dialpad_normal_light.png">
+		<path>com.android.contacts/res/drawable-nxhdpi</path>
+	</image>
+	<image description="新建联系人 图标 xxhdpi" src="framework-miui-res/res/drawable-xxhdpi/action_button_main_new_light.png">
+		<path>com.android.contacts/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="新建联系人 图标 nxhdpi" src="framework-miui-res/res/drawable-nxhdpi/action_button_main_new_light.png">
+		<path>com.android.contacts/framework-miui-res/res/drawable-nxhdpi</path>
+	</image>
+	<image description="拨号、联系人 右下角按钮背景 xxhdpi" src="res/drawable-xxhdpi/tab_fab_bg.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="拨号、联系人 右下角按钮背景 nxhdpi" src="res/drawable-xxhdpi/tab_fab_bg.png">
+		<path>com.android.contacts/res/drawable-nxhdpi</path>
+	</image>
+	<image description="联系人 我的群组 右下角按钮背景" src="framework-miui-res/res/drawable-xxhdpi/action_button_main_bg_light.png">
+		<path>com.android.contacts/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	
+</ThemeConfig>

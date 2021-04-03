@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ThemeConfig tag="控制中心" description="大背景/其他" version="12.0" order="20">
+	
+	<image description="控制中心 大背景" src="res/drawable-xxhdpi/qs_control_bg.9.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>        
+	</image>
+	
+	<image description="设置按钮" src="res/drawable-xxhdpi/qs_control_settings.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>        
+	</image>
+	<image description="编辑按钮" src="res/drawable-xxhdpi/qs_control_tiles_edit.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>        
+	</image>
+	
+	<image description="亮度条 背景（无特别设计建议使用颜色值）" src="res/drawable-xxhdpi/qs_control_brightness_toggle_bg.9.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	<image description="亮度条 进度（无特别设计建议使用颜色值）" src="res/drawable-xxhdpi/qs_control_brightness_toggle_progress_bg.9.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="亮度条 小太阳icon" src="res/drawable-xxhdpi/qs_control_low_brightness.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="-删除icon标识（编辑模式 已添加开关）" src="res/drawable-xxhdpi/ic_qs_control_delete_marker.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	<image description="+添加icon标识（编辑模式 未添加开关）" src="res/drawable-xxhdpi/ic_qs_control_add_marker.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	
+</ThemeConfig>

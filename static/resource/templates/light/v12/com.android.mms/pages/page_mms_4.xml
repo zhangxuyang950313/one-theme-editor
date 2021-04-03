@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ThemeConfig tag="短信" description="服务类短信 底栏" version="12.0" order="14">
+	
+	<!-- <image description="菜单模式" src="res/drawable-xxhdpi/message_bottom_edit_mode.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image> -->
+	
+	<image description="底部 菜单箭头 常态" src="res/drawable-xxhdpi/bottom_menu_submenu_icon_n.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="底部 菜单箭头 选中态" src="res/drawable-xxhdpi/bottom_menu_submenu_icon_p.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="底部 二级菜单/附件菜单 弹窗背景" src="res/drawable-xxhdpi/bottom_sub_menu_bg.9.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	
+</ThemeConfig>

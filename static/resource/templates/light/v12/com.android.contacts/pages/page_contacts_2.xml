@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ThemeConfig tag="联系人" description="新建联系人" version="12.0" order="22">
+	
+	<!-- <image description="大背景" src="res/drawable-xxhdpi/contact_edit_content_bg.9.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="头像 背景" src="res/drawable-xxhdpi/contact_editor_photo_bg.9.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image> -->
+	
+	<image description="展开箭头 常态" src="res/drawable-xxhdpi/editor_dropdown_indicator_down_n.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="展开箭头 二态" src="res/drawable-xxhdpi/editor_dropdown_indicator_down_p.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="收起箭头 常态" src="res/drawable-xxhdpi/editor_dropdown_indicator_up_n.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="收起箭头 二态" src="res/drawable-xxhdpi/editor_dropdown_indicator_up_p.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="头像" src="res/drawable-xxhdpi/contact_detail_circle_photo_edit.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="输入框 常态 上" src="res/drawable-xxhdpi/edit_text_bg_spinner_first_light.9.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="输入框 二态 上" src="res/drawable-xxhdpi/edit_text_bg_spinner_first_light_p.9.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="输入框 常态 中" src="res/drawable-xxhdpi/edit_text_bg_spinner_middle_light.9.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="输入框 二态 中" src="res/drawable-xxhdpi/edit_text_bg_spinner_middle_light_p.9.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="输入框 常态 下" src="res/drawable-xxhdpi/edit_text_bg_spinner_last_light.9.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="输入框 二态 下" src="res/drawable-xxhdpi/edit_text_bg_spinner_last_light_p.9.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="输入框 常态 单独" src="res/drawable-xxhdpi/edit_text_bg_spinner_single_light.9.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="输入框 二态 单独" src="res/drawable-xxhdpi/edit_text_bg_spinner_single_light_p.9.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="添加更多项 常态" src="res/drawable-xxhdpi/editor_button_bg_n.9.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="添加更多项 二态" src="res/drawable-xxhdpi/editor_button_bg_p.9.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="展开 常态" src="res/drawable-xxhdpi/btn_inline_expand_normal_light.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="展开 二态" src="res/drawable-xxhdpi/btn_inline_expand_pressed_light.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="收起 常态" src="res/drawable-xxhdpi/btn_inline_shrink_normal_light.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="收起 二态" src="res/drawable-xxhdpi/btn_inline_shrink_pressed_light.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="编辑选项上下箭头 常态" src="res/drawable-xxhdpi/spinner_bg_edit_first_normal_light.9.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="编辑选项上下箭头 二态" src="res/drawable-xxhdpi/spinner_bg_edit_first_pressed_light.9.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="选项框右侧 删除按钮 常态" src="res/drawable-xxhdpi/btn_inline_delete_normal_light.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="选项框右侧 删除按钮 二态" src="res/drawable-xxhdpi/btn_inline_delete_pressed_light.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	
+</ThemeConfig>

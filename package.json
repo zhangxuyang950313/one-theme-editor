@@ -114,6 +114,7 @@
     "sass": "^1.32.8",
     "sass-loader": "^11.0.1",
     "scoped-css-loader": "^1.0.0",
+    "socket.io": "^4.0.1",
     "style-loader": "^2.0.0",
     "styled-components": "^5.2.3",
     "stylelint": "^13.12.0",

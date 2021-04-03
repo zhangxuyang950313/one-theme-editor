@@ -1,0 +1,72 @@
+<description name="浅色模板" version="1.0">
+    <!-- 预览静态图 -->
+    <poster>./v12/wallpaper/default_wallpaper.jpg</poster>
+    <!-- UI版本 -->
+    <ui-version name="MIUI11">v11</ui-version>
+    <ui-version name="MIUI12">v12</ui-version>
+    <!-- 壁纸 -->
+    <module name="图标和壁纸" icon="./v12/icons/res/com.android.thememanager.png">
+        <!-- 桌面壁纸 -->
+        <class name="桌面壁纸和图标">
+            <page>wallpaper/desktop0.xml</page>
+            <page>wallpaper/desktop1.xml</page>
+        </class>
+        <!-- 锁屏壁纸 -->
+        <class name="锁屏壁纸">
+            <page>wallpaper/lock.xml</page>
+        </class>
+        <class name="第三方图标">
+            <page>icons/pages/icons-more.xml</page>
+        </class>
+    </module>
+    <module name="拨号与联系人" icon="./v12/icons/res/com.android.contacts.activities.TwelveKeyDialer.png">
+        <class name="联系人">
+            <page>com.android.contacts/pages/page1.xml</page>
+            <!-- <page>com.android.contacts/pages/page2.xml</page> -->
+        </class>
+        <class name="拨号盘">
+            <!-- <page>com.android.contacts/pages/page3.xml</page> -->
+            <page>com.android.contacts/pages/page4.xml</page>
+        </class>
+    </module>
+    <module name="短信" icon="./v12/icons/res/com.android.mms.png">
+        <class name="短信主页面">
+            <page>com.android.mms/pages/page1.xml</page>
+            <page>com.android.mms/pages/page2.xml</page>
+        </class>
+    </module>
+    <module name="设置" icon="./v12/icons/res/com.android.settings.png">
+        <class name="设置第一页">
+            <page>com.android.settings/pages/page1.xml</page>
+            <page>com.android.settings/pages/page2.xml</page>
+        </class>
+    </module>
+    <module name="通知栏" icon="./v12/icons/res/com.android.systemui.png">
+        <class name="通知栏1">
+            <page>com.android.systemui/pages/page1.xml</page>
+            <page>com.android.systemui/pages/page2.xml</page>
+        </class>
+        <class name="通知栏-聚合通知">
+            <page>com.miui.notification/pages/page1.xml</page>
+            <page>com.miui.notification/pages/page2.xml</page>
+        </class>
+    </module>
+    <module name="桌面" icon="./v12/icons/res/com.android.system.notification_phone.png">
+        <class name="桌面小部件">
+            <page>com.miui.home/pages/page1.xml</page>
+            <page>com.miui.home/pages/page2.xml</page>
+        </class>
+    </module>
+    <module name="安全中心" icon="./v12/icons/res/com.miui.securitycenter.png">
+        <class name="安全中心">
+            <page>com.miui.securitycenter/pages/page1.xml</page>
+            <page>com.miui.securitycenter/pages/page2.xml</page>
+        </class>
+    </module>
+    <module name="原生全局" icon="./v12/icons/res/android.png">
+        <class name="原生全局">
+            <page>framework-res/pages/page1.xml</page>
+            <page>framework-res/pages/page2.xml</page>
+        </class>
+    </module>
+</description>

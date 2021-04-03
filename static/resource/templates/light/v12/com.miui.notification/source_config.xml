@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ThemeConfig>
+	<ModuleInfo package="com.miui.notification" description="通知栏-聚合通知" order="6"/>
+	<baseColors>
+		<color name="entrance_aggregate_title_color" priority="1"/>
+	</baseColors>
+	
+	<colors>
+		<color name="class_color_notification_title_text" description="通知中心首页 聚合通知（内容资讯/广告营销）标题文字 颜色">#ff838db8</color>
+		<color name="class_color_entrance_aggregate_divider" description="通知中心首页 聚合通知（内容资讯/广告营销）标题文字下方分割线 颜色">#0d000000</color>
+		
+		<!-- 聚合通知展开页 -->
+		<color name="class_color_realtime_news_title_text" description="聚合通知展开页 标题文字 颜色">#ffffffff</color>
+		<color name="class_color_notification_item_bg" description="聚合通知展开页 卡片背景 颜色">#e6ffffff</color>
+		<color name="class_color_notification_detail_app_name_text" description="聚合通知展开页 卡片 APP名称/时间 颜色">#66000000</color>
+		<color name="class_color_notification_detail_title_text" description="聚合通知展开页 卡片 标题文字 颜色">#e6000000</color>
+		<color name="class_color_notification_detail_text_text" description="聚合通知展开页 卡片 内容文字 颜色">#99000000</color>
+		
+		<color name="class_color_realtime_appname_title_text" description="聚合通知展开页 app名称及底部 提示文字 颜色（长按内容卡片后展示）">#ffffffff</color>
+		<color name="class_color_realtime_button_text_color" description="聚合通知展开页 按钮文字 颜色（长按内容卡片后展示）">#ffffffff</color>
+	</colors>
+	
+</ThemeConfig>

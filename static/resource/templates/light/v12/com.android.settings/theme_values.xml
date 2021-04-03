@@ -1,0 +1,498 @@
+<?xml version='1.0' encoding='utf-8' standalone='yes' ?>
+<MIUI_Theme_Values>
+	
+<!-- 顶栏 -->
+	<!-- 一级标题大文字 -->
+	<color name="action_bar_title_text_color_light" package="miui">class_color_top_title</color>
+	<!-- 顶栏编辑界面	标题文字	“MIOffice-5G 网络详情” -->
+	<color name="action_mode_title_text_color_light" package="miui">class_color_top_title</color>
+	<!-- 顶栏标题次要文字颜色 -->
+	<color name="action_bar_subtitle_text_light" package="miui">class_color_top_subtitle</color>
+	<!-- 左右小豆豆按钮	常态（不可按、二态是与底部小豆豆用的一套颜色值） -->
+	<color name="action_title_color_light" package="miui">class_color_top_title</color>
+	<!-- 顶部编辑按钮	顶部右上角编辑按钮（声音与振动-静音/勿扰-定时开启） -->
+	<color name="action_button_edit_color">class_color_top_title</color>
+	<!-- 更多设置-无障碍	顶部文字常态/选中 -->
+	<color name="accessibility_settings_action_bar_inactive_color">class_color_bar_normal</color>
+	<color name="accessibility_settings_action_bar_active_color">class_color_bar_active</color>
+	
+	<!-- 搜索条	背景、提示文字 -->
+	<color name="edit_text_search_bg_color_light" package="miui">class_color_search_bg</color>
+	<color name="edit_text_search_hint_color_light" package="miui">class_color_search_tips</color>
+
+<!-- 搜索框展开后 -->
+	<!-- 搜索条	输入的文字 -->
+	<color name="edit_text_search_color_light" package="miui">class_color_search_normal</color>
+	<!-- 搜索条右侧		“取消”	文字按钮 -->
+	<color name="search_action_mode_cancel_text_color_normal" package="miui">class_color_search_light</color>
+	<color name="search_action_mode_cancel_text_color_pressed" package="miui">class_color_search_normal</color>
+	
+<!-- 设置首页 -->
+	<!-- 设置首页-小米账号次要文字：“管理账号、云服务、支付信息等” -->
+	<color name="account_info_summary">class_color_second</color>
+	<!--  我的设备：“新版本”按钮背景、文字“新版本” -->
+	<color name="new_version_button_color">class_color_new_version_bg</color>
+	<color name="new_version_text_color">class_color_light_n</color>
+	
+	<!-- 首页列表	主要文字 -->
+	<color name="preference_primary_text_color_disable_light" package="miui">class_color_disable</color>
+	<color name="preference_primary_text_color_light" package="miui">class_color_first</color>
+	<color name="preference_primary_text_color_pressed_light" package="miui">class_color_first</color>
+	<!-- 首页列表	列表次要文字 -->
+	<color name="preference_secondary_text_color_disable_light" package="miui">class_color_disable</color>
+	<color name="preference_secondary_text_color_light" package="miui">class_color_second</color>
+	<color name="preference_secondary_text_color_pressed_light" package="miui">class_color_second</color>
+	<color name="preference_secondary_text_color_checked_light" package="miui">class_color_light_n</color>
+	<!-- 系统默认是用的#99000000、次要文字；class_color_second -->
+	<!-- 首页列表	次要提示文字	设置列表右侧提示文字“已开启、已关闭” -->
+	<color name="list_secondary_text_color_disable_light" package="miui">class_color_disable</color>
+	<color name="list_secondary_text_color_normal_light" package="miui">class_color_tips</color>
+	<color name="list_secondary_text_color_pressed_light" package="miui">class_color_tips</color>
+	
+	<!-- 无标题 非第一条列表分隔线（首页、wifi网络详情页） -->
+	<color name="preference_first_last_divider_line_light">#0d000000</color>
+	
+<!-- 二级设置界面 -->
+	<!-- 无标题 非第一条分割线（二级设置界面） -->
+	<color name="miuix_preference_first_last_divider_line_light">#0d000000</color>
+	<!-- 主要文字 -->
+	<color name="miuix_preference_primary_text_color_disable_light">class_color_disable</color>
+	<color name="miuix_preference_primary_text_color_light">class_color_first</color>
+	<!-- 次要文字 -->
+	<color name="miuix_preference_secondary_text_color_disable_light">class_color_disable</color>
+	<color name="miuix_preference_secondary_text_color_light">class_color_second</color>
+	<color name="miuix_preference_secondary_text_color_checked_light">class_color_light_n</color>
+	<!-- 次要提示文字	“勿扰”（声音与振动-静音/勿扰＞） -->
+	<color name="miuix_preference_list_secondary_text_color_disable_light">class_color_disable</color>
+	<color name="miuix_preference_list_secondary_text_color_normal_light">class_color_second</color>
+	<color name="miuix_preference_list_secondary_text_color_pressed_light">class_color_second</color>
+	<color name="miuix_preference_list_secondary_text_color_checked_light">class_color_light_n</color>
+	<!-- 次要文字	右操作提示文字“适中”（声音与振动-点按时振动-） -->
+	<color name="miuix_compat_integrated_spinner_text_color_light">class_color_tips</color>
+	
+	<!-- 卡片背景（常态、选中） -->
+	<color name="miuix_preference_checkable_item_fill_color_normal_light">class_color_checkable_item_fill_bg_normal</color>
+	<color name="miuix_preference_checkable_item_fill_color_checked_light">class_color_checkable_item_fill_bg_checked</color>
+	<!-- 卡片 主要文字 选中高亮色 -->
+	<color name="miuix_preference_highlight_disabled_light">class_color_light_d</color>
+	<color name="miuix_preference_highlight_normal_light">class_color_light_n</color>
+	<color name="miuix_preference_highlight_pressed_light">class_color_light_n</color>
+	<!-- 卡片左侧 选中√勾 -->
+	<color name="miuix_preference_btn_radio_arrow_color">class_color_light_n</color>
+	
+	<!-- 列表右箭头 -->
+	<color name="miuix_preference_arrow_right_normal_fill_color_light">class_color_tips</color>
+	<color name="miuix_preference_arrow_right_pressed_fill_color_light">class_color_tips</color>
+	<!-- 内容标题文字	“选取附近的WLAN” -->
+	<color name="bright_foreground_light">class_color_first</color>
+	<!-- 类别小标题文字	“WLAN设置”	#ff8c93b0 -->
+	<color name="miuix_preference_category_text_color_light">class_color_category_text_tips</color>
+	<!-- VPN-添加VPN-标题文字“类型” -->
+	<color name="preference_category_text_color_light" package="miui">class_color_tips</color>
+	<!-- 右侧刷新按钮：圆圈背景 -->
+	<color name="bt_refresh_bg_color">class_color_wb_bt_refresh_bg</color>
+	<!-- 右侧刷新按钮：箭头 -->
+	<color name="bt_refresh_color">class_color_wb_bt_refresh_arrow</color>
+	
+	<!-- WLAN卡片、蓝牙卡片 -->
+	<!-- 已连接 wifi信号图标染色颜色值 -->
+	<color name="miuix_preference_connect_icon_connected_color">class_color_wb_card_first_connected</color>
+	<!-- 已连接卡片内 主要文字 -->
+	<color name="miuix_preference_connect_title_connected_color">class_color_wb_card_first_connected</color>
+	<!-- 已连接卡片内 次要文字 -->
+	<color name="miuix_preference_connect_summary_connected_color">class_color_wb_card_secondary_connected</color>
+	<!-- 已连接卡片内 主要文字后面的小图标 -->
+	<color name="wifi_signal_icon_connected_color">class_color_wb_card_first_connected</color>
+	
+	<!-- wifi/蓝牙 卡片背景 圆角 -->
+	<!-- <dimen name="miuix_preference_high_light_radius">17.45dp</dimen> -->
+	<dimen name="miuix_preference_high_light_radius">class_dimen_miuix_preference_high_light_radius</dimen>
+	
+	<!-- 未连接 wifi信号图标染色颜色值 -->
+	<color name="miuix_preference_connect_icon_disconnected_color_light">class_color_wb_card_first_disconnected</color>
+	<!-- 未连接	wifi列表 主要文字 -->
+	<color name="miuix_preference_connect_title_disconnected_color_light">class_color_wb_card_first_disconnected</color>
+	<!-- 未连接	wifi列表 次要文字（在上面已连接wifi刚开始连接时显示） -->
+	<color name="miuix_preference_connect_summary_disconnected_color_light">class_color_wb_card_secondary_disconnected</color>
+	<!-- 列表文字后面的小图标（2.4G/5G/6G/MI） -->
+	<color name="wifi_signal_icon_color">class_color_wb_card_first_disconnected</color>
+	
+	<!-- 网络详情界面 详细图标icon染色 -->
+	<color name="wifi_detail_item_icon_color">class_color_second</color>
+	<!-- icon下方主要文字、次要文字 -->
+	<color name="basic_info_item_title_color">class_color_first</color>
+	<color name="basic_info_item_summary_color">class_color_second</color>
+	
+	<!-- wifi网络详情页面 高亮文字 -->
+	<!-- 修改密码 -->
+	<color name="wifi_detail_modify_color">class_color_light_n</color>
+	<!-- 删除网络 -->
+	<color name="wifi_detail_delete_color">class_color_wifi_detail_delete</color>
+	<!-- WLAN：添加网络按钮文字“添加网络” -->
+	<color name="wifi_add_network_title_color">class_color_light_n</color>
+	
+	<!-- 列表 右操作 近手弹窗	提示文字 -->
+	<color name="miuix_compat_spinner_text_color_light">class_color_tips</color>
+	
+	<!-- 账号与同步	 -->
+	<!-- 小米账号下方提示文字：“小米云服务能同步你的联系人，照片，备份桌面应用，系统设置,还能开启查找手机防止手机丢失” -->
+	<color name="list_secondary_text_color_normal_light">class_color_tips</color>
+	
+	<!-- 恢复出厂设置	底部提示文字 -->
+	<color name="reset_hint_content">class_color_second</color>
+	
+<!-- USB弹窗 -->
+	<!-- 选中边框 -->
+	<color name="usb_dialog_selected_bg_color">class_color_light_n</color>
+	<!-- 卡片背景 -->
+	<color name="usb_dialog_bg_color">class_color_usb_dialog_bg</color>
+	<!-- 选项卡片中文字 -->
+	<color name="usb_dialog_text_color">class_color_usb_dialog_text</color>
+	
+<!-- 弹窗 -->
+	<!-- 按下、选中（与弹窗-列表按下背景共用） -->
+	<color name="list_item_bg_color_pressed_light" package="miui">class_color_list_bg_pressed</color>
+	<color name="list_item_bg_color_checked_light" package="miui">class_color_list_bg_checked</color>
+	<!-- <color name="list_item_bg_color_light" package="miui">class_color_list_bg_pressed</color> -->
+	<color name="miuix_folme_color_touch_tint">class_color_list_bg_pressed</color>
+	<color name="folme_color_touch_tint" package="miui">class_color_list_bg_pressed</color>
+	<!-- 更多弹窗（连接有共享-触碰付款-更多-） -->
+	<!-- 弹窗列表文字	不可按、常态、按下 -->
+	<color name="menu_list_text_color_disabled_light" package="miui">class_color_disable</color>
+	<color name="menu_list_text_color_normal_light" package="miui">class_color_first</color>
+	<color name="menu_list_text_color_pressed_light" package="miui">class_color_first</color>
+	<!-- 弹窗列表 二态：list_item_bg_color_pressed_light（与弹窗-列表按下背景共用） -->
+	<!-- 弹窗列表文字	未选中 -->
+	<color name="dialog_list_text_color_disabled_light" package="miui">class_color_disable</color>
+	<color name="dialog_list_text_color_normal_light" package="miui">class_color_first</color>
+	<color name="dialog_list_text_color_pressed_light" package="miui">class_color_first</color>
+	<!-- <color name="list_item_bg_color_pressed_light" package="miui">#0c000000</color> -->
+	<!-- 弹窗列表文字	已选中	高亮色（系统高亮蓝：#ff0d84ff） -->
+	<color name="highlight_disabled_light" package="miui">class_color_light_d</color>
+	<color name="highlight_normal_light" package="miui">class_color_light_n</color>
+	<color name="highlight_pressed_light" package="miui">class_color_light_n</color>
+	
+	<!-- 近手弹窗	主要文字（个人热点-已连接设备-最大设备连接数）	不可按、常态、按下、选中 -->
+	<color name="miuix_compat_list_text_color_disable_light">class_color_disable</color>
+	<color name="miuix_compat_list_text_color_normal_light">class_color_first</color>
+	<color name="miuix_compat_list_text_color_pressed_light">class_color_first</color>
+	<color name="miuix_compat_list_text_color_checked_light">class_color_light_n</color>
+	<!-- 近手弹窗	次要文字（更多设置-语言与输入法-全面屏键盘优化-左右侧功能键-） -->
+	<color name="miuix_compat_list_secondary_text_color_disable_light">class_color_disable</color>
+	<color name="miuix_compat_list_secondary_text_color_normal_light">class_color_second</color>
+	<color name="miuix_compat_list_secondary_text_color_pressed_light">class_color_second</color>
+	<color name="miuix_compat_list_secondary_text_color_checked_light">class_color_light_n</color>
+	
+	<!-- 近手弹窗	列表文字	不可按/常态/二态 -->
+	<color name="list_text_color_disable_light" package="miui">class_color_disable</color>
+	<color name="list_text_color_normal_light" package="miui">class_color_first</color>
+	<color name="list_text_color_pressed_light" package="miui">class_color_first</color>
+	<color name="list_text_color_checked_light" package="miui">class_color_light_n</color>
+
+	<!-- 弹窗列表背景（WLAN-网络详情-代理-）	常态、按下、选中 -->
+	<color name="dropdown_popup_list_item_bg_normal_light" package="miui">#00000000</color>
+	<color name="dropdown_popup_list_item_bg_pressed_light" package="miui">class_color_list_bg_pressed</color>
+	<color name="dropdown_popup_list_item_bg_checked_light" package="miui">class_color_list_bg_checked</color>
+	
+	<!-- 弹窗列表文字	不可按、常态、按下、选中 -->
+	<color name="dropdown_popup_list_text_color_disabled_light" package="miui">class_color_disable</color>
+	<color name="dropdown_popup_list_text_color_normal_light" package="miui">class_color_first</color>
+	<color name="dropdown_popup_list_text_color_pressed_light" package="miui">class_color_first</color>
+	<color name="dropdown_popup_list_text_color_checked_light" package="miui">class_color_light_n</color>
+	
+<!-- 底部弹窗 -->
+	<!-- 弹窗背景 -->
+	<color name="dialog_bg_color_light" package="miui">class_color_dialog_bg</color>
+	<!-- 标题文字	设置时间、静音/勿扰-定时开启-添加-规则名称-定时规则：“规则名称” -->
+	<color name="dialog_title_text_color" package="miui">class_color_first</color>
+	<!-- 提示文字	“确定要删除所选的9个会话吗？”	“用户名面不匹配” -->
+	<color name="dialog_message_text_color_light" package="miui">class_color_first</color>
+	<!-- 二级提示文字	“同时删除选中的收藏的信息” -->
+	<color name="dialog_checkbox_text_color_light" package="miui">class_color_second</color>
+	<!-- 左按钮文字		“取消”、添加VPN复选框标题文字“显示高级选项”、密码图案设置界面：“重绘” -->
+	<!-- 左按钮文字	不可按、常态 -->
+	<color name="disabled_text_light" package="miui">class_color_disable</color>
+	<color name="button_text_color_light" package="miui">class_color_second</color>
+	<!-- 右 高亮按钮背景 -->
+	<color name="button_bg_primary_color_disabled_light" package="miui">class_color_dialog_button_bg_primary_d</color>
+	<color name="button_bg_primary_color_normal_light" package="miui">class_color_dialog_button_bg_primary_n</color>
+	<color name="button_bg_primary_color_pressed_light" package="miui">class_color_dialog_button_bg_primary_n</color>
+	<!-- 右 高亮按钮 文字	“确定” -->
+	<color name="button_text_color_guide_disabled_light" package="miui">class_color_dialog_button_text_guide_d</color>
+	<color name="button_text_color_guide_normal_light" package="miui">class_color_dialog_button_text_guide_n</color>
+	
+	<!-- 输入框 -->
+	<!-- 输入常用语、添加私密联系人；身份、密码	背景框 -->
+	<color name="edit_text_dialog_bg_solid_light" package="miui">class_color_edit_text_dialog_bg</color>
+	<!-- 匿名身份？	背景框-->
+	<color name="edit_text_bg_color_light" package="miui">class_color_edit_text_dialog_bg</color>
+	<!-- 输入框 描边（实际是矩形背景） -->
+	<color name="edit_text_border_color" package="miui">class_color_edit_text_dialog_border</color>
+	
+	<!-- 页面输入框 -->
+	<!-- 提示文字 -->
+	<color name="hint_edit_text_dialog_color_light" package="miui">class_color_tips</color>
+	<color name="hint_foreground_light" package="miui">class_color_tips</color>
+	<!-- 框下空白处提示文字：“在使用快传接收发送文件、蓝牙设备互联、首次建立共享热点等操作时，都会看到您的手机名称”（我的设备-修改手机名称-） -->
+	<color name="prompt_text_color">class_color_tips</color>
+	<!-- 备份与恢复-帮助与反馈-常见问题-问题详情页-提示文字“备份方式有2种，分别是......” -->
+	<color name="detal_description_color">class_color_second</color>
+	<!-- 已输入的文字 -->
+	<color name="edit_text_color_light_disabled" package="miui">class_color_disable</color>
+	<color name="edit_text_dialog_color_disabled_light" package="miui">class_color_disable</color>
+	<color name="edit_text_dialog_color_normal_light" package="miui">class_color_first</color>
+	<color name="edit_text_color_light" package="miui">class_color_first</color>
+	
+	<!-- 修复系统设置、我的设备-全部参数：SIM卡状态 弹窗 主要文字 -->
+	<color name="dim_foreground_light" package="miui">class_color_second</color>
+	
+	<!-- 时间弹窗 -->
+	<!-- 待选提示日期时间文字 -->
+	<color name="number_picker_hint_text_color" package="miui">class_color_second</color>
+	<!-- 选中高亮色	**时**分（时间*单位） -->
+	<color name="number_picker_highlight_text_color" package="miui">class_color_light_n</color>
+	<color name="number_picker_label_color" package="miui">class_color_light_n</color>
+
+	<!-- 蓝牙配对弹窗 提示文字：“蓝牙配对码”	“允许访问您的通讯录和通话记录” -->
+	<color name="bluetooth_dialog_text_color">class_color_second</color>
+	<color name="bluetooth_dialog_text_color_2">class_color_second</color>
+	
+	<!-- 连接wifi时CA证书域名提示文字：“必须指定域名。” -->
+	<color name="error_color_material_light">class_color_wifi_detail_delete</color>
+	
+<!-- 我的设备 -->
+	<!-- MIUI 版本 卡片背景	#fff7f7f7 -->
+	<color name="card_view_background_color">class_color_card_view_background</color>
+	<!-- 次要文字：版本号/版本类（MIUI 12 20.5.25、开发板） -->
+	<color name="instructions_text_color">class_color_second</color>
+	<!-- 有新版本提示文字：“有新版本” -->
+	<color name="need_update_text_color">class_color_light_n</color>
+	<!-- 储存空间 卡片背景、进度背景 -->
+	<color name="progress_card_view_background_color">class_color_card_view_background</color>
+	<color name="progress_paint_color">class_color_card_progress_paint</color>
+	
+	<!-- 手机参数卡片背景、描边 -->
+	<color name="device_card_background">class_color_device_card_background</color>
+	<color name="card_background_stroke_color">class_color_device_card_stroke</color>
+	<!-- 参数icon染色 -->
+	<color name="device_icon_fill_color">class_color_second</color>
+	
+<!-- 声音与振动 -->
+	<!-- 文字：电话铃声、小米清新版 -->
+	<color name="ringtone_item_title_color">class_color_first</color>
+	<color name="ringtone_item_value_color">class_color_second</color>
+	<!-- 音量标识icon -->
+	<color name="volume_icon_color">class_color_tips</color>
+	<!-- 音量条背景 -->
+	<color name="progressBackground_light" package="miui">class_color_progressBackground</color>
+	<!-- 音量条进度（目前只有亮度调节页面生效） -->
+	<color name="progressPrimaryColor" package="miui">class_color_light_n</color>
+	<color name="progressDisableColor" package="miui">class_color_light_n</color>
+	<color name="ringtone_item_region_color">class_color_progressBackground</color>
+	<color name="seekbar_progress_color" package="miui">class_color_first</color>
+	<color name="volume_seekbar_title_color">class_color_first</color>
+	
+<!-- 全面屏键盘优化 -->
+	<!-- 旧：选中卡片 蓝色边框 -->
+	<color name="input_method_keyboard_bg_color">class_color_light_n</color>
+	<!-- 旧：选中卡片 下方文字 -->
+	<color name="input_method_keyboard_des_text_color_selected">class_color_light_n</color>
+	<!-- 旧：未选卡片 下方文字 -->
+	<color name="input_method_keyboard_des_text_color_unselected">class_color_first</color>
+	<!-- 选中卡片 蓝色边框 -->
+	<color name="visual_check_borderlayout_bg_stroke_color">class_color_light_n</color>
+	<!-- 选中卡片 下方文字 -->
+	<color name="visual_check_textview_checked_text_color">class_color_light_n</color>
+	<!-- 未选卡片 下方文字 -->
+	<color name="visual_check_textview_unchecked_text_color">class_color_first</color>
+	
+<!-- 密码与安全 -->
+	<!-- 未开启：卡片背景（与我的设备卡片颜色“card_view_background_color”共用）、素材：card_shape_corner.png -->
+	<!-- 未开启：主要文字、次要文字-->
+	<color name="card_view_title_color">class_color_first</color>
+	<color name="card_view_value_color">class_color_second</color>
+	<!-- 密码 icon：ic_password_unlock.png、指纹 icon：ic_finger_unlock.png、人脸 icon：ic_face_unlock.png、蓝牙 icon：ic_bluetooth_unlock.png -->
+	<!-- 已开启：卡片背景	素材：card_checked_corner.png -->
+	<color name="card_view_checked_color">class_color_card_view_checked</color>
+	<!-- 已开启：主要文字、次要文字 -->
+	<color name="card_view_title_checked_color">class_color_password_card_checked_first</color>
+	<color name="card_view_value_checked_color">class_color_password_card_checked_second</color>
+	<!-- 图案密码、数字密码、混合密码	卡片背景	常态、按下、选中、选中按下（设置锁屏密码-三级界面） -->
+	<color name="choose_unlock_item_bg_normal">class_color_choose_unlock_item_bg</color>
+	<color name="choose_unlock_item_bg_pressed">class_color_choose_unlock_item_bg</color>
+	<color name="choose_unlock_item_bg_selected">class_color_card_view_checked</color>
+	<color name="choose_unlock_item_bg_selected_pressed">class_color_card_view_checked</color>
+	<!-- 密码设置进行中界面 标题提示文字：“请设置图案”	“请重试” -->
+	<color name="default_text_color">class_color_first</color>
+	<!-- 更换锁屏密码 按钮文字：“关闭密码” -->
+	<color name="turn_off_password_color">class_color_wifi_detail_delete</color>
+	<!-- 更换锁屏密码 卡片文字 -->
+	<!-- 未选卡片：主要文字、次要文字 -->
+	<color name="card_style_title_normal_color">class_color_first</color>
+	<color name="card_style_summary_normal_color">class_color_second</color>
+	<!-- 选中卡片：主要文字、次要文字 -->
+	<color name="card_style_title_selected_color">class_color_password_card_checked_first</color>
+	<color name="card_style_summary_selected_color">class_color_password_card_checked_second</color>
+	
+	<!-- 忘记密码	弹窗文字 -->
+	<!-- <color name="forget_password_dialog_background">#b3000000</color> -->
+	<!-- 标题文字、主要文字：“请重置数据”、忘记密码无法找回、您只能通过 清除全部数据 ...... -->
+	<color name="forget_password_dialog_title_text_color">class_color_first</color>
+	<!-- 次要文字：“如需清除数据，请按以下操作：......” -->
+	<color name="forget_password_dialog_content_text_color">class_color_tips</color>
+	
+	<!-- SOS紧急求助 -->
+	<!-- 播放求助录音：卡片背景、文字、播放按钮、按钮按下 -->
+	<color name="sos_player_linear_bg">class_color_card_view_background</color>
+	<color name="sos_text_color">class_color_second</color>
+	<color name="sos_player_bg">class_color_second</color>
+	<color name="sos_player_linear_pressed_bg">class_color_card_view_background</color>
+	<!-- SOS紧急求助（紧急联系人） -->
+	<!-- 已添加紧急联系人 列表背景 -->
+	<color name="emergency_contact_item_bg">#00000000</color>
+	<!-- 已添加联系人名字 -->
+	<color name="emergency_contact_name_color">class_color_first</color>
+	<!-- 电话号码 -->
+	<color name="emergency_contact_number_color">class_color_second</color>
+	
+	<!-- 设置锁屏密码、页面按钮 -->
+	<color name="settings_default_bg_color">#00000000</color>
+	<color name="add_fingerprint_title_text_color">class_color_first</color>
+	<color name="add_fingerprint_msg_text_color">class_color_second</color>
+	<color name="add_fingerprint_finish_title_text_color">class_color_first</color>
+	<color name="choose_password_forget_text_color_light">class_color_tips</color>
+	
+	<!-- 隐私密码 背景、主要文字、次要文字 -->
+	<color name="main_page_background">class_color_main_page_background</color>
+	<color name="unlock_text_title">class_color_unlock_text_title</color>
+	<color name="unlock_text_summary">class_color_unlock_text_summary</color>
+	<color name="account_info_text_color">class_color_first</color>
+	<!-- 密码上方提示：请输入隐私密码 -->
+	<color name="unlock_text_tips">class_color_tips</color>
+	<!-- 底部提示：忘记了密码？ -->
+	<color name="unlock_text_light">class_color_first</color>
+
+	<!-- 设置页引导卡片：在查找其他设置吗？ -->
+	<!-- 卡片背景 -->
+	<color name="recommend_region_color">class_color_recommend_bg</color>
+	<!-- 主要文字、次要文字 -->
+	<color name="recommend_title_color">class_color_second</color>
+	<color name="recommend_item_link">class_color_light_n</color>
+	<color name="recommend_item_link_pressed">class_color_light_d</color>
+	
+	<!-- 隐藏屏幕刘海 -->
+	<color name="notch_radio_button_text">class_color_first</color>
+	<color name="notch_radio_button_text_checked">class_color_light_n</color>
+	
+	<!-- 通知过滤 -->
+	<color name="fold_description_text_color">class_color_tips</color>
+	<color name="fold_feedback_link_color">class_color_light_n</color>
+	<!-- 滑盖设置 -->
+	<color name="slider_color_header">class_color_second</color>
+	<!-- 设备解锁状态 -->
+	<color name="bootloader_status_default_color">class_color_first</color>
+	<!-- 字体大小与粗细 -->
+	<!-- 无障碍-视觉-显示大小	小标题提示文字 -->
+	<color name="transparent_40_balck">class_color_tips</color>
+	<color name="transparent_60_balck">class_color_second</color>
+	<color name="transparent_80_balck">class_color_first</color>
+	<color name="font_size_view_background">class_color_recommend_bg</color>
+	<color name="font_size_view_small_color">class_color_font_size_view_small</color>
+	<color name="font_weight_view_small_color">class_color_font_weight_view_small</color>
+	<!-- 圆点滑块 -->
+	<color name="font_size_view_big_color">class_color_light_n</color>
+	<color name="font_size_view_big_center_color">#ffffffff</color>
+	
+	<!-- 设置-显示-色彩风格 -->
+	<!-- 色温圆盘下方的 横向多选条背景	class_color_second -->
+	<color name="filter_sort_view_bg_color_light" package="miui">#ffe5e5e5</color>
+	<!-- 文字：“默认、暖色、冷色、自定义” -->
+	<color name="filter_sort_tab_view_text_normal_light">#cc000000</color>
+	
+	<!-- 全面屏 复选框按钮 文字 -->
+	<color name="color_radio_button_text">class_color_first</color>
+	<!-- MIUI实验室、蓝牙配对码数字“62821”、我的设备：卡片主要文字 -->
+	<color name="bright_foreground_light_disabled" package="miui">class_color_disable</color>
+	<color name="bright_foreground_light" package="miui">class_color_first</color>
+	<color name="miuix_preference_bright_foreground_light_disabled">class_color_disable</color>
+	<color name="miuix_preference_bright_foreground_light">class_color_first</color>
+	<color name="usage_stats_black60">class_color_second</color>
+	
+	<!-- 空页面提示文字 -->
+	<color name="blank_page_text_color_light" package="miui">class_color_tips</color>
+	
+<!-- 输入框长按内容后-文本功能弹窗 -->
+	<!-- <color name="text_select_bg_color_light" package="miui">class_color_dialog</color> -->
+	<!-- <color name="text_select_border_color_light" package="miui">class_color_dialog</color> -->
+	<!-- 按钮背景、分割线、文字、加载中的圆圈 -->
+	<color name="text_select_item_bg_color_normal_light" package="miui">#00000000</color>
+	<color name="text_select_item_bg_color_pressed_light" package="miui">class_color_list_bg_pressed</color>
+	<color name="divider_color_light" package="miui">#0d000000</color>
+	<color name="text_edit_action_popup_text_normal" package="miui">class_color_first</color>
+	<color name="text_edit_action_popup_text_pressed" package="miui">class_color_light_n</color>
+	<color name="progressbar_indeterminate_circle_color_light" package="miui">class_color_first</color>
+	<!-- 释义后展开面板文字颜色	释义的文字、文字释义、金山词霸提供技术支持、更多详情 -->
+	<color name="text_edit_action_popup_title_normal_light" package="miui">class_color_first</color>
+	<color name="text_edit_action_popup_summary_normal_light" package="miui">class_color_second</color>
+	<color name="text_edit_action_popup_info_normal_light" package="miui">class_color_tips</color>
+	<color name="text_edit_action_popup_more_normal_light" package="miui">class_color_light_n</color>
+	
+	<!-- 我的设备-全部参数：底部卡片内白色块 -->
+	<color name="list_card_background">#00000000</color>
+	<!-- 列表底层的白色背景	网速模式、护眼模式、色彩风格 -->
+	<color name="miuix_preference_white">#00000000</color>
+	<!-- WLAN网络详情九宫格白色块背景 最新版本已去掉 -->
+	<color name="white">#00000000</color>
+	<!-- 更多设置-日期和时间-选择时区-时区：“中国”（属于安卓原生模块） -->
+	<color name="holo_blue_light" package="android">class_color_light_n</color>
+	
+<!-- 开关背景、滑块 -->
+	<!-- 开关按钮	关闭背景、开启背景 -->
+	<color name="sliding_button_bar_off_light" package="miui">class_color_sliding_btn_off</color>
+	<color name="sliding_button_bar_on_light" package="miui">class_color_sliding_btn_on</color>
+	<!-- <color name="sliding_button_bg_border_color">#19000000</color> -->
+	<!-- 开关按钮	滑块	关闭按钮、开启按钮 -->
+	<color name="sliding_btn_slider_off_normal_color_light" package="miui">class_color_sliding_btn_slider</color>
+	<color name="sliding_btn_slider_off_pressed_color_light" package="miui">class_color_sliding_btn_slider</color>
+	<color name="sliding_btn_slider_on_normal_color_light" package="miui">class_color_sliding_btn_slider</color>
+	<color name="sliding_btn_slider_on_pressed_color_light" package="miui">class_color_sliding_btn_slider</color>
+	
+	<!-- 底部小豆豆icon -->
+	<color name="svg_icon_color_normal_light">class_color_svg_icon_n</color>
+	<color name="svg_icon_color_pressed_light">class_color_svg_icon_p</color>
+	<color name="svg_icon_color_disable_light">class_color_svg_icon_d</color>
+	<color name="svg_icon_color_normal_light" package="miui">class_color_svg_icon_n</color>
+	<color name="svg_icon_color_pressed_light" package="miui">class_color_svg_icon_p</color>
+	<color name="svg_icon_color_disable_light" package="miui">class_color_svg_icon_d</color>
+	<color name="svg_icon_color_blue_selected_light" package="miui">class_color_svg_icon_light</color>
+	<color name="svg_icon_color_blue_disable_light" package="miui">class_color_svg_icon_d</color>
+	<color name="svg_icon_color_red_pressed_light" package="miui">class_color_svg_icon_p</color>
+	<color name="svg_icon_color_red_disable_light" package="miui">class_color_svg_icon_d</color>
+	<color name="svg_icon_color_red_normal_light" package="miui">class_color_svg_icon_red</color>
+	<!-- 底部小豆豆文字 -->
+	<color name="action_mode_button_text_color_normal_light" package="miui">class_color_svg_icon_n</color>
+	<color name="action_mode_button_text_color_pressed_light" package="miui">class_color_svg_icon_p</color>
+	<color name="action_mode_button_text_color_disable_light" package="miui">class_color_svg_icon_d</color>
+	<color name="action_mode_button_text_color_selected_light" package="miui">class_color_svg_icon_light</color>
+	<color name="action_button_text_color_normal_light" package="miui">class_color_svg_icon_n</color>
+	<color name="action_button_text_color_pressed_light" package="miui">class_color_svg_icon_p</color>
+	<color name="action_button_text_color_disable_light" package="miui">class_color_svg_icon_d</color>
+	<color name="action_button_text_color_selected_light" package="miui">class_color_svg_icon_light</color>
+	
+	<!-- 复选框 未选 描边的颜色 -->
+	<color name="checkbox_btn_stroke_color_light" package="miui">class_color_checkbox_btn_stroke</color>
+	<!-- 复选框 未选、已选、对勾 颜色 -->
+	<color name="checkbox_btn_disable_background_color_light" package="miui">class_color_checkbox_btn_off</color>
+	<color name="checkbox_btn_on_background_color_light" package="miui">class_color_checkbox_btn_on</color>
+	<color name="checkbox_btn_on_foreground_color_light" package="miui">class_color_checkbox_btn_hook</color>
+	<!-- 背景透明度 -->
+	<integer name="checkwidget_background_normal_alpha_light" package="miui">class_integer_checkbox_bg_n</integer>
+	<integer name="checkwidget_background_disable_alpha_light" package="miui">class_integer_checkbox_bg_d</integer>
+	<!-- 描边透明度 -->
+	<integer name="checkwidget_stroke_normal_alpha_light" package="miui">class_integer_checkbox_stroke_n</integer>
+	<integer name="checkwidget_stroke_disable_alpha_light" package="miui">class_integer_checkbox_stroke_d</integer>
+	
+	<integer name="window_translucent_status" package="miui">class_integer_window_status</integer>
+	<!-- <bool name="check_widget_anim_enable" package="miui">class_bool_checkbox_btn</bool> -->
+	
+</MIUI_Theme_Values>

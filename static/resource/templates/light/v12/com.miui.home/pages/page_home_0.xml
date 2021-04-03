@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ThemeConfig tag="桌面" description="桌面 一键清理" version="12.0" order="0">
+	
+	<image description="一键清理缩略图（编辑模式-添加工具页面）" src="res/drawable-xxhdpi/gadget_clear_button.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<!-- <image description="强力清理缩略图" src="res/drawable-xxhdpi/gadget_power_clear_button.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image> -->
+	
+	<image description="一键清理/强力清理 背景" src="res/drawable-xxhdpi/gadget_clear_button_bg.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="强力清理 icon（安全中心设置-添加桌快捷方式）" src="res/drawable-xxhdpi/gadget_power_clear_icon.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="扫把 0（下方是一键清理的扫把 图片序列帧）" src="res/drawable-xxhdpi/gadget_clear_broom_00000.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="扫把 1" src="res/drawable-xxhdpi/gadget_clear_broom_00001.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="扫把 2" src="res/drawable-xxhdpi/gadget_clear_broom_00002.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="扫把 3" src="res/drawable-xxhdpi/gadget_clear_broom_00003.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="扫把 4" src="res/drawable-xxhdpi/gadget_clear_broom_00004.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="扫把 5" src="res/drawable-xxhdpi/gadget_clear_broom_00005.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="扫把 6" src="res/drawable-xxhdpi/gadget_clear_broom_00006.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="扫把 7" src="res/drawable-xxhdpi/gadget_clear_broom_00007.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="扫把 8" src="res/drawable-xxhdpi/gadget_clear_broom_00008.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="扫把 9" src="res/drawable-xxhdpi/gadget_clear_broom_00009.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="扫把 10" src="res/drawable-xxhdpi/gadget_clear_broom_00010.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="扫把 11" src="res/drawable-xxhdpi/gadget_clear_broom_00011.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="扫把 12" src="res/drawable-xxhdpi/gadget_clear_broom_00012.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="扫把 13" src="res/drawable-xxhdpi/gadget_clear_broom_00013.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="扫把 14" src="res/drawable-xxhdpi/gadget_clear_broom_00014.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="扫把 15" src="res/drawable-xxhdpi/gadget_clear_broom_00015.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="扫把 16" src="res/drawable-xxhdpi/gadget_clear_broom_00016.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="扫把 17" src="res/drawable-xxhdpi/gadget_clear_broom_00017.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="扫把 18" src="res/drawable-xxhdpi/gadget_clear_broom_00018.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="扫把 19" src="res/drawable-xxhdpi/gadget_clear_broom_00019.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="扫把 20" src="res/drawable-xxhdpi/gadget_clear_broom_00020.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="扫把 21" src="res/drawable-xxhdpi/gadget_clear_broom_00021.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="扫把 22" src="res/drawable-xxhdpi/gadget_clear_broom_00022.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="扫把 23" src="res/drawable-xxhdpi/gadget_clear_broom_00023.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="扫把 24" src="res/drawable-xxhdpi/gadget_clear_broom_00024.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="扫把 25" src="res/drawable-xxhdpi/gadget_clear_broom_00025.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="扫把 26" src="res/drawable-xxhdpi/gadget_clear_broom_00026.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="扫把 27" src="res/drawable-xxhdpi/gadget_clear_broom_00027.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="扫把 28" src="res/drawable-xxhdpi/gadget_clear_broom_00028.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	
+</ThemeConfig>

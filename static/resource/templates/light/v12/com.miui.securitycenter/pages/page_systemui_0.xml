@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ThemeConfig tag="通知栏" description="安全中心" version="12.0" order="10">
+
+	<image description="可用内存" src="res/drawable-xxhdpi/icon_garbage_notification.png">
+		<path>com.miui.securitycenter/res/drawable-xxhdpi</path>
+	</image>
+	<image description="电量" src="res/drawable-xxhdpi/icon_power_normal.png">
+		<path>com.miui.securitycenter/res/drawable-xxhdpi</path>
+	</image>
+	<image description="垃圾清理" src="res/drawable-xxhdpi/icon_garbage_clean_notification_normal.png">
+		<path>com.miui.securitycenter/res/drawable-xxhdpi</path>
+	</image>
+	<image description="骚扰拦截" src="res/drawable-xxhdpi/icon_antispam_notification_normal.png">
+		<path>com.miui.securitycenter/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="流量图标 无数据" src="res/drawable-xxhdpi/status_bar_flow_null.png">
+		<path>com.miui.securitycenter/res/drawable-xxhdpi</path>
+	</image>
+	<image description="流量图标 5%" src="res/drawable-xxhdpi/status_bar_flow_5.png">
+		<path>com.miui.securitycenter/res/drawable-xxhdpi</path>
+	</image>
+	<image description="流量图标 15%" src="res/drawable-xxhdpi/status_bar_flow_15.png">
+		<path>com.miui.securitycenter/res/drawable-xxhdpi</path>
+	</image>
+	<image description="流量图标 25%" src="res/drawable-xxhdpi/status_bar_flow_25.png">
+		<path>com.miui.securitycenter/res/drawable-xxhdpi</path>
+	</image>
+	<image description="流量图标 35%" src="res/drawable-xxhdpi/status_bar_flow_35.png">
+		<path>com.miui.securitycenter/res/drawable-xxhdpi</path>
+	</image>
+	<image description="流量图标 45%" src="res/drawable-xxhdpi/status_bar_flow_45.png">
+		<path>com.miui.securitycenter/res/drawable-xxhdpi</path>
+	</image>
+	<image description="流量图标 55%" src="res/drawable-xxhdpi/status_bar_flow_55.png">
+		<path>com.miui.securitycenter/res/drawable-xxhdpi</path>
+	</image>
+	<image description="流量图标 65%" src="res/drawable-xxhdpi/status_bar_flow_65.png">
+		<path>com.miui.securitycenter/res/drawable-xxhdpi</path>
+	</image>
+	<image description="流量图标 75%" src="res/drawable-xxhdpi/status_bar_flow_75.png">
+		<path>com.miui.securitycenter/res/drawable-xxhdpi</path>
+	</image>
+	<image description="流量图标 85%" src="res/drawable-xxhdpi/status_bar_flow_85.png">
+		<path>com.miui.securitycenter/res/drawable-xxhdpi</path>
+	</image>
+	<image description="流量图标 95%" src="res/drawable-xxhdpi/status_bar_flow_95.png">
+		<path>com.miui.securitycenter/res/drawable-xxhdpi</path>
+	</image>
+	<image description="流量图标 100%" src="res/drawable-xxhdpi/status_bar_flow_100.png">
+		<path>com.miui.securitycenter/res/drawable-xxhdpi</path>
+	</image>
+	
+</ThemeConfig>

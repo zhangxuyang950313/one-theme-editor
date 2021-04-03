@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ThemeConfig>
+	<ModuleInfo package="framework-res" description="通知栏 悬浮通知" order="5"/>
+	<baseColors>
+		<color name="notification_primary_text_color_light" priority="1"/>
+		<color name="statusbar_content_title" priority="2"/>
+	</baseColors>
+	
+	<!-- 透明度规范：	
+			主要文字：90%	e6
+			次要文字：60%	99
+			禁用内容：30%	4d
+			提示文字：40%	66	 -->
+	
+	<colors>
+		<color name="class_color_notification_text_title" description="消息标题 文字颜色">#e6000000</color>
+		<color name="class_color_notification_text_subtitle" description="消息内容/收起箭头 文字颜色">#99000000</color>
+		<color name="class_color_notification_text_time" description="消息 时间、提示等 文字颜色">#66000000</color>
+		<color name="class_color_notification_btn_text" description="带按钮通知/悬浮窗 按钮内文字">#a6000000</color>
+		<color name="class_color_notification_holo_red" description="关闭通知时 提示文字（已屏蔽***的通知）">#ffcc0000</color>
+		
+		<color name="class_color_notification_progress_horizontal_bg" description="带进度条通知 进度背景 颜色">#33000000</color>
+		<color name="class_color_notification_progress_horizontal_progress" description="带进度条通知 进度条 颜色">#ff0d84ff</color>
+		
+	</colors>
+	
+</ThemeConfig>

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ThemeConfig>
+	<ModuleInfo package="com.android.mms" description="短信" order="2"/>
+	<baseColors>
+		<color name="list_text_color_normal_light" package="miui" priority="1"/>
+		<color name="list_text_color_pressed_light" package="miui" priority="2"/>
+	</baseColors>
+
+	<!-- 透明度规范：	
+			高亮文字：100%	ff
+			标题文字：80%	cc
+			主要文字：90%	e6
+			次要文字：60%	99
+			禁用内容：30%	4d
+			提示文字：40%	66
+			设置列表小标题文字：高级灰：#ff8c93b0 -->
+
+	<colors>
+		<color name="class_color_tab_title" description="顶栏标题文字 颜色">#cc000000</color>
+		<color name="class_color_tab_subtitle" description="顶栏次要标题文字 颜色">#99000000</color>
+		<color name="class_color_tab_normal" description="首页 顶栏标题文字 未选中 颜色">#66000000</color>
+		<color name="class_color_tab_active" description="首页 顶栏标题文字 选中 颜色">#cc000000</color>
+		<color name="class_color_tab_light" description="顶栏 高亮色文字（短信顶部 二级tab选中、新建已选网络联系人、搜索取消按钮）">#ff0d84ff</color>
+
+		<color name="class_color_search_bg" description="搜索条 颜色（优先使用素材）">#0d000000</color>
+		<color name="class_color_search_tips" description="搜索条 提示文字">#66000000</color>
+		<color name="class_color_search_normal" description="搜索条 输入文字">#e6000000</color>
+		<color name="class_color_cloud_card_bg" description="云服务提示条、开启智能短信卡片 背景颜色">#0d000000</color>
+		<color name="class_color_cloud_error_text" description="云服务提示条内 未同步时提示文字 颜色">#fff22424</color>
+
+		<color name="class_color_first" description="主要字体颜色">#e6000000</color>
+		<color name="class_color_second" description="次要字体颜色">#99000000</color>
+		<color name="class_color_disable" description="不可按态字体颜色">#4d000000</color>
+		<color name="class_color_tips" description="提示类字体颜色">#66000000</color>
+		<color name="class_color_category_text_tips" description="设置列表 类别小标题文字颜色">#ff8c93b0</color>
+		<color name="class_color_visual_guidance_layout_bg" description="新版设置列表 大卡片背景颜色">#00ffffff</color>
+		<color name="class_color_light_d" description="全局高亮色 不可按">#800d84ff</color>
+		<color name="class_color_light_n" description="全局高亮色 常态">#ff0d84ff</color>
+
+		<color name="class_color_dialog_bg" description="底部弹窗背景、语音短信录入弹窗背景（有素材资源时，优先使用图片）">#ffffffff</color>
+		<color name="class_color_dialog_button_bg_primary_d" description="底部/弹窗 高亮按钮背景 不可按">#0d000000</color>
+		<color name="class_color_dialog_button_text_guide_d" description="底部/弹窗 高亮按钮文字 不可按">#4d000000</color>
+		<color name="class_color_dialog_button_bg_primary_n" description="底部/弹窗 高亮按钮背景 常态">#ff0d84ff</color>
+		<color name="class_color_dialog_button_text_guide_d" description="底部/弹窗 高亮按钮文字 不可按">#4dffffff</color>
+		<color name="class_color_dialog_button_text_guide_n" description="底部/弹窗 高亮按钮文字 常态">#ffffffff</color>
+		<color name="class_color_list_bg_pressed" description="弹窗/列表背景 按下颜色">#0d000000</color>
+		<color name="class_color_list_bg_checked" description="弹窗列表背景 选中颜色">#0d0d84ff</color>
+
+		<color name="class_color_edit_text_dialog_bg" description="输入框背景（不可透明）">#fff0f0f0</color>
+		<color name="class_color_edit_text_dialog_border" description="输入框背景/描边">#ff0d84ff</color>
+
+		<color name="class_color_word_photo" description="列表头像文字的颜色">#f4000000</color>
+
+		<!-- 新建联系人 -->
+		<color name="class_color_fab_bg" description="首页右下角 +新建短信 按钮背景 颜色（有素材资源时，优先使用图片）">#ffffbb00</color>
+		<color name="class_color_new_border" description="新建短信 收信人下方 分割线">#1a000000</color>
+		<color name="class_color_recent_recipient_text_bg" description="新建短信 最近联系人名字 按钮背景（有素材资源时，优先使用图片）">#0d000000</color>
+
+		<!-- 短信气泡 -->
+		<color name="class_color_message_bubble_in_bg_n" description="收到短信气泡 颜色（有素材资源时，优先使用图片）">#0a000000</color>
+		<color name="class_color_message_bubble_out_bg_n" description="发出 正常短信气泡 颜色">#ff32bf71</color>
+		<color name="class_color_mi_message_bubble_out_bg_n" description="发出 网络短信气泡 颜色">#ff2d74ff</color>
+		<!-- 短信对话界面气泡内字体颜色 -->
+		<color name="class_color_message_in_n" description="收到短信气泡文字/语音数字颜色">#e6000000</color>
+		<color name="class_color_message_in_highlight" description=	"收到短信气泡高亮（链接/数字）文字颜色">#ff0d84ff</color>
+		<color name="class_color_understand_button_color" description="收到短信气泡内 按钮背景 颜色">#ffffffff</color>
+		<color name="class_color_understand_button_text" description="收到短信气泡内 按钮内文字 颜色">#ff35c878</color>
+		<color name="class_color_message_out_n" description="发出短信气泡文字/语音数字颜色">#e6ffffff</color>
+		<color name="class_color_message_out_mx_n" description="网络短信 发出短信气泡文字/语音数字颜色">#e6ffffff</color>
+		<color name="class_color_message_out_highlight" description="发出短信气泡高亮（链接/数字）文字颜色">#ffffffee</color>
+
+		<!-- 短信对话底部 -->
+		<color name="class_color_sim_button_container_bg" description="双卡选择/附件 弹窗背景（底部输入框右侧双卡选择按钮-点击展开）">#ffffffff</color>
+		<color name="class_color_button_send_slot_bg_p" description="双卡弹窗 选中列表背景 颜色">#1a0d84ff</color>
+
+		<color name="class_color_hint_edit_tips" description="短信对话 底部输入框内 提示文字 颜色">#66000000</color>
+		<color name="class_color_hint_edit_light" description="短信对话 底部输入框内 已输入文字 颜色">#e6000000</color>
+		<color name="class_color_message_text" description="短信对话 底部输入框 右侧提示文字（彩信、剩余可输入数字）颜色">#99000000</color>
+
+		<color name="class_color_card_bottom_menu_bg" description="底部 输入框/语音按钮/附件卡片/菜单按钮 背景（输入框背景优先调用素材图片）">#0d000000</color>
+		<color name="class_color_text_edit_phrase" description="底部 语音短信（“按住说话”） 按钮文字颜色">#ff0d84ff</color>
+
+		<color name="class_color_attachment_type_n" description="短信对话 附件文字 常态 颜色">#e6000000</color>
+		<color name="class_color_attachment_type_d" description="短信对话 附件文字 不可按 颜色">#4d000000</color>
+		<color name="class_color_bottom_menu_text_n" description="服务短信 底部按钮 菜单文字 常态 颜色">#e6000000</color>
+		<color name="class_color_bottom_menu_text_s" description="服务短信 底部按钮 菜单文字 选中 颜色">#ff0d84ff</color>
+
+		<color name="class_color_border_line" description="开启智能短信卡片背景描边、附件顶部分割线 颜色">#26000000</color>
+		<!-- 短信对话页面	联系人名片	卡片背景 -->
+		<color name="class_color_contact_card_bg_color_n" description="联系人名片 卡片背景 颜色（短信对话页）">#0d000000</color>
+		<color name="class_color_card_background_covered_bg_n" description="联系人名片 卡片背景 颜色（短信对话页-定时气泡内）">#fff5f5f5</color>
+		<color name="class_color_insert_contact_light" description="联系人名片 卡片内（新建+加号）颜色">#ff0d84ff</color>
+		<!-- 短信对话（我的收藏、验证码）卡片背景 -->
+		<color name="class_color_verification_bg" description="（我的收藏、验证码）大背景 颜色（有素材资源时，优先使用图片）">#ffffffff</color>
+		<color name="class_color_new_card_body_bg" description="（我的收藏、验证码）卡片背景 常态 颜色">#0a000000</color>
+		<color name="class_color_card_text_subtitle" description="卡片内 副标题文字 颜色">#ff8c93b0</color>
+		<color name="class_color_card_text_highlight" description="卡片内 高亮色文字 颜色">#ff0d84ff</color>
+		<color name="class_color_card_body_bg_popup" description="（我的收藏、验证码）卡片弹窗背景 颜色（透明度不可低于95%）">#ffffffff</color>
+		<color name="class_color_card_bottom_button_bg" description="卡片内 胶囊按钮 颜色">#ffffffff</color>
+		<!-- <color name="class_color_card_arrow_right" description="卡片内 右箭头 颜色（有素材资源时，优先使用图片）">#99000000</color> -->
+		<color name="class_color_card_divider" description="卡片内 分割线颜色">#0f000000</color>
+		<color name="class_color_card_border_stroke" description="卡片背景 描边 颜色">#26000000</color>
+
+		<color name="class_color_understand_float_text" description="通知中心 短信通知 验证码数字 颜色">#ff0d84ff</color>
+
+		<color name="class_color_sliding_btn_off" description="开关按钮（关闭背景）">#26000000</color>
+		<color name="class_color_sliding_btn_on" description="开关按钮（开启背景）">#ff0d84ff</color>
+		<color name="class_color_sliding_btn_slider" description="开关按钮（滑块颜色）">#ffffffff</color>
+
+		<color name="class_color_svg_icon_n" description="小豆豆按钮 常态">#e6000000</color>
+		<color name="class_color_svg_icon_p" description="小豆豆按钮 二态">#99000000</color>
+		<color name="class_color_svg_icon_d" description="小豆豆按钮 不可按">#4d000000</color>
+		<color name="class_color_svg_icon_light" description="小豆豆按钮 高亮">#ff0d84ff</color>
+		<color name="class_color_svg_icon_red" description="小豆豆按钮 红心收藏">#fff22424</color>
+
+		<color name="class_color_checkbox_btn_stroke" description="复选框（未选）描边颜色；透明度到整型值修改">#ff000000</color>
+		<color name="class_color_checkbox_btn_off" description="复选框（未选）背景颜色；透明度到整型值修改">#ff000000</color>
+		<color name="class_color_checkbox_btn_on" description="复选框（已选）背景颜色；不支持修改透明度">#ff0d84ff</color>
+		<color name="class_color_checkbox_btn_hook" description="复选框（选勾）颜色；不支持修改透明度">#ffffffff</color>
+	</colors>
+
+	<!-- <bools>
+		<bool name="class_bool_checkbox_btn" description="复选框 动画；false 关闭动画，true 开启动画；如主题使用素材是，更改为 false。">true</bool>
+	</bools> -->
+
+	<integers>
+		<integer name="class_window_translucent_status" description="状态栏样式：0 是黑色背景、白色图标；1 是透明背景、黑色图标；2 是透明背景、白色图标。">1</integer>
+
+		<integer name="class_integer_checkbox_bg_n" description="复选框（未选）背景透明度 常态；取值范围：0-255">25</integer>
+		<integer name="class_integer_checkbox_bg_d" description="复选框（未选）背景透明度 不可用；取值范围：0-255">12</integer>
+		<integer name="class_integer_checkbox_stroke_n" description="复选框（未选）描边透明度 常态；取值范围：0-255">50</integer>
+		<integer name="class_integer_checkbox_stroke_d" description="复选框（未选）描边透明度 不可用；取值范围：0-255">25</integer>
+	</integers>
+
+</ThemeConfig>

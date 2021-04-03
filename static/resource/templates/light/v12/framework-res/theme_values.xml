@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='utf-8' standalone='yes' ?>
+<MIUI_Theme_Values>
+	
+	<!-- 通知列表 主要文字、次要文字 -->
+	<color name="notification_primary_text_color_light">class_color_notification_text_title</color>
+	<color name="notification_secondary_text_color_light">class_color_notification_text_subtitle</color>
+	<!-- 组件通知	主要文字、歌曲名文字 -->
+	<color name="statusbar_content_title">class_color_notification_text_title</color>
+	<!-- 组件通知	次要文字、歌手文字 -->
+	<color name="statusbar_content">class_color_notification_text_subtitle</color>
+	<!-- 通知右侧	按钮文字“上报矫正短信” -->
+	<color name="notification_miui_action_text_color_n">class_color_notification_btn_text</color>
+	<color name="notification_miui_action_text_color_p">class_color_notification_btn_text</color>
+	
+	<!-- 系统更新进度条背景	#8a000000。改颜色值包含第三方应用的某些颜色值，所以不能用 -->
+	<!-- <color name="secondary_text_default_material_light">class_color_notification_progress_horizontal_bg</color> -->
+	<!-- 带进度条的通知	进度条背景、进度条 -->
+	<!-- <color name="notification_progress_background_color"/> -->
+	<color name="notification_progress_horizontal_bg_color">class_color_notification_progress_horizontal_bg</color>
+	<color name="notification_progress_horizontal_progress_color">class_color_notification_progress_horizontal_progress</color>
+	
+	<!-- ??? -->
+	<color name="media_notification_app_name_text_color">class_color_notification_text_subtitle</color>
+	<color name="notification_time_color">class_color_notification_text_time</color>
+	<color name="holo_red_dark">class_color_notification_holo_red</color>
+	
+</MIUI_Theme_Values>

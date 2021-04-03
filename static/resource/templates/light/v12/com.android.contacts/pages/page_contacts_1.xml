@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ThemeConfig tag="联系人" description="联系人详情页" version="12.0" order="21">
+	
+	<image description="详情页顶部大图(最大1080x918)" src="res/drawable-xxhdpi/contact_detail_default_photo.9.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="详情页头像" src="res/drawable-xxhdpi/contact_detail_circle_photo.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	
+	<!-- <image description="首行圆角列表 常态" src="res/drawable-xxhdpi/contact_detail_list_item_bg_top_n.9.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="首行圆角列表 二态" src="res/drawable-xxhdpi/contact_detail_list_item_bg_top_p.9.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="详情页大背景" src="res/drawable-xxhdpi/contact_detail_content_bg.9.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image> -->
+		
+	<image description="电话" src="res/drawable-xxhdpi/send_call_ic.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="短信" src="res/drawable-xxhdpi/send_sms_ic.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="视频" src="res/drawable-xxhdpi/send_video_ic.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+
+</ThemeConfig>

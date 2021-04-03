@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ThemeConfig tag="控制中心" description="卡片" version="12.0" order="21">
+	
+	<!--流量剩余相关-->
+	<image description="流量剩余卡片 不可按背景" src="res/drawable-xxhdpi/ic_qs_big_tile_bg_unavailable_0.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	<image description="流量剩余卡片 关闭背景" src="res/drawable-xxhdpi/ic_qs_big_tile_bg_inactive_0.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	<image description="流量剩余卡片 开启背景" src="res/drawable-xxhdpi/ic_qs_big_tile_bg_0.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+    
+	<image description="第一个卡片右下角 展开小icon（需兼容卡片开启和关闭2种状态）" src="res/drawable-xxhdpi/qs_big_tile_expand_indicator_dark.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	<image description="其他 卡片右下角 展开小icon（需兼容卡片开启和关闭2种状态）" src="res/drawable-xxhdpi/qs_big_tile_expand_indicator.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	
+	<!--蓝牙卡片相关-->
+	<image description="蓝牙卡片 不可按背景" src="res/drawable-xxhdpi/ic_qs_big_tile_bg_unavailable_3.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+    <image description="蓝牙卡片 关闭背景" src="res/drawable-xxhdpi/ic_qs_big_tile_bg_inactive_3.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	<image description="蓝牙卡片 开启背景" src="res/drawable-xxhdpi/ic_qs_big_tile_bg_3.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	
+    <!--移动数据相关-->
+	<image description="移动数据卡片 不可按背景" src="res/drawable-xxhdpi/ic_qs_big_tile_bg_unavailable_1.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	<image description="移动数据卡片 关闭背景" src="res/drawable-xxhdpi/ic_qs_big_tile_bg_inactive_1.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	<image description="移动数据卡片 开启背景" src="res/drawable-xxhdpi/ic_qs_big_tile_bg_1.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+
+	<!--无线网络相关-->
+    <image description="无线网络卡片 不可按背景" src="res/drawable-xxhdpi/ic_qs_big_tile_bg_unavailable_2.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+    <image description="无线网络卡片 关闭背景" src="res/drawable-xxhdpi/ic_qs_big_tile_bg_inactive_2.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	<image description="无线网络卡片 开启背景" src="res/drawable-xxhdpi/ic_qs_big_tile_bg_2.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	
+</ThemeConfig>

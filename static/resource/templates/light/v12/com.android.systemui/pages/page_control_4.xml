@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ThemeConfig tag="控制中心" description="旧版：开关面板" version="12.0" order="24">
+	
+	<!-- <image description="快捷开关 窗口背景" src="res/drawable-xxhdpi/panel_round_corner_bg.9.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image> -->
+	<image description="快捷开关 窗口背景" src="res/drawable-xxhdpi/qs_detail_bg.9.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="开关【关闭状态】背景（有图片时 颜色值不生效）" src="res/drawable-xxhdpi/ic_qs_bg_disabled.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	<image description="开关【开启状态】背景（有图片时 颜色值不生效）" src="res/drawable-xxhdpi/ic_qs_bg_enabled.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="亮度条 背景（无特别设计建议使用颜色值）" src="res/drawable-xxhdpi/brightness_toggle_bg.9.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	<image description="亮度条 进度（无特别设计建议使用颜色值）" src="res/drawable-xxhdpi/brightness_toggle_progress_bg.9.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="低亮度" src="res/drawable-xxhdpi/ic_brightness_low.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	<image description="高亮度" src="res/drawable-xxhdpi/ic_brightness_high.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	<image description="移动数据、wifi、蓝牙 三角箭头展开图标" src="res/drawable-xxhdpi/qs_tile_expand_indicator.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="设置图标 常态" src="res/drawable-xxhdpi/notch_settings_n.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	<image description="设置图标 二态" src="res/drawable-xxhdpi/notch_settings_p.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	
+</ThemeConfig>

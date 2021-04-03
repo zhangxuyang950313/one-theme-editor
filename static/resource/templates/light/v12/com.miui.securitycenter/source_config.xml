@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ThemeConfig>
+	<ModuleInfo package="com.miui.securitycenter" description="通知栏-安全中心" order="7"/>
+	<baseColors>
+		<color name="notification_title_text_color" priority="1"/>
+		<color name="notification_title_divide_color" priority="2"/>
+	</baseColors>
+	
+	<colors>
+		<color name="class_color_securitycenter_line" description="通知栏 安全中心-图标分割线">#1a000000</color>
+		<color name="class_color_securitycenter_title" description="通知栏 安全中心-文字颜色">#99000000</color>
+		<color name="class_color_securitycenter_red" description="通知栏 安全中心-待清理数字颜色">#fff77060</color>
+	</colors>
+	
+</ThemeConfig>

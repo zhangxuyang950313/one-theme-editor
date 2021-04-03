@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ThemeConfig tag="短信" description="快捷回复悬浮窗" version="12.0" order="16">
+	
+	<image description="快捷标题背景（可透明）" src="res/drawable-xxhdpi/new_message_popup_title_bg.9.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="背景-调用的短信对话界面背景" src="res/drawable-xxhdpi/new_message_popup_bg.9.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="底栏背景（可透明）" src="res/drawable-xxhdpi/new_message_popup_bottom_bg.9.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="正常短信输入框 xxhdpi" src="res/drawable-xxhdpi/new_message_popup_msg_editor_bg.9.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="正常短信输入框 nxhdpi" src="res/drawable-nxhdpi/new_message_popup_msg_editor_bg.9.png">
+		<path>com.android.mms/res/drawable-nxhdpi</path>
+	</image>
+	<!-- <image description="网络短信输入框" src="res/drawable-xxhdpi/compose_mi_message_editor_bg.9.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image> -->
+	
+</ThemeConfig>

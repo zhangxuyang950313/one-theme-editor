@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ThemeConfig tag="设置" description="密码与安全、其他" version="12.0" order="16">
+
+	<image description="密码与安全 未开启 卡片背景（素材会叠加在上层，建议不放此素材，修改颜色值即可）" src="res/drawable-xxhdpi/card_shape_corner.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="密码与安全 已开启 卡片背景" src="res/drawable-xxhdpi/card_checked_corner.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+
+	<image description="密码类型icon 密码解锁 关" src="res/drawable-xxhdpi/ic_password_unlock.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="密码类型icon 密码解锁 开" src="res/drawable-xxhdpi/ic_password_unlock_checked.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="密码类型icon 指纹解锁 关" src="res/drawable-xxhdpi/ic_finger_unlock.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="密码类型icon 指纹解锁 开" src="res/drawable-xxhdpi/ic_finger_unlock_checked.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="密码类型icon 人脸解锁 关" src="res/drawable-xxhdpi/ic_face_unlock.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="密码类型icon 人脸解锁 开" src="res/drawable-xxhdpi/ic_face_unlock_checked.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="密码类型icon 蓝牙解锁 关" src="res/drawable-xxhdpi/ic_bluetooth_unlock.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="密码类型icon 蓝牙解锁 开" src="res/drawable-xxhdpi/ic_bluetooth_unlock_checked.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+
+	<image description="密码解锁 图案密码icon 未选（更换锁屏密码页面卡片内icon）" src="res/drawable-xxhdpi/ic_unlock_pattern_icon.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="密码解锁 图案密码icon 选中" src="res/drawable-xxhdpi/ic_unlock_pattern_icon_selected.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="密码解锁 数字密码icon 未选" src="res/drawable-xxhdpi/ic_unlock_pin_icon.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="密码解锁 数字密码icon 选中" src="res/drawable-xxhdpi/ic_unlock_pin_icon_selected.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="密码解锁 混合密码icon 未选" src="res/drawable-xxhdpi/ic_unlock_password_icon.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="密码解锁 混合密码icon 选中" src="res/drawable-xxhdpi/ic_unlock_password_icon_selected.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+
+
+	<image description="紧急求助 操作示意图" src="res/drawable-xxhdpi/sos_direction_back.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+
+	<image description="添加账号 +（账号与同步）" src="res/drawable-xxhdpi/ic_menu_add.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+
+	<image description="指纹录入成功 图标（后置指纹）" src="res/drawable-xxhdpi/new_fingerprint_finish.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+
+	<image description="设备已解锁" src="res/drawable-xxhdpi/bootloader_unlock.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="设备未解锁" src="res/drawable-xxhdpi/bootloader_lock.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+
+	<image description="设置icon（文字转语音（TTS）输出-首选引擎）" src="res/drawable-xxhdpi/ic_settings_accent.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+
+	<image description="多用户 弹窗 头像选择背景（开发者选项-关闭MIUI优化-设置首页-多用户-个人资料信息弹窗-点击头像弹出）" src="res/drawable-xxhdpi/popup_background.9.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+
+	<image description="图案密码 小圆点" src="res/drawable-xxhdpi/lock_pattern_code_lock_touched_holo.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+</ThemeConfig>

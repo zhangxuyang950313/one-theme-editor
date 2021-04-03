@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ThemeConfig tag="短信-全局" description="设置列表/大背景" version="12.0" order="2">
+	
+	<image description="短信大背景 xxhdpi" src="framework-miui-res/res/drawable-xxhdpi/window_bg_light.9.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="短信大背景 nxhdpi" src="framework-miui-res/res/drawable-nxhdpi/window_bg_light.9.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-nxhdpi</path>
+	</image>
+	
+	<image description="列表 右箭头 不可按" src="framework-miui-res/res/drawable-xxhdpi/arrow_right_disable.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="列表 右箭头 常态" src="framework-miui-res/res/drawable-xxhdpi/arrow_right_normal.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="列表 右箭头 二态" src="framework-miui-res/res/drawable-xxhdpi/arrow_right_pressed.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="设置列表 右箭头" src="res/drawable-xxhdpi/miuix_preference_arrow_right.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="关闭按钮（短信设置-短信回收站：关闭按钮）" src="res/drawable-xxhdpi/hybrid_action_bar_close.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="分享按钮（短信设置-短信回收站：分享按钮）" src="res/drawable-xxhdpi/hybrid_action_bar_share.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="短信设置-高级设置-彩信界面 SIM卡图标 卡1" src="res/drawable-xxhdpi/sim_card_1.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="短信设置-高级设置-彩信界面 SIM卡图标 卡2" src="res/drawable-xxhdpi/sim_card_2.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	
+	<!-- ============================================================================================================ -->
+	
+	<!-- miuiX全局（素材位于当前模块的res/drawable-xxhdpi/目录内） -->
+	<image description="列表类型 有标题 第一条" src="res/drawable-xxhdpi/miuix_preference_category_bg_first_light.9.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="列表类型 有标题 非第一条" src="res/drawable-xxhdpi/miuix_preference_category_bg_light.9.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="列表类型 无标题 第一条" src="res/drawable-xxhdpi/miuix_preference_category_bg_first_no_title_light.9.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="列表类型 无标题 非第一条" src="res/drawable-xxhdpi/miuix_preference_category_bg_no_title_light.9.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="设置列表 无图标 上" src="res/drawable-xxhdpi/miuix_preference_first_item_bg_light_normal.9.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="设置列表 无图标 中" src="res/drawable-xxhdpi/miuix_preference_middle_item_bg_light_normal.9.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="设置列表 无图标 下" src="res/drawable-xxhdpi/miuix_preference_last_item_bg_light_normal.9.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="设置列表 无图标 单列" src="res/drawable-xxhdpi/miuix_preference_single_item_bg_light_normal.9.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="设置列表 有图标 上" src="res/drawable-xxhdpi/miuix_preference_first_item_with_icon_bg_normal.9.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="设置列表 有图标 中" src="res/drawable-xxhdpi/miuix_preference_middle_item_with_icon_bg_normal.9.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="设置列表 有图标 下" src="res/drawable-xxhdpi/miuix_preference_last_item_with_icon_bg_normal.9.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="设置列表 有图标 单列" src="res/drawable-xxhdpi/miuix_preference_single_item_with_icon_bg_normal.9.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	
+	<!-- ============================================================================================================ -->
+	<!-- 
+	<image description="列表类型 有标题 第一条" src="framework-miui-res/res/drawable-xxhdpi/preference_category_background_first.9.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="列表类型 有标题 非第一条" src="framework-miui-res/res/drawable-xxhdpi/preference_category_background.9.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="列表类型 无标题 第一条" src="framework-miui-res/res/drawable-xxhdpi/preference_category_background_first_no_title.9.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="列表类型 无标题 非第一条" src="framework-miui-res/res/drawable-xxhdpi/preference_category_background_no_title.9.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="设置列表 无图标 上 常态" src="framework-miui-res/res/drawable-xxhdpi/preference_first_item_bg_normal.9.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="设置列表 无图标 上 二态" src="framework-miui-res/res/drawable-xxhdpi/preference_first_item_bg_pressed.9.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="设置列表 无图标 中 常态" src="framework-miui-res/res/drawable-xxhdpi/preference_middle_item_bg_normal.9.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="设置列表 无图标 中 二态" src="framework-miui-res/res/drawable-xxhdpi/preference_middle_item_bg_pressed.9.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="设置列表 无图标 下 常态" src="framework-miui-res/res/drawable-xxhdpi/preference_last_item_bg_normal.9.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="设置列表 无图标 下 二态" src="framework-miui-res/res/drawable-xxhdpi/preference_last_item_bg_pressed.9.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="设置列表 无图标 单列 常态" src="framework-miui-res/res/drawable-xxhdpi/preference_single_item_bg_normal.9.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="设置列表 无图标 单列 二态" src="framework-miui-res/res/drawable-xxhdpi/preference_single_item_bg_pressed.9.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="设置列表 有图标 上 常态" src="framework-miui-res/res/drawable-xxhdpi/preference_first_item_with_icon_bg_normal.9.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="设置列表 有图标 上 二态" src="framework-miui-res/res/drawable-xxhdpi/preference_first_item_with_icon_bg_pressed.9.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="设置列表 有图标 中 常态" src="framework-miui-res/res/drawable-xxhdpi/preference_middle_item_with_icon_bg_normal.9.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="设置列表 有图标 中 二态" src="framework-miui-res/res/drawable-xxhdpi/preference_middle_item_with_icon_bg_pressed.9.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="设置列表 有图标 下 常态" src="framework-miui-res/res/drawable-xxhdpi/preference_last_item_with_icon_bg_normal.9.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="设置列表 有图标 下 二态" src="framework-miui-res/res/drawable-xxhdpi/preference_last_item_with_icon_bg_pressed.9.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="设置列表 有图标 单列 常态" src="framework-miui-res/res/drawable-xxhdpi/preference_single_item_with_icon_bg_normal.9.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="设置列表 有图标 单列 二态" src="framework-miui-res/res/drawable-xxhdpi/preference_single_item_with_icon_bg_pressed.9.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	 -->
+	
+	<!-- <image description="页面复选框按钮 未选 禁用" src="framework-miui-res/res/drawable-xxhdpi/btn_checkbox_off_disabled_light.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="页面复选框按钮 未选 常态" src="framework-miui-res/res/drawable-xxhdpi/btn_checkbox_off_normal_light.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="页面复选框按钮 已选 禁用" src="framework-miui-res/res/drawable-xxhdpi/btn_checkbox_on_disabled_light.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="页面复选框按钮 已选 常态" src="framework-miui-res/res/drawable-xxhdpi/btn_checkbox_on_normal_light.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="页面 复选框 按钮（透明图片，暂停动画使用）" src="framework-miui-res/res/drawable-xxhdpi/btn_checkbox_off_to_on_light.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="页面 复选框 按钮（透明图片，暂停动画使用）" src="framework-miui-res/res/drawable-xxhdpi/btn_checkbox_on_to_off_light.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image> -->
+	
+	<!-- <image description="开关背景" src="framework-miui-res/res/drawable-xxhdpi/sliding_btn_bg_light.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image> -->
+	<!-- <image description="开关 关 背景" src="framework-miui-res/res/drawable-xxhdpi/sliding_btn_bar_off_light.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="开关 开 背景" src="framework-miui-res/res/drawable-xxhdpi/sliding_btn_bar_on_light.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="开关线框" src="framework-miui-res/res/drawable-xxhdpi/sliding_btn_frame_light.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="开关蒙版" src="framework-miui-res/res/drawable-xxhdpi/sliding_btn_mask_light.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="开关滑块 关 常态" src="framework-miui-res/res/drawable-xxhdpi/sliding_btn_slider_off_normal_light.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="开关滑块 关 二态" src="framework-miui-res/res/drawable-xxhdpi/sliding_btn_slider_off_pressed_light.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="开关滑块 开 常态" src="framework-miui-res/res/drawable-xxhdpi/sliding_btn_slider_on_normal_light.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="开关滑块 开 二态" src="framework-miui-res/res/drawable-xxhdpi/sliding_btn_slider_on_pressed_light.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image> -->
+	
+</ThemeConfig>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ThemeConfig tag="通知中心" description="通知中心" version="12.0" order="0">
+	
+	<image description="通知中心 大背景" src="res/drawable-xxhdpi/notification_panel_window_bg.9.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="通知列表背景" src="res/drawable-xxhdpi/notification_item_bg.9.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="通知左滑 点击设置后的背景条" src="res/drawable-xxhdpi/notification_guts_bg.9.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	<image description="通知左滑 按钮背景圆" src="res/drawable-xxhdpi/notification_menu_bg.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	<image description="通知左滑 设置icon" src="res/drawable-xxhdpi/ic_settings.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	<image description="通知左滑 设为不重要通知icon" src="res/drawable-xxhdpi/ic_aggregate.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="带回复按钮通知 发送按钮 不可按（在通知列表中展开的回复框右侧 发送按钮）" src="res/drawable-xxhdpi/notification_reply_send_bg_disabled.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	<image description="带回复按钮通知 发送按钮 常态" src="res/drawable-xxhdpi/notification_reply_send_bg_enabled.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="不重要通知/聚合通知 右箭头" src="res/drawable-xxhdpi/ic_app_more.png">
+		<path>com.miui.notification/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="清除按钮背景" src="res/drawable-xxhdpi/btn_clear_all.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	<image description="清除按钮" src="res/drawable-xxhdpi/notifications_clear_all.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+
+</ThemeConfig>

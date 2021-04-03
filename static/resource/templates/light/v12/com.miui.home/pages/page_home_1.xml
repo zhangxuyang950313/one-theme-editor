@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ThemeConfig tag="桌面" description="负一屏 一键清理" version="12.0" order="1">
+	
+	<image description="一键清理背景（桌面模块；该背景制作后会叠在图标背板之上显示，制作时需注意）" src="res/drawable-xxhdpi/gadget_clear_button_bg_pa.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="一键清理" src="res/drawable-xxhdpi/gadget_clear_button_fore_normal_pa.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="强力清理（安全中心-设置-添加桌快捷方式）" src="res/drawable-xxhdpi/gadget_power_clear_fore_normal_pa.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="内存占用圆圈" src="res/drawable-xxhdpi/gadget_clear_button_circle_pa.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="一键清理背景（最新版负一屏一键清理变更到了“智能助理”模块，所以建议做2份素材兼容新旧版本）" src="res/drawable-xxhdpi/gadget_clear_button_bg_pa.png">
+		<path>com.miui.personalassistant/res/drawable-xxhdpi</path>
+	</image>
+	<image description="一键清理" src="res/drawable-xxhdpi/gadget_clear_button_fore_normal_pa.png">
+		<path>com.miui.personalassistant/res/drawable-xxhdpi</path>
+	</image>
+	<image description="强力清理（安全中心-设置-添加桌快捷方式）" src="res/drawable-xxhdpi/gadget_power_clear_fore_normal_pa.png">
+		<path>com.miui.personalassistant/res/drawable-xxhdpi</path>
+	</image>
+	<image description="内存占用圆圈" src="res/drawable-xxhdpi/gadget_clear_button_circle_pa.png">
+		<path>com.miui.personalassistant/res/drawable-xxhdpi</path>
+	</image>
+	
+</ThemeConfig>

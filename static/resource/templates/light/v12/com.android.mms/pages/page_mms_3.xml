@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ThemeConfig tag="短信" description="新建短信/附件/幻灯片" version="12.0" order="13">
+
+	<!-- <image description="新建短信顶栏背景" src="res/drawable-xxhdpi/title_bar_bg_row.9.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image> -->
+	
+	<image description="收信人 按钮背景 xxhdpi" src="res/drawable-xxhdpi/recipient_view_bg.9.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="收信人 按钮背景 nxhdpi" src="res/drawable-nxhdpi/recipient_view_bg.9.png">
+		<path>com.android.mms/res/drawable-nxhdpi</path>
+	</image>
+	
+	<image description="联系人联想大背景（输入号码时展示、群发短信对话页右上角下弹窗背景）" src="res/drawable-xxhdpi/recipient_bg.9.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="联系人联想列表背景 常态" src="res/drawable-xxhdpi/recipient_item_bg_normal.9.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="联系人联想列表背景 二态" src="res/drawable-xxhdpi/recipient_item_bg_pressed.9.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="添加联系人icon" src="res/drawable-xxhdpi/ic_add_contact.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="预选联系人 按钮背景 xxhdpi" src="res/drawable-xxhdpi/recent_contact_item_bg.9.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="预选联系人 按钮背景 nxhdpi" src="res/drawable-nxhdpi/recent_contact_item_bg.9.png">
+		<path>com.android.mms/res/drawable-nxhdpi</path>
+	</image>
+	
+	<image description="附件背景" src="res/drawable-xxhdpi/attachment_screen_bg.9.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="附件 分页指示点 常态" src="res/drawable-xxhdpi/screen_view_seek_point_normal.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="附件 分页指示点 选中态" src="res/drawable-xxhdpi/screen_view_seek_point_highlight.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="附件-表情 分页指示点 常态" src="framework-miui-res/res/drawable-xxhdpi/screen_view_seek_point_normal.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="附件-表情 分页指示点 选中态" src="framework-miui-res/res/drawable-xxhdpi/screen_view_seek_point_highlight.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="附件-表情底部 小图标背景" src="res/drawable-xxhdpi/smiley_tab_bg.9.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="附件-表情底部 小图标tab 二态" src="res/drawable-xxhdpi/smiley_item_bg_p.9.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	
+	<!-- 附件表情底部选择 -->
+	<image description="附件-表情 表情" src="res/drawable-xxhdpi/smiley_tab_image_smiley.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="附件-表情 动物" src="res/drawable-xxhdpi/smiley_tab_image_creature.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="附件-表情 生活" src="res/drawable-xxhdpi/smiley_tab_image_lifestyle.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="附件-表情 颜文字" src="res/drawable-xxhdpi/smiley_tab_text.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="附件-表情 符号" src="res/drawable-xxhdpi/smiley_tab_symbol.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="附件-表情 删除" src="res/drawable-xxhdpi/smiley_back.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	
+	<!-- 幻灯片编辑界面 -->
+	<image description="幻灯片编辑-底部背景" src="res/drawable-xxhdpi/slide_controler_bg.9.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="幻灯片编辑-取消操作 不可按（下列为幻灯片编辑界面）" src="res/drawable-xxhdpi/action_button_slide_pre_disable.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="幻灯片编辑-取消操作 常态" src="res/drawable-xxhdpi/action_button_slide_pre_normal.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="幻灯片编辑-取消操作 二态" src="res/drawable-xxhdpi/action_button_slide_pre_pressed.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="幻灯片编辑-下一步 不可按" src="res/drawable-xxhdpi/action_button_slide_next_disable.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="幻灯片编辑-下一步 常态" src="res/drawable-xxhdpi/action_button_slide_next_normal.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="幻灯片编辑-下一步 二态" src="res/drawable-xxhdpi/action_button_slide_next_pressed.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="幻灯片编辑-删除 常态" src="res/drawable-xxhdpi/action_button_slide_delete_normal.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="幻灯片编辑-删除 二态" src="res/drawable-xxhdpi/action_button_slide_delete_pressed.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="幻灯片编辑-完成 常态" src="res/drawable-xxhdpi/action_button_slide_done_normal.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="幻灯片编辑-完成 二态" src="res/drawable-xxhdpi/action_button_slide_done_pressed.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	
+	<!-- 附件icon按钮 -->
+	<image description="附件 表情 不可按" src="res/drawable-xxhdpi/ic_attach_smiley_d.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="附件 表情 常态" src="res/drawable-xxhdpi/ic_attach_smiley_n.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="附件 名片 不可按" src="res/drawable-xxhdpi/ic_attach_contact_d.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="附件 名片 常态" src="res/drawable-xxhdpi/ic_attach_contact_n.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="附件 图片 不可按" src="res/drawable-xxhdpi/ic_attach_photo_d.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="附件 图片 常态" src="res/drawable-xxhdpi/ic_attach_photo_n.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="附件 拍照 不可按" src="res/drawable-xxhdpi/ic_attach_take_photo_d.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="附件 拍照 常态" src="res/drawable-xxhdpi/ic_attach_take_photo_n.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="附件 我的收藏 不可按" src="res/drawable-xxhdpi/ic_attach_phrase_d.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="附件 我的收藏 常态" src="res/drawable-xxhdpi/ic_attach_phrase_n.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="附件 定时 不可按" src="res/drawable-xxhdpi/ic_attach_timing_d.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="附件 定时 常态" src="res/drawable-xxhdpi/ic_attach_timing_n.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="附件 主题 不可按" src="res/drawable-xxhdpi/ic_attach_subject_d.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="附件 主题 常态" src="res/drawable-xxhdpi/ic_attach_subject_n.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="附件 音频 不可按" src="res/drawable-xxhdpi/ic_attach_sound_d.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="附件 音频 常态" src="res/drawable-xxhdpi/ic_attach_sound_n.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="附件 视频 不可按" src="res/drawable-xxhdpi/ic_attach_video_d.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="附件 视频 常态" src="res/drawable-xxhdpi/ic_attach_video_n.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="附件 幻灯片 不可按" src="res/drawable-xxhdpi/ic_attach_slide_show_d.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="附件 幻灯片 常态" src="res/drawable-xxhdpi/ic_attach_slide_show_n.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="附件 文件 不可按" src="res/drawable-xxhdpi/ic_attach_rcs_file_d.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="附件 文件 常态" src="res/drawable-xxhdpi/ic_attach_rcs_file_n.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="附件 位置 不可按" src="res/drawable-xxhdpi/ic_attach_rcs_location_d.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="附件 位置 常态" src="res/drawable-xxhdpi/ic_attach_rcs_location_n.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	
+</ThemeConfig>

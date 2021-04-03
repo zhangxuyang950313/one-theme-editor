@@ -280,7 +280,7 @@ const config: webpack.ConfigurationFactory = (env, args) => {
       // 环境区分
       ...(isDev
         ? [
-            // new HotModuleReplacementPlugin()
+            new HotModuleReplacementPlugin()
             // new FriendlyErrorsWebpackPlugin({
             //   compilationSuccessInfo: {
             //     messages: [

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ThemeConfig tag="短信-全局" description="底部弹窗/其他" version="12.0" order="3">
+	
+	<!-- 编辑状态下的底栏背景与更多弹窗背景 -->
+	<image description="底栏背景（编辑模式，不可透明）" src="framework-miui-res/res/drawable-xxhdpi/action_bar_split_bg_light.9.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="底部弹窗背景" src="framework-miui-res/res/drawable-xxhdpi/dialog_bg_light.9.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="底栏 更多-弹窗背景（编辑模式）" src="framework-miui-res/res/drawable-xxhdpi/list_menu_bg_light.9.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="弹窗 左按钮（包含拦截短信-对话页面底部按钮）xxhdpi" src="framework-miui-res/res/drawable-xxhdpi/btn_bg_light.9.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="弹窗 左按钮（包含拦截短信-对话页面底部按钮）nxhdpi" src="framework-miui-res/res/drawable-nxhdpi/btn_bg_light.9.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-nxhdpi</path>
+	</image>
+	<image description="弹窗 右按钮（建议使用颜色值）xxhdpi" src="framework-miui-res/res/drawable-xxhdpi/btn_bg_primary_light.9.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="弹窗 右按钮（建议使用颜色值）nxhdpi" src="framework-miui-res/res/drawable-nxhdpi/btn_bg_primary_light.9.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-nxhdpi</path>
+	</image>
+	
+	<image description="输入框（附件-编辑常用语-新建常用语）" src="framework-miui-res/res/drawable-xxhdpi/edit_text_bg_dialog_light.9.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="页面输入框（私密短信-添加私密联系人-手动添加）" src="framework-miui-res/res/drawable-xxhdpi/edit_text_bg_light.9.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	
+	<!-- <image description="复选框按钮 未选 不可按" src="framework-miui-res/res/drawable-xxhdpi/btn_checkbox_dialog_off_disabled_light.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="复选框按钮 未选 常态" src="framework-miui-res/res/drawable-xxhdpi/btn_checkbox_dialog_off_normal_light.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="复选框按钮 已选 不可按" src="framework-miui-res/res/drawable-xxhdpi/btn_checkbox_dialog_on_disabled_light.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="复选框按钮 已选 常态" src="framework-miui-res/res/drawable-xxhdpi/btn_checkbox_dialog_on_normal_light.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image> -->
+	
+	<!-- <image description="更多-弹窗列表背景 常态" src="framework-miui-res/res/drawable-xxhdpi/list_menu_item_bg_normal_light.9.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="更多-弹窗列表背景 二态" src="framework-miui-res/res/drawable-xxhdpi/list_menu_item_bg_pressed_light.9.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image> -->
+	
+	<!-- 全局弹窗列表 -->
+	<!-- <image description="更多-弹窗列表背景 第一条 常态" src="framework-miui-res/res/drawable-xxhdpi/list_item_bg_dialog_first_normal_light.9.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="更多-弹窗列表背景 第一条 二态" src="framework-miui-res/res/drawable-xxhdpi/list_item_bg_dialog_first_pressed_light.9.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="更多-弹窗列表背景 中间 常态" src="framework-miui-res/res/drawable-xxhdpi/list_item_bg_dialog_middle_normal_light.9.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="更多-弹窗列表背景 中间 二态" src="framework-miui-res/res/drawable-xxhdpi/list_item_bg_dialog_middle_pressed_light.9.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="更多-弹窗列表背景 最后一条 常态" src="framework-miui-res/res/drawable-xxhdpi/list_item_bg_dialog_last_normal_light.9.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="更多-弹窗列表背景 最后一条 二态" src="framework-miui-res/res/drawable-xxhdpi/list_item_bg_dialog_last_pressed_light.9.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="更多-弹窗列表背景 单条 常态" src="framework-miui-res/res/drawable-xxhdpi/list_item_bg_dialog_single_normal_light.9.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="更多-弹窗列表背景 单条 二态" src="framework-miui-res/res/drawable-xxhdpi/list_item_bg_dialog_single_pressed_light.9.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image> -->
+	
+</ThemeConfig>
