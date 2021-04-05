@@ -7,6 +7,7 @@ import { TypeTemplateConfig } from "@/types/project";
 import { Card } from "antd";
 
 type TypeProps = {
+  hoverable?: boolean;
   config: TypeTemplateConfig;
 };
 
@@ -20,8 +21,8 @@ function TemplateCard(props: TypeProps): JSX.Element {
     />
   );
   return (
-    <StyleTemplateCard>
-      <Card hoverable style={{ width: "100%" }} cover={cover}>
+    <StyleTemplateCard data-hoverable={props.hoverable}>
+      <Card hoverable={props.hoverable} style={{ width: "100%" }} cover={cover}>
         <Card.Meta
           title={config.name}
           description={config.uiVersions?.map(o => o.name).join(" | ")}
@@ -32,9 +33,8 @@ function TemplateCard(props: TypeProps): JSX.Element {
 }
 
 const StyleTemplateCard = styled.div`
-  width: 130px;
-  height: 213px;
-  margin: 10px;
+  width: 100%;
+  height: 100%;
   box-sizing: border-box;
   .ant-card {
     box-sizing: border-box;
@@ -46,7 +46,7 @@ const StyleTemplateCard = styled.div`
       font-size: 12px;
     }
   }
-  &:hover {
+  &:hover[data-hoverable="true"] {
     transform: translateY(-2px);
   }
   transition: 0.3s all ease-in;

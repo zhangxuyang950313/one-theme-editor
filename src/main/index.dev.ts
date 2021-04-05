@@ -5,7 +5,7 @@ import installExtension, {
   REACT_DEVELOPER_TOOLS
 } from "electron-devtools-installer";
 import { mainWindow } from "./windows";
-import { htmlFile } from "./constant";
+import { localUrl } from "./constant";
 
 // 用于添加Chromium插件
 async function setupDevTools() {
@@ -16,8 +16,8 @@ app.allowRendererProcessReuse = true;
 
 app.on("ready", () => {
   const win = mainWindow();
-  win.loadFile(htmlFile);
-  // win.loadURL(localUrl);
+  // win.loadFile(htmlFile);
+  win.loadURL(localUrl);
   win.webContents.openDevTools(); // 创建并打开 dev 工具
   setupDevTools().then(() => {
     // 利用 electron-debug，添加和Chrome类似的快捷键

@@ -66,8 +66,6 @@ const devServer: WebpackDevServer.Configuration = {
   quiet: false
 };
 
-console.log(devServer);
-
 const config: webpack.ConfigurationFactory = (env, args) => {
   const isDev = args.mode !== "production";
   return {

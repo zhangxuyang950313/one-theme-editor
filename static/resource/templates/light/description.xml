@@ -3,8 +3,8 @@
 <!-- 预览静态图 -->
 <poster src="v12/wallpaper/default_wallpaper.jpg"/>
 <!-- UI版本 -->
-<uiVersion name="MIUI11" src="v11"/>
-<uiVersion name="MIUI12" src="v12"/>
+<uiVersion name="MIUI 11" src="v11"/>
+<uiVersion name="MIUI 12" src="v12"/>
 <!-- 壁纸 -->
 <module name="图标和壁纸" icon="v12/icons/res/com.android.thememanager.png">
     <!-- 桌面壁纸 -->

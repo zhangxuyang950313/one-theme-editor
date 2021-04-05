@@ -25,7 +25,7 @@ function ProjectManager(): JSX.Element {
     setTimeout(() => {
       setProjects(p);
       setLoading(false);
-    }, 500);
+    });
   };
   return (
     <StyleProjectManager>
@@ -43,7 +43,9 @@ function ProjectManager(): JSX.Element {
           <Spin className="spin" tip="加载中..." spinning={loading} />
         ) : (
           projects.map((item, key) => (
-            <ProjectCard projectInfo={item} key={key} />
+            <div className="project-card" key={key}>
+              <ProjectCard hoverable projectInfo={item} />
+            </div>
           ))
         )}
       </StyleProjectList>
@@ -58,10 +60,13 @@ const StyleProjectManager = styled.div`
   box-sizing: border-box;
   .top-container {
     display: flex;
+    flex-shrink: 0;
     justify-content: space-between;
     align-items: center;
     padding: 30px 30px 0 30px;
     .title {
+      flex-shrink: 0;
+      margin-right: 20px;
       h2 {
         color: ${({ theme }) => theme["@text-color"]};
       }
@@ -84,6 +89,11 @@ const StyleProjectList = styled.div`
   overflow-y: auto;
   .spin {
     margin: auto;
+  }
+  .project-card {
+    width: 150px;
+    height: 267px;
+    margin: 0 20px 20px 0;
   }
 `;
 

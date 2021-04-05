@@ -31,7 +31,7 @@ function TemplateManager(props: TypeProps): JSX.Element {
             }}
             key={key}
           >
-            <TemplateCard config={template} />
+            <TemplateCard hoverable config={template} />
             <CheckCircleTwoTone className="check-icon" />
           </StyleCardContainer>
         );
@@ -49,6 +49,9 @@ const StyleTemplateManager = styled.div`
 
 type TypeCardContainerProps = { isActive: boolean; isInit: boolean };
 const StyleCardContainer = styled.div<TypeCardContainerProps>`
+  width: 130px;
+  height: 213px;
+  margin: 10px;
   opacity: ${({ isInit, isActive }) => 0.5 + 0.5 * Number(isInit || isActive)};
   transition: 0.3s opacity ease-in;
   position: relative;

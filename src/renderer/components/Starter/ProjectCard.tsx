@@ -4,13 +4,17 @@ import styled from "styled-components";
 
 import { Card } from "antd";
 
+type TypeProps = {
+  hoverable?: boolean;
+  projectInfo: TypeProjectInfo;
+};
 // 工程卡片展示
-function ProjectCard(props: { projectInfo: TypeProjectInfo }): JSX.Element {
+function ProjectCard(props: TypeProps): JSX.Element {
   const { projectInfo } = props;
   return (
-    <StyleProjectCard>
+    <StyleProjectCard data-hoverable={props.hoverable}>
       <Card
-        hoverable
+        hoverable={props.hoverable}
         style={{ width: "100%" }}
         cover={
           <img
@@ -30,14 +34,13 @@ function ProjectCard(props: { projectInfo: TypeProjectInfo }): JSX.Element {
 
 const StyleProjectCard = styled.div`
   cursor: pointer;
-  width: 150px;
-  height: 267px;
-  margin: 0 20px 20px 0;
+  width: 100%;
+  height: 100%;
   box-sizing: border-box;
   .ant-card-body {
     padding: 16px;
   }
-  &:hover {
+  &:hover[data-hoverable] {
     transform: translateY(-5px);
   }
   transition: 0.3s all ease-in;
