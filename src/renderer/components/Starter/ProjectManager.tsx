@@ -23,6 +23,7 @@ function ProjectManager(): JSX.Element {
   const refreshList = async () => {
     const p = await getProjects();
     setTimeout(() => {
+      console.log(p);
       setProjects(p);
       setLoading(false);
     });
@@ -35,7 +36,7 @@ function ProjectManager(): JSX.Element {
           <p>新建{projects.length > 0 ? "或选择" : ""}一个主题开始创作</p>
         </div>
         {/* 新建工程 */}
-        <CreateProject refreshList={refreshList} />
+        <CreateProject onProjectCreated={refreshList} />
       </div>
       {/* 工程列表 */}
       <StyleProjectList>

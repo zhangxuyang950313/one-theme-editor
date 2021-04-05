@@ -1,6 +1,12 @@
 import { promisify } from "util";
 import Nedb from "nedb";
 
+type TypeNedbDataWithAttrs<T> = T & {
+  _id: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
 // nedb promisify
 export default class NedbPromisify<T> {
   private instance: Promise<Nedb<T>>;
@@ -25,7 +31,7 @@ export default class NedbPromisify<T> {
     return await promisify<T, T>(db.insert.bind(db))(data);
   }
 
-  async getAllData(): Promise<T[]> {
+  async getAllData(): Promise<TypeNedbDataWithAttrs<T>[]> {
     const db = await this.instance;
     return db.getAllData();
   }

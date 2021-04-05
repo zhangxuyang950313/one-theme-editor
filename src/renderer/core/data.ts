@@ -4,9 +4,9 @@ import Nedb from "./nedb-promisify";
 
 export type TypeProjectInfo = {
   name: string;
-  description: string;
-  uiVersion: string;
   author: string;
+  version: string;
+  uiVersion: string;
   designer: string;
 };
 
@@ -36,5 +36,8 @@ export async function addProject(
 // 获取所有工程
 export async function getProjects(): Promise<TypeProjectInfo[]> {
   if (!db.projects) return [];
-  return await db.projects.getAllData();
+  const projects = await db.projects.getAllData();
+  return projects.sort(
+    (a, b) => new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime()
+  );
 }

@@ -1,23 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
-import { addProject, TypeProjectInfo } from "@/core/data";
 import { useSelector } from "react-redux";
 import { getBrandInfo } from "@/store/modules/normalized/selector";
-
+import { addProject, TypeProjectInfo } from "@/core/data";
 import { getTemplateConfigList } from "@/core/template-compiler";
-
-import { Modal, Button, message } from "antd";
 import { TypeTemplateConfig } from "@/types/project";
+
+// components
+import { Modal, Button, message, FormInstance, Form } from "antd";
+import _ from "lodash";
 import Steps from "../Steps";
-import ProjectInfo from "../ProjectInfo";
+import ProjectInfoForm, { TypeFormData } from "../ProjectInfoForm";
 import TemplateManager from "./TemplateManager";
 import TemplateCard from "./TemplateCard";
 
 type TypeProps = {
-  refreshList: () => Promise<void>;
+  onProjectCreated: () => Promise<void>;
 };
-
 function CreateProject(props: TypeProps): JSX.Element {
   // 机型信息
   const [brandInfo] = useSelector(getBrandInfo);
@@ -25,28 +25,32 @@ function CreateProject(props: TypeProps): JSX.Element {
   const [templateList, setTemplateList] = useState<TypeTemplateConfig[]>([]);
   // 弹框控制
   const [modalVisible, setModalVisible] = useState(false);
-  // 当先选择的模板
+  // 选择的模板
   const [selectiveTemp, setSelectiveTemp] = useState<TypeTemplateConfig>();
   // 当前步骤
   const [curStep, setCurStep] = useState(0);
+
+  // 表单实例
+  const [form] = Form.useForm<TypeFormData>();
 
   // 获取模板列表
   useEffect(() => {
     getTemplateConfigList().then(setTemplateList);
   }, []);
 
+  // 步骤控制
+  const nextStep = () => setCurStep(curStep + 1);
+  const prevStep = () => setCurStep(curStep - 1);
+  const jumpStep = (step: number) => setCurStep(step);
+
   // 创建新工程
   const handleAddProduct = async () => {
-    const info: TypeProjectInfo = {
-      name: "我的主题",
-      description: "描述",
-      designer: "默认",
-      author: "默认",
-      uiVersion: "V12"
-    };
-    return addProject(info).then(() => {
+    const projectInfo = form.getFieldsValue();
+    console.log({ projectInfo });
+    if (!projectInfo) return Promise.resolve();
+    return addProject(projectInfo).then(() => {
       setModalVisible(false);
-      props.refreshList();
+      props.onProjectCreated();
     });
   };
 
@@ -56,17 +60,29 @@ function CreateProject(props: TypeProps): JSX.Element {
       setModalVisible(false);
       return;
     }
-    setCurStep(curStep - 1);
+    prevStep();
   };
 
   // 下一步
   const handleNext = () => {
+    // 校验表单
+    if (curStep === 1) {
+      form
+        .validateFields()
+        .then(() => {
+          nextStep();
+        })
+        .catch(() => {
+          //
+        });
+      return;
+    }
+    // 创建工程
     if (curStep === 2) {
-      // 创建工程
       handleAddProduct();
       return;
     }
-    setCurStep(curStep + 1);
+    nextStep();
   };
 
   // 创建主题步骤容器
@@ -99,13 +115,23 @@ function CreateProject(props: TypeProps): JSX.Element {
               </div>
               {/* 填写信息 */}
               <div className="project-info">
-                <ProjectInfo uiVersions={uiVersions} />
+                <ProjectInfoForm
+                  uiVersions={uiVersions}
+                  form={form}
+                  initialValues={{
+                    name: "",
+                    designer: "",
+                    author: "",
+                    version: "1.0.0",
+                    uiVersion: _.last(selectiveTemp.uiVersions)?.src || ""
+                  }}
+                />
               </div>
             </StyleFillInfo>
           );
         }
         message.info({ content: "模板版本信息错误", duration: 1000 });
-        setCurStep(0);
+        jumpStep(0);
         return null;
       }
       // 信息确认
