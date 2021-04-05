@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ThemeConfig tag="短信-全局" description="近手弹窗" version="12.0" order="4">
+	
+	<image description="上弹窗背景（通知类信息-全部通知类信息）" src="framework-miui-res/res/drawable-xxhdpi/dropdown_listview_bg_light.9.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="弹窗背景（右上角更多菜单、近手弹窗）（若无特殊设计，建议不替换素材资源）" src="framework-miui-res/res/drawable-xxhdpi/immersion_window_bg_light.9.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="近手弹窗 多选按钮 背景 xxhdpi（短信首页-列表长按-多选 单个按钮）" src="framework-miui-res/res/drawable-xxhdpi/context_menu_separate_item_bg_light.9.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="近手弹窗 多选按钮 背景 nxhdpi（该素材直接拷贝即可，无需处理）" src="framework-miui-res/res/drawable-nxhdpi/context_menu_separate_item_bg_light.9.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-nxhdpi</path>
+	</image>
+	
+	<image description="近手弹窗 列表选中项 √勾 xxhdpi" src="framework-miui-res/res/drawable-xxhdpi/btn_radio_on_light.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="近手弹窗 列表选中项 √勾 nxhdpi" src="framework-miui-res/res/drawable-nxhdpi/btn_radio_on_light.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-nxhdpi</path>
+	</image>
+	
+</ThemeConfig>

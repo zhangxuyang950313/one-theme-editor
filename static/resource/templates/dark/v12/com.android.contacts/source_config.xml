@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Module package="com.android.contacts" description="拨号与联系人" order="1">
+	<color name="list_text_color_normal_light" package="miui" priority="1"/>
+	<color name="list_text_color_pressed_light" package="miui" priority="2"/>
+
+<!-- 透明度规范：	
+		主要文字：90%	e6
+		次要文字：60%	99
+		禁用内容：30%	4d
+		提示文字：40%	66 -->
+
+	<color name="class_color_top_title" description="顶栏标题文字颜色">#e6000000</color>
+	<color name="class_color_top_subtitle" description="顶栏次要标题文字颜色">#99000000</color>
+	<color name="class_color_tab_text_normal" description="顶栏tab文字常态颜色">#66000000</color>
+	<color name="class_color_tab_dialer_text_selected" description="拨号 顶栏tab文字选中、通话提示条、右下角按钮背景、单卡拨号按钮 颜色">#ff0abd5b</color>
+	<color name="class_color_tab_contacts_text_selected" description="联系人 顶栏tab文字选中、右下角按钮背景、我的群组右下角按钮背景">#ff0d84ff</color>
+	<color name="class_color_return_call_text" description="通话时拨号页提示条内“点击返回通话”文字颜色">#ffffffff</color>
+
+	<color name="class_color_search_bg" description="搜索条 颜色">#0d000000</color>
+	<color name="class_color_search_tips" description="搜索条提示文字">#66000000</color>
+	<color name="class_color_search_normal" description="搜索条输入文字">#e6000000</color>
+	<color name="class_color_search_light" description="搜索条展开后 顶栏右侧“取消”按钮文字 颜色">#ff0d84ff</color>
+
+	<color name="class_color_first" description="主要字体颜色">#e6000000</color>
+	<color name="class_color_second" description="次要字体颜色">#99000000</color>
+	<color name="class_color_disable" description="不可按态字体颜色">#4d000000</color>
+	<color name="class_color_tips" description="提示类字体颜色">#66000000</color>
+	<color name="class_color_category_text_tips" description="设置列表 类别小标题文字颜色">#ff8c93b0</color>
+	<color name="class_color_light_d" description="全局高亮色 不可按">#4d0d84ff</color>
+	<color name="class_color_light_n" description="全局高亮色 常态">#ff0d84ff</color>
+	
+	<color name="class_color_dialog_bg" description="底部弹窗、快捷联系人弹窗 背景（有素材资源时，优先使用图片）">#ffffffff</color>
+	<color name="class_color_dialer_menu_item_bg_n" description="底部弹窗 选项卡片背景 常态">#0d000000</color>
+	<color name="class_color_dialer_menu_item_bg_p" description="底部弹窗 选项卡片背景 按下">#1a000000</color>
+	<color name="class_color_dialog_button_bg_primary_d" description="底部弹窗 高亮按钮背景 不可按">#0d000000</color>
+	<color name="class_color_dialog_button_text_guide_d" description="底部弹窗 高亮按钮文字 不可按">#4d000000</color>
+	<color name="class_color_dialog_button_bg_primary_n" description="底部弹窗 高亮按钮背景 常态">#ff0d84ff</color>
+	<color name="class_color_dialog_button_text_guide_n" description="底部弹窗 高亮按钮文字 常态">#ffffffff</color>
+	<color name="class_color_list_pressed" description="弹窗/列表背景 按下颜色（透明度建议为5%）">#0d000000</color>
+	<color name="class_color_list_checked" description="弹窗/列表背景 选中颜色（透明度建议为10%）">#1a0d84ff</color>
+	
+	<color name="class_color_alphabet_indexer_text" description="字母索引 左侧选中大文字">#ff000000</color>
+	<color name="class_color_alphabet_indexer_bg" description="字母索引 背景（a-z条）">#0d000000</color>
+	<color name="class_color_word_photo" description="列表头像文字 颜色">#f4ffffff</color>
+	
+	<color name="class_color_list_divider" description="联系人分割线 颜色">#0d000000</color>
+	<color name="class_color_missed_call" description="拨号列表中 未接电话 颜色">#ffED5137</color>
+	<color name="class_color_highlight_light" description="拨号列表中 已拨文字 颜色">#ff0d84ff</color>
+	<color name="class_color_dialer_digits" description="拨号键盘已输入号码文字 颜色">#ff0abd5b</color>
+	<color name="class_color_location" description="拨号键盘归属地文字 颜色">#66000000</color>
+	<color name="class_color_dialer_btn_text" description="双卡 拨号按钮文字 颜色">#e6ffffff</color>
+	
+	<!-- <color name="class_color_quickcontact_title_bg" description="快捷联系人弹窗 标题 背景">#ff333333</color> -->
+	<color name="class_color_content_bg" description="详情页 大背景 背景">#ffffffff</color>
+	<color name="class_color_contact_tab" description="详情页 上滑顶栏颜色（不可使用带透明的颜色）">#ffffffff</color>
+	<color name="class_color_contact_filter_white" description="详情页 顶栏icon颜色 浅色（返回/更多；仅在自定义头像大背景时生效）">#e6ffffff</color>
+	<color name="class_color_contact_filter_black" description="详情页 顶栏icon颜色 深色（返回/更多；仅在自定义头像大背景时生效）">#ff999999</color>
+	<color name="class_color_detail_title" description="详情页 头像标题文字">#e6000000</color>
+	<color name="class_color_detail_subtitle" description="详情页 头像次级文字">#99000000</color>
+	
+	<color name="class_color_editor_scan_card_n" description="新建联系人 “扫描名片”按钮">#1a0d84ff</color>
+	<color name="class_color_suggestions_n" description="新建联系人顶部展开 弹窗背景、输入结果联想 弹窗背景 正常">#ffffffff</color>
+	<color name="class_color_suggestions_p" description="新建联系人顶部展开 弹窗背景、输入结果联想 弹窗背景 按下（不可带透明度）">#ffeaeaea</color>
+
+	<color name="class_color_sliding_btn_off" description="开关按钮（关闭状态）">#26000000</color>
+	<color name="class_color_sliding_btn_on" description="开关按钮（开启状态）">#ff0d84ff</color>
+	<color name="class_color_sliding_btn_slider" description="开关按钮（滑块颜色）">#ffffffff</color>
+
+	<color name="class_color_svg_icon_n" description="小豆豆按钮 常态">#e6000000</color>
+	<color name="class_color_svg_icon_p" description="小豆豆按钮 二态">#99000000</color>
+	<color name="class_color_svg_icon_d" description="小豆豆按钮 不可按">#4c000000</color>
+	<color name="class_color_svg_icon_light" description="小豆豆按钮 高亮">#ff0d84ff</color>
+	<color name="class_color_svg_icon_red" description="小豆豆按钮红心收藏按钮">#ffff2a48</color>
+
+	<color name="class_color_checkbox_btn_stroke" description="复选框（未选）描边颜色；透明度到整型值修改">#ff000000</color>
+	<color name="class_color_checkbox_btn_off" description="复选框（未选）背景颜色；透明度到整型值修改">#ff000000</color>
+	<color name="class_color_checkbox_btn_on" description="复选框（已选）背景颜色；不支持修改透明度">#ff0d84ff</color>
+	<color name="class_color_checkbox_btn_hook" description="复选框（选勾）颜色；不支持修改透明度">#ff000000</color>
+
+	<integer name="class_integer_window_status" description="状态栏样式：1 黑色图标、文字，透明背景；2 白色图标和文字，透明背景；0 白色图标，黑色背景">1</integer>
+	<integer name="class_integer_checkbox_bg_n" description="复选框（未选）背景透明度 常态；取值范围：0-255">13</integer>
+	<integer name="class_integer_checkbox_bg_d" description="复选框（未选）背景透明度 不可用；取值范围：0-255">6</integer>
+	<integer name="class_integer_checkbox_stroke_n" description="复选框（未选）描边透明度 常态；取值范围：0-255">25</integer>
+	<integer name="class_integer_checkbox_stroke_d" description="复选框（未选）描边透明度 不可用；取值范围：0-255">13</integer>
+
+	<bool name="class_bool_default_theme" description="拨号盘的数字是字体。改为false后拨号盘数字是图片">false</bool>
+	<bool name="class_bool_dialerinput_ani" description="拨号盘展开动画">false</bool>
+	<bool name="class_bool_status_bar" description="详情页状态栏样式；false 为黑色，true 为白色">false</bool>
+	<!-- <bool name="class_bool_checkbox_btn" description="复选框 动画；false 关闭动画，true 开启动画；如主题使用素材是，更改为 false">false</bool> -->
+
+	<dimen name="class_dimen_digits_input_shadow_height" description="输入号码 背景的阴影高度（默认：14.099976dp）"></dimen>
+	<dimen name="class_dimen_digits_input_bg_height" description="输入号码 背景偏移高度（默认：15.0dp）"></dimen>
+	<dimen name="class_dimen_digits_input_text_height" description="输入号码 文字偏移高度（默认：0.0dp）"></dimen>
+	<dimen name="class_dimen_dialerpad_padding_top" description="数字区域与背景图顶部间距（默认：6.909973dp）"></dimen>
+	<dimen name="class_dimen_dialerpad_height" description="数字区域高度（此区域内等分）（默认：266.664062dp）"></dimen>
+	<dimen name="class_dimen_dialerpad_padding_start" description="数字区域与屏幕边缘左边 间距（默认：0.0dp）"></dimen>
+	<dimen name="class_dimen_dialerpad_padding_end" description="数字区域与屏幕边缘右边 间距（默认：0.0dp）"></dimen>
+	<dimen name="class_dimen_dialer_menu_padding_btm" description="拨号盘底部3个功能键距离底部的间距（默认：16.949982dp）"></dimen>
+	<dimen name="class_dimen_double_call_btn_divider" description="双卡按钮中间的间距（默认：0.5dp）"></dimen>
+</Module>

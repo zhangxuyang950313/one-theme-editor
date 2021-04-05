@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ThemeConfig tag="设置-全局" description="近手弹窗" version="12.0" order="6">
+	
+	<image description="近手弹窗 上下箭头" src="res/drawable-xxhdpi/miuix_compat_arrow_up_down_integrated.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="近手弹窗 上下箭头（wifi网络详情）" src="res/drawable-xxhdpi/miuix_compat_arrow_up_down.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="近手弹窗 背景（若无特殊设计，建议不替换素材资源）" src="framework-miui-res/res/drawable-xxhdpi/immersion_window_bg_light.9.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="近手弹窗 列表选中项 √勾 xxhdpi" src="framework-miui-res/res/drawable-xxhdpi/btn_radio_on_light.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="近手弹窗 列表选中项 √勾 nxhdpi" src="framework-miui-res/res/drawable-nxhdpi/btn_radio_on_light.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-nxhdpi</path>
+	</image>
+	
+	<!-- 控制中心与状态栏 -->
+	<image description="状态栏电量样式 圆形方式（显示-控制中心与状态栏-状态栏电量样式）" src="res/drawable-xxhdpi/battery_indicator_graphic.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="状态栏电量样式 数字方式（电池内部）" src="res/drawable-xxhdpi/battery_indicator_percent_in.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="状态栏电量样式 数字方式（电池外部）" src="res/drawable-xxhdpi/battery_indicator_percent_out.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="状态栏电量样式 顶部方式" src="res/drawable-xxhdpi/battery_indicator_top.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	
+	<!-- 全面屏键盘优化 -->
+	<image description="语音输入 常态（设置-语言与输入法-全面屏键盘优化-左右侧功能键）" src="res/drawable-xxhdpi/input_method_voice_function.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="语音输入 选中" src="res/drawable-xxhdpi/input_method_voice_function_selected.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="小爱智能语音输入 常态" src="res/drawable-xxhdpi/input_method_xiaoai_function.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="小爱智能语音输入 选中" src="res/drawable-xxhdpi/input_method_xiaoai_function_selected.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="切换输入法 常态" src="res/drawable-xxhdpi/input_method_switch_function.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="切换输入法 选中" src="res/drawable-xxhdpi/input_method_switch_function_selected.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="剪贴板和常用语 常态" src="res/drawable-xxhdpi/input_method_clipboard_function.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="剪贴板和常用语 选中" src="res/drawable-xxhdpi/input_method_clipboard_function_selected.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="切换语言 常态" src="res/drawable-xxhdpi/input_method_switch_keyboard_language.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="切换语言 选中" src="res/drawable-xxhdpi/input_method_switch_keyboard_language_selected.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="切换键盘 常态" src="res/drawable-xxhdpi/input_method_switch_keyboard_type.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="切换键盘 选中" src="res/drawable-xxhdpi/input_method_switch_keyboard_type_selected.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="无功能 常态" src="res/drawable-xxhdpi/input_method_no_function.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="无功能 选中" src="res/drawable-xxhdpi/input_method_no_function_selected.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	
+</ThemeConfig>

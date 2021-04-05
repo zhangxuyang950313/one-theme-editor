@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='utf-8' standalone='yes' ?>
+<MIUI_Theme_Values>
+
+	<!-- 大背景 -->
+	<drawable name="settings_window_bg_light.9.png">window_bg_light.9.png</drawable>
+	<drawable name="window_search_mask.9.png">window_bg_light.9.png</drawable>
+	
+	<!-- 首页顶栏 -->
+	<drawable name="action_bar_embeded_tabs_bg_light.9.png">action_bar_bg_light.9.png</drawable>
+	
+	<!-- 我的收藏/验证码	大背景：隐射短信对话页大背景 -->
+	<drawable name="window_bg_verification_list.9.png">conversation_bg.9.png</drawable>
+	
+	<!-- 编辑模式	底栏-更多-展开后的底部背景 -->
+	<drawable name="action_bar_split_bg_expanded_light.9.png">action_bar_split_bg_light.9.png</drawable>
+	
+	<!-- 快捷回复悬浮窗	底部输入栏 -->
+	<drawable name="new_message_popup_msg_editor_bg.9.png">compose_message_editor_bg.9.png</drawable>
+	
+	<!-- 文本选择弹窗 -->
+	<drawable name="text_select_bg_light.9.png">text_select_bg.9.png</drawable>
+	<!-- 文本选择手柄 -->
+	<drawable name="text_select_handle_left_light.9.png">text_select_handle_left.9.png</drawable>
+	<drawable name="text_select_handle_middle_light.9.png">text_select_handle_middle.9.png</drawable>
+	<drawable name="text_select_handle_right_light.9.png">text_select_handle_right.9.png</drawable>
+	
+	<!-- 短信 发送语音弹窗提示 -->
+	<drawable name="audio_record_window_p.9.png">audio_record_window_n.9.png</drawable>
+	
+	<!-- 列表头像 -->
+	<drawable name="ic_contact_sp_picture.png">ic_contact_list_picture.png</drawable>
+	<drawable name="ic_contact_list_picture2.png">ic_contact_list_picture.png</drawable>
+	<drawable name="ic_contact_list_picture3.png">ic_contact_list_picture.png</drawable>
+	<drawable name="ic_contact_list_picture4.png">ic_contact_list_picture.png</drawable>
+	<drawable name="ic_contact_group_photo.png">ic_contact_list_picture.png</drawable>
+	<drawable name="ic_contact_unknown_picture.png">ic_contact_list_picture.png</drawable>
+	
+	<!-- 短信双卡待选 -->
+	<drawable name="ic_conversation_sim1_indicator.png">sim1_indicator.png</drawable>
+	<drawable name="ic_sim1_selected.png">sim1_indicator_checked.png</drawable>
+	<drawable name="ic_conversation_sim2_indicator.png">sim2_indicator.png</drawable>
+	<drawable name="sim2_indicator_checked.png">ic_sim2_selected.png</drawable>
+	
+</MIUI_Theme_Values>

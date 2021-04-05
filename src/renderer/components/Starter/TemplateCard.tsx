@@ -13,18 +13,15 @@ type TypeProps = {
 // 模板卡片样式
 function TemplateCard(props: TypeProps): JSX.Element {
   const { config } = props;
+  const cover = (
+    <img
+      alt="example"
+      src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
+    />
+  );
   return (
     <StyleTemplateCard>
-      <Card
-        hoverable
-        style={{ width: "100%" }}
-        cover={
-          <img
-            alt="example"
-            src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
-          />
-        }
-      >
+      <Card hoverable style={{ width: "100%" }} cover={cover}>
         <Card.Meta
           title={config.name}
           description={config.uiVersions?.map(o => o.name).join(" | ")}

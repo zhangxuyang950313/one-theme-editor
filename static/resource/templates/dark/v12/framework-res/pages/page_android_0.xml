@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ThemeConfig tag="通知栏" description="通知列表/悬浮通知" version="12.0" order="10">
+	
+	<!-- <image description="悬浮通知 背景" src="res/drawable-xxhdpi/notification_heads_up_bg.9.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image> -->
+	
+	<!-- <image description="通知按钮 常态 xxhdpi" src="res/drawable-xxhdpi/notification_miui_action_bg_n.9.png">
+		<path>framework-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="通知按钮 二态 xxhdpi" src="res/drawable-xxhdpi/notification_miui_action_bg_p.9.png">
+		<path>framework-res/res/drawable-xxhdpi</path>
+	</image> -->
+	
+	<image description="收起箭头" src="res/drawable-xxhdpi/notification_up_arrow.png">
+		<path>framework-res/res/drawable-xxhdpi</path>
+	</image>
+	
+</ThemeConfig>

@@ -1,5 +1,5 @@
 import path from "path";
-import webpack from "webpack";
+import webpack, { DefinePlugin } from "webpack";
 import WebpackBar from "webpackbar";
 import DotEnvPlugin from "dotenv-webpack";
 import { CleanWebpackPlugin } from "clean-webpack-plugin";
@@ -61,6 +61,9 @@ const config: webpack.ConfigurationFactory = (env, args) => {
         systemvars: true, // load all the predefined 'process.env' variables which will trump anything local per dotenv specs.
         silent: true, // hide any errors
         defaults: false // load '.env.defaults' as the default values if empty.
+      }),
+      new DefinePlugin({
+        "process.env.NODE_ENV": `'${args.mode}'`
       })
     ]
   };

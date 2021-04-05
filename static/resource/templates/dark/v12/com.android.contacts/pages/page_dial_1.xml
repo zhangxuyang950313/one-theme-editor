@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ThemeConfig tag="拨号盘" description="双卡拨号盘" version="12.0" order="31">
+	
+	<image description="拷贝电话号码 背景" src="res/drawable-xxhdpi/dialer_digits_copy_bg.9.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="关闭 常态" src="res/drawable-xxhdpi/dialer_copy_hint_delete_bg_normal.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="关闭 二态" src="res/drawable-xxhdpi/dialer_copy_hint_delete_bg_pressed.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="卡 1 常态" src="res/drawable-xxhdpi/btn_call_sim1_normal.9.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="卡 1 二态" src="res/drawable-xxhdpi/btn_call_sim1_press.9.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="卡 2 常态" src="res/drawable-xxhdpi/btn_call_sim2_normal.9.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="卡 2 二态" src="res/drawable-xxhdpi/btn_call_sim2_press.9.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="收起/展开 拨号键盘过渡动画背景" src="res/drawable-xxhdpi/btn_call_double_sim_fg.9.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="双卡拨号键盘菜单 常态" src="res/drawable-xxhdpi/dual_dialer_btn_menu_dialpad_normal.9.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="双卡拨号键盘菜单 二态" src="res/drawable-xxhdpi/dual_dialer_btn_menu_dialpad_pressed.9.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="双卡拨号收起键盘 常态" src="res/drawable-xxhdpi/dual_dialer_btn_close_dialpad_normal.9.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="双卡拨号收起键盘 二态" src="res/drawable-xxhdpi/dual_dialer_btn_close_dialpad_pressed.9.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="拨号防火墙" src="res/drawable-xxhdpi/dialer_fire_wall.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="新建联系人icon" src="res/drawable-xxhdpi/dialer_ic_call_log_header_newcontact.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="语音信箱icon" src="res/drawable-xxhdpi/dialer_ic_call_log_header_voicemail.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="传出呼叫icon" src="res/drawable-xxhdpi/dialer_ic_call_log_header_outgoing_call.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="传入呼叫icon" src="res/drawable-xxhdpi/dialer_ic_call_log_header_incoming_call.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="传入呼叫转移icon" src="res/drawable-xxhdpi/dialer_ic_call_log_header_incoming_forwarding_call.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="传入未接呼叫icon" src="res/drawable-xxhdpi/dialer_ic_call_log_header_missed_call.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="传入未接呼叫转移icon" src="res/drawable-xxhdpi/dialer_ic_call_log_header_missed_forwarding_call.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="sim 卡1" src="res/drawable-xxhdpi/sim1.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="sim 卡2" src="res/drawable-xxhdpi/sim2.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	
+</ThemeConfig>

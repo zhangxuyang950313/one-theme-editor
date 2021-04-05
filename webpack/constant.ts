@@ -46,6 +46,14 @@ export const outputDir = {
 
 export const eslintConfigFile = path.resolve(rootDir, ".eslintrc.js");
 
+export const WDS_SERVER_HOST = "localhost";
+
+export const WDS_SERVER_PORT = 3000;
+
+export const WDS_SOCKET_HOST = WDS_SERVER_HOST;
+
+export const WDS_SOCKET_PORT = WDS_SERVER_PORT;
+
 export const extensions = [
   ".js",
   ".jsx",

@@ -13,18 +13,16 @@ import LightTheme from "./theme/light";
 
 function Root(): JSX.Element {
   return (
-    <>
+    <Provider store={store}>
       <StyleGlobal />
-      <Provider store={store}>
-        <ThemeProvider theme={LightTheme}>
-          <StyleContainer>
-            <ConfigProvider locale={zhCN}>
-              <Router />
-            </ConfigProvider>
-          </StyleContainer>
-        </ThemeProvider>
-      </Provider>
-    </>
+      <ThemeProvider theme={LightTheme}>
+        <StyleContainer>
+          <ConfigProvider locale={zhCN}>
+            <Router />
+          </ConfigProvider>
+        </StyleContainer>
+      </ThemeProvider>
+    </Provider>
   );
 }
 

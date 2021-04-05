@@ -16,9 +16,8 @@ app.allowRendererProcessReuse = true;
 
 app.on("ready", () => {
   const win = mainWindow();
-  console.log(htmlFile);
   win.loadFile(htmlFile);
-  // win.loadURL(`http://localhost:${process.env.PORT || 3000}`);
+  // win.loadURL(localUrl);
   win.webContents.openDevTools(); // 创建并打开 dev 工具
   setupDevTools().then(() => {
     // 利用 electron-debug，添加和Chrome类似的快捷键

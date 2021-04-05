@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ThemeConfig tag="短信" description="短信对话气泡+" version="12.0" order="12">
+	
+	<image description="短信接收 常态" src="res/drawable-xxhdpi/message_bubble_in_bg_n.9.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="短信接收 二态" src="res/drawable-xxhdpi/message_bubble_in_bg_p.9.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="短信发出 常态" src="res/drawable-xxhdpi/message_bubble_out_bg_n.9.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="短信发出 二态" src="res/drawable-xxhdpi/message_bubble_out_bg_p.9.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="网络短信发出 常态" src="res/drawable-xxhdpi/mi_message_bubble_out_bg_n.9.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="网络短信发出 二态" src="res/drawable-xxhdpi/mi_message_bubble_out_bg_p.9.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="群发短信 发送失败时气泡下方按钮 常态" src="res/drawable-xxhdpi/alert_btn_n.9.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="群发短信 发送失败时气泡下方按钮 二态" src="res/drawable-xxhdpi/alert_btn_p.9.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="群发短信 气泡内号码分割线" src="res/drawable-xxhdpi/group_item_bg.9.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="收藏 红心icon" src="res/drawable-xxhdpi/favorite_icon.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="发送的：音频icon（有文字时）对话默认展示icon" src="res/drawable-xxhdpi/message_attachment_audio_new.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="发送的：音频icon（无文字时）" src="res/drawable-xxhdpi/message_attachment_audio_only_new.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="发送的：视频icon（有文字时）" src="res/drawable-xxhdpi/message_attachment_video_new.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="发送的：视频icon（无文字时）" src="res/drawable-xxhdpi/message_attachment_video_only_new.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="发送的：幻灯片icon（有文字时）" src="res/drawable-xxhdpi/message_attachment_default_new.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="发送的：幻灯片icon（无文字时）" src="res/drawable-xxhdpi/message_attachment_default_only_new.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="卡片内 机票 icon（服务短信卡片）" src="res/drawable-xxhdpi/card_airlines.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="卡片内 车票 icon" src="res/drawable-xxhdpi/card_railway.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="卡片内 车次 ∠ 箭头" src="res/drawable-xxhdpi/card_travel_to.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<!-- <image description="卡片内 添加到达站＞箭头" src="res/drawable-xxhdpi/aaaa.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image> -->
+	
+	<image description="录音窗口弹窗背景（网络短信下）" src="res/drawable-xxhdpi/audio_record_window_n.9.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="手机报显示页索引分割线" src="res/drawable-xxhdpi/flatshow_dashline_titled.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="手机报显示页索引数字小背景" src="res/drawable-xxhdpi/flatshow_page_index_gb.9.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	
+	<!-- 附件下载 -->
+	<image description="附件按钮左分割线" src="res/drawable-xxhdpi/download_progress_bg.9.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="下载按钮 常态" src="res/drawable-xxhdpi/download_btn_n.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	
+	<!-- <image description="联系人 卡片内	右箭头＞" src="res/drawable-xxhdpi/contact_card_arrow_right.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image> -->
+	
+</ThemeConfig>

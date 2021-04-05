@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ThemeConfig tag="设置" description="首页列表图标" version="12.0" order="10">
+
+	<image description="我的设备" src="res/drawable-xxhdpi/ic_my_device.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="双卡与移动网络" src="res/drawable-xxhdpi/ic_settings_dualsim.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="WLAN" src="res/drawable-xxhdpi/ic_wifi_settings.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="蓝牙" src="res/drawable-xxhdpi/ic_bluetooth_settings.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="个人热点" src="res/drawable-xxhdpi/ic_portable_wlan_hotspot_settings.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="VPN" src="res/drawable-xxhdpi/ic_vpn.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="连接与共享" src="res/drawable-xxhdpi/ic_device_connection.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="多用户" src="res/drawable-xxhdpi/ic_multiple_users.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="息屏与锁屏" src="res/drawable-xxhdpi/ic_unlock_set_settings.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="显示" src="res/drawable-xxhdpi/ic_display_settings.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="声音与振动" src="res/drawable-xxhdpi/ic_sound_settings.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="通知管理" src="res/drawable-xxhdpi/ic_notification_center.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="桌面" src="res/drawable-xxhdpi/ic_miui_home_settings.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="壁纸" src="res/drawable-xxhdpi/ic_wallpaper_settings.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="个性主题" src="res/drawable-xxhdpi/com_android_thememanager.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="密码与安全" src="res/drawable-xxhdpi/ic_security_settings_settings.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="隐私保护" src="res/drawable-xxhdpi/ic_privacy_protection.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="电池与性能" src="res/drawable-xxhdpi/ic_battery_settings.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="应用设置" src="res/drawable-xxhdpi/ic_system_app_settings.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="更多设置" src="res/drawable-xxhdpi/ic_other_advanced_settings.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="小爱同学" src="res/drawable-xxhdpi/xiaoai.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="屏幕时间管理" src="res/drawable-xxhdpi/ic_app_timer.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="特色功能" src="res/drawable-xxhdpi/ic_miui_lab_settings.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="账号与同步" src="res/drawable-xxhdpi/ic_account_settings.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="服务与反馈" src="res/drawable-xxhdpi/ic_bugreport_settings.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	
+</ThemeConfig>

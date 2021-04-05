@@ -10,6 +10,7 @@ import { getTemplateConfigList } from "@/core/template-compiler";
 import { Modal, Button } from "antd";
 import { TypeTemplateConfig } from "@/types/project";
 import Steps from "../Steps";
+import ProjectInfo from "../ProjectInfo";
 import TemplateManager from "./TemplateManager";
 
 type TypeProps = {
@@ -17,11 +18,15 @@ type TypeProps = {
 };
 
 function CreateProject(props: TypeProps): JSX.Element {
+  // 机型信息
   const [brandInfo] = useSelector(getBrandInfo);
+  // 模板列表
   const [templateList, setTemplateList] = useState<TypeTemplateConfig[]>([]);
-
+  // 弹框控制
   const [modalVisible, setModalVisible] = useState(false);
+  // 当先选择的模板
   const [selectiveTemp, setSelectiveTemp] = useState<TypeTemplateConfig>();
+  // 当前步骤
   const [curStep, setCurStep] = useState(0);
 
   // 获取模板列表
@@ -74,7 +79,7 @@ function CreateProject(props: TypeProps): JSX.Element {
         新建主题
       </Button>
       <Modal
-        width="80%"
+        width="700px"
         visible={modalVisible}
         title={`创建${brandInfo.name}主题`}
         destroyOnClose={true}
@@ -85,7 +90,7 @@ function CreateProject(props: TypeProps): JSX.Element {
         onCancel={handlePrev}
         afterClose={() => setCurStep(0)}
       >
-        <Steps steps={["选择模板", "填写信息", "开始制作"]} current={curStep} />
+        <Steps steps={["选择模板", "填写信息", "开始创作"]} current={curStep} />
         <StyleStepContainer>
           {/* 选择模板 */}
           {curStep === 0 && (
@@ -95,6 +100,8 @@ function CreateProject(props: TypeProps): JSX.Element {
               onSelected={setSelectiveTemp}
             />
           )}
+          {/* 填写主题信息 */}
+          {curStep === 1 && <ProjectInfo />}
         </StyleStepContainer>
       </Modal>
     </StyleCreateProject>

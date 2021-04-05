@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ThemeConfig tag="设置" description="添加 VPN" version="12.0" order="13">
+	
+	<image description="右箭头 常态 xxhdpi" src="framework-miui-res/res/drawable-xxhdpi/btn_inline_detail_normal_light.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="右箭头 二态 xxhdpi" src="framework-miui-res/res/drawable-xxhdpi/btn_inline_detail_pressed_light.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="右箭头 常态 nxhdpi" src="framework-miui-res/res/drawable-nxhdpi/btn_inline_detail_normal_light.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-nxhdpi</path>
+	</image>
+	<image description="右箭头 二态 nxhdpi" src="framework-miui-res/res/drawable-nxhdpi/btn_inline_detail_pressed_light.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-nxhdpi</path>
+	</image>
+	
+	<image description="编辑输入框 上" src="framework-miui-res/res/drawable-xxhdpi/edit_text_bg_spinner_first_light.9.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="编辑输入框 中" src="framework-miui-res/res/drawable-xxhdpi/edit_text_bg_spinner_middle_light.9.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="编辑输入框 下" src="framework-miui-res/res/drawable-xxhdpi/edit_text_bg_spinner_last_light.9.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="编辑输入框 单独" src="framework-miui-res/res/drawable-xxhdpi/edit_text_bg_spinner_single_light.9.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="编辑输入框 左边名称背景 上 常态" src="framework-miui-res/res/drawable-xxhdpi/spinner_bg_edit_first_normal_light.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="编辑输入框 左边名称背景 上 二态" src="framework-miui-res/res/drawable-xxhdpi/spinner_bg_edit_first_pressed_light.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="编辑输入框 左边名称背景 中 常态" src="framework-miui-res/res/drawable-xxhdpi/spinner_bg_edit_middle_normal_light.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="编辑输入框 左边名称背景 中 二态" src="framework-miui-res/res/drawable-xxhdpi/spinner_bg_edit_middle_pressed_light.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="编辑输入框 左边名称背景 下 常态" src="framework-miui-res/res/drawable-xxhdpi/spinner_bg_edit_last_normal_light.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="编辑输入框 左边名称背景 下 二态" src="framework-miui-res/res/drawable-xxhdpi/spinner_bg_edit_last_pressed_light.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="编辑输入框 左边名称背景 单独 常态" src="framework-miui-res/res/drawable-xxhdpi/spinner_bg_edit_single_normal_light.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="编辑输入框 左边名称背景 单独 二态" src="framework-miui-res/res/drawable-xxhdpi/spinner_bg_edit_single_pressed_light.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="可配置弹窗按钮背景 常态" src="framework-miui-res/res/drawable-xxhdpi/spinner_bg_normal_light.9.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="可配置弹窗按钮背景 二态" src="framework-miui-res/res/drawable-xxhdpi/spinner_bg_pressed_light.9.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="其他 下拉菜单背景按钮 常态" src="framework-miui-res/res/drawable-xxhdpi/spinner_bg_drop_down_normal_light.9.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="其他 下拉菜单背景按钮 二态" src="framework-miui-res/res/drawable-xxhdpi/spinner_bg_drop_down_pressed_light.9.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	
+</ThemeConfig>

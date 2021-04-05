@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ThemeConfig tag="短信" description="我的收藏/验证码" version="12.0" order="15">
+	
+	<image description="顶栏标题背景（可透明）" src="res/drawable-xxhdpi/actionbar_bg_verification_list.9.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="大背景" src="res/drawable-xxhdpi/window_bg_verification_list.9.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	
+</ThemeConfig>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ThemeConfig tag="经典导航键" description="底部虚拟按键" version="12.0" order="20">
+	
+	<!-- <image description="返回手势 背景" src="res/drawable-xxhdpi/gesture_back_background.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	<image description="返回手势 箭头" src="res/drawable-xxhdpi/gesture_back_arrow.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image> -->
+	
+	<image description="菜单键（浅色模式）" src="res/drawable-xxhdpi/ic_sysbar_recent.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	<image description="菜单键（深色模式）" src="res/drawable-xxhdpi/ic_sysbar_recent_darkmode.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	<image description="桌面键（浅色模式）" src="res/drawable-xxhdpi/ic_sysbar_home.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	<image description="桌面键（深色模式）" src="res/drawable-xxhdpi/ic_sysbar_home_darkmode.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	<image description="返回（浅色模式）" src="res/drawable-xxhdpi/ic_sysbar_back.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	<image description="返回（深色模式）" src="res/drawable-xxhdpi/ic_sysbar_back_darkmode.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	<image description="横屏返回（浅色模式）" src="res/drawable-xxhdpi/ic_sysbar_back_ime.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	<image description="横屏返回（深色模式）" src="res/drawable-xxhdpi/ic_sysbar_back_ime_darkmode.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	
+</ThemeConfig>

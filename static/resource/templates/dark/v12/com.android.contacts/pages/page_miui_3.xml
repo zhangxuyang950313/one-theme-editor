@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ThemeConfig tag="联系人-全局" description="底部弹窗/其他" version="12.0" order="13">
+	
+	<image description="底栏背景（编辑模式，不可透明）" src="framework-miui-res/res/drawable-xxhdpi/action_bar_split_bg_light.9.png">
+		<path>com.android.contacts/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="底部弹窗 背景" src="framework-miui-res/res/drawable-xxhdpi/dialog_bg_light.9.png">
+		<path>com.android.contacts/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="文本输入框" src="framework-miui-res/res/drawable-xxhdpi/edit_text_bg_dialog_light.9.png">
+		<path>com.android.contacts/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="弹窗 左按钮 常态 xxhdpi" src="framework-miui-res/res/drawable-xxhdpi/btn_bg_light.9.png">
+		<path>com.android.contacts/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="弹窗 左按钮 常态 nxhdpi" src="framework-miui-res/res/drawable-nxhdpi/btn_bg_light.9.png">
+		<path>com.android.contacts/framework-miui-res/res/drawable-nxhdpi</path>
+	</image>
+	<image description="弹窗 右按钮 高亮（建议使用颜色值） xxhdpi" src="framework-miui-res/res/drawable-xxhdpi/btn_bg_primary_light.9.png">
+		<path>com.android.contacts/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="弹窗 右按钮 高亮（建议使用颜色值） nxhdpi" src="framework-miui-res/res/drawable-nxhdpi/btn_bg_primary_light.9.png">
+		<path>com.android.contacts/framework-miui-res/res/drawable-nxhdpi</path>
+	</image>
+	
+	<image description="二维码名片分享按钮 常态" src="framework-miui-res/res/drawable-xxhdpi/btn_bg_warn_single_normal_light.9.png">
+		<path>com.android.contacts/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="二维码名片分享按钮 按下" src="framework-miui-res/res/drawable-xxhdpi/btn_bg_warn_single_pressed_light.9.png">
+		<path>com.android.contacts/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="充话费" src="res/drawable-xxhdpi/dialer_menu_recharge.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="充流量" src="res/drawable-xxhdpi/dialer_menu_mobiledata.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="骚扰拦截" src="res/drawable-xxhdpi/dialer_menu_blocklist.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="ai通话" src="res/drawable-xxhdpi/dialer_menu_aiphone.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="号码识别" src="res/drawable-xxhdpi/dialer_menu_identify_numbers.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="volte" src="res/drawable-xxhdpi/dialer_menu_volte.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="我的群组 公司" src="res/drawable-xxhdpi/company_group.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="我的群组 所在地" src="res/drawable-xxhdpi/location_group.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="我的群组 最近联系时间" src="res/drawable-xxhdpi/frequency_group.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="我的群组 头像背景" src="res/drawable-xxhdpi/group_photos_container_bg.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="cellphone" src="res/drawable-xxhdpi/ic_bt_cellphone.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="imaging" src="res/drawable-xxhdpi/ic_bt_imaging.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="laptop" src="res/drawable-xxhdpi/ic_bt_laptop.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="空列表 拨号" src="res/drawable-xxhdpi/list_empty_no_call_log.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="空列表 联系人" src="res/drawable-xxhdpi/list_empty_no_contact.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="空列表 我的群组" src="res/drawable-xxhdpi/list_empty_no_group.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	<image description="空列表 收藏夹" src="res/drawable-xxhdpi/list_empty_no_favorites.png">
+		<path>com.android.contacts/res/drawable-xxhdpi</path>
+	</image>
+	
+	<!-- <image description="复选框 关 常态" src="framework-miui-res/res/drawable-xxhdpi/btn_checkbox_dialog_off_normal_light.png">
+		<path>com.android.contacts/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="复选框 关 禁用" src="framework-miui-res/res/drawable-xxhdpi/btn_checkbox_dialog_off_disabled_light.png">
+		<path>com.android.contacts/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="复选框 开 常态" src="framework-miui-res/res/drawable-xxhdpi/btn_checkbox_dialog_on_normal_light.png">
+		<path>com.android.contacts/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="复选框 开 禁用" src="framework-miui-res/res/drawable-xxhdpi/btn_checkbox_dialog_on_disabled_light.png">
+		<path>com.android.contacts/framework-miui-res/res/drawable-xxhdpi</path>
+	</image> -->
+	
+</ThemeConfig>

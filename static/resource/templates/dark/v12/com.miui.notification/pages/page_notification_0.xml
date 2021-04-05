@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ThemeConfig tag="通知栏-聚合通知" description="内容资讯/广告营销" version="12.0" order="0">
+	
+	<image description="左侧箭头icon" src="res/drawable-xxhdpi/ic_title_back.png">
+		<path>com.miui.notification/res/drawable-xxhdpi</path>
+	</image>
+	<image description="右侧箭头icon" src="res/drawable-xxhdpi/ic_notification_manager.png">
+		<path>com.miui.notification/res/drawable-xxhdpi</path>
+	</image>
+	
+	<!-- <image description="内容卡片背景" src="res/drawable-xxhdpi/notification_item_bg.9.png">
+		<path>com.miui.notification/res/drawable-xxhdpi</path>
+	</image> -->
+	
+	<image description="按钮背景 xxhdpi（长按卡片后展示）" src="res/drawable-xxhdpi/notification_setting_btn_bg.9.png">
+		<path>com.miui.notification/res/drawable-xxhdpi</path>
+	</image>
+	<image description="按钮背景 nxhdpi" src="res/drawable-nxhdpi/notification_setting_btn_bg.9.png">
+		<path>com.miui.notification/res/drawable-nxhdpi</path>
+	</image>
+	
+</ThemeConfig>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ThemeConfig tag="设置" description="声音与振动" version="12.0" order="15">
+	
+	<image description="电话铃声" src="res/drawable-xxhdpi/ic_telephone_ring.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="闹钟铃声" src="res/drawable-xxhdpi/ic_alarms_ring.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="日程提醒" src="res/drawable-xxhdpi/ic_calendar_ring.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="通知提醒" src="res/drawable-xxhdpi/ic_notification_ring.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="来电、提醒、通知 启用" src="res/drawable-xxhdpi/ic_audio_ring_notif.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="来电、提醒、通知 禁用" src="res/drawable-xxhdpi/ic_audio_ring_notif_mute.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="闹钟音量 启用" src="res/drawable-xxhdpi/ic_audio_alarm.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="闹钟音量 禁用" src="res/drawable-xxhdpi/ic_audio_alarm_mute.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="音乐、游戏、媒体 启用" src="res/drawable-xxhdpi/ic_audio_media.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="音乐、游戏、媒体 禁用" src="res/drawable-xxhdpi/ic_audio_media_mute.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="蓝牙音量 启用" src="res/drawable-xxhdpi/ic_audio_bt.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="蓝牙音量 禁用" src="res/drawable-xxhdpi/ic_audio_bt_mute.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="耳机音量 启用" src="res/drawable-xxhdpi/ic_audio_headset.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="耳机音量 禁用" src="res/drawable-xxhdpi/ic_audio_headset_mute.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="触感强度 icon（振动触感，部分机型有此项设置）" src="res/drawable-xxhdpi/ic_haptic_feedback.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	
+</ThemeConfig>

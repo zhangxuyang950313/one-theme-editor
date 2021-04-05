@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ThemeConfig>
+	
+	<integer name="window_translucent_status" package="miui">class_integer_window_status</integer>
+	
+	<!-- <bool name="check_widget_anim_enable" package="miui">class_bool_checkbox_btn</bool> -->
+	
+	<!-- 默认是true，拨号盘的数字是字体。改为false后拨号盘数字是图片 -->
+	<bool name="default_theme">class_bool_default_theme</bool>
+	<!-- 拨号盘展开动画 -->
+	<bool name="dialerinput_with_animation">class_bool_dialerinput_ani</bool>
+	<bool name="status_bar_color_enable">false</bool>
+	<bool name="status_bar_color_white">class_bool_status_bar</bool>
+	<!-- 输入号码 背景的阴影高度	（默认：14.099976dp） -->
+	<dimen name="shadow_height">class_dimen_digits_input_shadow_height</dimen>
+	<!-- 输入号码 背景偏移高度	（默认：15.0dp） -->
+	<dimen name="twelve_key_digits_input_margin_top">class_dimen_digits_input_bg_height</dimen>
+	<!-- 输入号码 文字偏移高度	（默认：0.0dp） -->
+	<dimen name="dialer_input_margin_top">class_dimen_digits_input_text_height</dimen>
+	<!-- 数字区域与背景图顶部间距	（默认：6.909973dp） -->
+	<dimen name="dialerpad_padding_top">class_dimen_dialerpad_padding_top</dimen>
+	<!-- 数字区域高度（此区域内等分）	（默认：266.664062dp） -->
+	<dimen name="dialerpad_height">class_dimen_dialerpad_height</dimen>
+	<!-- 数字区域与屏幕边缘左边 间距	（默认：0.0dp） -->
+	<dimen name="dialerpad_padding_start">class_dimen_dialerpad_padding_start</dimen>
+	<!-- 数字区域与屏幕边缘右边 间距	（默认：0.0dp） -->
+	<dimen name="dialerpad_padding_end">class_dimen_dialerpad_padding_end</dimen>
+	<!-- 拨号盘底部3个功能键距离底部的间距	（默认：16.949982dp） -->
+	<dimen name="dialer_menu_padding_btm">class_dimen_dialer_menu_padding_btm</dimen>
+	<!-- 双卡按钮中间的间距（默认：0.5dp） -->
+	<dimen name="double_call_btn_divider">class_dimen_double_call_btn_divider</dimen>
+	
+	<!-- 顶栏、搜索条 -->
+	<color name="action_bar_title_text_color_light" package="miui">class_color_top_title</color>
+	<color name="action_mode_title_text_color_light" package="miui">class_color_top_title</color>
+	<color name="dialer_title_text_color">class_color_top_title</color>
+	<color name="action_bar_subtitle_text_light" package="miui">class_color_top_subtitle</color>
+	<!-- 搜索条	背景、提示文字 -->
+	<color name="edit_text_search_bg_color_light">class_color_search_bg</color>
+	<color name="edit_text_search_bg_color_light" package="miui">class_color_search_bg</color>
+	<color name="edit_text_search_hint_color_light" package="miui">class_color_search_tips</color>
+	<!-- 编辑模式下 搜索条 放大镜的颜色；icon有透明通道，此处使用class_color_search_normal颜色 -->
+	<color name="edit_text_search_color">class_color_search_normal</color>
+	<!-- 搜索条	输入的文字 -->
+	<color name="edit_text_search_color_light" package="miui">class_color_search_normal</color>
+	<!-- 搜索条右侧		“取消”	文字按钮 -->
+	<color name="search_action_mode_cancel_text_color_normal" package="miui">class_color_search_light</color>
+	<color name="search_action_mode_cancel_text_color_pressed" package="miui">class_color_search_normal</color>
+
+	<color name="cloud_state_message_bg_color_normal_light" package="miui">class_color_search_bg</color>
+	<color name="cloud_count_normal_text_color_light" package="miui">class_color_search_tips</color>
+	<color name="cloud_status_normal_text_color_light" package="miui">class_color_search_tips</color>
+	<color name="cloud_status_highlight_text_color_light" package="miui">class_color_search_tips</color>
+	
+	<!-- 云同步	提示条背景	颜色值。图片：cloud_state_view_bg_light.9.png -->
+	<color name="miuix_appcompat_cloud_state_message_bg_color_normal_light">class_color_search_bg</color>
+	<!-- 主要文字、次要文字、错误提示文字 -->
+	<color name="miuix_appcompat_cloud_count_normal_text_color_light">class_color_search_tips</color>
+	<color name="miuix_appcompat_cloud_status_normal_text_color_light">class_color_search_tips</color>
+	<color name="miuix_appcompat_cloud_status_highlight_text_color_light">class_color_search_tips</color>
+
+	<!-- 云服务背景、文字 -->
+	<!-- <color name="cloud_recommend_bar_bg_color">#1a0d84ff</color> -->
+	<color name="cloud_recommend_msg_color">class_color_light_n</color>
+	
+	<!-- 联系人二维码名片	卡片背景、联系人名字、提示文字 -->
+	<color name="qrcode_bg_corlor">#fff7f7f7</color>
+	<color name="primary_text">#ff000000</color>
+	<color name="secondary_text">#66000000</color>
+
+	<!-- 顶部未选文字	“通话”“联系人” -->
+	<color name="action_bar_tab_text_color_normal_light" package="miui">class_color_tab_text_normal</color>
+	<!-- 顶部选中文字	“通话”、通话提示条背景、键盘弹起按钮背景 -->
+	<color name="dialer_accent_color">class_color_tab_dialer_text_selected</color>
+	<color name="dialer_accent_color_pressed">class_color_tab_dialer_text_selected</color>
+	<!-- “点击返回通话	正在通话”	上面2个颜色值是背景、文字 -->
+	<color name="return_call_text_color">class_color_return_call_text</color>
+	<!-- 没有（dialer_accent_color）颜色值时就是“通话”选中文字、有就是“联系人”选中文字 -->
+	<color name="tab_text_color_focused">class_color_tab_dialer_text_selected</color>
+	<!-- 顶部选中文字	“联系人” -->
+	<color name="contacts_accent_color">class_color_tab_contacts_text_selected</color>
+	<!-- 联系人-我的群组：右下角按钮背景 -->
+	<color name="accent_color_light" package="miui">class_color_tab_contacts_text_selected</color>
+	<!-- 旧： -->
+	<color name="tab_text_color_unfocused">class_color_tab_text_normal</color>
+	
+	<!-- 多选编辑模式-二级顶栏文字：常态/选中 -->
+	<color name="picker_action_bar_tab_text_color_normal">class_color_tab_text_normal</color>
+	<color name="picker_action_bar_tab_text_color_selected">class_color_tab_contacts_text_selected</color>
+	
+	<!-- 顶栏icon -->
+	<color name="action_title_color_light" package="miui">class_color_top_title</color>
+	<!-- 新建联系人 头像和大背景 颜色 -->
+	<color name="list_item_bg_normal">#00000000</color>
+	<color name="contact_edit_content_bg_color">#00000000</color>
+	<!-- 全部通话、文字头像颜色 -->
+	<color name="list_view_item_group_header_text_light" package="miui">class_color_second</color>
+	<color name="svg_dropdown_indicator">class_color_second</color>
+	<color name="word_photo_color" package="miui">class_color_word_photo</color>
+	<!-- 联系人a-z文字、通话、联系人 列表文字、未接电话 -->
+	<color name="header_text_label_color">class_color_second</color>
+	<color name="color_log_item_title_tv">class_color_first</color>
+	<color name="list_text_color_normal_light" package="miui">class_color_first</color>
+	<color name="list_text_color_pressed_light" package="miui">class_color_first</color>
+	<color name="list_text_color_disable_light" package="miui">class_color_disable</color>
+	<color name="list_text_color_checked_light" package="miui">class_color_light_n</color>
+	<color name="t9_list_item_text_highlight">class_color_highlight_light</color>
+	<color name="list_secondary_text_color_normal_light" package="miui">class_color_second</color>
+	<color name="list_secondary_text_color_pressed_light" package="miui">class_color_second</color>
+	<color name="list_secondary_text_color_disable_light" package="miui">class_color_disable</color>
+	<color name="list_secondary_text_color_checked_light" package="miui">class_color_light_n</color>
+	<color name="v5_list_text_color_light">class_color_first</color>
+	<color name="missed_call_text">class_color_missed_call</color>
+
+	<!-- 编辑模式小标题 -->
+	<color name="picker_recent_header_color">class_color_second</color>
+	<!-- 列表小标题 -->
+	<color name="miuix_preference_category_text_color_light">class_color_category_text_tips</color>
+	<!-- 主要文字	不可按、常态 -->
+	<color name="miuix_preference_primary_text_color_disable_light">class_color_disable</color>
+	<color name="miuix_preference_primary_text_color_light">class_color_first</color>
+	<!-- 次要文字	不可按、常态、选中 -->
+	<color name="miuix_preference_secondary_text_color_disable_light">class_color_disable</color>
+	<color name="miuix_preference_secondary_text_color_light">class_color_second</color>
+	<color name="miuix_preference_secondary_text_color_checked_light">class_color_light_n</color>
+	<!-- 次要提示文字	“勿扰”（声音与振动-静音/勿扰＞） -->
+	<color name="miuix_preference_list_secondary_text_color_disable_light">class_color_disable</color>
+	<color name="miuix_preference_list_secondary_text_color_normal_light">class_color_second</color>
+	<color name="miuix_preference_list_secondary_text_color_pressed_light">class_color_second</color>
+	<color name="miuix_preference_list_secondary_text_color_checked_light">class_color_light_n</color>
+	<!-- 次要文字	右操作提示文字“钢琴音”（拨号设置-更多设置-拨号音-音效-） -->
+	<color name="miuix_compat_integrated_spinner_text_color_light">class_color_tips</color>
+	<!-- 设置列表	无标题非第一条分隔线 -->
+	<color name="miuix_preference_first_last_divider_line_light">#1affffff</color>
+	<!-- 右箭头 -->
+	<color name="miuix_preference_arrow_right_normal_fill_color_light">class_color_second</color>
+	<color name="miuix_preference_arrow_right_pressed_fill_color_light">class_color_second</color>
+	<color name="miuix_preference_arrow_right_disable_fill_color_light">class_color_disable</color>
+
+	<color name="miuix_preference_arrow_right_normal_stroke_color">class_color_second</color>
+	<color name="miuix_preference_arrow_right_disable_stroke_color">class_color_second</color>
+	<color name="miuix_preference_arrow_right_pressed_stroke_color">class_color_disable</color>
+	<!-- 列表选中 -->
+	<color name="miuix_preference_btn_radio_arrow_color">class_color_light_n</color>
+
+	<color name="miuix_folme_color_touch_tint">class_color_list_pressed</color>
+	<color name="contact_list_item_bg_p">class_color_list_pressed</color>
+	<color name="context_menu_item_bg_color_pressed_light" package="miui">class_color_list_pressed</color>
+	<color name="action_button_positive_color">class_color_light_n</color>
+	<color name="search_history_clear_all">class_color_tips</color>
+
+	<!-- 弹窗选时间 -->
+	<color name="number_picker_highlight_text_color" package="miui">class_color_light_n</color>
+	<color name="number_picker_label_color" package="miui">class_color_light_n</color>
+	<color name="number_picker_hint_text_color" package="miui">class_color_second</color>
+
+	<!-- 空页面提示文字 -->
+	<color name="blank_page_text_color_light" package="miui">class_color_tips</color>
+	<!-- 联系人 列表组 分割线 -->
+	<color name="list_divider_stroke">class_color_list_divider</color>
+	<!-- 联系人"我的名片"背景 -->
+	<color name="default_contact_list_item_bg">#00000000</color>
+	<!-- 设置列表 小标题、主要文字、次级文字 -->
+	<color name="preference_category_text_color_light" package="miui">class_color_second</color>
+	<color name="preference_primary_text_color_light" package="miui">class_color_first</color>
+	<color name="preference_primary_text_color_pressed_light" package="miui">class_color_first</color>
+	<color name="preference_primary_text_color_disable_light" package="miui">class_color_disable</color>
+	<color name="preference_secondary_text_color_light" package="miui">class_color_second</color>
+	<color name="preference_secondary_text_color_pressed_light" package="miui">class_color_second</color>
+	<color name="preference_secondary_text_color_disable_light" package="miui">class_color_disable</color>
+	
+	<!-- 底部小豆豆icon -->
+	<color name="svg_icon_color_normal">class_color_svg_icon_n</color>
+	<color name="svg_icon_color_pressed">class_color_svg_icon_p</color>
+	<color name="svg_icon_color_disable">class_color_svg_icon_d</color>
+	<color name="svg_icon_color_normal_light" package="miui">class_color_svg_icon_n</color>
+	<color name="svg_icon_color_pressed_light" package="miui">class_color_svg_icon_p</color>
+	<color name="svg_icon_color_disable_light" package="miui">class_color_svg_icon_d</color>
+	<color name="svg_icon_color_blue_disable_light" package="miui">class_color_svg_icon_d</color>
+	<color name="svg_icon_color_blue_normal_light" package="miui">class_color_svg_icon_light</color>
+	<color name="svg_icon_color_blue_pressed_light" package="miui">class_color_svg_icon_p</color>
+	<color name="svg_icon_color_blue_selected_light" package="miui">class_color_svg_icon_light</color>
+	<color name="svg_icon_color_red_pressed_light" package="miui">class_color_svg_icon_p</color>
+	<color name="svg_icon_color_red_disable_light" package="miui">class_color_svg_icon_d</color>
+	<color name="svg_icon_color_red_normal_light" package="miui">class_color_svg_icon_red</color>
+	<!-- 底部小豆豆文字 -->
+	<color name="action_mode_button_text_color_normal_light" package="miui">class_color_svg_icon_n</color>
+	<color name="action_mode_button_text_color_pressed_light" package="miui">class_color_svg_icon_p</color>
+	<color name="action_mode_button_text_color_disable_light" package="miui">class_color_svg_icon_d</color>
+	<color name="action_mode_button_text_color_selected_light" package="miui">class_color_svg_icon_light</color>
+	<color name="action_button_text_color_normal_light" package="miui">class_color_svg_icon_n</color>
+	<color name="action_button_text_color_pressed_light" package="miui">class_color_svg_icon_p</color>
+	<color name="action_button_text_color_disable_light" package="miui">class_color_svg_icon_d</color>
+	<color name="action_button_text_color_selected_light" package="miui">class_color_svg_icon_light</color>
+	<!-- a-z bar 背景、文字颜色 -->
+	<color name="miuix_appcompat_alphabet_indexer_bg_color_light">class_color_alphabet_indexer_bg</color>
+	<color name="miuix_appcompat_alphabet_indexer_text_color">class_color_tips</color>
+	<color name="miuix_appcompat_alphabet_indexer_overlay_text_color">class_color_alphabet_indexer_text</color>
+	<color name="miuix_appcompat_highlight_normal_light">class_color_light_n</color>
+
+	<!-- 拨号盘 -->
+	<!-- 输入号码和归属地 -->
+	<color name="dialer_digits_text_color">class_color_dialer_digits</color>
+	<color name="dialer_digits_location_text_color">class_color_location</color>
+	<!-- 双卡拨号按钮文字颜色 -->
+	<color name="dialer_buttons_text_color_normal">class_color_dialer_btn_text</color>
+	<color name="dialer_buttons_text_color_press">class_color_dialer_btn_text</color>
+
+	<!-- 新建联系人页面 -->
+	<!-- 扫描名片 -->
+	<color name="editor_scan_bussiness_card_bg_n">class_color_editor_scan_card_n</color>
+	<color name="editor_scan_bussiness_card_bg_p">class_color_light_d</color>
+	<color name="editor_scan_businesscard_btn_txt_color">class_color_light_n</color>
+	<!-- 输入框 -->
+	<color name="editor_hint_text_color_n">class_color_tips</color>
+	<color name="edit_text_color_light" package="miui">class_color_first</color>
+	<color name="editor_label_text_color_n">class_color_second</color>
+	<color name="editor_label_text_color_p">class_color_first</color>
+	<!-- 群组名称 -->
+	<color name="contact_editor_group_name_color">class_color_first</color>
+	<!-- 添加更多选项 -->
+	<color name="editor_button_default_color">class_color_first</color>
+	<!-- 输入姓名时联系结果背景 -->
+	<color name="aggregation_suggestions_item_n">class_color_suggestions_n</color>
+	<color name="aggregation_suggestions_item_p">class_color_suggestions_p</color>
+	<color name="bright_foreground_light" package="miui">class_color_first</color>
+	<color name="dim_foreground_light" package="miui">class_color_second</color>
+	<!-- 手机号码高亮 -->
+	<color name="high_light_text">class_color_light_n</color>
+	<!-- 已选： 2019年9月10日 星期二 -->
+	<color name="highlight_normal_light" package="miui">class_color_light_n</color>
+	<color name="highlight_pressed_light" package="miui">class_color_light_n</color>
+	<color name="highlight_disabled_light" package="miui">class_color_light_d</color>
+	<!-- 已选 下方的未选 -->
+	<!-- <color name="button_text_color_light" package="miui">class_color_first</color> -->
+	<!-- 待选区域：'年 '月 '日 -->
+	<color name="numberpicker_label" package="miui">class_color_light_n</color>
+	<!-- 待选区域： 2019' 09' 10' -->
+	<color name="numberpicker_highlight_text" package="miui">class_color_light_n</color>
+	<!-- 待选区域 未选 2020 10 11 -->
+	<color name="numberpicker_hint_text" package="miui">class_color_second</color>
+
+	<!-- 联系人详情页 -->
+	<!-- 联系人详情页 上滑顶部的颜色 -->
+	<color name="contact_photoview_end_color">class_color_contact_tab</color>
+	<color name="contact_detail_cover_bg_color">class_color_contact_tab</color>
+	<color name="contact_detail_content_bg_color">class_color_content_bg</color>
+	<!-- 素材：contact_detail_list_item_top_bg_v12.9.png -->
+	<color name="contact_list_item_bg_top_n">class_color_content_bg</color>
+	<color name="contact_list_item_bg_top_p">class_color_list_pressed</color>
+	<!-- 详情页头像标题 -->
+	<color name="contact_title_color">class_color_detail_title</color>
+	<color name="contact_subtitle_color">class_color_detail_subtitle</color>
+	<!-- 联系人详情-list-主要、次要 字颜色 -->
+	<color name="contact_detail_list_item_firstly_text_color">class_color_first</color>
+	<color name="contact_detail_list_item_secondly_text_color">class_color_second</color>
+	<!-- 联系人详情页 分割线背景颜色 -->
+	<color name="divider_bg_color">#00000000</color>
+	<!-- 联系人详情-「更多」-小标题文字颜色 -->
+	<color name="contact_detail_head_textcolor">class_color_tips</color>
+	<!-- "新建"、 "标记" 等文字颜色 -->
+	<color name="contact_detail_action_item_textcolor_disable">class_color_light_d</color>
+	<color name="contact_detail_action_item_textcolor">class_color_light_n</color>
+
+	<!-- 详情页 顶栏icon颜色 -->
+	<color name="color_filter_white">class_color_contact_filter_white</color>
+	<color name="color_filter_black">class_color_contact_filter_black</color>
+	
+	<!-- 快捷联系人 弹窗背景、tab背景、名字 -->
+	<color name="quickcontact_window_bg">class_color_dialog_bg</color>
+	<!-- <color name="quickcontact_window_title_bg_normal">class_color_quickcontact_title_bg</color> -->
+	<color name="quick_contact_name_text_color" package="miui">class_color_first</color>
+	<!-- 电话、归属地 -->
+	<color name="quickcontact_list_item_primary_text_color">class_color_first</color>
+	<color name="list_secondary_text_color_normal_light">class_color_second</color>
+	<color name="list_secondary_text_color_pressed_light">class_color_second</color>
+	
+	<color name="immersion_text_color_normal_light" package="miui">class_color_first</color>
+	<color name="immersion_text_color_pressed_light" package="miui">class_color_first</color>
+	<color name="immersion_text_color_disable_light" package="miui">class_color_disable</color>
+	
+	<!-- 联系人-所有联系人 近手弹窗		常态、按下、选中 -->
+	<color name="dropdown_popup_list_item_bg_normal">#00ffffff</color>
+	<color name="dropdown_popup_list_item_bg_pressed">class_color_list_pressed</color>
+	<color name="dropdown_popup_list_item_bg_checked_v12">class_color_list_checked</color>
+	
+	<!-- 弹窗 -->
+	<color name="dialog_bg_color_light" package="miui">class_color_dialog_bg</color>
+	<color name="dialog_title_text_color" package="miui">class_color_first</color>
+	<color name="dialog_title_text_color">class_color_first</color>
+	<color name="dialog_message_text_color_light" package="miui">class_color_second</color>
+	<color name="dialog_message_text_color_light">class_color_second</color>
+	<color name="dialer_menu_item_bg_color">class_color_dialer_menu_item_bg_n</color>
+	<color name="dialer_menu_item_bg_press_color">class_color_dialer_menu_item_bg_p</color>
+	<color name="hint_edit_text_dialog_color_light" package="miui">class_color_tips</color>
+	<color name="edit_text_dialog_color_normal_light" package="miui">class_color_first</color>
+	<!-- 弹窗按钮文字 -->
+	<color name="button_text_color_dialog_light" package="miui">class_color_first</color>
+	<color name="button_text_color_dialog_disabled_light" package="miui">class_color_disable</color>
+	<!-- 左按钮文字	不可按、常态 -->
+	<color name="disabled_text_light" package="miui">class_color_disable</color>
+	<color name="button_text_color_light" package="miui">class_color_second</color>
+	<!-- 右 高亮按钮背景 -->
+	<color name="button_bg_primary_color_disabled_light" package="miui">class_color_dialog_button_bg_primary_d</color>
+	<color name="button_bg_primary_color_normal_light" package="miui">class_color_dialog_button_bg_primary_n</color>
+	<color name="button_bg_primary_color_pressed_light" package="miui">class_color_dialog_button_bg_primary_n</color>
+	<!-- 右 高亮按钮 文字	“删除”	更多-详情：“确定” -->
+	<color name="button_text_color_guide_disabled_light" package="miui">class_color_dialog_button_text_guide_d</color>
+	<color name="button_text_color_guide_normal_light" package="miui">class_color_dialog_button_text_guide_n</color>
+	<!-- 分享二维码		按钮背景、文字↑ -->
+	<color name="button_bg_color_warn_normal_light" package="miui">class_color_dialog_button_bg_primary_n</color>
+	<color name="button_bg_color_warn_pressed_light" package="miui">class_color_dialog_button_bg_primary_n</color>
+	
+	<!-- 新建联系人	顶部弹窗内：次要文字 -->
+	<color name="dropdown_popup_list_second_text_color_disabled">class_color_disable</color>
+	<color name="dropdown_popup_list_second_text_color_normal">class_color_second</color>
+	<color name="dropdown_popup_list_second_text_color_pressed">class_color_second</color>
+	<color name="dropdown_popup_list_second_text_color_checked">class_color_list_checked</color>
+	<!-- 弹窗列表文字 -->
+	<color name="dialog_list_text_color_normal_light" package="miui">class_color_first</color>
+	<color name="dialog_list_text_color_pressed_light" package="miui">class_color_first</color>
+	<color name="dialog_list_text_color_disabled_light" package="miui">class_color_disable</color>
+	<color name="list_item_bg_color_pressed_light" package="miui">class_color_list_pressed</color>
+	<color name="list_item_bg_color_checked_light" package="miui">class_color_list_checked</color>
+	<!-- 跟手弹窗 -->
+	<color name="dropdown_popup_list_text_color_normal_light" package="miui">class_color_first</color>
+	<color name="dropdown_popup_list_text_color_pressed_light" package="miui">class_color_first</color>
+	<color name="dropdown_popup_list_text_color_disabled_light" package="miui">class_color_disable</color>
+	<color name="dropdown_popup_list_text_color_checked_light" package="miui">class_color_light_n</color>
+	<!-- 跟手弹窗 背景 -->
+	<color name="dropdown_popup_list_item_bg_normal_light" package="miui">#00ffffff</color>
+	<color name="dropdown_popup_list_item_bg_pressed_light" package="miui">class_color_list_pressed</color>
+	<color name="dropdown_popup_list_item_bg_checked_light" package="miui">class_color_list_checked</color>
+	<!-- 弹窗列表文字	不可按、常态、按下 -->
+	<color name="menu_list_text_color_disabled_light" package="miui">class_color_disable</color>
+	<color name="menu_list_text_color_normal_light" package="miui">class_color_first</color>
+	<color name="menu_list_text_color_pressed_light" package="miui">class_color_first</color>
+	<!-- 近手弹窗	主要文字（个人热点-已连接设备-最大设备连接数）	不可按、常态、按下、选中 -->
+	<color name="miuix_compat_list_text_color_disable_light">class_color_disable</color>
+	<color name="miuix_compat_list_text_color_normal_light">class_color_first</color>
+	<color name="miuix_compat_list_text_color_pressed_light">class_color_first</color>
+	<color name="miuix_compat_list_text_color_checked_light">class_color_light_n</color>
+	<!-- 近手弹窗	次要文字（更多设置-语言与输入法-全面屏键盘优化-左右侧功能键-） -->
+	<color name="miuix_compat_list_secondary_text_color_disable_light">class_color_disable</color>
+	<color name="miuix_compat_list_secondary_text_color_normal_light">class_color_second</color>
+	<color name="miuix_compat_list_secondary_text_color_pressed_light">class_color_second</color>
+	<color name="miuix_compat_list_secondary_text_color_checked_light">class_color_light_n</color>
+	
+	<!-- 输入框长按内容后-文本功能弹窗 -->
+	<!-- <color name="text_select_bg_color_light" package="miui">class_color_dialog</color> -->
+	<!-- <color name="text_select_border_color_light" package="miui">class_color_dialog</color> -->
+	<!-- 按钮背景、分割线、文字、加载中的圆圈 -->
+	<color name="text_select_item_bg_color_normal_light" package="miui">#00000000</color>
+	<color name="text_select_item_bg_color_pressed_light" package="miui">class_color_list_pressed</color>
+	<color name="divider_color_light" package="miui">#0d000000</color>
+	<color name="text_edit_action_popup_text_normal" package="miui">class_color_first</color>
+	<color name="text_edit_action_popup_text_pressed" package="miui">class_color_light_n</color>
+	<color name="progressbar_indeterminate_circle_color_light" package="miui">class_color_first</color>
+	<!-- 释义后展开面板文字颜色	释义的文字、文字释义、金山词霸提供技术支持、更多详情 -->
+	<color name="text_edit_action_popup_title_normal_light" package="miui">class_color_first</color>
+	<color name="text_edit_action_popup_summary_normal_light" package="miui">class_color_second</color>
+	<color name="text_edit_action_popup_info_normal_light" package="miui">class_color_tips</color>
+	<color name="text_edit_action_popup_more_normal_light" package="miui">class_color_light_n</color>
+	
+	<!-- 拨号盘数字、字母 -->
+	<!-- <color name="dialer_item_number_color">#ff000000</color> -->
+	<!-- <color name="dialer_item_letter_color">#ff000000</color> -->
+	
+<!-- 拨号设置-高级设置-一键拨号- -->
+	<!-- 背景 -->
+	<color name="quick_dial_divider_color">#1a000000</color>
+	<!-- 数字1-9按钮背景 -->
+	<color name="quick_dial_item_bg_color">#e6ffffff</color>
+	<color name="quick_dial_item_bg_color_pressed">#fff2f2f2</color>
+	<!-- 数字1-9 -->
+	<color name="quick_dial_item_pos_text">class_color_disable</color>
+	<!-- 数字下方文字：语音信箱、联系人名字 -->
+	<color name="quick_dial_item_name_text">class_color_first</color>
+	<!-- 数字下方文字：联系人号码 -->
+	<color name="quick_dial_item_number_text">class_color_second</color>
+	<!-- 底部提示文字：“点击数字键添加或删除一键拨号的号码，拨打号码时，长按数字即可快速拨打此号码。” -->
+	<color name="quick_dial_setting_hint_text_color">class_color_tips</color>
+	
+<!-- 开关背景、滑块 -->
+	<!-- 开关按钮	关闭背景、开启背景 -->
+	<color name="sliding_button_bar_off_light" package="miui">class_color_sliding_btn_off</color>
+	<color name="sliding_button_bar_on_light" package="miui">class_color_sliding_btn_on</color>
+	<!-- <color name="sliding_button_bg_border_color">#19000000</color> -->
+	<!-- 开关按钮	滑块	关闭按钮、开启按钮 -->
+	<color name="sliding_btn_slider_off_normal_color_light" package="miui">class_color_sliding_btn_slider</color>
+	<color name="sliding_btn_slider_off_pressed_color_light" package="miui">class_color_sliding_btn_slider</color>
+	<color name="sliding_btn_slider_on_normal_color_light" package="miui">class_color_sliding_btn_slider</color>
+	<color name="sliding_btn_slider_on_pressed_color_light" package="miui">class_color_sliding_btn_slider</color>
+	
+	<!-- 复选框；深色 -->
+	<!-- 复选框 未选 描边的颜色 -->
+	<color name="checkbox_btn_stroke_color_light" package="miui">class_color_checkbox_btn_stroke</color>
+	<!-- 复选框 未选、已选、对勾 颜色 -->
+	<color name="checkbox_btn_disable_background_color_light" package="miui">class_color_checkbox_btn_off</color>
+	<color name="checkbox_btn_on_background_color_light" package="miui">class_color_checkbox_btn_on</color>
+	<color name="checkbox_btn_on_foreground_color_light" package="miui">class_color_checkbox_btn_hook</color>
+	<!-- 背景透明度 -->
+	<integer name="checkwidget_background_normal_alpha_light" package="miui">class_integer_checkbox_bg_n</integer>
+	<integer name="checkwidget_background_disable_alpha_light" package="miui">class_integer_checkbox_bg_d</integer>
+	<!-- 描边透明度 -->
+	<integer name="checkwidget_stroke_normal_alpha_light" package="miui">class_integer_checkbox_stroke_n</integer>
+	<integer name="checkwidget_stroke_disable_alpha_light" package="miui">class_integer_checkbox_stroke_d</integer>
+	
+</ThemeConfig>

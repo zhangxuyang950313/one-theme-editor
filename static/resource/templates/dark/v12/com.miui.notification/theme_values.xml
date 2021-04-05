@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ThemeConfig>
+	
+	<!-- 通知中心首页	聚合通知（内容资讯/广告营销）	标题文字颜色 -->
+	<color name="entrance_aggregate_title_color">class_color_notification_title_text</color>
+	
+	<!-- 聚合通知	下方分割线 -->
+	<color name="entrance_aggregate_divider_color">class_color_entrance_aggregate_divider</color>
+	
+<!-- 聚合通知展开页 -->
+	<!-- 聚合通知展开页	标题文字颜色 -->
+	<color name="list_container_title_title_text_color">class_color_realtime_news_title_text</color>
+	<!-- 卡片背景	素材：notification_item_bg.9.png -->
+	<color name="notification_item_bg_color">class_color_notification_item_bg</color>
+	<!-- APP名称｜时间 -->
+	<color name="notification_detail_app_name_text_color">class_color_notification_detail_app_name_text</color>
+	<!-- 标题 -->
+	<color name="notification_detail_title_text_color">class_color_notification_detail_title_text</color>
+	<!-- 内容 -->
+	<color name="notification_detail_text_text_color">class_color_notification_detail_text_text</color>
+	
+<!-- 长按卡片后展示 -->
+	<!-- APP名称及底部文字颜色 -->
+	<color name="notification_setting_menu_text_color">class_color_realtime_appname_title_text</color>
+	<!-- 按钮文字颜色 -->
+	<color name="notification_setting_menu_btn_text_color">class_color_realtime_button_text_color</color>
+	
+</ThemeConfig>

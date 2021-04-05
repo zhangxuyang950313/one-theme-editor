@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ThemeConfig>
+	<ModuleInfo package="com.android.systemui" description="通知栏" order="4"/>
+	<baseColors>
+		<color name="qs_detail_title_text_color" priority="1"/>
+		<color name="qs_detail_item_primary_text_color" priority="2"/>
+	</baseColors>
+	
+	<!-- 透明度规范：	
+			主要文字：90%	e6
+			次要文字：60%	99
+			禁用内容：30%	4d
+			提示文字：40%	66
+			通知背景：20%	33 -->
+	
+	<colors>
+		<color name="class_color_time_date_text" description="旧版通知页：时间/日期 颜色">#ccffffff</color>
+		<color name="class_color_title_text" description="通知中心 时间、右侧通知管理icon 颜色">#ffffffff</color>
+		<color name="class_color_date_text" description="通知中心 日期 颜色">#99ffffff</color>
+		
+		<!-- 通知中心 -->
+		<color name="class_color_notification_bg" description="通知中心 列表背景 颜色（有图片资源时优先使用图片）">#e6ffffff</color>
+		<color name="class_color_notification_child_bg" description="通知中心 组通知展开后 子通知左滑时单条通知背景条颜色">#ffffffff</color>
+		<color name="class_color_notification_guts_bg" description="通知中心 通知左滑 点击设置后展开的背景条颜色">#e6e4f1ff</color>
+		<color name="class_color_notification_time" description="通知中心 消息时间、多条通知时按钮内数字 颜色">#99000000</color>
+		<color name="class_color_notification_expand_button" description="通知中心 展开下/上箭头按钮 颜色">#ff000000</color>
+		<color name="class_color_notification_button_bg_color" description="通知中心/悬浮窗 带按钮通知 按钮背景 颜色">#1a000000</color>
+		<color name="class_color_notification_button_text_color" description="通知中心 带按钮通知 文字按钮 颜色">#ff0d84ff</color>
+		<color name="class_color_notification_light" description="通知中心 高亮色文字按钮（“更多设置”“完成”“收起”按钮文字）">#ff0d84ff</color>
+		<color name="class_color_recent_tick_anim" description="通知中心 完成清理勾 √ 动画 颜色">#ff43c773</color>
+		
+		<!-- 悬浮窗（系统默认：#f5ffffff	96%） -->
+		<color name="class_color_notification_heads_up_bg" description="全局 悬浮通知 背景">#f5ffffff</color>
+		<color name="class_color_up_notification_text" description="横屏 悬浮通知 标题文字">#e6000000</color>
+		<color name="class_color_up_notification_btn_text" description="横屏 悬浮通知 按钮文字">#b3000000</color>
+		<!-- <color name="class_color_lock_notification_panel_background_keyguard" description="（旧）锁屏下拉 通知栏 通知列表 背景（目前系统已不支持锁屏下拉通知栏,用于预防后续支持）">#e6ffffff</color> -->
+		<color name="class_color_notification_in_call_caller_name" description="来电 悬浮通知 联系人名字 文字颜色">#ff000000</color>
+		<color name="class_color_notification_in_call_caller_info" description="来电 悬浮通知 电话号码/归属地 文字颜色">#99000000</color>
+		
+		<color name="class_color_control_header_clock" description="控制中心 时间、“控制中心”文字 颜色">#ffffffff</color>
+		<color name="class_color_control_header_date" description="控制中心 日期 颜色">#99ffffff</color>
+		<color name="class_color_control_settings_edit" description="控制中心 设置/编辑 按钮颜色">#ffffffff</color>
+		
+		<!-- 控制中心	流量卡片 -->
+		<color name="class_color_control_big_tile_white_bg" description="控制中心 流量卡片 背景颜色">#f7ffffff</color>
+		<color name="class_color_control_expand_tile_title" description="控制中心 流量卡片  第一行提示文字 颜色">#4d000000</color>
+		<color name="class_color_control_expand_tile_sub_title" description="控制中心 流量卡片 第二行主要文字 颜色">#e6000000</color>
+		<color name="class_color_control_expand_tile_unit" description="控制中心 流量卡片 第二行单位文字 颜色">#80000000</color>
+		<!-- 3个开关	不可按＼关闭卡片 -->
+		<color name="class_color_control_tile_icon_unavailable" description="控制中心 卡片/开关 不可用背景（不可按开关icon）">#26ffffff</color>
+		<color name="class_color_control_tile_icon_disabled" description="控制中心 卡片/开关 关闭背景">#33ffffff</color>
+		<!-- 移动数据卡片 -->
+		<color name="class_color_control_big_tile_green_bg" description="控制中心 移动数据 卡片开启背景">#ff06cb6c</color>
+		<!-- 蓝牙卡片 / wifi卡片 -->
+		<color name="class_color_control_big_tile_blue_bg" description="控制中心 蓝牙 / wifi 卡片开启背景">#ff3d84ff</color>
+		<!-- 3个深色卡片	主要文字、次要文字 -->
+		<color name="class_color_control_tile_text_unavailable" description="控制中心 卡片/开关 不可用文字 颜色">#4dffffff</color>
+		<color name="class_color_control_big_tile_title_off" description="控制中心 卡片关闭 主要文字 颜色">#ffffffff</color>
+		<color name="class_color_control_big_tile_sub_title_off" description="控制中心 卡片关闭 次要文字 颜色">#99ffffff</color>
+		<color name="class_color_control_big_tile_title" description="控制中心 卡片开启 主要文字 颜色">#ffffffff</color>
+		<color name="class_color_control_big_tile_sub_title" description="控制中心 卡片开启 次要文字 颜色">#99ffffff</color>
+		
+		<!-- 开关 -->
+		<color name="class_color_switch_blue_bg_on" description="控制中心 开关（系统蓝） 开启背景">#ff3d84ff</color>
+		<color name="class_color_switch_orange_bg_on" description="控制中心 开关（系统橙） 开启背景">#ffffa133</color>
+		<color name="class_color_switch_icon_off" description="控制中心 开关 关闭icon（与卡片关闭icon相同）">#ffffffff</color>
+		<color name="class_color_switch_icon_on" description="控制中心 开关 开启icon（与卡片开启icon相同）">#ffffffff</color>
+		<color name="class_color_switch_name_text" description="快捷开关名称 文字颜色">#e6ffffff</color>
+		<color name="class_color_switch_auto_brightness_bg_on" description="控制中心 自动亮度A字母 开启背景颜色">#f7ffffff</color>
+		<color name="class_color_switch_auto_brightness_text_on" description="控制中心 自动亮度A字母 开启颜色">#ff3d84ff</color>
+		
+		<!-- 亮度条 -->
+		<color name="class_color_brightness_background" description="亮度条背景 颜色（与旧版亮度条背景共用）">#adebebeb</color>
+		<color name="class_color_brightness_progress_V12" description="亮度条进度 颜色">#f7ffffff</color>
+		<color name="class_color_tiles_expand_indicator_V12" description="指示器 颜色（亮度条下方小横条）">#ffffffff</color>
+		
+		<!-- 卡片/开关	展开面板 -->
+		<color name="class_color_control_item_detail_bg" description="卡片 展开面板 背景颜色">#f7ffffff</color>
+		<color name="class_color_control_item_detail_header_text" description="卡片 展开面板 标题文字 颜色">#ff000000</color>
+		<color name="class_color_control_item_detail_selected_bg" description="卡片 展开面板 选中列表背景 颜色">#1a0d84ff</color>
+		<color name="class_color_control_item_detail_selected_text" description="卡片 展开面板 选中列表高亮文字/√ 颜色">#ff0d84ff</color>
+		<color name="class_color_control_item_first" description="卡片 展开面板 列表主要文字 颜色">#e6000000</color>
+		<color name="class_color_control_item_second" description="卡片 展开面板 列表次要文字 颜色">#99000000</color>
+		<color name="class_color_control_item_disable" description="卡片 展开面板 列表不可按文字 颜色">#4d000000</color>
+		<color name="class_color_control_item_tips" description="卡片 展开面板 列表提示文字 颜色">#66000000</color>
+		<color name="class_color_control_item_button_bg" description="卡片 展开面板 按钮背景颜色">#0d000000</color>
+		<color name="class_color_control_item_button_text" description="卡片 展开面板 按钮文字颜色">#e6000000</color>
+		
+		<!-- 开关编辑页面 -->
+		<color name="class_color_control_customizer_title" description="控制中心 开关编辑页面 顶/低部“已/未添加开关”文字颜色">#ffffffff</color>
+		<color name="class_color_control_customizer_sub_title" description="控制中心 开关编辑页面 顶部 次要标题 文字颜色">#99ffffff</color>
+		<color name="class_color_control_customizer_tiles_save_bg" description="控制中心 编辑开关页面 “完成”按钮 背景颜色">#ffffffff</color>
+		<color name="class_color_control_customizer_tiles_save_text" description="控制中心 编辑开关页面 “完成”按钮 文字颜色">#b3000000</color>
+		<color name="class_color_control_customizer_others_title_bg" description="控制中心 编辑开关页面 底部“未添加开关” 面板背景颜色（不可透明）">#ff404040</color>
+		
+		<!-- 未使用新版控制中心时	开关面板 -->
+		<color name="class_color_panel_background" description="旧版： 开关窗口背景/开关展开面板 背景颜色">#e6ffffff</color>
+		<color name="class_color_icon_bg_off" description="旧版：开关（关闭背景）颜色">#1a000000</color>
+		<color name="class_color_icon_off" description="旧版：开关（关闭icon）颜色">#ff5c5d5e</color>
+		<color name="class_color_icon_bg_on" description="旧版：开关（开启背景）颜色">#ff0d84ff</color>
+		<color name="class_color_icon_on" description="旧版：开关（开启icon）颜色">#ffffffff</color>
+		<color name="class_color_icon_name_disable" description="旧版：开关名称 不可按 颜色">#40000000</color>
+		<color name="class_color_icon_name_normal" description="旧版：开关名称 常态 颜色">#b3000000</color>
+		<color name="class_color_page_indicator_dot" description="旧版：翻页指示点 颜色">#ff000000</color>
+		<color name="class_color_footer_data_usage_text" description="旧版：流量数据文字 颜色">#66000000</color>
+		<color name="class_color_switch_panel_divider" description="旧版：开关面板 分割线">#33000000</color>
+		<color name="class_color_brightness_progress_V11" description="旧版：亮度条进度 颜色">#ccffffff</color>
+		<color name="class_color_panel_expand_indicator_V11" description="旧版：指示器 颜色（亮度条下方小横条）">#59ffffff</color>
+		
+		<!-- 卡片开关	展开面板	开关 -->
+		<color name="class_color_sliding_btn_off" description="开关按钮（关闭状态）">#26000000</color>
+		<color name="class_color_sliding_btn_on" description="开关按钮（开启状态）">#ff0d84ff</color>
+		<color name="class_color_sliding_slider" description="开关按钮（滑块颜色）">#ffffffff</color>
+	</colors>
+	
+	<bools>
+		<bool name="class_bool_status_bar_darkmode" description="状态栏样式；true 为黑色，false 为白色">false</bool>
+		<bool name="class_bool_battery_meter_use_legacy" description="状态栏电池样式；true:采用旧样式（胶囊样式），false:采用新样式">false</bool>
+	</bools>
+	
+	<dimens>
+		<dimen name="class_dimen_control_brightness_corner_radius" description="控制中心：亮度条圆角（默认：17.454498dp）"></dimen>
+		<dimen name="class_dimen_panel_content_corner_radius" description="旧版通知栏：亮度条圆角（默认：12.0dp）"></dimen>
+		<dimen name="class_dimen_notification_heads_up_bg_radius" description="全局 悬浮通知 背景圆角">17.46dp</dimen>
+	</dimens>
+	
+</ThemeConfig>

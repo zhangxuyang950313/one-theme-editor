@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ThemeConfig>
+	<ModuleInfo package="com.android.settings" description="设置" order="3"/>
+	<baseColors>
+		<color name="preference_primary_text_color_light" package="miui" priority="1"/>
+		<color name="preference_primary_text_color_pressed_light" package="miui" priority="2"/>
+	</baseColors>
+	
+	<!-- 透明度规范：	
+			高亮文字：100%	ff
+			标题文字：80%	cc
+			主要文字：90%	e6
+			次要文字：60%	99
+			禁用内容：30%	4d
+			提示文字：40%	66	 -->
+	
+	<colors>
+		<color name="class_color_top_title" description="顶栏标题文字 颜色">#e6000000</color>
+		<color name="class_color_top_subtitle" description="顶栏次要标题文字 颜色">#99000000</color>
+		<color name="class_color_bar_normal" description="更多设置-无障碍 顶栏标题文字 未选中 颜色">#66000000</color>
+		<color name="class_color_bar_active" description="更多设置-无障碍 顶栏标题文字 选中 颜色">#cc000000</color>
+		
+		<color name="class_color_search_bg" description="搜索条 颜色（优先使用素材）">#0d000000</color>
+		<color name="class_color_search_tips" description="搜索条 提示文字">#66000000</color>
+		<color name="class_color_search_normal" description="搜索条 输入文字">#e6000000</color>
+		<color name="class_color_search_light" description="搜索条展开后 顶栏右侧“取消”按钮文字 颜色">#ff0d84ff</color>
+
+		<color name="class_color_first" description="主要字体颜色">#e6000000</color>
+		<color name="class_color_second" description="次要字体颜色">#99000000</color>
+		<color name="class_color_disable" description="不可按态字体颜色">#4d000000</color>
+		<color name="class_color_tips" description="提示类字体颜色">#66000000</color>
+		<color name="class_color_category_text_tips" description="设置列表 类别小标题文字 颜色">#ff8c93b0</color>
+		<color name="class_color_light_d" description="全局高亮色 不可按">#800d84ff</color>
+		<color name="class_color_light_n" description="全局高亮色 常态">#ff0d84ff</color>
+		
+		<!-- 弹窗 -->
+		<color name="class_color_dialog_bg" description="底部弹窗 背景（有素材资源时，优先使用图片）">#ffffffff</color>
+		<color name="class_color_dialog_button_bg_primary_d" description="底部/弹窗 高亮按钮背景 不可按">#0d000000</color>
+		<color name="class_color_dialog_button_text_guide_d" description="底部/弹窗 高亮按钮文字 不可按">#4d000000</color>
+		<color name="class_color_dialog_button_bg_primary_n" description="底部/弹窗 高亮按钮背景 常态">#ff0d84ff</color>
+		<color name="class_color_dialog_button_text_guide_n" description="底部/弹窗 高亮按钮文字 常态">#e6ffffff</color>
+		<color name="class_color_list_bg_pressed" description="弹窗/列表背景 按下颜色（透明度建议为5%）">#0d000000</color>
+		<color name="class_color_list_bg_checked" description="弹窗/列表背景 选中颜色（透明度建议为10%）">#1a0d84ff</color>
+		
+		<color name="class_color_edit_text_dialog_bg" description="输入框背景（不可透明）颜色">#fff0f0f0</color>
+		<color name="class_color_edit_text_dialog_border" description="输入框背景/描边 颜色">#ff0d84ff</color>
+		
+		<!-- USB弹窗 -->
+		<color name="class_color_usb_dialog_bg" description="USB弹窗 卡片背景颜色">#fff7f7f7</color>
+		<color name="class_color_usb_dialog_text" description="USB弹窗 卡片内文字颜色">#e6000000</color>
+		
+		<color name="class_color_new_version_bg" description="设置首页（新版本）提示按钮 背景颜色">#1a0d84ff</color>
+		
+		<!-- 我的设备 -->
+		<color name="class_color_card_view_background" description="我的设备/声音与振动/密码与安全 常态 卡片背景">#fff7f7f7</color>
+		<color name="class_color_card_progress_paint" description="我的设备 储存空间 已用进度 背景">#330d84ff</color>
+		<color name="class_color_device_card_background" description="我的设备 更多参数 卡片背景">#1affffff</color>
+		<color name="class_color_device_card_stroke" description="我的设备 更多参数 卡片背景描边">#1a000000</color>
+		
+		<!-- WLAN/蓝牙 卡片背景 -->
+		<color name="class_color_wb_card_first_connected" description="WLAN/蓝牙 已连接卡片内 信号图标/主要文字 颜色">#e6ffffff</color>
+		<color name="class_color_wb_card_secondary_connected" description="WLAN/蓝牙 已连接卡片内 次要文字 颜色">#99ffffff</color>
+		<color name="class_color_wb_card_first_disconnected" description="WLAN/蓝牙 未连接卡片内 信号图标/主要文字 颜色">#e6000000</color>
+		<color name="class_color_wb_card_secondary_disconnected" description="WLAN/蓝牙 未连接卡片内 次要文字 颜色">#99000000</color>
+		<color name="class_color_wb_bt_refresh_bg" description="WLAN/蓝牙 列表刷新按钮圆圈 颜色">#0d000000</color>
+		<color name="class_color_wb_bt_refresh_arrow" description="WLAN/蓝牙 列表刷新按钮 箭头 颜色">#e6000000</color>
+		<!-- <color name="class_color_wifi_detail_modify" description="WLAN网络详情 底部按钮文字“修改密码”“添加网络” 颜色">#ff0d84ff</color> -->
+		<color name="class_color_wifi_detail_delete" description="WLAN网络详情 底部按钮文字“删除网络” 颜色">#fff22424</color>
+		
+		<!-- 密码与安全 -->
+		<color name="class_color_card_view_checked" description="密码与安全 已开启密码/已选密码解锁类型 卡片背景">#ff0d84ff</color>
+		<color name="class_color_choose_unlock_item_bg" description="密码与安全-密码解锁类型 卡片背景">#0d000000</color>
+		<color name="class_color_password_card_checked_first" description="密码与安全 选中卡片 主要字体颜色">#e6ffffff</color>
+		<color name="class_color_password_card_checked_second" description="密码与安全 选中卡片 次要字体颜色">#99ffffff</color>
+		
+		<color name="class_color_progressBackground" description="音量条/亮度条 背景颜色">#1a597098</color>
+		<color name="class_color_recommend_bg" description="设置页引导卡片背景（在查找其他模块吗？）、字体大小与粗细拖动条 颜色">#0d000000</color>
+		<color name="class_color_main_page_background" description="隐私密码 大背景 颜色（设置-密码、隐私与安全-隐私密码-启用隐私密码）">#ffffffff</color>
+		<color name="class_color_unlock_text_title" description="隐私密码 标题文字/主要文字 颜色（设置-密码，隐私与安全-隐私密码-启用隐私密码）">#ff000000</color>
+		<color name="class_color_unlock_text_summary" description="隐私密码 提示文字/次要文字 颜色（设置-密码，隐私与安全-隐私密码-启用隐私密码）">#80000000</color>
+		
+		<!-- 护眼模式、色彩风格		卡片背景 -->
+		<color name="class_color_checkable_item_fill_bg_normal" description="护眼模式、色彩风格 卡片背景 常态颜色">#0d000000</color>
+		<color name="class_color_checkable_item_fill_bg_checked" description="护眼模式、色彩风格 卡片背景 选中颜色">#1a0d84ff</color>
+		
+		<color name="class_color_font_size_view_small" description="字体大小与粗细（字体大小拖动条 6个小圆点）">#ffa3b3cd</color>
+		<color name="class_color_font_weight_view_small" description="字体大小与粗细（字体粗细拖动条 中间小圆点）">#4da3b3cd</color>
+		
+		<color name="class_color_sliding_btn_off" description="开关按钮（关闭背景）">#1a000000</color>
+		<color name="class_color_sliding_btn_on" description="开关按钮（开启背景）">#ff0d84ff</color>
+		<color name="class_color_sliding_btn_slider" description="开关按钮（滑块颜色）">#ffffffff</color>
+		
+		<color name="class_color_svg_icon_n" description="小豆豆按钮 常态">#e6000000</color>
+		<color name="class_color_svg_icon_p" description="小豆豆按钮 二态">#99000000</color>
+		<color name="class_color_svg_icon_d" description="小豆豆按钮 不可按">#4d000000</color>
+		<color name="class_color_svg_icon_light" description="小豆豆按钮 高亮">#ff0d84ff</color>
+		<color name="class_color_svg_icon_red" description="小豆豆按钮红心收藏按钮">#ffff2a48</color>
+
+		<color name="class_color_checkbox_btn_stroke" description="复选框（未选）描边颜色；透明度到整型值修改">#ff000000</color>
+		<color name="class_color_checkbox_btn_off" description="复选框（未选）背景颜色；透明度到整型值修改">#ff000000</color>
+		<color name="class_color_checkbox_btn_on" description="复选框（已选）背景颜色；不支持修改透明度">#ff0d84ff</color>
+		<color name="class_color_checkbox_btn_hook" description="复选框（选勾）颜色；不支持修改透明度">#ffffffff</color>
+	</colors>
+	<integers>
+		<integer name="class_integer_window_status" description="状态栏样式：1 黑色图标、文字，透明背景；2 白色图标和文字，透明背景；0 白色图标，黑色背景">1</integer>
+		<integer name="class_integer_checkbox_bg_n" description="复选框（未选）背景透明度 常态；取值范围：0-255">25</integer>
+		<integer name="class_integer_checkbox_bg_d" description="复选框（未选）背景透明度 不可用；取值范围：0-255">12</integer>
+		<integer name="class_integer_checkbox_stroke_n" description="复选框（未选）描边透明度 常态；取值范围：0-255">50</integer>
+		<integer name="class_integer_checkbox_stroke_d" description="复选框（未选）描边透明度 不可用；取值范围：0-255">25</integer>
+	</integers>
+	<!-- xh 圆角÷2=0.00dp、xxhdpi 圆角÷3=0.00dp、xxxhdpi 圆角÷4=0.00dp、nxhdpi 圆角÷2.75==0.00dp -->
+	<dimens>
+		<dimen name="class_dimen_miuix_preference_high_light_radius" description="WLAN/蓝牙 卡片背景 圆角半径（默认:17.45dp）"></dimen>
+	</dimens>
+	
+	<!-- <bools>
+		<bool name="class_bool_checkbox_btn" description="复选框 动画；false 关闭动画，true 开启动画；如主题使用素材是，更改为 false">true</bool>
+	</bools> -->
+	
+</ThemeConfig>

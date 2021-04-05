@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ThemeConfig tag="设置-全局" description="设置列表/大背景" version="12.0" order="3">
+	
+	<image description="设置大背景 xxhdpi" src="framework-miui-res/res/drawable-xxhdpi/window_bg_light.9.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="设置大背景 nxhdpi" src="framework-miui-res/res/drawable-nxhdpi/window_bg_light.9.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-nxhdpi</path>
+	</image>
+	
+	<image description="登录小米账号 头像" src="res/drawable-xxhdpi/ic_account_avatar.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+		
+	<image description="列表 右箭头 不可按" src="framework-miui-res/res/drawable-xxhdpi/arrow_right_disable.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="列表 右箭头 常态" src="framework-miui-res/res/drawable-xxhdpi/arrow_right_normal.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="列表 右箭头 二态" src="framework-miui-res/res/drawable-xxhdpi/arrow_right_pressed.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="列表 有标题 第一条" src="framework-miui-res/res/drawable-xxhdpi/preference_category_background_first.9.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="列表 有标题 非第一条" src="framework-miui-res/res/drawable-xxhdpi/preference_category_background.9.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="列表 无标题 第一条" src="framework-miui-res/res/drawable-xxhdpi/preference_category_background_first_no_title.9.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="列表 无标题 非第一条（分割线）" src="framework-miui-res/res/drawable-xxhdpi/preference_category_background_no_title.9.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="列表 无图标 上 常态" src="framework-miui-res/res/drawable-xxhdpi/preference_first_item_bg_normal.9.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="列表 无图标 上 二态" src="framework-miui-res/res/drawable-xxhdpi/preference_first_item_bg_pressed.9.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="列表 有图标 上 常态" src="framework-miui-res/res/drawable-xxhdpi/preference_first_item_with_icon_bg_normal.9.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="列表 有图标 上 二态" src="framework-miui-res/res/drawable-xxhdpi/preference_first_item_with_icon_bg_pressed.9.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="列表 无图标 中 常态" src="framework-miui-res/res/drawable-xxhdpi/preference_middle_item_bg_normal.9.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="列表 无图标 中 二态" src="framework-miui-res/res/drawable-xxhdpi/preference_middle_item_bg_pressed.9.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="列表 有图标 中 常态" src="framework-miui-res/res/drawable-xxhdpi/preference_middle_item_with_icon_bg_normal.9.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="列表 有图标 中 二态" src="framework-miui-res/res/drawable-xxhdpi/preference_middle_item_with_icon_bg_pressed.9.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="列表 无图标 下 常态" src="framework-miui-res/res/drawable-xxhdpi/preference_last_item_bg_normal.9.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="列表 无图标 下 二态" src="framework-miui-res/res/drawable-xxhdpi/preference_last_item_bg_pressed.9.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="列表 有图标 下 常态" src="framework-miui-res/res/drawable-xxhdpi/preference_last_item_with_icon_bg_normal.9.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="列表 有图标 下 二态" src="framework-miui-res/res/drawable-xxhdpi/preference_last_item_with_icon_bg_pressed.9.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="列表 无图标 单列 常态" src="framework-miui-res/res/drawable-xxhdpi/preference_single_item_bg_normal.9.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="列表 无图标 单列 二态" src="framework-miui-res/res/drawable-xxhdpi/preference_single_item_bg_pressed.9.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="列表 有图标 单列 常态" src="framework-miui-res/res/drawable-xxhdpi/preference_single_item_with_icon_bg_normal.9.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="列表 有图标 单列 二态" src="framework-miui-res/res/drawable-xxhdpi/preference_single_item_with_icon_bg_pressed.9.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	
+</ThemeConfig>

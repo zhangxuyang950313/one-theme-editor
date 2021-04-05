@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ThemeConfig tag="设置" description="我的设备" version="12.0" order="11">
+	
+	<image description="MIUI版本（/miui_version_logo_dev.png）" src="res/drawable-xxhdpi/miui_version_logo.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="系统更新、登录 提示小红点" src="res/drawable-xxhdpi/account_unlogin_tip.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+
+	<image description="手机型号（下列7个图已有颜色值,如需做图请在nxhdpi放置一份,防止图变糊）" src="res/drawable-xxhdpi/device_description_model.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="运行内存" src="res/drawable-xxhdpi/device_description_ram.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="屏幕尺寸" src="res/drawable-xxhdpi/device_description_screen.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="分辨率" src="res/drawable-xxhdpi/device_description_resolution.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="电池容量" src="res/drawable-xxhdpi/device_description_battery.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="处理器" src="res/drawable-xxhdpi/device_description_cpu.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="摄像头" src="res/drawable-xxhdpi/device_description_camera.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image  description="手机备份恢复 icon（备份与恢复；下列4个图请在nxhdpi放置一份,防止图变糊）" src="res/drawable-xxhdpi/ic_mobile.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="电脑备份恢复 icon" src="res/drawable-xxhdpi/ic_computer.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="U盘备份恢复 icon 不可按" src="res/drawable-xxhdpi/ic_usb_disable.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="U盘备份恢复 icon " src="res/drawable-xxhdpi/ic_usb_enable.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	
+</ThemeConfig>

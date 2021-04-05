@@ -1,0 +1,535 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ThemeConfig>
+
+	<!-- 顶栏 -->
+	<!-- 标题文字	常态/选中 -->
+	<color name="tab_normal_text_color">class_color_tab_normal</color>
+	<color name="tab_active_text_color">class_color_tab_active</color>
+	<!-- 顶栏标题文字 -->
+	<color name="action_bar_title_text_color_light" package="miui">class_color_tab_title</color>
+	<!-- 顶栏编辑界面	标题文字（选中列表信息后-编辑模式） -->
+	<color name="action_mode_title_text_color_light" package="miui">class_color_tab_title</color>
+	<!-- 我的收藏：顶栏标题文字 -->
+	<color name="flat_list_title_color">class_color_tab_title</color>
+	<!-- 左右小豆豆按钮	常态（不可按、二态是与底部小豆豆用的一套颜色值） -->
+	<color name="action_title_color_light" package="miui">class_color_tab_title</color>
+	<!-- 顶栏标题次要文字颜色	“18730218809 河北保定” -->
+	<color name="action_bar_subtitle_text_light" package="miui">class_color_tab_subtitle</color>
+	<!-- 二级标题文字（短信设置-高级设置-管理SIM卡中的信息）	常态、选中高亮色 -->
+	<color name="action_bar_tab_text_color_normal_light" package="miui">class_color_tab_subtitle</color>
+	<color name="action_bar_tab_text_color_pressed_light" package="miui">class_color_tab_title</color>
+	<color name="action_bar_tab_text_color_selected_light" package="miui">class_color_tab_light</color>
+	<!-- 高亮色（系统高亮蓝：#ff0d84ff） -->
+	<color name="highlight_normal_light" package="miui">class_color_tab_light</color>
+	<color name="highlight_pressed_light" package="miui">class_color_light_n</color>
+	<color name="highlight_disabled_light" package="miui">class_color_light_d</color>
+
+	<!-- 搜索条	背景、提示文字 -->
+	<color name="edit_text_search_bg_color_light" package="miui">class_color_search_bg</color>
+	<color name="edit_text_search_hint_color_light" package="miui">class_color_search_tips</color>
+
+	<!-- 搜索框展开后 -->
+	<!-- 输入的文字 -->
+	<color name="edit_text_search_color_light" package="miui">class_color_search_normal</color>
+	<!-- 右侧“取消”文字 -->
+	<color name="search_action_mode_cancel_text_color_normal" package="miui">class_color_tab_light</color>
+	<color name="search_action_mode_cancel_text_color_pressed" package="miui">class_color_tab_subtitle</color>
+	<!-- 已输入的号码 搜索出来的列表	（关键字 “010”	按钮文字“显示更多”）高亮色文字（v11旧：text_color_highlight） -->
+	<color name="highlight_text_color">class_color_light_n</color>
+	<!-- 空页面提示文字	“没找到短信”	“SIM 卡中无信息” -->
+	<color name="blank_page_text_color_light" package="miui">class_color_tips</color>
+
+	<!-- 云同步 -->
+	<!-- 云同步提示条（短信首页搜索条下），下滑一下 云同步：“开启小米云同步，同步短信数据>” -->
+	<!-- 提示条背景	颜色值。图片：cloud_state_view_bg_light.9.png -->
+	<color name="miuix_appcompat_cloud_state_message_bg_color_normal_light">class_color_cloud_card_bg</color>
+	<!-- 主要文字、次要文字、错误提示文字 -->
+	<color name="miuix_appcompat_cloud_count_normal_text_color_light">class_color_second</color>
+	<color name="miuix_appcompat_cloud_status_normal_text_color_light">class_color_tips</color>
+	<color name="miuix_appcompat_cloud_status_highlight_text_color_light">class_color_cloud_error_text</color>
+	<!-- >右箭头最新是跟随文字颜色变化的。箭头icon：cloud_btn_ltr.png	旧名称：cloud_btn.png -->
+	<!-- 未开启云同步（目前只在小米云服务界面或者其他设置界面看到有这个） -->
+	<!-- 提示条-引导类=提醒		蓝 -->
+	<!-- <color name="message_view_guide_bg_color_light" package="miui">#1a0d84ff</color> -->
+	<!-- <color name="message_view_text_color_light" package="miui">#ff0d84ff</color> -->
+	<!-- 叉号资源名称：ic_message_view_close_guide_light.png -->
+	<!-- 提示条-引导类=警示		黄 -->
+	<!-- <color name="message_view_warning_bg_color_light" package="miui">#1aff7f00</color> -->
+	<!-- <color name="message_view_text_color_warning_light" package="miui">#fffaa703</color> -->
+	<!-- 叉号资源名称：ic_message_view_close_warning_light.png -->
+	<!-- 提示条-引导类=错误		红 -->
+	<!-- <color name="message_view_error_bg_color_light" package="miui">#1aff000d</color> -->
+	<!-- <color name="message_view_text_color_error_light" package="miui">#fffe3d28</color> -->
+	<!-- 叉号资源名称：ic_message_view_close_error_light.png -->
+
+	<!-- 短信首页“开启智能短信”卡片 -->
+	<!-- 卡片背景 -->
+	<color name="recommend_bar_home_background_color">class_color_cloud_card_bg</color>
+	<!-- 开启智能短信卡片背景描边、附件顶部/底部分割线、桌面底部快捷回复弹窗分割线 -->
+	<color name="border_color">class_color_border_line</color>
+	<!-- 提示文字	“开启智能短信” -->
+	<color name="recommend_bar_title_color">class_color_first</color>
+	<!-- 提示文字	“智能短信将提供快捷复制验证码、查询快递、查询物流、短信卡片优化等服务” -->
+	<color name="recommend_bar_message_color">class_color_tips</color>
+	<!-- 按钮文字：忽略 -->
+	<color name="recommend_bar_button_close_text_color">class_color_second</color>
+	<!-- 按钮文字：立即开启 -->
+	<color name="recommend_bar_button_ok_text_color">class_color_light_n</color>
+
+	<!-- 下拉进入隐私空间 -->
+	<!-- 小锁	灰色（安卓版本 V21无效，V24已生效） -->
+	<color name="miuix_sbl_locked_gray">class_color_first</color>
+	<!-- 小锁	蓝色（安卓版本 V21无效，V24已生效） -->
+	<color name="miuix_sbl_locked_blue">class_color_light_n</color>
+	<!-- 小锁文字	灰色 -->
+	<color name="miuix_sbl_locked_text_gray">class_color_first</color>
+	<!-- 小锁文字	蓝色 -->
+	<color name="miuix_sbl_locked_text_blue">class_color_light_n</color>
+
+	<!-- 短信	首页列表文字 -->
+	<!-- 首页列表	主要文字	我的收藏/1831005970 -->
+	<color name="list_text_color_normal_light" package="miui">class_color_first</color>
+	<color name="list_text_color_pressed_light" package="miui">class_color_first</color>
+	<color name="list_text_color_disable_light" package="miui">class_color_disable</color>
+	<color name="list_text_color_checked_light" package="miui">class_color_first</color>
+	<!-- 首页列表	次要文字	列表二级文本颜色	设置列表右侧提示文字：“已开启” -->
+	<color name="list_secondary_text_color_normal_light" package="miui">class_color_second</color>
+	<color name="list_secondary_text_color_pressed_light" package="miui">class_color_second</color>
+	<color name="list_secondary_text_color_disable_light" package="miui">class_color_disable</color>
+	<color name="list_secondary_text_color_checked_light" package="miui">class_color_second</color>
+	<!-- 首页列表	日期文字 -->
+	<color name="conversation_date_color">class_color_tips</color>
+	<!-- 首页列表背景	按下（与弹窗-列表按下背景共用） -->
+	<color name="list_item_bg_color_pressed_light" package="miui">class_color_list_bg_pressed</color>
+	<color name="list_item_bg_color_checked_light" package="miui">class_color_list_bg_checked</color>
+	<!-- <color name="list_item_bg_color_light" package="miui">class_color_list_bg_pressed</color> -->
+	<color name="miuix_folme_color_touch_tint">class_color_list_bg_pressed</color>
+	<color name="folme_color_touch_tint" package="miui">class_color_list_bg_pressed</color>
+
+	<!-- 短信首页	列表头像文字 -->
+	<color name="word_photo_color" package="miui">class_color_word_photo</color>
+	<!-- 新短信	圆点标记 高亮色 -->
+	<color name="unread_icon">class_color_light_n</color>
+	<!-- 短信首页右下角新建短信按钮背景 -->
+	<color name="fab_bg_color">class_color_fab_bg</color>
+
+	<!-- 短信设置	miuix -->
+	<!-- 标题提示文字：“免费网络短信/移动网络短信”	“显示” -->
+	<color name="miuix_preference_category_text_color_light">class_color_category_text_tips</color>
+	<!-- 主要文字	不可按、常态 -->
+	<color name="miuix_preference_primary_text_color_disable_light">class_color_disable</color>
+	<color name="miuix_preference_primary_text_color_light">class_color_first</color>
+	<color name="preference_primary_text_color_disable_light" package="miui">class_color_disable</color>
+	<color name="preference_primary_text_color_light" package="miui">class_color_first</color>
+	<color name="preference_primary_text_color_pressed_light" package="miui">class_color_first</color>
+	<!-- 次要文字	不可按、常态、选中 -->
+	<color name="miuix_preference_secondary_text_color_disable_light">class_color_disable</color>
+	<color name="miuix_preference_secondary_text_color_light">class_color_tips</color>
+	<color name="miuix_preference_secondary_text_color_checked_light">class_color_tips</color>
+	<!-- 设置列表	右箭头> -->
+	<color name="miuix_preference_arrow_right_disable_fill_color_light">class_color_disable</color>
+	<color name="miuix_preference_arrow_right_normal_fill_color_light">class_color_tips</color>
+	<color name="miuix_preference_arrow_right_pressed_fill_color_light">class_color_tips</color>
+
+	<!-- 首页列表？	次要文字？ -->
+	<color name="miuix_preference_list_secondary_text_color_disable_light">class_color_disable</color>
+	<color name="miuix_preference_list_secondary_text_color_normal_light">class_color_second</color>
+	<color name="miuix_preference_list_secondary_text_color_pressed_light">class_color_second</color>
+	<color name="miuix_preference_list_secondary_text_color_checked_light">class_color_second</color>
+
+	<!-- 设置列表	无标题非第一条分隔线 -->
+	<color name="miuix_preference_first_last_divider_line_light">#0d000000</color>
+
+	<!-- 通知类信息：“全部通知类信息” 标题提示文字 -->
+	<color name="list_view_item_group_header_text_light" package="miui">class_color_tips</color>
+
+	<!-- 新建短信 -->
+	<!-- 提示文字：收信人 -->
+	<color name="new_message_label_color">class_color_tips</color>
+	<!-- 输入框：已输入的号码、联想列表主要文字、最近联系人名字 -->
+	<color name="recipient_text_color">class_color_first</color>
+	<color name="text_color_recipient_item">class_color_first</color>
+	<!-- 输入框：按钮内已选中的 网络联系人名字 -->
+	<color name="text_color_mi_recipient">class_color_tab_light</color>
+	<!-- 分割线 -->
+	<color name="new_border_color">class_color_new_border</color>
+	<!-- 提示文字：最近联系人 -->
+	<color name="recent_label_text_color">class_color_tips</color>
+	<!-- 最近联系人名字	背景 -->
+	<color name="recent_recipient_text_bg_color">class_color_recent_recipient_text_bg</color>
+	<!-- 最近联系人	不可按 -->
+	<color name="recent_recipient_checked_text_color">class_color_disable</color>
+
+	<!-- 双卡选择弹窗 -->
+	<!-- 弹窗背景 -->
+	<color name="sim_button_container_color">class_color_sim_button_container_bg</color>
+	<!-- 列表背景	选中态 -->
+	<color name="button_send_slot_bg_p">class_color_button_send_slot_bg_p</color>
+	<!-- 弹窗	列表主要文字、次要数字		常态、选中 -->
+	<color name="sim_indicator_color_normal">class_color_first</color>
+	<color name="sim_number_color_normal">class_color_second</color>
+	<color name="sim_indicator_color_selected">class_color_light_n</color>
+	<!-- 双卡状态下发送信息时选卡提示弹窗中的次要文字 -->
+	<color name="sim_card_number_color">class_color_second</color>
+
+	<!-- 输入框		提示文字“短信” “彩信”	“右侧剩余可输入文字字数提示” -->
+	<color name="hint_edit_text_color_light">class_color_hint_edit_tips</color>
+	<!-- 输入框添加主题		提示文字：“主题” -->
+	<color name="hint_edit_text_color_light" package="miui">class_color_hint_edit_tips</color>
+	<!-- 底部/输入框		已输入的文字	/“编辑幻灯片输入的文字” -->
+	<color name="edit_text_color_light" package="miui">class_color_hint_edit_light</color>
+
+	<!-- 底部输入框右侧提示文字“彩信”“剩余字数” -->
+	<color name="list_secondary_text_color_normal_light_message">class_color_message_text</color>
+	<color name="list_secondary_text_color_pressed_light_message">class_color_message_text</color>
+	<color name="list_secondary_text_color_disable_light_message">class_color_message_text</color>
+	<!-- 短信对话：底部输入框附件弹窗背景、文字 -->
+	<color name="bottom_sub_menu_bg_color">class_color_sim_button_container_bg</color>
+	<color name="text_color_black">class_color_first</color>
+
+	<!-- 附件 -->
+	<!-- 附件卡片背景、常用语列表背景、服务短信底部菜单按钮背景 -->
+	<color name="card_bottom_menu_button_color">class_color_card_bottom_menu_bg</color>
+	<!-- 附件标题颜色（icon下方文字）/文字表情颜色 -->
+	<color name="text_color_attachment_type_name">class_color_attachment_type_n</color>
+	<color name="text_color_attachment_type_name_disabled">class_color_attachment_type_d</color>
+	<!-- <color name="bright_foreground_light_disabled">class_color_bright_foreground_d</color> -->
+	<!-- 附件标题文字（比如：常用语）	有该颜色值后此 text_color_attachment_type_name 颜色值无效 -->
+	<color name="text_color_attachment_type">class_color_attachment_type_n</color>
+	<!-- 附件底部指示点 -->
+	<color name="screen_view_seek_point_normal">class_color_attachment_type_d</color>
+	<color name="screen_view_seek_point_highlight">class_color_attachment_type_n</color>
+	<!-- 幻灯片：编辑界面	底部背景 -->
+	<color name="slide_controler_bg">class_color_card_bottom_menu_bg</color>
+	<!-- 输入框内 提示文字：“请输入账号密码”、幻灯片编辑界面：“输入文字或保留空白”、桌面底部快捷回复弹窗输入框内提示文字“免费网络短信” -->
+	<color name="hint_foreground_light" package="miui">class_color_tips</color>
+	<!-- 网络联系人	底部“按住说话”按钮 -->
+	<!-- 按钮背景（+底部输入框背景）	常态 -->
+	<color name="record_audio_btn_editor">class_color_card_bottom_menu_bg</color>
+	<!-- 按钮背景	按下态 -->
+	<color name="record_audio_btn_editor_p">class_color_card_bottom_menu_bg</color>
+	<!-- 按钮背景内	提示文字：“按住说话”“松开结束” -->
+	<color name="text_color_attachment_edit_phrase">class_color_text_edit_phrase</color>
+
+	<!-- 服务短信 底部按钮内文字	常态、二态 -->
+	<color name="bottom_menu_text_color">class_color_bottom_menu_text_n</color>
+	<color name="text_color_bottom_menu_button">class_color_bottom_menu_text_s</color>
+
+	<!-- 网络短信 语音 -->
+	<!-- 下层黑色遮罩 -->
+	<color name="audio_progress_window_background">#99000000</color>
+	<!-- 语音录入弹窗背景	素材：audio_record_window_n.9.png -->
+	<color name="record_audio_dialog_bg">class_color_dialog_bg</color>
+	<!-- 弹窗文字：上滑取消发送、松开取消发送 -->
+	<color name="audio_progress_title_normal">class_color_first</color>
+	<color name="audio_progress_title_disabled">class_color_light_n</color>
+	<!-- 弹窗：音频频率条背景、音频频率条进度 -->
+	<color name="audio_bottom_default_color">class_color_first</color>
+	<color name="audio_bottom_color">class_color_light_n</color>
+
+	<!-- 短信对话 -->
+	<!-- 收到	短信气泡	颜色	#0a000000 -->
+	<color name="message_bubble_in_bg_n">class_color_message_bubble_in_bg_n</color>
+	<color name="message_bubble_in_bg_p">class_color_message_bubble_in_bg_n</color>
+	<!-- 发送	正常短信气泡	颜色	#ff32bf71 -->
+	<color name="message_bubble_out_bg_n">class_color_message_bubble_out_bg_n</color>
+	<color name="message_bubble_out_bg_p">class_color_message_bubble_out_bg_n</color>
+	<!-- 发送	网络短信气泡	颜色	#ff2d74ff -->
+	<color name="mi_message_bubble_out_bg_n">class_color_mi_message_bubble_out_bg_n</color>
+	<color name="mi_message_bubble_out_bg_p">class_color_mi_message_bubble_out_bg_n</color>
+	<!-- 部分短信气泡按下	#0c000000 -->
+	<color name="view_press_mask">#0d000000</color>
+	<!-- 收到-发出信息日期时间 -->
+	<color name="list_secondary_text_color_normal_light">class_color_second</color>
+	<color name="list_secondary_text_color_pressed_light">class_color_second</color>
+	<color name="list_secondary_text_color_disable_light">class_color_disable</color>
+	<!-- 短信对话框 -->
+	<!-- 收到	内容文字 -->
+	<color name="text_color_message_in">class_color_message_in_n</color>
+	<color name="text_color_message_in_pressed">class_color_message_in_n</color>
+	<color name="text_color_message_in_highlight">class_color_message_in_highlight</color>
+	<color name="text_color_message_in_highlight_pressed">class_color_message_in_highlight</color>
+	<!-- 收到	气泡底部按钮背景、按钮内文字“流量充值”“视频免流” -->
+	<color name="understand_button_color">class_color_understand_button_color</color>
+	<color name="understand_button_text">class_color_understand_button_text</color>
+	<!-- 发出	内容文字/彩信文字 -->
+	<color name="text_color_message_out">class_color_message_out_n</color>
+	<color name="text_color_message_out_pressed">class_color_message_out_n</color>
+	<color name="text_color_message_out_highlight">class_color_message_out_highlight</color>
+	<color name="text_color_message_out_highlight_pressed">class_color_message_out_highlight</color>
+	<!-- 发送失败后：气泡内链接高亮文字 -->
+	<color name="text_color_message_alert_highlight">class_color_message_out_highlight</color>
+	<color name="text_color_message_alert_highlight_pressed">class_color_message_out_highlight</color>
+	<!-- 发送失败后：彩信标题颜色 -->
+	<color name="text_color_message_alert">class_color_message_out_highlight</color>
+	<color name="text_color_message_alert_pressed">class_color_message_out_highlight</color>
+	<!-- 短信：群发短信，有一个联系人发送失败时次要文字（给1人发送失败,选择并重发？） -->
+	<color name="text_color_message_alert_secondary">class_color_second</color>
+	<color name="text_color_message_alert_secondary_pressed">class_color_second</color>
+	<!-- 群发消息 标题文字：“发给：” -->
+	<color name="text_color_message_out_sendtitle">class_color_message_out_highlight</color>
+	<color name="text_color_message_out_sendtitle_pressed">class_color_message_out_highlight</color>
+	<!-- 网络短信	发出 -->
+	<color name="text_color_message_out_mx">class_color_message_out_mx_n</color>
+	<color name="text_color_message_out_mx_pressed">class_color_message_out_mx_n</color>
+	<!-- 网络短信	发出、收到	语音气泡内数字颜色 -->
+	<color name="audio_item_out_text_color">class_color_message_out_mx_n</color>
+	<color name="audio_item_in_text_color">class_color_message_in_n</color>
+
+	<!-- 彩信内主要文字、群发短信：有一个联系人发送失败时气泡内按钮内的文字（重发，不发了） -->
+	<color name="bright_foreground_light_disabled" package="miui">class_color_disable</color>
+	<color name="bright_foreground_light" package="miui">class_color_first</color>
+	<!-- 短信内容安全提示：上条短信疑似他人伪装本号码发送，涉及扣费、转账等信息，切勿轻易相信。 -->
+	<color name="security_alert_hint_text_color">class_color_second</color>
+	<!-- 高亮提示：这不是伪基站短信 -->
+	<color name="security_alert_color">class_color_light_n</color>
+	<!-- 彩信详情页	圆圈内页面数字 -->
+	<color name="flatshow_pageno_text_color">class_color_first</color>
+
+	<!-- 联系人名片	卡片背景 -->
+	<color name="contact_card_bg_color_n">class_color_contact_card_bg_color_n</color>
+	<color name="contact_card_bg_color_p">class_color_contact_card_bg_color_n</color>
+	<!-- 联系人名片	定时短信气泡内	卡片背景 -->
+	<color name="card_background_covered_bg_n">class_color_card_background_covered_bg_n</color>
+	<color name="card_background_covered_bg_p">class_color_card_background_covered_bg_n</color>
+	<!-- 联系人名字 -->
+	<color name="contact_card_title_text_color">class_color_first</color>
+	<!-- 联系人名片卡片内分割线 -->
+	<color name="contact_card_divider_color">class_color_card_divider</color>
+	<!-- 联系人号码 -->
+	<color name="contact_card_item_title_text_color">class_color_first</color>
+	<!-- 联系人号码		归属地“电话|北京” -->
+	<color name="contact_card_item_tag_text_color">class_color_second</color>
+	<!-- 联系人	右箭头＞	素材：contact_card_arrow_right.png -->
+	<color name="ic_contact_card_arrow_right_color">class_color_tips</color>
+	<!-- 联系人	新建联系人+加号	高亮色 -->
+	<color name="ic_insert_contact_color">class_color_insert_contact_light</color>
+
+	<!-- 我的收藏、验证码 -->
+	<!-- 大背景颜色 -->
+	<color name="verification_activity_background">class_color_verification_bg</color>
+	<!-- 头像右侧列表	联系人名字/号码（中国移动、1008611），日期（“收藏于：昨天 下午5::01”） -->
+	<color name="tab_list_header_title">class_color_second</color>
+	<color name="tab_list_header_date">class_color_disable</color>
+	<!-- 卡片背景 -->
+	<color name="new_card_body_bg">class_color_new_card_body_bg</color>
+	<!-- 验证码数字、卡片主要文字 -->
+	<color name="verfication_card_text_primary">class_color_first</color>
+	<!-- 卡片	主要文字（铁路12306卡片有）“17:45 南京”“4车 21号 中铺” -->
+	<color name="normal_card_text_primary">class_color_first</color>
+	<!-- 卡片	次要文字	（铁路12306卡片有）“乘车人、日期、订单号、车次、席位”，（收藏页卡片内信息文字） -->
+	<color name="normal_card_text_secondary">class_color_second</color>
+	<!-- 卡片	高亮色文字	（铁路12306卡片有）“添加到达” -->
+	<color name="train_card_action_text_primary">class_color_card_text_highlight</color>
+	<!-- 卡片	提示文字	（银行卡的卡片有）“存入、支付金额、账户信息、还款时间” -->
+	<color name="bank_subtitle_color">class_color_card_text_subtitle</color>
+	<!-- 次要提示文字	“验证码” -->
+	<color name="verficationl_card_text_secondary">class_color_second</color>
+	<!-- 右侧按钮背景 -->
+	<color name="verfication_card_bottom_button_bg">class_color_card_bottom_button_bg</color>
+	<!-- 右侧按钮内文字“复制” -->
+	<color name="verfication_card_action_text_primary">class_color_first</color>
+	<!-- 验证码卡片 分割线 -->
+	<color name="verification_code_raw_content_divider_color">class_color_card_divider</color>
+	<!-- **下面是验证码卡片弹窗** -->
+	<!-- 验证码界面点开卡片后弹窗后面的半透黑 -->
+	<!-- <color name="card_original_text_background">#33000000</color> -->
+	<!-- 验证码卡片	弹窗背景 -->
+	<color name="card_body_bg">class_color_card_body_bg_popup</color>
+	<!-- <color name="card_original_text_bg">class_color_card_body_bg_popup</color> -->
+	<!-- 卡片弹窗背景描边 -->
+	<color name="card_border">class_color_card_border_stroke</color>
+	<!-- 验证码弹窗内按钮	常态、按下 -->
+	<color name="card_bottom_button_bg">class_color_card_bottom_button_bg</color>
+	<color name="mask_view_pressed">#0d000000</color>
+	<!-- 正文内容	“【支付宝】注册验证码：0000。....” -->
+	<color name="card_original_text_color">class_color_first</color>
+	<!-- 按钮内文字“收藏”	“复制文本” -->
+	<color name="card_original_text_primary">class_color_first</color>
+	<!-- 快递单号	数字/链接	高亮色* -->
+	<color name="link_text_color_normal">class_color_card_text_highlight</color>
+	<!-- 电话号码	高亮色*、彩信详情页链接高亮色 -->
+	<color name="link_text_light" package="miui">class_color_card_text_highlight</color>
+	<color name="sms_card_body_secondary">class_color_second</color>
+	<!-- //旧版卡片颜色// -->
+	<color name="card_body_text_color">class_color_second</color>
+	<color name="tab_list_card_border">class_color_card_border_stroke</color>
+	<color name="card_divider_bg">class_color_card_divider</color>
+
+	<!-- 输入框 -->
+	<!-- 身份、密码	背景框 -->
+	<color name="edit_text_dialog_bg_solid_light" package="miui">class_color_edit_text_dialog_bg</color>
+	<!-- 匿名身份	背景框-->
+	<color name="edit_text_bg_color_light" package="miui">class_color_edit_text_dialog_bg</color>
+	<!-- 输入框 描边（实际是矩形背景） -->
+	<color name="edit_text_border_color" package="miui">class_color_edit_text_dialog_border</color>
+	<!-- <color name="edit_text_dialog_bg_solid_light" package="miui">#ffae42b3</color>
+	<color name="edit_text_bg_color_light" package="miui">#ffae42b3</color>
+	<color name="edit_text_border_color" package="miui">class_color_light_n</color> -->
+	<!-- 新建常用语		输入栏背景 -->
+	<!-- 背景、描边、提示“输入常用语”文字、输入的文字 -->
+	<color name="hint_edit_text_dialog_color_light" package="miui">class_color_tips</color>
+	<color name="edit_text_dialog_color_disabled_light" package="miui">class_color_disable</color>
+	<color name="edit_text_dialog_color_normal_light" package="miui">class_color_first</color>
+
+	<!-- 短信对话-底栏编辑状态 -->
+	<!-- 当前模块	小豆豆按钮 -->
+	<color name="svg_icon_color_disable">class_color_svg_icon_d</color>
+	<color name="svg_icon_color_normal">class_color_svg_icon_n</color>
+	<color name="svg_icon_color_pressed">class_color_svg_icon_p</color>
+	<!-- 小豆豆 -->
+	<color name="svg_icon_color_disable_light" package="miui">class_color_svg_icon_d</color>
+	<color name="svg_icon_color_normal_light" package="miui">class_color_svg_icon_n</color>
+	<color name="svg_icon_color_pressed_light" package="miui">class_color_svg_icon_p</color>
+	<!-- 更多按钮 -->
+	<color name="svg_icon_color_blue_disable_light" package="miui">class_color_svg_icon_d</color>
+	<color name="svg_icon_color_blue_normal_light" package="miui">class_color_svg_icon_light</color>
+	<color name="svg_icon_color_blue_pressed_light" package="miui">class_color_svg_icon_p</color>
+	<color name="svg_icon_color_blue_selected_light" package="miui">class_color_svg_icon_light</color>
+	<!-- 收藏	红心按钮 -->
+	<color name="svg_icon_color_red_disable_light" package="miui">class_color_svg_icon_d</color>
+	<color name="svg_icon_color_red_normal_light" package="miui">class_color_svg_icon_red</color>
+	<color name="svg_icon_color_red_pressed_light" package="miui">class_color_svg_icon_p</color>
+	<!-- 小豆豆	下面的文字颜色 -->
+	<color name="action_mode_button_text_color_disable_light" package="miui">class_color_svg_icon_d</color>
+	<color name="action_mode_button_text_color_normal_light" package="miui">class_color_svg_icon_n</color>
+	<color name="action_mode_button_text_color_pressed_light" package="miui">class_color_svg_icon_p</color>
+	<!-- 非编辑状态		小豆豆文字颜色 -->
+	<color name="action_button_text_color_disable_light" package="miui">class_color_svg_icon_d</color>
+	<color name="action_button_text_color_normal_light" package="miui">class_color_svg_icon_n</color>
+	<color name="action_button_text_color_pressed_light" package="miui">class_color_svg_icon_p</color>
+	<color name="action_button_text_color_selected_light" package="miui">class_color_svg_icon_light</color>
+	<!-- 小豆豆	下面的文字颜色	选中态/收藏 -->
+	<color name="action_mode_button_text_color_selected_light" package="miui">class_color_svg_icon_light</color>
+
+	<!-- 快捷回复悬浮窗：桌面底部快捷回复悬浮窗 -->
+	<!-- 标题文字“联系人名字”“电话号码” -->
+	<color name="new_message_popup_sender_color">class_color_tab_title</color>
+	<!-- 顶栏下/底栏上分割线、输入框描边：border_color -->
+	<!-- 输入框背景 -->
+	<!-- <color name="button_send_slot_bg_n">#fff0f0f0</color> -->
+
+	<!-- 弹窗 -->
+	<!-- 短信对话-附件-定时 -->
+	<!-- 定时弹窗标题文字、次要标题文字、次要提示文字？ -->
+	<color name="dialog_primary_text">class_color_first</color>
+	<color name="dialog_secondary_text">class_color_second</color>
+	<color name="dialog_tertiary_text">class_color_second</color>
+	<!-- 待选提示日期时间文字 -->
+	<color name="number_picker_hint_text_color" package="miui">class_color_second</color>
+	<!-- 选中高亮色	**时**分（时间*单位） -->
+	<color name="number_picker_highlight_text_color" package="miui">class_color_light_n</color>
+	<color name="number_picker_label_color" package="miui">class_color_light_n</color>
+
+	<!-- 底部弹窗（选中列表信息后-编辑模式-底部：删除） -->
+	<!-- 弹窗背景 -->
+	<color name="dialog_bg_color_light" package="miui">class_color_dialog_bg</color>
+	<!-- 标题文字	“删除”	更多-详情：“消息详情”	“系统需要验证您的小米账号，请输入您的账号密码...”	“验证失败” -->
+	<color name="dialog_title_text_color" package="miui">class_color_first</color>
+	<!-- 提示文字	“确定要删除所选的9个会话吗？”	“用户名面不匹配” -->
+	<color name="dialog_message_text_color_light" package="miui">class_color_first</color>
+	<!-- 二级提示文字	“同时删除选中的收藏的信息” -->
+	<color name="dialog_checkbox_text_color_light" package="miui">class_color_second</color>
+	<!-- 左按钮文字	“取消”		拦截短信：“不载拦截、回复短信” -->
+	<color name="disabled_text_light" package="miui">class_color_disable</color>
+	<color name="button_text_color_light" package="miui">class_color_second</color>
+	<!-- 右 高亮按钮背景 -->
+	<color name="button_bg_primary_color_disabled_light" package="miui">class_color_dialog_button_bg_primary_d</color>
+	<color name="button_bg_primary_color_normal_light" package="miui">class_color_dialog_button_bg_primary_n</color>
+	<color name="button_bg_primary_color_pressed_light" package="miui">class_color_dialog_button_bg_primary_n</color>
+	<!-- 右 高亮按钮 文字	“删除”	更多-详情：“确定” -->
+	<color name="button_text_color_guide_disabled_light" package="miui">class_color_dialog_button_text_guide_d</color>
+	<color name="button_text_color_guide_normal_light" package="miui">class_color_dialog_button_text_guide_n</color>
+	<!-- 分享二维码		按钮背景、文字↑ -->
+	<color name="button_bg_color_warn_normal_light" package="miui">class_color_dialog_button_bg_primary_n</color>
+	<color name="button_bg_color_warn_pressed_light" package="miui">class_color_dialog_button_bg_primary_n</color>
+	<!-- 弹窗标题文字	？？？ -->
+	<!-- <color name="dialog_simple_list_title_color_light" package="miui">class_color_first</color> -->
+	<!-- 我的收藏-长按卡片弹出的底部弹窗列表文字	（不可按、常态、按下） -->
+	<color name="dialog_list_text_color_disabled_light" package="miui">class_color_disable</color>
+	<color name="dialog_list_text_color_normal_light" package="miui">class_color_first</color>
+	<color name="dialog_list_text_color_pressed_light" package="miui">class_color_first</color>
+	<color name="dialog_list_text_color_checked_light" package="miui">class_color_first</color>
+
+	<!-- 更多弹窗（短信对话页-长按气泡进入编辑模式-底部：更多 展开） -->
+	<!-- 弹窗列表文字	不可按、常态、按下 -->
+	<color name="menu_list_text_color_disabled_light" package="miui">class_color_disable</color>
+	<color name="menu_list_text_color_normal_light" package="miui">class_color_first</color>
+	<color name="menu_list_text_color_pressed_light" package="miui">class_color_first</color>
+	<!-- 弹窗列表 二态：list_item_bg_color_pressed_light（与弹窗-列表按下背景共用） -->
+
+	<!-- 更多弹窗（对象对话-右上角“⋮”三点按钮） -->
+	<!-- 弹窗文字	不可按、常态、按下 -->
+	<color name="immersion_text_color_disable_light" package="miui">class_color_disable</color>
+	<color name="immersion_text_color_normal_light" package="miui">class_color_first</color>
+	<color name="immersion_text_color_pressed_light" package="miui">class_color_first</color>
+	<!-- 弹窗列表 二态：list_item_bg_color_pressed_light（与弹窗-列表按下背景共用） -->
+
+	<!-- 左上角	跟手弹窗（通知类信息-全部通知类信息-） -->
+	<!-- 弹窗列表背景	常态、按下、选中 -->
+	<color name="dropdown_popup_list_item_bg_normal_light" package="miui">#00000000</color>
+	<color name="dropdown_popup_list_item_bg_pressed_light" package="miui">class_color_list_bg_pressed</color>
+	<color name="dropdown_popup_list_item_bg_checked_light" package="miui">class_color_list_bg_checked</color>
+	<!-- 弹窗列表文字	不可按、常态、按下、选中 -->
+	<color name="dropdown_popup_list_text_color_disabled_light" package="miui">class_color_disable</color>
+	<color name="dropdown_popup_list_text_color_normal_light" package="miui">class_color_first</color>
+	<color name="dropdown_popup_list_text_color_pressed_light" package="miui">class_color_first</color>
+	<color name="dropdown_popup_list_text_color_checked_light" package="miui">class_color_light_n</color>
+	<!-- 近手弹窗	最后一条（单独列表）按下背景（拨号才有这个） -->
+	<!-- <color name="context_menu_item_bg_color_normal_light" package="miui">#ff7e2992</color> -->
+	<!-- <color name="context_menu_item_bg_color_pressed_light" package="miui">#ff721aaa</color> -->
+
+	<!-- 输入框长按内容后-文本功能弹窗 -->
+	<!-- 按钮背景、分割线、文字、加载中的圆圈 -->
+	<color name="text_select_item_bg_color_normal_light" package="miui">#00000000</color>
+	<color name="text_select_item_bg_color_pressed_light" package="miui">class_color_list_bg_pressed</color>
+	<color name="divider_color_light" package="miui">#0d000000</color>
+	<color name="text_edit_action_popup_text_normal" package="miui">class_color_first</color>
+	<color name="text_edit_action_popup_text_pressed" package="miui">class_color_light_n</color>
+	<color name="progressbar_indeterminate_circle_color_light" package="miui">class_color_first</color>
+	<!-- 释义后展开面板文字颜色	释义的文字、文字释义、金山词霸提供技术支持、更多详情 -->
+	<color name="text_edit_action_popup_title_normal_light" package="miui">class_color_first</color>
+	<color name="text_edit_action_popup_summary_normal_light" package="miui">class_color_second</color>
+	<color name="text_edit_action_popup_info_normal_light" package="miui">class_color_tips</color>
+	<color name="text_edit_action_popup_more_normal_light" package="miui">class_color_light_n</color>
+
+	<!-- 开关按钮	关闭背景、开启背景 -->
+	<color name="sliding_button_bar_off_light" package="miui">class_color_sliding_btn_off</color>
+	<color name="sliding_button_bar_on_light" package="miui">class_color_sliding_btn_on</color>
+	<!-- <color name="sliding_button_bg_border_color">#19000000</color> -->
+	<!-- 开关按钮 滑块 关闭按钮、开启按钮 -->
+	<color name="sliding_btn_slider_off_normal_color_light" package="miui">class_color_sliding_btn_slider</color>
+	<color name="sliding_btn_slider_off_pressed_color_light" package="miui">class_color_sliding_btn_slider</color>
+	<color name="sliding_btn_slider_on_normal_color_light" package="miui">class_color_sliding_btn_slider</color>
+	<color name="sliding_btn_slider_on_pressed_color_light" package="miui">class_color_sliding_btn_slider</color>
+
+	<!-- 复选框	深色 -->
+	<!-- 复选框 未选 描边的颜色 -->
+	<color name="checkbox_btn_stroke_color_light" package="miui">class_color_checkbox_btn_stroke</color>
+	<!-- 复选框 未选、已选、对勾 颜色 -->
+	<color name="checkbox_btn_disable_background_color_light" package="miui">class_color_checkbox_btn_off</color>
+	<color name="checkbox_btn_on_background_color_light" package="miui">class_color_checkbox_btn_on</color>
+	<color name="checkbox_btn_on_foreground_color_light" package="miui">class_color_checkbox_btn_hook</color>
+	<!-- 背景透明度 -->
+	<integer name="checkwidget_background_normal_alpha_light" package="miui">class_integer_checkbox_bg_n</integer>
+	<integer name="checkwidget_background_disable_alpha_light" package="miui">class_integer_checkbox_bg_d</integer>
+	<!-- 描边透明度 -->
+	<integer name="checkwidget_stroke_normal_alpha_light" package="miui">class_integer_checkbox_stroke_n</integer>
+	<integer name="checkwidget_stroke_disable_alpha_light" package="miui">class_integer_checkbox_stroke_d</integer>
+
+	<!-- 状态栏图标文字		颜色模式 -->
+	<integer name="window_translucent_status" package="miui">class_window_translucent_status</integer>
+	<integer name="window_translucent_status">class_window_translucent_status</integer>
+
+	<!-- <bool name="check_widget_anim_enable" package="miui">class_bool_checkbox_btn</bool> -->
+
+	<!-- 点击发送按钮后		弹窗列表文字？？？ -->
+	<!-- <color name="sms_card_key_text">class_color_second</color> -->
+
+	<!-- 通知栏 短信通知 验证码数字 颜色 -->
+	<color name="understand_float_text_color">class_color_understand_float_text</color>
+
+	<!-- 短信设置-显示—可视化白色背景 -->
+	<color name="visual_guidance_layout_bg_color">class_color_visual_guidance_layout_bg</color>
+
+</ThemeConfig>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ThemeConfig tag="设置-全局" description="设置顶栏" version="12.0" order="1">
+	
+	<image description="顶栏背景（可透明）" src="framework-miui-res/res/drawable-xxhdpi/action_bar_bg_light.9.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="编辑模式 顶栏背景（不可透明）" src="framework-miui-res/res/drawable-xxhdpi/action_mode_bg_light.9.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="搜索条背景 xxhdpi（可透明）" src="framework-miui-res/res/drawable-xxhdpi/search_mode_bg_light.9.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="搜索条背景 nxhdpi（可透明）" src="framework-miui-res/res/drawable-nxhdpi/search_mode_bg_light.9.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-nxhdpi</path>
+	</image>
+	<image description="搜索条 xxhdpi" src="framework-miui-res/res/drawable-xxhdpi/search_mode_edit_text_bg_light.9.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="搜索条 nxhdpi" src="framework-miui-res/res/drawable-nxhdpi/search_mode_edit_text_bg_light.9.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-nxhdpi</path>
+	</image>
+	<image description="搜索（放大镜）" src="framework-miui-res/res/drawable-xxhdpi/edit_text_search.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	
+	<!-- <image description="设置按钮" src="framework-miui-res/res/drawable-xxhdpi/icon_settings_light.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image> -->
+	<image description="返回 按钮" src="framework-miui-res/res/drawable-xxhdpi/action_bar_back_light.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="更多菜单 按钮" src="framework-miui-res/res/drawable-xxhdpi/action_mode_immersion_more_light.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="编辑模式 取消 按钮" src="framework-miui-res/res/drawable-xxhdpi/action_mode_title_button_cancel_light.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="编辑模式 选择全部 不可按 按钮" src="framework-miui-res/res/drawable-xxhdpi/action_mode_title_button_select_all_disable_light.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="编辑模式 选择全部 常态 按钮" src="framework-miui-res/res/drawable-xxhdpi/action_mode_title_button_select_all_normal_light.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="编辑模式 取消全部 不可按 按钮" src="framework-miui-res/res/drawable-xxhdpi/action_mode_title_button_deselect_all_disable_light.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="编辑模式 取消全部 常态 按钮" src="framework-miui-res/res/drawable-xxhdpi/action_mode_title_button_deselect_all_normal_light.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="编辑模式 确认 按钮" src="framework-miui-res/res/drawable-xxhdpi/action_mode_title_button_confirm_light.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="编辑模式 完成 按钮" src="framework-miui-res/res/drawable-xxhdpi/action_mode_immersion_done_light.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="编辑模式 删除 按钮" src="framework-miui-res/res/drawable-xxhdpi/action_mode_title_button_delete_light.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	
+</ThemeConfig>

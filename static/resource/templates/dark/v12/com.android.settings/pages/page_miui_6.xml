@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ThemeConfig tag="设置-全局" description="USB弹窗" version="12.0" order="7">
+
+	<image description="三选项 仅限充电（该页面未设计时无需拷贝素材）" src="res/drawable-xxhdpi/ic_usb_charging_only.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="三选项 传输文件" src="res/drawable-xxhdpi/ic_usb_mtp.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="三选项 传输照片" src="res/drawable-xxhdpi/ic_usb_ptp.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+
+	<image description="四选项 仅限充电" src="res/drawable-xxhdpi/ic_usb_charging_only_small.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="四选项 传输文件" src="res/drawable-xxhdpi/ic_usb_mtp_small.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="四选项 传输照片" src="res/drawable-xxhdpi/ic_usb_ptp_small.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="四选项 反向充电" src="res/drawable-xxhdpi/ic_usb_reverse_charging.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+
+</ThemeConfig>

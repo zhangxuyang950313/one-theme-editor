@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ThemeConfig tag="设置-全局" description="底部弹窗/其他" version="12.0" order="5">
+	
+	<image description="底栏背景（不可透明）" src="framework-miui-res/res/drawable-xxhdpi/action_bar_split_bg_light.9.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="底栏 更多-弹窗背景（编辑状态）" src="framework-miui-res/res/drawable-xxhdpi/list_menu_bg_light.9.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="底部弹窗背景" src="framework-miui-res/res/drawable-xxhdpi/dialog_bg_light.9.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="弹窗 左按钮 xxhdpi" src="framework-miui-res/res/drawable-xxhdpi/btn_bg_light.9.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="弹窗 左按钮 nxhdpi" src="framework-miui-res/res/drawable-nxhdpi/btn_bg_light.9.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-nxhdpi</path>
+	</image>
+	<image description="弹窗 右按钮（建议使用颜色值）xxhdpi" src="framework-miui-res/res/drawable-xxhdpi/btn_bg_primary_light.9.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="弹窗 右按钮（建议使用颜色值）nxhdpi" src="framework-miui-res/res/drawable-nxhdpi/btn_bg_primary_light.9.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-nxhdpi</path>
+	</image>
+	
+	<image description="输入框（2个输入框建议到颜色值中修改）" src="framework-miui-res/res/drawable-xxhdpi/edit_text_bg_dialog_light.9.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="页面输入框（用图后选中时无效果-谨用）" src="framework-miui-res/res/drawable-xxhdpi/edit_text_bg_light.9.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="密码 不可见" src="framework-miui-res/res/drawable-xxhdpi/ic_invisible_light.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="密码 可见" src="framework-miui-res/res/drawable-xxhdpi/ic_visible_light.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	
+	<!-- <image description="编辑文本对话框 上" src="framework-miui-res/res/drawable-xxhdpi/edit_text_bg_dialog_first_light.9.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="编辑文本对话框 中" src="framework-miui-res/res/drawable-xxhdpi/edit_text_bg_dialog_middle_light.9.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="编辑文本对话框 下" src="framework-miui-res/res/drawable-xxhdpi/edit_text_bg_dialog_last_light.9.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="编辑文本对话框 单独" src="framework-miui-res/res/drawable-xxhdpi/edit_text_bg_dialog_single_light.9.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image> -->
+	
+	<!-- <image description="复选框 关 常态" src="framework-miui-res/res/drawable-xxhdpi/btn_checkbox_dialog_off_normal_light.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="复选框 关 禁用" src="framework-miui-res/res/drawable-xxhdpi/btn_checkbox_dialog_off_disabled_light.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="复选框 开 常态" src="framework-miui-res/res/drawable-xxhdpi/btn_checkbox_dialog_on_normal_light.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="复选框 开 禁用" src="framework-miui-res/res/drawable-xxhdpi/btn_checkbox_dialog_on_disabled_light.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image> -->
+	
+</ThemeConfig>

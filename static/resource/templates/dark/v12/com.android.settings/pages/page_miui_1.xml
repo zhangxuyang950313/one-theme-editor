@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ThemeConfig tag="设置-全局" description="搜索结果/文本选择" version="12.0" order="2">
+	
+	<image description="搜索结果 顶栏背景 xxhdpi（不可透明；点9显示区域边距：底部左侧留70px、右侧底部留36px）" src="framework-miui-res/res/drawable-xxhdpi/search_mode_input_bg_light.9.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="搜索结果 顶栏背景 nxhdpi（不可透明；点9显示区域边距：底部左侧留70px、右侧底部留36px）" src="framework-miui-res/res/drawable-nxhdpi/search_mode_input_bg_light.9.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-nxhdpi</path>
+	</image>
+	
+	<image description="搜索条 删除按钮" src="framework-miui-res/res/drawable-xxhdpi/edit_text_search_clear_btn_on_light.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+
+	<image description="搜索结果 未输入文字状态 大背景（无图时默认映射大背景）" src="framework-miui-res/res/drawable-xxhdpi/window_search_mask.9.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<!-- <image description="搜索结果 输入文字状态 大背景" src="res/drawable-xxhdpi/search_bg.9.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image> -->
+	
+	<image description="没有找到设置项 icon" src="res/drawable-xxhdpi/search_list_empty.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+
+	<image description="文本选择 手柄 左" src="framework-miui-res/res/drawable-xxhdpi/text_select_handle_left.9.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="文本选择 手柄 中" src="framework-miui-res/res/drawable-xxhdpi/text_select_handle_middle.9.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="文本选择 手柄 右" src="framework-miui-res/res/drawable-xxhdpi/text_select_handle_right.9.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="文本选择 背景" src="framework-miui-res/res/drawable-xxhdpi/text_select_bg.9.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="文本 搜索 常态" src="framework-miui-res/res/drawable-xxhdpi/text_action_search_normal.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="文本 搜索 二态" src="framework-miui-res/res/drawable-xxhdpi/text_action_search_pressed.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="文本 电话 常态" src="framework-miui-res/res/drawable-xxhdpi/text_action_tel_normal.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="文本 电话 二态" src="framework-miui-res/res/drawable-xxhdpi/text_action_tel_pressed.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="文本 释义 常态" src="framework-miui-res/res/drawable-xxhdpi/text_action_dic_normal.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="文本 释义 二态" src="framework-miui-res/res/drawable-xxhdpi/text_action_dic_pressed.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="文本 分享 常态" src="framework-miui-res/res/drawable-xxhdpi/text_action_share_normal.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="文本 分享 二态" src="framework-miui-res/res/drawable-xxhdpi/text_action_share_pressed.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="文本 链接 常态" src="framework-miui-res/res/drawable-xxhdpi/text_action_url_normal.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="文本 链接 二态" src="framework-miui-res/res/drawable-xxhdpi/text_action_url_pressed.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="文本 翻页 上一页 不可按" src="framework-miui-res/res/drawable-xxhdpi/text_action_previous_disable_light.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="文本 翻页 上一页 常态" src="framework-miui-res/res/drawable-xxhdpi/text_action_previous_normal_light.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="文本 翻页 下一页 不可按" src="framework-miui-res/res/drawable-xxhdpi/text_action_next_disable_light.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="文本 翻页 下一页 常态" src="framework-miui-res/res/drawable-xxhdpi/text_action_next_normal_light.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="文本选择箭头 展开" src="framework-miui-res/res/drawable-xxhdpi/text_select_arrow_down.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="文本选择箭头 收起" src="framework-miui-res/res/drawable-xxhdpi/text_select_arrow_up.png">
+		<path>com.android.settings/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	
+</ThemeConfig>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ThemeConfig tag="短信" description="短信首页" version="12.0" order="10">
+	
+	<image description="设置按钮" src="framework-miui-res/res/drawable-xxhdpi/icon_settings_light.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="首页列表背景 常态" src="framework-miui-res/res/drawable-xxhdpi/list_item_bg_normal_light.9.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="首页列表背景 二态" src="framework-miui-res/res/drawable-xxhdpi/list_item_bg_pressed_light.9.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="首页列表背景 选中" src="framework-miui-res/res/drawable-xxhdpi/list_item_bg_selected_light.9.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="新建短信 加号背景（短信首页右下角）xxhdpi" src="framework-miui-res/res/drawable-xxhdpi/action_button_main_bg_light.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="新建短信 加号背景（短信首页右下角）nxhdpi" src="framework-miui-res/res/drawable-nxhdpi/action_button_main_bg_light.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-nxhdpi</path>
+	</image>
+	<image description="新建短信 加号（短信首页右下角）xxhdpi" src="framework-miui-res/res/drawable-xxhdpi/action_button_main_new_light.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="新建短信 加号（短信首页右下角）nxhdpi" src="framework-miui-res/res/drawable-nxhdpi/action_button_main_new_light.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-nxhdpi</path>
+	</image>
+
+	<image description="列表头像" src="framework-miui-res/res/drawable-xxhdpi/ic_contact_list_picture.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="列表文字头像背景" src="framework-miui-res/res/drawable-xxhdpi/word_photo_bg.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="列表头像 边框" src="framework-miui-res/res/drawable-xxhdpi/ic_contact_photo_fg.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	<image description="列表头像 遮罩mask" src="framework-miui-res/res/drawable-xxhdpi/ic_contact_photo_mask.png">
+		<path>com.android.mms/framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="置顶按钮" src="res/drawable-xxhdpi/conversation_stick_indicator.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="会话附件" src="res/drawable-xxhdpi/conversation_attachment_indicator.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="会话草稿" src="res/drawable-xxhdpi/conversation_draft_indicator.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<!-- <image description="对话定时" src="res/drawable-xxhdpi/conversation_timed_indicator.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image> -->
+	<image description="发送失败" src="res/drawable-xxhdpi/conversation_error_indicator.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<!-- <image description="飞行" src="res/drawable-xxhdpi/ic_airplane_normal.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image> -->
+
+	<!-- 通知类信息-全部通知类信息	箭头 -->
+	<image description="全部通知类信息 展开箭头 常态" src="res/drawable-xxhdpi/dropdown_indicator_down_n.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="展开箭头 二态" src="res/drawable-xxhdpi/dropdown_indicator_down_p.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="收起箭头 常态" src="res/drawable-xxhdpi/dropdown_indicator_up_n.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="收起箭头 二态" src="res/drawable-xxhdpi/dropdown_indicator_up_p.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="隐私空间 锁 上 常态（首页下拉，建议只改颜色即可）" src="res/drawable-xxhdpi/miuix_sbl_simple_indicator_locked_header_gray.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="隐私空间 锁 上 高亮态" src="res/drawable-xxhdpi/miuix_sbl_simple_indicator_locked_header_blue.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="隐私空间 锁 下 常态" src="res/drawable-xxhdpi/miuix_sbl_simple_indicator_locked_body_gray.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="隐私空间 锁 下 高亮态" src="res/drawable-xxhdpi/miuix_sbl_simple_indicator_locked_body_blue.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	
+</ThemeConfig>

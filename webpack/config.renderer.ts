@@ -1,6 +1,6 @@
 import path from "path";
 import WebpackBar from "webpackbar";
-import webpack, { HotModuleReplacementPlugin } from "webpack";
+import webpack, { DefinePlugin, HotModuleReplacementPlugin } from "webpack";
 import WebpackDevServer from "webpack-dev-server";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
@@ -11,23 +11,25 @@ import EslintPlugin from "eslint-webpack-plugin";
 // import postCssPresetEnv from "postcss-preset-env";
 // import FriendlyErrorsWebpackPlugin from "friendly-errors-webpack-plugin";
 import { CleanWebpackPlugin } from "clean-webpack-plugin";
+import ReactRefreshPlugin from "@pmmmwh/react-refresh-webpack-plugin";
 import {
   rootDir,
   extensions,
   outputDir,
   eslintConfigFile,
-  entryFile
+  entryFile,
+  WDS_SOCKET_HOST,
+  WDS_SERVER_HOST,
+  WDS_SOCKET_PORT,
+  WDS_SERVER_PORT
 } from "./constant";
 
-// const isDev = process.env.NODE_ENV !== "production";
-
-// dotenv.config({ path: path.resolve(__dirname, "../.env") });
-// dotenv.config({
-//   path: path.resolve(
-//     __dirname,
-//     `../.env.${isDev ? "development" : "production"}`
-//   )
-// });
+const webpackDevClientEntry = require.resolve(
+  "react-dev-utils/webpackHotDevClient"
+);
+const reactRefreshOverlayEntry = require.resolve(
+  "react-dev-utils/refreshOverlayInterop"
+);
 
 const getCssLoaders = (options: { isDev: boolean; importLoaders: number }) => {
   return [
@@ -46,21 +48,31 @@ const getCssLoaders = (options: { isDev: boolean; importLoaders: number }) => {
 };
 
 const devServer: WebpackDevServer.Configuration = {
-  host: "localhost",
-  // contentBase: "./release.renderer",
-  port: Number(process.env.PORT) || 3000,
+  host: WDS_SERVER_HOST,
+  port: WDS_SERVER_PORT,
+  sockHost: WDS_SOCKET_HOST,
+  sockPort: WDS_SOCKET_PORT,
+  contentBase: "./release.renderer",
+  // By default files from `contentBase` will not trigger a page reload.
+  watchContentBase: false,
   compress: true, // 是否启用 gzip 压缩
   open: false, // 打开默认浏览器
   hot: true, // 热更新
+  transportMode: "ws",
   writeToDisk: true,
-  stats: "errors-warnings"
+  stats: "errors-warnings",
+  // clientLogLevel: "info",
+  overlay: true,
+  quiet: false
 };
+
+console.log(devServer);
 
 const config: webpack.ConfigurationFactory = (env, args) => {
   const isDev = args.mode !== "production";
   return {
     target: "electron-renderer",
-    devtool: isDev ? "source-map" : false,
+    devtool: isDev ? "cheap-eval-source-map" : false,
     watchOptions: {
       ignored: "**/node_modules"
     },
@@ -82,12 +94,14 @@ const config: webpack.ConfigurationFactory = (env, args) => {
         : "js/[name].[contenthash:8].chunk.js",
       hotUpdateChunkFilename: "hmr/[id].hot-update.js",
       hotUpdateMainFilename: "hmr/runtime.hot-update.json",
-      // globalObject: "this",
       /**
        * 模块中包含路径信息
        * https://www.webpackjs.com/configuration/output/#output-pathinfo
        */
-      pathinfo: isDev
+      pathinfo: isDev,
+      // this defaults to 'window', but by setting it to 'this' then
+      // module chunks which are built will work in web workers as well.
+      globalObject: "this"
     },
     optimization: {
       minimize: !isDev,
@@ -162,8 +176,9 @@ const config: webpack.ConfigurationFactory = (env, args) => {
               plugins: [
                 "@babel/plugin-transform-runtime",
                 "babel-plugin-styled-components",
-                "babel-plugin-react-scoped-css"
-              ]
+                "babel-plugin-react-scoped-css",
+                isDev && "react-refresh/babel"
+              ].filter(Boolean)
             }
           }
         },
@@ -274,14 +289,24 @@ const config: webpack.ConfigurationFactory = (env, args) => {
         silent: true, // hide any errors
         defaults: false // load '.env.defaults' as the default values if empty.
       }),
-      // new DefinePlugin({
-      //   "process.env.NODE_ENV": `'${args.mode}'`,
-      //   "process.env.VERSION": `'${process.env.VERSION}'`
-      // }),
+      new DefinePlugin({
+        "process.env.NODE_ENV": `'${args.mode}'`
+      }),
       // 环境区分
       ...(isDev
         ? [
-            new HotModuleReplacementPlugin()
+            new HotModuleReplacementPlugin(),
+            new ReactRefreshPlugin({
+              overlay: {
+                entry: webpackDevClientEntry,
+                // The expected exports are slightly different from what the overlay exports,
+                // so an interop is included here to enable feedback on module-level errors.
+                module: reactRefreshOverlayEntry,
+                // Since we ship a custom dev client and overlay integration,
+                // the bundled socket handling logic can be eliminated.
+                sockIntegration: false
+              }
+            })
             // new FriendlyErrorsWebpackPlugin({
             //   compilationSuccessInfo: {
             //     messages: [

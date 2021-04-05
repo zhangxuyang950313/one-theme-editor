@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ThemeConfig tag="控制中心" description="卡片展开 面板" version="12.0" order="23">
+	
+	<image description="卡片展开 面板背景 xxhdpi" src="res/drawable-xxhdpi/qs_control_detail_bg.9.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>        
+	</image>
+	<image description="卡片展开 面板背景 nxhdpi" src="res/drawable-nxhdpi/qs_control_detail_bg.9.png">
+		<path>com.android.systemui/res/drawable-nxhdpi</path>        
+	</image>
+	
+	<image description="卡片展开 面板背景 底部“更多设置”按钮" src="res/drawable-xxhdpi/qs_control_detail_more_button_bg.9.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	
+	<!-- <image description="无线网络 wifi 0（下列图标已有颜色值控制，无其他设计时无需拷贝）" src="res/drawable-xxhdpi/ic_qs_wifi_full_0.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	<image description="无线网络 wifi 1（本页小图标在旧版开关面板二级界面共用）" src="res/drawable-xxhdpi/ic_qs_wifi_full_1.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	<image description="无线网络 wifi 2" src="res/drawable-xxhdpi/ic_qs_wifi_full_2.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	<image description="无线网络 wifi 3" src="res/drawable-xxhdpi/ic_qs_wifi_full_3.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	<image description="无线网络 wifi 4" src="res/drawable-xxhdpi/ic_qs_wifi_full_4.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	<image description="无线网络 wifi 有密码" src="res/drawable-xxhdpi/ic_qs_wifi_lock.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="蓝牙列表 手机" src="res/drawable-xxhdpi/ic_qs_bluetooth_device_cellphone.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	<image description="蓝牙列表 蓝牙" src="res/drawable-xxhdpi/ic_qs_bluetooth_device_common.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	<image description="蓝牙列表 耳机" src="res/drawable-xxhdpi/ic_qs_bluetooth_device_headset.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	<image description="蓝牙列表 打印机" src="res/drawable-xxhdpi/ic_qs_bluetooth_device_imageing.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	<image description="蓝牙列表 电脑" src="res/drawable-xxhdpi/ic_qs_bluetooth_device_laptop.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	<image description="蓝牙列表 游戏设备" src="res/drawable-xxhdpi/ic_qs_bluetooth_device_mist.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image> -->
+	
+</ThemeConfig>

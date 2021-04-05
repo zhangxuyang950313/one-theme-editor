@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ThemeConfig tag="通知栏" description="来电-悬浮通知" version="12.0" order="20">
+	
+	<image description="来电卡号标识 卡1 xxhdpi" src="res/drawable-xxhdpi/stat_sys_sim_card_1.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	<image description="来电卡号标识 卡2 xxhdpi" src="res/drawable-xxhdpi/stat_sys_sim_card_2.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="来电卡号标识 卡1 nxhdpi" src="res/drawable-nxhdpi/stat_sys_sim_card_1.png">
+		<path>com.android.systemui/res/drawable-nxhdpi</path>
+	</image>
+	<image description="来电卡号标识 卡2 nxhdpi" src="res/drawable-nxhdpi/stat_sys_sim_card_2.png">
+		<path>com.android.systemui/res/drawable-nxhdpi</path>
+	</image>
+	
+	<image description="挂断" src="res/drawable-xxhdpi/end_call_icon.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	<image description="接听" src="res/drawable-xxhdpi/answer_icon.png">
+		<path>com.android.systemui/res/drawable-xxhdpi</path>
+	</image>
+	
+</ThemeConfig>

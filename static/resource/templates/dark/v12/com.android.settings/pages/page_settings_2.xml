@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ThemeConfig tag="设置" description="WLAN/蓝牙 列表" version="12.0" order="12">
+	
+	<image description="wifi/蓝牙 已连接设备 卡片背景（不可透明）" src="res/drawable-xxhdpi/miuix_ic_preference_connected_bg.9.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="wifi/蓝牙 历史连接设备 卡片背景（不可透明）" src="res/drawable-xxhdpi/miuix_ic_preference_disconnected_bg.9.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="已连接卡片 右箭头＞ xxhdpi" src="res/drawable-xxhdpi/miuix_preference_ic_detail_connected.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="已连接卡片 右箭头＞ nxhdpi" src="res/drawable-nxhdpi/miuix_preference_ic_detail_connected.png">
+		<path>com.android.settings/res/drawable-nxhdpi</path>
+	</image>
+	
+	<image description="未连接卡片 右箭头＞ xxhdpi" src="res/drawable-xxhdpi/miuix_preference_ic_detail_disconnected_light.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="未连接卡片 右箭头＞ nxhdpi" src="res/drawable-nxhdpi/miuix_preference_ic_detail_disconnected_light.png">
+		<path>com.android.settings/res/drawable-nxhdpi</path>
+	</image>
+	
+	
+	<!-- <image description="wifi信号强度 1" src="res/drawable-xxhdpi/wifi_animation_1.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="wifi信号强度 2" src="res/drawable-xxhdpi/wifi_animation_2.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="wifi信号强度 3" src="res/drawable-xxhdpi/wifi_animation_3.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="wifi信号强度 4" src="res/drawable-xxhdpi/wifi_animation_4.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image> -->
+	
+	<!-- <image description="wifi网络详情页icon：状态信息" src="res/drawable-xxhdpi/ic_wifi_status_icon.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="wifi网络详情页icon：技术标准" src="res/drawable-xxhdpi/ic_wifi_generation_icon.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="wifi网络详情页icon：连接速度" src="res/drawable-xxhdpi/ic_wifi_speed_icon.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="wifi网络详情页icon：信号强度" src="res/drawable-xxhdpi/ic_wifi_strength_icon.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="wifi网络详情页icon：安全性" src="res/drawable-xxhdpi/ic_network_security_icon.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="wifi网络详情页icon：IP地址" src="res/drawable-xxhdpi/ic_network_ip_icon.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="wifi网络详情页icon：子网掩码" src="res/drawable-xxhdpi/ic_subnet_mask_icon.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="wifi网络详情页icon：路由器" src="res/drawable-xxhdpi/ic_router_icon.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image> -->
+	
+	<!-- <image description="热点" src="res/drawable-xxhdpi/ic_wifi_metered.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="小米路由器 标识" src="res/drawable-xxhdpi/xiaomi_wifi_indicator.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="2.4wifi 标识" src="res/drawable-xxhdpi/band_wifi_24g.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="5Gwifi 标识" src="res/drawable-xxhdpi/band_wifi_5g.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image>
+	<image description="密码锁" src="res/drawable-xxhdpi/ic_wifi_encryption.png">
+		<path>com.android.settings/res/drawable-xxhdpi</path>
+	</image> -->
+	
+	
+</ThemeConfig>

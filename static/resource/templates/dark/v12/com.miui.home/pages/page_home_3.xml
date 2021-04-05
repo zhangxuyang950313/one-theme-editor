@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ThemeConfig tag="桌面" description="桌面 其他" version="12.0" order="3">
+	
+	<image description="应用双开 标记" src="res/drawable-xxhdpi/ic_corp_icon_xspace.png">
+		<path>framework-miui-res/res/drawable-xxhdpi</path>
+	</image>
+	
+	<!-- <image description="新装应用标记" src="res/drawable-xxhdpi/new_install_notification.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image> -->
+	
+	<image description="图标角标背景 xxhdpi" src="res/drawable-xxhdpi/icon_notification_bg.9.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="图标角标背景 440dpi" src="res/drawable-440dpi/icon_notification_bg.9.png">
+		<path>com.miui.home/res/drawable-440dpi</path>
+	</image>
+	<image description="应用商店APP图标角标背景 xxhdpi" src="res/drawable-xxhdpi/action_badge_home_bg.9.png">
+		<path>com.xiaomi.market/res/drawable-xxhdpi</path>
+	</image>
+	<image description="应用商店APP图标角标背景 440dpi" src="res/drawable-440dpi/action_badge_home_bg.9.png">
+		<path>com.xiaomi.market/res/drawable-440dpi</path>
+	</image>
+	
+	<image description="负一屏指示点" src="res/drawable-xxhdpi/workspace_assistantpoint.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="负一屏指示点" src="res/drawable-xxhdpi/workspace_assistantpoint_dark.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="页面指示点" src="res/drawable-xxhdpi/workspace_seekpoint_normal.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="页面指示点 选中态" src="res/drawable-xxhdpi/workspace_seekpoint_highlight.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="页面指示点（浅壁纸模式）" src="res/drawable-xxhdpi/workspace_seekpoint_normal_dark.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="页面指示点 选中态（浅壁纸模式）" src="res/drawable-xxhdpi/workspace_seekpoint_highlight_dark.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	
+	<!-- 编辑状态 -->
+	<image description="编辑状态：复选框 未选状态" src="res/drawable-xxhdpi/edit_mode_checkbox_off.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="编辑状态：复选框 已选状态" src="res/drawable-xxhdpi/edit_mode_checkbox_on.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	
+	<!-- 浅色 -->
+	<image description="编辑状态：修改壁纸 常态" src="res/drawable-xxhdpi/thumbnail_entry_set_wallpaper_n.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="编辑状态：修改壁纸 二态" src="res/drawable-xxhdpi/thumbnail_entry_set_wallpaper_p.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="编辑状态：添加工具 常态" src="res/drawable-xxhdpi/thumbnail_entry_tools_n.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="编辑状态：添加工具 二态" src="res/drawable-xxhdpi/thumbnail_entry_tools_p.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="编辑状态：桌面设置 常态" src="res/drawable-xxhdpi/thumbnail_entry_setting_n.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="编辑状态：桌面设置 二态" src="res/drawable-xxhdpi/thumbnail_entry_setting_p.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	
+	<!-- 深色 -->
+	<image description="编辑状态：修改壁纸 常态【浅色壁纸】" src="res/drawable-xxhdpi/thumbnail_entry_set_wallpaper_n_dark.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="编辑状态：修改壁纸 二态【浅色壁纸】" src="res/drawable-xxhdpi/thumbnail_entry_set_wallpaper_p_dark.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="编辑状态：添加工具 常态【浅色壁纸】" src="res/drawable-xxhdpi/thumbnail_entry_tools_n_dark.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="编辑状态：添加工具 二态【浅色壁纸】" src="res/drawable-xxhdpi/thumbnail_entry_tools_p_dark.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="编辑状态：桌面设置 常态【浅色壁纸】" src="res/drawable-xxhdpi/thumbnail_entry_setting_n_dark.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	<image description="编辑状态：桌面设置 二态【浅色壁纸】" src="res/drawable-xxhdpi/thumbnail_entry_setting_p_dark.png">
+		<path>com.miui.home/res/drawable-xxhdpi</path>
+	</image>
+	
+	
+</ThemeConfig>

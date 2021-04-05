@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ThemeConfig tag="短信" description="短信对话/输入框" version="12.0" order="11">
+
+	<image description="对话页面大背景" src="res/drawable-xxhdpi/conversation_bg.9.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="对话页面 群发信息 标题背景（可透明）" src="res/drawable-xxhdpi/title_bar_tall_bg.9.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="手机报（彩信、幻灯片）详情页面 大背景（建议透明）" src="res/drawable-xxhdpi/flatshow_bg.9.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="底栏编辑背景（不可透明）" src="res/drawable-xxhdpi/message_edit_bottom_panel.9.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="底栏输入框 xxhdpi" src="res/drawable-xxhdpi/compose_message_editor_bg.9.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="底栏输入框 nxhdpi" src="res/drawable-nxhdpi/compose_message_editor_bg.9.png">
+		<path>com.android.mms/res/drawable-nxhdpi</path>
+	</image>
+	
+	<image description="添加附件" src="res/drawable-xxhdpi/insert_attachment_button_n.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="菜单模式（服务类短信所有）" src="res/drawable-xxhdpi/message_bottom_edit_mode.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="编辑模式" src="res/drawable-xxhdpi/ic_bottom_menu_mode_n.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="发送按钮 不可按" src="res/drawable-xxhdpi/ic_send_btn_disable.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="发送按钮" src="res/drawable-xxhdpi/ic_send_btn_n.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+
+	<image description="网络短信 发送按钮" src="res/drawable-xxhdpi/ic_send_mx_btn_n.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="语音模式" src="res/drawable-xxhdpi/ic_chat_icon_voice_n.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="定时信息 按钮背景 常态" src="res/drawable-xxhdpi/timing_button_n.9.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="定时信息 按钮背景 二态" src="res/drawable-xxhdpi/timing_button_p.9.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="附件幻灯片icon（添加幻灯片后输入框内展示）" src="res/drawable-xxhdpi/ic_attachment_slideshow.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="气泡内 单条 定时发送icon 不可按" src="res/drawable-xxhdpi/timed_message_indicator_d.9.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="气泡内 单条 定时发送icon 常态" src="res/drawable-xxhdpi/timed_message_indicator_n.9.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="气泡内 单条 定时发送icon 二态" src="res/drawable-xxhdpi/timed_message_indicator_p.9.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="气泡内 多条 定时发送icon 不可按" src="res/drawable-xxhdpi/timed_message_indicator_group_d.9.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="气泡内 多条 定时发送icon 常态" src="res/drawable-xxhdpi/timed_message_indicator_group_n.9.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="气泡内 多条 定时发送icon 二态" src="res/drawable-xxhdpi/timed_message_indicator_group_p.9.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="双卡选择按钮 弹窗背景" src="res/drawable-xxhdpi/sim_button_container_bg.9.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="双卡标识 待选" src="res/drawable-xxhdpi/msg_edit_default.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="双卡标识 sim1" src="res/drawable-xxhdpi/msg_edit_sim1.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="双卡标识 sim2" src="res/drawable-xxhdpi/msg_edit_sim2.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="双卡标识 sim1（和多号 移动定制机显示）" src="res/drawable-xxhdpi/msg_edit_sub_sim1.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="双卡标识 sim2（和多号 移动定制机显示）" src="res/drawable-xxhdpi/msg_edit_sub_sim2.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="双卡弹窗 sim卡1 未选" src="res/drawable-xxhdpi/ic_sim1_indicator.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="双卡弹窗 sim卡1 已选" src="res/drawable-xxhdpi/ic_sim1_indicator_checked.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="双卡弹窗 sim卡2 未选" src="res/drawable-xxhdpi/ic_sim2_indicator.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="双卡弹窗 sim卡2 已选" src="res/drawable-xxhdpi/ic_sim2_indicator_checked.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="双卡弹窗 选中列表 √勾 xxhdpi" src="res/drawable-xxhdpi/ic_select.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="双卡弹窗 选中列表 √勾 nxhdpi" src="res/drawable-nxhdpi/ic_select.png">
+		<path>com.android.mms/res/drawable-nxhdpi</path>
+	</image>
+	
+	<image description="对话右侧 提示sim卡1" src="res/drawable-xxhdpi/sim1_indicator.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="对话右侧 提示sim卡2" src="res/drawable-xxhdpi/sim2_indicator.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="sim1（和多号 移动定制机显示）" src="res/drawable-xxhdpi/sub_sim1_indicator.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="sim1 选中（和多号 移动定制机显示）" src="res/drawable-xxhdpi/sub_sim1_indicator_checked.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="sim2（和多号 移动定制机显示）" src="res/drawable-xxhdpi/sub_sim2_indicator.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="sim2 选中（和多号 移动定制机显示）" src="res/drawable-xxhdpi/ic_sub_sim2_selected.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+
+	<!-- 群发短信对话页面右上角	展开/收起	已选联系人  箭头 -->
+	<image description="群发短信 展开箭头 常态" src="res/drawable-xxhdpi/show_contact_info_unchecked_n.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="群发短信 展开箭头 二态" src="res/drawable-xxhdpi/show_contact_info_unchecked_p.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="群发短信 收起箭头 常态" src="res/drawable-xxhdpi/show_contact_info_checked_n.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="群发短信 收起箭头 二态" src="res/drawable-xxhdpi/show_contact_info_checked_p.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="群发短信 展开下弹窗 列表分割线" src="res/drawable-xxhdpi/recipient_divider_solid.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+
+	<image description="群发短信 进度圈背景" src="res/drawable-xxhdpi/group_send_progress_back.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="群发短信 进度圈" src="res/drawable-xxhdpi/group_send_progress_middle.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+
+	<image description="发送等待中...缓冲圈背景" src="res/drawable-xxhdpi/pending_bg.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="发送等待中...缓冲圈" src="res/drawable-xxhdpi/pending_fg.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+
+	<image description="发送失败图标 常态" src="res/drawable-xxhdpi/icon_sendfailed_n.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="发送失败图标 二态" src="res/drawable-xxhdpi/icon_sendfailed_p.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	
+	<image description="聊天列表提醒" src="res/drawable-xxhdpi/chat_list_remind.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	
+	<!-- 语音对话气泡内 -->
+	<image description="接收 语音图标" src="res/drawable-xxhdpi/chat_icon_voice_in.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="接收 语音图标 0" src="res/drawable-xxhdpi/chat_icon_voice_in0.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="接收 语音图标 1" src="res/drawable-xxhdpi/chat_icon_voice_in1.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="接收 语音图标 2" src="res/drawable-xxhdpi/chat_icon_voice_in2.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="发送 语音图标" src="res/drawable-xxhdpi/chat_icon_voice_out.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="发送 语音图标 0" src="res/drawable-xxhdpi/chat_icon_voice_out0.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="发送 语音图标 1" src="res/drawable-xxhdpi/chat_icon_voice_out1.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	<image description="发送 语音图标 2" src="res/drawable-xxhdpi/chat_icon_voice_out2.png">
+		<path>com.android.mms/res/drawable-xxhdpi</path>
+	</image>
+	
+</ThemeConfig>

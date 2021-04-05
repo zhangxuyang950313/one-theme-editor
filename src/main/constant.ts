@@ -13,3 +13,7 @@ export const htmlFile = path.join(
   isDev ? ".." : "",
   "release.renderer/index.html"
 );
+
+export const localUrl = `http://localhost:${
+  process.env.WDS_SERVER_PORT || 3000
+}`;

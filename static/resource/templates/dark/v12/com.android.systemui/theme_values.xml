@@ -1,0 +1,254 @@
+<?xml version='1.0' encoding='utf-8' standalone='yes' ?>
+<MIUI_Theme_Values>
+
+	<!-- 状态栏样式 -->
+	<bool name="expanded_status_bar_darkmode">class_bool_status_bar_darkmode</bool>
+	
+	<!-- 状态栏电池	true:采用旧方式 false:采用新方式 -->
+	<bool name="battery_meter_use_legacy_drawable">class_bool_battery_meter_use_legacy</bool>
+	
+	<!-- 未使用新版控制中心时：左上角时间时间、日期（包含使用新控制中心后左上角运营商提示文字“中国联通｜无服务”） -->
+	<color name="status_bar_expanded_weather">class_color_time_date_text</color>
+	<!-- 未使用新版控制中心时：编辑开关 页面左上角文字：“编辑开关”	“长按拖动以增删和排序快捷开关” -->
+	<color name="qs_customize_title_text_color">class_color_title_text</color>
+	<!-- 使用新版控制中心时：左上角时间、日期、右侧通知管理设置按钮icon -->
+	<color name="notification_panel_time_color">class_color_title_text</color>
+	<color name="notification_panel_date_color">class_color_date_text</color>
+	<color name="notification_panel_manage_color">class_color_title_text</color>
+	<!-- 实时网速数字颜色：“21.4k/s” -->
+	<!-- <color name="status_bar_textColor">#e6ffffff</color> -->
+	
+	<!-- 通知中心：完成清理勾 √ 动画 -->
+	<color name="recent_tick_anim_color">class_color_recent_tick_anim</color>
+	
+<!-- 通知中心 -->
+	<!-- 组通知	列表背景（安全中心、内容咨询、广告营销）、无效图：notification_material_bg.9.png -->
+	<color name="notification_material_background_color">class_color_notification_bg</color>
+	<!-- 普通通知	列表背景 -->
+	<color name="notification_bg_color">class_color_notification_bg</color>
+	<!-- 组通知展开后：子通知左滑时单条通知背景 -->
+	<color name="notification_child_bg_color">class_color_notification_child_bg</color>
+	<!-- 通知左滑后	按钮圆背景 -->
+	<color name="notification_menu_bg_color">class_color_notification_bg</color>
+	
+	<!-- 通知左滑：点击设置后	弹出的背景颜色 -->
+	<color name="notification_guts_bg_color">class_color_notification_guts_bg</color>
+	<!-- 通知左滑：点击设置后	按钮文字：“取消”“确认”、“更多设置”“完成” -->
+	<color name="notification_setting_button_color">class_color_notification_light</color>
+	<!-- 消息时间颜色 -->
+	<color name="notification_time_color">class_color_notification_time</color>
+	<!-- 带按钮通知	按钮背景、按钮内文字 -->
+	<color name="notification_action_bg_color">class_color_notification_button_bg_color</color>
+	<color name="notification_actions_button_color">class_color_notification_button_text_color</color>
+	<!-- 悬浮组通知	折叠文字按钮“收起” -->
+	<color name="notification_group_collapsed_button_color">class_color_notification_light</color>
+	<!-- 通知列表	展开下/上箭头 -->
+	<color name="notification_expand_button_color">class_color_notification_expand_button</color>
+	<!-- 带回复按钮的通知：点击“回复”按钮后展开的输入框 -->
+	<!-- 输入框背景、背景描边 -->
+	<!-- <color name="remote_input_bg_color">#33ffffff</color> -->
+	<!-- <color name="remote_input_border_color">#ff0d84ff</color> -->
+	<!-- 输入框内	提示文字：“回复” -->
+	<!-- <color name="remote_input_hint">#4dffffff</color> -->
+	<!-- 输入框内	输入文字：“？？？” -->
+	<!-- <color name="remote_input_text_enabled">#ffffffff</color> -->
+	<!-- <color name="remote_input_text">#ffffffff</color> -->
+	<!-- 输入框内输入光标 -->
+	<!-- <color name="remote_input_cursor_color">#ff0d84ff</color> -->
+	<!-- 带数字多条通知数字：“+2”背景、“+2”数字 -->
+	<color name="hybrid_overflow_number_bg">class_color_notification_button_bg_color</color>
+	<color name="notification_overflow_number_color">class_color_notification_button_text_color</color>
+	
+	<!-- 悬浮通知背景 -->
+	<color name="notification_heads_up_bg_color">class_color_notification_heads_up_bg</color>
+	<!-- 悬浮通知背景	描边（系统默认：#1a000000） -->
+	<color name="notification_heads_up_bg_stroke_color">#1a000000</color>
+	<!-- 悬浮通知背景	宽度 -->
+	<!-- <dimen name="notification_heads_up_bg_stroke_width">0.36dip</dimen> -->
+	<!-- 悬浮通知背景	圆角（系统默认：10.67dp） -->
+	<dimen name="notification_heads_up_bg_radius">class_dimen_notification_heads_up_bg_radius</dimen>
+	<!-- 横屏悬浮通知	标题文字、按钮文字 -->
+	<color name="optimized_heads_up_notification_text">class_color_up_notification_text</color>
+	<color name="optimized_heads_up_notification_action_text">class_color_up_notification_btn_text</color>
+	<!-- 锁屏下拉 通知栏 通知列表 背景（目前系统已不支持锁屏下拉通知栏,用于预防后续支持） -->
+	<!-- <color name="notification_panel_background_keyguard">class_color_lock_notification_panel_background_keyguard</color> -->
+	<!-- 来电悬浮通知文字颜色	电话号码、归属地 -->
+	<color name="notification_in_call_caller_name_color">class_color_notification_in_call_caller_name</color>
+	<color name="notification_in_call_caller_info_color">class_color_notification_in_call_caller_info</color>
+	
+<!-- 新版控制中心 -->
+	<!-- 新：左上角：时间 -->
+	<color name="qs_control_header_clock_color">class_color_control_header_clock</color>
+	<!-- 新：左上角：日期 -->
+	<color name="qs_control_header_date_color">class_color_control_header_date</color>
+	<!-- 旧：左上角大文字：“控制中心” -->
+	<color name="qs_control_header_tiles_title_color">class_color_control_header_clock</color>
+	<!-- 右上角icon：设置、编辑开关 -->
+	<color name="qs_control_header_settings_color">class_color_control_settings_edit</color>
+	<color name="qs_control_header_edit_color">class_color_control_settings_edit</color>
+	
+<!-- MIUI 11：开关面板 -->
+	<!-- 开关 首页窗口背景 -->
+	<color name="qs_panel_background_color">class_color_panel_background</color>
+	<!-- 开关【关闭状态】背景颜色 -->
+	<color name="qs_tile_icon_bg_disabled_color">class_color_icon_bg_off</color>
+	<!-- 开关【关闭状态】icon颜色 -->
+	<color name="qs_tile_icon_disabled_color">class_color_icon_off</color>
+	<!-- 开关【开启状态】背景颜色 -->
+	<color name="qs_tile_icon_bg_enabled_color">class_color_icon_bg_on</color>
+	<!-- 开关【开启状态】icon颜色 -->
+	<color name="qs_tile_icon_enabled_color">class_color_icon_on</color>
+	<!-- 开关名称	不可按文字、常态文字 -->
+	<color name="qs_tile_label_text_color_secondary">class_color_icon_name_disable</color>
+	<color name="qs_tile_label_text_color">class_color_icon_name_normal</color>
+	<!-- 翻页指示点 -->
+	<color name="qs_page_indicator_dot_color">class_color_page_indicator_dot</color>
+	<!-- 首页	流量文字上方分割线 -->
+	<color name="qs_footer_data_usage_divider_color">class_color_switch_panel_divider</color>
+	<!-- 流量数据文字颜色：“今日:0b	剩余100.0MB” -->
+	<color name="qs_footer_data_usage_text_color">class_color_footer_data_usage_text</color>
+	<!-- 流量文字颜色：“超出:0b” -->
+	<color name="status_bar_network_flow_exceed_color">#ffb172ff</color>
+	<!-- V11 亮度条进度 -->
+	<color name="qs_brightness_progress_color">class_color_brightness_progress_V11</color>
+	<!-- V11 亮度条下方小横条 -->
+	<color name="qs_panel_expand_indicator_color">class_color_panel_expand_indicator_V11</color>
+	<!-- 分割线（中间背景上下与底部按钮中间） -->
+	<color name="qs_divider_color">class_color_switch_panel_divider</color>
+	<!-- 弹窗内部	开关展开：列表背景（顶部与底部中间部分的背景） -->
+	<!-- <color name="qs_detail_content_background_color">#14000000</color> -->
+	<!-- 编辑开关：中间背景 -->
+	<!-- <color name="qs_customize_content_background_color">#14000000</color> -->
+	<!-- 标题文字：“无线网络” -->
+	<color name="qs_detail_title_text_color">class_color_control_item_detail_header_text</color>
+	<!-- 底部按钮	按下 -->
+	<color name="qs_detail_button_pressed_color">#0d000000</color>
+	<!-- 底部按钮内文字：“更多设置”	“完成” -->
+	<color name="qs_detail_buttons_text_color">class_color_control_item_first</color>
+	<!-- 编辑开关页面：未添加开关功能名称下方的APP名称 -->
+	<color name="qs_tile_app_label_text_color">class_color_icon_name_disable</color>
+	
+
+<!-- MIUI12：卡片/开关 展开弹窗 -->
+	<!-- 弹窗背景 -->
+	<color name="qs_control_detail_bg_color">class_color_control_item_detail_bg</color>
+	<!-- 开关关闭时空信息提示icon -->
+	<color name="qs_detail_empty_icon_color">class_color_control_item_tips</color>
+	<!-- 开关关闭时空信息提示icon下方提示文字：“蓝牙已关闭”“WLAN 已关闭” -->
+	<color name="qs_detail_empty_text_color">class_color_control_item_tips</color>
+	<!-- 左上角大标题文字：“无线网络” -->
+	<color name="qs_control_detail_header_text_color">class_color_control_item_detail_header_text</color>
+	<!-- 流量卡片弹窗	第一行提示文字：“近日使用” -->
+	<color name="qs_control_expand_item_title_color">class_color_control_item_tips</color>
+	<!-- 流量卡片弹窗	第二行主要文字：“2.7” -->
+	<color name="qs_control_expand_item_sub_title_color">class_color_control_item_first</color>
+	<!-- 流量卡片弹窗	第二行单位文字：“小时” -->
+	<color name="qs_control_expand_item_unit_color">class_color_control_item_second</color>
+	<!-- 未连接	列表主要文字、次要文字、不可按文字 -->
+	<color name="qs_detail_item_primary_text_color">class_color_control_item_first</color>
+	<color name="qs_detail_item_secondary_text_color">class_color_control_item_second</color>
+	<color name="qs_detail_item_inactivated_color">class_color_control_item_disable</color>
+	<!-- 第一个流量卡片展开后列表选中背景 -->
+	<color name="qs_control_detail_selected_color">class_color_control_item_detail_selected_bg</color>
+	<!-- 已连接设配	列表背景 -->
+	<color name="qs_control_expand_tile_detail_selected_color">class_color_control_item_detail_selected_bg</color>
+	<!-- 已连接设备 高亮icon/文字/√对勾 -->
+	<color name="qs_detail_item_selected_color">class_color_control_item_detail_selected_text</color>
+	<!-- 移动数据卡片展开按钮不可按	列表前面的卡1/卡2按钮 -->
+	<color name="qs_cellular_detail_item_disable_icon_color">class_color_control_item_disable</color>
+	<!-- 列表左侧icon信号	信号背景格、信号强度格 -->
+	<color name="qs_detail_item_icon_color_secondary">class_color_control_item_tips</color>
+	<color name="qs_detail_item_icon_color">class_color_control_item_first</color>
+	<!-- 列表右侧icon锁 -->
+	<color name="qs_detail_item_icon_color_2">class_color_control_item_second</color>
+	<!-- 底部“更多设置”按钮		常态、按下 -->
+	<color name="qs_control_detail_more_button_bg_color">class_color_control_item_button_bg</color>
+	<!-- 底部按钮内文字：“更多设置” -->
+	<color name="qs_control_detail_more_button_color">class_color_control_item_button_text</color>
+	
+<!-- 控制中心开关编辑页面 -->
+	<!-- 开关编辑标题左上角 主要文字、次要文字 -->
+	<color name="qs_control_customizer_title_color">class_color_control_customizer_title</color>
+	<color name="qs_control_customizer_sub_title_color">class_color_control_customizer_sub_title</color>
+	<!-- “完成”按钮	按钮背景 -->
+	<color name="qs_control_customizer_tiles_save_bg_color">class_color_control_customizer_tiles_save_bg</color>
+	<!-- “完成”按钮	按钮文字：“完成” -->
+	<color name="qs_control_customizer_tiles_save_text_color">class_color_control_customizer_tiles_save_text</color>
+	<!-- “未添加开关”面板背景 -->
+	<color name="qs_control_customizer_others_title_bg_color">class_color_control_customizer_others_title_bg</color>
+	<!-- “未添加开关”标题文字 -->
+	<color name="qs_control_customizer_others_title_color">class_color_control_customizer_title</color>
+	<!-- -减号背景 -->
+	<!-- <color name="qs_control_customizer_delete_marker_color_out">#ffff3535</color> -->
+	<!-- -减号（删除） -->
+	<!-- <color name="qs_control_customizer_delete_marker_color_in">#ffffffff</color> -->
+	<!-- +加号背景 -->
+	<!-- <color name="qs_control_customizer_add_marker_color_out">#ff0ad975</color> -->
+	<!-- +加号（添加） -->
+	<!-- <color name="qs_control_customizer_add_marker_color_in">#ffffffff</color> -->
+	
+<!-- MIUI 12	控制中心：卡片、开关 -->
+	<!-- 流量卡片背景 -->
+	<color name="qs_control_big_tile_white_bg">class_color_control_big_tile_white_bg</color>
+	<!-- 第一行提示文字、第二行主要文字、第二行单位文字 -->
+	<color name="qs_control_expand_tile_title_color">class_color_control_expand_tile_title</color>
+	<color name="qs_control_expand_tile_sub_title_color">class_color_control_expand_tile_sub_title</color>
+	<color name="qs_control_expand_tile_unit_color">class_color_control_expand_tile_unit</color>
+	<!-- 流量卡片 小三角箭头 -->
+	<!-- <color name="qs_big_tile_expand_indicator_dark_color">#4d000000</color> -->
+	<!-- 其他3个卡片 -->
+	<!-- 卡片＼开关	不可按背景 -->
+	<color name="qs_control_tile_icon_unavailable_color">class_color_control_tile_icon_unavailable</color>
+	<!-- 卡片＼开关	关闭背景 -->
+	<color name="qs_control_tile_icon_disabled_color">class_color_control_tile_icon_disabled</color>
+	<!-- 卡片已连接背景：蓝色＼绿色 -->
+	<color name="qs_control_big_tile_blue_bg">class_color_control_big_tile_blue_bg</color>
+	<color name="qs_control_big_tile_green_bg">class_color_control_big_tile_green_bg</color>
+	<!-- 卡片＼开关	不可用文字：主要文字、次要文字 -->
+	<color name="qs_control_tile_text_unavailable_color">class_color_control_tile_text_unavailable</color>
+	<!-- 卡片关闭	主要文字、次要文字 -->
+	<color name="qs_control_big_tile_title_color_off">class_color_control_big_tile_title_off</color>
+	<color name="qs_control_big_tile_sub_title_color_off">class_color_control_big_tile_sub_title_off</color>
+	<!-- 卡片开启	主要文字、次要文字 -->
+	<color name="qs_control_big_tile_title_color">class_color_control_big_tile_title</color>
+	<color name="qs_control_big_tile_sub_title_color">class_color_control_big_tile_sub_title</color>
+	<!-- 其他卡片 小三角箭头 -->
+	<!-- <color name="qs_big_tile_expand_indicator_color">#b3ffffff</color> -->
+	
+	<!-- // 快捷开关 // -->
+	<!-- 开启背景（系统蓝） -->
+	<color name="qs_control_tile_icon_enable_color">class_color_switch_blue_bg_on</color>
+	<!-- 开启背景（系统橙） -->
+	<color name="cc_qs_tile_icon_bg_color_active_battery_related">class_color_switch_orange_bg_on</color>
+	<!-- 关闭icon -->
+	<color name="cc_qs_tile_icon_color_off">class_color_switch_icon_off</color>
+	<!-- 开启icon -->
+	<color name="cc_qs_tile_icon_color">class_color_switch_icon_on</color>
+	<!-- 开关名称 文字颜色 -->
+	<color name="qs_control_tile_label_text_color">class_color_switch_name_text</color>
+	<!-- 自动亮度A字母	开启背景 -->
+	<color name="cc_qs_tile_icon_bg_color_active_auto_brightness">class_color_switch_auto_brightness_bg_on</color>
+	<!-- 自动亮度A字母	开启颜色 -->
+	<color name="cc_qs_tile_icon_bg_color_active">class_color_switch_auto_brightness_text_on</color>
+	
+	<!-- 亮度条背景 -->
+	<color name="qs_brightness_background_color">class_color_brightness_background</color>
+	<!-- V12亮度条进度 -->
+	<color name="qs_control_brightness_progress_color">class_color_brightness_progress_V12</color>
+	<!-- 亮度条下方展开提示小横条、（未添加开关）背景横线颜色 -->
+	<color name="qs_control_tiles_expand_indicator_color">class_color_tiles_expand_indicator_V12</color>
+	
+	<!-- 控制中心	亮度条圆角 -->
+	<dimen name="qs_control_brightness_corner_radius">class_dimen_control_brightness_corner_radius</dimen>
+	<!-- 旧版通知栏	亮度条圆角 -->
+	<dimen name="panel_content_corner_radius">class_dimen_panel_content_corner_radius</dimen>
+	
+<!-- 开关背景、滑块 -->
+	<color name="sliding_button_bar_off_light" package="miui">class_color_sliding_btn_off</color>
+	<color name="sliding_button_bar_on_light" package="miui">class_color_sliding_btn_on</color>
+	<color name="sliding_btn_slider_off_normal_color_light" package="miui">class_color_sliding_slider</color>
+	<color name="sliding_btn_slider_off_pressed_color_light" package="miui">class_color_sliding_slider</color>
+	<color name="sliding_btn_slider_on_normal_color_light" package="miui">class_color_sliding_slider</color>
+	<color name="sliding_btn_slider_on_pressed_color_light" package="miui">class_color_sliding_slider</color>
+	
+</MIUI_Theme_Values>
