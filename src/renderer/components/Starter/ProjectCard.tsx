@@ -1,8 +1,9 @@
-import { TypeProjectInfo } from "@/core/data";
 import React from "react";
 import styled from "styled-components";
 
 import { Card } from "antd";
+
+import { TypeProjectInfo } from "@/types/project";
 
 type TypeProps = {
   hoverable?: boolean;

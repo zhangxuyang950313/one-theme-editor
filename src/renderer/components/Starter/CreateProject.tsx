@@ -4,7 +4,7 @@ import styled from "styled-components";
 import _ from "lodash";
 import { useSelector } from "react-redux";
 import { getBrandInfo } from "@/store/modules/normalized/selector";
-import { addProject } from "@/core/data";
+import { createProject } from "@/core/data";
 import { getTemplateConfigList } from "@/core/template-compiler";
 import { TypeTemplateConfig, TypeProjectInfo } from "@/types/project";
 
@@ -32,10 +32,13 @@ function CreateProject(props: TypeProps): JSX.Element {
   // 当前步骤
   const [curStep, setCurStep] = useState(0);
 
+  // 填写完成的项目数据
+  const [projectInfo, setProjectInfo] = useState<TypeProjectInfo>();
+
   // 表单实例
   const [form] = Form.useForm<TypeProjectInfo>();
 
-  // d表单默认值
+  // 表单默认值
   const initialValues = {
     name: "",
     designer: "",
@@ -54,16 +57,29 @@ function CreateProject(props: TypeProps): JSX.Element {
   const prevStep = () => setCurStep(curStep - 1);
   const jumpStep = (step: number) => setCurStep(step);
 
+  // 弹框控制
+  const openModal = () => setModalVisible(true);
+  const closeModal = () => setModalVisible(false);
+
+  // 复位
+  const init = () => {
+    jumpStep(0);
+    setSelectiveTemp(undefined);
+    setProjectInfo(undefined);
+    form.resetFields();
+  };
+
   // 开始创建主题
   const handleCreateProject = () => {
-    getTemplateConfigList().then(console.log);
-    setModalVisible(true);
+    // getTemplateConfigList().then(console.log);
+    // init();
+    openModal();
   };
 
   // 上一步
   const handlePrev = () => {
     if (curStep === 0) {
-      setModalVisible(false);
+      handleCancel();
       return;
     }
     prevStep();
@@ -75,7 +91,8 @@ function CreateProject(props: TypeProps): JSX.Element {
     if (curStep === 1) {
       form
         .validateFields()
-        .then(() => {
+        .then(data => {
+          setProjectInfo(data);
           nextStep();
         })
         .catch(() => {
@@ -85,36 +102,32 @@ function CreateProject(props: TypeProps): JSX.Element {
     }
     // 创建工程
     if (curStep === 2) {
-      const projectInfo = form.getFieldsValue();
-      console.log({ projectInfo });
       if (!projectInfo) return Promise.resolve();
-      addProject(projectInfo).then(() => {
-        setModalVisible(false);
+      createProject(projectInfo).then(() => {
         props.onProjectCreated();
+        closeModal();
+        init();
       });
       return;
     }
     nextStep();
   };
 
-  // 弹窗关闭
+  // 主动关闭
   const handleCancel = () => {
-    setModalVisible(false);
-    // const close = () => setModalVisible(false);
-    // if (curStep === 0) {
-    //   close();
-    //   return;
-    // }
-    // Modal.confirm({
-    //   title: "提示",
-    //   content: "填写的信息将不被保存，确定取消创建主题？",
-    //   onOk: close
-    // });
+    Modal.confirm({
+      title: "提示",
+      content: "填写的信息将不被保存，确定取消创建主题？",
+      onOk: () => {
+        closeModal();
+        init();
+      }
+    });
   };
 
   // 弹框底部控制按钮
   const modalFooter = [
-    <Button key="prev" onClick={handlePrev}>
+    <Button key="prev" onClick={curStep > 0 ? handlePrev : handleCancel}>
       {curStep > 0 ? "上一步" : "取消"}
     </Button>,
     <Button
@@ -198,7 +211,7 @@ function CreateProject(props: TypeProps): JSX.Element {
         visible={modalVisible}
         title={`创建${brandInfo.name}主题`}
         destroyOnClose={true}
-        onCancel={handleCancel}
+        onCancel={() => closeModal()}
         footer={modalFooter}
       >
         <Steps steps={["选择模板", "填写信息", "开始创作"]} current={curStep} />

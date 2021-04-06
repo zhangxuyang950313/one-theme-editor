@@ -18,8 +18,8 @@ const db: TypeDbInstance = {
   })
 };
 
-// 添加工程
-export async function addProject(
+// 创建工程
+export async function createProject(
   info: TypeProjectInfo
 ): Promise<TypeProjectInfo | null> {
   if (!db.projects) return Promise.resolve(null);
@@ -31,6 +31,6 @@ export async function getProjects(): Promise<TypeProjectInfo[]> {
   if (!db.projects) return [];
   const projects = await db.projects.getAllData();
   return projects.sort(
-    (a, b) => new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime()
+    (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
   );
 }

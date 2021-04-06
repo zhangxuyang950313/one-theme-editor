@@ -18,13 +18,13 @@ function ProjectInfo(props: TypeProps): JSX.Element {
     <StyleProjectInfo>
       {/* <h3>主题信息</h3> */}
       {list.map(item => (
-        <>
-          <div className="description" key={item.key}>
+        <div key={item.key}>
+          <div className="description">
             <span className="label">{item.name}：</span>
             <span className="content">{projectInfo[item.key]}</span>
           </div>
           <Divider />
-        </>
+        </div>
       ))}
     </StyleProjectInfo>
   );
