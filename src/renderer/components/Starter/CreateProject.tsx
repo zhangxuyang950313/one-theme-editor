@@ -15,6 +15,7 @@ import ProjectInfo from "@/components/ProjectInfo";
 import ProjectInfoForm from "@/components/ProjectInfoForm";
 import TemplateManager from "./TemplateManager";
 import TemplateCard from "./TemplateCard";
+import ProjectCard from "./ProjectCard";
 
 type TypeProps = {
   onProjectCreated: () => Promise<void>;
@@ -137,7 +138,16 @@ function CreateProject(props: TypeProps): JSX.Element {
       }
       // 信息确认
       case 2: {
-        return <ProjectInfo projectInfo={form.getFieldsValue()} />;
+        return (
+          <StyleConfirmInfo>
+            <div className="template-card">
+              <ProjectCard projectInfo={form.getFieldsValue()} />
+            </div>
+            <div className="project-info">
+              <ProjectInfo projectInfo={form.getFieldsValue()} />
+            </div>
+          </StyleConfirmInfo>
+        );
       }
       default: {
         return null;
@@ -188,6 +198,7 @@ function CreateProject(props: TypeProps): JSX.Element {
         ]}
       >
         <Steps steps={["选择模板", "填写信息", "开始创作"]} current={curStep} />
+        <br />
         <StyleStepContainer>
           <StepContainer />
         </StyleStepContainer>
@@ -215,5 +226,7 @@ const StyleFillInfo = styled.div`
     margin-left: 30px;
   }
 `;
+
+const StyleConfirmInfo = styled(StyleFillInfo)``;
 
 export default CreateProject;

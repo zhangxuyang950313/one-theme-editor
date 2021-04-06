@@ -8,6 +8,7 @@ import {
   SelectProps
 } from "antd";
 import { TypeUiVersion } from "@/types/project";
+import { projectInfoConfig } from "@/config/project";
 
 function getRuleNormalized(label: React.ReactNode) {
   return { required: true, message: `请输入${label || ""}` };
@@ -60,22 +61,26 @@ function getSelectForm(
 
 // 主题名称
 export function ProjectName(inputProps: InputProps): JSX.Element {
-  return getInputForm({ label: "主题名称", name: "name" }, inputProps);
+  const { name: label, key: name } = projectInfoConfig.name;
+  return getInputForm({ label, name }, inputProps);
 }
 
 // 设计师
 export function ProjectDesigner(inputProps: InputProps): JSX.Element {
-  return getInputForm({ label: "设计师名称", name: "designer" }, inputProps);
+  const { name: label, key: name } = projectInfoConfig.designer;
+  return getInputForm({ label, name }, inputProps);
 }
 
 // 制作者
 export function ProjectAuthor(inputProps: InputProps): JSX.Element {
-  return getInputForm({ label: "制作者名称", name: "author" }, inputProps);
+  const { name: label, key: name } = projectInfoConfig.author;
+  return getInputForm({ label, name }, inputProps);
 }
 
 // 版本
 export function ProjectVersion(inputProps: InputProps): JSX.Element {
-  return getInputForm({ label: "版本号", name: "version" }, inputProps);
+  const { name: label, key: name } = projectInfoConfig.version;
+  return getInputForm({ label, name }, inputProps);
 }
 
 // UI版本
@@ -83,8 +88,9 @@ export function ProjectUIVersion(props: {
   uiVersions: TypeUiVersion[];
   onChange: SelectProps<any>["onChange"];
 }): JSX.Element {
+  const { name: label, key: name } = projectInfoConfig.uiVersion;
   return getSelectForm(
-    { label: "UI版本", name: "uiVersion" },
+    { label, name },
     { onChange: props.onChange },
     props.uiVersions
       .filter(item => item.src && item.name)

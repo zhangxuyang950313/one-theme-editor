@@ -1,3 +1,5 @@
+import { projectInfoConfig } from "@/config/project";
+
 // 品牌信息
 export type TypeBrandInfo = {
   key: string;
@@ -29,9 +31,5 @@ export type TypeTemplateConfig = {
 
 // 项目描述信息
 export type TypeProjectInfo = {
-  name: string;
-  author: string;
-  version: string;
-  uiVersion: string;
-  designer: string;
+  [k in keyof typeof projectInfoConfig]: string;
 };
