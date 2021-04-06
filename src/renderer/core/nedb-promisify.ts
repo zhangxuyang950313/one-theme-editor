@@ -35,4 +35,12 @@ export default class NedbPromisify<T> {
     const db = await this.instance;
     return db.getAllData();
   }
+
+  async removeAll(): Promise<number> {
+    const db = await this.instance;
+    const remove = promisify<any, Nedb.RemoveOptions, number>(
+      db.remove.bind(db)
+    );
+    return remove({}, { multi: true });
+  }
 }

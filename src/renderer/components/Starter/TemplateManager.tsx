@@ -5,6 +5,7 @@ import { TypeTemplateConfig } from "@/types/project";
 
 // components
 import { CheckCircleTwoTone } from "@ant-design/icons";
+import { Empty } from "antd";
 import TemplateCard from "./TemplateCard"; // 模板卡片单项
 
 type TypeProps = {
@@ -15,27 +16,35 @@ type TypeProps = {
 
 // 模板卡片管理
 function TemplateManager(props: TypeProps): JSX.Element {
+  const { templateList, selective, onSelected } = props;
   return (
     <StyleTemplateManager>
-      {props.templateList.map((template, key) => {
-        const isActive = props.selective?.key === template.key;
-        const isInit = !props.selective?.key;
-
-        return (
-          <StyleCardContainer
-            isInit={isInit}
-            isActive={isActive}
-            onClick={() => {
-              // 点选中的恢复初始状态
-              props.onSelected(isActive ? undefined : template);
-            }}
-            key={key}
-          >
-            <TemplateCard hoverable config={template} />
-            <CheckCircleTwoTone className="check-icon" />
-          </StyleCardContainer>
-        );
-      })}
+      {templateList.length === 0 ? (
+        <Empty
+          className="empty"
+          image={Empty.PRESENTED_IMAGE_SIMPLE}
+          description={`暂无模板`}
+        />
+      ) : (
+        templateList.map((template, key) => {
+          const isActive = selective?.key === template.key;
+          const isInit = !selective?.key;
+          return (
+            <StyleCardContainer
+              isInit={isInit}
+              isActive={isActive}
+              onClick={() => {
+                // 点选中的恢复初始状态
+                onSelected(isActive ? undefined : template);
+              }}
+              key={key}
+            >
+              <TemplateCard hoverable config={template} />
+              <CheckCircleTwoTone className="check-icon" />
+            </StyleCardContainer>
+          );
+        })
+      )}
     </StyleTemplateManager>
   );
 }
@@ -45,6 +54,9 @@ const StyleTemplateManager = styled.div`
   flex-wrap: wrap;
   height: 50vh;
   overflow-y: auto;
+  .empty {
+    margin: auto;
+  }
 `;
 
 type TypeCardContainerProps = { isActive: boolean; isInit: boolean };

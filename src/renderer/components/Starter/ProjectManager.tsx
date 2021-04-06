@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
-import { getProjects, TypeProjectInfo } from "@/core/data";
-
 import { getBrandInfo } from "@/store/modules/normalized/selector";
+import { getProjects } from "@/core/data";
+import { TypeProjectInfo } from "@/types/project";
 
-import { Spin } from "antd";
+import { Empty, Spin } from "antd";
 import { useSelector } from "react-redux";
 import ProjectCard from "./ProjectCard";
 import CreateProject from "./CreateProject";
@@ -21,13 +21,38 @@ function ProjectManager(): JSX.Element {
 
   // 刷新工程列表
   const refreshList = async () => {
-    const p = await getProjects();
-    setTimeout(() => {
-      console.log(p);
-      setProjects(p);
-      setLoading(false);
+    await new Promise<void>(resolve => {
+      setTimeout(async () => {
+        setProjects(await getProjects());
+        setLoading(false);
+        resolve();
+      }, 500);
     });
   };
+
+  // 列表加载中、空、正常状态
+  const getProjectListContent = () => {
+    if (loading) {
+      return (
+        <Spin className="auto-margin" tip="加载中..." spinning={loading} />
+      );
+    }
+    if (projects.length > 0) {
+      return projects.map((item, key) => (
+        <div className="project-card" key={key}>
+          <ProjectCard hoverable projectInfo={item} />
+        </div>
+      ));
+    }
+    return (
+      <Empty
+        className="auto-margin"
+        image={Empty.PRESENTED_IMAGE_SIMPLE}
+        description="空空如也，快去创建一个主题吧"
+      />
+    );
+  };
+
   return (
     <StyleProjectManager>
       <div className="top-container">
@@ -39,17 +64,7 @@ function ProjectManager(): JSX.Element {
         <CreateProject onProjectCreated={refreshList} />
       </div>
       {/* 工程列表 */}
-      <StyleProjectList>
-        {loading ? (
-          <Spin className="spin" tip="加载中..." spinning={loading} />
-        ) : (
-          projects.map((item, key) => (
-            <div className="project-card" key={key}>
-              <ProjectCard hoverable projectInfo={item} />
-            </div>
-          ))
-        )}
-      </StyleProjectList>
+      <StyleProjectList>{getProjectListContent()}</StyleProjectList>
     </StyleProjectManager>
   );
 }
@@ -80,7 +95,7 @@ const StyleProjectManager = styled.div`
   }
 `;
 
-// 历史项目
+// 项目列表容器
 const StyleProjectList = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -88,7 +103,7 @@ const StyleProjectList = styled.div`
   padding: 20px 30px 0 30px;
   height: 100%;
   overflow-y: auto;
-  .spin {
+  .auto-margin {
     margin: auto;
   }
   .project-card {
