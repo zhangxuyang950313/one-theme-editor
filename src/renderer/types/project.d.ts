@@ -26,3 +26,12 @@ export type TypeTemplateConfig = {
     }>;
   }>;
 };
+
+// 项目描述信息
+export type TypeProjectInfo = {
+  name: string;
+  author: string;
+  version: string;
+  uiVersion: string;
+  designer: string;
+};

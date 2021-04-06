@@ -1,17 +1,18 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
+import _ from "lodash";
 import { useSelector } from "react-redux";
 import { getBrandInfo } from "@/store/modules/normalized/selector";
-import { addProject, TypeProjectInfo } from "@/core/data";
+import { addProject } from "@/core/data";
 import { getTemplateConfigList } from "@/core/template-compiler";
-import { TypeTemplateConfig } from "@/types/project";
+import { TypeTemplateConfig, TypeProjectInfo } from "@/types/project";
 
 // components
-import { Modal, Button, message, FormInstance, Form } from "antd";
-import _ from "lodash";
-import Steps from "../Steps";
-import ProjectInfoForm, { TypeFormData } from "../ProjectInfoForm";
+import { Modal, Button, message, Form } from "antd";
+import Steps from "@/components/Steps";
+import ProjectInfo from "@/components/ProjectInfo";
+import ProjectInfoForm from "@/components/ProjectInfoForm";
 import TemplateManager from "./TemplateManager";
 import TemplateCard from "./TemplateCard";
 
@@ -31,7 +32,7 @@ function CreateProject(props: TypeProps): JSX.Element {
   const [curStep, setCurStep] = useState(0);
 
   // 表单实例
-  const [form] = Form.useForm<TypeFormData>();
+  const [form] = Form.useForm<TypeProjectInfo>();
 
   // 获取模板列表
   useEffect(() => {
@@ -136,7 +137,7 @@ function CreateProject(props: TypeProps): JSX.Element {
       }
       // 信息确认
       case 2: {
-        return null;
+        return <ProjectInfo projectInfo={form.getFieldsValue()} />;
       }
       default: {
         return null;
@@ -159,18 +160,18 @@ function CreateProject(props: TypeProps): JSX.Element {
         visible={modalVisible}
         title={`创建${brandInfo.name}主题`}
         destroyOnClose={true}
-        afterClose={() => setCurStep(0)}
         onCancel={() => {
-          const close = () => setModalVisible(false);
-          if (curStep === 0) {
-            close();
-            return;
-          }
-          Modal.confirm({
-            title: "提示",
-            content: "填写的信息将不被保存，确定取消创建主题？",
-            onOk: close
-          });
+          setModalVisible(false);
+          // const close = () => setModalVisible(false);
+          // if (curStep === 0) {
+          //   close();
+          //   return;
+          // }
+          // Modal.confirm({
+          //   title: "提示",
+          //   content: "填写的信息将不被保存，确定取消创建主题？",
+          //   onOk: close
+          // });
         }}
         footer={[
           <Button key="prev" onClick={handlePrev}>

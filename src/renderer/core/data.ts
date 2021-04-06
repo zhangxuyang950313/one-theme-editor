@@ -1,14 +1,7 @@
 import path from "path";
 import { remote } from "electron";
+import { TypeProjectInfo } from "@/types/project";
 import Nedb from "./nedb-promisify";
-
-export type TypeProjectInfo = {
-  name: string;
-  author: string;
-  version: string;
-  uiVersion: string;
-  designer: string;
-};
 
 export type TypeDbInstance = {
   projects: Nedb<TypeProjectInfo> | null;

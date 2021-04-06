@@ -27,7 +27,8 @@ function Root(): JSX.Element {
 }
 
 const StyleGlobal = createGlobalStyle`
-* {
+body,
+html {
     margin: 0;
   }
 `;
@@ -40,6 +41,6 @@ const StyleContainer = styled.div`
   background-color: ${({ theme }) => theme["@background-color"]};
 `;
 
-if (module.hot) module.hot.accept();
+// if (module.hot) module.hot.accept();
 
 ReactDOM.render(<Root />, document.getElementById("root"));

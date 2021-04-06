@@ -1,7 +1,7 @@
 import React, { forwardRef, useImperativeHandle } from "react";
 import styled from "styled-components";
 
-import { TypeUiVersion } from "@/types/project";
+import { TypeUiVersion, TypeProjectInfo } from "@/types/project";
 
 // components
 import { Form, FormInstance } from "antd";
@@ -13,25 +13,15 @@ import {
   ProjectVersion
 } from "./Forms";
 
-export type TypeFormData = {
-  name: string;
-  designer: string;
-  author: string;
-  version: string;
-  uiVersion: string;
-};
-
 type TypeProps = {
   // ui 版本列表，用于渲染 select
   uiVersions: TypeUiVersion[];
   // 初始化数据
-  initialValues: TypeFormData | undefined;
-  // // 外部监听表单改变
-  // onChange: (event: React.FormEvent<HTMLFormElement>) => void;
-  form: FormInstance<TypeFormData>;
+  initialValues: TypeProjectInfo | undefined;
+  form: FormInstance<TypeProjectInfo>;
 };
 
-type TypeRef = FormInstance<TypeFormData>;
+type TypeRef = FormInstance<TypeProjectInfo>;
 
 // 主题信息表单
 function ProjectInfoForm(props: TypeProps, ref: React.ForwardedRef<TypeRef>) {
@@ -39,18 +29,18 @@ function ProjectInfoForm(props: TypeProps, ref: React.ForwardedRef<TypeRef>) {
 
   useImperativeHandle(ref, () => form);
 
-  const onInputChange = (field: keyof TypeFormData) => {
+  const onInputChange = (field: keyof TypeProjectInfo) => {
     return (event: React.ChangeEvent<HTMLInputElement>) => {
       form.setFieldsValue({ [field]: event.target.value });
     };
   };
-  const onSelectChange = (field: keyof TypeFormData) => {
+  const onSelectChange = (field: keyof TypeProjectInfo) => {
     return (value: string) => {
       form.setFieldsValue({ [field]: value });
     };
   };
   return (
-    <StyleProjectInfo>
+    <StyleProjectInfoForm>
       <Form
         name="FormProductInfo"
         form={form}
@@ -68,11 +58,11 @@ function ProjectInfoForm(props: TypeProps, ref: React.ForwardedRef<TypeRef>) {
           onChange={onSelectChange("uiVersion")}
         />
       </Form>
-    </StyleProjectInfo>
+    </StyleProjectInfoForm>
   );
 }
 
-const StyleProjectInfo = styled.div`
+const StyleProjectInfoForm = styled.div`
   width: 100%;
 `;
 

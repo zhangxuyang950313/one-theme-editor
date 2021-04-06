@@ -70,7 +70,7 @@ const config: webpack.ConfigurationFactory = (env, args) => {
   const isDev = args.mode !== "production";
   return {
     target: "electron-renderer",
-    devtool: isDev ? "cheap-eval-source-map" : false,
+    devtool: isDev ? "source-map" : false,
     watchOptions: {
       ignored: "**/node_modules"
     },
