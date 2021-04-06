@@ -35,6 +35,16 @@ const config: Options.XML2JS = {
 };
 
 // xml 解析 json 数据
+// 返回紧凑数据结构，适用于对象形式调用
+async function xml2jsonNormalized<T = Element>(
+  file: string,
+  options?: Options.XML2JS & { compact: false }
+): Promise<T>;
+// 返回完整递归数据结构，便于遍历查找
+async function xml2jsonNormalized<T = ElementCompact>(
+  file: string,
+  options?: Options.XML2JS & { compact: true }
+): Promise<T>;
 async function xml2jsonNormalized(
   file: string,
   options?: Options.XML2JS
@@ -48,45 +58,43 @@ async function xml2jsonNormalized(
 }
 
 // 返回对象形式的紧凑数据
-async function xml2jsonCompact(file: string): Promise<ElementCompact> {
+async function xml2jsonCompact<T>(file: string): Promise<T> {
   return xml2jsonNormalized(file, { compact: true });
 }
 
 // 返回完整的数组形式数据
-async function xml2jsonElements(file: string): Promise<Element> {
-  return xml2jsonNormalized(file, { compact: false }) as Element;
-}
-
-// 获取所有模板配置列表
-export async function getTemplateConfigList(): Promise<TypeTemplateConfig[]> {
-  const templateConfigList = (await Promise.all(
-    templateDescriptionList.map(xml2jsonCompact)
-  )) as TypeTemplateConfigResult[];
-  return templateConfigList.map<TypeTemplateConfig>(item => {
-    const { description, poster, uiVersion, module: modules } = item;
-    return {
-      key: getRandomStr(),
-      name: description?.[0]?._attributes?.name,
-      version: description?.[0]._attributes?.version,
-      poster: poster?.[0]._attributes?.src,
-      uiVersions: uiVersion?.map(o => _.pick(o._attributes, ["name", "src"])),
-      modules: modules?.map(moduleItem => ({
-        ..._.pick(moduleItem?._attributes, ["name", "icon"]),
-        previewClass: moduleItem?.class?.map(classItem => ({
-          name: classItem._attributes?.name,
-          pages: classItem?.page
-            ?.map(pageItem => pageItem._attributes?.src || "")
-            .filter(Boolean)
-        }))
-      }))
-    };
-  });
+async function xml2jsonElements<T>(file: string): Promise<T> {
+  return xml2jsonNormalized<T>(file, { compact: false });
 }
 
 // 获取模板配置信息
 export async function getTemplateConfig(
   file: string
-): Promise<Element | ElementCompact> {
-  const templateData = await xml2jsonCompact(file);
-  return templateData;
+): Promise<TypeTemplateConfig> {
+  const templateData = await xml2jsonCompact<TypeTemplateConfigResult>(file);
+  const { description, poster, uiVersion, module: modules } = templateData;
+  return {
+    key: getRandomStr(),
+    name: description?.[0]?._attributes?.name,
+    version: description?.[0]._attributes?.version,
+    poster: poster?.[0]._attributes?.src,
+    uiVersions: uiVersion?.map(o => _.pick(o._attributes, ["name", "src"])),
+    modules: modules?.map(moduleItem => ({
+      ..._.pick(moduleItem?._attributes, ["name", "icon"]),
+      previewClass: moduleItem?.class?.map(classItem => ({
+        name: classItem._attributes?.name,
+        pages: classItem?.page
+          ?.map(pageItem => pageItem._attributes?.src || "")
+          .filter(Boolean)
+      }))
+    }))
+  };
+}
+
+// 获取所有模板配置列表
+export async function getTemplateConfigList(): Promise<TypeTemplateConfig[]> {
+  const templateConfigList = await Promise.all(
+    templateDescriptionList.map(getTemplateConfig)
+  );
+  return templateConfigList;
 }

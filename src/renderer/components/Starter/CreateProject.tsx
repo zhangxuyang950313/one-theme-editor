@@ -35,6 +35,15 @@ function CreateProject(props: TypeProps): JSX.Element {
   // 表单实例
   const [form] = Form.useForm<TypeProjectInfo>();
 
+  // d表单默认值
+  const initialValues = {
+    name: "",
+    designer: "",
+    author: "",
+    version: "1.0.0",
+    uiVersion: _.last(selectiveTemp?.uiVersions)?.src || ""
+  };
+
   // 获取模板列表
   useEffect(() => {
     getTemplateConfigList().then(setTemplateList);
@@ -45,15 +54,10 @@ function CreateProject(props: TypeProps): JSX.Element {
   const prevStep = () => setCurStep(curStep - 1);
   const jumpStep = (step: number) => setCurStep(step);
 
-  // 创建新工程
-  const handleAddProduct = async () => {
-    const projectInfo = form.getFieldsValue();
-    console.log({ projectInfo });
-    if (!projectInfo) return Promise.resolve();
-    return addProject(projectInfo).then(() => {
-      setModalVisible(false);
-      props.onProjectCreated();
-    });
+  // 开始创建主题
+  const handleCreateProject = () => {
+    getTemplateConfigList().then(console.log);
+    setModalVisible(true);
   };
 
   // 上一步
@@ -81,11 +85,47 @@ function CreateProject(props: TypeProps): JSX.Element {
     }
     // 创建工程
     if (curStep === 2) {
-      handleAddProduct();
+      const projectInfo = form.getFieldsValue();
+      console.log({ projectInfo });
+      if (!projectInfo) return Promise.resolve();
+      addProject(projectInfo).then(() => {
+        setModalVisible(false);
+        props.onProjectCreated();
+      });
       return;
     }
     nextStep();
   };
+
+  // 弹窗关闭
+  const handleCancel = () => {
+    setModalVisible(false);
+    // const close = () => setModalVisible(false);
+    // if (curStep === 0) {
+    //   close();
+    //   return;
+    // }
+    // Modal.confirm({
+    //   title: "提示",
+    //   content: "填写的信息将不被保存，确定取消创建主题？",
+    //   onOk: close
+    // });
+  };
+
+  // 弹框底部控制按钮
+  const modalFooter = [
+    <Button key="prev" onClick={handlePrev}>
+      {curStep > 0 ? "上一步" : "取消"}
+    </Button>,
+    <Button
+      key="next"
+      type="primary"
+      onClick={handleNext}
+      disabled={!selectiveTemp}
+    >
+      {curStep < 2 ? "下一步" : "开始"}
+    </Button>
+  ];
 
   // 创建主题步骤容器
   const StepContainer = () => {
@@ -120,13 +160,7 @@ function CreateProject(props: TypeProps): JSX.Element {
                 <ProjectInfoForm
                   uiVersions={uiVersions}
                   form={form}
-                  initialValues={{
-                    name: "",
-                    designer: "",
-                    author: "",
-                    version: "1.0.0",
-                    uiVersion: _.last(selectiveTemp.uiVersions)?.src || ""
-                  }}
+                  initialValues={initialValues}
                 />
               </div>
             </StyleFillInfo>
@@ -156,13 +190,7 @@ function CreateProject(props: TypeProps): JSX.Element {
   };
   return (
     <StyleCreateProject>
-      <Button
-        type="primary"
-        onClick={() => {
-          getTemplateConfigList().then(console.log);
-          setModalVisible(true);
-        }}
-      >
+      <Button type="primary" onClick={handleCreateProject}>
         新建主题
       </Button>
       <Modal
@@ -170,32 +198,8 @@ function CreateProject(props: TypeProps): JSX.Element {
         visible={modalVisible}
         title={`创建${brandInfo.name}主题`}
         destroyOnClose={true}
-        onCancel={() => {
-          setModalVisible(false);
-          // const close = () => setModalVisible(false);
-          // if (curStep === 0) {
-          //   close();
-          //   return;
-          // }
-          // Modal.confirm({
-          //   title: "提示",
-          //   content: "填写的信息将不被保存，确定取消创建主题？",
-          //   onOk: close
-          // });
-        }}
-        footer={[
-          <Button key="prev" onClick={handlePrev}>
-            {curStep > 0 ? "上一步" : "取消"}
-          </Button>,
-          <Button
-            key="next"
-            type="primary"
-            onClick={handleNext}
-            disabled={!selectiveTemp}
-          >
-            {curStep < 2 ? "下一步" : "开始"}
-          </Button>
-        ]}
+        onCancel={handleCancel}
+        footer={modalFooter}
       >
         <Steps steps={["选择模板", "填写信息", "开始创作"]} current={curStep} />
         <br />
