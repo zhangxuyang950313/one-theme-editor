@@ -2,7 +2,7 @@ import { projectInfoConfig } from "@/config/project";
 
 // 品牌信息
 export type TypeBrandInfo = {
-  key: string;
+  templateDir: string;
   name: string;
 };
 

@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
 
-import { brandConfig } from "@/config";
+// import { brandConfig } from "@/config";
+import { getBrandConfig } from "@/core/template-compiler";
+import { TypeBrandInfo } from "@/types/project";
 import { getBrandInfo } from "@/store/modules/normalized/selector";
 
 import { Menu } from "antd";
@@ -10,26 +12,40 @@ import TopInfo from "./TopInfo";
 
 // 欢迎页侧边栏
 function Sidebar(): JSX.Element {
+  const [brandConfig, setBrandConfig] = useState<TypeBrandInfo[]>();
   const [selectiveBrandInfo, setBrandInfo] = useSelector(getBrandInfo);
+
+  useEffect(() => {
+    getBrandConfig().then(setBrandConfig);
+  }, []);
+
+  const renderMenu = () => {
+    if (brandConfig) {
+      const menuItem = brandConfig.map(item => (
+        <Menu.Item key={item.templateDir}>{item.name}</Menu.Item>
+      ));
+      return (
+        <Menu
+          className="menu"
+          defaultSelectedKeys={[selectiveBrandInfo.templateDir]}
+          onSelect={v => {
+            const brandInfo = brandConfig.find(o => v.key === o.templateDir);
+            if (brandInfo) setBrandInfo(brandInfo);
+          }}
+        >
+          {menuItem}
+        </Menu>
+      );
+    }
+    return null;
+  };
+
   return (
     <StyleSidebar>
       {/*  编辑器信息展示 */}
       <TopInfo />
       {/* 厂商选择 */}
-      <StyleMenu>
-        <Menu
-          className="menu"
-          defaultSelectedKeys={[selectiveBrandInfo.key]}
-          onSelect={e => {
-            const brandInfo = brandConfig.find(o => e.key === o.key);
-            if (brandInfo) setBrandInfo(brandInfo);
-          }}
-        >
-          {brandConfig.map(item => (
-            <Menu.Item key={item.key}>{item.name}</Menu.Item>
-          ))}
-        </Menu>
-      </StyleMenu>
+      <StyleMenu>{renderMenu()}</StyleMenu>
     </StyleSidebar>
   );
 }

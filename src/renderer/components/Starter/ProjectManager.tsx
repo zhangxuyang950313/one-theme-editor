@@ -60,8 +60,10 @@ function ProjectManager(): JSX.Element {
           <h2>{brandInfo.name}主题列表</h2>
           <p>新建{projects.length > 0 ? "或选择" : ""}一个主题开始创作</p>
         </div>
-        {/* 新建工程 */}
-        <CreateProject onProjectCreated={refreshList} />
+        <div className="button">
+          {/* 新建主题按钮 */}
+          <CreateProject onProjectCreated={refreshList} />
+        </div>
       </div>
       {/* 工程列表 */}
       <StyleProjectList>{getProjectListContent()}</StyleProjectList>
@@ -91,6 +93,9 @@ const StyleProjectManager = styled.div`
         font-size: 14px;
         color: ${({ theme }) => theme["@text-color-secondary"]};
       }
+    }
+    .button {
+      display: flex;
     }
   }
 `;

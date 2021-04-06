@@ -1,9 +1,13 @@
 import fse from "fs-extra";
 import _ from "lodash";
 import { xml2js, Options, Element, ElementCompact } from "xml-js";
+import { TypeBrandInfo, TypeTemplateConfig } from "@/types/project";
+import {
+  TypeTemplateConfigResult,
+  TypeBrandConfigResult
+} from "@/types/xml-result";
+import { templateConfigFile } from "@/config/paths";
 import { templateDescriptionList } from "@/config";
-import { TypeTemplateConfig } from "@/types/project";
-import { TypeTemplateConfigResult } from "@/types/xml-result";
 import { getRandomStr } from "./utils";
 
 const config: Options.XML2JS = {
@@ -58,13 +62,21 @@ async function xml2jsonNormalized(
 }
 
 // 返回对象形式的紧凑数据
-async function xml2jsonCompact<T>(file: string): Promise<T> {
+async function xml2jsonCompact<T = ElementCompact>(file: string): Promise<T> {
   return xml2jsonNormalized(file, { compact: true });
 }
 
 // 返回完整的数组形式数据
-async function xml2jsonElements<T>(file: string): Promise<T> {
+async function xml2jsonElements<T = Element>(file: string): Promise<T> {
   return xml2jsonNormalized<T>(file, { compact: false });
+}
+
+// 获取厂商配置
+export async function getBrandConfig(): Promise<TypeBrandInfo[]> {
+  const data = await xml2jsonCompact<TypeBrandConfigResult>(templateConfigFile);
+  return data.brand.map(item =>
+    _.pick(item._attributes, ["name", "templateDir"])
+  );
 }
 
 // 获取模板配置信息

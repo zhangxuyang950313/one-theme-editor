@@ -15,3 +15,6 @@ export const resourceDir = path.resolve(staticDir, "resource");
 
 // 模板所在目录
 export const templateDir = path.resolve(resourceDir, "templates");
+
+// 手机品牌配置文件
+export const templateConfigFile = path.resolve(templateDir, "config.xml");

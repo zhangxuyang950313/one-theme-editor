@@ -2,6 +2,6 @@
 export type TypeSelectorResult<T, R = void> = [T, (data: T) => R];
 
 // 更新 state
-export function updateState<T>(oldState: T, newState: T): T {
+export function updateState<T>(oldState: T, newState: Partial<T>): T {
   return Object.assign({}, oldState, newState);
 }
