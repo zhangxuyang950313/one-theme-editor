@@ -8,7 +8,7 @@ import {
   SelectProps
 } from "antd";
 import { TypeUiVersion } from "@/types/project";
-import { projectInfoConfig } from "@/config/project";
+import { projectInfoConfig } from "@/config/editor";
 
 function getRuleNormalized(label: React.ReactNode) {
   return { required: true, message: `请输入${label || ""}` };

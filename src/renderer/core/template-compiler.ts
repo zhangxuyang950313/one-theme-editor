@@ -1,3 +1,4 @@
+import path from "path";
 import fse from "fs-extra";
 import _ from "lodash";
 import { xml2js, Options, Element, ElementCompact } from "xml-js";
@@ -6,8 +7,7 @@ import {
   TypeTemplateConfigResult,
   TypeBrandConfigResult
 } from "@/types/xml-result";
-import { templateConfigFile } from "@/config/paths";
-import { templateDescriptionList } from "@/config";
+import { getTemplateDirByBrand, templateConfigFile } from "@/config/paths";
 import { getRandomStr } from "./utils";
 
 const config: Options.XML2JS = {
@@ -79,14 +79,27 @@ export async function getBrandConfig(): Promise<TypeBrandInfo[]> {
   );
 }
 
+// 模板描述文件列表
+export const getTempDescFileList = (brandInfo: TypeBrandInfo): string[] => {
+  const brandTemplate = getTemplateDirByBrand(brandInfo);
+  return fse.existsSync(brandTemplate)
+    ? fse
+        .readdirSync(brandTemplate)
+        .map(dir => path.resolve(brandTemplate, dir, "description.xml"))
+        .filter(fse.existsSync)
+    : []; // 排除不存在 description.xml 的目录
+};
+
 // 获取模板配置信息
 export async function getTemplateConfig(
-  file: string
+  file: string,
+  brandInfo: TypeBrandInfo
 ): Promise<TypeTemplateConfig> {
   const templateData = await xml2jsonCompact<TypeTemplateConfigResult>(file);
   const { description, poster, uiVersion, module: modules } = templateData;
   return {
     key: getRandomStr(),
+    brandInfo,
     name: description?.[0]?._attributes?.name,
     version: description?.[0]._attributes?.version,
     poster: poster?.[0]._attributes?.src,
@@ -104,9 +117,12 @@ export async function getTemplateConfig(
 }
 
 // 获取所有模板配置列表
-export async function getTemplateConfigList(): Promise<TypeTemplateConfig[]> {
-  const templateConfigList = await Promise.all(
-    templateDescriptionList.map(getTemplateConfig)
+export async function getTemplateConfigList(
+  brandInfo: TypeBrandInfo
+): Promise<TypeTemplateConfig[]> {
+  const getConfigQueue = getTempDescFileList(brandInfo).map(descFile =>
+    getTemplateConfig(descFile, brandInfo)
   );
+  const templateConfigList = await Promise.all(getConfigQueue);
   return templateConfigList;
 }

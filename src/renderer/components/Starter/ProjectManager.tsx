@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
-import { getBrandInfo } from "@/store/modules/normalized/selector";
+import { getBrandInfo } from "@/store/modules/template/selector";
 import { getProjects } from "@/core/data";
 import { TypeProjectInfo } from "@/types/project";
 
@@ -13,7 +13,7 @@ import CreateProject from "./CreateProject";
 function ProjectManager(): JSX.Element {
   const [loading, setLoading] = useState(true);
   const [projects, setProjects] = useState<TypeProjectInfo[]>([]);
-  const [brandInfo] = useSelector(getBrandInfo);
+  const brandInfo = useSelector(getBrandInfo);
 
   useEffect(() => {
     refreshList();
@@ -57,7 +57,7 @@ function ProjectManager(): JSX.Element {
     <StyleProjectManager>
       <div className="top-container">
         <div className="title">
-          <h2>{brandInfo.name}主题列表</h2>
+          <h2>{brandInfo?.name || ""}主题列表</h2>
           <p>新建{projects.length > 0 ? "或选择" : ""}一个主题开始创作</p>
         </div>
         <div className="button">

@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { TypeProjectInfo } from "@/types/project";
 
 import { Divider } from "antd";
-import { projectInfoConfig } from "@/config/project";
+import { projectInfoConfig } from "@/config/editor";
 
 type TypeProps = {
   projectInfo: TypeProjectInfo;

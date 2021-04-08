@@ -1,33 +1,39 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
-import {
-  getBrandInfo,
-  getBrandInfoList
-} from "@/store/modules/normalized/selector";
-import { getBrandConfig } from "@/core/template-compiler";
+import { getBrandInfo } from "@/store/modules/template/selector";
 
 // components
 import Sidebar from "@/components/Starter/Sidebar";
 import ProjectManager from "@/components/Starter/ProjectManager";
+import { setBrandInfo } from "@/store/modules/template/action";
+import { useBrandInfoList } from "@/hooks/template";
 
 // 开始页面
 function Starter(): JSX.Element {
-  const [, setBrandInfoList] = useSelector(getBrandInfoList);
-  const [, setBrandInfo] = useSelector(getBrandInfo);
+  const brandInfo = useSelector(getBrandInfo);
+  const dispatch = useDispatch();
+  const brandInfoList = useBrandInfoList();
 
-  useEffect(() => {
-    getBrandConfig().then(info => {
-      setBrandInfoList(info);
-      setBrandInfo(info[0]);
-    });
-  }, []);
+  console.log({ brandInfo });
+
+  // useEffect(() => {
+  //   getBrandConfig().then(info => {
+  //     setBrandInfoList(info);
+  //     setBrandInfo(info[0]);
+  //   });
+  // });
 
   return (
     <StyleHome>
       {/* 侧边栏 */}
-      <Sidebar />
+      <Sidebar
+        brandInfoList={brandInfoList}
+        defaultSelected={brandInfo}
+        onSelect={data => dispatch(setBrandInfo(data))}
+      />
+
       {/* 主题管理 */}
       <ProjectManager />
     </StyleHome>

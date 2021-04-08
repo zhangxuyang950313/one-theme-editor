@@ -1,5 +1,6 @@
 import path from "path";
 import { remote } from "electron";
+import { TypeBrandInfo } from "@/types/project";
 
 // app 根目录
 export const appDir = path.resolve(remote.app.getAppPath(), "..");
@@ -14,7 +15,12 @@ export const binaryDir = path.resolve(appDir, "binary");
 export const resourceDir = path.resolve(staticDir, "resource");
 
 // 模板所在目录
-export const templateDir = path.resolve(resourceDir, "templates");
+export const templatesDir = path.resolve(resourceDir, "templates");
+
+// 获取对应机型的模板目录
+export const getTemplateDirByBrand = (brandInfo: TypeBrandInfo): string => {
+  return path.resolve(templatesDir, brandInfo.templateDir);
+};
 
 // 手机品牌配置文件
-export const templateConfigFile = path.resolve(templateDir, "config.xml");
+export const templateConfigFile = path.resolve(templatesDir, "config.xml");

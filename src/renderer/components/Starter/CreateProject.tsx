@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 import _ from "lodash";
 import { useSelector } from "react-redux";
-import { getBrandInfo } from "@/store/modules/normalized/selector";
+import { getBrandInfo } from "@/store/modules/template/selector";
 import { createProject } from "@/core/data";
-import { getTemplateConfigList } from "@/core/template-compiler";
 import { TypeTemplateConfig, TypeProjectInfo } from "@/types/project";
 
 // components
@@ -13,6 +12,7 @@ import { Modal, Button, message, Form } from "antd";
 import Steps from "@/components/Steps";
 import ProjectInfo from "@/components/ProjectInfo";
 import ProjectInfoForm from "@/components/ProjectInfoForm";
+import { useTemplateList } from "@/hooks/template";
 import TemplateManager from "./TemplateManager";
 import TemplateCard from "./TemplateCard";
 import ProjectCard from "./ProjectCard";
@@ -22,19 +22,15 @@ type TypeProps = {
 };
 function CreateProject(props: TypeProps): JSX.Element {
   // 机型信息
-  const [brandInfo] = useSelector(getBrandInfo);
-  // 模板列表
-  const [templateList, setTemplateList] = useState<TypeTemplateConfig[]>([]);
+  const brandInfo = useSelector(getBrandInfo);
   // 弹框控制
   const [modalVisible, setModalVisible] = useState(false);
   // 选择的模板
   const [selectiveTemp, setSelectiveTemp] = useState<TypeTemplateConfig>();
   // 当前步骤
   const [curStep, setCurStep] = useState(0);
-
   // 填写完成的项目数据
   const [projectInfo, setProjectInfo] = useState<TypeProjectInfo>();
-
   // 表单实例
   const [form] = Form.useForm<TypeProjectInfo>();
 
@@ -47,10 +43,8 @@ function CreateProject(props: TypeProps): JSX.Element {
     uiVersion: _.last(selectiveTemp?.uiVersions)?.src || ""
   };
 
-  // 获取模板列表
-  useEffect(() => {
-    getTemplateConfigList().then(setTemplateList);
-  }, []);
+  // 模板列表
+  const templateList = useTemplateList(brandInfo);
 
   // 步骤控制
   const nextStep = () => setCurStep(curStep + 1);
