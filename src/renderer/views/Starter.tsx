@@ -24,9 +24,8 @@ function Starter(): JSX.Element {
         defaultSelected={brandInfo}
         onSelect={data => dispatch(setBrandInfo(data))}
       />
-
-      {/* 主题管理 */}
-      <ProjectManager />
+      {/* 工程管理 */}
+      <ProjectManager brandInfo={brandInfo} />
     </StyleHome>
   );
 }

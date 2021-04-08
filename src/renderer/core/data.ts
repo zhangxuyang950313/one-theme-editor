@@ -2,13 +2,15 @@ import path from "path";
 import { remote } from "electron";
 import { TypeBrandInfo, TypeProjectInfo } from "@/types/project";
 import Database from "nedb-promises";
-// import Nedb from "./nedb-promisify";
+import { isDev } from "./constant";
 
 export type TypeDbInstance = {
   project: Database;
 };
 
-const userDataPath = remote.app.getPath("userData");
+const userDataPath = isDev
+  ? path.resolve(remote.app.getAppPath(), "../userCache")
+  : remote.app.getPath("userData");
 
 const projectData = path.resolve(userDataPath, "store/projects.db");
 

@@ -1,16 +1,19 @@
 import React from "react";
 import styled from "styled-components";
 
-import { getBrandInfo } from "@/store/modules/template/selector";
+import { TypeBrandInfo } from "@/types/project";
+import { useProjectList } from "@/hooks/project";
 
 import { Empty, Spin } from "antd";
-import { useSelector } from "react-redux";
-import { useProjectList } from "@/hooks/project";
 import ProjectCard from "./ProjectCard";
 import CreateProject from "./CreateProject";
 
-function ProjectManager(): JSX.Element {
-  const brandInfo = useSelector(getBrandInfo);
+type TypeProps = {
+  // 使用机型进行隔离查询
+  brandInfo: TypeBrandInfo;
+};
+function ProjectManager(props: TypeProps): JSX.Element {
+  const { brandInfo } = props;
   const [projects, refreshList, isLoading] = useProjectList(brandInfo);
 
   // 列表加载中、空、正常状态
