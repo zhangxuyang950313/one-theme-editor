@@ -16,15 +16,6 @@ function Starter(): JSX.Element {
   const dispatch = useDispatch();
   const brandInfoList = useBrandInfoList();
 
-  console.log({ brandInfo });
-
-  // useEffect(() => {
-  //   getBrandConfig().then(info => {
-  //     setBrandInfoList(info);
-  //     setBrandInfo(info[0]);
-  //   });
-  // });
-
   return (
     <StyleHome>
       {/* 侧边栏 */}

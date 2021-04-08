@@ -1,6 +1,6 @@
 import path from "path";
 import { remote } from "electron";
-import { TypeProjectInfo } from "@/types/project";
+import { TypeBrandInfo, TypeProjectInfo } from "@/types/project";
 import Database from "nedb-promises";
 // import Nedb from "./nedb-promisify";
 
@@ -11,7 +11,6 @@ export type TypeDbInstance = {
 const userDataPath = remote.app.getPath("userData");
 
 const projectData = path.resolve(userDataPath, "store/projects.db");
-// const templateData = path.resolve()
 
 const db: TypeDbInstance = {
   // 项目工程数据
@@ -23,16 +22,31 @@ const db: TypeDbInstance = {
 };
 
 // 创建工程
+type TypeProjectInDB = {
+  brandInfo: TypeBrandInfo;
+  projectInfo: TypeProjectInfo;
+};
 export async function createProject(
-  info: TypeProjectInfo
-): Promise<TypeProjectInfo> {
-  return await db.project.insert(info);
+  props: TypeProjectInDB
+): Promise<TypeProjectInDB> {
+  return await db.project.insert(props);
 }
 
 // 获取所有工程
-export async function getProjects(): Promise<TypeProjectInfo[]> {
+type TypeAllBrandProjects = {
+  [x: string]: TypeProjectInDB[];
+};
+export async function getAllProjects(): Promise<TypeAllBrandProjects[]> {
   if (!db.project) return [];
-  const projects = await db.project.find<TypeProjectInfo>({});
+  return await db.project.find<TypeAllBrandProjects>({});
+}
+
+// 获取对应厂商所有工程
+export async function getProjectsByBrand(
+  brandInfo: TypeBrandInfo
+): Promise<TypeProjectInDB[]> {
+  if (!db.project) return [];
+  const projects = await db.project.find<TypeProjectInDB>({ brandInfo });
   return projects.sort((a, b) => {
     if (a.updatedAt && b.updatedAt) {
       return b.updatedAt.getTime() - a.updatedAt.getTime();
@@ -40,4 +54,4 @@ export async function getProjects(): Promise<TypeProjectInfo[]> {
   });
 }
 
-// db.projects?.removeAll();
+// db.project?.remove({}, { multi: true });

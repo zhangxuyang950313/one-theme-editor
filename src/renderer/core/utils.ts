@@ -4,3 +4,8 @@ export function getRandomStr(
 ): string {
   return Math.random().toString(36).slice(2, len);
 }
+
+// 数组为空
+export function arrayIsEmpty(data: unknown): boolean {
+  return !!(Array.isArray(data) && data.length);
+}

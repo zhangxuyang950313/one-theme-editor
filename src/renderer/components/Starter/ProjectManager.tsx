@@ -1,40 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 
 import { getBrandInfo } from "@/store/modules/template/selector";
-import { getProjects } from "@/core/data";
-import { TypeProjectInfo } from "@/types/project";
 
 import { Empty, Spin } from "antd";
 import { useSelector } from "react-redux";
+import { useProjectList } from "@/hooks/project";
 import ProjectCard from "./ProjectCard";
 import CreateProject from "./CreateProject";
 
 function ProjectManager(): JSX.Element {
-  const [loading, setLoading] = useState(true);
-  const [projects, setProjects] = useState<TypeProjectInfo[]>([]);
   const brandInfo = useSelector(getBrandInfo);
-
-  useEffect(() => {
-    refreshList();
-  }, []);
-
-  // 刷新工程列表
-  const refreshList = async () => {
-    await new Promise<void>(resolve => {
-      setTimeout(async () => {
-        setProjects(await getProjects());
-        setLoading(false);
-        resolve();
-      }, 500);
-    });
-  };
+  const [projects, refreshList, isLoading] = useProjectList(brandInfo);
 
   // 列表加载中、空、正常状态
   const getProjectListContent = () => {
-    if (loading) {
+    if (isLoading) {
       return (
-        <Spin className="auto-margin" tip="加载中..." spinning={loading} />
+        <Spin className="auto-margin" tip="加载中..." spinning={isLoading} />
       );
     }
     if (projects.length > 0) {

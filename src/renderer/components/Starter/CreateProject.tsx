@@ -17,8 +17,9 @@ import TemplateManager from "./TemplateManager";
 import TemplateCard from "./TemplateCard";
 import ProjectCard from "./ProjectCard";
 
+// 创建主题按钮
 type TypeProps = {
-  onProjectCreated: () => Promise<void>;
+  onProjectCreated: (projectInfo: TypeProjectInfo) => Promise<void>;
 };
 function CreateProject(props: TypeProps): JSX.Element {
   // 机型信息
@@ -97,8 +98,12 @@ function CreateProject(props: TypeProps): JSX.Element {
     // 创建工程
     if (curStep === 2) {
       if (!projectInfo) return Promise.resolve();
-      createProject(projectInfo).then(() => {
-        props.onProjectCreated();
+      createProject({
+        brandInfo,
+        projectInfo
+      }).then(data => {
+        console.log(data);
+        props.onProjectCreated(data.projectInfo);
         closeModal();
         init();
       });
