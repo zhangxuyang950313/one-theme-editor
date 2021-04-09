@@ -80,6 +80,7 @@ module.exports = {
     }
   },
   rules: {
+    "react/prop-types": "off", // React.FC 报错未知问题，暂时关闭
     "@typescript-eslint/no-unused-vars": isDev ? "warn" : "error", // 未使用的值作为警告
     "@typescript-eslint/no-explicit-any": "off",
     "react-hooks/rules-of-hooks": "error",

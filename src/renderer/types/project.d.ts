@@ -34,3 +34,16 @@ export type TypeTemplateConfig = {
 export type TypeProjectInfo = {
   [k in keyof typeof projectInfoConfig]: string;
 };
+
+// 储存在数据库的项目数据
+export type TypeProjectData = {
+  brandInfo: TypeBrandInfo;
+  projectInfo: TypeProjectInfo;
+};
+
+// 从数据库取出的项目文档数据
+export type TypeDatabase<T = { [x: string]: any }> = T & {
+  _id: string;
+  createAt?: Date;
+  updateAt?: Date;
+};

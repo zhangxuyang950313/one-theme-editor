@@ -1,10 +1,10 @@
 import path from "path";
 import { remote } from "electron";
-import { TypeBrandInfo, TypeProjectInfo } from "@/types/project";
+import { TypeBrandInfo, TypeProjectData, TypeDatabase } from "@/types/project";
 import Database from "nedb-promises";
 import { isDev } from "./constant";
 
-export type TypeDbInstance = {
+type TypeDbInstance = {
   project: Database;
 };
 
@@ -24,21 +24,19 @@ const db: TypeDbInstance = {
 };
 
 // 创建工程
-type TypeProjectInDB = {
-  brandInfo: TypeBrandInfo;
-  projectInfo: TypeProjectInfo;
-};
 export async function createProject(
-  props: TypeProjectInDB
-): Promise<TypeProjectInDB> {
+  props: TypeProjectData
+): Promise<TypeDatabase<TypeProjectData>> {
   return await db.project.insert(props);
 }
 
 // 获取所有工程
 type TypeAllBrandProjects = {
-  [x: string]: TypeProjectInDB[];
+  [x: string]: TypeProjectData[];
 };
-export async function getAllProjects(): Promise<TypeAllBrandProjects[]> {
+export async function getAllProjects(): Promise<
+  TypeDatabase<TypeAllBrandProjects>[]
+> {
   if (!db.project) return [];
   return await db.project.find<TypeAllBrandProjects>({});
 }
@@ -46,9 +44,10 @@ export async function getAllProjects(): Promise<TypeAllBrandProjects[]> {
 // 获取对应厂商所有工程
 export async function getProjectsByBrand(
   brandInfo: TypeBrandInfo
-): Promise<TypeProjectInDB[]> {
+): Promise<TypeDatabase<TypeProjectData>[]> {
   if (!db.project) return [];
-  const projects = await db.project.find<TypeProjectInDB>({ brandInfo });
+  const projects = await db.project.find<TypeProjectData>({ brandInfo });
+  console.log(projects);
   return projects.sort((a, b) => {
     if (a.updatedAt && b.updatedAt) {
       return b.updatedAt.getTime() - a.updatedAt.getTime();

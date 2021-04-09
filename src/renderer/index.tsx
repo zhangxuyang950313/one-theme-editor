@@ -30,6 +30,7 @@ const StyleGlobal = createGlobalStyle`
 body,
 html {
     margin: 0;
+    user-select: none;
   }
 `;
 
