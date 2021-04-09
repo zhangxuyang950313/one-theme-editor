@@ -27,7 +27,7 @@ function CreateProject(props: TypeProps): JSX.Element {
   // 弹框控制
   const [modalVisible, setModalVisible] = useState(false);
   // 选择的模板
-  const [selectiveTemp, setSelectiveTemp] = useState<TypeTemplateConfig>();
+  const [templateConfig, setTemplateConf] = useState<TypeTemplateConfig>();
   // 当前步骤
   const [curStep, setCurStep] = useState(0);
   // 填写完成的项目数据
@@ -41,7 +41,7 @@ function CreateProject(props: TypeProps): JSX.Element {
     designer: "",
     author: "",
     version: "1.0.0",
-    uiVersion: _.last(selectiveTemp?.uiVersions)?.src || ""
+    uiVersion: _.last(templateConfig?.uiVersions)?.src || ""
   };
 
   // 模板列表
@@ -59,7 +59,7 @@ function CreateProject(props: TypeProps): JSX.Element {
   // 复位
   const init = () => {
     jumpStep(0);
-    setSelectiveTemp(undefined);
+    setTemplateConf(undefined);
     setProjectInfo(undefined);
     form.resetFields();
   };
@@ -97,12 +97,20 @@ function CreateProject(props: TypeProps): JSX.Element {
     }
     // 创建工程
     if (curStep === 2) {
-      if (!projectInfo) return Promise.resolve();
+      if (!projectInfo || !templateConfig) {
+        message.warn({
+          content: "创建失败",
+          duration: 1000
+        });
+        return;
+      }
       createProject({
         brandInfo,
-        projectInfo
+        projectInfo,
+        templateConfig,
+        projectResource: {}
       }).then(data => {
-        console.log(data);
+        console.log("创建工程：", data);
         props.onProjectCreated(data.projectInfo);
         closeModal();
         init();
@@ -133,7 +141,7 @@ function CreateProject(props: TypeProps): JSX.Element {
       key="next"
       type="primary"
       onClick={handleNext}
-      disabled={!selectiveTemp}
+      disabled={!templateConfig}
     >
       {curStep < 2 ? "下一步" : "开始"}
     </Button>
@@ -147,17 +155,17 @@ function CreateProject(props: TypeProps): JSX.Element {
         return (
           <TemplateManager
             templateList={templateList}
-            selective={selectiveTemp}
-            onSelected={setSelectiveTemp}
+            selective={templateConfig}
+            onSelected={setTemplateConf}
           />
         );
       }
       // 填写主题信息
       case 1: {
         // 模板版本
-        const uiVersions = selectiveTemp?.uiVersions;
+        const uiVersions = templateConfig?.uiVersions;
         if (
-          selectiveTemp && // 模板信息有效
+          templateConfig && // 模板信息有效
           Array.isArray(uiVersions) &&
           uiVersions.length >= 0 // ui 版本信息有效
         ) {
@@ -165,7 +173,7 @@ function CreateProject(props: TypeProps): JSX.Element {
             <StyleFillInfo>
               {/* 模板预览 */}
               <div className="template-card">
-                <TemplateCard config={selectiveTemp} />
+                <TemplateCard config={templateConfig} />
               </div>
               {/* 填写信息 */}
               <div className="project-info">
@@ -206,6 +214,7 @@ function CreateProject(props: TypeProps): JSX.Element {
         新建主题
       </Button>
       <Modal
+        style={{ minWidth: "500px" }}
         width="700px"
         visible={modalVisible}
         title={`创建${brandInfo.name}主题`}

@@ -13,7 +13,8 @@ export type TypeUiVersion = {
 };
 export type TypeTemplateConfig = {
   key: string; // 随机键值
-  brandInfo?: TypeBrandInfo;
+  root: string; // 根目录
+  // brandInfo?: TypeBrandInfo;
   name?: string; // 模板名称
   poster?: string; // 模板缩略图
   version?: string; //
@@ -39,6 +40,8 @@ export type TypeProjectInfo = {
 export type TypeProjectData = {
   brandInfo: TypeBrandInfo;
   projectInfo: TypeProjectInfo;
+  templateConfig: TypeTemplateConfig;
+  projectResource: any;
 };
 
 // 从数据库取出的项目文档数据

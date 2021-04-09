@@ -1,5 +1,5 @@
-import { useEffect, useState, useCallback } from "react";
-import { getProjectsByBrand } from "@/core/data";
+import { useLayoutEffect, useState, useCallback } from "react";
+import { getProjectById, getProjectsByBrand } from "@/core/data";
 import { TypeBrandInfo, TypeDatabase, TypeProjectData } from "@/types/project";
 
 // 获取项目列表
@@ -19,8 +19,19 @@ export function useProjectList(
       updateLoading(false);
     }, 300);
   }, [brandInfo]);
-  useEffect(() => {
+  useLayoutEffect(() => {
     refresh();
   }, [refresh]);
   return [value, refresh, loading];
+}
+
+// 使用 id 获取项目信息
+export function useProjectById(id: string): TypeProjectDataInDoc | null {
+  const [value, updateValue] = useState<TypeProjectDataInDoc | null>(null);
+  useLayoutEffect(() => {
+    getProjectById(id).then(project => {
+      if (project) updateValue(project);
+    });
+  }, [id]);
+  return value;
 }

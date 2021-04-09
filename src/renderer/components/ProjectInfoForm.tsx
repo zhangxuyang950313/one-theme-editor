@@ -64,6 +64,7 @@ function ProjectInfoForm(props: TypeProps, ref: React.ForwardedRef<TypeRef>) {
 
 const StyleProjectInfoForm = styled.div`
   width: 100%;
+  flex-shrink: 0;
 `;
 
 export default forwardRef<TypeRef, TypeProps>(ProjectInfoForm);

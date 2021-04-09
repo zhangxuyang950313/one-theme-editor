@@ -62,18 +62,23 @@ async function xml2jsonNormalized(
 }
 
 // 返回对象形式的紧凑数据
-async function xml2jsonCompact<T = ElementCompact>(file: string): Promise<T> {
+async function xml2jsonCompact<T = ElementCompact>(
+  file: string
+): Promise<T | Partial<T>> {
+  if (!fse.existsSync(file)) return Promise.resolve({});
   return xml2jsonNormalized(file, { compact: true });
 }
 
 // 返回完整的数组形式数据
-async function xml2jsonElements<T = Element>(file: string): Promise<T> {
+async function xml2jsonElements<T = Element>(file: string): Promise<T | []> {
+  if (!fse.existsSync(file)) return Promise.resolve([]);
   return xml2jsonNormalized<T>(file, { compact: false });
 }
 
 // 获取厂商配置
 export async function getBrandConfig(): Promise<TypeBrandInfo[]> {
   const data = await xml2jsonCompact<TypeBrandConfigResult>(templateConfigFile);
+  if (!Array.isArray(data.brand)) return Promise.resolve([]);
   return data.brand.map(item =>
     _.pick(item._attributes, ["name", "templateDir"])
   );
@@ -92,14 +97,13 @@ export const getTempDescFileList = (brandInfo: TypeBrandInfo): string[] => {
 
 // 获取模板配置信息
 export async function getTemplateConfig(
-  file: string,
-  brandInfo: TypeBrandInfo
+  file: string
 ): Promise<TypeTemplateConfig> {
   const templateData = await xml2jsonCompact<TypeTemplateConfigResult>(file);
   const { description, poster, uiVersion, module: modules } = templateData;
   return {
     key: getRandomStr(),
-    brandInfo,
+    root: path.dirname(file),
     name: description?.[0]?._attributes?.name,
     version: description?.[0]._attributes?.version,
     poster: poster?.[0]._attributes?.src,
@@ -121,7 +125,7 @@ export async function getTemplateConfigList(
   brandInfo: TypeBrandInfo
 ): Promise<TypeTemplateConfig[]> {
   const getConfigQueue = getTempDescFileList(brandInfo).map(descFile =>
-    getTemplateConfig(descFile, brandInfo)
+    getTemplateConfig(descFile)
   );
   const templateConfigList = await Promise.all(getConfigQueue);
   return templateConfigList;
