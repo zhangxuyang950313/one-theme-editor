@@ -37,7 +37,12 @@ const Editor: React.FC = () => {
   return (
     <StyleEditor>
       {/* 模块选择器 */}
-      <ModuleSelector templateConfig={project.templateConfig}></ModuleSelector>
+      <ModuleSelector
+        templateConfig={project.templateConfig}
+        onSelected={tempModule => {
+          //
+        }}
+      ></ModuleSelector>
     </StyleEditor>
   );
 };
