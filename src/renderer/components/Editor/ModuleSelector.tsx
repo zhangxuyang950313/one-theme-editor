@@ -15,7 +15,6 @@ const ModuleSelector: React.FC<TypeProps> = props => {
   const { templateConfig, onSelected } = props;
   const [selectedIndex, updateIndex] = useState(0);
   if (!templateConfig) return null;
-  console.log(templateConfig);
   const { root, modules } = templateConfig;
   if (!modules) return null;
 
@@ -41,6 +40,7 @@ const ModuleSelector: React.FC<TypeProps> = props => {
 };
 
 const StyleModuleSelector = styled.div`
+  flex-shrink: 0;
   width: 80px;
   height: 100vh;
   overflow-y: auto;

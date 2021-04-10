@@ -7,6 +7,7 @@ import { useProjectById } from "@/hooks/project";
 
 import { Button, Empty } from "antd";
 import ModuleSelector from "@/components/Editor/ModuleSelector";
+import EditorToolsBar from "@/components/Editor/ToolsBar";
 
 const Editor: React.FC = () => {
   const [, updateTitle] = useDocumentTitle();
@@ -41,8 +42,12 @@ const Editor: React.FC = () => {
         templateConfig={project.templateConfig}
         onSelected={tempModule => {
           //
+          console.log(tempModule);
         }}
-      ></ModuleSelector>
+      />
+      <StyleEditorContent>
+        <EditorToolsBar />
+      </StyleEditorContent>
     </StyleEditor>
   );
 };
@@ -56,6 +61,16 @@ const StyleEditorEmpty = styled.div`
   justify-content: center;
 `;
 
-const StyleEditor = styled.div``;
+const StyleEditor = styled.div`
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+`;
+
+const StyleEditorContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+`;
 
 export default Editor;
