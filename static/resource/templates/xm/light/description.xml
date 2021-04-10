@@ -10,7 +10,7 @@
     <!-- 桌面壁纸 -->
     <class name="桌面壁纸和图标">
         <page src="wallpaper/desktop0.xml"/>
-        <page src="wallpaper/desktop1.xml"/>
+        <!-- <page src="wallpaper/desktop1.xml"/> -->
     </class>
     <!-- 锁屏壁纸 -->
     <class name="锁屏壁纸">
