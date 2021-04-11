@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import { TypeTemplateConfig } from "@/types/project";
+import { TypeTempConf } from "@/types/project";
 
 // components
 import { CheckCircleTwoTone } from "@ant-design/icons";
@@ -9,9 +9,9 @@ import { Empty } from "antd";
 import TemplateCard from "./TemplateCard"; // 模板卡片单项
 
 type TypeProps = {
-  templateList: TypeTemplateConfig[];
-  selective?: TypeTemplateConfig;
-  onSelected: (config?: TypeTemplateConfig) => void;
+  templateList: TypeTempConf[];
+  selective?: TypeTempConf;
+  onSelected: (config?: TypeTempConf) => void;
 };
 
 // 模板卡片管理

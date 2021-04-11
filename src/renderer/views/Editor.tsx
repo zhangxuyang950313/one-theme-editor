@@ -1,21 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import { useHistory, useParams } from "react-router";
 import styled from "styled-components";
 
 import { useDocumentTitle } from "@/hooks";
 import { useProjectById } from "@/hooks/project";
+import { TypeTempModule } from "@/types/project";
 
 import { Button, Empty } from "antd";
 import ModuleSelector from "@/components/Editor/ModuleSelector";
 import EditorToolsBar from "@/components/Editor/ToolsBar";
+import PageSelector from "@/components/Editor/PageSelector";
+import ResourceContext from "@/components/Editor/ResourceContext";
 
 const Editor: React.FC = () => {
   const [, updateTitle] = useDocumentTitle();
+  const history = useHistory();
   // 从路由参数中获得项目 id
   const { pid } = useParams<{ pid: string }>();
   // 项目数据，null 表示未找到
   const project = useProjectById(pid);
-  const history = useHistory();
+
+  const [selectedModule, updateModule] = useState<TypeTempModule>();
   // 空状态
   if (!project)
     return (
@@ -39,15 +44,20 @@ const Editor: React.FC = () => {
     <StyleEditor>
       {/* 模块选择器 */}
       <ModuleSelector
-        templateConfig={project.templateConfig}
+        tempConf={project.templateConf}
         onSelected={tempModule => {
           //
+          updateModule(tempModule);
           console.log(tempModule);
         }}
       />
-      <StyleEditorContent>
+      <StyleEditorContext>
         <EditorToolsBar />
-      </StyleEditorContent>
+        <StyleEditorMain>
+          <PageSelector tempClasses={selectedModule?.previewClass || []} />
+          <ResourceContext />
+        </StyleEditorMain>
+      </StyleEditorContext>
     </StyleEditor>
   );
 };
@@ -67,10 +77,16 @@ const StyleEditor = styled.div`
   display: flex;
 `;
 
-const StyleEditorContent = styled.div`
+const StyleEditorContext = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+`;
+
+const StyleEditorMain = styled.div`
+  display: flex;
+  height: 100%;
+  /* flex-grow: 1; */
 `;
 
 export default Editor;

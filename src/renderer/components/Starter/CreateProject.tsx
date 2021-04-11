@@ -5,7 +5,7 @@ import _ from "lodash";
 import { useSelector } from "react-redux";
 import { getBrandInfo } from "@/store/modules/template/selector";
 import { createProject } from "@/core/data";
-import { TypeTemplateConfig, TypeProjectInfo } from "@/types/project";
+import { TypeTempConf, TypeProjectInfo } from "@/types/project";
 
 // components
 import { Modal, Button, message, Form } from "antd";
@@ -13,6 +13,9 @@ import Steps from "@/components/Steps";
 import ProjectInfo from "@/components/ProjectInfo";
 import ProjectInfoForm from "@/components/ProjectInfoForm";
 import { useTemplateList } from "@/hooks/template";
+import { compilePreviewConf } from "@/core/template-compiler";
+import { isDev } from "@/core/constant";
+import Project from "@/core/Project";
 import TemplateManager from "./TemplateManager";
 import TemplateCard from "./TemplateCard";
 import ProjectCard from "./ProjectCard";
@@ -27,7 +30,7 @@ function CreateProject(props: TypeProps): JSX.Element {
   // 弹框控制
   const [modalVisible, setModalVisible] = useState(false);
   // 选择的模板
-  const [templateConfig, setTemplateConf] = useState<TypeTemplateConfig>();
+  const [templateConf, setTemplateConf] = useState<TypeTempConf>();
   // 当前步骤
   const [curStep, setCurStep] = useState(0);
   // 填写完成的项目数据
@@ -37,11 +40,11 @@ function CreateProject(props: TypeProps): JSX.Element {
 
   // 表单默认值
   const initialValues = {
-    name: "",
-    designer: "",
-    author: "",
+    name: isDev ? "测试" : "",
+    designer: isDev ? "测试" : "",
+    author: isDev ? "测试" : "",
     version: "1.0.0",
-    uiVersion: _.last(templateConfig?.uiVersions)?.src || ""
+    uiVersion: _.last(templateConf?.uiVersions)?.src || ""
   };
 
   // 模板列表
@@ -81,7 +84,7 @@ function CreateProject(props: TypeProps): JSX.Element {
   };
 
   // 下一步
-  const handleNext = () => {
+  const handleNext = async () => {
     // 校验表单
     if (curStep === 1) {
       form
@@ -97,24 +100,29 @@ function CreateProject(props: TypeProps): JSX.Element {
     }
     // 创建工程
     if (curStep === 2) {
-      if (!projectInfo || !templateConfig) {
+      if (!projectInfo || !templateConf) {
         message.warn({
           content: "创建失败",
           duration: 1000
         });
         return;
       }
-      createProject({
-        brandInfo,
-        projectInfo,
-        templateConfig,
-        projectResource: {}
-      }).then(data => {
-        console.log("创建工程：", data);
-        props.onProjectCreated(data.projectInfo);
-        closeModal();
-        init();
-      });
+
+      new Project()
+        .create({
+          brandInfo,
+          projectInfo,
+          templateConf,
+          uiVersion: templateConf.uiVersions.find(
+            o => o.src === form.getFieldValue("uiVersion")
+          )
+        })
+        .then(data => {
+          console.log("创建工程：", data);
+          props.onProjectCreated(projectInfo);
+          closeModal();
+          init();
+        });
       return;
     }
     nextStep();
@@ -141,7 +149,7 @@ function CreateProject(props: TypeProps): JSX.Element {
       key="next"
       type="primary"
       onClick={handleNext}
-      disabled={!templateConfig}
+      disabled={!templateConf}
     >
       {curStep < 2 ? "下一步" : "开始"}
     </Button>
@@ -155,7 +163,7 @@ function CreateProject(props: TypeProps): JSX.Element {
         return (
           <TemplateManager
             templateList={templateList}
-            selective={templateConfig}
+            selective={templateConf}
             onSelected={setTemplateConf}
           />
         );
@@ -163,9 +171,9 @@ function CreateProject(props: TypeProps): JSX.Element {
       // 填写主题信息
       case 1: {
         // 模板版本
-        const uiVersions = templateConfig?.uiVersions;
+        const uiVersions = templateConf?.uiVersions;
         if (
-          templateConfig && // 模板信息有效
+          templateConf && // 模板信息有效
           Array.isArray(uiVersions) &&
           uiVersions.length >= 0 // ui 版本信息有效
         ) {
@@ -173,7 +181,7 @@ function CreateProject(props: TypeProps): JSX.Element {
             <StyleFillInfo>
               {/* 模板预览 */}
               <div className="template-card">
-                <TemplateCard config={templateConfig} />
+                <TemplateCard config={templateConf} />
               </div>
               {/* 填写信息 */}
               <div className="project-info">

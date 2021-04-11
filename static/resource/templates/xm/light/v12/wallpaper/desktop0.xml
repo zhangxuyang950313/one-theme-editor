@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
+<!-- <?xml version="1.0" encoding="utf-8"?> -->
+
 <config version="1.0.0" description="桌面壁纸和首屏图标" screenWidth="1080"/>
 
 <cover src="./default_wallpaper.jpg"/>
@@ -100,14 +101,12 @@
     <layout x="670" y="1400" w="186" h="186" align="center" alignV="center"/>
     <from src="../icons/res/com.xiaomi.shop.png"/>
     <to src="icons/res/com.xiaomi.padshop"/>
-    <to src="icons/res/com.xiaomi.shop">
+    <to src="icons/res/com.xiaomi.shop"/>
     <to src="icons/res/com.xiaomi.shop.activity.MainTabActivity.shop"/>
 </source>
 <color description="图标文字">
-    <layout x="670" y="1550" size="36" align="center" alignV="center">
-        小米商城
-    </layout>
-    <default>#ffffffff</default>
+    <layout x="670" y="1550" size="36" align="center" alignV="center" text="小米商城"/>
+    <value class="" default="#ffffffff"/>
 </color>
 <source description="设置">
     <layout x="925" y="1400" w="186" h="186" align="center" alignV="center"/>
@@ -115,10 +114,8 @@
     <to src="icons/res/com.android.settings.png"/>
 </source>
 <color description="设置">
-    <layout x="925" y="1550" size="36" align="center" alignV="center">
-        设置
-    </layout>
-    <default>#ffffffff</default>
+    <layout x="925" y="1550" size="36" align="center" alignV="center" text="设置"/>
+    <value class="" default="#ffffffff"/>
 </color>
 
 
@@ -129,10 +126,8 @@
     <to src="icons/res/com.xiaomi.market.png"/>
 </source>
 <color description="图标文字">
-    <layout x="168" y="1850" size="36" align="center" alignV="center">
-        应用商店
-    </layout>
-    <default>#ffffffff</default>
+    <layout x="168" y="1850" size="36" align="center" alignV="center" text="应用商店"/>
+    <value class="" default="#ffffffff"/>
 </color>
 <source description="游戏中心">
     <layout x="415" y="1700" w="186" h="186" align="center" alignV="center"/>
@@ -140,10 +135,8 @@
     <to src="icons/res/com.android.fileexplorer.png"/>
 </source>
 <color description="图标文字">
-    <layout x="415" y="1850" size="36" align="center" alignV="center">
-        游戏中心
-    </layout>
-    <default>#ffffffff</default>
+    <layout x="415" y="1850" size="36" align="center" alignV="center" text="游戏中心"/>
+    <value class="" default="#ffffffff"/>
 </color>
 <source description="手机管家">
     <layout x="670" y="1700" w="186" h="186" align="center" alignV="center"/>
@@ -151,10 +144,8 @@
     <to src="icons/res/com.xiaomi.padshop.png"/>
 </source>
 <color description="图标文字">
-    <layout x="670" y="1850" size="36" align="center" alignV="center">
-        手机管家
-    </layout>
-    <default>#ffffffff</default>
+    <layout x="670" y="1850" size="36" align="center" alignV="center" text="手机管家"/>
+    <value class="" default="#ffffffff"/>
 </color>
 <source description="米家">
     <layout x="925" y="1700" w="186" h="186" align="center" alignV="center"/>
@@ -162,10 +153,8 @@
     <to src="icons/res/com.xiaomi.smarthome.png"/>
 </source>
 <color description="图标文字">
-    <layout x="925" y="1850" size="36" align="center" alignV="center">
-        米家
-    </layout>
-    <default>#ffffffff</default>
+    <layout x="925" y="1850" size="36" align="center" alignV="center" text="米家"/>
+    <value class="" default="#ffffffff"/>
 </color>
 
 <!-- 分页器 -->

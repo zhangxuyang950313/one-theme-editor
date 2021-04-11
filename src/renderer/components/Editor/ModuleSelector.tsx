@@ -2,20 +2,20 @@ import path from "path";
 import React, { useState } from "react";
 import styled from "styled-components";
 
-import { TypeTemplateConfig, TypeTempModule } from "@/types/project";
+import { TypeTempConf, TypeTempModule } from "@/types/project";
 
 import AsyncImage from "@/components/AsyncImage";
 
 type TypeProps = {
-  templateConfig: TypeTemplateConfig;
+  tempConf: TypeTempConf;
   onSelected: (x: TypeTempModule) => void;
 };
 // 模块选择器
 const ModuleSelector: React.FC<TypeProps> = props => {
-  const { templateConfig, onSelected } = props;
+  const { tempConf, onSelected } = props;
   const [selectedIndex, updateIndex] = useState(0);
-  if (!templateConfig) return null;
-  const { root, modules } = templateConfig;
+  if (!tempConf) return null;
+  const { root, modules } = tempConf;
   if (!modules) return null;
 
   return (

@@ -9,3 +9,23 @@ export function getRandomStr(
 export function arrayIsEmpty(data: unknown): boolean {
   return !!(Array.isArray(data) && data.length);
 }
+
+// pick Object with def
+export function pickObjectWithDef<T, U extends keyof T, D>(
+  object: T,
+  props: Array<U>,
+  def: D
+): { [k in U]: T[U] | D } {
+  return props.reduce((t, o) => {
+    t[o] = o in object ? object[o] : def;
+    return t;
+  }, {} as { [k in U]: T[U] | D });
+}
+
+// 异步 map
+export async function asyncMap<T = any>(
+  list: T[],
+  callbackfn: (value: T, index: number, array: T[]) => T
+): Promise<T[]> {
+  return await Promise.all(list.map(async (...args) => callbackfn(...args)));
+}

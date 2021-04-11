@@ -3,7 +3,7 @@ import {
   SET_BRAND_INFO_LIST,
   SET_TEMPLATE_LIST
 } from "@/store/actions";
-import { TypeBrandInfo, TypeTemplateConfig } from "@/types/project";
+import { TypeBrandInfo, TypeTempConf } from "@/types/project";
 
 // 更新品牌信息列表
 type TypeSetBrandInfoList = {
@@ -20,7 +20,7 @@ type TypeSetBrandInfo = {
 // 模板列表
 type TypeSetTemplateList = {
   type: typeof SET_TEMPLATE_LIST;
-  templateList: TypeTemplateConfig[];
+  templateList: TypeTempConf[];
 };
 
 // main actions
@@ -42,7 +42,7 @@ export function setBrandInfo(brandInfo: TypeBrandInfo): TypeSetBrandInfo {
 }
 
 export function setTemplateList(
-  templateList: TypeTemplateConfig[]
+  templateList: TypeTempConf[]
 ): TypeSetTemplateList {
   return { type: SET_TEMPLATE_LIST, templateList };
 }

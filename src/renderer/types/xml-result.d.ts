@@ -3,25 +3,69 @@ type TypeAttrsContent<T> = {
 };
 
 // 模板配置原始信息
-export type TypeTemplateConfigResult = {
-  description?: TypeAttrsContent<{ name?: string; version?: string }>[];
-  poster?: TypeAttrsContent<{ src?: string }>[];
-  uiVersion?: TypeAttrsContent<{ name?: string; src?: string }>[];
-  module?: Array<
-    TypeAttrsContent<{ name?: string; icon?: string }> & {
-      class?: Array<
-        TypeAttrsContent<{ name?: string }> & {
-          page?: TypeAttrsContent<{ src?: string }>[];
-        }
-      >;
-    }
+export type TypeOriginTempConf = Partial<{
+  description: TypeAttrsContent<Partial<{ name: string; version: string }>>[];
+  poster: TypeAttrsContent<Partial<{ src: string }>>[];
+  uiVersion: TypeAttrsContent<
+    Partial<{
+      name: string;
+      src: string;
+      code: string;
+    }>
+  >[];
+  module: Array<
+    TypeAttrsContent<Partial<{ name: string; icon: string }>> &
+      Partial<{
+        class: Array<
+          TypeAttrsContent<Partial<{ name: string }>> & {
+            page?: TypeAttrsContent<Partial<{ src: string }>>[];
+          }
+        >;
+      }>
   >;
-};
+}>;
 
 // 厂商配置原始信息
-export type TypeBrandConfigResult = {
+export type TypeOriginBrandConf = Partial<{
   brand: TypeAttrsContent<{
     name: string;
     templateDir: string;
   }>[];
-};
+}>;
+
+// 页面配置原始信息
+export type TypeTempLayout = Partial<
+  Record<"x" | "y" | "w" | "h", string> & {
+    align: "left" | "center" | "right";
+    alignV: "top" | "center" | "bottom";
+  }
+>;
+export type TypeTempFrom = Partial<{ src: string }>;
+export type TypeTempTo = Partial<{ src: string }>;
+export type TypeTempOriginPageConf = Partial<{
+  config?: [
+    TypeAttrsContent<
+      Partial<{
+        version: string;
+        description: string;
+        screenWidth: string;
+      }>
+    >
+  ];
+  cover?: TypeAttrsContent<Partial<{ src: string }>>[];
+  category?: TypeAttrsContent<
+    Partial<{
+      tag: string;
+      description: string;
+      type: "image" | "xml";
+    }>
+  >[];
+  source?: Array<
+    TypeAttrsContent<Partial<{ description: string }>> &
+      Partial<{
+        layout: [TypeAttrsContent<TypeTempLayout>];
+        from: [TypeAttrsContent<TypeTempFrom>];
+        to: TypeAttrsContent<TypeTempTo>[];
+      }>
+  >;
+}>;
