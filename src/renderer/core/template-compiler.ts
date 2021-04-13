@@ -5,9 +5,10 @@ import { xml2js, Options, Element, ElementCompact } from "xml-js";
 import {
   TypeBrandInfo,
   TypeTempPageConf,
-  TypePreviewConf,
-  TypeTempConf,
-  TypeClassConf
+  TypeTemplateConf,
+  TypeImageData,
+  TypePageConfData,
+  TypePreviewData
 } from "@/types/project";
 import {
   TypeOriginTempConf,
@@ -18,7 +19,8 @@ import {
   getTemplateDirByBrand as getTempDirByBrand,
   templateConfigFile
 } from "@/config/paths";
-import { asyncMap, getRandomStr } from "./utils";
+import { getRandomStr, localImageToBase64Async } from "./utils";
+import errCode from "./error-code";
 
 const config: Options.XML2JS = {
   trim: true,
@@ -79,11 +81,11 @@ async function xml2jsonCompact<T = ElementCompact>(
   return xml2jsonNormalized(file, { compact: true });
 }
 
-// 解析 xml 返回完整的数组形式数据
-async function xml2jsonElements<T = Element>(file: string): Promise<T | []> {
-  if (!fse.existsSync(file)) return Promise.resolve([]);
-  return xml2jsonNormalized<T>(file, { compact: false });
-}
+// // 解析 xml 返回完整的数组形式数据
+// async function xml2jsonElements<T = Element>(file: string): Promise<T | []> {
+//   if (!fse.existsSync(file)) return Promise.resolve([]);
+//   return xml2jsonNormalized<T>(file, { compact: false });
+// }
 
 // 解析厂商配置
 export async function compileBrandConf(): Promise<TypeBrandInfo[]> {
@@ -106,15 +108,12 @@ export const getTempDescFileList = (brandInfo: TypeBrandInfo): string[] => {
 };
 
 // 解析单个预览页面配置
-export async function compilePageConf(
-  file: string,
-  pageKey: string
-): Promise<TypeTempPageConf | null> {
-  if (!fse.existsSync(file)) return Promise.resolve(null);
+export async function compilePageConf(file: string): Promise<TypeTempPageConf> {
+  if (!fse.existsSync(file)) {
+    return Promise.reject(new Error(errCode[1001]));
+  }
   const data = await xml2jsonCompact<TypeTempOriginPageConf>(file);
-  console.log({ data });
   const result: TypeTempPageConf = {
-    pageKey,
     config: {
       version: data.config?.[0]._attributes.version || "",
       description: data.config?.[0]._attributes.description || "",
@@ -139,40 +138,76 @@ export async function compilePageConf(
   return result;
 }
 
-// 解析模块所有预览图配置
-export async function compilePreviewConf(
-  tempConf: TypeTempConf,
+// 加载图片，返回 key 和异步任务
+const loadImageByFile = (file: string) => {
+  const key = getRandomStr();
+  const task = localImageToBase64Async(file)
+    .then(base64 => ({ key, base64 }))
+    .catch(err => {
+      // todo log
+      console.error(err);
+      return { key, base64: null };
+    });
+  return { key, task };
+};
+
+// 解析页面数据
+const loadPageConfByFile = (file: string) => {
+  const key = getRandomStr();
+  const task = compilePageConf(file)
+    .then(conf => ({ key, conf }))
+    .catch(err => {
+      // todo log
+      console.error(err);
+      return { key, conf: null };
+    });
+  return { key, task };
+};
+
+// 解析 templateConf，将图片和页面配置生成预览数据
+// TypeConfData 结构暂时同 TypeTemplateConf
+export async function compilePreviewData(
+  tempConf: TypeTemplateConf,
   uiVersionSrc: string
-): Promise<TypePreviewConf> {
+): Promise<TypePreviewData> {
   const { root } = tempConf;
-  const queue: Promise<TypeTempPageConf | null>[] = [];
-  const pageConfList: Array<TypeTempPageConf> = [];
-  const result: TypePreviewConf = {
-    modules:
-      tempConf?.modules.map(moduleItem => {
-        const classList: TypeClassConf[] = moduleItem.previewClass.map(
-          classItem => {
-            const pages = classItem.pages.map(pageItem => {
-              const pageKey = getRandomStr();
-              const file = path.resolve(root, uiVersionSrc, pageItem);
-              const pageConf = compilePageConf(file, pageKey);
-              queue.push(pageConf);
-              return pageKey;
-            });
-            return { name: classItem.name, pages };
-          }
-        );
-        return { name: moduleItem.name, classList };
-      }) || [],
-    pageConfList
+  const imageQueue: Promise<TypeImageData>[] = [];
+  const pageConfQueue: Promise<TypePageConfData>[] = [];
+  const resolveRootPath = (p: string) => path.resolve(root, p);
+  // 处理需要版本片段的路径
+  const resolveVersionPath = (p: string) => path.resolve(root, uiVersionSrc, p);
+  const loadImage = (file: string) => {
+    const { key, task } = loadImageByFile(file);
+    imageQueue.push(task);
+    return key;
   };
-  const list = await Promise.all(queue);
-  pageConfList.push(...(list.filter(Boolean) as TypeTempPageConf[]));
-  return result;
+  const loadPageConf = (p: string) => {
+    const file = resolveVersionPath(p);
+    const { key, task } = loadPageConfByFile(file);
+    pageConfQueue.push(task);
+    return key;
+  };
+  const previewConf: TypeTemplateConf = {
+    ...tempConf,
+    cover: loadImage(resolveRootPath(tempConf.cover)),
+    modules: tempConf.modules.map(moduleItem => ({
+      ...moduleItem,
+      icon: loadImage(resolveRootPath(moduleItem.icon)),
+      previewClass: moduleItem.previewClass.map(classItem => ({
+        ...classItem,
+        pages: classItem.pages.map(pageFile =>
+          loadPageConf(resolveVersionPath(pageFile))
+        )
+      }))
+    }))
+  };
+  const imageData = await Promise.all(imageQueue);
+  const pageConfData = await Promise.all(pageConfQueue);
+  return { previewConf, imageData, pageConfData };
 }
 
-// 获取模板配置信息
-export async function compileTempConf(file: string): Promise<TypeTempConf> {
+// 解析模板配置信息
+export async function compileTempConf(file: string): Promise<TypeTemplateConf> {
   const templateData = await xml2jsonCompact<TypeOriginTempConf>(file);
   const { description, poster, uiVersion, module: modules } = templateData;
   const root = path.dirname(file);
@@ -214,9 +249,7 @@ export async function compileTempConf(file: string): Promise<TypeTempConf> {
 // 获取所有模板配置列表
 export async function getTempConfList(
   brandInfo: TypeBrandInfo
-): Promise<TypeTempConf[]> {
-  const getConfigQueue = getTempDescFileList(brandInfo).map(descFile =>
-    compileTempConf(descFile)
-  );
-  return await Promise.all(getConfigQueue);
+): Promise<TypeTemplateConf[]> {
+  const queue = getTempDescFileList(brandInfo).map(compileTempConf);
+  return Promise.all(queue);
 }

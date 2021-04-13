@@ -1,26 +1,26 @@
 import {
   TypeBrandInfo,
-  TypePreviewConf,
+  TypePreviewData,
   TypeProjectData,
   TypeProjectInfo,
-  TypeTempConf,
-  TypeTempUiVersion
+  TypeTemplateConf,
+  TypeTempUiVersionConf
 } from "@/types/project";
-import { createProject } from "./data";
-import { compilePreviewConf } from "./template-compiler";
+import { addProject } from "./data";
+import { compilePreviewData } from "./template-compiler";
 
 type TypePropsNormalized = {
   brandInfo: TypeBrandInfo;
   projectInfo: TypeProjectInfo;
-  templateConf: TypeTempConf;
+  templateConf: TypeTemplateConf;
 };
 
 type TypeCreateProps = TypePropsNormalized & {
-  uiVersion: TypeTempUiVersion | undefined;
+  uiVersion: TypeTempUiVersionConf | undefined;
 };
 
 type TypeSetUpProps = TypePropsNormalized & {
-  previewConf: TypePreviewConf;
+  previewData: TypePreviewData;
   projectResource: any;
 };
 
@@ -30,9 +30,9 @@ export default class Project {
   // 主题描述信息
   projectInfo?: TypeProjectInfo;
   // 模板配置
-  templateConf?: TypeTempConf;
+  templateConf?: TypeTemplateConf;
   // 预览配置列表
-  previewConf?: TypePreviewConf;
+  previewData?: TypePreviewData;
   // 主题数据
   projectResource?: any;
 
@@ -41,10 +41,10 @@ export default class Project {
     this.brandInfo = props.brandInfo;
     this.projectInfo = props.projectInfo;
     this.templateConf = props.templateConf;
-    this.previewConf = props.previewConf;
+    this.previewData = props.previewData;
     this.projectResource = props.projectResource;
     // 创建主题，写入数据库
-    return await createProject(props);
+    return addProject(props);
   }
 
   // 从模板创建主题
@@ -54,12 +54,12 @@ export default class Project {
       brandInfo: props.brandInfo,
       projectInfo: props.projectInfo,
       templateConf: props.templateConf,
-      previewConf: await compilePreviewConf(
+      previewData: await compilePreviewData(
         props.templateConf,
         props.uiVersion?.src || ""
       ),
       projectResource: {}
     };
-    return await this.setUp(data);
+    return this.setUp(data);
   }
 }

@@ -1,14 +1,14 @@
 import React from "react";
 import styled from "styled-components";
 
-import { TypeTempConf } from "@/types/project";
+import { TypeTemplateConf } from "@/types/project";
 
 // components
 import { Card } from "antd";
 
 type TypeProps = {
   hoverable?: boolean;
-  config: TypeTempConf;
+  config: TypeTemplateConf;
 };
 
 // 模板卡片样式

@@ -5,7 +5,7 @@ import {
   setBrandInfoList,
   setTemplateList
 } from "@/store/modules/template/action";
-import { TypeBrandInfo, TypeTempConf } from "@/types/project";
+import { TypeBrandInfo, TypeTemplateConf } from "@/types/project";
 import { initialBrand } from "@/config/editor";
 
 // 获取配置的厂商列表
@@ -28,14 +28,18 @@ export function useBrandInfoList(): TypeBrandInfo[] {
 }
 
 // 获取模板列表
-export function useTemplateList(brandInfo: TypeBrandInfo): TypeTempConf[] {
-  const [value, updateValue] = useState<TypeTempConf[]>([]);
+export function useTemplateList(brandInfo: TypeBrandInfo): TypeTemplateConf[] {
+  const [value, updateValue] = useState<TypeTemplateConf[]>([]);
   const dispatch = useDispatch();
   useLayoutEffect(() => {
     getTempConfList(brandInfo).then(tempConfList => {
+      console.log(tempConfList);
       dispatch(setTemplateList(tempConfList));
       updateValue(tempConfList);
     });
   }, [brandInfo, dispatch]);
   return value;
 }
+
+// 获取预览数据
+// export function usePreview

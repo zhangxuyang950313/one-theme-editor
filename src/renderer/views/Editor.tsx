@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router";
 import styled from "styled-components";
 
 import { useDocumentTitle } from "@/hooks";
 import { useProjectById } from "@/hooks/project";
-import { TypeTempModule } from "@/types/project";
+import { TypeTempModuleConf } from "@/types/project";
 
 import { Button, Empty } from "antd";
 import ModuleSelector from "@/components/Editor/ModuleSelector";
@@ -20,7 +20,14 @@ const Editor: React.FC = () => {
   // 项目数据，null 表示未找到
   const project = useProjectById(pid);
 
-  const [selectedModule, updateModule] = useState<TypeTempModule>();
+  const [selectedModule, updateModule] = useState<TypeTempModuleConf>();
+
+  // 默认选择第一个模块
+  useEffect(() => {
+    const firstModule = project?.templateConf.modules[0];
+    if (firstModule) updateModule(firstModule);
+  }, [project?.templateConf.modules]);
+
   // 空状态
   if (!project)
     return (

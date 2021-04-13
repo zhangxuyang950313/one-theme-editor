@@ -2,13 +2,13 @@ import path from "path";
 import React, { useState } from "react";
 import styled from "styled-components";
 
-import { TypeTempConf, TypeTempModule } from "@/types/project";
+import { TypeTemplateConf, TypeTempModuleConf } from "@/types/project";
 
-import AsyncImage from "@/components/AsyncImage";
+// import AsyncImage from "@/components/AsyncImage";
 
 type TypeProps = {
-  tempConf: TypeTempConf;
-  onSelected: (x: TypeTempModule) => void;
+  tempConf: TypeTemplateConf;
+  onSelected: (x: TypeTempModuleConf) => void;
 };
 // 模块选择器
 const ModuleSelector: React.FC<TypeProps> = props => {
@@ -31,7 +31,7 @@ const ModuleSelector: React.FC<TypeProps> = props => {
               onSelected(item);
             }}
           >
-            <AsyncImage src={path.resolve(root, item.icon)} alt="" />
+            {/* <AsyncImage src={path.resolve(root, item.icon)} alt="" /> */}
           </StyleIcon>
         );
       })}

@@ -5,14 +5,14 @@ import {
 } from "@/store/actions";
 import { updateState } from "@/store/utils";
 import { initialBrand } from "@/config/editor";
-import { TypeBrandInfo, TypeTempConf } from "@/types/project";
+import { TypeBrandInfo, TypeTemplateConf } from "@/types/project";
 import { TypeActions } from "./action";
 
 // main states
 export type TypeStates = {
   brandInfoList: TypeBrandInfo[];
   selectedBrandInfo: TypeBrandInfo;
-  templateList: TypeTempConf[];
+  templateList: TypeTemplateConf[];
 };
 
 // 通用的数据

@@ -4,8 +4,7 @@ import styled from "styled-components";
 import _ from "lodash";
 import { useSelector } from "react-redux";
 import { getBrandInfo } from "@/store/modules/template/selector";
-import { createProject } from "@/core/data";
-import { TypeTempConf, TypeProjectInfo } from "@/types/project";
+import { TypeTemplateConf, TypeProjectInfo } from "@/types/project";
 
 // components
 import { Modal, Button, message, Form } from "antd";
@@ -13,7 +12,6 @@ import Steps from "@/components/Steps";
 import ProjectInfo from "@/components/ProjectInfo";
 import ProjectInfoForm from "@/components/ProjectInfoForm";
 import { useTemplateList } from "@/hooks/template";
-import { compilePreviewConf } from "@/core/template-compiler";
 import { isDev } from "@/core/constant";
 import Project from "@/core/Project";
 import TemplateManager from "./TemplateManager";
@@ -30,11 +28,13 @@ function CreateProject(props: TypeProps): JSX.Element {
   // 弹框控制
   const [modalVisible, setModalVisible] = useState(false);
   // 选择的模板
-  const [templateConf, setTemplateConf] = useState<TypeTempConf>();
+  const [templateConf, setTemplateConf] = useState<TypeTemplateConf>();
   // 当前步骤
   const [curStep, setCurStep] = useState(0);
   // 填写完成的项目数据
   const [projectInfo, setProjectInfo] = useState<TypeProjectInfo>();
+  // 创建状态
+  const [isCreating, updateCreating] = useState(false);
   // 表单实例
   const [form] = Form.useForm<TypeProjectInfo>();
 
@@ -44,7 +44,7 @@ function CreateProject(props: TypeProps): JSX.Element {
     designer: isDev ? "测试" : "",
     author: isDev ? "测试" : "",
     version: "1.0.0",
-    uiVersion: _.last(templateConf?.uiVersions)?.src || ""
+    uiVersion: _.last(templateConf?.uiVersions)?.code || ""
   };
 
   // 模板列表
@@ -107,14 +107,14 @@ function CreateProject(props: TypeProps): JSX.Element {
         });
         return;
       }
-
+      updateCreating(true);
       new Project()
         .create({
           brandInfo,
           projectInfo,
           templateConf,
           uiVersion: templateConf.uiVersions.find(
-            o => o.src === form.getFieldValue("uiVersion")
+            o => o.code === form.getFieldValue("uiVersion")
           )
         })
         .then(data => {
@@ -122,6 +122,7 @@ function CreateProject(props: TypeProps): JSX.Element {
           props.onProjectCreated(projectInfo);
           closeModal();
           init();
+          updateCreating(false);
         });
       return;
     }
@@ -142,14 +143,19 @@ function CreateProject(props: TypeProps): JSX.Element {
 
   // 弹框底部控制按钮
   const modalFooter = [
-    <Button key="prev" onClick={curStep > 0 ? handlePrev : handleCancel}>
+    <Button
+      key="prev"
+      onClick={curStep > 0 ? handlePrev : handleCancel}
+      disabled={isCreating}
+    >
       {curStep > 0 ? "上一步" : "取消"}
     </Button>,
     <Button
       key="next"
       type="primary"
       onClick={handleNext}
-      disabled={!templateConf}
+      disabled={!templateConf || isCreating}
+      loading={isCreating}
     >
       {curStep < 2 ? "下一步" : "开始"}
     </Button>

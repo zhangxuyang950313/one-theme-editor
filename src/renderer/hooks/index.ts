@@ -1,5 +1,5 @@
 import { useCallback, useLayoutEffect, useState } from "react";
-import { getImageByPath, getImageListByPaths } from "@/core/data";
+// import { getImageByPath, getImageListByPaths } from "@/core/data";
 import { InputProps } from "antd";
 
 // 设置页面标题
@@ -34,28 +34,28 @@ export function useInputValue(initialValue: string): TypeUseInputValueReturn {
   return { value, onChange };
 }
 
-// 异步从数据库获取缓存的图片
-export function useAsyncImage(file: string): string {
-  const [value, updateVal] = useState<string>("");
-  useLayoutEffect(() => {
-    getImageByPath(file).then(img => {
-      if (!img?.base64) return;
-      updateVal(img.base64);
-    });
-  }, [file]);
-  return value;
-}
+// // 异步从数据库获取缓存的图片
+// export function useAsyncImage(file: string): string {
+//   const [value, updateVal] = useState<string>("");
+//   useLayoutEffect(() => {
+//     getImageByPath(file).then(img => {
+//       if (!img?.base64) return;
+//       updateVal(img.base64);
+//     });
+//   }, [file]);
+//   return value;
+// }
 
-// 异步从数据库获取多个图片
-export function useAsyncImageList(): [
-  (string | null)[],
-  (fileList: string[]) => void
-] {
-  const [list, updateList] = useState<(string | null)[]>([]);
-  const getImages = (fileList: string[]) => {
-    getImageListByPaths(fileList).then(images => {
-      updateList(images.map(item => item?.base64 || null));
-    });
-  };
-  return [list, getImages];
-}
+// // 异步从数据库获取多个图片
+// export function useAsyncImageList(): [
+//   (string | null)[],
+//   (fileList: string[]) => void
+// ] {
+//   const [list, updateList] = useState<(string | null)[]>([]);
+//   const getImages = (fileList: string[]) => {
+//     getImageListByPaths(fileList).then(images => {
+//       updateList(images.map(item => item?.base64 || null));
+//     });
+//   };
+//   return [list, getImages];
+// }

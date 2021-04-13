@@ -1,5 +1,5 @@
 import path from "path";
-import fse from "fs-extra";
+// import fse from "fs-extra";
 import { remote } from "electron";
 import Database from "nedb-promises";
 import { TypeBrandInfo, TypeProjectData, TypeDatabase } from "@/types/project";
@@ -27,39 +27,34 @@ const db: Record<any, Database> = {
   })
 };
 
-type TypeImageCache = {
-  md5?: string;
-  file: string;
-  base64: string;
-};
-export async function getImageByPath(
-  file: string
-): Promise<TypeImageCache | null> {
-  if (!fse.existsSync(file)) return Promise.resolve(null);
-  if (!db.image) return Promise.resolve(null);
-  const getImg = async () => await db.image.findOne<TypeImageCache>({ file });
-  if (!(await getImg())) {
-    const base64 = await fse.readFile(file, "base64");
-    const extname = path.extname(file).replace(/^\./, "");
-    const imgBase64 = `data:image/${extname};base64,${base64}`;
-    await db.image.insert<TypeImageCache>({
-      file,
-      base64: imgBase64
-    });
-  }
-  // todo  if img === null
-  return getImg();
-}
+// export async function getImageByPath(
+//   file: string
+// ): Promise<TypeImageCache | null> {
+//   if (!fse.existsSync(file)) return Promise.resolve(null);
+//   if (!db.image) return Promise.resolve(null);
+//   const getImg = async () => await db.image.findOne<TypeImageCache>({ file });
+//   if (!(await getImg())) {
+//     const base64 = await fse.readFile(file, "base64");
+//     const extname = path.extname(file).replace(/^\./, "");
+//     const imgBase64 = `data:image/${extname};base64,${base64}`;
+//     await db.image.insert<TypeImageCache>({
+//       file,
+//       base64: imgBase64
+//     });
+//   }
+//   // todo  if img === null
+//   return getImg();
+// }
 
-export async function getImageListByPaths(
-  fileList: string[]
-): Promise<(TypeImageCache | null)[]> {
-  const queue = fileList.map(getImageByPath);
-  return Promise.all(queue);
-}
+// export async function getImageListByPaths(
+//   fileList: string[]
+// ): Promise<(TypeImageCache | null)[]> {
+//   const queue = fileList.map(getImageByPath);
+//   return Promise.all(queue);
+// }
 
 // 创建工程
-export async function createProject(
+export async function addProject(
   props: TypeProjectData
 ): Promise<TypeDatabase<TypeProjectData>> {
   return await db.project.insert(props);
@@ -94,8 +89,7 @@ export async function getProjectById(
   id: string
 ): Promise<TypeDatabase<TypeProjectData> | null> {
   if (!db.project) return null;
-  const project = await db.project.findOne<TypeProjectData>({ _id: id });
-  return project;
+  return await db.project.findOne<TypeProjectData>({ _id: id });
 }
 
 // db.project?.remove({}, { multi: true });

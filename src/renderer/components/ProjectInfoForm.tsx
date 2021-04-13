@@ -1,7 +1,7 @@
 import React, { forwardRef, useImperativeHandle } from "react";
 import styled from "styled-components";
 
-import { TypeTempUiVersion, TypeProjectInfo } from "@/types/project";
+import { TypeTempUiVersionConf, TypeProjectInfo } from "@/types/project";
 
 // components
 import { Form, FormInstance } from "antd";
@@ -15,7 +15,7 @@ import {
 
 type TypeProps = {
   // ui 版本列表，用于渲染 select
-  uiVersions: TypeTempUiVersion[];
+  uiVersions: TypeTempUiVersionConf[];
   // 初始化数据
   initialValues: TypeProjectInfo | undefined;
   form: FormInstance<TypeProjectInfo>;
