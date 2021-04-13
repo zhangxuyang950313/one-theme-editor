@@ -74,7 +74,6 @@ export type TypeProjectData = {
   projectInfo: TypeProjectInfo;
   templateConf: TypeTemplateConf;
   previewData: TypePreviewData;
-  projectResource: any;
 };
 
 // 从数据库取出的项目文档数据

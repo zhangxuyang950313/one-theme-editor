@@ -26,6 +26,22 @@ export function pickObjectWithDef<T, U extends keyof T, D>(
   }, {} as { [k in U]: T[U] | D });
 }
 
+// 使用列表项目中的一个键值生成 map
+// 键值如果非 string 类型则该项被忽略
+export function arrayToMapByKey<T, K extends keyof T>(
+  list: T[],
+  key: K
+): { [k: string]: T } {
+  const map: { [k: string]: T } = {};
+  list.forEach(item => {
+    const k = item[key];
+    if (typeof k === "string") {
+      map[k] = item;
+    }
+  });
+  return map;
+}
+
 // 异步 map
 export async function asyncMap<T = any>(
   list: T[],

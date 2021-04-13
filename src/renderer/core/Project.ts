@@ -1,5 +1,7 @@
 import {
   TypeBrandInfo,
+  TypeImageData,
+  TypePageConfData,
   TypePreviewData,
   TypeProjectData,
   TypeProjectInfo,
@@ -8,6 +10,7 @@ import {
 } from "@/types/project";
 import { addProject } from "./data";
 import { compilePreviewData } from "./template-compiler";
+import { arrayToMapByKey } from "./utils";
 
 type TypePropsNormalized = {
   brandInfo: TypeBrandInfo;
@@ -21,45 +24,79 @@ type TypeCreateProps = TypePropsNormalized & {
 
 type TypeSetUpProps = TypePropsNormalized & {
   previewData: TypePreviewData;
-  projectResource: any;
 };
 
+type TypeImageDataMap = { [x: string]: TypeImageData };
+
+type TypePageConfDataMap = { [x: string]: TypePageConfData };
+
+// new 完之后一定要先调用 setUp 或者 create
 export default class Project {
+  public isInitialized!: boolean;
   // 厂商信息
-  brandInfo?: TypeBrandInfo;
+  private brandInfo!: TypeBrandInfo;
   // 主题描述信息
-  projectInfo?: TypeProjectInfo;
+  private projectInfo!: TypeProjectInfo;
   // 模板配置
-  templateConf?: TypeTemplateConf;
+  private templateConf!: TypeTemplateConf;
   // 预览配置列表
-  previewData?: TypePreviewData;
-  // 主题数据
-  projectResource?: any;
+  private previewData!: TypePreviewData;
+  // 提供图片数据索引
+  private imageDataMap!: TypeImageDataMap;
+  // 提供页面配置数据索引
+  private pageConfMap!: TypePageConfDataMap;
+
+  constructor() {
+    this.isInitialized = false;
+  }
 
   // 从现有数据安装主题
-  async setUp(props: TypeSetUpProps): Promise<TypeProjectData> {
+  public setup(props: TypeSetUpProps): TypeProjectData {
     this.brandInfo = props.brandInfo;
     this.projectInfo = props.projectInfo;
     this.templateConf = props.templateConf;
     this.previewData = props.previewData;
-    this.projectResource = props.projectResource;
-    // 创建主题，写入数据库
-    return addProject(props);
+    // 生成数据索引
+    this.imageDataMap = arrayToMapByKey(props.previewData.imageData, "key");
+    this.pageConfMap = arrayToMapByKey(props.previewData.pageConfData, "key");
+    this.isInitialized = true;
+    return props;
   }
 
   // 从模板创建主题
   // 和现有数据不同的是，从模板创建主题是要解析模板数据配合版本进行初始化的，而数据是初始化后的储存
-  async create(props: TypeCreateProps): Promise<TypeProjectData> {
-    const data = {
+  public async create(props: TypeCreateProps): Promise<TypeProjectData> {
+    const data: TypeProjectData = {
       brandInfo: props.brandInfo,
       projectInfo: props.projectInfo,
       templateConf: props.templateConf,
       previewData: await compilePreviewData(
         props.templateConf,
         props.uiVersion?.src || ""
-      ),
-      projectResource: {}
+      )
     };
-    return this.setUp(data);
+    this.setup(data);
+    return data;
+  }
+
+  // 保存到磁盘
+  public async save(): Promise<TypeProjectData> {
+    // 写入数据库
+    return addProject({
+      brandInfo: this.brandInfo,
+      projectInfo: this.projectInfo,
+      templateConf: this.templateConf,
+      previewData: this.previewData
+    });
+  }
+
+  // 使用 key 获取图片 base64
+  public getBase64ByKey(key: string): string {
+    return this.imageDataMap[key]?.base64 || "";
+  }
+
+  // 使用 key 获取页面配置
+  public getPageConfByKey(key: string): TypePageConfData | null {
+    return this.pageConfMap[key] || null;
   }
 }

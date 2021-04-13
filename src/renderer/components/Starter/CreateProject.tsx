@@ -108,7 +108,8 @@ function CreateProject(props: TypeProps): JSX.Element {
         return;
       }
       updateCreating(true);
-      new Project()
+      const project = new Project();
+      project
         .create({
           brandInfo,
           projectInfo,
@@ -117,6 +118,7 @@ function CreateProject(props: TypeProps): JSX.Element {
             o => o.code === form.getFieldValue("uiVersion")
           )
         })
+        .then(async () => project.save())
         .then(data => {
           console.log("创建工程：", data);
           props.onProjectCreated(projectInfo);

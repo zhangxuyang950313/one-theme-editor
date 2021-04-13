@@ -3,12 +3,11 @@ import React from "react";
 import styled from "styled-components";
 
 import { Collapse } from "antd";
-import { TypePreviewClass } from "@/types/project";
-// import AsyncImage from "../AsyncImage";
+import { TypeTempPreviewClassConf } from "@/types/project";
 
 // 页面选择器
 type TypeProps = {
-  tempClasses: TypePreviewClass[];
+  tempClasses: TypeTempPreviewClassConf[];
 };
 const PageSelector: React.FC<TypeProps> = props => {
   const { tempClasses } = props;
@@ -19,14 +18,7 @@ const PageSelector: React.FC<TypeProps> = props => {
         defaultActiveKey={Object.keys(tempClasses).map(o => Number(o))}
       >
         {tempClasses.map((item, key) => {
-          item.pageKeys.map(pageKey => {
-            //
-          });
-          return (
-            <Collapse.Panel header={item.name} key={key}>
-              {/* <AsyncImage src={item.}/> */}
-            </Collapse.Panel>
-          );
+          return <Collapse.Panel header={item.name} key={key}></Collapse.Panel>;
         })}
       </Collapse>
     </StylePageSelector>

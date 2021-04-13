@@ -1,37 +1,28 @@
-import path from "path";
 import React, { useState } from "react";
 import styled from "styled-components";
 
-import { TypeTemplateConf, TypeTempModuleConf } from "@/types/project";
-
-// import AsyncImage from "@/components/AsyncImage";
-
 type TypeProps = {
-  tempConf: TypeTemplateConf;
-  onSelected: (x: TypeTempModuleConf) => void;
+  icons: string[];
+  onSelected: (x: number) => void;
 };
 // 模块选择器
 const ModuleSelector: React.FC<TypeProps> = props => {
-  const { tempConf, onSelected } = props;
+  const { icons, onSelected } = props;
   const [selectedIndex, updateIndex] = useState(0);
-  if (!tempConf) return null;
-  const { root, modules } = tempConf;
-  if (!modules) return null;
 
   return (
     <StyleModuleSelector>
-      {modules.map((item, key) => {
-        if (!item?.icon) return null;
+      {icons.map((item, key) => {
         return (
           <StyleIcon
             key={key}
             isActive={selectedIndex === key}
             onClick={() => {
               updateIndex(key);
-              onSelected(item);
+              onSelected(key);
             }}
           >
-            {/* <AsyncImage src={path.resolve(root, item.icon)} alt="" /> */}
+            <img className="icon" alt="" src={item} />
           </StyleIcon>
         );
       })}
@@ -49,14 +40,17 @@ const StyleModuleSelector = styled.div`
 `;
 type TypeStyleIconProps = { isActive: boolean };
 const StyleIcon = styled.div<TypeStyleIconProps>`
+  cursor: pointer;
   width: ${({ isActive }) => (isActive ? "55px" : "45px")};
   opacity: ${({ isActive }) => (isActive ? 1 : 0.4)};
   margin: 20px auto;
-  cursor: pointer;
   &:hover {
     width: 60px;
   }
   transition: 0.4s all ease;
+  .icon {
+    width: 100%;
+  }
 `;
 
 export default ModuleSelector;
