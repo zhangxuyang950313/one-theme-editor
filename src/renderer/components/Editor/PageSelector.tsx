@@ -1,4 +1,3 @@
-import path from "path";
 import React from "react";
 import styled from "styled-components";
 

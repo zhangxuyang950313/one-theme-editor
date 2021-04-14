@@ -8,7 +8,8 @@ import {
   TypeTemplateConf,
   TypeImageData,
   TypePageConfData,
-  TypePreviewData
+  TypePreviewConf,
+  TypeTempUiVersionConf
 } from "@/types/project";
 import {
   TypeOriginTempConf,
@@ -21,6 +22,7 @@ import {
 } from "@/config/paths";
 import { getRandomStr, localImageToBase64Async } from "./utils";
 import errCode from "./error-code";
+import { TypeProjectProps } from "./Project";
 
 const config: Options.XML2JS = {
   trim: true,
@@ -113,7 +115,8 @@ export async function compilePageConf(file: string): Promise<TypeTempPageConf> {
     return Promise.reject(new Error(errCode[1001]));
   }
   const data = await xml2jsonCompact<TypeTempOriginPageConf>(file);
-  const result: TypeTempPageConf = {
+  return {
+    root: path.dirname(file),
     config: {
       version: data.config?.[0]._attributes.version || "",
       description: data.config?.[0]._attributes.description || "",
@@ -135,7 +138,6 @@ export async function compilePageConf(file: string): Promise<TypeTempPageConf> {
       })) || [],
     xml: []
   };
-  return result;
 }
 
 // 加载图片，返回 key 和异步任务
@@ -159,52 +161,55 @@ const loadPageConfByFile = (file: string) => {
     .catch(err => {
       // todo log
       console.error(err);
-      return { key, conf: null };
+      return { key, conf: null, imageQueue: [] };
     });
   return { key, task };
 };
 
-// 解析 templateConf，将图片和页面配置生成预览数据
-// TypeConfData 结构暂时同 TypeTemplateConf
-export async function compilePreviewData(
-  tempConf: TypeTemplateConf,
-  uiVersionSrc: string
-): Promise<TypePreviewData> {
-  const { root } = tempConf;
-  const imageQueue: Promise<TypeImageData>[] = [];
-  const pageConfQueue: Promise<TypePageConfData>[] = [];
-  const resolveRootPath = (p: string) => path.resolve(root, p);
-  // 处理需要版本片段的路径
-  const resolveVersionPath = (p: string) => path.resolve(root, uiVersionSrc, p);
-  const loadImage = (file: string) => {
-    const { key, task } = loadImageByFile(file);
-    imageQueue.push(task);
-    return key;
-  };
-  const loadPageConf = (p: string) => {
-    const file = resolveVersionPath(p);
-    const { key, task } = loadPageConfByFile(file);
-    pageConfQueue.push(task);
-    return key;
-  };
-  const previewConf: TypeTemplateConf = {
-    ...tempConf,
-    cover: loadImage(resolveRootPath(tempConf.cover)),
-    modules: tempConf.modules.map(moduleItem => ({
-      ...moduleItem,
-      icon: loadImage(resolveRootPath(moduleItem.icon)),
-      previewClass: moduleItem.previewClass.map(classItem => ({
-        ...classItem,
-        pages: classItem.pages.map(pageFile =>
-          loadPageConf(resolveVersionPath(pageFile))
-        )
-      }))
-    }))
-  };
-  const imageData = await Promise.all(imageQueue);
-  const pageConfData = await Promise.all(pageConfQueue);
-  return { previewConf, imageData, pageConfData };
-}
+// // 解析 templateConf，将图片和页面配置生成预览数据
+// // TypePreviewConf 结构暂时同 TypeTemplateConf
+// export async function compilePreviewData(
+//   tempConf: TypeTemplateConf,
+//   uiVersionSrc: string
+// ): Promise<TypePreviewData> {
+//   const { root } = tempConf;
+//   const imageQueue: Promise<TypeImageData>[] = [];
+//   const pageConfQueue: Promise<TypePageConfData>[] = [];
+//   // 相对模板根目录路径
+//   // 一般是用于和 ui 版本无关的路径
+//   const resolveRootPath = (p: string) => path.resolve(root, p);
+//   // 相对 ui 版本路径
+//   // 用于和 ui 版本紧密相关的路径
+//   const resolveVersionPath = (p: string) => path.resolve(root, uiVersionSrc, p);
+//   const loadImage = (file: string) => {
+//     const { key, task } = loadImageByFile(file);
+//     imageQueue.push(task);
+//     return key;
+//   };
+//   const loadPageConf = (p: string) => {
+//     const file = resolveVersionPath(p);
+//     const { key, task } = loadPageConfByFile(file);
+//     pageConfQueue.push(task);
+//     return key;
+//   };
+//   const previewConf: TypeTemplateConf = {
+//     ...tempConf,
+//     cover: loadImage(resolveRootPath(tempConf.cover)),
+//     modules: tempConf.modules.map(moduleItem => ({
+//       ...moduleItem,
+//       icon: loadImage(resolveRootPath(moduleItem.icon)),
+//       previewClass: moduleItem.previewClass.map(classItem => ({
+//         ...classItem,
+//         pages: classItem.pages.map(pageFile =>
+//           loadPageConf(resolveVersionPath(pageFile))
+//         )
+//       }))
+//     }))
+//   };
+//   const imageData = await Promise.all(imageQueue);
+//   const pageConfData = await Promise.all(pageConfQueue);
+//   return { previewConf, imageData, pageConfData };
+// }
 
 // 解析模板配置信息
 export async function compileTempConf(file: string): Promise<TypeTemplateConf> {
@@ -252,4 +257,118 @@ export async function getTempConfList(
 ): Promise<TypeTemplateConf[]> {
   const queue = getTempDescFileList(brandInfo).map(compileTempConf);
   return Promise.all(queue);
+}
+
+type TypeImageDataMap = { [x: string]: TypeImageData };
+
+type TypePageConfDataMap = { [x: string]: TypePageConfData };
+// 单个模板数据解析器
+export default class TemplateCompiler {
+  protected brandInfo: TypeBrandInfo;
+  protected uiVersion: TypeTempUiVersionConf;
+  protected templateConfList?: TypeTemplateConf[]; // 模板列表
+  protected templateConf: TypeTemplateConf; // 模板原始配置
+  protected previewConf?: TypePreviewConf; // 用于预览的配置
+  protected imageData: TypeImageData[];
+  protected pageConfData: TypePageConfData[];
+  protected imageDataMap!: TypeImageDataMap; // 提供图片数据索引
+  protected pageConfDataMap!: TypePageConfDataMap; // 提供页面配置数据索引
+  private templateRoot: string; // 模板根目录
+
+  constructor(props: TypeProjectProps) {
+    this.brandInfo = props.brandInfo;
+    this.uiVersion = props.uiVersion;
+    this.templateConf = props.templateConf;
+    this.templateRoot = props.templateConf.root;
+    this.imageData = [];
+    this.pageConfData = [];
+  }
+
+  // 相对模板根目录路径
+  // 一般是用于和 ui 版本无关的路径
+  private resolveRootPath(relativePath: string) {
+    return path.resolve(this.templateRoot, relativePath);
+  }
+
+  // 相对 ui 版本路径
+  // 用于和 ui 版本紧密相关的路径
+  private resolveVersionPath(relativePath: string) {
+    return path.resolve(this.templateRoot, this.uiVersion.src, relativePath);
+  }
+
+  // 加载图片
+  private loadImage(file: string) {
+    const key = getRandomStr();
+    const task = localImageToBase64Async(file)
+      .then(base64 => {
+        const data = { key, base64 };
+        this.imageData.push(data);
+        return data;
+      })
+      .catch(err => {
+        console.warn(errCode[1005], err);
+        return { key, base64: null };
+      });
+    return { key, task };
+  }
+
+  // 加载页面配置
+  private loadPageConf(relativePath: string) {
+    const file = this.resolveVersionPath(relativePath);
+    const { key, task } = loadPageConfByFile(file);
+    task
+      .then(data => {
+        this.pageConfData.push(data);
+      })
+      .catch(err => {
+        console.warn(errCode[1006], err);
+      });
+    return { key, task };
+  }
+
+  // 将模板转换成预览所需数据
+  async generatePreviewData(): Promise<TypePreviewConf> {
+    // 加载图片和页面配置的异步队列
+    const asyncQueue: Promise<TypeImageData | TypePageConfData>[] = [];
+    const coverImage = this.loadImage(
+      this.resolveRootPath(this.templateConf.cover)
+    );
+    asyncQueue.push(coverImage.task);
+    const previewConf: TypePreviewConf = {
+      ...this.templateConf,
+      cover: coverImage.key,
+      modules: this.templateConf.modules.map(moduleItem => ({
+        ...moduleItem,
+        icon: (() => {
+          const { key, task } = this.loadImage(
+            this.resolveRootPath(moduleItem.icon)
+          );
+          asyncQueue.push(task);
+          return key;
+        })(),
+        previewClass: moduleItem.previewClass.map(classItem => ({
+          ...classItem,
+          pages: classItem.pages.map(pageFile => {
+            const { key, task } = this.loadPageConf(
+              this.resolveVersionPath(pageFile)
+            );
+            asyncQueue.push(task);
+            return key;
+          })
+        }))
+      }))
+    };
+    await Promise.all(asyncQueue);
+    return previewConf;
+  }
+
+  // 使用 key 获取图片 base64
+  public getBase64ByKey(key: string): string {
+    return this.imageDataMap[key]?.base64 || "";
+  }
+
+  // 使用 key 获取页面配置
+  public getPageConfByKey(key: string): TypePageConfData | null {
+    return this.pageConfDataMap[key] || null;
+  }
 }

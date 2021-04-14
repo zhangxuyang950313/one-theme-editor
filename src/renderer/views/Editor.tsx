@@ -3,7 +3,7 @@ import { useHistory, useParams } from "react-router";
 import styled from "styled-components";
 
 import { useDocumentTitle } from "@/hooks";
-import { useProject, useProjectById } from "@/hooks/project";
+import { useProjectById } from "@/hooks/project";
 import { TypeTempModuleConf } from "@/types/project";
 
 import { Button, Empty, Spin } from "antd";
@@ -11,6 +11,7 @@ import ModuleSelector from "@/components/Editor/ModuleSelector";
 import EditorToolsBar from "@/components/Editor/ToolsBar";
 import PageSelector from "@/components/Editor/PageSelector";
 import ResourceContext from "@/components/Editor/ResourceContext";
+import Project from "@/core/Project";
 
 const Editor: React.FC = () => {
   const [, updateTitle] = useDocumentTitle();
@@ -19,10 +20,10 @@ const Editor: React.FC = () => {
   const { pid } = useParams<{ pid: string }>();
   // 项目数据，null 表示未找到
   const projectData = useProjectById(pid);
-  // 主题对象
-  const project = useProject();
   // 选择的模块数据
   const [selectedModule, updateModule] = useState<TypeTempModuleConf>();
+  // 工程实例
+  const [project, updateProject] = useState<Project>();
 
   // 默认选择第一个模块
   useEffect(() => {
@@ -30,14 +31,16 @@ const Editor: React.FC = () => {
     if (firstModule) updateModule(firstModule);
   }, [projectData?.templateConf.modules]);
 
-  // 安装主题信息
+  // 安装主题
   useEffect(() => {
     if (!projectData) return;
+    const project = new Project(projectData);
+    updateProject(project);
     project.setup(projectData);
-  }, [project, projectData]);
+  }, [projectData]);
 
   // 还未安装
-  if (!project.isInitialized) {
+  if (!project?.isInitialized) {
     return (
       <StyleEditorEmpty>
         <Spin tip="加载中" />
@@ -69,11 +72,11 @@ const Editor: React.FC = () => {
     <StyleEditor>
       {/* 模块选择器 */}
       <ModuleSelector
-        icons={projectData.previewData.previewConf.modules.map(item =>
+        icons={projectData.previewConf.modules.map(item =>
           project.getBase64ByKey(item.icon)
         )}
         onSelected={index => {
-          updateModule(projectData.previewData.previewConf.modules[index]);
+          updateModule(projectData.previewConf.modules[index]);
         }}
       />
       <StyleEditorContext>

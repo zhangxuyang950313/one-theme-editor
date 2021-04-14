@@ -1,18 +1,17 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-
 import _ from "lodash";
-import { useSelector } from "react-redux";
-import { getBrandInfo } from "@/store/modules/template/selector";
+
+import { isDev } from "@/core/constant";
+import errCode from "@/core/error-code";
 import { TypeTemplateConf, TypeProjectInfo } from "@/types/project";
+import { useBrandInfo, useTemplateList } from "@/hooks/template";
 
 // components
 import { Modal, Button, message, Form } from "antd";
 import Steps from "@/components/Steps";
 import ProjectInfo from "@/components/ProjectInfo";
 import ProjectInfoForm from "@/components/ProjectInfoForm";
-import { useTemplateList } from "@/hooks/template";
-import { isDev } from "@/core/constant";
 import Project from "@/core/Project";
 import TemplateManager from "./TemplateManager";
 import TemplateCard from "./TemplateCard";
@@ -24,7 +23,7 @@ type TypeProps = {
 };
 function CreateProject(props: TypeProps): JSX.Element {
   // 机型信息
-  const brandInfo = useSelector(getBrandInfo);
+  const brandInfo = useBrandInfo();
   // 弹框控制
   const [modalVisible, setModalVisible] = useState(false);
   // 选择的模板
@@ -48,7 +47,7 @@ function CreateProject(props: TypeProps): JSX.Element {
   };
 
   // 模板列表
-  const templateList = useTemplateList(brandInfo);
+  const templateList = useTemplateList();
 
   // 步骤控制
   const nextStep = () => setCurStep(curStep + 1);
@@ -93,9 +92,7 @@ function CreateProject(props: TypeProps): JSX.Element {
           setProjectInfo(data);
           nextStep();
         })
-        .catch(() => {
-          //
-        });
+        .catch(console.warn);
       return;
     }
     // 创建工程
@@ -107,25 +104,30 @@ function CreateProject(props: TypeProps): JSX.Element {
         });
         return;
       }
-      updateCreating(true);
-      const project = new Project();
-      project
-        .create({
-          brandInfo,
-          projectInfo,
-          templateConf,
-          uiVersion: templateConf.uiVersions.find(
-            o => o.code === form.getFieldValue("uiVersion")
-          )
-        })
-        .then(async () => project.save())
-        .then(data => {
-          console.log("创建工程：", data);
-          props.onProjectCreated(projectInfo);
-          closeModal();
-          init();
-          updateCreating(false);
+      const uiVersion = templateConf.uiVersions.find(
+        o => o.code === form.getFieldValue("uiVersion")
+      );
+      if (!uiVersion) {
+        message.warn({
+          content: errCode[1004],
+          duration: 1000
         });
+        return;
+      }
+      updateCreating(true);
+      const project = new Project({
+        projectInfo,
+        brandInfo,
+        uiVersion,
+        templateConf
+      });
+      project.create().then(data => {
+        console.log("创建工程：", data);
+        props.onProjectCreated(projectInfo);
+        closeModal();
+        init();
+        updateCreating(false);
+      });
       return;
     }
     nextStep();

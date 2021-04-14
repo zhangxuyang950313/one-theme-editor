@@ -1,7 +1,7 @@
-import { useLayoutEffect, useState, useCallback, useEffect } from "react";
+import { useLayoutEffect, useState, useCallback } from "react";
 import { getProjectById, getProjectsByBrand } from "@/core/data";
 import { TypeBrandInfo, TypeDatabase, TypeProjectData } from "@/types/project";
-import Project from "@/core/Project";
+// import Project from "@/core/Project";
 
 // 获取项目列表
 type TypeIsLoading = boolean;
@@ -37,8 +37,9 @@ export function useProjectById(id: string): TypeProjectDataInDoc | null {
   return value;
 }
 
-// 创建主题对象
-export function useProject(): Project {
-  const [project] = useState(new Project());
-  return project;
-}
+// // 创建主题对象
+// export function useProject(): Project {
+//   const projectData = use
+//   const [project] = useState(new Project(data));
+//   return project;
+// }

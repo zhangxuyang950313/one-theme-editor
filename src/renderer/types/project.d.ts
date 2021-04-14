@@ -33,9 +33,14 @@ export type TypeTempModuleConf = {
   previewClass: TypeTempPreviewClassConf[];
 };
 // 模板配置信息汇总
-export type TypeTemplateConf = {
-  key: string; // 随机键值
+export type TypeTemplateConf = TypePreviewConf & {
   root: string;
+};
+
+// 预览数据配置
+// 此时所有素材路径都已使用 key 来代替
+export type TypePreviewConf = {
+  key: string; // 随机键值
   name: string; // 模板名称
   cover: string; // 模板缩略图
   version: string; //
@@ -45,6 +50,7 @@ export type TypeTemplateConf = {
 
 // 预览图配置
 export type TypeTempPageConf = {
+  root: string;
   config: { version: string; description: string; screenWidth: string };
   cover: string;
   category: {
@@ -64,16 +70,16 @@ export type TypeTempPageConf = {
 // -----------------------
 // 以下是预览数据
 export type TypePreviewData = {
-  previewConf: TypeTemplateConf;
+  uiVersion: TypeTempUiVersionConf;
+  previewConf: TypePreviewConf;
   imageData: TypeImageData[];
   pageConfData: TypePageConfData[];
 };
 // 储存在数据库的项目数据
-export type TypeProjectData = {
+export type TypeProjectData = TypePreviewData & {
   brandInfo: TypeBrandInfo;
   projectInfo: TypeProjectInfo;
   templateConf: TypeTemplateConf;
-  previewData: TypePreviewData;
 };
 
 // 从数据库取出的项目文档数据

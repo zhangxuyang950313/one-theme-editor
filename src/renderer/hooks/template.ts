@@ -1,12 +1,13 @@
 import { useLayoutEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { compileBrandConf, getTempConfList } from "@/core/template-compiler";
+import { useDispatch, useSelector } from "react-redux";
+import { compileBrandConf, getTempConfList } from "@/core/TemplateCompiler";
 import {
   setBrandInfoList,
   setTemplateList
 } from "@/store/modules/template/action";
 import { TypeBrandInfo, TypeTemplateConf } from "@/types/project";
 import { initialBrand } from "@/config/editor";
+import { getBrandInfo } from "@/store/modules/template/selector";
 
 // 获取配置的厂商列表
 export function useBrandInfoList(): TypeBrandInfo[] {
@@ -27,10 +28,16 @@ export function useBrandInfoList(): TypeBrandInfo[] {
   return value;
 }
 
+// 当前选择的厂商信息
+export function useBrandInfo(): TypeBrandInfo {
+  return useSelector(getBrandInfo);
+}
+
 // 获取模板列表
-export function useTemplateList(brandInfo: TypeBrandInfo): TypeTemplateConf[] {
+export function useTemplateList(): TypeTemplateConf[] {
   const [value, updateValue] = useState<TypeTemplateConf[]>([]);
   const dispatch = useDispatch();
+  const brandInfo = useBrandInfo();
   useLayoutEffect(() => {
     getTempConfList(brandInfo).then(tempConfList => {
       console.log(tempConfList);
