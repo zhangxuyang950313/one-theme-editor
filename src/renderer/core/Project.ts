@@ -9,12 +9,6 @@ import { addProject } from "./data";
 import TemplateCompiler from "./TemplateCompiler";
 import { arrayToMapByKey } from "./utils";
 
-type TypeCreateProps = {
-  uiVersion: TypeTempUiVersionConf;
-  projectInfo: TypeProjectInfo;
-  templateConf: TypeTemplateConf;
-};
-
 export type TypeProjectProps = {
   brandInfo: TypeBrandInfo;
   uiVersion: TypeTempUiVersionConf;
@@ -22,7 +16,6 @@ export type TypeProjectProps = {
   templateConf: TypeTemplateConf;
 };
 
-// new 完之后一定要先调用 setUp 或者 create
 export default class Project extends TemplateCompiler {
   public isInitialized: boolean;
   // 厂商信息
@@ -58,7 +51,7 @@ export default class Project extends TemplateCompiler {
   // 和现有数据不同的是，从模板创建主题是要解析模板数据配合版本进行初始化的，而数据是初始化后的储存
   public async create(): Promise<TypeProjectData> {
     // 生成预览数据
-    const previewConf = await super.generatePreviewData();
+    const previewConf = await super.generateTempPreviewData();
     this.isInitialized = true;
     // 写入数据库
     return addProject({

@@ -17,8 +17,7 @@ export function useBrandInfoList(): TypeBrandInfo[] {
     compileBrandConf().then(conf => {
       // 添加默认小米，去重
       const list = [initialBrand, ...conf].reduce<TypeBrandInfo[]>((t, o) => {
-        if (!t.some(({ templateDir }) => templateDir === o.templateDir))
-          t.push(o);
+        if (!t.some(item => item.templateDir === o.templateDir)) t.push(o);
         return t;
       }, []);
       dispatch(setBrandInfoList(list));
@@ -34,18 +33,22 @@ export function useBrandInfo(): TypeBrandInfo {
 }
 
 // 获取模板列表
-export function useTemplateList(): TypeTemplateConf[] {
+export function useTemplateList(): [TypeTemplateConf[], boolean] {
   const [value, updateValue] = useState<TypeTemplateConf[]>([]);
+  const [loading, updateLoading] = useState(true);
   const dispatch = useDispatch();
   const brandInfo = useBrandInfo();
   useLayoutEffect(() => {
     getTempConfList(brandInfo).then(tempConfList => {
-      console.log(tempConfList);
+      console.log("模板列表：", tempConfList);
       dispatch(setTemplateList(tempConfList));
       updateValue(tempConfList);
+      setTimeout(() => {
+        updateLoading(false);
+      }, 300);
     });
   }, [brandInfo, dispatch]);
-  return value;
+  return [value, loading];
 }
 
 // 获取预览数据

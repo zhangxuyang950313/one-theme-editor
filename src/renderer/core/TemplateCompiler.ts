@@ -134,82 +134,11 @@ export async function compilePageConf(file: string): Promise<TypeTempPageConf> {
         description: item._attributes.description || "",
         layout: item.layout?.[0]._attributes || {},
         from: item.from?.[0]._attributes.src || "",
-        to: item.from?.[0]._attributes.src || ""
+        to: item.to?.[0]._attributes.src || ""
       })) || [],
     xml: []
   };
 }
-
-// 加载图片，返回 key 和异步任务
-const loadImageByFile = (file: string) => {
-  const key = getRandomStr();
-  const task = localImageToBase64Async(file)
-    .then(base64 => ({ key, base64 }))
-    .catch(err => {
-      // todo log
-      console.error(err);
-      return { key, base64: null };
-    });
-  return { key, task };
-};
-
-// 解析页面数据
-const loadPageConfByFile = (file: string) => {
-  const key = getRandomStr();
-  const task = compilePageConf(file)
-    .then(conf => ({ key, conf }))
-    .catch(err => {
-      // todo log
-      console.error(err);
-      return { key, conf: null, imageQueue: [] };
-    });
-  return { key, task };
-};
-
-// // 解析 templateConf，将图片和页面配置生成预览数据
-// // TypePreviewConf 结构暂时同 TypeTemplateConf
-// export async function compilePreviewData(
-//   tempConf: TypeTemplateConf,
-//   uiVersionSrc: string
-// ): Promise<TypePreviewData> {
-//   const { root } = tempConf;
-//   const imageQueue: Promise<TypeImageData>[] = [];
-//   const pageConfQueue: Promise<TypePageConfData>[] = [];
-//   // 相对模板根目录路径
-//   // 一般是用于和 ui 版本无关的路径
-//   const resolveRootPath = (p: string) => path.resolve(root, p);
-//   // 相对 ui 版本路径
-//   // 用于和 ui 版本紧密相关的路径
-//   const resolveVersionPath = (p: string) => path.resolve(root, uiVersionSrc, p);
-//   const loadImage = (file: string) => {
-//     const { key, task } = loadImageByFile(file);
-//     imageQueue.push(task);
-//     return key;
-//   };
-//   const loadPageConf = (p: string) => {
-//     const file = resolveVersionPath(p);
-//     const { key, task } = loadPageConfByFile(file);
-//     pageConfQueue.push(task);
-//     return key;
-//   };
-//   const previewConf: TypeTemplateConf = {
-//     ...tempConf,
-//     cover: loadImage(resolveRootPath(tempConf.cover)),
-//     modules: tempConf.modules.map(moduleItem => ({
-//       ...moduleItem,
-//       icon: loadImage(resolveRootPath(moduleItem.icon)),
-//       previewClass: moduleItem.previewClass.map(classItem => ({
-//         ...classItem,
-//         pages: classItem.pages.map(pageFile =>
-//           loadPageConf(resolveVersionPath(pageFile))
-//         )
-//       }))
-//     }))
-//   };
-//   const imageData = await Promise.all(imageQueue);
-//   const pageConfData = await Promise.all(pageConfQueue);
-//   return { previewConf, imageData, pageConfData };
-// }
 
 // 解析模板配置信息
 export async function compileTempConf(file: string): Promise<TypeTemplateConf> {
@@ -238,18 +167,11 @@ export async function compileTempConf(file: string): Promise<TypeTemplateConf> {
             pages:
               classItem.page
                 ?.map(page => page._attributes?.src || "")
-                .filter(Boolean) || []
+                ?.filter(Boolean) || []
           })) || []
       })) || []
   };
 }
-
-// pagesConf: classItem.page
-// ?.map(page => page._attributes.src || "")
-// .filter(Boolean)
-// .map(page => path.resolve(root, page))
-// .filter(fse.existsSync)
-// .map(getPageXmlConf)
 
 // 获取所有模板配置列表
 export async function getTempConfList(
@@ -259,9 +181,6 @@ export async function getTempConfList(
   return Promise.all(queue);
 }
 
-type TypeImageDataMap = { [x: string]: TypeImageData };
-
-type TypePageConfDataMap = { [x: string]: TypePageConfData };
 // 单个模板数据解析器
 export default class TemplateCompiler {
   protected brandInfo: TypeBrandInfo;
@@ -271,8 +190,8 @@ export default class TemplateCompiler {
   protected previewConf?: TypePreviewConf; // 用于预览的配置
   protected imageData: TypeImageData[];
   protected pageConfData: TypePageConfData[];
-  protected imageDataMap!: TypeImageDataMap; // 提供图片数据索引
-  protected pageConfDataMap!: TypePageConfDataMap; // 提供页面配置数据索引
+  protected imageDataMap!: { [x: string]: TypeImageData }; // 提供图片数据索引
+  protected pageConfDataMap!: { [x: string]: TypePageConfData }; // 提供页面配置数据索引
   private templateRoot: string; // 模板根目录
 
   constructor(props: TypeProjectProps) {
@@ -314,29 +233,83 @@ export default class TemplateCompiler {
 
   // 加载页面配置
   private loadPageConf(relativePath: string) {
+    const key = getRandomStr();
     const file = this.resolveVersionPath(relativePath);
-    const { key, task } = loadPageConfByFile(file);
-    task
-      .then(data => {
+    const task = this.generatePagePreviewData(file)
+      .then(conf => {
+        const data = { key, conf };
         this.pageConfData.push(data);
+        return data;
       })
       .catch(err => {
         console.warn(errCode[1006], err);
+        return { key, conf: null };
       });
     return { key, task };
   }
 
+  // 生成页面预览数据
+  private async generatePagePreviewData(
+    file: string
+  ): Promise<TypeTempPageConf> {
+    if (!fse.existsSync(file)) {
+      return Promise.reject(new Error(errCode[1001]));
+    }
+    const root = path.dirname(file);
+    const asyncQueue: Promise<TypeImageData>[] = [];
+    const data = await xml2jsonCompact<TypeTempOriginPageConf>(file);
+    const resolvePagePath = (relativePath: string) =>
+      path.resolve(root, relativePath);
+    return {
+      root,
+      config: {
+        version: data.config?.[0]._attributes.version || "",
+        description: data.config?.[0]._attributes.description || "",
+        screenWidth: data.config?.[0]._attributes.screenWidth || ""
+      },
+      cover: (() => {
+        const { key, task } = this.loadImage(
+          resolvePagePath(data.cover?.[0]._attributes.src || "")
+        );
+        asyncQueue.push(task);
+        return key;
+      })(),
+      category:
+        data.category?.map(item => ({
+          tag: item._attributes.tag || "",
+          description: item._attributes.description || "",
+          type: item._attributes.type || null
+        })) || [],
+      source:
+        data.source?.map(item => ({
+          description: item._attributes.description || "",
+          layout: item.layout?.[0]._attributes || {},
+          from: (() => {
+            const { key, task } = this.loadImage(
+              resolvePagePath(item.from?.[0]._attributes.src || "")
+            );
+            asyncQueue.push(task);
+            return key;
+          })(),
+          to: item.to?.[0]._attributes.src || ""
+        })) || [],
+      xml: []
+    };
+  }
+
   // 将模板转换成预览所需数据
-  async generatePreviewData(): Promise<TypePreviewConf> {
+  protected async generateTempPreviewData(): Promise<TypePreviewConf> {
     // 加载图片和页面配置的异步队列
     const asyncQueue: Promise<TypeImageData | TypePageConfData>[] = [];
-    const coverImage = this.loadImage(
-      this.resolveRootPath(this.templateConf.cover)
-    );
-    asyncQueue.push(coverImage.task);
     const previewConf: TypePreviewConf = {
       ...this.templateConf,
-      cover: coverImage.key,
+      cover: (() => {
+        const { key, task } = this.loadImage(
+          this.resolveRootPath(this.templateConf.cover)
+        );
+        asyncQueue.push(task);
+        return key;
+      })(),
       modules: this.templateConf.modules.map(moduleItem => ({
         ...moduleItem,
         icon: (() => {

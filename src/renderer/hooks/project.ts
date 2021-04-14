@@ -16,6 +16,7 @@ export function useProjectList(
     updateLoading(true);
     setTimeout(async () => {
       const projects = await getProjectsByBrand(brandInfo);
+      console.log("项目列表：", projects);
       updateValue(projects);
       updateLoading(false);
     }, 300);
@@ -37,9 +38,15 @@ export function useProjectById(id: string): TypeProjectDataInDoc | null {
   return value;
 }
 
-// // 创建主题对象
+// let project: Project;
+
+// // 创建工程对象
+// export function useCreateProject(data: TypeProjectData): Project {
+//   project = new Project(data);
+//   return project;
+// }
+
+// // 使用工程对象
 // export function useProject(): Project {
-//   const projectData = use
-//   const [project] = useState(new Project(data));
 //   return project;
 // }

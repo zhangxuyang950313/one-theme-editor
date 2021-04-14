@@ -6,18 +6,22 @@ import { TypeTempPreviewClassConf } from "@/types/project";
 
 // 页面选择器
 type TypeProps = {
-  tempClasses: TypeTempPreviewClassConf[];
+  previewClass: TypeTempPreviewClassConf[];
 };
 const PageSelector: React.FC<TypeProps> = props => {
-  const { tempClasses } = props;
+  const { previewClass } = props;
   return (
     <StylePageSelector>
       <Collapse
         bordered={false}
-        defaultActiveKey={Object.keys(tempClasses).map(o => Number(o))}
+        defaultActiveKey={Object.keys(previewClass).map(o => Number(o))}
       >
-        {tempClasses.map((item, key) => {
-          return <Collapse.Panel header={item.name} key={key}></Collapse.Panel>;
+        {previewClass.map((item, key) => {
+          return (
+            <Collapse.Panel header={item.name} key={key}>
+              {/* <img src={item.pages}/> */}
+            </Collapse.Panel>
+          );
         })}
       </Collapse>
     </StylePageSelector>

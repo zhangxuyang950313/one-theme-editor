@@ -5,7 +5,7 @@ import _ from "lodash";
 import { isDev } from "@/core/constant";
 import errCode from "@/core/error-code";
 import { TypeTemplateConf, TypeProjectInfo } from "@/types/project";
-import { useBrandInfo, useTemplateList } from "@/hooks/template";
+import { useBrandInfo } from "@/hooks/template";
 
 // components
 import { Modal, Button, message, Form } from "antd";
@@ -21,13 +21,13 @@ import ProjectCard from "./ProjectCard";
 type TypeProps = {
   onProjectCreated: (projectInfo: TypeProjectInfo) => Promise<void>;
 };
-function CreateProject(props: TypeProps): JSX.Element {
+const CreateProject: React.FC<TypeProps> = props => {
   // 机型信息
   const brandInfo = useBrandInfo();
   // 弹框控制
   const [modalVisible, setModalVisible] = useState(false);
   // 选择的模板
-  const [templateConf, setTemplateConf] = useState<TypeTemplateConf>();
+  const [selectedTemp, updateTempConf] = useState<TypeTemplateConf>();
   // 当前步骤
   const [curStep, setCurStep] = useState(0);
   // 填写完成的项目数据
@@ -43,11 +43,8 @@ function CreateProject(props: TypeProps): JSX.Element {
     designer: isDev ? "测试" : "",
     author: isDev ? "测试" : "",
     version: "1.0.0",
-    uiVersion: _.last(templateConf?.uiVersions)?.code || ""
+    uiVersion: _.last(selectedTemp?.uiVersions)?.code || ""
   };
-
-  // 模板列表
-  const templateList = useTemplateList();
 
   // 步骤控制
   const nextStep = () => setCurStep(curStep + 1);
@@ -61,14 +58,13 @@ function CreateProject(props: TypeProps): JSX.Element {
   // 复位
   const init = () => {
     jumpStep(0);
-    setTemplateConf(undefined);
+    updateTempConf(undefined);
     setProjectInfo(undefined);
     form.resetFields();
   };
 
   // 开始创建主题
   const handleCreateProject = () => {
-    // getTemplateConfigList().then(console.log);
     // init();
     openModal();
   };
@@ -97,14 +93,14 @@ function CreateProject(props: TypeProps): JSX.Element {
     }
     // 创建工程
     if (curStep === 2) {
-      if (!projectInfo || !templateConf) {
+      if (!projectInfo || !selectedTemp) {
         message.warn({
           content: "创建失败",
           duration: 1000
         });
         return;
       }
-      const uiVersion = templateConf.uiVersions.find(
+      const uiVersion = selectedTemp.uiVersions.find(
         o => o.code === form.getFieldValue("uiVersion")
       );
       if (!uiVersion) {
@@ -119,7 +115,7 @@ function CreateProject(props: TypeProps): JSX.Element {
         projectInfo,
         brandInfo,
         uiVersion,
-        templateConf
+        templateConf: selectedTemp
       });
       project.create().then(data => {
         console.log("创建工程：", data);
@@ -158,7 +154,7 @@ function CreateProject(props: TypeProps): JSX.Element {
       key="next"
       type="primary"
       onClick={handleNext}
-      disabled={!templateConf || isCreating}
+      disabled={!selectedTemp || isCreating}
       loading={isCreating}
     >
       {curStep < 2 ? "下一步" : "开始"}
@@ -172,26 +168,25 @@ function CreateProject(props: TypeProps): JSX.Element {
       case 0: {
         return (
           <TemplateManager
-            templateList={templateList}
-            selective={templateConf}
-            onSelected={setTemplateConf}
+            selectedTemp={selectedTemp}
+            onSelected={updateTempConf}
           />
         );
       }
       // 填写主题信息
       case 1: {
         // 模板版本
-        const uiVersions = templateConf?.uiVersions;
+        const uiVersions = selectedTemp?.uiVersions;
         if (
-          templateConf && // 模板信息有效
+          selectedTemp && // 模板信息有效
           Array.isArray(uiVersions) &&
-          uiVersions.length >= 0 // ui 版本信息有效
+          uiVersions.length > 0 // ui 版本信息有效
         ) {
           return (
             <StyleFillInfo>
               {/* 模板预览 */}
               <div className="template-card">
-                <TemplateCard config={templateConf} />
+                <TemplateCard config={selectedTemp} />
               </div>
               {/* 填写信息 */}
               <div className="project-info">
@@ -204,7 +199,10 @@ function CreateProject(props: TypeProps): JSX.Element {
             </StyleFillInfo>
           );
         }
-        message.info({ content: "模板版本信息错误", duration: 1000 });
+        message.info({
+          content: errCode[1007],
+          duration: 1000
+        });
         jumpStep(0);
         return null;
       }
@@ -226,6 +224,7 @@ function CreateProject(props: TypeProps): JSX.Element {
       }
     }
   };
+
   return (
     <StyleCreateProject>
       <Button type="primary" onClick={handleCreateProject}>
@@ -237,18 +236,19 @@ function CreateProject(props: TypeProps): JSX.Element {
         visible={modalVisible}
         title={`创建${brandInfo.name}主题`}
         destroyOnClose={true}
-        onCancel={() => closeModal()}
+        onCancel={closeModal}
         footer={modalFooter}
       >
         <Steps steps={["选择模板", "填写信息", "开始创作"]} current={curStep} />
         <br />
         <StyleStepContainer>
-          <StepContainer />
+          {/*  */}
+          {StepContainer()}
         </StyleStepContainer>
       </Modal>
     </StyleCreateProject>
   );
-}
+};
 
 const StyleCreateProject = styled.div``;
 
