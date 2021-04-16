@@ -1,205 +1,175 @@
-<?xml version="1.0" encoding="utf-8"?>
-<config version="1.0.0" description="桌面壁纸和首屏图标" screenWidth="1080">
-    <category tag="source"      description="图片"      type="image"/>
-	<category tag="color" 		description="颜色值"  	type="xml"/>
-	<category tag="bool" 		description="布尔值" 	type="xml"/>
-	<category tag="dimen" 		description="尺寸值" 	type="xml"/>
-	<category tag="integer" 	description="整型值" 	type="xml"/>
+<!-- <?xml version="1.0" encoding="utf-8"?> -->
 
-    <!-- 图片资源 -->
-    <source description="桌面壁纸">
-        <layout x="540" y="0" w="1080" h="2340" align="center">
-            ./default_wallpaper.jpg
-        </layout>
-        <to>wallpaper/default_wallpaper.jpg</to>
-    </source>
+<config version="1.0.0" description="桌面壁纸和首屏图标" screenWidth="1080"/>
 
-    <!-- 底栏图标 -->
-    <source description="拨号">
-        <layout x="160" y="2150" w="186" h="186" align="center" alignV="center">
-            ../icons/res/com.android.contacts.activities.TwelveKeyDialer.png
-        </layout>
-        <to>icons/res/com.android.contacts.activities.TwelveKeyDialer.png</to>
-    </source>
-    <source description="短信">
-        <layout x="415" y="2150" w="186" h="186" align="center" alignV="center">
-            ../icons/res/com.android.mms.png
-        </layout>
-        <to>icons/res/com.android.mms.png</to>
-    </source>
-    <source description="浏览器">
-        <layout x="670" y="2150" w="186" h="186" align="center" alignV="center">
-            ../icons/res/com.android.browser.png
-        </layout>
-        <to>icons/res/com.android.browser.png</to>
-    </source>
-    <source description="相机">
-        <layout x="925" y="2150" w="186" h="186" align="center" alignV="center">
-            ../icons/res/com.android.camera.png
-        </layout>
-        <to>icons/res/com.android.camera.png</to>
-    </source>
+<cover src="./default_wallpaper.jpg"/>
 
-    <!-- 第一排图标 -->
-    <source description="天气">
-        <layout x="168" y="1100" w="186" h="186" align="center" alignV="center">
-            ../icons/res/com.miui.weather2.png
-        </layout>
-    </source>
-    <color description="图标文字">
-        <layout x="168" y="1250" size="36" align="center" alignV="center">
-            天气
-        </layout>
-        <default>#ffffffff</default>
-    </color>
-    <source description="相册">
-        <layout x="415" y="1100" w="186" h="186" align="center" alignV="center">
-            ../icons/res/com.miui.gallery.png
-        </layout>
-    </source>
-    <color description="图标文字">
-        <layout x="415" y="1250" size="36" align="center" alignV="center">
-            相册
-        </layout>
-        <default>#ffffffff</default>
-    </color>
-    <source description="小米视频">
-        <layout x="670" y="1100" w="186" h="186" align="center" alignV="center">
-            ../icons/res/com.miui.video.png
-        </layout>
-    </source>
-    <color description="图标文字">
-        <layout x="670" y="1250" size="36" align="center" alignV="center">
-            小米视频
-        </layout>
-        <default>#ffffffff</default>
-    </color>
-    <source description="主题壁纸">
-        <layout x="925" y="1100" w="186" h="186" align="center" alignV="center">
-            ../icons/res/com.android.thememanager.png
-        </layout>
-    </source>
-    <color description="图标文字">
-        <layout x="925" y="1250" size="36" align="center" alignV="center">
-            主题壁纸
-        </layout>
-        <default>#ffffffff</default>
-    </color>
+<category tag="source"      description="图片"      type="image"/>
+<category tag="color" 		description="颜色值"  	type="xml"/>
+<category tag="bool" 		description="布尔值" 	type="xml"/>
+<category tag="dimen" 		description="尺寸值" 	type="xml"/>
+<category tag="integer" 	description="整型值" 	type="xml"/>
+
+<!-- 图片资源 -->
+<source description="桌面壁纸">
+    <layout x="540" y="0" w="1080" h="2340" align="center"/>
+    <from src="./default_wallpaper.jpg"/>
+    <to src="wallpaper/default_wallpaper.jpg"/>
+</source>
+
+<!-- 底栏图标 -->
+<source description="拨号">
+    <layout x="160" y="2150" w="186" h="186" align="center" alignV="center"/>
+    <from src="../icons/res/com.android.contacts.activities.TwelveKeyDialer.png"/>
+    <to src="icons/res/com.android.contacts.activities.TwelveKeyDialer.png"/>
+</source>
+<source description="短信">
+    <layout x="415" y="2150" w="186" h="186" align="center" alignV="center"/>
+    <from src="../icons/res/com.android.mms.png"/>
+    <to src="icons/res/com.android.mms.png"/>
+</source>
+<source description="浏览器">
+    <layout x="670" y="2150" w="186" h="186" align="center" alignV="center"/>
+    <from src="../icons/res/com.android.browser.png"/>
+    <to src="icons/res/com.android.browser.png"/>
+</source>
+<source description="相机">
+    <layout x="925" y="2150" w="186" h="186" align="center" alignV="center"/>
+    <from src="../icons/res/com.android.camera.png"/>
+    <to src="icons/res/com.android.camera.png"/>
+</source>
+
+<!-- 第一排图标 -->
+<source description="天气">
+    <layout x="168" y="1100" w="186" h="186" align="center" alignV="center"/>
+    <from src="../icons/res/com.miui.weather2.png"/>
+    <tp src="icons/res/com.miui.weather2.png"/>
+</source>
+<color description="图标文字">
+    <layout x="168" y="1250" size="36" align="center" alignV="center" text="天气"/>
+    <value class="" default="#ffffffff"/>
+</color>
+<source description="相册">
+    <layout x="415" y="1100" w="186" h="186" align="center" alignV="center"/>
+    <from src="../icons/res/com.miui.gallery.png"/>
+    <to src="icons/res/com.miui.gallery.png"/>
+</source>
+<color description="图标文字">
+    <layout x="415" y="1250" size="36" align="center" alignV="center" text="相册"/>
+    <value class="" default="#ffffffff"/>
+</color>
+<source description="小米视频">
+    <layout x="670" y="1100" w="186" h="186" align="center" alignV="center"/>
+    <from src="../icons/res/com.miui.video.png"/>
+    <to src="icons/res/com.miui.video.png"/>
+</source>
+<color description="图标文字">
+    <layout x="670" y="1250" size="36" align="center" alignV="center" text="小米视频"/>
+    <value class="" default="#ffffffff"/>
+</color>
+<source description="主题壁纸">
+    <layout x="925" y="1100" w="186" h="186" align="center" alignV="center"/>
+    <from src="../icons/res/com.android.thememanager.png"/>
+    <to src="icons/res/com.android.thememanager.png"/>
+</source>
+<color description="图标文字">
+    <layout x="925" y="1250" size="36" align="center" alignV="center" text="主题壁纸"/>
+    <value class="" default="#ffffffff"/>
+</color>
 
 
-    <!-- 第二排图标 -->
-    <source description="日历">
-        <layout x="168" y="1400" w="186" h="186" align="center" alignV="center">
-            ../icons/res/com.android.calendar.png
-        </layout>
-    </source>
-    <color description="图标文字">
-        <layout x="168" y="1550" size="36" align="center" alignV="center">
-            日历
-        </layout>
-        <default>#ffffffff</default>
-    </color>
-    <source description="文件管理">
-        <layout x="415" y="1400" w="186" h="186" align="center" alignV="center">
-            ../icons/res/com.android.fileexplorer.png
-        </layout>
-        <to>icons/res/com.android.fileexplorer.png</to>
-    </source>
-    <color description="图标文字">
-        <layout x="415" y="1550" size="36" align="center" alignV="center">
-            文件管理
-        </layout>
-        <default>#ffffffff</default>
-    </color>
-    <source description="小米商城">
-        <layout x="670" y="1400" w="186" h="186" align="center" alignV="center">
-            ../icons/res/com.xiaomi.shop.png
-        </layout>
-        <to>com.xiaomi.padshop</to>
-        <to>icons/res/com.xiaomi.shop</to>
-        <to>icons/res/com.xiaomi.shop.activity.MainTabActivity.shop</to>
-    </source>
-    <color description="图标文字">
-        <layout x="670" y="1550" size="36" align="center" alignV="center">
-            小米商城
-        </layout>
-        <default>#ffffffff</default>
-    </color>
-    <source description="设置">
-        <layout x="925" y="1400" w="186" h="186" align="center" alignV="center">
-            ../icons/res/com.android.settings.png
-        </layout>
-    </source>
-    <color description="设置">
-        <layout x="925" y="1550" size="36" align="center" alignV="center">
-            设置
-        </layout>
-        <default>#ffffffff</default>
-    </color>
+<!-- 第二排图标 -->
+<source description="日历">
+    <layout x="168" y="1400" w="186" h="186" align="center" alignV="center"/>
+    <from src="../icons/res/com.android.calendar.png"/>
+    <to src="icons/res/com.android.calendar.png"/>
+</source>
+<color description="图标文字">
+    <layout x="168" y="1550" size="36" align="center" alignV="center" text="日历"/>
+    <value class="" default="#ffffffff"/>
+</color>
+<source description="文件管理">
+    <layout x="415" y="1400" w="186" h="186" align="center" alignV="center"/>
+    <from src="../icons/res/com.android.fileexplorer.png"/>
+    <to src="icons/res/com.android.fileexplorer.png"/>
+</source>
+<color description="图标文字">
+    <layout x="415" y="1550" size="36" align="center" alignV="center" text="文件管理"/>
+    <value class="" default="#ffffffff"/>
+</color>
+<source description="小米商城">
+    <layout x="670" y="1400" w="186" h="186" align="center" alignV="center"/>
+    <from src="../icons/res/com.xiaomi.shop.png"/>
+    <to src="icons/res/com.xiaomi.padshop"/>
+    <to src="icons/res/com.xiaomi.shop"/>
+    <to src="icons/res/com.xiaomi.shop.activity.MainTabActivity.shop"/>
+</source>
+<color description="图标文字">
+    <layout x="670" y="1550" size="36" align="center" alignV="center" text="小米商城"/>
+    <value class="" default="#ffffffff"/>
+</color>
+<source description="设置">
+    <layout x="925" y="1400" w="186" h="186" align="center" alignV="center"/>
+    <from src="../icons/res/com.android.settings.png"/>
+    <to src="icons/res/com.android.settings.png"/>
+</source>
+<color description="设置">
+    <layout x="925" y="1550" size="36" align="center" alignV="center" text="设置"/>
+    <value class="" default="#ffffffff"/>
+</color>
 
 
-    <!-- 第三排图标 -->
-    <source description="应用商店">
-        <layout x="168" y="1700" w="186" h="186" align="center" alignV="center">
-            ../icons/res/com.xiaomi.market.png
-        </layout>
-    </source>
-    <color description="图标文字">
-        <layout x="168" y="1850" size="36" align="center" alignV="center">
-            应用商店
-        </layout>
-        <default>#ffffffff</default>
-    </color>
-    <source description="游戏中心">
-        <layout x="415" y="1700" w="186" h="186" align="center" alignV="center">
-            ../icons/res/com.xiaomi.gamecenter.png
-        </layout>
-        <to>icons/res/com.android.fileexplorer.png</to>
-    </source>
-    <color description="图标文字">
-        <layout x="415" y="1850" size="36" align="center" alignV="center">
-            游戏中心
-        </layout>
-        <default>#ffffffff</default>
-    </color>
-    <source description="手机管家">
-        <layout x="670" y="1700" w="186" h="186" align="center" alignV="center">
-            ../icons/res/com.miui.securitycenter.png
-        </layout>
-        <to>com.xiaomi.padshop</to>
-    </source>
-    <color description="图标文字">
-        <layout x="670" y="1850" size="36" align="center" alignV="center">
-            手机管家
-        </layout>
-        <default>#ffffffff</default>
-    </color>
-    <source description="米家">
-        <layout x="925" y="1700" w="186" h="186" align="center" alignV="center">
-            ../icons/res/com.xiaomi.smarthome.png
-        </layout>
-    </source>
-    <color description="图标文字">
-        <layout x="925" y="1850" size="36" align="center" alignV="center">
-            米家
-        </layout>
-        <default>#ffffffff</default>
-    </color>
+<!-- 第三排图标 -->
+<source description="应用商店">
+    <layout x="168" y="1700" w="186" h="186" align="center" alignV="center"/>
+    <from src="../icons/res/com.xiaomi.market.png"/>
+    <to src="icons/res/com.xiaomi.market.png"/>
+</source>
+<color description="图标文字">
+    <layout x="168" y="1850" size="36" align="center" alignV="center" text="应用商店"/>
+    <value class="" default="#ffffffff"/>
+</color>
+<source description="游戏中心">
+    <layout x="415" y="1700" w="186" h="186" align="center" alignV="center"/>
+    <from src="../icons/res/com.xiaomi.gamecenter.png"/>
+    <to src="icons/res/com.android.fileexplorer.png"/>
+</source>
+<color description="图标文字">
+    <layout x="415" y="1850" size="36" align="center" alignV="center" text="游戏中心"/>
+    <value class="" default="#ffffffff"/>
+</color>
+<source description="手机管家">
+    <layout x="670" y="1700" w="186" h="186" align="center" alignV="center"/>
+    <from src="../icons/res/com.miui.securitycenter.png"/>
+    <to src="icons/res/com.xiaomi.padshop.png"/>
+</source>
+<color description="图标文字">
+    <layout x="670" y="1850" size="36" align="center" alignV="center" text="手机管家"/>
+    <value class="" default="#ffffffff"/>
+</color>
+<source description="米家">
+    <layout x="925" y="1700" w="186" h="186" align="center" alignV="center"/>
+    <from src="../icons/res/com.xiaomi.smarthome.png"/>
+    <to src="icons/res/com.xiaomi.smarthome.png"/>
+</source>
+<color description="图标文字">
+    <layout x="925" y="1850" size="36" align="center" alignV="center" text="米家"/>
+    <value class="" default="#ffffffff"/>
+</color>
 
-    <!-- 分页器 -->
-    <source description="分页器（负一屏）">
-        <layout x="500" y="1950" w="40" h="40" align="center" alignV="center">
-            ../com.miui.home/res/drawable-xxhdpi/workspace_assistantpoint.png
-        </layout>
-    </source>
-    <source description="分页器（选中态）">
-        <layout x="540" y="1950" w="40" h="40" align="center" alignV="center">
-            ../com.miui.home/res/drawable-xxhdpi/workspace_seekpoint_highlight.png
-        </layout>
-    </source>
-    <source description="分页器（未选中态）">
-        <layout x="580" y="1950" w="40" h="40" align="center" alignV="center">
-            ../com.miui.home/res/drawable-xxhdpi/workspace_seekpoint_normal.png
-        </layout>
-    </source>
-</config>
+<!-- 分页器 -->
+<source description="分页器（负一屏）">
+    <layout x="500" y="1950" w="40" h="40" align="center" alignV="center"/>
+    <from src="../com.miui.home/res/drawable-xxhdpi/workspace_assistantpoint.png"/>
+    <to src="com.miui.home/res/drawable-xxhdpi/workspace_assistantpoint.png"/>
+</source>
+<source description="分页器（选中态）">
+    <layout x="540" y="1950" w="40" h="40" align="center" alignV="center"/>
+    <from src="../com.miui.home/res/drawable-xxhdpi/workspace_seekpoint_highlight.png"/>
+    <to src="com.miui.home/res/drawable-xxhdpi/workspace_seekpoint_highlight.png"/>
+</source>
+<source description="分页器（未选中态）">
+    <layout x="580" y="1950" w="40" h="40" align="center" alignV="center"/>
+    <from src="../com.miui.home/res/drawable-xxhdpi/workspace_seekpoint_normal.png"/>
+    <to src="com.miui.home/res/drawable-xxhdpi/workspace_seekpoint_normal.png"/>
+</source>

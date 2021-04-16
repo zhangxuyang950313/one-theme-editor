@@ -9,7 +9,7 @@ import { projectInfoConfig } from "@/config/editor";
 type TypeProps = {
   projectInfo: TypeProjectInfo;
 };
-function ProjectInfo(props: TypeProps): JSX.Element {
+const ProjectInfo: React.FC<TypeProps> = props => {
   const { projectInfo } = props;
   const list = Object.values<{ key: keyof TypeProjectInfo; name: string }>(
     projectInfoConfig
@@ -28,7 +28,7 @@ function ProjectInfo(props: TypeProps): JSX.Element {
       ))}
     </StyleProjectInfo>
   );
-}
+};
 
 const StyleProjectInfo = styled.div`
   .description {

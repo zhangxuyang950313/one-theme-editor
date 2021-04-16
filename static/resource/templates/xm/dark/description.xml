@@ -5,6 +5,16 @@
 <!-- UI版本 -->
 <uiVersion name="MIUI 11" src="v11"/>
 <uiVersion name="MIUI 12" src="v12"/>
+<module name="拨号与联系人" icon="v12/icons/res/com.android.contacts.activities.TwelveKeyDialer.png">
+    <class name="联系人">
+        <page src="com.android.contacts/pages/page1.xml"/>
+        <!-- <page>com.android.contacts/pages/page2.xml</page> -->
+    </class>
+    <class name="拨号盘">
+        <!-- <page>com.android.contacts/pages/page3.xml</page> -->
+        <page src="com.android.contacts/pages/page4.xml"/>
+    </class>
+</module>
 <!-- 壁纸 -->
 <module name="图标和壁纸" icon="v12/icons/res/com.android.thememanager.png">
     <!-- 桌面壁纸 -->
@@ -18,16 +28,6 @@
     </class>
     <class name="第三方图标">
         <page src="icons/pages/icons-more.xml"/>
-    </class>
-</module>
-<module name="拨号与联系人" icon="v12/icons/res/com.android.contacts.activities.TwelveKeyDialer.png">
-    <class name="联系人">
-        <page src="com.android.contacts/pages/page1.xml"/>
-        <!-- <page>com.android.contacts/pages/page2.xml</page> -->
-    </class>
-    <class name="拨号盘">
-        <!-- <page>com.android.contacts/pages/page3.xml</page> -->
-        <page src="com.android.contacts/pages/page4.xml"/>
     </class>
 </module>
 <module name="短信" icon="v12/icons/res/com.android.mms.png">

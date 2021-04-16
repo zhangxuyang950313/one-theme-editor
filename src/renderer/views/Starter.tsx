@@ -9,12 +9,15 @@ import Sidebar from "@/components/Starter/Sidebar";
 import ProjectManager from "@/components/Starter/ProjectManager";
 import { setBrandInfo } from "@/store/modules/template/action";
 import { useBrandInfoList } from "@/hooks/template";
+import { useDocumentTitle } from "@/hooks";
 
 // 开始页面
 function Starter(): JSX.Element {
+  const [, , setPresetTitle] = useDocumentTitle();
   const brandInfo = useSelector(getBrandInfo);
   const dispatch = useDispatch();
   const brandInfoList = useBrandInfoList();
+  setPresetTitle("main");
 
   return (
     <StyleHome>

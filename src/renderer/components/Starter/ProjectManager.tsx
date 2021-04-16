@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { useHistory } from "react-router";
 
 import { TypeBrandInfo } from "@/types/project";
 import { useProjectList } from "@/hooks/project";
@@ -15,6 +16,7 @@ type TypeProps = {
 function ProjectManager(props: TypeProps): JSX.Element {
   const { brandInfo } = props;
   const [projects, refreshList, isLoading] = useProjectList(brandInfo);
+  const history = useHistory();
 
   // 列表加载中、空、正常状态
   const getProjectListContent = () => {
@@ -26,7 +28,13 @@ function ProjectManager(props: TypeProps): JSX.Element {
     if (projects.length > 0) {
       return projects.map((item, key) => (
         <div className="project-card" key={key}>
-          <ProjectCard hoverable projectInfo={item} />
+          <ProjectCard
+            hoverable
+            projectInfo={item.projectInfo}
+            onClick={() => {
+              history.push(`/editor/${item._id}`);
+            }}
+          />
         </div>
       ));
     }

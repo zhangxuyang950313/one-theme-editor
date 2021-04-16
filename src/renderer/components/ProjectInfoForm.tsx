@@ -1,7 +1,7 @@
 import React, { forwardRef, useImperativeHandle } from "react";
 import styled from "styled-components";
 
-import { TypeUiVersion, TypeProjectInfo } from "@/types/project";
+import { TypeTempUiVersionConf, TypeProjectInfo } from "@/types/project";
 
 // components
 import { Form, FormInstance } from "antd";
@@ -15,7 +15,7 @@ import {
 
 type TypeProps = {
   // ui 版本列表，用于渲染 select
-  uiVersions: TypeUiVersion[];
+  uiVersions: TypeTempUiVersionConf[];
   // 初始化数据
   initialValues: TypeProjectInfo | undefined;
   form: FormInstance<TypeProjectInfo>;
@@ -64,6 +64,7 @@ function ProjectInfoForm(props: TypeProps, ref: React.ForwardedRef<TypeRef>) {
 
 const StyleProjectInfoForm = styled.div`
   width: 100%;
+  flex-shrink: 0;
 `;
 
 export default forwardRef<TypeRef, TypeProps>(ProjectInfoForm);

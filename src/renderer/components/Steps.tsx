@@ -2,10 +2,11 @@ import React from "react";
 import styled from "styled-components";
 import { CheckCircleOutlined, ClockCircleOutlined } from "@ant-design/icons";
 
-export default function Steps(props: {
+type TypeProps = {
   current: number;
   steps: string[];
-}): JSX.Element {
+};
+const Steps: React.FC<TypeProps> = props => {
   return (
     <StyleSteps>
       {props.steps.map((step, key) => {
@@ -21,7 +22,7 @@ export default function Steps(props: {
       })}
     </StyleSteps>
   );
-}
+};
 
 const StyleSteps = styled.div`
   display: flex;
@@ -56,3 +57,4 @@ const StyleStep = styled.div<StyleStepProps>`
     }
   }
 `;
+export default Steps;

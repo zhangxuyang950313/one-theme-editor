@@ -1,60 +1,75 @@
 import React from "react";
 import styled from "styled-components";
 
-import { TypeTemplateConfig } from "@/types/project";
+import { TypeTemplateConf } from "@/types/project";
 
 // components
 import { CheckCircleTwoTone } from "@ant-design/icons";
-import { Empty } from "antd";
+import { Empty, Spin } from "antd";
+import { useTemplateList } from "@/hooks/template";
 import TemplateCard from "./TemplateCard"; // 模板卡片单项
 
 type TypeProps = {
-  templateList: TypeTemplateConfig[];
-  selective?: TypeTemplateConfig;
-  onSelected: (config?: TypeTemplateConfig) => void;
+  selectedTemp: TypeTemplateConf | undefined;
+  onSelected: (config?: TypeTemplateConf) => void;
 };
 
 // 模板卡片管理
-function TemplateManager(props: TypeProps): JSX.Element {
-  const { templateList, selective, onSelected } = props;
-  return (
-    <StyleTemplateManager>
-      {templateList.length === 0 ? (
+const TemplateManager: React.FC<TypeProps> = props => {
+  const { selectedTemp, onSelected } = props;
+  // 模板列表
+  const [templateList, isLoading] = useTemplateList();
+
+  if (isLoading) {
+    return (
+      <StyleTemplateManager>
+        <Spin className="center" tip="加载中" />
+      </StyleTemplateManager>
+    );
+  }
+
+  if (templateList.length === 0) {
+    return (
+      <StyleTemplateManager>
         <Empty
-          className="empty"
+          className="center"
           image={Empty.PRESENTED_IMAGE_SIMPLE}
           description={`暂无模板`}
         />
-      ) : (
-        templateList.map((template, key) => {
-          const isActive = selective?.key === template.key;
-          const isInit = !selective?.key;
-          return (
-            <StyleCardContainer
-              isInit={isInit}
-              isActive={isActive}
-              onClick={() => {
-                // 点选中的恢复初始状态
-                onSelected(isActive ? undefined : template);
-              }}
-              key={key}
-            >
-              <TemplateCard hoverable config={template} />
-              <CheckCircleTwoTone className="check-icon" />
-            </StyleCardContainer>
-          );
-        })
-      )}
+      </StyleTemplateManager>
+    );
+  }
+
+  return (
+    <StyleTemplateManager>
+      {templateList.map((template, key) => {
+        const isActive = selectedTemp?.key === template.key;
+        const isInit = !selectedTemp?.key;
+        return (
+          <StyleCardContainer
+            key={key}
+            isInit={isInit}
+            isActive={isActive}
+            onClick={() => {
+              // 点选中的恢复初始状态
+              onSelected(isActive ? undefined : template);
+            }}
+          >
+            <TemplateCard hoverable config={template} />
+            <CheckCircleTwoTone className="check-icon" />
+          </StyleCardContainer>
+        );
+      })}
     </StyleTemplateManager>
   );
-}
+};
 
 const StyleTemplateManager = styled.div`
   display: flex;
   flex-wrap: wrap;
   height: 50vh;
   overflow-y: auto;
-  .empty {
+  .center {
     margin: auto;
   }
 `;
