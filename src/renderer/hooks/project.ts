@@ -54,9 +54,10 @@ export function useProjectById(
   const [loading, updateLoading] = useState(true);
 
   useLayoutEffect(() => {
+    console.log(`准备获取工程（${id}）`);
     getProjectById(id)
       .then(project => {
-        console.log(`获取工程${id}：`, project);
+        console.log(`获取工程（${id}）成功`, project);
         updateValue(project);
       })
       .catch(err => {
@@ -85,17 +86,13 @@ export function useLoadProject(
   useLayoutEffect(() => {
     console.log("载入工程：", data);
     if (!data) return;
-    const previewData: TypePreviewData = {
-      imageData: data.imageData,
-      pageConfData: data.pageConfData
-    };
     dispatch(initProject()); // 避免快速切换工程的内存泄漏
     dispatch(setProjectBrandInfo(data.brandInfo));
     dispatch(setProjectUiVersion(data.uiVersion));
     dispatch(setProjectDescInfo(data.projectInfo));
     dispatch(setProjectTempConf(data.templateConf));
     dispatch(setProjectPreviewConf(data.previewConf));
-    dispatch(setProjectPreviewData(previewData));
+    dispatch(setProjectPreviewData(data.previewData));
   }, [data, dispatch]);
   return data;
 }

@@ -20,30 +20,42 @@ function ProjectManager(props: TypeProps): JSX.Element {
 
   // 列表加载中、空、正常状态
   const getProjectListContent = () => {
+    // 加载状态
     if (isLoading) {
       return (
-        <Spin className="auto-margin" tip="加载中..." spinning={isLoading} />
+        <StyleCenterContainer>
+          <Spin className="auto-margin" tip="加载中..." spinning={isLoading} />
+        </StyleCenterContainer>
       );
     }
+
     if (projects.length > 0) {
-      return projects.map((item, key) => (
-        <div className="project-card" key={key}>
-          <ProjectCard
-            hoverable
-            projectInfo={item.projectInfo}
-            onClick={() => {
-              history.push(`/editor/${item._id}`);
-            }}
-          />
-        </div>
-      ));
+      return (
+        <StyleProjectList>
+          {projects.map((item, key) => (
+            <div className="project-card" key={key}>
+              <ProjectCard
+                hoverable
+                projectInfo={item.projectInfo}
+                onClick={() => {
+                  history.push(`/editor/${item._id}`);
+                }}
+              />
+            </div>
+          ))}
+        </StyleProjectList>
+      );
     }
+
+    // 空项目
     return (
-      <Empty
-        className="auto-margin"
-        image={Empty.PRESENTED_IMAGE_SIMPLE}
-        description="空空如也，快去创建一个主题吧"
-      />
+      <StyleCenterContainer>
+        <Empty
+          className="auto-margin"
+          image={Empty.PRESENTED_IMAGE_SIMPLE}
+          description="空空如也，快去创建一个主题吧"
+        />
+      </StyleCenterContainer>
     );
   };
 
@@ -60,7 +72,7 @@ function ProjectManager(props: TypeProps): JSX.Element {
         </div>
       </div>
       {/* 工程列表 */}
-      <StyleProjectList>{getProjectListContent()}</StyleProjectList>
+      {getProjectListContent()}
     </StyleProjectManager>
   );
 }
@@ -100,15 +112,20 @@ const StyleProjectList = styled.div`
   flex-wrap: wrap;
   flex-grow: 0;
   padding: 20px 30px 0 30px;
-  height: 100%;
   overflow-y: auto;
-  .auto-margin {
-    margin: auto;
-  }
   .project-card {
     width: 150px;
     height: 267px;
     margin: 0 20px 20px 0;
+  }
+`;
+
+const StyleCenterContainer = styled.div`
+  display: flex;
+  flex-grow: 0;
+  height: 100%;
+  .auto-margin {
+    margin: auto;
   }
 `;
 

@@ -6,19 +6,18 @@ import { TypeTemplateConf } from "@/types/project";
 // components
 import { CheckCircleTwoTone } from "@ant-design/icons";
 import { Empty, Spin } from "antd";
-import { useTemplateList } from "@/hooks/template";
 import TemplateCard from "./TemplateCard"; // 模板卡片单项
 
 type TypeProps = {
+  isLoading: boolean;
+  templateList: TypeTemplateConf[];
   selectedTemp: TypeTemplateConf | undefined;
   onSelected: (config?: TypeTemplateConf) => void;
 };
 
 // 模板卡片管理
 const TemplateManager: React.FC<TypeProps> = props => {
-  const { selectedTemp, onSelected } = props;
-  // 模板列表
-  const [templateList, isLoading] = useTemplateList();
+  const { templateList, selectedTemp, isLoading, onSelected } = props;
 
   if (isLoading) {
     return (

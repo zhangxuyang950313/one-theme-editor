@@ -5,7 +5,7 @@ import _ from "lodash";
 import { isDev } from "@/core/constant";
 import errCode from "@/core/error-code";
 import { TypeTemplateConf, TypeProjectInfo } from "@/types/project";
-import { useBrandInfo } from "@/hooks/template";
+import { useBrandInfo, useTemplateList } from "@/hooks/template";
 
 // components
 import { Modal, Button, message, Form } from "antd";
@@ -26,6 +26,8 @@ const CreateProject: React.FC<TypeProps> = props => {
   const brandInfo = useBrandInfo();
   // 弹框控制
   const [modalVisible, setModalVisible] = useState(false);
+  // 模板列表
+  const [templateList, isLoading] = useTemplateList();
   // 选择的模板
   const [selectedTemp, updateTempConf] = useState<TypeTemplateConf>();
   // 当前步骤
@@ -168,6 +170,8 @@ const CreateProject: React.FC<TypeProps> = props => {
       case 0: {
         return (
           <TemplateManager
+            isLoading={isLoading}
+            templateList={templateList}
             selectedTemp={selectedTemp}
             onSelected={updateTempConf}
           />

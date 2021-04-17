@@ -1,3 +1,4 @@
+import path from "path";
 import React from "react";
 import styled from "styled-components";
 
@@ -5,6 +6,7 @@ import { TypeTemplateConf } from "@/types/project";
 
 // components
 import { Card } from "antd";
+import AsyncImage from "../AsyncImage";
 
 type TypeProps = {
   hoverable?: boolean;
@@ -12,14 +14,10 @@ type TypeProps = {
 };
 
 // 模板卡片样式
-function TemplateCard(props: TypeProps): JSX.Element {
+const TemplateCard: React.FC<TypeProps> = props => {
   const { config } = props;
-  const cover = (
-    <img
-      alt="example"
-      src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
-    />
-  );
+  const coverImage = path.resolve(config.root, config.cover);
+  const cover = <AsyncImage alt="example" src={coverImage} />;
   return (
     <StyleTemplateCard data-hoverable={props.hoverable}>
       <Card hoverable={props.hoverable} style={{ width: "100%" }} cover={cover}>
@@ -30,7 +28,7 @@ function TemplateCard(props: TypeProps): JSX.Element {
       </Card>
     </StyleTemplateCard>
   );
-}
+};
 
 const StyleTemplateCard = styled.div`
   width: 100%;

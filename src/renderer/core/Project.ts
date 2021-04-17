@@ -35,13 +35,14 @@ export default class Project extends TemplateCompiler {
 
   // 从现有数据安装主题
   public setup(props: TypeProjectData): void {
-    super.imageData = props.imageData;
-    super.pageConfData = props.pageConfData;
+    const { previewData } = props;
+    super.imageData = previewData.imageData;
+    super.pageConfData = previewData.pageConfData;
     super.previewConf = props.previewConf;
     super.templateConf = props.templateConf;
     // 生成数据索引
-    super.imageDataMap = arrayToMapByKey(props.imageData, "key");
-    super.pageConfDataMap = arrayToMapByKey(props.pageConfData, "key");
+    super.imageDataMap = arrayToMapByKey(previewData.imageData, "key");
+    super.pageConfDataMap = arrayToMapByKey(previewData.pageConfData, "key");
     this.projectInfo = props.projectInfo;
     this.uiVersion = props.uiVersion;
     this.isInitialized = true;
@@ -50,26 +51,19 @@ export default class Project extends TemplateCompiler {
   // 从模板创建主题
   // 和现有数据不同的是，从模板创建主题是要解析模板数据配合版本进行初始化的，而数据是初始化后的储存
   public async create(): Promise<TypeProjectData> {
-    // 生成预览数据
-    const previewConf = await super.generateTempPreviewData();
-    this.isInitialized = true;
     // 写入数据库
-    return addProject({
+    const result = await addProject({
       brandInfo: this.brandInfo,
       uiVersion: this.uiVersion,
       projectInfo: this.projectInfo,
       templateConf: this.templateConf,
-      previewConf: previewConf,
-      imageData: this.imageData,
-      pageConfData: this.pageConfData
+      previewConf: await super.generateTempPreviewData(), // 生成预览数据
+      previewData: {
+        imageData: this.imageData,
+        pageConfData: this.pageConfData
+      }
     });
-  }
-
-  // 更新项目信息
-  public updateProjectInfo(projectInfo: TypeProjectInfo): void {
-    this.projectInfo = {
-      ...this.projectInfo,
-      ...projectInfo
-    };
+    this.isInitialized = true;
+    return result;
   }
 }

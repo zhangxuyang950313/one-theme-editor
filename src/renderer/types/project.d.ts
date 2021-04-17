@@ -74,12 +74,13 @@ export type TypePreviewData = {
   pageConfData: TypePageConfData[];
 };
 // 储存在数据库的项目数据
-export type TypeProjectData = TypePreviewData & {
+export type TypeProjectData = {
   uiVersion: TypeUiVersionConf;
   brandInfo: TypeBrandInfo;
   projectInfo: TypeProjectInfo;
   templateConf: TypeTemplateConf;
   previewConf: TypePreviewConf;
+  previewData: TypePreviewData;
 };
 
 // 从数据库取出的项目文档数据
