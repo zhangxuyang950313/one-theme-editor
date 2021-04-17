@@ -25,7 +25,7 @@ const templateState: TypeStates = {
   templateList: []
 };
 
-export default function Base(
+export default function TemplateReducer(
   state: TypeStates = templateState,
   action: TypeActions
 ): TypeStates {

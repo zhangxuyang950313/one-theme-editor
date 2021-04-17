@@ -15,7 +15,7 @@ export type TypeProjectInfo = {
 // -----------------------
 // 模板配置原始数据
 // 模板支持 ui 版本
-export type TypeTempUiVersionConf = {
+export type TypeUiVersionConf = {
   name: string;
   src: string;
   code: string;
@@ -44,7 +44,7 @@ export type TypePreviewConf = {
   name: string; // 模板名称
   cover: string; // 模板缩略图
   version: string; //
-  uiVersions: TypeTempUiVersionConf[] | []; // 系统 UI 版本
+  uiVersions: TypeUiVersionConf[]; // 系统 UI 版本
   modules: TypeTempModuleConf[];
 };
 
@@ -70,16 +70,16 @@ export type TypeTempPageConf = {
 // -----------------------
 // 以下是预览数据
 export type TypePreviewData = {
-  uiVersion: TypeTempUiVersionConf;
-  previewConf: TypePreviewConf;
   imageData: TypeImageData[];
   pageConfData: TypePageConfData[];
 };
 // 储存在数据库的项目数据
 export type TypeProjectData = TypePreviewData & {
+  uiVersion: TypeUiVersionConf;
   brandInfo: TypeBrandInfo;
   projectInfo: TypeProjectInfo;
   templateConf: TypeTemplateConf;
+  previewConf: TypePreviewConf;
 };
 
 // 从数据库取出的项目文档数据

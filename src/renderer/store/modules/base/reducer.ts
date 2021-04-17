@@ -13,7 +13,7 @@ const BaseState = {
 
 export type TypeBaseState = typeof BaseState;
 
-export default function Base(
+export default function BaseReducer(
   state: TypeBaseState = BaseState,
   action: TypeActions
 ): TypeBaseState {

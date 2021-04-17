@@ -25,7 +25,7 @@ function TemplateCard(props: TypeProps): JSX.Element {
       <Card hoverable={props.hoverable} style={{ width: "100%" }} cover={cover}>
         <Card.Meta
           title={config.name}
-          description={config.uiVersions?.map(o => o.name).join(" | ")}
+          description={config.uiVersions.map(o => o.name).join(" | ")}
         />
       </Card>
     </StyleTemplateCard>

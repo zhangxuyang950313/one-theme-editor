@@ -3,15 +3,15 @@ import {
   TypeProjectData,
   TypeProjectInfo,
   TypeTemplateConf,
-  TypeTempUiVersionConf
+  TypeUiVersionConf
 } from "@/types/project";
 import { addProject } from "./data";
 import TemplateCompiler from "./TemplateCompiler";
 import { arrayToMapByKey } from "./utils";
 
-export type TypeProjectProps = {
+export type TypeCreateProject = {
   brandInfo: TypeBrandInfo;
-  uiVersion: TypeTempUiVersionConf;
+  uiVersion: TypeUiVersionConf;
   projectInfo: TypeProjectInfo;
   templateConf: TypeTemplateConf;
 };
@@ -21,11 +21,11 @@ export default class Project extends TemplateCompiler {
   // 厂商信息
   protected brandInfo: TypeBrandInfo;
   // ui 版本
-  protected uiVersion: TypeTempUiVersionConf;
+  protected uiVersion: TypeUiVersionConf;
   // 主题描述信息
   private projectInfo: TypeProjectInfo;
 
-  constructor(props: TypeProjectProps) {
+  constructor(props: TypeCreateProject) {
     super(props);
     this.brandInfo = props.brandInfo;
     this.projectInfo = props.projectInfo;

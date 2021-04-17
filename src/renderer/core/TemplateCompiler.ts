@@ -9,7 +9,7 @@ import {
   TypeImageData,
   TypePageConfData,
   TypePreviewConf,
-  TypeTempUiVersionConf
+  TypeUiVersionConf
 } from "@/types/project";
 import {
   TypeOriginTempConf,
@@ -22,7 +22,7 @@ import {
 } from "@/config/paths";
 import { getRandomStr, localImageToBase64Async } from "./utils";
 import errCode from "./error-code";
-import { TypeProjectProps } from "./Project";
+import { TypeCreateProject } from "./Project";
 
 const config: Options.XML2JS = {
   trim: true,
@@ -184,7 +184,7 @@ export async function getTempConfList(
 // 单个模板数据解析器
 export default class TemplateCompiler {
   protected brandInfo: TypeBrandInfo;
-  protected uiVersion: TypeTempUiVersionConf;
+  protected uiVersion: TypeUiVersionConf;
   protected templateConfList?: TypeTemplateConf[]; // 模板列表
   protected templateConf: TypeTemplateConf; // 模板原始配置
   protected previewConf?: TypePreviewConf; // 用于预览的配置
@@ -194,7 +194,7 @@ export default class TemplateCompiler {
   protected pageConfDataMap!: { [x: string]: TypePageConfData }; // 提供页面配置数据索引
   private templateRoot: string; // 模板根目录
 
-  constructor(props: TypeProjectProps) {
+  constructor(props: TypeCreateProject) {
     this.brandInfo = props.brandInfo;
     this.uiVersion = props.uiVersion;
     this.templateConf = props.templateConf;

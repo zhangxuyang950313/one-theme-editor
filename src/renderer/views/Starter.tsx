@@ -12,7 +12,7 @@ import { useBrandInfoList } from "@/hooks/template";
 import { useDocumentTitle } from "@/hooks";
 
 // 开始页面
-function Starter(): JSX.Element {
+const Starter: React.FC = () => {
   const [, , setPresetTitle] = useDocumentTitle();
   const brandInfo = useSelector(getBrandInfo);
   const dispatch = useDispatch();
@@ -31,7 +31,7 @@ function Starter(): JSX.Element {
       <ProjectManager brandInfo={brandInfo} />
     </StyleHome>
   );
-}
+};
 
 const StyleHome = styled.div`
   width: 100%;
