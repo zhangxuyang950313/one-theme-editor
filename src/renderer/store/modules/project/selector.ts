@@ -48,3 +48,11 @@ export const getImageDataByKey = createSelector(
     return state.previewData?.imageData.find(o => o.key === key) || null;
   }
 );
+
+// 获取页面配置信息
+export const getPageConfByKey = createSelector(
+  getState,
+  state => (key: string) => {
+    return state.previewData?.pageConfData.find(o => o.key === key) || null;
+  }
+);

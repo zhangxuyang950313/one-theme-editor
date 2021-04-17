@@ -242,7 +242,7 @@ export default class TemplateCompiler {
         return data;
       })
       .catch(err => {
-        console.warn(errCode[1006], err);
+        console.warn(errCode[1006], file, err);
         return { key, conf: null };
       });
     return { key, task };

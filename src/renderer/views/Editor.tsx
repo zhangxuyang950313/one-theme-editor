@@ -34,9 +34,9 @@ const Editor: React.FC = () => {
 
   // 默认选择第一个模块
   useLayoutEffect(() => {
-    const firstModule = projectData?.templateConf.modules[0];
+    const firstModule = projectData?.previewConf.modules[0];
     if (firstModule) updateModule(firstModule);
-  }, [projectData?.templateConf.modules]);
+  }, [projectData?.previewConf.modules]);
 
   // 预览所需配置
   const previewConf = usePreviewConf();

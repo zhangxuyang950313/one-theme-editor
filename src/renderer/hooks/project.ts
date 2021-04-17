@@ -3,13 +3,13 @@ import { useLayoutEffect, useState, useCallback } from "react";
 import { getProjectById, getProjectsByBrand } from "@/core/data";
 import {
   getImageDataByKey,
+  getPageConfByKey,
   getProjectPreviewConf
 } from "@/store/modules/project/selector";
 import {
   TypeBrandInfo,
   TypeDatabase,
   TypePreviewConf,
-  TypePreviewData,
   TypeProjectData
 } from "@/types/project";
 import {
@@ -56,6 +56,10 @@ export function useProjectById(
   useLayoutEffect(() => {
     console.log(`准备获取工程（${id}）`);
     getProjectById(id)
+      .then(async project => {
+        await new Promise(resolve => setTimeout(resolve, 300));
+        return project;
+      })
       .then(project => {
         console.log(`获取工程（${id}）成功`, project);
         updateValue(project);
@@ -105,4 +109,9 @@ export function usePreviewConf(): TypePreviewConf | null {
 // 获取图片信息
 export function useGetImageDataByKey(): ReturnType<typeof getImageDataByKey> {
   return useSelector(getImageDataByKey);
+}
+
+// 获取页面配置信息
+export function useGetPageConfByKey(): ReturnType<typeof getPageConfByKey> {
+  return useSelector(getPageConfByKey);
 }
