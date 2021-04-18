@@ -74,7 +74,7 @@ module.exports = {
       },
       // eslint-import-resolver-alias
       alias: {
-        "@": "./src/render",
+        $: "./src",
         extensions
       }
     }

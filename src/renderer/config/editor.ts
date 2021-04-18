@@ -1,5 +1,6 @@
 // 初始化厂商信息，必须是小米
 export const initialBrand = {
+  type: "xm",
   templateDir: "xm",
   name: "小米"
 };

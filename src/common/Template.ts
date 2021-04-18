@@ -1,100 +1,32 @@
 import path from "path";
 import fse from "fs-extra";
 import _ from "lodash";
-import { xml2js, Options, Element, ElementCompact } from "xml-js";
+import errCode from "../renderer/core/error-code";
+import {
+  TypeOriginTempConf,
+  TypeOriginBrandConf,
+  TypeTempOriginPageConf
+} from "../types/xml-result";
 import {
   TypeBrandInfo,
   TypeTempPageConf,
   TypeTemplateConf,
   TypeImageData,
-  TypePageConfData,
+  TypePageConf,
   TypePreviewConf,
   TypeUiVersionConf
-} from "@/types/project";
-import {
-  TypeOriginTempConf,
-  TypeOriginBrandConf,
-  TypeTempOriginPageConf
-} from "@/types/xml-result";
-import {
-  getTemplateDirByBrand as getTempDirByBrand,
-  templateConfigFile
-} from "@/config/paths";
-import { getRandomStr, localImageToBase64Async } from "./utils";
-import errCode from "./error-code";
+} from "../types/project";
+import { getTempDirByBrand, TEMPLATE_CONFIG } from "./paths";
 import { TypeCreateProject } from "./Project";
-
-const config: Options.XML2JS = {
-  trim: true,
-  addParent: true,
-  alwaysArray: true, // 仅适用于紧凑输出，单个元素使用对象形式
-  nativeType: true, // 尝试将数字或布尔值字符串转换成对应类型
-  // nativeTypeAttributes: false, // 尝试将数字或布尔值字符串属性转换成对应类型
-  /**
-   * <?go to="there"?>
-   * will be
-   * ```json
-   * {"_instruction":{"go":{"_attributes":{"to":"there"}}}}
-   * ```
-   * rather than
-   * ```json
-   * {"_instruction":{"go":"to=\"there\""}}
-   * ```
-   */
-  instructionHasAttributes: false, // 将指令解析为属性
-  alwaysChildren: true, // 是否总是生成 elements 元素，即使为空
-  ignoreDeclaration: true, // 忽略顶部声明属性
-  ignoreComment: true, // 忽略注释
-  ignoreInstruction: false, // 忽略处理指令
-  ignoreAttributes: false, // 忽略属性
-  ignoreCdata: false, // 忽略 cData
-  ignoreDoctype: false, // 忽略文档
-  ignoreText: false // 忽略纯文本
-};
-
-// xml 解析 json 数据
-// 返回紧凑数据结构，适用于对象形式调用
-async function xml2jsonNormalized<T = Element>(
-  file: string,
-  options?: Options.XML2JS & { compact: false }
-): Promise<T>;
-// 返回完整递归数据结构，便于遍历查找
-async function xml2jsonNormalized<T = ElementCompact>(
-  file: string,
-  options?: Options.XML2JS & { compact: true }
-): Promise<T>;
-async function xml2jsonNormalized(
-  file: string,
-  options?: Options.XML2JS
-): Promise<Element | ElementCompact> {
-  if (!fse.existsSync(file)) {
-    throw new Error(`文件${file}不存在`);
-  }
-  const data = await fse.readFile(file, { encoding: "utf-8" });
-  const xmlData = xml2js(data, { ...config, ...options });
-  return xmlData;
-}
-
-// 解析 xml 返回对象形式的紧凑数据
-async function xml2jsonCompact<T = ElementCompact>(
-  file: string
-): Promise<T | Partial<T>> {
-  if (!fse.existsSync(file)) return Promise.resolve({});
-  return xml2jsonNormalized(file, { compact: true });
-}
-
-// // 解析 xml 返回完整的数组形式数据
-// async function xml2jsonElements<T = Element>(file: string): Promise<T | []> {
-//   if (!fse.existsSync(file)) return Promise.resolve([]);
-//   return xml2jsonNormalized<T>(file, { compact: false });
-// }
+import { xml2jsonCompact } from "./xmlCompiler";
+import { getRandomStr, localImageToBase64Async } from "./utils";
 
 // 解析厂商配置
 export async function compileBrandConf(): Promise<TypeBrandInfo[]> {
-  const data = await xml2jsonCompact<TypeOriginBrandConf>(templateConfigFile);
+  const data = await xml2jsonCompact<TypeOriginBrandConf>(TEMPLATE_CONFIG);
   if (!Array.isArray(data.brand)) return Promise.resolve([]);
   return data.brand.map(item =>
-    _.pick(item._attributes, ["name", "templateDir"])
+    _.pick(item._attributes, ["name", "templateDir", "type"])
   );
 }
 
@@ -134,7 +66,7 @@ export async function compilePageConf(file: string): Promise<TypeTempPageConf> {
         description: item._attributes.description || "",
         layout: item.layout?.[0]._attributes || {},
         from: item.from?.[0]._attributes.src || "",
-        to: item.to?.[0]._attributes.src || ""
+        to: item.to?.map(item => item._attributes.src) || []
       })) || [],
     xml: []
   };
@@ -175,23 +107,27 @@ export async function compileTempConf(file: string): Promise<TypeTemplateConf> {
 
 // 获取所有模板配置列表
 export async function getTempConfList(
-  brandInfo: TypeBrandInfo
+  brandType: string
 ): Promise<TypeTemplateConf[]> {
+  const brandConf = await compileBrandConf();
+  console.log({ brandConf });
+  const brandInfo = brandConf.find(o => o.type === brandType);
+  if (!brandInfo) return [];
   const queue = getTempDescFileList(brandInfo).map(compileTempConf);
   return Promise.all(queue);
 }
 
 // 单个模板数据解析器
-export default class TemplateCompiler {
+export default class Template {
   protected brandInfo: TypeBrandInfo;
   protected uiVersion: TypeUiVersionConf;
   protected templateConfList?: TypeTemplateConf[]; // 模板列表
   protected templateConf: TypeTemplateConf; // 模板原始配置
   protected previewConf?: TypePreviewConf; // 用于预览的配置
   protected imageData: TypeImageData[];
-  protected pageConfData: TypePageConfData[];
+  protected pageConfData: TypePageConf[];
   protected imageDataMap!: { [x: string]: TypeImageData }; // 提供图片数据索引
-  protected pageConfDataMap!: { [x: string]: TypePageConfData }; // 提供页面配置数据索引
+  protected pageConfDataMap!: { [x: string]: TypePageConf }; // 提供页面配置数据索引
   private templateRoot: string; // 模板根目录
 
   constructor(props: TypeCreateProject) {
@@ -291,7 +227,7 @@ export default class TemplateCompiler {
             asyncQueue.push(task);
             return key;
           })(),
-          to: item.to?.[0]._attributes.src || ""
+          to: item.to?.map(o => o._attributes.src) || []
         })) || [],
       xml: []
     };
@@ -300,7 +236,7 @@ export default class TemplateCompiler {
   // 将模板转换成预览所需数据
   protected async generateTempPreviewData(): Promise<TypePreviewConf> {
     // 加载图片和页面配置的异步队列
-    const asyncQueue: Promise<TypeImageData | TypePageConfData>[] = [];
+    const asyncQueue: Promise<TypeImageData | TypePageConf>[] = [];
     const previewConf: TypePreviewConf = {
       ...this.templateConf,
       cover: (() => {
@@ -341,7 +277,7 @@ export default class TemplateCompiler {
   }
 
   // 使用 key 获取页面配置
-  public getPageConfByKey(key: string): TypePageConfData | null {
+  public getPageConfByKey(key: string): TypePageConf | null {
     return this.pageConfDataMap[key] || null;
   }
 }

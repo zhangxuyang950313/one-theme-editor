@@ -4,7 +4,6 @@ import styled from "styled-components";
 
 import { useDocumentTitle } from "@/hooks";
 import {
-  useGetImageDataByKey,
   usePreviewConf,
   useProjectById,
   useLoadProject
@@ -26,8 +25,6 @@ const Editor: React.FC = () => {
   const [projectData, isLoading] = useProjectById(pid);
   // 选择的模块数据
   const [selectedModule, updateModule] = useState<TypeTempModuleConf>();
-
-  const getImageDataByKey = useGetImageDataByKey();
 
   // 载入工程
   useLoadProject(projectData);
@@ -78,9 +75,10 @@ const Editor: React.FC = () => {
       {/* 模块选择器 */}
       <ModuleSelector
         icons={
-          previewConf?.modules.map(
-            item => getImageDataByKey(item.icon)?.base64 || "" // 默认图标
-          ) || []
+          previewConf?.modules.map(item => ({
+            icon: "", // TODO 默认图标
+            name: item.name
+          })) || []
         }
         onSelected={index => {
           if (previewConf) {

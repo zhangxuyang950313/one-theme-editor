@@ -1,6 +1,6 @@
 import { useLayoutEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { compileBrandConf, getTempConfList } from "@/core/TemplateCompiler";
+import { compileBrandConf, getTempConfList } from "@/core/Template";
 import {
   setBrandInfoList,
   setTemplateList

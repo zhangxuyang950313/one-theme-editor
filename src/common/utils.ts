@@ -1,6 +1,34 @@
+// 随机字符串，最多11位
 import path from "path";
 import fse from "fs-extra";
-import errCode from "./error-code";
+import errCode from "../renderer/core/error-code";
+
+export function getRandomStr(
+  len: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 = 11
+): string {
+  return Math.random().toString(36).slice(2, len);
+}
+
+// 数组为空
+export function arrayIsEmpty(data: unknown): boolean {
+  return !(Array.isArray(data) && data.length > 0);
+}
+
+// 使用列表项目中的一个键值生成 map
+// 键值如果非 string 类型则该项被忽略
+export function arrayToMapByKey<T, K extends keyof T>(
+  list: T[],
+  key: K
+): { [k: string]: T } {
+  const map: { [k: string]: T } = {};
+  list.forEach(item => {
+    const k = item[key];
+    if (typeof k === "string") {
+      map[k] = item;
+    }
+  });
+  return map;
+}
 
 // pick Object with def
 export function pickObjectWithDef<T, U extends keyof T, D>(
@@ -34,7 +62,7 @@ export function checkPathExists(file: string): string {
 }
 
 // 本地图片转 base64 同步方法
-export function localImageToBase64Sync(file: TypePathLike): TypeBase64 {
+export function localImageToBase64Sync(file: string): string {
   if (!file) return "";
   const extname = path.extname(file).replace(/^\./, "");
   if (!checkPathExists(file) || !extname) return "";
@@ -43,9 +71,7 @@ export function localImageToBase64Sync(file: TypePathLike): TypeBase64 {
 }
 
 // 本地图片转 base64 异步方法
-export function localImageToBase64Async(
-  file: TypePathLike
-): Promise<TypeBase64> {
+export function localImageToBase64Async(file: string): Promise<string> {
   return new Promise((resolve, reject) => {
     if (!file) {
       reject(new Error(`${errCode[1002]}: ${file}`));

@@ -1,29 +1,23 @@
 import path from "path";
-// import fse from "fs-extra";
+import fse from "fs-extra";
 import { remote } from "electron";
 import Database from "nedb-promises";
 import { TypeBrandInfo, TypeProjectData, TypeDatabase } from "@/types/project";
 import { isDev } from "./constant";
+import { getRandomStr } from "./utils";
 
 const userDataPath = isDev
   ? path.resolve(remote.app.getAppPath(), "../userCache")
   : remote.app.getPath("userData");
 
 const projectData = path.resolve(userDataPath, "store/project.db");
-const imageData = path.resolve(userDataPath, "store/image.db");
 
-const db: Record<any, Database> = {
+const db: Record<string, Database> = {
   // 项目工程数据
   project: new Database({
     filename: projectData,
     autoload: true,
     timestampData: true
-  }),
-  // 图片
-  image: new Database({
-    filename: imageData,
-    autoload: true,
-    timestampData: false
   })
 };
 
@@ -55,9 +49,15 @@ const db: Record<any, Database> = {
 
 // 创建工程
 export async function addProject(
-  props: TypeProjectData
+  projectData: TypeProjectData
 ): Promise<TypeDatabase<TypeProjectData>> {
-  return await db.project.insert(props);
+  const key = getRandomStr();
+  const db = new Database({
+    filename: `project/${key}`,
+    autoload: true,
+    timestampData: true
+  });
+  return await db.insert(projectData);
 }
 
 // 获取所有工程
@@ -90,6 +90,13 @@ export async function getProjectById(
 ): Promise<TypeDatabase<TypeProjectData> | null> {
   if (!db.project) return null;
   return await db.project.findOne<TypeProjectData>({ _id: id });
+}
+
+export async function getImageDataByKey(props: {
+  pid: string;
+  key: string;
+}): Promise<void> {
+  //
 }
 
 // db.project?.remove({}, { multi: true });

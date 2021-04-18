@@ -4,7 +4,6 @@ import _ from "lodash";
 
 import { isDev } from "@/core/constant";
 import errCode from "@/core/error-code";
-import { TypeTemplateConf, TypeProjectInfo } from "@/types/project";
 import { useBrandInfo, useTemplateList } from "@/hooks/template";
 
 // components
@@ -12,10 +11,13 @@ import { Modal, Button, message, Form } from "antd";
 import Steps from "@/components/Steps";
 import ProjectInfo from "@/components/ProjectInfo";
 import ProjectInfoForm from "@/components/ProjectInfoForm";
-import Project from "@/core/Project";
 import TemplateManager from "./TemplateManager";
 import TemplateCard from "./TemplateCard";
 import ProjectCard from "./ProjectCard";
+
+// root
+import { TypeTemplateConf, TypeProjectInfo } from "$/types/project";
+import Project from "$/common/Project";
 
 // 创建主题按钮
 type TypeProps = {

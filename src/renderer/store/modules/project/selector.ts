@@ -1,6 +1,5 @@
 import { createSelector } from "reselect";
 import { TypeStoreState } from "@/store/index";
-import { TypeImageData } from "@/types/project";
 
 // 数据
 const getState = (state: TypeStoreState) => state.projectState;
@@ -36,23 +35,7 @@ export const getProjectPreviewConf = createSelector(
 );
 
 // 获取项目预览所需数据
-export const getProjectPreviewData = createSelector(
+export const getProjectPageConfData = createSelector(
   getState,
-  state => state.previewData
-);
-
-// 获取图片信息
-export const getImageDataByKey = createSelector(
-  getState,
-  state => (key: string) => {
-    return state.previewData?.imageData.find(o => o.key === key) || null;
-  }
-);
-
-// 获取页面配置信息
-export const getPageConfByKey = createSelector(
-  getState,
-  state => (key: string) => {
-    return state.previewData?.pageConfData.find(o => o.key === key) || null;
-  }
+  state => state.pageConfData
 );

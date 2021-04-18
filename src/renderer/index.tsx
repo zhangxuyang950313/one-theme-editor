@@ -1,3 +1,4 @@
+import child_process from "child_process";
 import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
@@ -7,9 +8,13 @@ import "antd/dist/antd.css"; // antd 样式
 import zhCN from "antd/lib/locale/zh_CN"; // antd 中文
 
 import { ConfigProvider } from "antd";
+import { remote } from "electron";
 import Router from "./router";
 import store from "./store";
 import LightTheme from "./theme/light";
+
+// child_process.exec()
+console.log(remote.app.getAppPath());
 
 function Root(): JSX.Element {
   return (

@@ -30,6 +30,7 @@ export type TypeOriginBrandConf = Partial<{
   brand: TypeAttrsContent<{
     name: string;
     templateDir: string;
+    type: string;
   }>[];
 }>;
 

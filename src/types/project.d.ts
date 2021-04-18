@@ -3,6 +3,7 @@ import { TypeTempFrom, TypeTempLayout, TypeTempTo } from "./xml-result";
 
 // 品牌信息
 export type TypeBrandInfo = {
+  type: string;
   templateDir: string;
   name: string;
 };
@@ -62,17 +63,11 @@ export type TypeTempPageConf = {
     description: string;
     layout: TypeTempLayout;
     from: TypeTempFrom["src"];
-    to: TypeTempTo["src"];
+    to: TypeTempTo["src"][];
   }[];
   xml: any[];
 };
 
-// -----------------------
-// 以下是预览数据
-export type TypePreviewData = {
-  imageData: TypeImageData[];
-  pageConfData: TypePageConfData[];
-};
 // 储存在数据库的项目数据
 export type TypeProjectData = {
   uiVersion: TypeUiVersionConf;
@@ -80,7 +75,8 @@ export type TypeProjectData = {
   projectInfo: TypeProjectInfo;
   templateConf: TypeTemplateConf;
   previewConf: TypePreviewConf;
-  previewData: TypePreviewData;
+  pageConfData: TypePageConf[];
+  imageData: TypeImageData[];
 };
 
 // 从数据库取出的项目文档数据
@@ -98,7 +94,7 @@ export type TypeImageData = {
 };
 
 // 预览页面配置储存数据
-export type TypePageConfData = {
+export type TypePageConf = {
   key: string;
   md5?: string;
   conf: TypeTempPageConf | null;

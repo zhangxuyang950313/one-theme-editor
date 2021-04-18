@@ -1,7 +1,7 @@
 import {
   TypeBrandInfo,
+  TypePageConf,
   TypePreviewConf,
-  TypePreviewData,
   TypeProjectInfo,
   TypeTemplateConf,
   TypeUiVersionConf
@@ -11,7 +11,7 @@ import {
   SET_PROJECT_BRAND_INFO,
   SET_PROJECT_DESC_INFO,
   SET_PROJECT_PREVIEW_CONF,
-  SET_PROJECT_PREVIEW_DATA,
+  SET_PROJECT_PAGE_CONF_DATA,
   SET_PROJECT_TEMP_CONF,
   SET_PROJECT_UI_VERSION
 } from "@/store/actions";
@@ -24,7 +24,7 @@ export type TypeStates = {
   projectInfo: TypeProjectInfo | null;
   templateConf: TypeTemplateConf | null;
   previewConf: TypePreviewConf | null;
-  previewData: TypePreviewData | null;
+  pageConfData: TypePageConf[];
 };
 
 const defaultState: TypeStates = {
@@ -33,7 +33,7 @@ const defaultState: TypeStates = {
   projectInfo: null,
   templateConf: null,
   previewConf: null,
-  previewData: null
+  pageConfData: []
 };
 
 const projectState: TypeStates = { ...defaultState };
@@ -61,8 +61,8 @@ export default function ProjectReducer(
     case SET_PROJECT_PREVIEW_CONF: {
       return updateState(state, { previewConf: action.previewConf });
     }
-    case SET_PROJECT_PREVIEW_DATA: {
-      return updateState(state, { previewData: action.previewData });
+    case SET_PROJECT_PAGE_CONF_DATA: {
+      return updateState(state, { pageConfData: action.pageConfData });
     }
     default: {
       return state;

@@ -33,7 +33,7 @@
 	<value class="class_color_top_title" default="#e6000000"/>
 </color>
 <color description="顶栏次要标题文字颜色">
-	<layout x="100" y="100" size="40" text="次要标题文字">
+	<layout x="100" y="100" size="40" text="次要标题文字"/>
 	<value class="class_color_top_subtitle" default="#99000000"/>
 </color>
 

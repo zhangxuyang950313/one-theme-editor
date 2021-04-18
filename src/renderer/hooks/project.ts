@@ -1,26 +1,22 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useLayoutEffect, useState, useCallback } from "react";
 import { getProjectById, getProjectsByBrand } from "@/core/data";
-import {
-  getImageDataByKey,
-  getPageConfByKey,
-  getProjectPreviewConf
-} from "@/store/modules/project/selector";
-import {
-  TypeBrandInfo,
-  TypeDatabase,
-  TypePreviewConf,
-  TypeProjectData
-} from "@/types/project";
+import { getProjectPreviewConf } from "@/store/modules/project/selector";
 import {
   initProject,
   setProjectBrandInfo,
   setProjectDescInfo,
   setProjectPreviewConf,
-  setProjectPreviewData,
+  setProjectPageConfData,
   setProjectTempConf,
   setProjectUiVersion
 } from "@/store/modules/project/action";
+import {
+  TypeBrandInfo,
+  TypeDatabase,
+  TypePreviewConf,
+  TypeProjectData
+} from "$/types/project";
 
 // 获取项目列表
 type TypeIsLoading = boolean;
@@ -96,7 +92,7 @@ export function useLoadProject(
     dispatch(setProjectDescInfo(data.projectInfo));
     dispatch(setProjectTempConf(data.templateConf));
     dispatch(setProjectPreviewConf(data.previewConf));
-    dispatch(setProjectPreviewData(data.previewData));
+    dispatch(setProjectPageConfData(data.pageConfData));
   }, [data, dispatch]);
   return data;
 }
@@ -104,14 +100,4 @@ export function useLoadProject(
 // 工程预览所需配置
 export function usePreviewConf(): TypePreviewConf | null {
   return useSelector(getProjectPreviewConf);
-}
-
-// 获取图片信息
-export function useGetImageDataByKey(): ReturnType<typeof getImageDataByKey> {
-  return useSelector(getImageDataByKey);
-}
-
-// 获取页面配置信息
-export function useGetPageConfByKey(): ReturnType<typeof getPageConfByKey> {
-  return useSelector(getPageConfByKey);
 }

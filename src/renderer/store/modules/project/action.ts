@@ -1,20 +1,20 @@
 import {
+  INIT_PROJECT,
+  SET_PROJECT_BRAND_INFO,
+  SET_PROJECT_DESC_INFO,
+  SET_PROJECT_PREVIEW_CONF,
+  SET_PROJECT_PAGE_CONF_DATA,
+  SET_PROJECT_TEMP_CONF,
+  SET_PROJECT_UI_VERSION
+} from "@/store/actions";
+import {
   TypeBrandInfo,
   TypeProjectInfo,
   TypeTemplateConf,
   TypeUiVersionConf,
   TypePreviewConf,
-  TypePreviewData
-} from "@/types/project";
-import {
-  INIT_PROJECT,
-  SET_PROJECT_BRAND_INFO,
-  SET_PROJECT_DESC_INFO,
-  SET_PROJECT_PREVIEW_CONF,
-  SET_PROJECT_PREVIEW_DATA,
-  SET_PROJECT_TEMP_CONF,
-  SET_PROJECT_UI_VERSION
-} from "@/store/actions";
+  TypePageConf
+} from "$/types/project";
 
 type TypeInitProject = {
   type: typeof INIT_PROJECT;
@@ -45,9 +45,9 @@ type TypeSetProjectPreviewConf = {
   previewConf: TypePreviewConf;
 };
 
-type TypeSetProjectPreviewData = {
-  type: typeof SET_PROJECT_PREVIEW_DATA;
-  previewData: TypePreviewData;
+type TypeSetProjectPageConfData = {
+  type: typeof SET_PROJECT_PAGE_CONF_DATA;
+  pageConfData: TypePageConf[];
 };
 
 export type TypeActions =
@@ -57,7 +57,7 @@ export type TypeActions =
   | TypeSetProjectDescInfo
   | TypeSetProjectTempConf
   | TypeSetProjectPreviewConf
-  | TypeSetProjectPreviewData;
+  | TypeSetProjectPageConfData;
 
 // 初始化工程信息
 export function initProject(): TypeInitProject {
@@ -99,9 +99,9 @@ export function setProjectPreviewConf(
   return { type: SET_PROJECT_PREVIEW_CONF, previewConf };
 }
 
-// 设置用于预览的数据
-export function setProjectPreviewData(
-  previewData: TypePreviewData
-): TypeSetProjectPreviewData {
-  return { type: SET_PROJECT_PREVIEW_DATA, previewData };
+// 设置页面配置数据
+export function setProjectPageConfData(
+  pageConfData: TypePageConf[]
+): TypeSetProjectPageConfData {
+  return { type: SET_PROJECT_PAGE_CONF_DATA, pageConfData };
 }

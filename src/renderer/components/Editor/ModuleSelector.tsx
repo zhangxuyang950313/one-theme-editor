@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
+import { Tooltip } from "antd";
+
 type TypeProps = {
-  icons: string[];
+  icons: { icon: string; name: string }[];
   onSelected: (x: number) => void;
 };
 // 模块选择器
@@ -22,7 +24,9 @@ const ModuleSelector: React.FC<TypeProps> = props => {
               onSelected(key);
             }}
           >
-            <img className="icon" alt="" src={item} />
+            <Tooltip title={item.name} placement="right">
+              <img className="icon" alt="" src={item.icon} />
+            </Tooltip>
           </StyleIcon>
         );
       })}
@@ -50,6 +54,10 @@ const StyleIcon = styled.div<TypeStyleIconProps>`
   transition: 0.4s all ease;
   .icon {
     width: 100%;
+  }
+  .name {
+    font-size: 12px;
+    text-align: center;
   }
 `;
 

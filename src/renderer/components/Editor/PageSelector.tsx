@@ -3,7 +3,6 @@ import styled from "styled-components";
 
 import { Collapse } from "antd";
 import { TypeTempPreviewClassConf } from "@/types/project";
-import { useGetImageDataByKey, useGetPageConfByKey } from "@/hooks/project";
 
 // 页面选择器
 type TypeProps = {
@@ -11,8 +10,6 @@ type TypeProps = {
 };
 const PageSelector: React.FC<TypeProps> = props => {
   const { previewClass } = props;
-  const getImageDataByKey = useGetImageDataByKey();
-  const getPageConfByKey = useGetPageConfByKey();
   return (
     <StylePageSelector>
       <Collapse
@@ -24,16 +21,11 @@ const PageSelector: React.FC<TypeProps> = props => {
             <Collapse.Panel header={item.name} key={key}>
               <StylePagePreview>
                 {item.pages.map(page => {
-                  const pageConf = getPageConfByKey(page);
-                  if (!pageConf?.conf?.cover) return null;
-                  const imageData = getImageDataByKey(pageConf.conf.cover);
+                  // const pageConf = getPageConfByKey(page);
+                  // if (!pageConf?.conf?.cover) return null;
+                  // const imageData = getImageDataByKey(pageConf.conf.cover);
                   return (
-                    <img
-                      className="image"
-                      src={imageData?.base64 || ""}
-                      key={page}
-                      alt={page}
-                    />
+                    <img className="image" src={""} key={page} alt={page} />
                   );
                 })}
               </StylePagePreview>
