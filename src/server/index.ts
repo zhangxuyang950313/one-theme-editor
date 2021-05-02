@@ -2,7 +2,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import { getTempConfList } from "common/Template";
 import { PORT, HOST } from "common/config";
-import { initProject } from "./project-handler";
+import { getProjectList, initProject } from "./project-handler";
 
 const send = {
   success: (data: any) => {
@@ -31,7 +31,7 @@ app.use((req, res, next) => {
   req.method === "OPTIONS" ? res.status(204).end() : next();
 });
 
-// 模板解析
+// 模板列表
 app.get<any, any, any, { brandType: string }>("/template/list", (req, res) => {
   getTempConfList(req.query.brandType)
     .then(templateList => {
@@ -54,22 +54,21 @@ app.post("/project/add", (req, res) => {
     });
 });
 
+// 获取工程列表
+app.get("/project/all", (req, res) => {
+  getProjectList()
+    .then(result => {
+      res.send(send.success(result));
+    })
+    .catch(err => {
+      res.send(send.fail(err));
+    });
+});
+
 // // 通过参数获取工程
 // app.get("/project/find", (req, res) => {
 //   db.projects
 //     .findOne(req.query)
-//     .then(result => {
-//       res.send(send.success(result));
-//     })
-//     .catch(err => {
-//       res.send(send.fail(err));
-//     });
-// });
-
-// // 获取所有工程
-// app.get("/project/all", (req, res) => {
-//   db.projects
-//     .find({})
 //     .then(result => {
 //       res.send(send.success(result));
 //     })

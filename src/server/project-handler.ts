@@ -14,7 +14,7 @@ function createNedb(filename: string) {
   });
 }
 
-// 初始化项目
+// 初始化工程
 export async function initProject(
   data: TypeProjectThm
 ): Promise<TypeDatabase<TypeProjectThm>> {
@@ -27,4 +27,24 @@ export async function initProject(
   const file = path.resolve(PROJECTS_DIR, filename);
   const db = createNedb(file);
   return await db.insert(data);
+}
+
+// 获取所有工程
+export async function getProjectList(): Promise<
+  TypeDatabase<TypeProjectThm>[]
+> {
+  const projects = fse.readdirSync(PROJECTS_DIR).map(name => {
+    const filename = path.resolve(PROJECTS_DIR, name);
+    const projectDB = createNedb(filename);
+    return projectDB.find<TypeProjectThm>({});
+  });
+  const projectList = await Promise.all(projects);
+  return projectList
+    .map(item => item[0])
+    .filter(Boolean)
+    .sort((a, b) => {
+      if (a.updatedAt && b.updatedAt) {
+        return b.updatedAt.getTime() - a.updatedAt.getTime();
+      } else return 0;
+    });
 }
