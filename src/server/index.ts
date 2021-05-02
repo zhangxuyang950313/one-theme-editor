@@ -2,11 +2,15 @@ import express from "express";
 import bodyParser from "body-parser";
 import { getTempConfList } from "common/Template";
 import { PORT, HOST } from "common/config";
-import { getProjectList, initProject } from "./project-handler";
+import {
+  findProjectById,
+  getProjectList,
+  initProject
+} from "./project-handler";
 
 const send = {
   success: (data: any) => {
-    return { msg: "success", data };
+    return { msg: "success", data: data || null };
   },
   fail: (err: any) => {
     return { msg: "error", data: err };
@@ -67,9 +71,8 @@ app.get("/project/all", (req, res) => {
 
 // 通过参数获取工程
 app.get<any, any, any, { id: string }>("/project/find", (req, res) => {
-  getProjectList()
-    .then(projectList => {
-      const project = projectList.find(item => item._id === req.query.id);
+  findProjectById(req.query.id)
+    .then(project => {
       res.send(send.success(project));
     })
     .catch(err => {

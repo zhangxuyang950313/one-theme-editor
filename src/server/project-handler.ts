@@ -14,6 +14,14 @@ function createNedb(filename: string) {
   });
 }
 
+// 创建索引，加速查找
+const indexFile = path.resolve(PROJECTS_DIR, "index");
+fse.ensureFileSync(indexFile);
+const index = createNedb(indexFile);
+type TypeIndex = {
+  filename: string;
+};
+
 // 初始化工程
 export async function initProject(
   data: TypeProjectThm
@@ -26,18 +34,23 @@ export async function initProject(
   }
   const file = path.resolve(PROJECTS_DIR, filename);
   const db = createNedb(file);
-  return await db.insert(data);
+  const project = await db.insert(data);
+  index.insert({ _id: project._id, filename });
+  return project;
 }
 
 // 获取所有工程
 export async function getProjectList(): Promise<
   TypeDatabase<TypeProjectThm>[]
 > {
-  const projects = fse.readdirSync(PROJECTS_DIR).map(name => {
-    const filename = path.resolve(PROJECTS_DIR, name);
-    const projectDB = createNedb(filename);
-    return projectDB.find<TypeProjectThm>({});
-  });
+  const projects = fse
+    .readdirSync(PROJECTS_DIR)
+    .filter(item => item !== "index")
+    .map(name => {
+      const filename = path.resolve(PROJECTS_DIR, name);
+      const projectDB = createNedb(filename);
+      return projectDB.find<TypeProjectThm>({});
+    });
   const projectList = await Promise.all(projects);
   return projectList
     .map(item => item[0])
@@ -47,4 +60,14 @@ export async function getProjectList(): Promise<
         return b.updatedAt.getTime() - a.updatedAt.getTime();
       } else return 0;
     });
+}
+
+// 通过 id 查找工程
+export async function findProjectById(
+  _id: string
+): Promise<TypeDatabase<TypeProjectThm> | null> {
+  const data = await index.findOne<TypeIndex>({ _id });
+  if (!data.filename) return Promise.resolve(null);
+  const project = createNedb(path.join(PROJECTS_DIR, data.filename));
+  return project.findOne({ _id });
 }

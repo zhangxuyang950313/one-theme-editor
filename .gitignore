@@ -4,6 +4,7 @@ dist
 build
 release
 release.*
+userData
 
 
 # local env files
