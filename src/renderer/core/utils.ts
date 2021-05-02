@@ -48,12 +48,12 @@ export function localImageToBase64Async(
 ): Promise<TypeBase64> {
   return new Promise((resolve, reject) => {
     if (!file) {
-      reject(new Error(`${errCode[1002]}: ${file}`));
+      reject(new Error(`${errCode[4000]}: ${file}`));
       return;
     }
     const extname = path.extname(file).replace(/^\./, "");
     if (!checkPathExists(file) || !extname) {
-      reject(new Error(`${errCode[1003]}: ${file}`));
+      reject(new Error(`${errCode[4001]}: ${file}`));
       return;
     }
     const base64 = fse.readFileSync(file, "base64");

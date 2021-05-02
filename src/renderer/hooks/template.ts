@@ -52,7 +52,7 @@ export function useTemplateList(): [TypeTemplateConf[], boolean] {
         }, 300);
       })
       .catch(err => {
-        const content = errCode[1008];
+        const content = errCode[3002];
         message.error({ content });
         console.warn(`${content}: ${err}`);
       });

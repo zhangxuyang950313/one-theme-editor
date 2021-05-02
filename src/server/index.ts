@@ -5,7 +5,8 @@ import { PORT, HOST } from "common/config";
 import {
   findProjectById,
   getProjectList,
-  initProject
+  initProject,
+  updateProject
 } from "./project-handler";
 
 const send = {
@@ -80,17 +81,16 @@ app.get<any, any, any, { id: string }>("/project/find", (req, res) => {
     });
 });
 
-// // 更新数据
-// app.post("/project/update", (req, res) => {
-//   db.projects
-//     .update({ _id: req.body._id }, req.body)
-//     .then(result => {
-//       res.send(send.success(result));
-//     })
-//     .catch(err => {
-//       res.send(send.fail(err));
-//     });
-// });
+// 更新数据
+app.post("/project/update", (req, res) => {
+  updateProject(req.body._id, req.body)
+    .then(result => {
+      res.send(send.success(result));
+    })
+    .catch(err => {
+      res.send(send.fail(err));
+    });
+});
 
 // // 删除一个工程
 // app.delete("/project", (req, res) => {

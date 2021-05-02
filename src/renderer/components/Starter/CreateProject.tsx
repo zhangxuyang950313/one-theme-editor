@@ -109,7 +109,7 @@ const CreateProject: React.FC<TypeProps> = props => {
       );
       if (!uiVersion) {
         message.warn({
-          content: errCode[1004],
+          content: errCode[2002],
           duration: 1000
         });
         return;
@@ -206,7 +206,7 @@ const CreateProject: React.FC<TypeProps> = props => {
           );
         }
         message.info({
-          content: errCode[1007],
+          content: errCode[3001],
           duration: 1000
         });
         jumpStep(0);

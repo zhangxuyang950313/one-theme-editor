@@ -44,7 +44,7 @@ export const getTempDescFileList = (brandInfo: TypeBrandInfo): string[] => {
 // 解析单个预览页面配置
 export async function compilePageConf(file: string): Promise<TypeTempPageConf> {
   if (!fse.existsSync(file)) {
-    return Promise.reject(new Error(errCode[1001]));
+    return Promise.reject(new Error(errCode[3000]));
   }
   const data = await xml2jsonCompact<TypeTempOriginPageConf>(file);
   return {
@@ -160,7 +160,7 @@ export default class Template {
         return data;
       })
       .catch(err => {
-        console.warn(errCode[1005], err);
+        console.warn(errCode[4002], err);
         return { key, base64: null };
       });
     return { key, task };
@@ -177,7 +177,7 @@ export default class Template {
         return data;
       })
       .catch(err => {
-        console.warn(errCode[1006], file, err);
+        console.warn(errCode[3003], file, err);
         return { key, conf: null };
       });
     return { key, task };
@@ -188,7 +188,7 @@ export default class Template {
     file: string
   ): Promise<TypeTempPageConf> {
     if (!fse.existsSync(file)) {
-      return Promise.reject(new Error(errCode[1001]));
+      return Promise.reject(new Error(errCode[3000]));
     }
     const root = path.dirname(file);
     const asyncQueue: Promise<TypeImageData>[] = [];

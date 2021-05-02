@@ -3,7 +3,8 @@ import fse from "fs-extra";
 import Nedb from "nedb-promises";
 import { PROJECTS_DIR } from "common/paths";
 import { getRandomStr } from "common/utils";
-import { TypeDatabase, TypeProjectThm } from "types/project";
+import { TypeDatabase, TypeProjectData, TypeProjectThm } from "types/project";
+import errCode from "../renderer/core/error-code";
 
 function createNedb(filename: string) {
   fse.ensureDirSync(path.dirname(filename));
@@ -62,12 +63,26 @@ export async function getProjectList(): Promise<
     });
 }
 
-// 通过 id 查找工程
+async function findProjectDB(_id: string): Promise<Nedb> {
+  const data = await index.findOne<TypeIndex>({ _id });
+  if (!data.filename) throw new Error(errCode[2001]);
+  const project = createNedb(path.join(PROJECTS_DIR, data.filename));
+  return project;
+}
+
+// 通过 _id 查找工程
 export async function findProjectById(
   _id: string
 ): Promise<TypeDatabase<TypeProjectThm> | null> {
-  const data = await index.findOne<TypeIndex>({ _id });
-  if (!data.filename) return Promise.resolve(null);
-  const project = createNedb(path.join(PROJECTS_DIR, data.filename));
+  const project = await findProjectDB(_id);
   return project.findOne({ _id });
+}
+
+// 通过 _id 更新一个工程数据
+export async function updateProject(
+  _id: string,
+  data: TypeProjectData
+): Promise<TypeDatabase<TypeProjectData>> {
+  const project = await findProjectDB(_id);
+  return project.update({ _id }, data, { returnUpdatedDocs: true });
 }
