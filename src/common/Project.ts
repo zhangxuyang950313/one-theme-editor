@@ -1,12 +1,12 @@
-import Template from "./Template";
-import { arrayToMapByKey } from "./utils";
 import {
   TypeBrandInfo,
   TypeProjectData,
   TypeProjectInfo,
   TypeTemplateConf,
   TypeUiVersionConf
-} from "$/types/project";
+} from "src/types/project";
+import Template from "./Template";
+import { arrayToMapByKey } from "./utils";
 
 export type TypeCreateProject = {
   brandInfo: TypeBrandInfo;

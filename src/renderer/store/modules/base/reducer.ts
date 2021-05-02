@@ -1,7 +1,7 @@
-import { SET_WINDOW_TITLE } from "@/store/actions";
+import actionType from "@/store/actions";
 
 type TypeUpdateWindowTitle = {
-  type: typeof SET_WINDOW_TITLE;
+  type: typeof actionType.SET_WINDOW_TITLE;
   title: string;
 };
 
@@ -18,7 +18,7 @@ export default function BaseReducer(
   action: TypeActions
 ): TypeBaseState {
   switch (action.type) {
-    case SET_WINDOW_TITLE: {
+    case actionType.SET_WINDOW_TITLE: {
       document.title = action.title;
       return { ...state, windowTitle: action.title };
     }

@@ -2,10 +2,10 @@ import React from "react";
 import styled from "styled-components";
 import { useHistory } from "react-router";
 
-import { TypeBrandInfo } from "@/types/project";
 import { useProjectList } from "@/hooks/project";
 
 import { Empty, Spin } from "antd";
+import { TypeBrandInfo } from "src/types/project";
 import ProjectCard from "./ProjectCard";
 import CreateProject from "./CreateProject";
 

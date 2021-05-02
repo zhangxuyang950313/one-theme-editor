@@ -5,6 +5,8 @@ import _ from "lodash";
 import { isDev } from "@/core/constant";
 import errCode from "@/core/error-code";
 import { useBrandInfo, useTemplateList } from "@/hooks/template";
+import { TypeTemplateConf, TypeProjectInfo } from "src/types/project";
+import Project from "common/Project";
 
 // components
 import { Modal, Button, message, Form } from "antd";
@@ -16,8 +18,6 @@ import TemplateCard from "./TemplateCard";
 import ProjectCard from "./ProjectCard";
 
 // root
-import { TypeTemplateConf, TypeProjectInfo } from "$/types/project";
-import Project from "$/common/Project";
 
 // 创建主题按钮
 type TypeProps = {
@@ -121,13 +121,13 @@ const CreateProject: React.FC<TypeProps> = props => {
         uiVersion,
         templateConf: selectedTemp
       });
-      project.create().then(data => {
-        console.log("创建工程：", data);
-        props.onProjectCreated(projectInfo);
-        closeModal();
-        init();
-        updateCreating(false);
-      });
+      // project.create().then(data => {
+      //   console.log("创建工程：", data);
+      //   props.onProjectCreated(projectInfo);
+      //   closeModal();
+      //   init();
+      //   updateCreating(false);
+      // });
       return;
     }
     nextStep();

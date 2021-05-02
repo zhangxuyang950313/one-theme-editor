@@ -1,10 +1,9 @@
 import path from "path";
-import fse from "fs-extra";
 import { remote } from "electron";
 import Database from "nedb-promises";
-import { TypeBrandInfo, TypeProjectData, TypeDatabase } from "@/types/project";
+import { getRandomStr } from "common/utils";
+import { TypeBrandInfo, TypeProjectData, TypeDatabase } from "types/project";
 import { isDev } from "./constant";
-import { getRandomStr } from "./utils";
 
 const userDataPath = isDev
   ? path.resolve(remote.app.getAppPath(), "../userCache")

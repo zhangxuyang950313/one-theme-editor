@@ -38,6 +38,7 @@
     "build:mac": "npm run build:render:pro && npm run build:main:pro && npm run build:electron:mac",
     "build": "npm run build:render:pro && npm run build:main:pro && npm run build:electron",
     "start": "npm run build:webpack && concurrently \"npm run build:server:dev\" \"npm run build:render:dev\" \"wait-on http://localhost:3000 && npm run start:electron\"",
+    "start:server": "node release.server/index.js",
     "render:analyzer": "npm run build:webpack && npm run webpack:render:pro:analyze",
     "lint:eslint": "eslint --config .eslintrc.js --fix --ext .js,.jsx,.ts,.tsx,.less",
     "lint:style": "stylelint --config .stylelintrc.js **/*"
@@ -72,6 +73,7 @@
     "@typescript-eslint/eslint-plugin": "^4.22.0",
     "@typescript-eslint/parser": "^4.22.0",
     "antd": "^4.15.1",
+    "axios": "^0.21.1",
     "babel-loader": "^8.2.2",
     "babel-plugin-import": "^1.13.3",
     "babel-plugin-react-scoped-css": "^1.1.1",

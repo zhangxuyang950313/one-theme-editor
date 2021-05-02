@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import { Card } from "antd";
 
-import { TypeProjectInfo } from "@/types/project";
+import { TypeProjectInfo } from "src/types/project";
 
 type TypeProps = {
   hoverable?: boolean;

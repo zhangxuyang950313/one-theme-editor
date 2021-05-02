@@ -150,8 +150,11 @@ const config: webpack.ConfigurationFactory = (env, args) => {
     },
     resolve: {
       alias: {
-        "@": path.resolve(rootDir, "src/renderer"),
-        "$": path.resolve(rootDir, "src")
+        "src": path.resolve(rootDir, "src"),
+        "server": path.resolve(rootDir, "src/server"),
+        "common": path.resolve(rootDir, "src/common"),
+        "renderer": path.resolve(rootDir, "src/renderer"),
+        "@": path.resolve(rootDir, "src/renderer")
       },
       extensions
     },

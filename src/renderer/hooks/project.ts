@@ -16,7 +16,7 @@ import {
   TypeDatabase,
   TypePreviewConf,
   TypeProjectData
-} from "$/types/project";
+} from "src/types/project";
 
 // 获取项目列表
 type TypeIsLoading = boolean;

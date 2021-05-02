@@ -1,13 +1,16 @@
 import { useLayoutEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { compileBrandConf, getTempConfList } from "@/core/Template";
 import {
   setBrandInfoList,
   setTemplateList
 } from "@/store/modules/template/action";
-import { TypeBrandInfo, TypeTemplateConf } from "@/types/project";
 import { initialBrand } from "@/config/editor";
 import { getBrandInfo } from "@/store/modules/template/selector";
+import { TypeBrandInfo, TypeTemplateConf } from "src/types/project";
+import { compileBrandConf } from "common/Template";
+import { getTemplateList } from "renderer/api/index";
+import errCode from "@/core/error-code";
+import { message } from "antd";
 
 // 获取配置的厂商列表
 export function useBrandInfoList(): TypeBrandInfo[] {
@@ -39,14 +42,20 @@ export function useTemplateList(): [TypeTemplateConf[], boolean] {
   const dispatch = useDispatch();
   const brandInfo = useBrandInfo();
   useLayoutEffect(() => {
-    getTempConfList(brandInfo).then(tempConfList => {
-      console.log("模板列表：", tempConfList);
-      dispatch(setTemplateList(tempConfList));
-      updateValue(tempConfList);
-      setTimeout(() => {
-        updateLoading(false);
-      }, 300);
-    });
+    getTemplateList(brandInfo)
+      .then(tempConfList => {
+        console.log("模板列表：", tempConfList);
+        dispatch(setTemplateList(tempConfList));
+        updateValue(tempConfList);
+        setTimeout(() => {
+          updateLoading(false);
+        }, 300);
+      })
+      .catch(err => {
+        const content = errCode[1008];
+        message.error({ content });
+        console.warn(`${content}: ${err}`);
+      });
   }, [brandInfo, dispatch]);
   return [value, loading];
 }

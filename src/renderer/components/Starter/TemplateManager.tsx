@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import { TypeTemplateConf } from "@/types/project";
+import { TypeTemplateConf } from "types/project";
 
 // components
 import { CheckCircleTwoTone } from "@ant-design/icons";
