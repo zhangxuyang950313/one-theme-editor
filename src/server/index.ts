@@ -38,7 +38,7 @@ app.get<any, any, any, { brandType: string }>("/template/list", (req, res) => {
       res.send(send.success(templateList));
     })
     .catch(err => {
-      res.send(send.fail(err));
+      res.status(400).send(send.fail(err));
     });
 });
 
@@ -50,7 +50,7 @@ app.post("/project/add", (req, res) => {
       res.send(send.success(result));
     })
     .catch(err => {
-      res.send(send.fail(err));
+      res.status(400).send(send.fail(err));
     });
 });
 
@@ -61,21 +61,21 @@ app.get("/project/all", (req, res) => {
       res.send(send.success(result));
     })
     .catch(err => {
-      res.send(send.fail(err));
+      res.status(400).send(send.fail(err));
     });
 });
 
-// // 通过参数获取工程
-// app.get("/project/find", (req, res) => {
-//   db.projects
-//     .findOne(req.query)
-//     .then(result => {
-//       res.send(send.success(result));
-//     })
-//     .catch(err => {
-//       res.send(send.fail(err));
-//     });
-// });
+// 通过参数获取工程
+app.get<any, any, any, { id: string }>("/project/find", (req, res) => {
+  getProjectList()
+    .then(projectList => {
+      const project = projectList.find(item => item._id === req.query.id);
+      res.send(send.success(project));
+    })
+    .catch(err => {
+      res.status(400).send(send.fail(err));
+    });
+});
 
 // // 更新数据
 // app.post("/project/update", (req, res) => {
