@@ -1,12 +1,12 @@
 import path from "path";
 import fse from "fs-extra";
 import _ from "lodash";
-import errCode from "../renderer/core/error-code";
 import {
   TypeOriginTempConf,
   TypeOriginBrandConf,
   TypeTempOriginPageConf
-} from "../types/xml-result";
+} from "types/xml-result";
+import errCode from "renderer/core/error-code";
 import {
   TypeBrandInfo,
   TypeTempPageConf,
@@ -15,7 +15,7 @@ import {
   TypePageConf,
   TypePreviewConf,
   TypeUiVersionConf
-} from "../types/project";
+} from "types/project";
 import { getTempDirByBrand, TEMPLATE_CONFIG } from "./paths";
 import { TypeCreateProject } from "./Project";
 import { xml2jsonCompact } from "./xmlCompiler";
@@ -110,7 +110,6 @@ export async function getTempConfList(
   brandType: string
 ): Promise<TypeTemplateConf[]> {
   const brandConf = await compileBrandConf();
-  console.log({ brandConf });
   const brandInfo = brandConf.find(o => o.type === brandType);
   if (!brandInfo) return [];
   const queue = getTempDescFileList(brandInfo).map(compileTempConf);

@@ -1,28 +1,15 @@
 import express from "express";
 import bodyParser from "body-parser";
-import Nedb from "nedb-promises";
-import { PROJECTS_FILE } from "src/common/paths";
-import { getTempConfList } from "src/common/Template";
-import { PORT, HOST } from "src/common/config";
-
-function createNedb(filename: string) {
-  return new Nedb({
-    filename,
-    autoload: true,
-    timestampData: true
-  });
-}
-
-const db: Record<string, Nedb> = {
-  projects: createNedb(PROJECTS_FILE)
-};
+import { getTempConfList } from "common/Template";
+import { PORT, HOST } from "common/config";
+import { initProject } from "./project-handler";
 
 const send = {
   success: (data: any) => {
     return { msg: "success", data };
   },
   fail: (err: any) => {
-    return { msg: "error", info: err };
+    return { msg: "error", data: err };
   }
 };
 
@@ -47,21 +34,18 @@ app.use((req, res, next) => {
 // 模板解析
 app.get<any, any, any, { brandType: string }>("/template/list", (req, res) => {
   getTempConfList(req.query.brandType)
-    .then(result => {
-      res.send(send.success(result));
+    .then(templateList => {
+      res.send(send.success(templateList));
     })
     .catch(err => {
       res.send(send.fail(err));
     });
 });
 
-// ------------------------------ //
-
-// 工程信息
+// ---------------工程信息--------------- //
 // 添加工程
 app.post("/project/add", (req, res) => {
-  db.projects
-    .insert(req.body)
+  initProject(req.body)
     .then(result => {
       res.send(send.success(result));
     })
@@ -70,65 +54,65 @@ app.post("/project/add", (req, res) => {
     });
 });
 
-// 通过参数获取工程
-app.get("/project/find", (req, res) => {
-  db.projects
-    .findOne(req.query)
-    .then(result => {
-      res.send(send.success(result));
-    })
-    .catch(err => {
-      res.send(send.fail(err));
-    });
-});
+// // 通过参数获取工程
+// app.get("/project/find", (req, res) => {
+//   db.projects
+//     .findOne(req.query)
+//     .then(result => {
+//       res.send(send.success(result));
+//     })
+//     .catch(err => {
+//       res.send(send.fail(err));
+//     });
+// });
 
-// 获取所有工程
-app.get("/project/all", (req, res) => {
-  db.projects
-    .find({})
-    .then(result => {
-      res.send(send.success(result));
-    })
-    .catch(err => {
-      res.send(send.fail(err));
-    });
-});
+// // 获取所有工程
+// app.get("/project/all", (req, res) => {
+//   db.projects
+//     .find({})
+//     .then(result => {
+//       res.send(send.success(result));
+//     })
+//     .catch(err => {
+//       res.send(send.fail(err));
+//     });
+// });
 
-// 更新数据
-app.post("/project/update", (req, res) => {
-  db.projects
-    .update({ _id: req.body._id }, req.body)
-    .then(result => {
-      res.send(send.success(result));
-    })
-    .catch(err => {
-      res.send(send.fail(err));
-    });
-});
+// // 更新数据
+// app.post("/project/update", (req, res) => {
+//   db.projects
+//     .update({ _id: req.body._id }, req.body)
+//     .then(result => {
+//       res.send(send.success(result));
+//     })
+//     .catch(err => {
+//       res.send(send.fail(err));
+//     });
+// });
 
-// 删除一个工程
-app.delete("/project", (req, res) => {
-  db.projects
-    .remove(req.body, { multi: true })
-    .then(result => {
-      res.send(send.success(result));
-    })
-    .catch(err => {
-      res.send(send.fail(err));
-    });
-});
+// // 删除一个工程
+// app.delete("/project", (req, res) => {
+//   db.projects
+//     .remove(req.body, { multi: true })
+//     .then(result => {
+//       res.send(send.success(result));
+//     })
+//     .catch(err => {
+//       res.send(send.fail(err));
+//     });
+// });
 
-// 删除所有工程
-app.delete("/project/all", (req, res) => {
-  db.projects
-    .remove({}, { multi: true })
-    .then(result => {
-      res.send(send.success(result));
-    })
-    .catch(err => {
-      res.send(send.fail(err));
-    });
-});
+// // 删除所有工程
+// app.delete("/project/all", (req, res) => {
+//   db.projects
+//     .remove({}, { multi: true })
+//     .then(result => {
+//       res.send(send.success(result));
+//     })
+//     .catch(err => {
+//       res.send(send.fail(err));
+//     });
+// });
 
 app.listen(PORT, function () {
   console.log("应用实例，访问地址为 http://%s:%s", HOST, PORT);

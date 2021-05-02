@@ -1,4 +1,4 @@
-import { projectInfoConfig } from "@/config/editor";
+import { projectInfoConfig } from "renderer/config/editor";
 import { TypeTempFrom, TypeTempLayout, TypeTempTo } from "./xml-result";
 
 // 品牌信息
@@ -98,4 +98,11 @@ export type TypePageConf = {
   key: string;
   md5?: string;
   conf: TypeTempPageConf | null;
+};
+
+// 项目数据
+export type TypeProjectThm = {
+  projectInfo: TypeProjectInfo;
+  templateInfo: TypeTemplateConf;
+  resource: TypeImageData;
 };

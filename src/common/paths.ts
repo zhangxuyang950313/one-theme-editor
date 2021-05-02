@@ -1,8 +1,8 @@
 import path from "path";
 import { TypeBrandInfo } from "../types/project";
 
-// 工程文件
-export const PROJECTS_FILE = path.resolve(__dirname, "../userData/projects");
+// 工程目录
+export const PROJECTS_DIR = path.resolve(__dirname, "../userData/projects");
 
 // 静态资源目录
 export const STATIC_DIR = path.resolve(__dirname, "../static");
