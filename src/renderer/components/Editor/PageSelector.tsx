@@ -2,11 +2,11 @@ import React from "react";
 import styled from "styled-components";
 
 import { Collapse } from "antd";
-import { TypeTempPreviewClassConf } from "types/project";
+import { TypeTempClassConf } from "types/project";
 
 // 页面选择器
 type TypeProps = {
-  previewClass: TypeTempPreviewClassConf[];
+  previewClass: TypeTempClassConf[];
 };
 const PageSelector: React.FC<TypeProps> = props => {
   const { previewClass } = props;

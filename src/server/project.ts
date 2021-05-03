@@ -3,7 +3,7 @@ import fse from "fs-extra";
 import Nedb from "nedb-promises";
 import { PROJECTS_DIR } from "common/paths";
 import { getRandomStr } from "common/utils";
-import { TypeDatabase, TypeProjectData, TypeProjectThm } from "types/project";
+import { TypeDatabase, TypeProjectData } from "types/project";
 import errCode from "renderer/core/error-code";
 
 function createNedb(filename: string) {
@@ -26,8 +26,8 @@ type TypeIndex = {
 
 // 创建工程
 export async function createProject(
-  data: TypeProjectThm
-): Promise<TypeDatabase<TypeProjectThm>> {
+  data: TypeProjectData
+): Promise<TypeDatabase<TypeProjectData>> {
   const projects = fse.readdirSync(PROJECTS_DIR);
   let filename = getRandomStr();
   // 重名检测
@@ -47,12 +47,12 @@ export async function createProject(
 // 获取所有工程
 export async function getProjectList(
   brandType: string
-): Promise<TypeDatabase<TypeProjectThm>[]> {
+): Promise<TypeDatabase<TypeProjectData>[]> {
   const projectIndex = await projectIndexDB.find<TypeIndex>({ brandType });
   const projects = projectIndex.map(item => {
     const filename = path.resolve(PROJECTS_DIR, item.filename);
     const projectDB = createNedb(filename);
-    return projectDB.findOne<TypeProjectThm>({});
+    return projectDB.findOne<TypeProjectData>({});
   });
   const projectList = await Promise.all(projects);
   return projectList
@@ -74,7 +74,7 @@ async function getProjectDB(_id: string): Promise<Nedb> {
 // 通过 _id 查找工程
 export async function findProjectById(
   _id: string
-): Promise<TypeDatabase<TypeProjectThm> | null> {
+): Promise<TypeDatabase<TypeProjectData> | null> {
   return (await getProjectDB(_id)).findOne({ _id });
 }
 

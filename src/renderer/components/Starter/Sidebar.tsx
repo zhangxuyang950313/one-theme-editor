@@ -1,15 +1,15 @@
 import React from "react";
 import styled from "styled-components";
 
-import { TypeBrandInfo } from "types/project";
+import { TypeBrandConf } from "types/project";
 import { useBrandInfoList } from "@/hooks/template";
 
 import { Menu } from "antd";
 import TopInfo from "./TopInfo";
 
 type TypeProps = {
-  defaultSelected: TypeBrandInfo;
-  onSelect: (data: TypeBrandInfo) => void;
+  defaultSelected: TypeBrandConf;
+  onSelect: (data: TypeBrandConf) => void;
 };
 // 欢迎页侧边栏
 function Sidebar(props: TypeProps): JSX.Element {

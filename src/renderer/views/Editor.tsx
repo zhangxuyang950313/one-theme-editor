@@ -90,7 +90,7 @@ const Editor: React.FC = () => {
       <StyleEditorContext>
         <EditorToolsBar />
         <StyleEditorMain>
-          <PageSelector previewClass={selectedModule?.previewClass || []} />
+          <PageSelector previewClass={selectedModule?.classes || []} />
           <ResourceContext />
         </StyleEditorMain>
       </StyleEditorContext>

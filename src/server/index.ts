@@ -2,7 +2,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import { compileBrandConf } from "common/Template";
 import { PORT, HOST } from "common/config";
-import { TypeProjectThm } from "types/project.d";
+import { TypeProjectData } from "types/project.d";
 import {
   findProjectById,
   getProjectList,
@@ -65,8 +65,8 @@ app.get<any, any, any, { id: string }>("/image", (req, res) => {
 // 获取厂商列表
 app.get("/brand/list", (req, res) => {
   compileBrandConf()
-    .then(brandList => {
-      res.send(send.success(brandList));
+    .then(brandConfList => {
+      res.send(send.success(brandConfList));
     })
     .catch(err => {
       res.status(400).send(send.fail(err));
@@ -76,8 +76,8 @@ app.get("/brand/list", (req, res) => {
 // 模板列表
 app.get<any, any, any, { brandType: string }>("/template/list", (req, res) => {
   getTemplates(req.query.brandType)
-    .then(templateList => {
-      res.send(send.success(templateList));
+    .then(templateConfList => {
+      res.send(send.success(templateConfList));
     })
     .catch(err => {
       res.status(400).send(send.fail(err));
@@ -86,20 +86,21 @@ app.get<any, any, any, { brandType: string }>("/template/list", (req, res) => {
 
 // ---------------工程信息--------------- //
 // 添加工程
-app.post<any, any, TypeProjectThm, any>("/project/create", (req, res) => {
-  createProject(req.body).then(result => {
-    res.send(send.success(result));
-  });
-  // .catch(err => {
-  //   res.status(400).send(send.fail(err));
-  // });
+app.post<any, any, TypeProjectData, any>("/project/create", (req, res) => {
+  createProject(req.body)
+    .then(projectData => {
+      res.send(send.success(projectData));
+    })
+    .catch(err => {
+      res.status(400).send(send.fail(err));
+    });
 });
 
 // 获取工程列表
 app.get<any, any, any, { brandType: string }>("/project/list", (req, res) => {
   getProjectList(req.query.brandType)
-    .then(result => {
-      res.send(send.success(result));
+    .then(projectData => {
+      res.send(send.success(projectData));
     })
     .catch(err => {
       res.status(400).send(send.fail(err));
@@ -109,8 +110,8 @@ app.get<any, any, any, { brandType: string }>("/project/list", (req, res) => {
 // 通过参数获取工程
 app.get<any, any, any, { id: string }>("/project/find", (req, res) => {
   findProjectById(req.query.id)
-    .then(project => {
-      res.send(send.success(project));
+    .then(projectData => {
+      res.send(send.success(projectData));
     })
     .catch(err => {
       res.status(400).send(send.fail(err));
@@ -120,8 +121,8 @@ app.get<any, any, any, { id: string }>("/project/find", (req, res) => {
 // 更新数据
 app.post("/project/update", (req, res) => {
   updateProject(req.body._id, req.body)
-    .then(result => {
-      res.send(send.success(result));
+    .then(projectData => {
+      res.send(send.success(projectData));
     })
     .catch(err => {
       res.send(send.fail(err));

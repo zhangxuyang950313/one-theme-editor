@@ -2,7 +2,7 @@ import path from "path";
 import { remote } from "electron";
 import Database from "nedb-promises";
 import { getRandomStr } from "common/utils";
-import { TypeBrandInfo, TypeProjectData, TypeDatabase } from "types/project";
+import { TypeBrandConf, TypeProjectData, TypeDatabase } from "types/project";
 import { isDev } from "./constant";
 
 const userDataPath = isDev
@@ -72,7 +72,7 @@ export async function getAllProjects(): Promise<
 
 // 获取对应厂商所有工程
 export async function getProjectsByBrand(
-  brandInfo: TypeBrandInfo
+  brandInfo: TypeBrandConf
 ): Promise<TypeDatabase<TypeProjectData>[]> {
   if (!db.project) return [];
   const projects = await db.project.find<TypeProjectData>({ brandInfo });

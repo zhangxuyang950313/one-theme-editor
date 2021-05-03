@@ -1,9 +1,9 @@
 import {
-  TypeBrandInfo,
+  TypeBrandConf,
   TypePageConf,
-  TypePreviewConf,
-  TypeProjectInfo,
   TypeTemplateConf,
+  TypeProjectInfo,
+  TypeTemplateInfo,
   TypeUiVersionConf
 } from "src/types/project";
 import ACTION_TYPES from "@/store/actions";
@@ -11,11 +11,11 @@ import { updateState } from "@/store/utils";
 import { TypeActions } from "./action";
 
 export type TypeStates = {
-  brandInfo: TypeBrandInfo | null;
+  brandInfo: TypeBrandConf | null;
   uiVersion: TypeUiVersionConf | null;
   projectInfo: TypeProjectInfo | null;
-  templateConf: TypeTemplateConf | null;
-  previewConf: TypePreviewConf | null;
+  templateConf: TypeTemplateInfo | null;
+  previewConf: TypeTemplateConf | null;
   pageConfData: TypePageConf[];
 };
 

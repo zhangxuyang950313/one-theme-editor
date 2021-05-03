@@ -1,55 +1,51 @@
 import { projectInfoConfig } from "renderer/config/editor";
 import { TypeTempFrom, TypeTempLayout, TypeTempTo } from "./xml-result";
 
-// 品牌信息
 export type TypeBrandInfo = {
   type: string;
-  templateDir: string;
   name: string;
 };
 
-// 项目描述信息
+export type TypeBrandConf = TypeBrandInfo & {
+  templateDir: string;
+};
+
 export type TypeProjectInfo = {
   [k in keyof typeof projectInfoConfig]: string;
 };
 
-// -----------------------
-// 模板配置原始数据
-// 模板支持 ui 版本
-export type TypeUiVersionConf = {
+export type TypeUiVersionInfo = {
   name: string;
-  src: string;
   code: string;
 };
-// 模板预览分类
-export type TypeTempPreviewClassConf = {
+
+export type TypeUiVersionConf = TypeUiVersionInfo & {
+  src: string;
+};
+
+export type TypeTempClassConf = {
   name: string;
-  pages: string[]; // 页面配置路径
+  pages: string[];
 };
-// 模板模块配置
+
 export type TypeTempModuleConf = {
-  name: string; // 模块名称
-  icon: string; // 模块图标，用于侧边栏显示
-  // 预览图类型
-  previewClass: TypeTempPreviewClassConf[];
-};
-// 模板配置信息汇总
-export type TypeTemplateConf = TypePreviewConf & {
-  // root: string;
+  name: string;
+  icon: string;
+  classes: TypeTempClassConf[];
 };
 
-// 预览数据配置
-// 此时所有素材路径都已使用 key 来代替
-export type TypePreviewConf = {
-  key: string; // 随机键值
-  name: string; // 模板名称
-  cover: string; // 模板缩略图
-  version: string; //
-  uiVersions: TypeUiVersionConf[]; // 系统 UI 版本
-  // modules: TypeTempModuleConf[];
+export type TypeTemplateConf = {
+  key: string;
+  name: string;
+  cover: string;
+  version: string;
+  uiVersions: TypeUiVersionConf[];
 };
 
-// 预览图配置
+export type TypeTemplateInfo = TypeTemplateConf & {
+  modules: TypeTempModuleConf[];
+};
+
 export type TypeTempPageConf = {
   root: string;
   config: { version: string; description: string; screenWidth: string };
@@ -66,17 +62,6 @@ export type TypeTempPageConf = {
     to: TypeTempTo["src"][];
   }[];
   xml: any[];
-};
-
-// 储存在数据库的项目数据
-export type TypeProjectData = {
-  uiVersion: TypeUiVersionConf;
-  brandInfo: TypeBrandInfo;
-  projectInfo: TypeProjectInfo;
-  templateConf: TypeTemplateConf;
-  previewConf: TypePreviewConf;
-  pageConfData: TypePageConf[];
-  imageData: TypeImageData[];
 };
 
 // 从数据库取出的项目文档数据
@@ -102,10 +87,9 @@ export type TypePageConf = {
 };
 
 // 项目数据
-export type TypeProjectThm = {
+export type TypeProjectData = {
   brandInfo: TypeBrandInfo;
-  uiVersionInfo: TypeUiVersionConf;
+  uiVersionInfo: TypeUiVersionInfo;
   projectInfo: TypeProjectInfo;
-  templateInfo: TypeTemplateConf;
-  resource: TypeImageData[];
+  templateInfo: TypeTemplateInfo;
 };

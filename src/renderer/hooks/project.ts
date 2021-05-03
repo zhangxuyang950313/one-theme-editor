@@ -1,20 +1,20 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useLayoutEffect, useState, useCallback } from "react";
-import { getProjectById, getProjectsByBrand } from "@/core/data";
+import { getProjectById } from "@/core/data";
 import { getProjectPreviewConf } from "@/store/modules/project/selector";
+// import {
+//   initProject,
+//   setProjectBrandInfo,
+//   setProjectDescInfo,
+//   setProjectPreviewConf,
+//   setProjectPageConfData,
+//   setProjectTempConf,
+//   setProjectUiVersion
+// } from "@/store/modules/project/action";
 import {
-  initProject,
-  setProjectBrandInfo,
-  setProjectDescInfo,
-  setProjectPreviewConf,
-  setProjectPageConfData,
-  setProjectTempConf,
-  setProjectUiVersion
-} from "@/store/modules/project/action";
-import {
-  TypeBrandInfo,
+  TypeBrandConf,
   TypeDatabase,
-  TypePreviewConf,
+  TypeTemplateConf,
   TypeProjectData
 } from "src/types/project";
 import { getProjectList } from "@/api";
@@ -24,7 +24,7 @@ type TypeIsLoading = boolean;
 type TypeRefreshFn = () => Promise<void>;
 type TypeProjectDataInDoc = TypeDatabase<TypeProjectData>;
 export function useProjectList(
-  brandInfo: TypeBrandInfo
+  brandInfo: TypeBrandConf
 ): [TypeProjectDataInDoc[], TypeRefreshFn, TypeIsLoading] {
   const [value, updateValue] = useState<TypeProjectDataInDoc[]>([]);
   const [loading, updateLoading] = useState<boolean>(true);
@@ -87,18 +87,18 @@ export function useLoadProject(
   useLayoutEffect(() => {
     console.log("载入工程：", data);
     if (!data) return;
-    dispatch(initProject()); // 避免快速切换工程的内存泄漏
-    dispatch(setProjectBrandInfo(data.brandInfo));
-    dispatch(setProjectUiVersion(data.uiVersion));
-    dispatch(setProjectDescInfo(data.projectInfo));
-    dispatch(setProjectTempConf(data.templateConf));
-    dispatch(setProjectPreviewConf(data.previewConf));
-    dispatch(setProjectPageConfData(data.pageConfData));
+    // dispatch(initProject()); // 避免快速切换工程的内存泄漏
+    // dispatch(setProjectBrandInfo(data.brandInfo));
+    // dispatch(setProjectUiVersion(data.uiVersion));
+    // dispatch(setProjectDescInfo(data.projectInfo));
+    // dispatch(setProjectTempConf(data.templateConf));
+    // dispatch(setProjectPreviewConf(data.previewConf));
+    // dispatch(setProjectPageConfData(data.pageConfData));
   }, [data, dispatch]);
   return data;
 }
 
 // 工程预览所需配置
-export function usePreviewConf(): TypePreviewConf | null {
+export function usePreviewConf(): TypeTemplateConf | null {
   return useSelector(getProjectPreviewConf);
 }

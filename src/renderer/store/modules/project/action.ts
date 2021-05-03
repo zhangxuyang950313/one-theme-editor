@@ -1,10 +1,10 @@
 import ACTION_TYPES from "@/store/actions";
 import {
-  TypeBrandInfo,
+  TypeBrandConf,
   TypeProjectInfo,
-  TypeTemplateConf,
+  TypeTemplateInfo,
   TypeUiVersionConf,
-  TypePreviewConf,
+  TypeTemplateConf,
   TypePageConf
 } from "src/types/project";
 
@@ -14,7 +14,7 @@ type TypeInitProject = {
 
 type TypeSetProjectBrandInfo = {
   type: typeof ACTION_TYPES.SET_PROJECT_BRAND_INFO;
-  brandInfo: TypeBrandInfo;
+  brandInfo: TypeBrandConf;
 };
 
 type TypeSetProjectUiVersion = {
@@ -29,12 +29,12 @@ type TypeSetProjectDescInfo = {
 
 type TypeSetProjectTempConf = {
   type: typeof ACTION_TYPES.SET_PROJECT_TEMP_CONF;
-  tempConf: TypeTemplateConf;
+  tempConf: TypeTemplateInfo;
 };
 
 type TypeSetProjectPreviewConf = {
   type: typeof ACTION_TYPES.SET_PROJECT_PREVIEW_CONF;
-  previewConf: TypePreviewConf;
+  previewConf: TypeTemplateConf;
 };
 
 type TypeSetProjectPageConfData = {
@@ -58,7 +58,7 @@ export function initProject(): TypeInitProject {
 
 // 设置工程厂商信息
 export function setProjectBrandInfo(
-  brandInfo: TypeBrandInfo
+  brandInfo: TypeBrandConf
 ): TypeSetProjectBrandInfo {
   return { type: ACTION_TYPES.SET_PROJECT_BRAND_INFO, brandInfo };
 }
@@ -79,14 +79,14 @@ export function setProjectDescInfo(
 
 // 设置模板原始数据
 export function setProjectTempConf(
-  tempConf: TypeTemplateConf
+  tempConf: TypeTemplateInfo
 ): TypeSetProjectTempConf {
   return { type: ACTION_TYPES.SET_PROJECT_TEMP_CONF, tempConf };
 }
 
 // 设置用于预览的配置数据
 export function setProjectPreviewConf(
-  previewConf: TypePreviewConf
+  previewConf: TypeTemplateConf
 ): TypeSetProjectPreviewConf {
   return { type: ACTION_TYPES.SET_PROJECT_PREVIEW_CONF, previewConf };
 }

@@ -1,4 +1,4 @@
-import { TypePreviewConf } from "types/project";
+import { TypeTemplateConf } from "types/project";
 import {
   compileBrandConf,
   compileTempConf,
@@ -11,7 +11,7 @@ import { insertImageData } from "./image";
 // 获取对应厂商模板
 export async function getTemplates(
   brandType: string
-): Promise<TypePreviewConf[]> {
+): Promise<TypeTemplateConf[]> {
   const brandInfoList = await compileBrandConf();
   const brandInfo = brandInfoList.find(item => item.type === brandType);
   if (!brandInfo) return [];

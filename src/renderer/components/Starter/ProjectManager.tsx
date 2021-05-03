@@ -5,13 +5,13 @@ import { useHistory } from "react-router";
 import { useProjectList } from "@/hooks/project";
 
 import { Empty, Spin } from "antd";
-import { TypeBrandInfo } from "src/types/project";
+import { TypeBrandConf } from "src/types/project";
 import ProjectCard from "./ProjectCard";
 import CreateProject from "./CreateProject";
 
 type TypeProps = {
   // 使用机型进行隔离查询
-  brandInfo: TypeBrandInfo;
+  brandInfo: TypeBrandConf;
 };
 function ProjectManager(props: TypeProps): JSX.Element {
   const { brandInfo } = props;

@@ -5,8 +5,7 @@ import _ from "lodash";
 import { isDev } from "@/core/constant";
 import errCode from "@/core/error-code";
 import { useBrandInfo, useTemplateList } from "@/hooks/template";
-import { TypeTemplateConf, TypeProjectInfo } from "src/types/project";
-import Project from "common/Project";
+import { TypeTemplateInfo, TypeProjectInfo } from "src/types/project";
 
 // components
 import { Modal, Button, message, Form } from "antd";
@@ -32,7 +31,7 @@ const CreateProject: React.FC<TypeProps> = props => {
   // 模板列表
   const [templateList, isLoading] = useTemplateList();
   // 选择的模板
-  const [selectedTemp, updateTempConf] = useState<TypeTemplateConf>();
+  const [selectedTemp, updateTempConf] = useState<TypeTemplateInfo>();
   // 当前步骤
   const [curStep, setCurStep] = useState(0);
   // 填写完成的项目数据
@@ -116,12 +115,12 @@ const CreateProject: React.FC<TypeProps> = props => {
         return;
       }
       updateCreating(true);
+      // TODO 使用选择的模板路径生成 tempConf
       await createProject({
         projectInfo,
         brandInfo,
         uiVersionInfo: uiVersion,
         templateInfo: selectedTemp
-        // resource: {}
       }).then(data => {
         console.log("创建工程：", data);
         props.onProjectCreated(projectInfo);

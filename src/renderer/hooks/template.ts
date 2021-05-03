@@ -5,20 +5,20 @@ import {
   setTemplateList
 } from "@/store/modules/template/action";
 import { getBrandInfo } from "@/store/modules/template/selector";
-import { TypeBrandInfo, TypeTemplateConf } from "src/types/project";
-import { getBrandList, getTemplateList } from "@/api/index";
+import { TypeBrandConf, TypeTemplateInfo } from "src/types/project";
+import { getBrandConfList, getTempConfList } from "@/api/index";
 import { initialBrand } from "@/config/editor";
 import errCode from "@/core/error-code";
 import { message } from "antd";
 
 // 获取配置的厂商列表
-export function useBrandInfoList(): TypeBrandInfo[] {
-  const [value, updateValue] = useState<TypeBrandInfo[]>([]);
+export function useBrandInfoList(): TypeBrandConf[] {
+  const [value, updateValue] = useState<TypeBrandConf[]>([]);
   const dispatch = useDispatch();
   useLayoutEffect(() => {
-    getBrandList().then(conf => {
+    getBrandConfList().then(conf => {
       // 添加默认小米，去重
-      const list = [initialBrand, ...conf].reduce<TypeBrandInfo[]>((t, o) => {
+      const list = [initialBrand, ...conf].reduce<TypeBrandConf[]>((t, o) => {
         if (!t.some(item => item.templateDir === o.templateDir)) t.push(o);
         return t;
       }, []);
@@ -30,18 +30,18 @@ export function useBrandInfoList(): TypeBrandInfo[] {
 }
 
 // 当前选择的厂商信息
-export function useBrandInfo(): TypeBrandInfo {
+export function useBrandInfo(): TypeBrandConf {
   return useSelector(getBrandInfo);
 }
 
 // 获取模板列表
-export function useTemplateList(): [TypeTemplateConf[], boolean] {
-  const [value, updateValue] = useState<TypeTemplateConf[]>([]);
+export function useTemplateList(): [TypeTemplateInfo[], boolean] {
+  const [value, updateValue] = useState<TypeTemplateInfo[]>([]);
   const [loading, updateLoading] = useState(true);
   const dispatch = useDispatch();
   const brandInfo = useBrandInfo();
   useLayoutEffect(() => {
-    getTemplateList(brandInfo)
+    getTempConfList(brandInfo)
       .then(tempConfList => {
         console.log("模板列表：", tempConfList);
         dispatch(setTemplateList(tempConfList));
