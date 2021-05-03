@@ -17,6 +17,7 @@ import {
   TypePreviewConf,
   TypeProjectData
 } from "src/types/project";
+import { getProjectList } from "@/api";
 
 // 获取项目列表
 type TypeIsLoading = boolean;
@@ -30,7 +31,7 @@ export function useProjectList(
   const refresh = useCallback(async () => {
     updateLoading(true);
     setTimeout(async () => {
-      const projects = await getProjectsByBrand(brandInfo);
+      const projects = await getProjectList(brandInfo);
       console.log("获取工程列表：", projects);
       updateValue(projects);
       updateLoading(false);

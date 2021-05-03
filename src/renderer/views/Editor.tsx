@@ -8,7 +8,7 @@ import {
   useProjectById,
   useLoadProject
 } from "@/hooks/project";
-import { TypeTempModuleConf } from "@/types/project";
+import { TypeTempModuleConf } from "types/project";
 
 import { Button, Empty, Spin } from "antd";
 import ModuleSelector from "@/components/Editor/ModuleSelector";

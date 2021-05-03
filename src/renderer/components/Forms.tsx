@@ -7,7 +7,7 @@ import {
   Select,
   SelectProps
 } from "antd";
-import { TypeUiVersionConf } from "@/types/project";
+import { TypeUiVersionConf } from "types/project";
 import { projectInfoConfig } from "@/config/editor";
 
 function getRuleNormalized(label: React.ReactNode) {

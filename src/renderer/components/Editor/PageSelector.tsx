@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 import { Collapse } from "antd";
-import { TypeTempPreviewClassConf } from "@/types/project";
+import { TypeTempPreviewClassConf } from "types/project";
 
 // 页面选择器
 type TypeProps = {

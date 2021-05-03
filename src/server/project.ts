@@ -21,10 +21,11 @@ fse.ensureFileSync(indexFile);
 const index = createNedb(indexFile);
 type TypeIndex = {
   filename: string;
+  brandType: string;
 };
 
-// 初始化工程
-export async function initProject(
+// 创建工程
+export async function createProject(
   data: TypeProjectThm
 ): Promise<TypeDatabase<TypeProjectThm>> {
   const projects = fse.readdirSync(PROJECTS_DIR);
@@ -34,48 +35,47 @@ export async function initProject(
     filename = getRandomStr();
   }
   const file = path.resolve(PROJECTS_DIR, filename);
-  const db = createNedb(file);
-  const project = await db.insert(data);
-  index.insert({ _id: project._id, filename });
+  const project = await createNedb(file).insert(data);
+  index.insert({
+    _id: project._id,
+    filename,
+    brandType: data.brandInfo.type
+  });
   return project;
 }
 
 // 获取所有工程
-export async function getProjectList(): Promise<
-  TypeDatabase<TypeProjectThm>[]
-> {
-  const projects = fse
-    .readdirSync(PROJECTS_DIR)
-    .filter(item => item !== "index")
-    .map(name => {
-      const filename = path.resolve(PROJECTS_DIR, name);
-      const projectDB = createNedb(filename);
-      return projectDB.find<TypeProjectThm>({});
-    });
+export async function getProjectList(
+  brandType: string
+): Promise<TypeDatabase<TypeProjectThm>[]> {
+  const projectIndex = await index.find<TypeIndex>({ brandType });
+  const projects = projectIndex.map(item => {
+    const filename = path.resolve(PROJECTS_DIR, item.filename);
+    const projectDB = createNedb(filename);
+    return projectDB.findOne<TypeProjectThm>({});
+  });
   const projectList = await Promise.all(projects);
   return projectList
-    .map(item => item[0])
     .filter(Boolean)
-    .sort((a, b) => {
-      if (a.updatedAt && b.updatedAt) {
-        return b.updatedAt.getTime() - a.updatedAt.getTime();
-      } else return 0;
-    });
+    .sort((a, b) =>
+      a.updatedAt && b.updatedAt
+        ? b.updatedAt.getTime() - a.updatedAt.getTime()
+        : 0
+    );
 }
 
-async function findProjectDB(_id: string): Promise<Nedb> {
+// 通过 _id 获取工程数据库实例
+async function getProjectDB(_id: string): Promise<Nedb> {
   const data = await index.findOne<TypeIndex>({ _id });
   if (!data.filename) throw new Error(errCode[2001]);
-  const project = createNedb(path.join(PROJECTS_DIR, data.filename));
-  return project;
+  return createNedb(path.join(PROJECTS_DIR, data.filename));
 }
 
 // 通过 _id 查找工程
 export async function findProjectById(
   _id: string
 ): Promise<TypeDatabase<TypeProjectThm> | null> {
-  const project = await findProjectDB(_id);
-  return project.findOne({ _id });
+  return (await getProjectDB(_id)).findOne({ _id });
 }
 
 // 通过 _id 更新一个工程数据
@@ -83,6 +83,6 @@ export async function updateProject(
   _id: string,
   data: TypeProjectData
 ): Promise<TypeDatabase<TypeProjectData>> {
-  const project = await findProjectDB(_id);
+  const project = await getProjectDB(_id);
   return project.update({ _id }, data, { returnUpdatedDocs: true });
 }

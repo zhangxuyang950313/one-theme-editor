@@ -13,6 +13,7 @@ import { Modal, Button, message, Form } from "antd";
 import Steps from "@/components/Steps";
 import ProjectInfo from "@/components/ProjectInfo";
 import ProjectInfoForm from "@/components/ProjectInfoForm";
+import { createProject } from "@/api";
 import TemplateManager from "./TemplateManager";
 import TemplateCard from "./TemplateCard";
 import ProjectCard from "./ProjectCard";
@@ -115,11 +116,12 @@ const CreateProject: React.FC<TypeProps> = props => {
         return;
       }
       updateCreating(true);
-      const project = new Project({
+      await createProject({
         projectInfo,
         brandInfo,
-        uiVersion,
-        templateConf: selectedTemp
+        uiVersionInfo: uiVersion,
+        templateInfo: selectedTemp
+        // resource: {}
       });
       // project.create().then(data => {
       //   console.log("创建工程：", data);

@@ -102,7 +102,9 @@ export type TypePageConf = {
 
 // 项目数据
 export type TypeProjectThm = {
+  brandInfo: TypeBrandInfo;
+  uiVersionInfo: TypeUiVersionConf;
   projectInfo: TypeProjectInfo;
   templateInfo: TypeTemplateConf;
-  resource: TypeImageData;
+  resource: TypeImageData[];
 };

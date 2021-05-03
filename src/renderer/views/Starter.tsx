@@ -8,7 +8,6 @@ import { getBrandInfo } from "@/store/modules/template/selector";
 import Sidebar from "@/components/Starter/Sidebar";
 import ProjectManager from "@/components/Starter/ProjectManager";
 import { setBrandInfo } from "@/store/modules/template/action";
-import { useBrandInfoList } from "@/hooks/template";
 import { useDocumentTitle } from "@/hooks";
 
 // 开始页面
@@ -16,14 +15,12 @@ const Starter: React.FC = () => {
   const [, , setPresetTitle] = useDocumentTitle();
   const brandInfo = useSelector(getBrandInfo);
   const dispatch = useDispatch();
-  const brandInfoList = useBrandInfoList();
   setPresetTitle("main");
 
   return (
     <StyleHome>
       {/* 侧边栏 */}
       <Sidebar
-        brandInfoList={brandInfoList}
         defaultSelected={brandInfo}
         onSelect={data => dispatch(setBrandInfo(data))}
       />

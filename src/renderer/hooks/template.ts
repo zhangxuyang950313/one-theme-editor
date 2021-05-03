@@ -7,8 +7,7 @@ import {
 import { initialBrand } from "@/config/editor";
 import { getBrandInfo } from "@/store/modules/template/selector";
 import { TypeBrandInfo, TypeTemplateConf } from "src/types/project";
-import { compileBrandConf } from "common/Template";
-import { getTemplateList } from "renderer/api/index";
+import { getBrandList, getTemplateList } from "renderer/api/index";
 import errCode from "@/core/error-code";
 import { message } from "antd";
 
@@ -17,7 +16,7 @@ export function useBrandInfoList(): TypeBrandInfo[] {
   const [value, updateValue] = useState<TypeBrandInfo[]>([]);
   const dispatch = useDispatch();
   useLayoutEffect(() => {
-    compileBrandConf().then(conf => {
+    getBrandList().then(conf => {
       // 添加默认小米，去重
       const list = [initialBrand, ...conf].reduce<TypeBrandInfo[]>((t, o) => {
         if (!t.some(item => item.templateDir === o.templateDir)) t.push(o);

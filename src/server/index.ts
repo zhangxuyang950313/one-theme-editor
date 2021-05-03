@@ -1,13 +1,14 @@
 import express from "express";
 import bodyParser from "body-parser";
-import { getTempConfList } from "common/Template";
+import { getTempConfList, compileBrandConf } from "common/Template";
 import { PORT, HOST } from "common/config";
+import { TypeProjectThm } from "types/project.d";
 import {
   findProjectById,
   getProjectList,
-  initProject,
+  createProject,
   updateProject
-} from "./project-handler";
+} from "./project";
 
 const send = {
   success: (data: any) => {
@@ -36,6 +37,27 @@ app.use((req, res, next) => {
   req.method === "OPTIONS" ? res.status(204).end() : next();
 });
 
+// 通过工程 _id 和图片 key 获取图片数据
+app.get<any, any, any, { _id: string; key: string }>("/image", (req, res) => {
+  findProjectById(req.query._id).then(project => {
+    const imageData = project?.resource.find(
+      item => item.key === req.query.key
+    );
+    res.send(send.success(imageData || null));
+  });
+});
+
+// 获取厂商列表
+app.get("/brand/list", (req, res) => {
+  compileBrandConf()
+    .then(brandList => {
+      res.send(send.success(brandList));
+    })
+    .catch(err => {
+      res.status(400).send(send.fail(err));
+    });
+});
+
 // 模板列表
 app.get<any, any, any, { brandType: string }>("/template/list", (req, res) => {
   getTempConfList(req.query.brandType)
@@ -49,8 +71,8 @@ app.get<any, any, any, { brandType: string }>("/template/list", (req, res) => {
 
 // ---------------工程信息--------------- //
 // 添加工程
-app.post("/project/add", (req, res) => {
-  initProject(req.body)
+app.post<any, any, TypeProjectThm, any>("/project/create", (req, res) => {
+  createProject(req.body)
     .then(result => {
       res.send(send.success(result));
     })
@@ -60,8 +82,8 @@ app.post("/project/add", (req, res) => {
 });
 
 // 获取工程列表
-app.get("/project/all", (req, res) => {
-  getProjectList()
+app.get<any, any, any, { brandType: string }>("/project/list", (req, res) => {
+  getProjectList(req.query.brandType)
     .then(result => {
       res.send(send.success(result));
     })

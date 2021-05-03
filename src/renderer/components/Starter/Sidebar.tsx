@@ -1,20 +1,20 @@
 import React from "react";
 import styled from "styled-components";
-import { useSelector } from "react-redux";
 
-import { TypeBrandInfo } from "@/types/project";
+import { TypeBrandInfo } from "types/project";
+import { useBrandInfoList } from "@/hooks/template";
 
 import { Menu } from "antd";
 import TopInfo from "./TopInfo";
 
 type TypeProps = {
-  brandInfoList: TypeBrandInfo[];
   defaultSelected: TypeBrandInfo;
   onSelect: (data: TypeBrandInfo) => void;
 };
 // 欢迎页侧边栏
 function Sidebar(props: TypeProps): JSX.Element {
-  const { brandInfoList, defaultSelected, onSelect } = props;
+  const { defaultSelected, onSelect } = props;
+  const brandInfoList = useBrandInfoList();
 
   const renderMenu = () => {
     if (brandInfoList) {

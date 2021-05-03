@@ -1,6 +1,6 @@
 // import fs from "fs";
 // import path from "path";
-// // import { TypeBrandInfo } from "@/types/project";
+// // import { TypeBrandInfo } from "types/project";
 // import { templatesDir } from "./paths";
 
 // // // 品牌配置
