@@ -1,11 +1,17 @@
 import path from "path";
 import { TypeBrandInfo } from "../types/project";
 
-// 工程目录
-export const PROJECTS_DIR = path.resolve(__dirname, "../userData/projects");
-
 // 静态资源目录
 export const STATIC_DIR = path.resolve(__dirname, "../static");
+
+// 用户数据
+export const USER_DATA = path.resolve(__dirname, "../userData");
+
+// 用户缓存
+export const USER_CACHE = path.resolve(USER_DATA, "cache");
+
+// 工程目录
+export const PROJECTS_DIR = path.resolve(USER_DATA, "projects");
 
 // 资源目录
 export const RESOURCE_DIR = path.resolve(STATIC_DIR, "resource");

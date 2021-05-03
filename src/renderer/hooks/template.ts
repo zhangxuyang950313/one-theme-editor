@@ -4,10 +4,10 @@ import {
   setBrandInfoList,
   setTemplateList
 } from "@/store/modules/template/action";
-import { initialBrand } from "@/config/editor";
 import { getBrandInfo } from "@/store/modules/template/selector";
 import { TypeBrandInfo, TypeTemplateConf } from "src/types/project";
-import { getBrandList, getTemplateList } from "renderer/api/index";
+import { getBrandList, getTemplateList } from "@/api/index";
+import { initialBrand } from "@/config/editor";
 import errCode from "@/core/error-code";
 import { message } from "antd";
 

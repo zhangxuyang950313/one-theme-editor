@@ -35,18 +35,18 @@ export type TypeTempModuleConf = {
 };
 // 模板配置信息汇总
 export type TypeTemplateConf = TypePreviewConf & {
-  root: string;
+  // root: string;
 };
 
 // 预览数据配置
 // 此时所有素材路径都已使用 key 来代替
 export type TypePreviewConf = {
-  key: string; // 随机键值
+  // key: string; // 随机键值
   name: string; // 模板名称
   cover: string; // 模板缩略图
   version: string; //
   uiVersions: TypeUiVersionConf[]; // 系统 UI 版本
-  modules: TypeTempModuleConf[];
+  // modules: TypeTempModuleConf[];
 };
 
 // 预览图配置
@@ -88,10 +88,11 @@ export type TypeDatabase<T = { [x: string]: any }> = T & {
 
 // 图片存储数据
 export type TypeImageData = {
-  key: string;
   md5?: string;
   base64: string | null;
 };
+
+export type TypeImageDataInDoc = TypeDatabase<TypeImageData>;
 
 // 预览页面配置储存数据
 export type TypePageConf = {

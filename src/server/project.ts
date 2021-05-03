@@ -4,7 +4,7 @@ import Nedb from "nedb-promises";
 import { PROJECTS_DIR } from "common/paths";
 import { getRandomStr } from "common/utils";
 import { TypeDatabase, TypeProjectData, TypeProjectThm } from "types/project";
-import errCode from "../renderer/core/error-code";
+import errCode from "renderer/core/error-code";
 
 function createNedb(filename: string) {
   fse.ensureDirSync(path.dirname(filename));
@@ -16,9 +16,9 @@ function createNedb(filename: string) {
 }
 
 // 创建索引，加速查找
-const indexFile = path.resolve(PROJECTS_DIR, "index");
-fse.ensureFileSync(indexFile);
-const index = createNedb(indexFile);
+const projectIndexFile = path.resolve(PROJECTS_DIR, "index");
+fse.ensureFileSync(projectIndexFile);
+const projectIndexDB = createNedb(projectIndexFile);
 type TypeIndex = {
   filename: string;
   brandType: string;
@@ -36,7 +36,7 @@ export async function createProject(
   }
   const file = path.resolve(PROJECTS_DIR, filename);
   const project = await createNedb(file).insert(data);
-  index.insert({
+  projectIndexDB.insert({
     _id: project._id,
     filename,
     brandType: data.brandInfo.type
@@ -48,7 +48,7 @@ export async function createProject(
 export async function getProjectList(
   brandType: string
 ): Promise<TypeDatabase<TypeProjectThm>[]> {
-  const projectIndex = await index.find<TypeIndex>({ brandType });
+  const projectIndex = await projectIndexDB.find<TypeIndex>({ brandType });
   const projects = projectIndex.map(item => {
     const filename = path.resolve(PROJECTS_DIR, item.filename);
     const projectDB = createNedb(filename);
@@ -66,7 +66,7 @@ export async function getProjectList(
 
 // 通过 _id 获取工程数据库实例
 async function getProjectDB(_id: string): Promise<Nedb> {
-  const data = await index.findOne<TypeIndex>({ _id });
+  const data = await projectIndexDB.findOne<TypeIndex>({ _id });
   if (!data.filename) throw new Error(errCode[2001]);
   return createNedb(path.join(PROJECTS_DIR, data.filename));
 }

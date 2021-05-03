@@ -1,6 +1,6 @@
 import express from "express";
 import bodyParser from "body-parser";
-import { getTempConfList, compileBrandConf } from "common/Template";
+import { compileBrandConf } from "common/Template";
 import { PORT, HOST } from "common/config";
 import { TypeProjectThm } from "types/project.d";
 import {
@@ -9,6 +9,8 @@ import {
   createProject,
   updateProject
 } from "./project";
+import { getTemplates } from "./template";
+import { findImageData } from "./image";
 
 const send = {
   success: (data: any) => {
@@ -37,13 +39,36 @@ app.use((req, res, next) => {
   req.method === "OPTIONS" ? res.status(204).end() : next();
 });
 
-// 通过工程 _id 和图片 key 获取图片数据
-app.get<any, any, any, { _id: string; key: string }>("/image", (req, res) => {
-  findProjectById(req.query._id).then(project => {
-    const imageData = project?.resource.find(
-      item => item.key === req.query.key
+// // 通过工程 _id 和图片 key 获取图片数据
+// app.get<any, any, any, { projectId: string; imageId: string }>(
+//   "/image",
+//   (req, res) => {
+//     findProjectById(req.query.projectId).then(project => {
+//       const imageData = project?.resource.find(
+//         item => item.id === req.query.imageId
+//       );
+//       res.send(send.success(imageData || null));
+//     });
+//   }
+// );
+
+app.get<any, any, any, { id: string }>("/image", (req, res) => {
+  findImageData(req.query.id).then(async data => {
+    // const file = path.resolve(USER_CACHE, data._id);
+    // await fse.writeFile(
+    //   file,
+    //   Buffer.from(
+    //     data.base64?.replace(/^data:image\/\w+;base64,/, "") || "",
+    //     "base64"
+    //   )
+    // );
+    // console.log(file);
+    // res.sendFile(file);
+    const buffer = Buffer.from(
+      data.base64?.replace(/^data:image\/\w+;base64,/, "") || "",
+      "base64"
     );
-    res.send(send.success(imageData || null));
+    res.send(buffer);
   });
 });
 
@@ -60,7 +85,7 @@ app.get("/brand/list", (req, res) => {
 
 // 模板列表
 app.get<any, any, any, { brandType: string }>("/template/list", (req, res) => {
-  getTempConfList(req.query.brandType)
+  getTemplates(req.query.brandType)
     .then(templateList => {
       res.send(send.success(templateList));
     })

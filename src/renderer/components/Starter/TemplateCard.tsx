@@ -1,4 +1,3 @@
-import path from "path";
 import React from "react";
 import styled from "styled-components";
 
@@ -6,7 +5,6 @@ import { TypeTemplateConf } from "types/project";
 
 // components
 import { Card } from "antd";
-import AsyncImage from "../AsyncImage";
 
 type TypeProps = {
   hoverable?: boolean;
@@ -16,11 +14,13 @@ type TypeProps = {
 // 模板卡片样式
 const TemplateCard: React.FC<TypeProps> = props => {
   const { config } = props;
-  const coverImage = path.resolve(config.root, config.cover);
-  const cover = <AsyncImage alt="example" src={coverImage} />;
   return (
     <StyleTemplateCard data-hoverable={props.hoverable}>
-      <Card hoverable={props.hoverable} style={{ width: "100%" }} cover={cover}>
+      <Card
+        hoverable={props.hoverable}
+        style={{ width: "100%" }}
+        cover={<img alt={config.name} src={config.cover} />}
+      >
         <Card.Meta
           title={config.name}
           description={config.uiVersions.map(o => o.name).join(" | ")}

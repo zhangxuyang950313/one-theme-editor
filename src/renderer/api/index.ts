@@ -1,9 +1,9 @@
 import axios from "axios";
 import {
   TypeBrandInfo,
-  TypeProjectData,
   TypeProjectThm,
-  TypeTemplateConf
+  TypeTemplateConf,
+  TypeUiVersionConf
 } from "types/project";
 import { HOST, PORT } from "common/config";
 
@@ -12,10 +12,15 @@ const http = axios.create({
 });
 
 const API = {
-  // 厂商列表
-  GET_BRAND_INFO_LIST: "/brand/list",
+  // 获取厂商信息列表
+  GET_BRAND_LIST: "/brand/list",
+  // 获取模板列表
   GET_TEMPLATE_LIST: "/template/list",
+  // 获取模板配置
+  GET_TEMPLATE_CONF: "/template/conf",
+  // 获取工程列表
   GET_PROJECT_LIST: "/project/list",
+  // 创建工程
   CREATE_PROJECT: "/project/create"
 };
 
@@ -27,7 +32,7 @@ type TypeResponseFrame<T> = {
 // 获取厂商列表
 export async function getBrandList(): Promise<TypeBrandInfo[]> {
   return http
-    .get<TypeResponseFrame<TypeBrandInfo[]>>(API.GET_BRAND_INFO_LIST)
+    .get<TypeResponseFrame<TypeBrandInfo[]>>(API.GET_BRAND_LIST)
     .then(data => data.data.data);
 }
 
@@ -40,6 +45,14 @@ export async function getTemplateList(
       params: { brandType: brandInfo.type }
     })
     .then(data => data.data.data);
+}
+
+// 获取模板配置
+export async function getTemplateConf(
+  brandInfo: TypeBrandInfo,
+  uiVersion: TypeUiVersionConf
+) {
+  // todo
 }
 
 // 获取工程列表

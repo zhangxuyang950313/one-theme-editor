@@ -75,33 +75,32 @@ export async function compilePageConf(file: string): Promise<TypeTempPageConf> {
 // 解析模板配置信息
 export async function compileTempConf(file: string): Promise<TypeTemplateConf> {
   const templateData = await xml2jsonCompact<TypeOriginTempConf>(file);
-  const { description, poster, uiVersion, module: modules } = templateData;
+  const { description, poster, uiVersion } = templateData;
   const root = path.dirname(file);
   return {
-    key: getRandomStr(),
-    root,
+    // root,
     name: description?.[0]?._attributes?.name || "",
     version: description?.[0]._attributes?.version || "",
-    cover: poster?.[0]._attributes?.src || "",
+    cover: path.resolve(root, poster?.[0]._attributes?.src || ""),
     uiVersions:
       uiVersion?.map(o => ({
         name: o._attributes.name || "",
         src: o._attributes.src || "",
         code: o._attributes.code || ""
-      })) || [],
-    modules:
-      modules?.map(moduleItem => ({
-        name: moduleItem._attributes.name || "",
-        icon: moduleItem._attributes.icon || "",
-        previewClass:
-          moduleItem.class?.map(classItem => ({
-            name: classItem._attributes?.name || "",
-            pages:
-              classItem.page
-                ?.map(page => page._attributes?.src || "")
-                ?.filter(Boolean) || []
-          })) || []
       })) || []
+    // modules:
+    //   modules?.map(moduleItem => ({
+    //     name: moduleItem._attributes.name || "",
+    //     icon: moduleItem._attributes.icon || "",
+    //     previewClass:
+    //       moduleItem.class?.map(classItem => ({
+    //         name: classItem._attributes?.name || "",
+    //         pages:
+    //           classItem.page
+    //             ?.map(page => page._attributes?.src || "")
+    //             ?.filter(Boolean) || []
+    //       })) || []
+    //   })) || []
   };
 }
 
