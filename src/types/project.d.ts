@@ -25,7 +25,7 @@ export type TypeUiVersionConf = TypeUiVersionInfo & {
 
 export type TypeTempClassConf = {
   name: string;
-  pages: string[];
+  pages: TypeTempPageConf[];
 };
 
 export type TypeTempModuleConf = {
@@ -86,10 +86,16 @@ export type TypePageConf = {
   conf: TypeTempPageConf | null;
 };
 
-// 项目数据
-export type TypeProjectData = {
-  brandInfo: TypeBrandInfo;
-  uiVersionInfo: TypeUiVersionInfo;
+export type TypeCreateProjectData = {
   projectInfo: TypeProjectInfo;
+  uiVersionInfo: TypeUiVersionInfo;
+  brandInfo: TypeBrandInfo;
+  templateConf: TypeTemplateConf;
+};
+
+export type TypeProjectData = {
+  projectInfo: TypeProjectInfo;
+  uiVersionInfo: TypeUiVersionInfo;
+  brandInfo: TypeBrandInfo;
   templateInfo: TypeTemplateInfo;
 };

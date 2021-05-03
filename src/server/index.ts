@@ -2,7 +2,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import { compileBrandConf } from "common/Template";
 import { PORT, HOST } from "common/config";
-import { TypeProjectData } from "types/project.d";
+import { TypeCreateProjectData } from "types/project.d";
 import {
   findProjectById,
   getProjectList,
@@ -86,15 +86,18 @@ app.get<any, any, any, { brandType: string }>("/template/list", (req, res) => {
 
 // ---------------工程信息--------------- //
 // 添加工程
-app.post<any, any, TypeProjectData, any>("/project/create", (req, res) => {
-  createProject(req.body)
-    .then(projectData => {
-      res.send(send.success(projectData));
-    })
-    .catch(err => {
-      res.status(400).send(send.fail(err));
-    });
-});
+app.post<any, any, TypeCreateProjectData, any>(
+  "/project/create",
+  (req, res) => {
+    createProject(req.body)
+      .then(projectData => {
+        res.send(send.success(projectData));
+      })
+      .catch(err => {
+        res.status(400).send(send.fail(err));
+      });
+  }
+);
 
 // 获取工程列表
 app.get<any, any, any, { brandType: string }>("/project/list", (req, res) => {
