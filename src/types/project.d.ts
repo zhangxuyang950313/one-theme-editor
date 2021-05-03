@@ -41,7 +41,7 @@ export type TypeTemplateConf = TypePreviewConf & {
 // 预览数据配置
 // 此时所有素材路径都已使用 key 来代替
 export type TypePreviewConf = {
-  // key: string; // 随机键值
+  key: string; // 随机键值
   name: string; // 模板名称
   cover: string; // 模板缩略图
   version: string; //

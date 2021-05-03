@@ -71,8 +71,6 @@ export async function createProject(
   data: TypeProjectThm
 ): Promise<TypeProjectThm> {
   return http
-    .post<TypeResponseFrame<TypeProjectThm>>(API.CREATE_PROJECT, {
-      data
-    })
+    .post<TypeResponseFrame<TypeProjectThm>>(API.CREATE_PROJECT, data)
     .then(data => data.data.data);
 }

@@ -54,16 +54,6 @@ app.use((req, res, next) => {
 
 app.get<any, any, any, { id: string }>("/image", (req, res) => {
   findImageData(req.query.id).then(async data => {
-    // const file = path.resolve(USER_CACHE, data._id);
-    // await fse.writeFile(
-    //   file,
-    //   Buffer.from(
-    //     data.base64?.replace(/^data:image\/\w+;base64,/, "") || "",
-    //     "base64"
-    //   )
-    // );
-    // console.log(file);
-    // res.sendFile(file);
     const buffer = Buffer.from(
       data.base64?.replace(/^data:image\/\w+;base64,/, "") || "",
       "base64"
@@ -97,13 +87,12 @@ app.get<any, any, any, { brandType: string }>("/template/list", (req, res) => {
 // ---------------工程信息--------------- //
 // 添加工程
 app.post<any, any, TypeProjectThm, any>("/project/create", (req, res) => {
-  createProject(req.body)
-    .then(result => {
-      res.send(send.success(result));
-    })
-    .catch(err => {
-      res.status(400).send(send.fail(err));
-    });
+  createProject(req.body).then(result => {
+    res.send(send.success(result));
+  });
+  // .catch(err => {
+  //   res.status(400).send(send.fail(err));
+  // });
 });
 
 // 获取工程列表

@@ -77,8 +77,10 @@ export async function compileTempConf(file: string): Promise<TypeTemplateConf> {
   const templateData = await xml2jsonCompact<TypeOriginTempConf>(file);
   const { description, poster, uiVersion } = templateData;
   const root = path.dirname(file);
+  const key = getRandomStr();
   return {
     // root,
+    key,
     name: description?.[0]?._attributes?.name || "",
     version: description?.[0]._attributes?.version || "",
     cover: path.resolve(root, poster?.[0]._attributes?.src || ""),

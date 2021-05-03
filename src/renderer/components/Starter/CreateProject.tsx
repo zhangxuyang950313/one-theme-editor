@@ -122,6 +122,12 @@ const CreateProject: React.FC<TypeProps> = props => {
         uiVersionInfo: uiVersion,
         templateInfo: selectedTemp
         // resource: {}
+      }).then(data => {
+        console.log("创建工程：", data);
+        props.onProjectCreated(projectInfo);
+        closeModal();
+        init();
+        updateCreating(false);
       });
       // project.create().then(data => {
       //   console.log("创建工程：", data);
