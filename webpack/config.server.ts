@@ -51,7 +51,10 @@ const config: webpack.ConfigurationFactory = (env, args) => {
               cacheDirectory: true,
               cacheCompression: true,
               presets: ["@babel/preset-env", "@babel/preset-typescript"],
-              plugins: ["@babel/plugin-transform-runtime"]
+              plugins: [
+                "transform-class-properties",
+                "@babel/plugin-transform-runtime"
+              ]
             }
           }
         }

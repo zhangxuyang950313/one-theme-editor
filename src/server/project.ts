@@ -3,8 +3,13 @@ import fse from "fs-extra";
 import Nedb from "nedb-promises";
 import { PROJECTS_DIR } from "common/paths";
 import { getRandomStr } from "common/utils";
-import { TypeDatabase, TypeCreateProjectData } from "types/project";
+import {
+  TypeDatabase,
+  TypeCreateProjectData,
+  TypeProjectData
+} from "types/project";
 import errCode from "renderer/core/error-code";
+import ProjectData from "src/data/ProjectData";
 
 function createNedb(filename: string) {
   fse.ensureDirSync(path.dirname(filename));
@@ -27,7 +32,7 @@ type TypeIndex = {
 // 创建工程
 export async function createProject(
   data: TypeCreateProjectData
-): Promise<TypeDatabase<TypeCreateProjectData>> {
+): Promise<TypeDatabase<TypeProjectData>> {
   const projects = fse.readdirSync(PROJECTS_DIR);
   let filename = getRandomStr();
   // 重名检测
@@ -35,11 +40,23 @@ export async function createProject(
     filename = getRandomStr();
   }
   const file = path.resolve(PROJECTS_DIR, filename);
-  const project = await createNedb(file).insert(data);
+  const projectData = new ProjectData();
+  projectData.setProjectInfo(data.projectInfo);
+  projectData.setBrandInfo({
+    type: data.brandConf.type,
+    name: data.brandConf.name
+  });
+  projectData.setUiVersionInfo({
+    name: data.uiVersionConf.name,
+    code: data.uiVersionConf.code
+  });
+  projectData.setTemplateInfo(data.templateConf); // todo 解析模板
+  const project = await createNedb(file).insert(projectData.getData());
+  // 添加索引
   projectIndexDB.insert({
     _id: project._id,
     filename,
-    brandType: data.brandInfo.type
+    brandType: data.brandConf.type
   });
   return project;
 }

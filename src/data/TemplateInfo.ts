@@ -1,60 +1,23 @@
-import { TypeTemplateConf, TypeUiVersionConf } from "../types/project.d";
-
+import { TypeTemplateInfo, TypeTempModuleConf } from "../types/project";
+import TemplateConf from "./TemplateConf";
 /**
- * 模板的预览信息
- * 用于选择模板时的必要信息，由于此时的模板版本还未知，故不能生成模板映射数据
+ * 模板的配置数据
+ * 用于映射模板素材，这时已经获得了模板版本数据，可以生成模块的映射数据
+ * 编辑器中素材映射的核心数据
  */
-export default class TemplateInfo {
-  private key: string;
-  private root: string;
-  private name: string;
-  private version: string;
-  private cover: string;
-  private uiVersions: TypeUiVersionConf[];
+export default class TemplateInfo extends TemplateConf {
+  private modules: TypeTempModuleConf[] = [];
 
-  setKey(key: string): void {
-    this.key = key;
+  setModules(modules: TypeTempModuleConf[]): void {
+    this.modules = modules;
   }
-  getKey(): string {
-    return this.key;
+  getModules(): TypeTempModuleConf[] {
+    return this.modules;
   }
-  setRoot(root: string): void {
-    this.root = root;
-  }
-  getRoot(): string {
-    return this.root;
-  }
-  setName(name: string): void {
-    this.name = name;
-  }
-  getName(): string {
-    return this.name;
-  }
-  setVersion(version: string): void {
-    this.version = version;
-  }
-  getVersion(): string {
-    return this.version;
-  }
-  setCover(cover: string): void {
-    this.cover = cover;
-  }
-  getCover(): string {
-    return this.cover;
-  }
-  setUiVersions(uiVersions: TypeUiVersionConf[]): void {
-    this.uiVersions = uiVersions;
-  }
-  getUiVersions(): TypeUiVersionConf[] {
-    return this.uiVersions;
-  }
-  getData(): TypeTemplateConf {
+  getData(): TypeTemplateInfo {
     return {
-      key: this.key,
-      name: this.name,
-      version: this.version,
-      cover: this.cover,
-      uiVersions: this.uiVersions
+      ...super.getData(),
+      modules: this.modules
     };
   }
 }

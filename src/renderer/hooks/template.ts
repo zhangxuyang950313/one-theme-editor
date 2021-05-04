@@ -5,7 +5,7 @@ import {
   setTemplateList
 } from "@/store/modules/template/action";
 import { getBrandInfo } from "@/store/modules/template/selector";
-import { TypeBrandConf, TypeTemplateInfo } from "src/types/project";
+import { TypeBrandConf, TypeTemplateConf } from "src/types/project";
 import { getBrandConfList, getTempConfList } from "@/api/index";
 import { initialBrand } from "@/config/editor";
 import errCode from "@/core/error-code";
@@ -30,21 +30,21 @@ export function useBrandInfoList(): TypeBrandConf[] {
 }
 
 // 当前选择的厂商信息
-export function useBrandInfo(): TypeBrandConf {
+export function useBrandConf(): TypeBrandConf {
   return useSelector(getBrandInfo);
 }
 
 // 获取模板列表
-export function useTemplateList(): [TypeTemplateInfo[], boolean] {
-  const [value, updateValue] = useState<TypeTemplateInfo[]>([]);
+export function useTemplateList(): [TypeTemplateConf[], boolean] {
+  const [value, updateValue] = useState<TypeTemplateConf[]>([]);
   const [loading, updateLoading] = useState(true);
   const dispatch = useDispatch();
-  const brandInfo = useBrandInfo();
+  const brandInfo = useBrandConf();
   useLayoutEffect(() => {
     getTempConfList(brandInfo)
       .then(tempConfList => {
         console.log("模板列表：", tempConfList);
-        dispatch(setTemplateList(tempConfList));
+        // dispatch(setTemplateList(tempConfList));
         updateValue(tempConfList);
         setTimeout(() => {
           updateLoading(false);

@@ -1,6 +1,7 @@
 import axios from "axios";
 import {
   TypeBrandConf,
+  TypeCreateProjectData,
   TypeDatabase,
   TypeProjectData,
   TypeTemplateConf,
@@ -70,7 +71,7 @@ export async function getProjectList(
 
 // 创建工程
 export async function createProject(
-  data: TypeProjectData
+  data: TypeCreateProjectData
 ): Promise<TypeProjectData> {
   return http
     .post<TypeResponseFrame<TypeProjectData>>(API.CREATE_PROJECT, data)

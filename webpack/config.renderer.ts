@@ -176,6 +176,7 @@ const config: webpack.ConfigurationFactory = (env, args) => {
                 "@babel/preset-typescript"
               ],
               plugins: [
+                "transform-class-properties",
                 "@babel/plugin-transform-runtime",
                 "babel-plugin-styled-components",
                 "babel-plugin-react-scoped-css",

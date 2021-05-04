@@ -88,8 +88,8 @@ export type TypePageConf = {
 
 export type TypeCreateProjectData = {
   projectInfo: TypeProjectInfo;
-  uiVersionInfo: TypeUiVersionInfo;
-  brandInfo: TypeBrandInfo;
+  uiVersionConf: TypeUiVersionConf;
+  brandConf: TypeBrandConf;
   templateConf: TypeTemplateConf;
 };
 

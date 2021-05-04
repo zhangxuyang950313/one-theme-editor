@@ -4,8 +4,8 @@ import _ from "lodash";
 
 import { isDev } from "@/core/constant";
 import errCode from "@/core/error-code";
-import { useBrandInfo, useTemplateList } from "@/hooks/template";
-import { TypeTemplateInfo, TypeProjectInfo } from "src/types/project";
+import { useBrandConf, useTemplateList } from "@/hooks/template";
+import { TypeTemplateConf, TypeProjectInfo } from "src/types/project";
 
 // components
 import { Modal, Button, message, Form } from "antd";
@@ -24,14 +24,14 @@ type TypeProps = {
   onProjectCreated: (projectInfo: TypeProjectInfo) => Promise<void>;
 };
 const CreateProject: React.FC<TypeProps> = props => {
-  // 机型信息
-  const brandInfo = useBrandInfo();
+  // 机型配置
+  const brandConf = useBrandConf();
   // 弹框控制
   const [modalVisible, setModalVisible] = useState(false);
   // 模板列表
   const [templateList, isLoading] = useTemplateList();
   // 选择的模板
-  const [selectedTemp, updateTempConf] = useState<TypeTemplateInfo>();
+  const [selectedTemp, updateTempConf] = useState<TypeTemplateConf>();
   // 当前步骤
   const [curStep, setCurStep] = useState(0);
   // 填写完成的项目数据
@@ -118,9 +118,9 @@ const CreateProject: React.FC<TypeProps> = props => {
       // TODO 使用选择的模板路径生成 tempConf
       await createProject({
         projectInfo,
-        brandInfo,
-        uiVersionInfo: uiVersion,
-        templateInfo: selectedTemp
+        brandConf: brandConf,
+        uiVersionConf: uiVersion,
+        templateConf: selectedTemp
       }).then(data => {
         console.log("创建工程：", data);
         props.onProjectCreated(projectInfo);
@@ -247,7 +247,7 @@ const CreateProject: React.FC<TypeProps> = props => {
         style={{ minWidth: "500px" }}
         width="700px"
         visible={modalVisible}
-        title={`创建${brandInfo.name}主题`}
+        title={`创建${brandConf.name}主题`}
         destroyOnClose={true}
         onCancel={closeModal}
         footer={modalFooter}

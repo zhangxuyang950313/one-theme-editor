@@ -52,8 +52,8 @@ app.use((req, res, next) => {
 //   }
 // );
 
-app.get<any, any, any, { id: string }>("/image", (req, res) => {
-  findImageData(req.query.id).then(async data => {
+app.get<{ id: string }, any, any, any>("/image/:id", (req, res) => {
+  findImageData(req.params.id).then(async data => {
     const buffer = Buffer.from(
       data.base64?.replace(/^data:image\/\w+;base64,/, "") || "",
       "base64"
@@ -94,6 +94,7 @@ app.post<any, any, TypeCreateProjectData, any>(
         res.send(send.success(projectData));
       })
       .catch(err => {
+        console.error(err);
         res.status(400).send(send.fail(err));
       });
   }
