@@ -36,6 +36,8 @@ export type TypeTempModuleConf = {
 
 export type TypeTemplateConf = {
   key: string;
+  root: string;
+  file: string;
   name: string;
   cover: string;
   version: string;

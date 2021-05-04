@@ -6,10 +6,13 @@ import { getRandomStr } from "common/utils";
 import {
   TypeDatabase,
   TypeCreateProjectData,
-  TypeProjectData
+  TypeProjectData,
+  TypeBrandInfo,
+  TypeUiVersionInfo
 } from "types/project";
 import errCode from "renderer/core/error-code";
 import ProjectData from "src/data/ProjectData";
+import { compileTempInfo } from "./template";
 
 function createNedb(filename: string) {
   fse.ensureDirSync(path.dirname(filename));
@@ -40,17 +43,22 @@ export async function createProject(
     filename = getRandomStr();
   }
   const file = path.resolve(PROJECTS_DIR, filename);
+  const { brandConf, uiVersionConf } = data;
+  const brandInfo: TypeBrandInfo = {
+    type: brandConf.type,
+    name: brandConf.name
+  };
+  const uiVersionInfo: TypeUiVersionInfo = {
+    name: uiVersionConf.name,
+    code: uiVersionConf.code
+  };
+  const templateInfo = await compileTempInfo(data);
+  // 组装数据
   const projectData = new ProjectData();
   projectData.setProjectInfo(data.projectInfo);
-  projectData.setBrandInfo({
-    type: data.brandConf.type,
-    name: data.brandConf.name
-  });
-  projectData.setUiVersionInfo({
-    name: data.uiVersionConf.name,
-    code: data.uiVersionConf.code
-  });
-  projectData.setTemplateInfo(data.templateConf); // todo 解析模板
+  projectData.setBrandInfo(brandInfo);
+  projectData.setUiVersionInfo(uiVersionInfo);
+  projectData.setTemplateInfo(templateInfo);
   const project = await createNedb(file).insert(projectData.getData());
   // 添加索引
   projectIndexDB.insert({

@@ -1,17 +1,40 @@
 import path from "path";
+import fse from "fs-extra";
+import _ from "lodash";
+import { TypeOriginBrandConf, TypeOriginTempConf } from "types/xml-result";
 import {
-  TypeBrandInfo,
+  TypeBrandConf,
+  TypeCreateProjectData,
   TypeTemplateConf,
-  TypeUiVersionInfo
+  TypeTemplateInfo
 } from "types/project";
-import { compileBrandConf, getTempDescFileList } from "common/Template";
 import { HOST, PORT } from "common/config";
-import { getRandomStr, localImageToBase64Async } from "common/utils";
 import { xml2jsonCompact } from "common/xmlCompiler";
-import { TypeOriginTempConf } from "types/xml-result";
+import { TEMPLATE_CONFIG, getTempDirByBrand } from "common/paths";
+import { getRandomStr, localImageToBase64Async } from "common/utils";
 import TemplateConf from "src/data/TemplateConf";
 import TemplateInfo from "src/data/TemplateInfo";
 import { insertImageData } from "./image";
+
+// 解析厂商配置
+export async function compileBrandConf(): Promise<TypeBrandConf[]> {
+  const data = await xml2jsonCompact<TypeOriginBrandConf>(TEMPLATE_CONFIG);
+  if (!Array.isArray(data.brand)) return Promise.resolve([]);
+  return data.brand.map(item =>
+    _.pick(item._attributes, ["name", "templateDir", "type"])
+  );
+}
+
+// 模板描述文件列表
+export const getTempDescFileList = (brandInfo: TypeBrandConf): string[] => {
+  const brandTemplate = getTempDirByBrand(brandInfo);
+  return fse.existsSync(brandTemplate)
+    ? fse
+        .readdirSync(brandTemplate)
+        .map(dir => path.resolve(brandTemplate, dir, "description.xml"))
+        .filter(fse.existsSync) // 排除不存在 description.xml 的目录
+    : [];
+};
 
 // 解析模板配置信息，该数据用于选择模板的预览，不需要全部解析，且此时并不知道选择的版本
 async function compileTempConf(file: string): Promise<TypeTemplateConf> {
@@ -30,6 +53,8 @@ async function compileTempConf(file: string): Promise<TypeTemplateConf> {
     })) || [];
   const templateConf = new TemplateConf();
   templateConf.setKey(key);
+  templateConf.setRoot(root);
+  templateConf.setFile(file);
   templateConf.setName(description?.[0]?._attributes?.name || "");
   templateConf.setCover(`http://${HOST}:${PORT}/image/${_id}`);
   templateConf.setVersion(description?.[0]._attributes?.version || "");
@@ -63,12 +88,15 @@ async function compileTempConf(file: string): Promise<TypeTemplateConf> {
   // };
 }
 
-async function compileTempInfo(
-  brandInfo: TypeBrandInfo,
-  uiVersionInfo: TypeUiVersionInfo
-) {
+export async function compileTempInfo(
+  projectData: TypeCreateProjectData
+): Promise<TypeTemplateInfo> {
+  const templateData = await xml2jsonCompact<TypeOriginTempConf>(
+    projectData.templateConf.file
+  );
   const templateInfo = new TemplateInfo();
   // templateInfo.set
+  return templateInfo.getData();
 }
 
 // 获取对应厂商模板

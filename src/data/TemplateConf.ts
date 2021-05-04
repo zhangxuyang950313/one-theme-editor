@@ -7,6 +7,7 @@ import { TypeTemplateConf, TypeUiVersionConf } from "../types/project.d";
 export default class TemplateConf {
   private key = "";
   private root = "";
+  private file = "";
   private name = "";
   private version = "";
   private cover = "";
@@ -23,6 +24,12 @@ export default class TemplateConf {
   }
   getRoot(): string {
     return this.root;
+  }
+  setFile(file: string): void {
+    this.file = file;
+  }
+  getFile(): string {
+    return this.file;
   }
   setName(name: string): void {
     this.name = name;
@@ -50,11 +57,13 @@ export default class TemplateConf {
   }
   getData(): TypeTemplateConf {
     return {
-      key: this.key,
-      name: this.name,
-      version: this.version,
-      cover: this.cover,
-      uiVersions: this.uiVersions
+      key: this.getKey(),
+      root: this.getRoot(),
+      file: this.getFile(),
+      name: this.getName(),
+      version: this.getVersion(),
+      cover: this.getCover(),
+      uiVersions: this.getUiVersions()
     };
   }
 }

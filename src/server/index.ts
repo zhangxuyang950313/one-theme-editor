@@ -1,15 +1,14 @@
 import express from "express";
 import bodyParser from "body-parser";
-import { compileBrandConf } from "common/Template";
 import { PORT, HOST } from "common/config";
-import { TypeCreateProjectData } from "types/project.d";
+import { TypeCreateProjectData } from "types/project";
 import {
   findProjectById,
   getProjectList,
   createProject,
   updateProject
 } from "./project";
-import { getTemplates } from "./template";
+import { getTemplates, compileBrandConf } from "./template";
 import { findImageData } from "./image";
 
 const send = {
