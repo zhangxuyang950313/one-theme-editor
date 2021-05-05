@@ -8,12 +8,13 @@ import {
   TypeTemplateConf,
   TypeTemplateInfo
 } from "types/project";
+import TemplateData from "src/data/TemplateConf";
+import TemplateInfo from "src/data/TemplateInfo";
+import Template from "common/Template";
 import { HOST, PORT } from "common/config";
 import { xml2jsonCompact } from "common/xmlCompiler";
 import { TEMPLATE_CONFIG, getTempDirByBrand } from "common/paths";
 import { getRandomStr, localImageToBase64Async } from "common/utils";
-import TemplateConf from "src/data/TemplateConf";
-import TemplateInfo from "src/data/TemplateInfo";
 import { insertImageData } from "./image";
 
 // 解析厂商配置
@@ -38,28 +39,21 @@ export const getTempDescFileList = (brandInfo: TypeBrandConf): string[] => {
 
 // 解析模板配置信息，该数据用于选择模板的预览，不需要全部解析，且此时并不知道选择的版本
 async function compileTempConf(file: string): Promise<TypeTemplateConf> {
-  const templateData = await xml2jsonCompact<TypeOriginTempConf>(file);
-  const { description, poster, uiVersion } = templateData;
+  const template = new Template(file);
+  const templateData = new TemplateData();
   const key = getRandomStr();
   const root = path.dirname(file);
-  const cover = path.resolve(root, poster?.[0]._attributes?.src || "");
+  const cover = path.resolve(root, await template.getCover());
   const base64 = await localImageToBase64Async(cover);
   const { _id } = await insertImageData({ md5: "", base64 });
-  const uiVersions =
-    uiVersion?.map(o => ({
-      name: o._attributes.name || "",
-      src: o._attributes.src || "",
-      code: o._attributes.code || ""
-    })) || [];
-  const templateConf = new TemplateConf();
-  templateConf.setKey(key);
-  templateConf.setRoot(root);
-  templateConf.setFile(file);
-  templateConf.setName(description?.[0]?._attributes?.name || "");
-  templateConf.setCover(`http://${HOST}:${PORT}/image/${_id}`);
-  templateConf.setVersion(description?.[0]._attributes?.version || "");
-  templateConf.setUiVersions(uiVersions);
-  return templateConf.getData();
+  templateData.setKey(key);
+  templateData.setRoot(root);
+  templateData.setFile(file);
+  templateData.setName(await template.getName());
+  templateData.setCover(`http://${HOST}:${PORT}/image/${_id}`);
+  templateData.setVersion(await template.getVersion());
+  templateData.setUiVersions(await template.getUiVersions());
+  return templateData.getData();
   // return {
   //   // root,
   //   key,
@@ -91,9 +85,10 @@ async function compileTempConf(file: string): Promise<TypeTemplateConf> {
 export async function compileTempInfo(
   projectData: TypeCreateProjectData
 ): Promise<TypeTemplateInfo> {
-  const templateData = await xml2jsonCompact<TypeOriginTempConf>(
-    projectData.templateConf.file
-  );
+  // const templateData = await xml2jsonCompact<TypeOriginTempConf>(
+  //   projectData.templateConf.file
+  // );
+  const template = new Template(projectData.templateConf.file);
   const templateInfo = new TemplateInfo();
   // templateInfo.set
   return templateInfo.getData();

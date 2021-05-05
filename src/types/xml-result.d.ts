@@ -6,24 +6,22 @@ type TypeAttrsContent<T> = {
 export type TypeOriginTempConf = Partial<{
   description: TypeAttrsContent<Partial<{ name: string; version: string }>>[];
   poster: TypeAttrsContent<Partial<{ src: string }>>[];
-  uiVersion: TypeAttrsContent<
-    Partial<{
-      name: string;
-      src: string;
-      code: string;
-    }>
-  >[];
-  module: Array<
-    TypeAttrsContent<Partial<{ name: string; icon: string }>> &
-      Partial<{
-        class: Array<
-          TypeAttrsContent<Partial<{ name: string }>> & {
-            page?: TypeAttrsContent<Partial<{ src: string }>>[];
-          }
-        >;
-      }>
-  >;
+  uiVersion: TypeOriginUiVersionConf[];
+  module: TypeOriginTempModuleConf[];
 }>;
+export type TypeOriginUiVersionConf = TypeAttrsContent<
+  Partial<{ name: string; src: string; code: string }>
+>;
+export type TypeOriginTempModuleConf = TypeAttrsContent<
+  Partial<{ name: string; icon: string }>
+> &
+  Partial<{ class: TypeOriginTempModuleClassConf[] }>;
+export type TypeOriginTempModuleClassPageConf = TypeAttrsContent<
+  Partial<{ src: string }>
+>;
+export type TypeOriginTempModuleClassConf = TypeAttrsContent<
+  Partial<{ name: string }>
+> & { page?: TypeOriginTempModuleClassPageConf[] };
 
 // 厂商配置原始信息
 export type TypeOriginBrandConf = Partial<{
@@ -37,8 +35,9 @@ export type TypeOriginBrandConf = Partial<{
 // 页面配置原始信息
 export type TypeTempLayout = Partial<
   Record<"x" | "y" | "w" | "h", string> & {
-    align: "left" | "center" | "right";
-    alignV: "top" | "center" | "bottom";
+    align: "left" | "center" | "right" | string;
+    alignV: "top" | "center" | "bottom" | string;
+    text: string;
   }
 >;
 export type TypeTempFrom = Partial<{ src: string }>;
@@ -53,7 +52,7 @@ export type TypeTempOriginPageConf = Partial<{
       }>
     >
   ];
-  cover?: TypeAttrsContent<Partial<{ src: string }>>[];
+  preview?: TypeAttrsContent<Partial<{ src: string }>>[];
   category?: TypeAttrsContent<
     Partial<{
       tag: string;

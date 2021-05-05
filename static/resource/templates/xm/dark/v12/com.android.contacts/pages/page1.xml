@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <config version="1.0" description="联系人列表" screenWidth="1080"/>
 
-<poster src="page_contacts_0.jpg"/>
+<cover src="page_contacts_0.jpg"/>
 
 <!-- 分类 -->
 <category tag="source" 	description="图片资源"  	type="image"/>
@@ -11,7 +11,7 @@
 <category tag="integer" description="整型值" 	type="xml"/>
 
 <!-- 图片 -->
-<source description="电话">
+<source description="电话">t
 	<layout x="0" y="0" w="100" h="100"/>
 	<from src="../res/drawable-xxhdpi/send_call_ic.png"/>
 	<to src="com.android.contacts/res/drawable-xxhdpi">

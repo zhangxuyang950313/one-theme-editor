@@ -44,25 +44,35 @@ export type TypeTemplateConf = {
   uiVersions: TypeUiVersionConf[];
 };
 
-export type TypeTemplateInfo = TypeTemplateConf & {
+export type TypeTemplateInfo = {
+  name: string;
+  cover: string;
+  version: string;
+  uiVersions: TypeUiVersionConf[];
   modules: TypeTempModuleConf[];
 };
 
+export type TypeTempPageConfigConf = {
+  version: string;
+  description: string;
+  screenWidth: string;
+};
+export type TypeTempPageCategoryConf = {
+  tag: string;
+  description: string;
+  type: "image" | "xml" | "";
+};
+export type TypeTempPageSourceConf = {
+  description: string;
+  layout: TypeTempLayout;
+  from: TypeTempFrom["src"];
+  to: TypeTempTo["src"][];
+};
 export type TypeTempPageConf = {
-  root: string;
-  config: { version: string; description: string; screenWidth: string };
+  config: TypeTempPageConfigConf;
   cover: string;
-  category: {
-    tag: string;
-    description: string;
-    type: "image" | "xml" | null;
-  }[];
-  source: {
-    description: string;
-    layout: TypeTempLayout;
-    from: TypeTempFrom["src"];
-    to: TypeTempTo["src"][];
-  }[];
+  category: TypeTempPageCategoryConf[];
+  source: TypeTempPageSourceConf[];
   xml: any[];
 };
 
@@ -95,6 +105,7 @@ export type TypeCreateProjectData = {
   templateConf: TypeTemplateConf;
 };
 
+// 打包所有信息
 export type TypeProjectData = {
   projectInfo: TypeProjectInfo;
   uiVersionInfo: TypeUiVersionInfo;
