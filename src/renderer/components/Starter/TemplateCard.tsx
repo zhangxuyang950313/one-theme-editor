@@ -19,7 +19,7 @@ const TemplateCard: React.FC<TypeProps> = props => {
       <Card
         hoverable={props.hoverable}
         style={{ width: "100%" }}
-        cover={<img alt={config.name} src={config.cover} />}
+        cover={<img alt={config.name} src={config.preview} />}
       >
         <Card.Meta
           title={config.name}

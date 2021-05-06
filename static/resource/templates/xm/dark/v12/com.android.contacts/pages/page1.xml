@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <config version="1.0" description="联系人列表" screenWidth="1080"/>
 
-<cover src="page_contacts_0.jpg"/>
+<preview src="page_contacts_0.jpg"/>
 
 <!-- 分类 -->
 <category tag="source" 	description="图片资源"  	type="image"/>

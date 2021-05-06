@@ -12,7 +12,7 @@ import {
 export default class TemplateInfo {
   private name = "";
   private version = "";
-  private cover = "";
+  private preview = "";
   private uiVersions: TypeUiVersionConf[] = [];
   private modules: TypeTempModuleConf[] = [];
 
@@ -28,11 +28,11 @@ export default class TemplateInfo {
   getVersion(): string {
     return this.version;
   }
-  setCover(cover: string): void {
-    this.cover = cover;
+  setPreview(preview: string): void {
+    this.preview = preview;
   }
-  getCover(): string {
-    return this.cover;
+  getPreview(): string {
+    return this.preview;
   }
   setUiVersions(uiVersions: TypeUiVersionConf[]): void {
     this.uiVersions = uiVersions;
@@ -50,7 +50,7 @@ export default class TemplateInfo {
     return {
       name: this.getName(),
       version: this.getVersion(),
-      cover: this.getCover(),
+      preview: this.getPreview(),
       uiVersions: this.getUiVersions(),
       modules: this.getModules()
     };

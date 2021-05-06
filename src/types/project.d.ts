@@ -23,7 +23,7 @@ export type TypeUiVersionConf = TypeUiVersionInfo & {
   src: string;
 };
 
-export type TypeTempClassConf = {
+export type TypeTempPageGroupConf = {
   name: string;
   pages: TypeTempPageConf[];
 };
@@ -31,7 +31,7 @@ export type TypeTempClassConf = {
 export type TypeTempModuleConf = {
   name: string;
   icon: string;
-  classes: TypeTempClassConf[];
+  groups: TypeTempPageGroupConf[];
 };
 
 export type TypeTemplateConf = {
@@ -39,14 +39,14 @@ export type TypeTemplateConf = {
   root: string;
   file: string;
   name: string;
-  cover: string;
+  preview: string;
   version: string;
   uiVersions: TypeUiVersionConf[];
 };
 
 export type TypeTemplateInfo = {
   name: string;
-  cover: string;
+  preview: string;
   version: string;
   uiVersions: TypeUiVersionConf[];
   modules: TypeTempModuleConf[];
@@ -69,8 +69,9 @@ export type TypeTempPageSourceConf = {
   to: TypeTempTo["src"][];
 };
 export type TypeTempPageConf = {
+  pathname: string;
   config: TypeTempPageConfigConf;
-  cover: string;
+  preview: string;
   category: TypeTempPageCategoryConf[];
   source: TypeTempPageSourceConf[];
   xml: any[];

@@ -2,7 +2,7 @@
 
 <config version="1.0.0" description="桌面壁纸和首屏图标" screenWidth="1080"/>
 
-<cover src="./default_wallpaper.jpg"/>
+<preview src="./default_wallpaper.jpg"/>
 
 <category tag="source"      description="图片"      type="image"/>
 <category tag="color" 		description="颜色值"  	type="xml"/>

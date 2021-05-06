@@ -5,7 +5,7 @@ type TypeAttrsContent<T> = {
 // 模板配置原始信息
 export type TypeOriginTempConf = Partial<{
   description: TypeAttrsContent<Partial<{ name: string; version: string }>>[];
-  poster: TypeAttrsContent<Partial<{ src: string }>>[];
+  preview: TypeAttrsContent<Partial<{ src: string }>>[];
   uiVersion: TypeOriginUiVersionConf[];
   module: TypeOriginTempModuleConf[];
 }>;
@@ -15,13 +15,13 @@ export type TypeOriginUiVersionConf = TypeAttrsContent<
 export type TypeOriginTempModuleConf = TypeAttrsContent<
   Partial<{ name: string; icon: string }>
 > &
-  Partial<{ class: TypeOriginTempModuleClassConf[] }>;
-export type TypeOriginTempModuleClassPageConf = TypeAttrsContent<
+  Partial<{ group: TypeOriginTempPageGroupConf[] }>;
+export type TypeOriginTempModulePageConf = TypeAttrsContent<
   Partial<{ src: string }>
 >;
-export type TypeOriginTempModuleClassConf = TypeAttrsContent<
+export type TypeOriginTempPageGroupConf = TypeAttrsContent<
   Partial<{ name: string }>
-> & { page?: TypeOriginTempModuleClassPageConf[] };
+> & { page?: TypeOriginTempModulePageConf[] };
 
 // 厂商配置原始信息
 export type TypeOriginBrandConf = Partial<{

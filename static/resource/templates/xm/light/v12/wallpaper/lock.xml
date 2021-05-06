@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <config version="1.0.0" description="锁屏壁纸" screenWidth="1080"/>
 
-<cover src="./default_lock_wallpaper.jpg"/>
+<preview src="./default_lock_wallpaper.jpg"/>
 
 <category tag="source" description="图片" type="image"/>
 

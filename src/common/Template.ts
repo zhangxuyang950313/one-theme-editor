@@ -2,7 +2,7 @@ import path from "path";
 import errCode from "renderer/core/error-code";
 import { xml2jsonCompact } from "common/xmlCompiler";
 import {
-  TypeTempClassConf,
+  TypeTempPageGroupConf,
   TypeTemplateInfo,
   TypeTempModuleConf,
   TypeTempPageConf,
@@ -12,8 +12,8 @@ import {
 } from "types/project";
 import {
   TypeOriginTempConf,
-  TypeOriginTempModuleClassConf,
-  TypeOriginTempModuleClassPageConf,
+  TypeOriginTempPageGroupConf,
+  TypeOriginTempModulePageConf,
   TypeTempLayout,
   TypeTempOriginPageConf
 } from "types/xml-result";
@@ -23,9 +23,13 @@ import { TypeTempPageCategoryConf } from "./../types/project.d";
 
 export class Page {
   private file: string;
+  private dir: string;
+  private pathname: string;
   private xmlData!: TypeTempOriginPageConf;
-  constructor(file: string) {
+  constructor({ file, pathname }: { file: string; pathname: string }) {
     this.file = file;
+    this.pathname = pathname;
+    this.dir = path.dirname(file);
   }
 
   private async ensureXmlData() {
@@ -77,7 +81,7 @@ export class Page {
         return {
           description: item._attributes.description || "",
           layout,
-          from: item.from?.[0]._attributes.src || "",
+          from: path.resolve(this.dir, item.from?.[0]._attributes.src || ""),
           to: item.to?.map(item => item._attributes.src) || []
         };
       }) || []
@@ -101,16 +105,17 @@ export class Page {
   }
 
   async getData(): Promise<TypeTempPageConf> {
-    const [config, cover, category, source, xml] = await Promise.all([
-      this.getConfig(),
-      this.getPreview(),
-      this.getCategoryList(),
-      this.getSourceList(),
-      [] // todo
-    ]);
-    return { config, cover, category, source, xml };
+    return {
+      pathname: this.pathname,
+      config: await this.getConfig(),
+      preview: await this.getPreview(),
+      category: await this.getCategoryList(),
+      source: await this.getSourceList(),
+      xml: []
+    };
   }
 }
+
 export default class Template {
   // description.xml 路径
   private descFile = "";
@@ -120,6 +125,9 @@ export default class Template {
   private xmlData!: TypeOriginTempConf;
   private uiVersion?: TypeUiVersionConf;
   constructor(descFile: string) {
+    if (!descFile) {
+      throw new Error(errCode[3005]);
+    }
     this.descFile = descFile;
     this.rootDir = path.dirname(descFile);
   }
@@ -151,10 +159,10 @@ export default class Template {
     const tempData = await this.ensureXmlData();
     return tempData.description?.[0]._attributes.version || "";
   }
-  // 模板封面
-  async getCover(): Promise<string> {
+  // 模板预览图
+  async getPreview(): Promise<string> {
     const tempData = await this.ensureXmlData();
-    return tempData.poster?.[0]._attributes.src || "";
+    return tempData.preview?.[0]._attributes.src || "";
   }
   // 模板支持 ui 版本列表
   async getUiVersions(): Promise<TypeUiVersionConf[]> {
@@ -168,7 +176,7 @@ export default class Template {
     return uiVersions;
   }
   async getPages(
-    data: TypeOriginTempModuleClassPageConf[]
+    data: TypeOriginTempModulePageConf[]
   ): Promise<TypeTempPageConf[]> {
     if (!this.uiVersion?.src) {
       throw new Error(errCode[3004]);
@@ -177,42 +185,48 @@ export default class Template {
     const moduleDir = path.resolve(this.rootDir, this.uiVersion.src);
     const pagesQueue = data.map(item => {
       const pageNode = new XMLNode(item);
-      const pageFile = path.resolve(moduleDir, pageNode.getAttribute("src"));
-      const page = new Page(pageFile);
+      const pathname = pageNode.getAttribute("src");
+      const pageFile = path.resolve(moduleDir, pathname);
+      const page = new Page({ file: pageFile, pathname });
       return page.getData();
     });
     return await Promise.all(pagesQueue);
   }
-  async getClasses(
-    data: TypeOriginTempModuleClassConf[]
-  ): Promise<TypeTempClassConf[]> {
-    const classesQueue: Promise<TypeTempClassConf>[] = data.map(async item => {
-      const classNode = new XMLNode(item);
-      return {
-        name: classNode.getAttribute("name"),
-        pages: item.page ? await this.getPages(item.page) : []
-      };
-    });
-    return await Promise.all(classesQueue);
+  async getPageGroup(
+    data: TypeOriginTempPageGroupConf[]
+  ): Promise<TypeTempPageGroupConf[]> {
+    const groupsQueue: Promise<TypeTempPageGroupConf>[] = data.map(
+      async item => {
+        const groupNode = new XMLNode(item);
+        return {
+          name: groupNode.getAttribute("name"),
+          pages: item.page ? await this.getPages(item.page) : []
+        };
+      }
+    );
+    return await Promise.all(groupsQueue);
   }
   async getModules(): Promise<TypeTempModuleConf[]> {
     const tempData = await this.ensureXmlData();
     const modulesQueue: Promise<TypeTempModuleConf>[] =
       tempData.module?.map(async item => {
         const moduleNode = new XMLNode(item);
-        return {
+        const result: TypeTempModuleConf = {
           name: moduleNode.getAttribute("name"),
           icon: moduleNode.getAttribute("icon"),
-          classes: item.class ? await this.getClasses(item.class) : []
+          groups: item.group ? await this.getPageGroup(item.group) : []
         };
+        return result;
       }) || [];
     return await Promise.all(modulesQueue);
   }
   async getTempInfo(): Promise<TypeTemplateInfo> {
-    const data = await xml2jsonCompact<TypeOriginTempConf>(this.descFile);
     const templateInfo = new TemplateInfo();
-    templateInfo.setCover(this.xmlData.poster?.[0]._attributes.src || "");
-    templateInfo.setName(this.xmlData.description?.[0]._attributes.name || "");
+    templateInfo.setName(await this.getName());
+    templateInfo.setVersion(await this.getVersion());
+    templateInfo.setPreview(await this.getPreview());
+    templateInfo.setUiVersions(await this.getUiVersions());
+    templateInfo.setModules(await this.getModules());
     return templateInfo.getData();
   }
 }

@@ -7,7 +7,7 @@
 <category tag="dimen"       description="尺寸值"   type="xml"/>
 <category tag="integer"     description="整型值"   type="xml"/>
 
-<cover src="./default_lock_wallpaper.jpg"/>
+<preview src="./default_lock_wallpaper.jpg"/>
 
 <!-- 图片资源 -->
 <source description="桌面壁纸">
