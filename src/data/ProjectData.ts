@@ -41,8 +41,8 @@ export default class ProjectData {
     if (!this.uiVersionInfo) throw new Error("UI版本为空");
     if (!this.templateInfo) throw new Error("模板信息为空");
     return {
-      projectInfo: this.projectInfo,
       brandInfo: this.brandInfo,
+      projectInfo: this.projectInfo,
       uiVersionInfo: this.uiVersionInfo,
       templateInfo: this.templateInfo
     };

@@ -25,11 +25,13 @@ export class Page {
   private file: string;
   private dir: string;
   private pathname: string;
+  private uiPath: string;
   private xmlData!: TypeTempOriginPageConf;
-  constructor({ file, pathname }: { file: string; pathname: string }) {
-    this.file = file;
-    this.pathname = pathname;
-    this.dir = path.dirname(file);
+  constructor(props: { file: string; pathname: string; uiPath: string }) {
+    this.file = props.file;
+    this.pathname = props.pathname;
+    this.uiPath = props.uiPath;
+    this.dir = path.dirname(props.file);
   }
 
   private async ensureXmlData() {
@@ -41,7 +43,7 @@ export class Page {
 
   async getPreview(): Promise<string> {
     const xmlData = await this.ensureXmlData();
-    return xmlData.preview?.[0]._attributes.src || "";
+    return path.join(this.uiPath, xmlData.preview?.[0]._attributes.src || "");
   }
 
   async getConfig(): Promise<TypeTempPageConfigConf> {
@@ -78,31 +80,35 @@ export class Page {
           layout.align = layoutNode.getAttribute("align");
           layout.alignV = layoutNode.getAttribute("alignV");
         }
-        return {
-          description: item._attributes.description || "",
-          layout,
-          from: path.resolve(this.dir, item.from?.[0]._attributes.src || ""),
-          to: item.to?.map(item => item._attributes.src) || []
-        };
+        const description = item._attributes.description || "";
+        const from = path.resolve(
+          this.dir,
+          item.from?.[0]._attributes.src || ""
+        );
+        const to =
+          item.to?.map(item =>
+            path.join(this.uiPath, item._attributes.src || "")
+          ) || [];
+        return { description, layout, from, to };
       }) || []
     );
   }
 
-  async getColorList() {
-    const xmlData = await this.ensureXmlData();
-  }
+  // async getColorList() {
+  //   const xmlData = await this.ensureXmlData();
+  // }
 
-  async getIntegerList() {
-    const xmlData = await this.ensureXmlData();
-  }
+  // async getIntegerList() {
+  //   const xmlData = await this.ensureXmlData();
+  // }
 
-  async getBoolList() {
-    const xmlData = await this.ensureXmlData();
-  }
+  // async getBoolList() {
+  //   const xmlData = await this.ensureXmlData();
+  // }
 
-  async getDimenList() {
-    const xmlData = await this.ensureXmlData();
-  }
+  // async getDimenList() {
+  //   const xmlData = await this.ensureXmlData();
+  // }
 
   async getData(): Promise<TypeTempPageConf> {
     return {
@@ -181,13 +187,13 @@ export default class Template {
     if (!this.uiVersion?.src) {
       throw new Error(errCode[3004]);
     }
+    const uiPath = this.uiVersion.src;
     // 这里是在选择模板版本后得到的目标模块目录
-    const moduleDir = path.resolve(this.rootDir, this.uiVersion.src);
     const pagesQueue = data.map(item => {
       const pageNode = new XMLNode(item);
-      const pathname = pageNode.getAttribute("src");
-      const pageFile = path.resolve(moduleDir, pathname);
-      const page = new Page({ file: pageFile, pathname });
+      const pathname = path.join(uiPath, pageNode.getAttribute("src"));
+      const file = path.join(this.rootDir, pathname);
+      const page = new Page({ file, pathname, uiPath });
       return page.getData();
     });
     return await Promise.all(pagesQueue);
@@ -230,52 +236,3 @@ export default class Template {
     return templateInfo.getData();
   }
 }
-
-// import path from "path";
-// import fse from "fs-extra";
-// import _ from "lodash";
-// import {
-//   TypeBrandConf,
-//   TypeTempPageConf,
-//   TypeTemplateConf
-// } from "../types/project";
-// import {
-//   TypeOriginTempConf,
-//   TypeOriginBrandConf,
-//   TypeTempOriginPageConf
-// } from "../types/xml-result";
-// import errCode from "../renderer/core/error-code";
-// import { getTempDirByBrand, TEMPLATE_CONFIG } from "./paths";
-// import { xml2jsonCompact } from "./xmlCompiler";
-// import { getRandomStr } from "./utils";
-
-// // 解析单个预览页面配置
-// export async function compilePageConf(file: string): Promise<TypeTempPageConf> {
-//   if (!fse.existsSync(file)) {
-//     return Promise.reject(new Error(errCode[3000]));
-//   }
-//   const data = await xml2jsonCompact<TypeTempOriginPageConf>(file);
-//   return {
-//     root: path.dirname(file),
-//     config: {
-//       version: data.config?.[0]._attributes.version || "",
-//       description: data.config?.[0]._attributes.description || "",
-//       screenWidth: data.config?.[0]._attributes.screenWidth || ""
-//     },
-//     cover: data.cover?.[0]._attributes.src || "",
-//     category:
-//       data.category?.map(item => ({
-//         tag: item._attributes.tag || "",
-//         description: item._attributes.description || "",
-//         type: item._attributes.type || null
-//       })) || [],
-//     source:
-//       data.source?.map(item => ({
-//         description: item._attributes.description || "",
-//         layout: item.layout?.[0]._attributes || {},
-//         from: item.from?.[0]._attributes.src || "",
-//         to: item.to?.map(item => item._attributes.src) || []
-//       })) || [],
-//     xml: []
-//   };
-// }

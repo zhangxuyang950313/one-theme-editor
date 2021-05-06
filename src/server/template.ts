@@ -1,7 +1,7 @@
 import path from "path";
 import fse from "fs-extra";
 import _ from "lodash";
-import { TypeOriginBrandConf, TypeOriginTempConf } from "types/xml-result";
+import { TypeOriginBrandConf } from "types/xml-result";
 import {
   TypeBrandConf,
   TypeCreateProjectData,
