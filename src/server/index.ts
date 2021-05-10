@@ -7,9 +7,9 @@ import {
   getProjectList,
   createProject,
   updateProject
-} from "./project";
-import { getTemplates, compileBrandConf } from "./template";
-import { findImageData } from "./image";
+} from "./db-handler/project";
+import { getTemplates, compileBrandConf } from "./db-handler/template";
+import { findImageData } from "./db-handler/image";
 
 const send = {
   success: (data: any) => {

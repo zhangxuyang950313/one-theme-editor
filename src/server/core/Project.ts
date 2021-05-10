@@ -3,7 +3,7 @@ import {
   TypeProjectInfo,
   TypeTemplateInfo,
   TypeUiVersionConf
-} from "../types/project";
+} from "types/project";
 
 export type TypeCreateProject = {
   brandInfo: TypeBrandConf;

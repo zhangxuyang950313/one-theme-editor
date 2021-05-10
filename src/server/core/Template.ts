@@ -1,6 +1,5 @@
 import path from "path";
 import errCode from "renderer/core/error-code";
-import { xml2jsonCompact } from "common/xmlCompiler";
 import {
   TypeTempPageGroupConf,
   TypeTemplateInfo,
@@ -8,7 +7,8 @@ import {
   TypeTempPageConf,
   TypeTempPageConfigConf,
   TypeTempPageSourceConf,
-  TypeUiVersionConf
+  TypeUiVersionConf,
+  TypeTempPageCategoryConf
 } from "types/project";
 import {
   TypeOriginTempConf,
@@ -18,8 +18,9 @@ import {
   TypeTempOriginPageConf
 } from "types/xml-result";
 import TemplateInfo from "src/data/TemplateInfo";
-import XMLNode from "common/XMLNode";
-import { TypeTempPageCategoryConf } from "./../types/project.d";
+import { getImageUrlByAbsPath } from "@/db-handler/image";
+import { xml2jsonCompact } from "./xmlCompiler";
+import XMLNode from "./XMLNode";
 
 export class Page {
   private file: string;
@@ -43,15 +44,19 @@ export class Page {
 
   async getPreview(): Promise<string> {
     const xmlData = await this.ensureXmlData();
-    return path.join(this.uiPath, xmlData.preview?.[0]._attributes.src || "");
+    const previewSrc = path.join(
+      this.uiPath,
+      xmlData.preview?.[0]._attributes.src || ""
+    );
+    return getImageUrlByAbsPath(previewSrc);
   }
 
   async getConfig(): Promise<TypeTempPageConfigConf> {
     const xmlData = await this.ensureXmlData();
     return {
-      version: xmlData.config?.[0]._attributes.version || "",
-      description: xmlData.config?.[0]._attributes.description || "",
-      screenWidth: xmlData.config?.[0]._attributes.screenWidth || ""
+      version: xmlData.config?.[0]._attributes?.version || "",
+      description: xmlData.config?.[0]._attributes?.description || "",
+      screenWidth: xmlData.config?.[0]._attributes?.screenWidth || ""
     };
   }
 
@@ -59,20 +64,20 @@ export class Page {
     const xmlData = await this.ensureXmlData();
     return (
       xmlData.category?.map(item => ({
-        tag: item._attributes.tag || "",
-        description: item._attributes.description || "",
-        type: item._attributes.type || ""
+        tag: item._attributes?.tag || "",
+        description: item._attributes?.description || "",
+        type: item._attributes?.type || ""
       })) || []
     );
   }
 
   async getSourceList(): Promise<TypeTempPageSourceConf[]> {
     const xmlData = await this.ensureXmlData();
-    return (
-      xmlData.source?.map(item => {
+    const queue =
+      xmlData.source?.map(async item => {
         const layout: TypeTempLayout = {};
         if (item.layout) {
-          const layoutNode = new XMLNode(item.layout);
+          const layoutNode = new XMLNode(item.layout[0]);
           layout.x = layoutNode.getAttribute("x");
           layout.y = layoutNode.getAttribute("y");
           layout.w = layoutNode.getAttribute("w");
@@ -80,18 +85,21 @@ export class Page {
           layout.align = layoutNode.getAttribute("align");
           layout.alignV = layoutNode.getAttribute("alignV");
         }
-        const description = item._attributes.description || "";
-        const from = path.resolve(
+        const description = item?._attributes?.description || "";
+        const fromSrc = path.resolve(
           this.dir,
-          item.from?.[0]._attributes.src || ""
+          item.from?.[0]._attributes?.src || ""
         );
-        const to =
-          item.to?.map(item =>
-            path.join(this.uiPath, item._attributes.src || "")
-          ) || [];
-        return { description, layout, from, to };
-      }) || []
-    );
+        const fromUrl = await getImageUrlByAbsPath(fromSrc);
+        const to = item.to
+          ? item.to.map(item =>
+              path.join(this.uiPath, item?._attributes?.src || "")
+            )
+          : [];
+        return { description, layout, from: fromUrl, to };
+      }) || [];
+
+    return Promise.all(queue);
   }
 
   // async getColorList() {
@@ -149,12 +157,19 @@ export default class Template {
     return this.xmlData;
   }
 
-  async getDescFile(): Promise<string> {
+  getDescFile(): string {
     return this.descFile;
   }
-  async getRootDir(): Promise<string> {
+
+  getRootDir(): string {
     return this.rootDir;
   }
+
+  // 处理成模板根目录
+  resolvePath(relativePath: string): string {
+    return path.join(this.getRootDir(), relativePath);
+  }
+
   // 模板名称
   async getName(): Promise<string> {
     const tempData = await this.ensureXmlData();
@@ -168,7 +183,11 @@ export default class Template {
   // 模板预览图
   async getPreview(): Promise<string> {
     const tempData = await this.ensureXmlData();
-    return tempData.preview?.[0]._attributes.src || "";
+    const imageSrc = path.join(
+      this.rootDir,
+      tempData.preview?.[0]._attributes.src || ""
+    );
+    return getImageUrlByAbsPath(imageSrc);
   }
   // 模板支持 ui 版本列表
   async getUiVersions(): Promise<TypeUiVersionConf[]> {
@@ -217,9 +236,12 @@ export default class Template {
     const modulesQueue: Promise<TypeTempModuleConf>[] =
       tempData.module?.map(async item => {
         const moduleNode = new XMLNode(item);
+        const iconUrl = await getImageUrlByAbsPath(
+          path.join(this.rootDir, moduleNode.getAttribute("icon"))
+        );
         const result: TypeTempModuleConf = {
           name: moduleNode.getAttribute("name"),
-          icon: moduleNode.getAttribute("icon"),
+          icon: iconUrl,
           groups: item.group ? await this.getPageGroup(item.group) : []
         };
         return result;

@@ -10,11 +10,11 @@ import {
 } from "types/project";
 import TemplateData from "src/data/TemplateConf";
 import TemplateInfo from "src/data/TemplateInfo";
-import Template from "common/Template";
 import { HOST, PORT } from "common/config";
-import { xml2jsonCompact } from "common/xmlCompiler";
 import { TEMPLATE_CONFIG, getTempDirByBrand } from "common/paths";
 import { getRandomStr, localImageToBase64Async } from "common/utils";
+import { xml2jsonCompact } from "../core/xmlCompiler";
+import Template from "../core/Template";
 import { insertImageData } from "./image";
 
 // 解析厂商配置
