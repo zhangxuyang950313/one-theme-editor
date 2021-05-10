@@ -124,9 +124,11 @@ export default class Template {
     const modulesQueue: Promise<TypeTempModuleConf>[] =
       tempData.module?.map(async item => {
         const moduleNode = new XMLNode(item);
-        const iconUrl = await getImageUrlByAbsPath(
-          path.join(this.rootDir, moduleNode.getAttribute("icon"))
+        const iconSrc = path.join(
+          this.rootDir,
+          moduleNode.getAttribute("icon")
         );
+        const iconUrl = await getImageUrlByAbsPath(iconSrc);
         const result: TypeTempModuleConf = {
           name: moduleNode.getAttribute("name"),
           icon: iconUrl,

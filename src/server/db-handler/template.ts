@@ -43,14 +43,11 @@ async function compileTempConf(file: string): Promise<TypeTemplateConf> {
   const templateData = new TemplateData();
   const key = getRandomStr();
   const root = path.dirname(file);
-  const preview = path.resolve(root, await template.getPreview());
-  const base64 = await localImageToBase64Async(preview);
-  const { _id } = await insertImageData({ md5: "", base64 });
   templateData.setKey(key);
   templateData.setRoot(root);
   templateData.setFile(file);
   templateData.setName(await template.getName());
-  templateData.setPreview(`http://${HOST}:${PORT}/image/${_id}`);
+  templateData.setPreview(await template.getPreview());
   templateData.setVersion(await template.getVersion());
   templateData.setUiVersions(await template.getUiVersions());
   return templateData.getData();

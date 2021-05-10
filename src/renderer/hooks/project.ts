@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useLayoutEffect, useState, useCallback } from "react";
-import { getProjectById } from "@/core/data";
+import { getProjectById } from "@/api/index";
 import { getProjectPreviewConf } from "@/store/modules/project/selector";
 // import {
 //   initProject,

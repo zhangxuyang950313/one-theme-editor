@@ -20,10 +20,12 @@ const API = {
   GET_TEMPLATE_LIST: "/template/list",
   // 获取模板配置
   GET_TEMPLATE_CONF: "/template/conf",
+  // 创建工程
+  CREATE_PROJECT: "/project/create",
   // 获取工程列表
   GET_PROJECT_LIST: "/project/list",
-  // 创建工程
-  CREATE_PROJECT: "/project/create"
+  // 通过 id 获取工程信息
+  GET_PROJECT_BY_ID: "/project/find"
 };
 
 type TypeResponseFrame<T> = {
@@ -57,6 +59,14 @@ export async function getTemplateInfo(
   // todo
 }
 
+// 创建工程
+export async function createProject(
+  data: TypeCreateProjectData
+): Promise<TypeProjectData> {
+  return http
+    .post<TypeResponseFrame<TypeProjectData>>(API.CREATE_PROJECT, data)
+    .then(data => data.data.data);
+}
 // 获取工程列表
 export async function getProjectList(
   brandInfo: TypeBrandConf
@@ -69,11 +79,14 @@ export async function getProjectList(
     .then(data => data.data.data);
 }
 
-// 创建工程
-export async function createProject(
-  data: TypeCreateProjectData
-): Promise<TypeProjectData> {
+// 通过 _id 查询工程
+export async function getProjectById(
+  id: string
+): Promise<TypeDatabase<TypeProjectData>> {
   return http
-    .post<TypeResponseFrame<TypeProjectData>>(API.CREATE_PROJECT, data)
+    .get<TypeResponseFrame<TypeDatabase<TypeProjectData>>>(
+      API.GET_PROJECT_BY_ID,
+      { params: { id } }
+    )
     .then(data => data.data.data);
 }

@@ -1,24 +1,24 @@
-import path from "path";
-import { remote } from "electron";
-import Database from "nedb-promises";
-import { getRandomStr } from "common/utils";
-import { TypeBrandConf, TypeProjectData, TypeDatabase } from "types/project";
-import { isDev } from "./constant";
+// import path from "path";
+// import { remote } from "electron";
+// import Database from "nedb-promises";
+// import { getRandomStr } from "common/utils";
+// import { TypeBrandConf, TypeProjectData, TypeDatabase } from "types/project";
+// import { isDev } from "./constant";
 
-const userDataPath = isDev
-  ? path.resolve(remote.app.getAppPath(), "../userCache")
-  : remote.app.getPath("userData");
+// const userDataPath = isDev
+//   ? path.resolve(remote.app.getAppPath(), "../userCache")
+//   : remote.app.getPath("userData");
 
-const projectData = path.resolve(userDataPath, "store/project.db");
+// const projectData = path.resolve(userDataPath, "store/project.db");
 
-const db: Record<string, Database> = {
-  // 项目工程数据
-  project: new Database({
-    filename: projectData,
-    autoload: true,
-    timestampData: true
-  })
-};
+// const db: Record<string, Database> = {
+//   // 项目工程数据
+//   project: new Database({
+//     filename: projectData,
+//     autoload: true,
+//     timestampData: true
+//   })
+// };
 
 // export async function getImageByPath(
 //   file: string
@@ -47,55 +47,55 @@ const db: Record<string, Database> = {
 // }
 
 // 创建工程
-export async function addProject(
-  projectData: TypeProjectData
-): Promise<TypeDatabase<TypeProjectData>> {
-  const key = getRandomStr();
-  const db = new Database({
-    filename: `project/${key}`,
-    autoload: true,
-    timestampData: true
-  });
-  return await db.insert(projectData);
-}
+// export async function addProject(
+//   projectData: TypeProjectData
+// ): Promise<TypeDatabase<TypeProjectData>> {
+//   const key = getRandomStr();
+//   const db = new Database({
+//     filename: `project/${key}`,
+//     autoload: true,
+//     timestampData: true
+//   });
+//   return await db.insert(projectData);
+// }
 
 // 获取所有工程
-type TypeAllBrandProjects = {
-  [x: string]: TypeProjectData[];
-};
-export async function getAllProjects(): Promise<
-  TypeDatabase<TypeAllBrandProjects>[]
-> {
-  if (!db.project) return [];
-  return await db.project.find<TypeAllBrandProjects>({});
-}
+// type TypeAllBrandProjects = {
+//   [x: string]: TypeProjectData[];
+// };
+// export async function getAllProjects(): Promise<
+//   TypeDatabase<TypeAllBrandProjects>[]
+// > {
+//   if (!db.project) return [];
+//   return await db.project.find<TypeAllBrandProjects>({});
+// }
 
 // 获取对应厂商所有工程
-export async function getProjectsByBrand(
-  brandInfo: TypeBrandConf
-): Promise<TypeDatabase<TypeProjectData>[]> {
-  if (!db.project) return [];
-  const projects = await db.project.find<TypeProjectData>({ brandInfo });
-  return projects.sort((a, b) => {
-    if (a.updatedAt && b.updatedAt) {
-      return b.updatedAt.getTime() - a.updatedAt.getTime();
-    } else return 0;
-  });
-}
+// export async function getProjectsByBrand(
+//   brandInfo: TypeBrandConf
+// ): Promise<TypeDatabase<TypeProjectData>[]> {
+//   if (!db.project) return [];
+//   const projects = await db.project.find<TypeProjectData>({ brandInfo });
+//   return projects.sort((a, b) => {
+//     if (a.updatedAt && b.updatedAt) {
+//       return b.updatedAt.getTime() - a.updatedAt.getTime();
+//     } else return 0;
+//   });
+// }
 
-// 通过 id 获取主题项目
-export async function getProjectById(
-  id: string
-): Promise<TypeDatabase<TypeProjectData> | null> {
-  if (!db.project) return null;
-  return await db.project.findOne<TypeProjectData>({ _id: id });
-}
+// // 通过 id 获取主题项目
+// export async function getProjectById(
+//   id: string
+// ): Promise<TypeDatabase<TypeProjectData> | null> {
+//   if (!db.project) return null;
+//   return await db.project.findOne<TypeProjectData>({ _id: id });
+// }
 
-export async function getImageDataByKey(props: {
-  pid: string;
-  key: string;
-}): Promise<void> {
-  //
-}
+// export async function getImageDataByKey(props: {
+//   pid: string;
+//   key: string;
+// }): Promise<void> {
+//   //
+// }
 
 // db.project?.remove({}, { multi: true });

@@ -79,6 +79,7 @@ app.get<any, any, any, { brandType: string }>("/template/list", (req, res) => {
       res.send(send.success(templateConfList));
     })
     .catch(err => {
+      console.log(err);
       res.status(400).send(send.fail(err));
     });
 });
@@ -117,7 +118,7 @@ app.get<any, any, any, { id: string }>("/project/find", (req, res) => {
       res.send(send.success(projectData));
     })
     .catch(err => {
-      res.status(400).send(send.fail(err));
+      res.status(400).send(send.fail(err.message));
     });
 });
 

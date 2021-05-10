@@ -92,7 +92,7 @@ export async function getProjectList(
 // 通过 _id 获取工程数据库实例
 async function getProjectDB(_id: string): Promise<Nedb> {
   const data = await projectIndexDB.findOne<TypeIndex>({ _id });
-  if (!data.filename) throw new Error(errCode[2001]);
+  if (!data?.filename) throw new Error(errCode[2001]);
   return createNedb(path.join(PROJECTS_DIR, data.filename));
 }
 

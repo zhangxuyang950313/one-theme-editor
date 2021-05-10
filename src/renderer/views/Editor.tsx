@@ -3,11 +3,7 @@ import { useHistory, useParams } from "react-router";
 import styled from "styled-components";
 
 import { useDocumentTitle } from "@/hooks";
-import {
-  usePreviewConf,
-  useProjectById,
-  useLoadProject
-} from "@/hooks/project";
+import { useProjectById, useLoadProject } from "@/hooks/project";
 import { TypeTempModuleConf } from "types/project";
 
 import { Button, Empty, Spin } from "antd";
@@ -31,12 +27,12 @@ const Editor: React.FC = () => {
 
   // 默认选择第一个模块
   useLayoutEffect(() => {
-    const firstModule = projectData?.previewConf.modules[0];
+    const firstModule = projectData?.templateInfo.modules[0];
     if (firstModule) updateModule(firstModule);
-  }, [projectData?.previewConf.modules]);
+  }, [projectData?.templateInfo.modules]);
 
   // 预览所需配置
-  const previewConf = usePreviewConf();
+  // const previewConf = usePreviewConf();
 
   // 还未安装
   if (isLoading) {
@@ -69,28 +65,27 @@ const Editor: React.FC = () => {
   // 更新标题
   updateTitle(projectData.projectInfo.name || "");
 
+  const icons =
+    projectData.templateInfo.modules.map(item => ({
+      icon: item.icon, // TODO 默认图标
+      name: item.name
+    })) || [];
+
   // 进入编辑状态
   return (
     <StyleEditor>
       {/* 模块选择器 */}
       <ModuleSelector
-        icons={
-          previewConf?.modules.map(item => ({
-            icon: "", // TODO 默认图标
-            name: item.name
-          })) || []
-        }
+        icons={icons}
         onSelected={index => {
-          if (previewConf) {
-            updateModule(previewConf.modules[index]);
-          }
+          updateModule(projectData.templateInfo.modules[index]);
         }}
       />
       {/* 编辑区域 */}
       <StyleEditorContext>
         <EditorToolsBar />
         <StyleEditorMain>
-          <PageSelector previewClass={selectedModule?.groups || []} />
+          <PageSelector pageGroups={selectedModule?.groups || []} />
           <ResourceContext />
         </StyleEditorMain>
       </StyleEditorContext>

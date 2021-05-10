@@ -6,32 +6,27 @@ import { TypeTempPageGroupConf } from "types/project";
 
 // 页面选择器
 type TypeProps = {
-  previewClass: TypeTempPageGroupConf[];
+  pageGroups: TypeTempPageGroupConf[];
 };
 const PageSelector: React.FC<TypeProps> = props => {
-  const { previewClass } = props;
+  const { pageGroups } = props;
   return (
     <StylePageSelector>
-      <Collapse
-        bordered={false}
-        defaultActiveKey={Object.keys(previewClass).map(o => Number(o))}
-      >
-        {previewClass.map((item, key) => {
-          return (
-            <Collapse.Panel header={item.name} key={key}>
-              <StylePagePreview>
-                {item.pages.map(page => {
-                  // const pageConf = getPageConfByKey(page);
-                  // if (!pageConf?.conf?.cover) return null;
-                  // const imageData = getImageDataByKey(pageConf.conf.cover);
-                  return (
-                    <img className="image" src={""} key={page} alt={page} />
-                  );
-                })}
-              </StylePagePreview>
-            </Collapse.Panel>
-          );
-        })}
+      <Collapse bordered={false} defaultActiveKey={Object.keys(pageGroups)}>
+        {pageGroups.map((group, key) => (
+          <Collapse.Panel header={group.name} key={key}>
+            <StylePagePreview>
+              {group.pages.map((page, index) => (
+                <img
+                  className="image"
+                  key={index}
+                  src={page.preview}
+                  alt={page.pathname}
+                />
+              ))}
+            </StylePagePreview>
+          </Collapse.Panel>
+        ))}
       </Collapse>
     </StylePageSelector>
   );
