@@ -20,9 +20,10 @@ export default class XMLNode {
   // }
 
   // 根据键获得值
-  getAttribute(attr: string): string {
-    return this.node._attributes
-      ? String(this.node._attributes[attr]) ?? ""
-      : "";
+  getAttribute(attr: string, def = ""): string {
+    if (this.node._attributes && this.node._attributes[attr]) {
+      return String(this.node._attributes[attr]);
+    }
+    return def;
   }
 }

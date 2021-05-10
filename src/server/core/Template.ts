@@ -24,7 +24,7 @@ import XMLNode from "./XMLNode";
 
 export class Page {
   private file: string;
-  private dir: string;
+  private dirWithUiPath: string;
   private pathname: string;
   private uiPath: string;
   private xmlData!: TypeTempOriginPageConf;
@@ -32,7 +32,7 @@ export class Page {
     this.file = props.file;
     this.pathname = props.pathname;
     this.uiPath = props.uiPath;
-    this.dir = path.dirname(props.file);
+    this.dirWithUiPath = path.dirname(props.file);
   }
 
   private async ensureXmlData() {
@@ -45,9 +45,10 @@ export class Page {
   async getPreview(): Promise<string> {
     const xmlData = await this.ensureXmlData();
     const previewSrc = path.join(
-      this.uiPath,
+      this.dirWithUiPath,
       xmlData.preview?.[0]._attributes.src || ""
     );
+    console.log(previewSrc);
     return getImageUrlByAbsPath(previewSrc);
   }
 
@@ -82,12 +83,12 @@ export class Page {
           layout.y = layoutNode.getAttribute("y");
           layout.w = layoutNode.getAttribute("w");
           layout.h = layoutNode.getAttribute("h");
-          layout.align = layoutNode.getAttribute("align");
-          layout.alignV = layoutNode.getAttribute("alignV");
+          layout.align = layoutNode.getAttribute("align", "left");
+          layout.alignV = layoutNode.getAttribute("alignV", "top");
         }
         const description = item?._attributes?.description || "";
         const fromSrc = path.resolve(
-          this.dir,
+          this.dirWithUiPath,
           item.from?.[0]._attributes?.src || ""
         );
         const fromUrl = await getImageUrlByAbsPath(fromSrc);
