@@ -3,12 +3,12 @@ import styled from "styled-components";
 
 import { Card } from "antd";
 
-import { TypeProjectInfo } from "src/types/project";
+import { TypeProjectDesc } from "src/types/project";
 
 type TypeProps = {
   hoverable?: boolean;
-  projectInfo: TypeProjectInfo;
-  onClick?: (data: TypeProjectInfo) => void;
+  projectInfo: TypeProjectDesc;
+  onClick?: (data: TypeProjectDesc) => void;
 };
 // 工程卡片展示
 function ProjectCard(props: TypeProps): JSX.Element {

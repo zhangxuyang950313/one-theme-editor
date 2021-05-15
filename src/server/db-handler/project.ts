@@ -44,21 +44,21 @@ export async function createProject(
   }
   const file = path.resolve(PROJECTS_DIR, filename);
   const { brandConf, uiVersionConf } = data;
-  const brandInfo: TypeBrandInfo = {
+  const brand: TypeBrandInfo = {
     type: brandConf.type,
     name: brandConf.name
   };
-  const uiVersionInfo: TypeUiVersionInfo = {
+  const uiVersion: TypeUiVersionInfo = {
     name: uiVersionConf.name,
     code: uiVersionConf.code
   };
-  const templateInfo = await compileTempInfo(data);
+  const template = await compileTempInfo(data);
   // 组装数据
   const projectData = new ProjectData();
-  projectData.setProjectInfo(data.projectInfo);
-  projectData.setBrandInfo(brandInfo);
-  projectData.setUiVersionInfo(uiVersionInfo);
-  projectData.setTemplateInfo(templateInfo);
+  projectData.setProjectDesc(data.projectInfo);
+  projectData.setBrand(brand);
+  projectData.setUiVersion(uiVersion);
+  projectData.setTemplate(template);
   const project = await createNedb(file).insert(projectData.getData());
   // 添加索引
   projectIndexDB.insert({

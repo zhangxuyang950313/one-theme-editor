@@ -27,9 +27,9 @@ const Editor: React.FC = () => {
 
   // 默认选择第一个模块
   useLayoutEffect(() => {
-    const firstModule = projectData?.templateInfo.modules[0];
+    const firstModule = projectData?.template.modules[0];
     if (firstModule) updateModule(firstModule);
-  }, [projectData?.templateInfo.modules]);
+  }, [projectData?.template.modules]);
 
   // 预览所需配置
   // const previewConf = usePreviewConf();
@@ -66,7 +66,7 @@ const Editor: React.FC = () => {
   updateTitle(projectData.projectInfo.name || "");
 
   const icons =
-    projectData.templateInfo.modules.map(item => ({
+    projectData.template.modules.map(item => ({
       icon: item.icon, // TODO 默认图标
       name: item.name
     })) || [];
@@ -78,7 +78,7 @@ const Editor: React.FC = () => {
       <ModuleSelector
         icons={icons}
         onSelected={index => {
-          updateModule(projectData.templateInfo.modules[index]);
+          updateModule(projectData.template.modules[index]);
         }}
       />
       {/* 编辑区域 */}

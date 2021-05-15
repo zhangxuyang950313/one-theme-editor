@@ -1,7 +1,7 @@
 import ACTION_TYPES from "@/store/actions";
 import {
   TypeBrandConf,
-  TypeProjectInfo,
+  TypeProjectDesc,
   TypeTemplateInfo,
   TypeUiVersionConf,
   TypeTemplateConf,
@@ -24,7 +24,7 @@ type TypeSetProjectUiVersion = {
 
 type TypeSetProjectDescInfo = {
   type: typeof ACTION_TYPES.SET_PROJECT_DESC_INFO;
-  info: TypeProjectInfo;
+  info: TypeProjectDesc;
 };
 
 type TypeSetProjectTempConf = {
@@ -72,7 +72,7 @@ export function setProjectUiVersion(
 
 // 设置项目描述信息
 export function setProjectDescInfo(
-  info: TypeProjectInfo
+  info: TypeProjectDesc
 ): TypeSetProjectDescInfo {
   return { type: ACTION_TYPES.SET_PROJECT_DESC_INFO, info };
 }

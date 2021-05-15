@@ -2,7 +2,7 @@ import {
   TypeBrandConf,
   TypePageConf,
   TypeTemplateConf,
-  TypeProjectInfo,
+  TypeProjectDesc,
   TypeTemplateInfo,
   TypeUiVersionConf
 } from "src/types/project";
@@ -13,7 +13,7 @@ import { TypeActions } from "./action";
 export type TypeStates = {
   brandInfo: TypeBrandConf | null;
   uiVersion: TypeUiVersionConf | null;
-  projectInfo: TypeProjectInfo | null;
+  projectInfo: TypeProjectDesc | null;
   templateConf: TypeTemplateInfo | null;
   previewConf: TypeTemplateConf | null;
   pageConfData: TypePageConf[];

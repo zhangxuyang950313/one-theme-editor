@@ -5,7 +5,7 @@ import _ from "lodash";
 import { isDev } from "@/core/constant";
 import errCode from "@/core/error-code";
 import { useBrandConf, useTemplateList } from "@/hooks/template";
-import { TypeTemplateConf, TypeProjectInfo } from "src/types/project";
+import { TypeTemplateConf, TypeProjectDesc } from "src/types/project";
 
 // components
 import { Modal, Button, message, Form } from "antd";
@@ -21,7 +21,7 @@ import ProjectCard from "./ProjectCard";
 
 // 创建主题按钮
 type TypeProps = {
-  onProjectCreated: (projectInfo: TypeProjectInfo) => Promise<void>;
+  onProjectCreated: (projectInfo: TypeProjectDesc) => Promise<void>;
 };
 const CreateProject: React.FC<TypeProps> = props => {
   // 机型配置
@@ -35,11 +35,11 @@ const CreateProject: React.FC<TypeProps> = props => {
   // 当前步骤
   const [curStep, setCurStep] = useState(0);
   // 填写完成的项目数据
-  const [projectInfo, setProjectInfo] = useState<TypeProjectInfo>();
+  const [projectInfo, setProjectInfo] = useState<TypeProjectDesc>();
   // 创建状态
   const [isCreating, updateCreating] = useState(false);
   // 表单实例
-  const [form] = Form.useForm<TypeProjectInfo>();
+  const [form] = Form.useForm<TypeProjectDesc>();
 
   // 表单默认值
   const initialValues = {

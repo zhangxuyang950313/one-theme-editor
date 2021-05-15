@@ -1,50 +1,51 @@
 import {
   TypeBrandInfo,
   TypeProjectData,
-  TypeProjectInfo,
+  TypeProjectDesc,
   TypeUiVersionInfo,
   TypeTemplateInfo
 } from "../types/project.d";
 
 export default class ProjectData {
-  private projectInfo?: TypeProjectInfo;
-  private brandInfo?: TypeBrandInfo;
-  private uiVersionInfo?: TypeUiVersionInfo;
-  private templateInfo?: TypeTemplateInfo;
-  setProjectInfo(data: TypeProjectInfo): void {
+  private projectInfo?: TypeProjectDesc;
+  private brand?: TypeBrandInfo;
+  private uiVersion?: TypeUiVersionInfo;
+  private template?: TypeTemplateInfo;
+  setProjectDesc(data: TypeProjectDesc): void {
     this.projectInfo = data;
   }
-  getProjectInfo(): TypeProjectInfo | undefined {
+  getProjectDesc(): TypeProjectDesc | undefined {
     return this.projectInfo;
   }
-  setBrandInfo(data: TypeBrandInfo): void {
-    this.brandInfo = data;
+  setBrand(data: TypeBrandInfo): void {
+    this.brand = data;
   }
-  getBrandInfo(): TypeBrandInfo | undefined {
-    return this.brandInfo;
+  getBrand(): TypeBrandInfo | undefined {
+    return this.brand;
   }
-  setUiVersionInfo(data: TypeUiVersionInfo): void {
-    this.uiVersionInfo = data;
+  setUiVersion(data: TypeUiVersionInfo): void {
+    this.uiVersion = data;
   }
   getUiVersion(): TypeUiVersionInfo | undefined {
-    return this.uiVersionInfo;
+    return this.uiVersion;
   }
-  setTemplateInfo(data: TypeTemplateInfo): void {
-    this.templateInfo = data;
+  setTemplate(data: TypeTemplateInfo): void {
+    this.template = data;
   }
-  getTemplateInfo(): TypeTemplateInfo | undefined {
-    return this.templateInfo;
+  getTemplate(): TypeTemplateInfo | undefined {
+    return this.template;
   }
   getData(): TypeProjectData {
     if (!this.projectInfo) throw new Error("主题信息为空");
-    if (!this.brandInfo) throw new Error("机型信息为空");
-    if (!this.uiVersionInfo) throw new Error("UI版本为空");
-    if (!this.templateInfo) throw new Error("模板信息为空");
-    return {
-      brandInfo: this.brandInfo,
+    if (!this.brand) throw new Error("机型信息为空");
+    if (!this.uiVersion) throw new Error("UI版本为空");
+    if (!this.template) throw new Error("模板信息为空");
+    const data: TypeProjectData = {
+      brand: this.brand,
       projectInfo: this.projectInfo,
-      uiVersionInfo: this.uiVersionInfo,
-      templateInfo: this.templateInfo
+      uiVersion: this.uiVersion,
+      template: this.template
     };
+    return data;
   }
 }

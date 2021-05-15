@@ -10,7 +10,7 @@ export type TypeBrandConf = TypeBrandInfo & {
   templateDir: string;
 };
 
-export type TypeProjectInfo = {
+export type TypeProjectDesc = {
   [k in keyof typeof projectInfoConfig]: string;
 };
 
@@ -100,7 +100,7 @@ export type TypePageConf = {
 };
 
 export type TypeCreateProjectData = {
-  projectInfo: TypeProjectInfo;
+  projectInfo: TypeProjectDesc;
   uiVersionConf: TypeUiVersionConf;
   brandConf: TypeBrandConf;
   templateConf: TypeTemplateConf;
@@ -108,8 +108,8 @@ export type TypeCreateProjectData = {
 
 // 打包所有信息
 export type TypeProjectData = {
-  projectInfo: TypeProjectInfo;
-  uiVersionInfo: TypeUiVersionInfo;
-  brandInfo: TypeBrandInfo;
-  templateInfo: TypeTemplateInfo;
+  projectInfo: TypeProjectDesc;
+  uiVersion: TypeUiVersionInfo;
+  brand: TypeBrandInfo;
+  template: TypeTemplateInfo;
 };
