@@ -4,12 +4,13 @@ import styled from "styled-components";
 
 import { useDocumentTitle } from "@/hooks";
 import { useProjectById, useLoadProject } from "@/hooks/project";
-import { TypeTempModuleConf } from "types/project";
+import { TypeTempModuleConf, TypeTempPageConf } from "types/project";
 
 import { Button, Empty, Spin } from "antd";
 import ModuleSelector from "@/components/Editor/ModuleSelector";
 import EditorToolsBar from "@/components/Editor/ToolsBar";
 import PageSelector from "@/components/Editor/PageSelector";
+import Preview from "@/components/Editor/Preview";
 import ResourceContext from "@/components/Editor/ResourceContext";
 
 const Editor: React.FC = () => {
@@ -21,14 +22,18 @@ const Editor: React.FC = () => {
   const [projectData, isLoading] = useProjectById(pid);
   // 选择的模块数据
   const [selectedModule, updateModule] = useState<TypeTempModuleConf>();
+  // 选择的页面数据
+  const [selectPage, updatePageData] = useState<TypeTempPageConf>();
 
   // 载入工程
   useLoadProject(projectData);
 
-  // 默认选择第一个模块
+  // 默认选择第一个模块和第一个页面
   useLayoutEffect(() => {
     const firstModule = projectData?.template.modules[0];
     if (firstModule) updateModule(firstModule);
+    const firstPage = firstModule?.groups[0].pages[0];
+    if (firstPage) updatePageData(firstPage);
   }, [projectData?.template.modules]);
 
   // 预览所需配置
@@ -85,7 +90,15 @@ const Editor: React.FC = () => {
       <StyleEditorContext>
         <EditorToolsBar />
         <StyleEditorMain>
+          {/* 页面选择器 */}
           <PageSelector pageGroups={selectedModule?.groups || []} />
+          {/* 预览 */}
+          {selectPage && (
+            <StylePreview>
+              <Preview pageConf={selectPage} />
+            </StylePreview>
+          )}
+          {/* 素材编辑区 */}
           <ResourceContext />
         </StyleEditorMain>
       </StyleEditorContext>
@@ -118,6 +131,12 @@ const StyleEditorMain = styled.div`
   display: flex;
   height: 100%;
   /* flex-grow: 1; */
+`;
+
+const StylePreview = styled.div`
+  width: 360px;
+  padding: 20px;
+  flex-shrink: 0;
 `;
 
 export default Editor;

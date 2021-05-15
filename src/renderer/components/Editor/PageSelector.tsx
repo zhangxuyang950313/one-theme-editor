@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 import { Collapse } from "antd";
 import { TypeTempPageGroupConf } from "types/project";
+import { StyleBorderRight } from "@/style/index";
 
 // 页面选择器
 type TypeProps = {
@@ -32,16 +33,19 @@ const PageSelector: React.FC<TypeProps> = props => {
   );
 };
 
-const StylePageSelector = styled.div`
-  width: 360px;
+const StylePageSelector = styled(StyleBorderRight)`
+  width: 260px;
+  flex-shrink: 0;
 `;
 
 const StylePagePreview = styled.div`
   display: flex;
   justify-content: space-around;
+  overflow: hidden;
   .image {
     cursor: pointer;
     width: 40%;
+    border-radius: 10px;
   }
 `;
 
