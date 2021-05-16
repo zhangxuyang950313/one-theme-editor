@@ -8,9 +8,9 @@ type TypeProps = {
 const Preview: React.FC<TypeProps> = (props: TypeProps) => {
   const { pageConf } = props;
   return (
-    <StylePreview>
+    <StylePreviewer>
       <StyleImage src={pageConf.preview} alt={pageConf.pathname} />
-    </StylePreview>
+    </StylePreviewer>
   );
 };
 
@@ -18,7 +18,7 @@ const StyleImage = styled.img`
   width: 100%;
 `;
 
-const StylePreview = styled.div`
+const StylePreviewer = styled.div`
   width: 100%;
   overflow: hidden;
   border-radius: 20px;

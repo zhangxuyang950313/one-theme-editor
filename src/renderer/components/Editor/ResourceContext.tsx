@@ -1,16 +1,33 @@
 import React from "react";
 import styled from "styled-components";
 
-const ResourceContext: React.FC = () => {
-  return <StyleResourceContext></StyleResourceContext>;
+import { TypeTempPageConf } from "types/project";
+import { StyleBorderRight } from "@/style";
+import ImageChanger from "./ImageChanger";
+
+type TypeProps = {
+  pageConf: TypeTempPageConf;
+};
+const ResourceContext: React.FC<TypeProps> = props => {
+  return (
+    <StyleResourceContext>
+      <StyleImageChanger>
+        {props.pageConf.source.map((item, index) => (
+          <ImageChanger key={index} data={item} />
+        ))}
+      </StyleImageChanger>
+    </StyleResourceContext>
+  );
 };
 
 const StyleResourceContext = styled.div`
-  width: 100%;
+  width: 280px;
   height: 100%;
-  flex-grow: 1;
-  border-left: 1px solid;
-  border-left-color: ${({ theme }) => theme["@border-color-base"]};
+  /* flex-grow: 1; */
+  height: 100%;
+  overflow: auto;
 `;
+
+const StyleImageChanger = styled(StyleBorderRight)``;
 
 export default ResourceContext;

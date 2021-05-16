@@ -10,8 +10,9 @@ import { Button, Empty, Spin } from "antd";
 import ModuleSelector from "@/components/Editor/ModuleSelector";
 import EditorToolsBar from "@/components/Editor/ToolsBar";
 import PageSelector from "@/components/Editor/PageSelector";
-import Preview from "@/components/Editor/Preview";
+import Previewer from "@/components/Editor/Previewer";
 import ResourceContext from "@/components/Editor/ResourceContext";
+import { StyleBorderRight } from "@/style";
 
 const Editor: React.FC = () => {
   const [, updateTitle] = useDocumentTitle();
@@ -70,11 +71,12 @@ const Editor: React.FC = () => {
   // 更新标题
   updateTitle(projectData.projectInfo.name || "");
 
-  const icons =
-    projectData.template.modules.map(item => ({
-      icon: item.icon, // TODO 默认图标
-      name: item.name
-    })) || [];
+  const icons = projectData.template.modules.map(item => ({
+    icon: item.icon, // TODO 默认图标
+    name: item.name
+  }));
+
+  const groups = selectedModule?.groups || [];
 
   // 进入编辑状态
   return (
@@ -91,15 +93,21 @@ const Editor: React.FC = () => {
         <EditorToolsBar />
         <StyleEditorMain>
           {/* 页面选择器 */}
-          <PageSelector pageGroups={selectedModule?.groups || []} />
+          <StylePageSelector>
+            <PageSelector pageGroups={groups} />
+          </StylePageSelector>
           {/* 预览 */}
           {selectPage && (
-            <StylePreview>
-              <Preview pageConf={selectPage} />
-            </StylePreview>
+            <StylePreviewer>
+              <Previewer pageConf={selectPage} />
+            </StylePreviewer>
           )}
           {/* 素材编辑区 */}
-          <ResourceContext />
+          {selectPage && (
+            <StyleResourceContent>
+              <ResourceContext pageConf={selectPage} />
+            </StyleResourceContent>
+          )}
         </StyleEditorMain>
       </StyleEditorContext>
     </StyleEditor>
@@ -131,11 +139,23 @@ const StyleEditorMain = styled.div`
   display: flex;
   height: 100%;
   /* flex-grow: 1; */
+  box-sizing: border-box;
 `;
 
-const StylePreview = styled.div`
+const StylePageSelector = styled(StyleBorderRight)`
+  width: 260px;
+  flex-shrink: 0;
+`;
+
+const StylePreviewer = styled(StyleBorderRight)`
   width: 360px;
   padding: 20px;
+  flex-shrink: 0;
+`;
+
+const StyleResourceContent = styled(StyleBorderRight)`
+  width: 100%;
+  padding: 0 20px;
   flex-shrink: 0;
 `;
 
