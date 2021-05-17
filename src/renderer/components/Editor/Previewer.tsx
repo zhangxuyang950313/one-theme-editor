@@ -3,10 +3,11 @@ import React from "react";
 import styled from "styled-components";
 
 type TypeProps = {
-  pageConf: TypeTempPageConf;
+  pageConf: TypeTempPageConf | undefined;
 };
 const Preview: React.FC<TypeProps> = (props: TypeProps) => {
   const { pageConf } = props;
+  if (!pageConf) return null;
   return (
     <StylePreviewer>
       <StyleImage src={pageConf.preview} alt={pageConf.pathname} />

@@ -6,9 +6,10 @@ import { StyleBorderRight } from "@/style";
 import ImageChanger from "./ImageChanger";
 
 type TypeProps = {
-  pageConf: TypeTempPageConf;
+  pageConf: TypeTempPageConf | undefined;
 };
 const ResourceContext: React.FC<TypeProps> = props => {
+  if (!props.pageConf) return null;
   return (
     <StyleResourceContext>
       <StyleImageChanger>

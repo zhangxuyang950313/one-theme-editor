@@ -7,6 +7,7 @@ import { useProjectById, useLoadProject } from "@/hooks/project";
 import { TypeTempModuleConf, TypeTempPageConf } from "types/project";
 
 import { Button, Empty, Spin } from "antd";
+import { SplitPane } from "react-collapse-pane";
 import ModuleSelector from "@/components/Editor/ModuleSelector";
 import EditorToolsBar from "@/components/Editor/ToolsBar";
 import PageSelector from "@/components/Editor/PageSelector";
@@ -92,22 +93,20 @@ const Editor: React.FC = () => {
       <StyleEditorContext>
         <EditorToolsBar />
         <StyleEditorMain>
-          {/* 页面选择器 */}
-          <StylePageSelector>
-            <PageSelector pageGroups={groups} />
-          </StylePageSelector>
-          {/* 预览 */}
-          {selectPage && (
+          <SplitPane split="vertical">
+            {/* 页面选择器 */}
+            <StylePageSelector>
+              <PageSelector pageGroups={groups} />
+            </StylePageSelector>
+            {/* 预览 */}
             <StylePreviewer>
               <Previewer pageConf={selectPage} />
             </StylePreviewer>
-          )}
-          {/* 素材编辑区 */}
-          {selectPage && (
+            {/* 素材编辑区 */}
             <StyleResourceContent>
               <ResourceContext pageConf={selectPage} />
             </StyleResourceContent>
-          )}
+          </SplitPane>
         </StyleEditorMain>
       </StyleEditorContext>
     </StyleEditor>
@@ -136,27 +135,32 @@ const StyleEditorContext = styled.div`
 `;
 
 const StyleEditorMain = styled.div`
-  display: flex;
-  height: 100%;
-  /* flex-grow: 1; */
-  box-sizing: border-box;
+  /* display: flex; */
+  /* overflow: auto; */
+  /* flex: auto; */
+  /* height: 100%; */
+  /* flex-grow: 1;
+  box-sizing: border-box; */
 `;
 
 const StylePageSelector = styled(StyleBorderRight)`
-  width: 260px;
-  flex-shrink: 0;
+  /* width: 260px; */
+  /* flex-shrink: 0; */
 `;
 
 const StylePreviewer = styled(StyleBorderRight)`
-  width: 360px;
+  /* width: 360px; */
   padding: 20px;
-  flex-shrink: 0;
+  /* flex-shrink: 0; */
 `;
 
 const StyleResourceContent = styled(StyleBorderRight)`
-  width: 100%;
-  padding: 0 20px;
-  flex-shrink: 0;
+  /* width: 100%; */
+  /* max-height: 100%; */
+  overflow: auto;
+  /* padding: 0 20px; */
+  /* box-sizing: border-box; */
+  /* flex-shrink: 0; */
 `;
 
 export default Editor;
