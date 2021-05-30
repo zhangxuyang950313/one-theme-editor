@@ -80,9 +80,10 @@ export default class Page {
         );
         const fromUrl = await getImageUrlByAbsPath(fromSrc);
         const to = item.to
-          ? item.to.map(item =>
-              path.join(this.uiPath, item?._attributes?.src || "")
-            )
+          ? item.to.map(item => ({
+              url: "",
+              path: path.join(this.uiPath, item?._attributes?.src || "")
+            }))
           : [];
         return { description, layout, from: fromUrl, to };
       }) || [];

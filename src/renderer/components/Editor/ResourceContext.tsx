@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 
 import { TypeTempPageConf } from "types/project";
-import { StyleBorderRight } from "@/style";
 import ImageChanger from "./ImageChanger";
 
 type TypeProps = {
@@ -12,23 +11,18 @@ const ResourceContext: React.FC<TypeProps> = props => {
   if (!props.pageConf) return null;
   return (
     <StyleResourceContext>
-      <StyleImageChanger>
-        {props.pageConf.source.map((item, index) => (
-          <ImageChanger key={index} data={item} />
-        ))}
-      </StyleImageChanger>
+      {props.pageConf.source.map((item, index) => (
+        <ImageChanger key={index} data={item} />
+      ))}
     </StyleResourceContext>
   );
 };
 
 const StyleResourceContext = styled.div`
-  width: 280px;
-  height: 100%;
-  /* flex-grow: 1; */
-  height: 100%;
+  /* width: 280px; */
   overflow: auto;
+  padding: 20px;
+  box-sizing: border-box;
 `;
-
-const StyleImageChanger = styled(StyleBorderRight)``;
 
 export default ResourceContext;

@@ -93,20 +93,18 @@ const Editor: React.FC = () => {
       <StyleEditorContext>
         <EditorToolsBar />
         <StyleEditorMain>
-          <SplitPane split="vertical">
-            {/* 页面选择器 */}
-            <StylePageSelector>
-              <PageSelector pageGroups={groups} />
-            </StylePageSelector>
-            {/* 预览 */}
-            <StylePreviewer>
-              <Previewer pageConf={selectPage} />
-            </StylePreviewer>
-            {/* 素材编辑区 */}
-            <StyleResourceContent>
-              <ResourceContext pageConf={selectPage} />
-            </StyleResourceContent>
-          </SplitPane>
+          {/* 页面选择器 */}
+          <StylePageSelector>
+            <PageSelector pageGroups={groups} />
+          </StylePageSelector>
+          {/* 预览 */}
+          <StylePreviewer>
+            <Previewer pageConf={selectPage} />
+          </StylePreviewer>
+          {/* 素材编辑区 */}
+          <StyleResourceContent>
+            <ResourceContext pageConf={selectPage} />
+          </StyleResourceContent>
         </StyleEditorMain>
       </StyleEditorContext>
     </StyleEditor>
@@ -135,31 +133,28 @@ const StyleEditorContext = styled.div`
 `;
 
 const StyleEditorMain = styled.div`
-  /* display: flex; */
-  /* overflow: auto; */
-  /* flex: auto; */
-  /* height: 100%; */
-  /* flex-grow: 1;
-  box-sizing: border-box; */
+  display: flex;
+  overflow: hidden;
+  height: 100%;
+  flex-grow: 1;
+  box-sizing: border-box;
 `;
 
 const StylePageSelector = styled(StyleBorderRight)`
-  /* width: 260px; */
-  /* flex-shrink: 0; */
+  width: 260px;
+  flex-shrink: 0;
+  overflow: auto;
 `;
 
 const StylePreviewer = styled(StyleBorderRight)`
-  /* width: 360px; */
+  width: 360px;
   padding: 20px;
-  /* flex-shrink: 0; */
+  overflow: auto;
 `;
 
 const StyleResourceContent = styled(StyleBorderRight)`
-  /* width: 100%; */
-  /* max-height: 100%; */
   overflow: auto;
-  /* padding: 0 20px; */
-  /* box-sizing: border-box; */
+  box-sizing: border-box;
   /* flex-shrink: 0; */
 `;
 

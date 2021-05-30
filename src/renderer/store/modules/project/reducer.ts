@@ -1,31 +1,37 @@
+import _ from "lodash";
 import {
   TypeBrandConf,
-  TypePageConf,
-  TypeTemplateConf,
-  TypeProjectDesc,
-  TypeTemplateInfo,
-  TypeUiVersionConf
+  TypeDatabase,
+  // TypePageConf,
+  // TypeTemplateConf,
+  // TypeProjectDesc,
+  // TypeTemplateInfo,
+  // TypeUiVersionConf,
+  TypeProjectData
 } from "src/types/project";
 import ACTION_TYPES from "@/store/actions";
 import { updateState } from "@/store/utils";
+import { updateProjectById } from "@/api";
 import { TypeActions } from "./action";
 
 export type TypeStates = {
   brandInfo: TypeBrandConf | null;
-  uiVersion: TypeUiVersionConf | null;
-  projectInfo: TypeProjectDesc | null;
-  templateConf: TypeTemplateInfo | null;
-  previewConf: TypeTemplateConf | null;
-  pageConfData: TypePageConf[];
+  projectData: TypeDatabase<TypeProjectData> | null;
+  // uiVersion: TypeUiVersionConf | null;
+  // projectInfo: TypeProjectDesc | null;
+  // templateConf: TypeTemplateInfo | null;
+  // previewConf: TypeTemplateConf | null;
+  // pageConfData: TypePageConf[];
 };
 
 const defaultState: TypeStates = {
   brandInfo: null,
-  uiVersion: null,
-  projectInfo: null,
-  templateConf: null,
-  previewConf: null,
-  pageConfData: []
+  projectData: null
+  // uiVersion: null,
+  // projectInfo: null,
+  // templateConf: null,
+  // previewConf: null,
+  // pageConfData: []
 };
 
 const projectState: TypeStates = { ...defaultState };
@@ -38,24 +44,27 @@ export default function ProjectReducer(
     case ACTION_TYPES.INIT_PROJECT: {
       return defaultState;
     }
-    case ACTION_TYPES.SET_PROJECT_BRAND_INFO: {
-      return updateState(state, { brandInfo: action.brandInfo });
+    case ACTION_TYPES.SET_PROJECT: {
+      return updateState(state, { projectData: action.projectData });
     }
-    case ACTION_TYPES.SET_PROJECT_UI_VERSION: {
-      return updateState(state, { uiVersion: action.uiVersion });
-    }
-    case ACTION_TYPES.SET_PROJECT_DESC_INFO: {
-      return updateState(state, { projectInfo: action.info });
-    }
-    case ACTION_TYPES.SET_PROJECT_TEMP_CONF: {
-      return updateState(state, { templateConf: action.tempConf });
-    }
-    case ACTION_TYPES.SET_PROJECT_PREVIEW_CONF: {
-      return updateState(state, { previewConf: action.previewConf });
-    }
-    case ACTION_TYPES.SET_PROJECT_PAGE_CONF_DATA: {
-      return updateState(state, { pageConfData: action.pageConfData });
-    }
+    // case ACTION_TYPES.SET_PROJECT_BRAND_INFO: {
+    //   return updateState(state, { brandInfo: action.brandInfo });
+    // }
+    // case ACTION_TYPES.SET_PROJECT_UI_VERSION: {
+    //   return updateState(state, { uiVersion: action.uiVersion });
+    // }
+    // case ACTION_TYPES.SET_PROJECT_DESC_INFO: {
+    //   return updateState(state, { projectInfo: action.info });
+    // }
+    // case ACTION_TYPES.SET_PROJECT_TEMP_CONF: {
+    //   return updateState(state, { templateConf: action.tempConf });
+    // }
+    // case ACTION_TYPES.SET_PROJECT_PREVIEW_CONF: {
+    //   return updateState(state, { previewConf: action.previewConf });
+    // }
+    // case ACTION_TYPES.SET_PROJECT_PAGE_CONF_DATA: {
+    //   return updateState(state, { pageConfData: action.pageConfData });
+    // }
     default: {
       return state;
     }

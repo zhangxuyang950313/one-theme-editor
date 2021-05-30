@@ -65,8 +65,8 @@ export type TypeTempPageCategoryConf = {
 export type TypeTempPageSourceConf = {
   description: string;
   layout: TypeTempLayout;
-  from: TypeTempFrom["src"];
-  to: TypeTempTo["src"][];
+  from: string;
+  to: Array<{ url: string; path: string }>;
 };
 export type TypeTempPageConf = {
   pathname: string;
@@ -108,8 +108,8 @@ export type TypeCreateProjectData = {
 
 // 打包所有信息
 export type TypeProjectData = {
+  brand: TypeBrandInfo;
   projectInfo: TypeProjectDesc;
   uiVersion: TypeUiVersionInfo;
-  brand: TypeBrandInfo;
   template: TypeTemplateInfo;
 };

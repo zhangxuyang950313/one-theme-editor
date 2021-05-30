@@ -123,8 +123,8 @@ app.get<any, any, any, { id: string }>("/project/find", (req, res) => {
 });
 
 // 更新数据
-app.post("/project/update", (req, res) => {
-  updateProject(req.body._id, req.body)
+app.post<{ id: string }>("/project/update/:id", (req, res) => {
+  updateProject(req.params.id, req.body)
     .then(projectData => {
       res.send(send.success(projectData));
     })

@@ -2,24 +2,25 @@
  * 图片替换单元组件
  */
 import path from "path";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { remote } from "electron";
 
 import { RightCircleOutlined } from "@ant-design/icons";
 import { TypeTempPageSourceConf } from "@/../types/project";
-// import { TypeImageSourceElement } from "@/store/types";
-// import { copyFile, loadImageUseImgHTML } from "@/core/utils";
+import { useUpdateProject } from "@/hooks/project";
 
 // 图片素材展示
 function ShowImage(props: { onClick?: () => void; srcUrl: string }) {
   return (
     <StyleImageBackground srcUrl={props.srcUrl}>
-      <div
-        className="preview"
-        can-click={String(!!props.onClick)}
-        onClick={() => props.onClick && props.onClick()}
-      ></div>
+      {props.srcUrl && (
+        <div
+          className="preview"
+          can-click={String(!!props.onClick)}
+          onClick={() => props.onClick && props.onClick()}
+        />
+      )}
     </StyleImageBackground>
   );
 }
@@ -65,6 +66,7 @@ type TypeProps = {
 };
 const ResourceChanger: React.FC<TypeProps> = props => {
   const [{ width, height }, setImageSize] = useState({ width: 0, height: 0 });
+  const handleUpdateProject = useUpdateProject();
   const { from, to, description } = props.data;
   // useEffect(() => {
   //   loadImageUseImgHTML(from).then(({ width, height }) =>
@@ -89,11 +91,12 @@ const ResourceChanger: React.FC<TypeProps> = props => {
   const handleShowImageFile = (target: string) => {
     remote.shell.showItemInFolder(target);
   };
-  // 将图片资源移动至工作目录
-  const handleMoveResourceToWorkDir = () => {
-    // TODO 批量复制文件
-    // copyFile(from, to[0]);
-    // .then(loadWorkImage);
+  // 中间的快速使用默认素材按钮
+  const handleUseDefaultResource = () => {
+    to.forEach(item => {
+      item.url = from;
+    });
+    handleUpdateProject();
   };
   return (
     <StyleImageChanger>
@@ -110,17 +113,17 @@ const ResourceChanger: React.FC<TypeProps> = props => {
           <ShowImage
             srcUrl={from}
             onClick={() => handlePreviewFile(from, description)}
-          ></ShowImage>
+          />
         </div>
         <RightCircleOutlined
           className="center"
-          onClick={handleMoveResourceToWorkDir}
+          onClick={handleUseDefaultResource}
         />
         <div className="right">
           <ShowImage
-            srcUrl={to[0]}
-            onClick={() => handleShowImageFile(to[0])}
-          ></ShowImage>
+            srcUrl={to?.[0]?.url}
+            onClick={() => handleShowImageFile(to?.[0]?.url)}
+          />
         </div>
       </div>
     </StyleImageChanger>

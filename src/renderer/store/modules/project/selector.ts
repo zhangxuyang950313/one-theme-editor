@@ -10,32 +10,38 @@ export const getProjectBrandInfo = createSelector(
   state => state.brandInfo
 );
 
-// 获取项目ui版本信息
-export const getProjectUiVersion = createSelector(
+// 获取工程数据
+export const getProjectData = createSelector(
   getState,
-  state => state.uiVersion
+  state => state.projectData
 );
 
-// 获取项目描述信息
-export const getProjectDescInfo = createSelector(
-  getState,
-  state => state.projectInfo
-);
+// // 获取工程ui版本信息
+// export const getProjectUiVersion = createSelector(
+//   getState,
+//   state => state.uiVersion
+// );
 
-// 获取项目模板
-export const getProjectTemplateConf = createSelector(
-  getState,
-  state => state.templateConf
-);
+// // 获取工程描述信息
+// export const getProjectDescInfo = createSelector(
+//   getState,
+//   state => state.projectInfo
+// );
 
-// 获取项目预览配置
-export const getProjectPreviewConf = createSelector(
-  getState,
-  state => state.previewConf
-);
+// // 获取工程模板
+// export const getProjectTemplateConf = createSelector(
+//   getState,
+//   state => state.templateConf
+// );
 
-// 获取项目预览所需数据
-export const getProjectPageConfData = createSelector(
-  getState,
-  state => state.pageConfData
-);
+// // 获取工程预览配置
+// export const getProjectPreviewConf = createSelector(
+//   getState,
+//   state => state.previewConf
+// );
+
+// // 获取工程预览所需数据
+// export const getProjectPageConfData = createSelector(
+//   getState,
+//   state => state.pageConfData
+// );

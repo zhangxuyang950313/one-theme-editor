@@ -63,11 +63,13 @@ export default class Template {
     const tempData = await this.ensureXmlData();
     return tempData.description?.[0]._attributes.name || "";
   }
+
   // 模板版本
   async getVersion(): Promise<string> {
     const tempData = await this.ensureXmlData();
     return tempData.description?.[0]._attributes.version || "";
   }
+
   // 模板预览图
   async getPreview(): Promise<string> {
     const tempData = await this.ensureXmlData();
@@ -77,6 +79,7 @@ export default class Template {
     );
     return getImageUrlByAbsPath(imageSrc);
   }
+
   // 模板支持 ui 版本列表
   async getUiVersions(): Promise<TypeUiVersionConf[]> {
     const tempData = await this.ensureXmlData();
@@ -88,6 +91,8 @@ export default class Template {
       })) || [];
     return uiVersions;
   }
+
+  // 页面数据
   async getPages(
     data: TypeOriginTempModulePageConf[]
   ): Promise<TypeTempPageConf[]> {
@@ -105,6 +110,8 @@ export default class Template {
     });
     return await Promise.all(pagesQueue);
   }
+
+  // 页面分组数据
   async getPageGroup(
     data: TypeOriginTempPageGroupConf[]
   ): Promise<TypeTempPageGroupConf[]> {
@@ -119,6 +126,8 @@ export default class Template {
     );
     return await Promise.all(groupsQueue);
   }
+
+  // 模块数据
   async getModules(): Promise<TypeTempModuleConf[]> {
     const tempData = await this.ensureXmlData();
     const modulesQueue: Promise<TypeTempModuleConf>[] =
@@ -138,6 +147,7 @@ export default class Template {
       }) || [];
     return await Promise.all(modulesQueue);
   }
+
   async getTempInfo(): Promise<TypeTemplateInfo> {
     const templateInfo = new TemplateInfo();
     templateInfo.setName(await this.getName());

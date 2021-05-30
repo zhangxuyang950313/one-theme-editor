@@ -1,7 +1,8 @@
+import _ from "lodash";
 import { useDispatch, useSelector } from "react-redux";
 import { useLayoutEffect, useState, useCallback } from "react";
-import { getProjectById } from "@/api/index";
-import { getProjectPreviewConf } from "@/store/modules/project/selector";
+import { getProjectById, updateProjectById } from "@/api/index";
+// import { getProjectPreviewConf } from "@/store/modules/project/selector";
 // import {
 //   initProject,
 //   setProjectBrandInfo,
@@ -14,10 +15,12 @@ import { getProjectPreviewConf } from "@/store/modules/project/selector";
 import {
   TypeBrandConf,
   TypeDatabase,
-  TypeTemplateConf,
+  // TypeTemplateConf,
   TypeProjectData
 } from "src/types/project";
 import { getProjectList } from "@/api";
+import { setProject } from "@/store/modules/project/action";
+import { getProjectData } from "@/store/modules/project/selector";
 
 // 获取项目列表
 type TypeIsLoading = boolean;
@@ -74,8 +77,8 @@ export function useProjectById(
 
 // 载入工程
 export function useLoadProject(
-  projectData: TypeProjectData | null | undefined
-): TypeProjectData | null | undefined {
+  projectData: TypeDatabase<TypeProjectData> | null | undefined
+): TypeDatabase<TypeProjectData> | null | undefined {
   const [data, updateData] = useState(projectData);
   const dispatch = useDispatch();
 
@@ -87,6 +90,7 @@ export function useLoadProject(
   useLayoutEffect(() => {
     console.log("载入工程：", data);
     if (!data) return;
+    dispatch(setProject(data));
     // dispatch(initProject()); // 避免快速切换工程的内存泄漏
     // dispatch(setProjectBrandInfo(data.brandInfo));
     // dispatch(setProjectUiVersion(data.uiVersion));
@@ -98,7 +102,23 @@ export function useLoadProject(
   return data;
 }
 
-// 工程预览所需配置
-export function usePreviewConf(): TypeTemplateConf | null {
-  return useSelector(getProjectPreviewConf);
+// // 工程预览所需配置
+// export function usePreviewConf(): TypeTemplateConf | null {
+//   return useSelector(getProjectPreviewConf);
+// }
+
+export function useUpdateProject(): () => void {
+  const dispatch = useDispatch();
+  const projectData = useSelector(getProjectData);
+  const handleUpdate = () => {
+    if (projectData && projectData._id) {
+      updateProjectById(
+        projectData._id,
+        _.pick(projectData, ["brand", "projectInfo", "uiVersion", "template"])
+      ).then(data => {
+        dispatch(setProject(data));
+      });
+    }
+  };
+  return handleUpdate;
 }

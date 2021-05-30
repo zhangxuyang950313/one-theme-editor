@@ -4,8 +4,8 @@ import {
   TypeCreateProjectData,
   TypeDatabase,
   TypeProjectData,
-  TypeTemplateConf,
-  TypeUiVersionConf
+  TypeTemplateConf
+  // TypeUiVersionConf
 } from "types/project";
 import { HOST, PORT } from "common/config";
 
@@ -22,6 +22,8 @@ const API = {
   GET_TEMPLATE_CONF: "/template/conf",
   // 创建工程
   CREATE_PROJECT: "/project/create",
+  // 更新工程
+  UPDATE_PROJECT: "/project/update",
   // 获取工程列表
   GET_PROJECT_LIST: "/project/list",
   // 通过 id 获取工程信息
@@ -51,13 +53,13 @@ export async function getTempConfList(
     .then(data => data.data.data);
 }
 
-// 获取模板信息
-export async function getTemplateInfo(
-  brandConf: TypeBrandConf,
-  uiVersionConf: TypeUiVersionConf
-) {
-  // todo
-}
+// // 获取模板信息
+// export async function getTemplateInfo(
+//   brandConf: TypeBrandConf,
+//   uiVersionConf: TypeUiVersionConf
+// ) {
+//   // todo
+// }
 
 // 创建工程
 export async function createProject(
@@ -87,6 +89,19 @@ export async function getProjectById(
     .get<TypeResponseFrame<TypeDatabase<TypeProjectData>>>(
       API.GET_PROJECT_BY_ID,
       { params: { id } }
+    )
+    .then(data => data.data.data);
+}
+
+// 通过 _id 更新工程
+export async function updateProjectById(
+  id: string,
+  data: TypeProjectData
+): Promise<TypeDatabase<TypeProjectData>> {
+  return http
+    .post<TypeResponseFrame<TypeDatabase<TypeProjectData>>>(
+      `${API.UPDATE_PROJECT}/${id}`,
+      data
     )
     .then(data => data.data.data);
 }
