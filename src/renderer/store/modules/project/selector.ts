@@ -2,7 +2,7 @@ import { createSelector } from "reselect";
 import { TypeStoreState } from "@/store/index";
 
 // 数据
-const getState = (state: TypeStoreState) => state.projectState;
+const getState = (state: TypeStoreState) => state.project;
 
 // 获取厂商信息
 export const getProjectBrandInfo = createSelector(

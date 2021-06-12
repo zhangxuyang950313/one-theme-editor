@@ -2,7 +2,7 @@ import { createSelector } from "reselect";
 import { TypeStoreState } from "@/store/index";
 
 // 数据
-const getState = (state: TypeStoreState) => state.templateState;
+const getState = (state: TypeStoreState) => state.template;
 
 // 获取厂商信息列表
 export const getBrandInfoList = createSelector(
@@ -11,9 +11,9 @@ export const getBrandInfoList = createSelector(
 );
 
 // 获取前选择的厂商信息
-export const getBrandInfo = createSelector(
+export const getSelectedBrand = createSelector(
   getState,
-  state => state.selectedBrandInfo
+  state => state.selectedBrand
 );
 
 // 获取模板列表

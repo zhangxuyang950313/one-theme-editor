@@ -3,19 +3,15 @@ import styled from "styled-components";
 import { useHistory } from "react-router";
 
 import { useProjectList } from "@/hooks/project";
+import { useSelectedBrand } from "@/hooks/template";
 
 import { Empty, Spin } from "antd";
-import { TypeBrandConf } from "src/types/project";
 import ProjectCard from "./ProjectCard";
 import CreateProject from "./CreateProject";
 
-type TypeProps = {
-  // 使用机型进行隔离查询
-  brandInfo: TypeBrandConf;
-};
-function ProjectManager(props: TypeProps): JSX.Element {
-  const { brandInfo } = props;
-  const [projects, refreshList, isLoading] = useProjectList(brandInfo);
+const ProjectManager: React.FC = () => {
+  const brandInfo = useSelectedBrand();
+  const [projects, refreshList, isLoading] = useProjectList();
   const history = useHistory();
 
   // 列表加载中、空、正常状态
@@ -75,7 +71,7 @@ function ProjectManager(props: TypeProps): JSX.Element {
       {getProjectListContent()}
     </StyleProjectManager>
   );
-}
+};
 
 const StyleProjectManager = styled.div`
   display: flex;

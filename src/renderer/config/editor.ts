@@ -1,10 +1,3 @@
-// 初始化厂商信息，必须是小米
-export const initialBrand = {
-  type: "xiaomi",
-  templateDir: "xm",
-  name: "小米"
-};
-
 // 主题描述信息配置
 const labelMap = {
   name: "主题名称",

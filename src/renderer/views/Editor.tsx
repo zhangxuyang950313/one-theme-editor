@@ -7,7 +7,6 @@ import { useProjectById, useLoadProject } from "@/hooks/project";
 import { TypeTempModuleConf, TypeTempPageConf } from "types/project";
 
 import { Button, Empty, Spin } from "antd";
-import { SplitPane } from "react-collapse-pane";
 import ModuleSelector from "@/components/Editor/ModuleSelector";
 import EditorToolsBar from "@/components/Editor/ToolsBar";
 import PageSelector from "@/components/Editor/PageSelector";

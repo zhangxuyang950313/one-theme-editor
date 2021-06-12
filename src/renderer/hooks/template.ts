@@ -2,12 +2,11 @@ import { useLayoutEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setBrandInfoList,
-  setTemplateList
+  updateSelectedBrand
 } from "@/store/modules/template/action";
-import { getBrandInfo } from "@/store/modules/template/selector";
+import { getSelectedBrand } from "@/store/modules/template/selector";
 import { TypeBrandConf, TypeTemplateConf } from "src/types/project";
 import { getBrandConfList, getTempConfList } from "@/api/index";
-import { initialBrand } from "@/config/editor";
 import errCode from "@/core/error-code";
 import { message } from "antd";
 
@@ -18,11 +17,12 @@ export function useBrandInfoList(): TypeBrandConf[] {
   useLayoutEffect(() => {
     getBrandConfList().then(conf => {
       // 添加默认小米，去重
-      const list = [initialBrand, ...conf].reduce<TypeBrandConf[]>((t, o) => {
+      const list = conf.reduce<TypeBrandConf[]>((t, o) => {
         if (!t.some(item => item.templateDir === o.templateDir)) t.push(o);
         return t;
       }, []);
       dispatch(setBrandInfoList(list));
+      dispatch(updateSelectedBrand(list[0]));
       updateValue(list);
     });
   }, [dispatch]);
@@ -30,8 +30,8 @@ export function useBrandInfoList(): TypeBrandConf[] {
 }
 
 // 当前选择的厂商信息
-export function useBrandConf(): TypeBrandConf {
-  return useSelector(getBrandInfo);
+export function useSelectedBrand(): TypeBrandConf | null {
+  return useSelector(getSelectedBrand);
 }
 
 // 获取模板列表
@@ -39,12 +39,12 @@ export function useTemplateList(): [TypeTemplateConf[], boolean] {
   const [value, updateValue] = useState<TypeTemplateConf[]>([]);
   const [loading, updateLoading] = useState(true);
   const dispatch = useDispatch();
-  const brandInfo = useBrandConf();
+  const brandInfo = useSelectedBrand();
   useLayoutEffect(() => {
+    if (!brandInfo) return;
     getTempConfList(brandInfo)
       .then(tempConfList => {
         console.log("模板列表：", tempConfList);
-        // dispatch(setTemplateList(tempConfList));
         updateValue(tempConfList);
         setTimeout(() => {
           updateLoading(false);

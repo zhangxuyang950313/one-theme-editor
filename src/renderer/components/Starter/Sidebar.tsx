@@ -1,20 +1,20 @@
 import React from "react";
 import styled from "styled-components";
 
-import { TypeBrandConf } from "types/project";
-import { useBrandInfoList } from "@/hooks/template";
+import { useBrandInfoList, useSelectedBrand } from "@/hooks/template";
 
 import { Menu } from "antd";
+import { useDispatch } from "react-redux";
+import { updateSelectedBrand } from "@/store/modules/template/action";
 import TopInfo from "./TopInfo";
 
-type TypeProps = {
-  defaultSelected: TypeBrandConf;
-  onSelect: (data: TypeBrandConf) => void;
-};
 // 欢迎页侧边栏
-function Sidebar(props: TypeProps): JSX.Element {
-  const { defaultSelected, onSelect } = props;
+const Sidebar: React.FC = props => {
   const brandInfoList = useBrandInfoList();
+  const currentBrandInfo = useSelectedBrand();
+  const dispatch = useDispatch();
+
+  if (!currentBrandInfo) return null;
 
   const renderMenu = () => {
     if (brandInfoList) {
@@ -24,10 +24,10 @@ function Sidebar(props: TypeProps): JSX.Element {
       return (
         <Menu
           className="menu"
-          selectedKeys={[defaultSelected.templateDir]}
+          selectedKeys={[currentBrandInfo.templateDir]}
           onSelect={v => {
             const brandInfo = brandInfoList.find(o => v.key === o.templateDir);
-            if (brandInfo) onSelect(brandInfo);
+            if (brandInfo) dispatch(updateSelectedBrand(brandInfo));
           }}
         >
           {menuItem}
@@ -45,7 +45,7 @@ function Sidebar(props: TypeProps): JSX.Element {
       <StyleMenu>{renderMenu()}</StyleMenu>
     </StyleSidebar>
   );
-}
+};
 
 const StyleSidebar = styled.div`
   flex-shrink: 0;

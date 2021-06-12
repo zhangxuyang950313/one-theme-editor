@@ -1,22 +1,21 @@
 import ACTION_TYPES from "@/store/actions";
 import { updateState } from "@/store/utils";
-import { initialBrand } from "@/config/editor";
 import { TypeBrandConf, TypeTemplateInfo } from "src/types/project";
 import { TypeActions } from "./action";
 
 // main states
 export type TypeStates = {
   brandInfoList: TypeBrandConf[];
-  selectedBrandInfo: TypeBrandConf;
+  selectedBrand: TypeBrandConf | null;
   templateList: TypeTemplateInfo[];
 };
 
 // 通用的数据
 const templateState: TypeStates = {
   // 品牌列表
-  brandInfoList: [initialBrand],
-  // 手机品牌信息
-  selectedBrandInfo: initialBrand,
+  brandInfoList: [],
+  // 选择的手机品牌信息
+  selectedBrand: null,
   // 模板列表
   templateList: []
 };
@@ -27,16 +26,12 @@ export default function TemplateReducer(
 ): TypeStates {
   switch (action.type) {
     // 更新品牌信息列表
-    case ACTION_TYPES.SET_BRAND_INFO_LIST: {
+    case ACTION_TYPES.SET_BRAND_LIST: {
       return updateState(state, { brandInfoList: action.brandInfoList });
     }
     // 更新选择的手机品牌信息
-    case ACTION_TYPES.SET_BRAND_INFO: {
-      return updateState(state, { selectedBrandInfo: action.brandInfo });
-    }
-    // 更新模板列表
-    case ACTION_TYPES.SET_TEMPLATE_LIST: {
-      return updateState(state, { templateList: action.templateList });
+    case ACTION_TYPES.SET_SELECTED_BRAND: {
+      return updateState(state, { selectedBrand: action.brandInfo });
     }
     default:
       return state;

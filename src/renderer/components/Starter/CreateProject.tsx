@@ -4,7 +4,7 @@ import _ from "lodash";
 
 import { isDev } from "@/core/constant";
 import errCode from "@/core/error-code";
-import { useBrandConf, useTemplateList } from "@/hooks/template";
+import { useSelectedBrand, useTemplateList } from "@/hooks/template";
 import { TypeTemplateConf, TypeProjectDesc } from "src/types/project";
 
 // components
@@ -25,7 +25,7 @@ type TypeProps = {
 };
 const CreateProject: React.FC<TypeProps> = props => {
   // 机型配置
-  const brandConf = useBrandConf();
+  const brandConf = useSelectedBrand();
   // 弹框控制
   const [modalVisible, setModalVisible] = useState(false);
   // 模板列表
@@ -40,6 +40,10 @@ const CreateProject: React.FC<TypeProps> = props => {
   const [isCreating, updateCreating] = useState(false);
   // 表单实例
   const [form] = Form.useForm<TypeProjectDesc>();
+
+  if (!brandConf) {
+    return null;
+  }
 
   // 表单默认值
   const initialValues = {
@@ -118,7 +122,7 @@ const CreateProject: React.FC<TypeProps> = props => {
       // TODO 使用选择的模板路径生成 tempConf
       await createProject({
         projectInfo,
-        brandConf: brandConf,
+        brandConf,
         uiVersionConf: uiVersion,
         templateConf: selectedTemp
       }).then(data => {

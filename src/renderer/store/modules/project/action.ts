@@ -1,4 +1,9 @@
-import { TypeDatabase, TypeProjectData } from "@/../types/project";
+import { TypeTempModuleConf } from "types/project";
+import {
+  TypeDatabase,
+  TypeProjectData,
+  TypeTempPageConf
+} from "types/project.d";
 import ACTION_TYPES from "@/store/actions";
 // import {
 //   TypeBrandConf,
@@ -9,17 +14,37 @@ import ACTION_TYPES from "@/store/actions";
 //   TypePageConf
 // } from "src/types/project";
 
-type TypeInitProject = {
+type TypeActionInitProject = {
   type: typeof ACTION_TYPES.INIT_PROJECT;
 };
 
-type TypeSetProject = {
+type TypeActionSetProject = {
   type: typeof ACTION_TYPES.SET_PROJECT;
   projectData: TypeDatabase<TypeProjectData>;
 };
 
-type TypeUpdateProject = {
+type TypeActionUpdateProject = {
   type: typeof ACTION_TYPES.UPDATE_PROJECT;
+};
+
+type TypeActionSetTempModuleConf = {
+  type: typeof ACTION_TYPES.SET_TEMP_MODULE_CONF;
+  payload: TypeTempModuleConf[];
+};
+
+type TypeActionSetTempPageConf = {
+  type: typeof ACTION_TYPES.SET_TEMP_PAGE_CONF;
+  payload: TypeTempPageConf[];
+};
+
+type TypeActionUpdateSelectedModule = {
+  type: typeof ACTION_TYPES.SET_SELECTED_MODULE;
+  payload: TypeTempModuleConf;
+};
+
+type TypeActionUpdateSelectedPage = {
+  type: typeof ACTION_TYPES.SET_SELECTED_PAGE;
+  payload: TypeTempPageConf;
 };
 
 // type TypeSetProjectBrandInfo = {
@@ -52,7 +77,14 @@ type TypeUpdateProject = {
 //   pageConfData: TypePageConf[];
 // };
 
-export type TypeActions = TypeInitProject | TypeSetProject | TypeUpdateProject;
+export type TypeActions =
+  | TypeActionInitProject
+  | TypeActionSetProject
+  | TypeActionUpdateProject
+  | TypeActionSetTempModuleConf
+  | TypeActionSetTempPageConf
+  | TypeActionUpdateSelectedModule
+  | TypeActionUpdateSelectedPage;
 // | TypeSetProjectBrandInfo
 // | TypeSetProjectUiVersion
 // | TypeSetProjectDescInfo
@@ -61,21 +93,50 @@ export type TypeActions = TypeInitProject | TypeSetProject | TypeUpdateProject;
 // | TypeSetProjectPageConfData;
 
 // 初始化工程信息
-export function initProject(): TypeInitProject {
+export function initProject(): TypeActionInitProject {
   return { type: ACTION_TYPES.INIT_PROJECT };
 }
 
 // 设置工程数据
 export function setProject(
   projectData: TypeDatabase<TypeProjectData>
-): TypeSetProject {
+): TypeActionSetProject {
   return { type: ACTION_TYPES.SET_PROJECT, projectData };
 }
 
 // 自动更新工程数据到数据库
-export function updateProject(): TypeUpdateProject {
+export function updateProject(): TypeActionUpdateProject {
   return { type: ACTION_TYPES.UPDATE_PROJECT };
 }
+
+// 设置当前模板模块信息
+export function setTempModuleConf(
+  payload: TypeTempModuleConf[]
+): TypeActionSetTempModuleConf {
+  return { type: ACTION_TYPES.SET_TEMP_MODULE_CONF, payload };
+}
+
+// 设置当前模板页面信息
+export function setTempPageConf(
+  payload: TypeTempPageConf[]
+): TypeActionSetTempPageConf {
+  return { type: ACTION_TYPES.SET_TEMP_PAGE_CONF, payload };
+}
+
+// 更新当前选择的模块
+export function updateSelectedModule(
+  payload: TypeTempModuleConf
+): TypeActionUpdateSelectedModule {
+  return { type: ACTION_TYPES.SET_SELECTED_MODULE, payload };
+}
+
+// 更新当前选择的页面
+export function updateSelectedPage(
+  payload: TypeTempPageConf
+): TypeActionUpdateSelectedPage {
+  return { type: ACTION_TYPES.SET_SELECTED_PAGE, payload };
+}
+
 // // 设置工程厂商信息
 // export function setProjectBrandInfo(
 //   brandInfo: TypeBrandConf

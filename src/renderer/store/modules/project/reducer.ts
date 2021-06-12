@@ -1,4 +1,3 @@
-import _ from "lodash";
 import {
   TypeBrandConf,
   TypeDatabase,
@@ -11,7 +10,7 @@ import {
 } from "src/types/project";
 import ACTION_TYPES from "@/store/actions";
 import { updateState } from "@/store/utils";
-import { updateProjectById } from "@/api";
+// import { updateProjectById } from "@/api";
 import { TypeActions } from "./action";
 
 export type TypeStates = {

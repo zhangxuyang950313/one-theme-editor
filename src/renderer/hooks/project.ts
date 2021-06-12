@@ -1,45 +1,38 @@
 import _ from "lodash";
 import { useDispatch, useSelector } from "react-redux";
 import { useLayoutEffect, useState, useCallback } from "react";
-import { getProjectById, updateProjectById } from "@/api/index";
-// import { getProjectPreviewConf } from "@/store/modules/project/selector";
-// import {
-//   initProject,
-//   setProjectBrandInfo,
-//   setProjectDescInfo,
-//   setProjectPreviewConf,
-//   setProjectPageConfData,
-//   setProjectTempConf,
-//   setProjectUiVersion
-// } from "@/store/modules/project/action";
+import { getProjectById, updateProjectById, getProjectList } from "@/api/index";
+import { TypeDatabase, TypeProjectData } from "types/project";
+import { useSelectedBrand } from "@/hooks/template";
 import {
-  TypeBrandConf,
-  TypeDatabase,
-  // TypeTemplateConf,
-  TypeProjectData
-} from "src/types/project";
-import { getProjectList } from "@/api";
-import { setProject } from "@/store/modules/project/action";
+  setProject,
+  updateSelectedModule,
+  updateSelectedPage
+} from "@/store/modules/project/action";
 import { getProjectData } from "@/store/modules/project/selector";
 
 // 获取项目列表
 type TypeIsLoading = boolean;
 type TypeRefreshFn = () => Promise<void>;
 type TypeProjectDataInDoc = TypeDatabase<TypeProjectData>;
-export function useProjectList(
-  brandInfo: TypeBrandConf
-): [TypeProjectDataInDoc[], TypeRefreshFn, TypeIsLoading] {
+type TypeReturnData = [TypeProjectDataInDoc[], TypeRefreshFn, TypeIsLoading];
+
+export function useProjectList(): TypeReturnData {
+  // 使用机型进行隔离查询
+  const currentBrandInfo = useSelectedBrand();
   const [value, updateValue] = useState<TypeProjectDataInDoc[]>([]);
   const [loading, updateLoading] = useState<boolean>(true);
+
   const refresh = useCallback(async () => {
     updateLoading(true);
     setTimeout(async () => {
-      const projects = await getProjectList(brandInfo);
+      if (!currentBrandInfo) return;
+      const projects = await getProjectList(currentBrandInfo);
       console.log("获取工程列表：", projects);
       updateValue(projects);
       updateLoading(false);
     }, 300);
-  }, [brandInfo]);
+  }, [currentBrandInfo]);
   useLayoutEffect(() => {
     refresh();
   }, [refresh]);
@@ -78,34 +71,19 @@ export function useProjectById(
 // 载入工程
 export function useLoadProject(
   projectData: TypeDatabase<TypeProjectData> | null | undefined
-): TypeDatabase<TypeProjectData> | null | undefined {
-  const [data, updateData] = useState(projectData);
+): void {
   const dispatch = useDispatch();
 
   useLayoutEffect(() => {
     if (!projectData) return;
-    updateData(projectData);
-  }, [projectData]);
-
-  useLayoutEffect(() => {
-    console.log("载入工程：", data);
-    if (!data) return;
-    dispatch(setProject(data));
-    // dispatch(initProject()); // 避免快速切换工程的内存泄漏
-    // dispatch(setProjectBrandInfo(data.brandInfo));
-    // dispatch(setProjectUiVersion(data.uiVersion));
-    // dispatch(setProjectDescInfo(data.projectInfo));
-    // dispatch(setProjectTempConf(data.templateConf));
-    // dispatch(setProjectPreviewConf(data.previewConf));
-    // dispatch(setProjectPageConfData(data.pageConfData));
-  }, [data, dispatch]);
-  return data;
+    console.log("载入工程：", projectData);
+    dispatch(setProject(projectData));
+    const firstModule = projectData?.template.modules[0];
+    const firstPage = firstModule?.groups[0].pages[0];
+    if (firstModule) dispatch(updateSelectedModule(firstModule));
+    if (firstPage) dispatch(updateSelectedPage(firstPage));
+  }, [dispatch, projectData]);
 }
-
-// // 工程预览所需配置
-// export function usePreviewConf(): TypeTemplateConf | null {
-//   return useSelector(getProjectPreviewConf);
-// }
 
 export function useUpdateProject(): () => void {
   const dispatch = useDispatch();
