@@ -1,17 +1,15 @@
+import { useSelectedPage } from "@/hooks/project";
 import React from "react";
 import styled from "styled-components";
 
-import { TypeTempPageConf } from "types/project";
 import ImageChanger from "./ImageChanger";
 
-type TypeProps = {
-  pageConf: TypeTempPageConf | undefined;
-};
-const ResourceContext: React.FC<TypeProps> = props => {
-  if (!props.pageConf) return null;
+const ResourceContext: React.FC = () => {
+  const [selectedPage] = useSelectedPage();
+  if (!selectedPage) return null;
   return (
     <StyleResourceContext>
-      {props.pageConf.source.map((item, index) => (
+      {selectedPage.source.map((item, index) => (
         <ImageChanger key={index} data={item} />
       ))}
     </StyleResourceContext>

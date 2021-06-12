@@ -9,13 +9,16 @@ enum ACTION_TYPES { // 修改标题
   INIT_PROJECT = "INIT_PROJECT",
   // 设置工程新数据
   SET_PROJECT = "SET_PROJECT",
+  // 设置工程信息
+  SET_PROJECT_INFO = "SET_PROJECT_INFO",
+  // 更新工程信息
+  UPDATE_PROJECT = "UPDATE_PROJECT",
+
   // 设置模块配置
   SET_TEMP_MODULE_CONF = "SET_TEMP_MODULE_CONF",
   // 设置页面配置
   SET_TEMP_PAGE_CONF = "SET_TEMP_MODULE_CONF",
 
-  // 更新工程信息
-  UPDATE_PROJECT = "UPDATE_PROJECT",
   // 更新当前选择的模块信息
   SET_SELECTED_MODULE = "SET_SELECTED_MODULE",
   // 更新当前选择的页面信息

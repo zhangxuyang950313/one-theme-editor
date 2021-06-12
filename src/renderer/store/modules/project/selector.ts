@@ -2,18 +2,30 @@ import { createSelector } from "reselect";
 import { TypeStoreState } from "@/store/index";
 
 // 数据
-const getState = (state: TypeStoreState) => state.project;
+const getProjectState = (state: TypeStoreState) => state.project;
 
 // 获取厂商信息
 export const getProjectBrandInfo = createSelector(
-  getState,
+  getProjectState,
   state => state.brandInfo
 );
 
 // 获取工程数据
 export const getProjectData = createSelector(
-  getState,
+  getProjectState,
   state => state.projectData
+);
+
+// 获取当前模块
+export const getSelectedModule = createSelector(
+  getProjectState,
+  state => state.selectedModule
+);
+
+// 获取当前页面
+export const getSelectedPage = createSelector(
+  getProjectState,
+  state => state.selectedPage
 );
 
 // // 获取工程ui版本信息

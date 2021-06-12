@@ -53,7 +53,7 @@ export function useTemplateList(): [TypeTemplateConf[], boolean] {
       .catch(err => {
         const content = errCode[3002];
         message.error({ content });
-        console.warn(`${content}: ${err}`);
+        console.log(`${content}: ${err}`);
       });
   }, [brandInfo, dispatch]);
   return [value, loading];

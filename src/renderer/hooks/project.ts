@@ -2,14 +2,23 @@ import _ from "lodash";
 import { useDispatch, useSelector } from "react-redux";
 import { useLayoutEffect, useState, useCallback } from "react";
 import { getProjectById, updateProjectById, getProjectList } from "@/api/index";
-import { TypeDatabase, TypeProjectData } from "types/project";
+import {
+  TypeDatabase,
+  TypeProjectData,
+  TypeTempModuleConf,
+  TypeTempPageConf
+} from "types/project";
 import { useSelectedBrand } from "@/hooks/template";
 import {
   setProject,
-  updateSelectedModule,
-  updateSelectedPage
+  setSelectedModule,
+  setSelectedPage
 } from "@/store/modules/project/action";
-import { getProjectData } from "@/store/modules/project/selector";
+import {
+  getProjectData,
+  getSelectedModule,
+  getSelectedPage
+} from "@/store/modules/project/selector";
 
 // 获取项目列表
 type TypeIsLoading = boolean;
@@ -43,9 +52,8 @@ export function useProjectList(): TypeReturnData {
 export function useProjectById(
   id: string
 ): [TypeProjectDataInDoc | null, boolean] {
-  const [value, updateValue] = useState<TypeProjectDataInDoc | null>(null);
+  const [project, updateProject] = useState<TypeProjectDataInDoc | null>(null);
   const [loading, updateLoading] = useState(true);
-
   useLayoutEffect(() => {
     console.log(`准备获取工程（${id}）`);
     getProjectById(id)
@@ -55,34 +63,35 @@ export function useProjectById(
       })
       .then(project => {
         console.log(`获取工程（${id}）成功`, project);
-        updateValue(project);
+        updateProject(project);
       })
       .catch(err => {
         console.warn(`获取工程（${id}）失败`, err);
-        updateValue(null);
       })
       .finally(() => {
         updateLoading(false);
       });
   }, [id]);
-  return [value, loading];
+  return [project, loading];
 }
 
 // 载入工程
-export function useLoadProject(
-  projectData: TypeDatabase<TypeProjectData> | null | undefined
-): void {
+export function useLoadProject(projectData: TypeProjectDataInDoc | null): void {
   const dispatch = useDispatch();
-
   useLayoutEffect(() => {
     if (!projectData) return;
     console.log("载入工程：", projectData);
     dispatch(setProject(projectData));
-    const firstModule = projectData?.template.modules[0];
-    const firstPage = firstModule?.groups[0].pages[0];
-    if (firstModule) dispatch(updateSelectedModule(firstModule));
-    if (firstPage) dispatch(updateSelectedPage(firstPage));
   }, [dispatch, projectData]);
+}
+
+// 获取当前工程数据
+export function useProjectData(): [
+  TypeProjectDataInDoc | null,
+  (data: TypeProjectDataInDoc) => void
+] {
+  const dispatch = useDispatch();
+  return [useSelector(getProjectData), data => dispatch(setProject(data))];
 }
 
 export function useUpdateProject(): () => void {
@@ -99,4 +108,28 @@ export function useUpdateProject(): () => void {
     }
   };
   return handleUpdate;
+}
+
+// 获取当前选择的模块
+export function useSelectedModule(): [
+  TypeTempModuleConf | null,
+  (data: TypeTempModuleConf) => void
+] {
+  const dispatch = useDispatch();
+  return [
+    useSelector(getSelectedModule),
+    data => dispatch(setSelectedModule(data))
+  ];
+}
+
+// 获取当前选择的页面
+export function useSelectedPage(): [
+  TypeTempPageConf | null,
+  (data: TypeTempPageConf) => void
+] {
+  const dispatch = useDispatch();
+  return [
+    useSelector(getSelectedPage),
+    data => dispatch(setSelectedPage(data))
+  ];
 }

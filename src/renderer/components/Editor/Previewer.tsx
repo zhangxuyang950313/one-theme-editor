@@ -1,16 +1,14 @@
-import { TypeTempPageConf } from "@/../types/project";
 import React from "react";
 import styled from "styled-components";
 
-type TypeProps = {
-  pageConf: TypeTempPageConf | undefined;
-};
-const Preview: React.FC<TypeProps> = (props: TypeProps) => {
-  const { pageConf } = props;
-  if (!pageConf) return null;
+import { useSelectedPage } from "@/hooks/project";
+
+const Preview: React.FC = () => {
+  const [selectedPage] = useSelectedPage();
+  if (!selectedPage) return null;
   return (
     <StylePreviewer>
-      <StyleImage src={pageConf.preview} alt={pageConf.pathname} />
+      <StyleImage src={selectedPage.preview} alt={selectedPage.pathname} />
     </StylePreviewer>
   );
 };

@@ -2,22 +2,22 @@ import { createSelector } from "reselect";
 import { TypeStoreState } from "@/store/index";
 
 // 数据
-const getState = (state: TypeStoreState) => state.template;
+const getTemplateState = (state: TypeStoreState) => state.template;
 
 // 获取厂商信息列表
 export const getBrandInfoList = createSelector(
-  getState,
+  getTemplateState,
   state => state.brandInfoList
 );
 
 // 获取前选择的厂商信息
 export const getSelectedBrand = createSelector(
-  getState,
+  getTemplateState,
   state => state.selectedBrand
 );
 
 // 获取模板列表
 export const getTemplateList = createSelector(
-  getState,
+  getTemplateState,
   state => state.templateList
 );

@@ -1,15 +1,18 @@
 import React from "react";
 import styled from "styled-components";
 
+import { useSelectedModule } from "@/hooks/project";
+
 import { Collapse } from "antd";
-import { TypeTempPageGroupConf } from "types/project";
 
 // 页面选择器
-type TypeProps = {
-  pageGroups: TypeTempPageGroupConf[];
-};
-const PageSelector: React.FC<TypeProps> = props => {
-  const { pageGroups } = props;
+const PageSelector: React.FC = () => {
+  const [selectedModule] = useSelectedModule();
+  const pageGroups = selectedModule?.groups;
+  if (!pageGroups) {
+    console.log("页面分组为空");
+    return null;
+  }
   return (
     <Collapse bordered={false} defaultActiveKey={Object.keys(pageGroups)}>
       {pageGroups.map((group, key) => (

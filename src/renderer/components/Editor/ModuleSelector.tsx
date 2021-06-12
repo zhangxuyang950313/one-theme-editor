@@ -1,27 +1,31 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
+import { useProjectData, useSelectedModule } from "@/hooks/project";
+
 import { Tooltip } from "antd";
 
-type TypeProps = {
-  icons: { icon: string; name: string }[];
-  onSelected: (x: number) => void;
-};
 // 模块选择器
-const ModuleSelector: React.FC<TypeProps> = props => {
-  const { icons, onSelected } = props;
+const ModuleSelector: React.FC = () => {
   const [selectedIndex, updateIndex] = useState(0);
+  const [projectData] = useProjectData();
+  const [, updateModule] = useSelectedModule();
+
+  if (!Array.isArray(projectData?.template.modules)) {
+    console.log("modules 为空");
+    return null;
+  }
 
   return (
     <StyleModuleSelector>
-      {icons.map((item, key) => {
+      {projectData?.template.modules.map((item, key) => {
         return (
           <StyleIcon
             key={key}
             isActive={selectedIndex === key}
             onClick={() => {
               updateIndex(key);
-              onSelected(key);
+              updateModule(item);
             }}
           >
             <Tooltip title={item.name} placement="right">

@@ -20,7 +20,7 @@ type TypeActionInitProject = {
 
 type TypeActionSetProject = {
   type: typeof ACTION_TYPES.SET_PROJECT;
-  projectData: TypeDatabase<TypeProjectData>;
+  payload: TypeDatabase<TypeProjectData>;
 };
 
 type TypeActionUpdateProject = {
@@ -37,12 +37,12 @@ type TypeActionSetTempPageConf = {
   payload: TypeTempPageConf[];
 };
 
-type TypeActionUpdateSelectedModule = {
+type TypeActionSetSelectedModule = {
   type: typeof ACTION_TYPES.SET_SELECTED_MODULE;
   payload: TypeTempModuleConf;
 };
 
-type TypeActionUpdateSelectedPage = {
+type TypeActionSetSelectedPage = {
   type: typeof ACTION_TYPES.SET_SELECTED_PAGE;
   payload: TypeTempPageConf;
 };
@@ -83,8 +83,8 @@ export type TypeActions =
   | TypeActionUpdateProject
   | TypeActionSetTempModuleConf
   | TypeActionSetTempPageConf
-  | TypeActionUpdateSelectedModule
-  | TypeActionUpdateSelectedPage;
+  | TypeActionSetSelectedModule
+  | TypeActionSetSelectedPage;
 // | TypeSetProjectBrandInfo
 // | TypeSetProjectUiVersion
 // | TypeSetProjectDescInfo
@@ -101,7 +101,7 @@ export function initProject(): TypeActionInitProject {
 export function setProject(
   projectData: TypeDatabase<TypeProjectData>
 ): TypeActionSetProject {
-  return { type: ACTION_TYPES.SET_PROJECT, projectData };
+  return { type: ACTION_TYPES.SET_PROJECT, payload: projectData };
 }
 
 // 自动更新工程数据到数据库
@@ -124,16 +124,16 @@ export function setTempPageConf(
 }
 
 // 更新当前选择的模块
-export function updateSelectedModule(
+export function setSelectedModule(
   payload: TypeTempModuleConf
-): TypeActionUpdateSelectedModule {
+): TypeActionSetSelectedModule {
   return { type: ACTION_TYPES.SET_SELECTED_MODULE, payload };
 }
 
 // 更新当前选择的页面
-export function updateSelectedPage(
+export function setSelectedPage(
   payload: TypeTempPageConf
-): TypeActionUpdateSelectedPage {
+): TypeActionSetSelectedPage {
   return { type: ACTION_TYPES.SET_SELECTED_PAGE, payload };
 }
 

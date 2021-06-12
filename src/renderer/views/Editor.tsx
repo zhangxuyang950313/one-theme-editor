@@ -1,10 +1,9 @@
-import React, { useLayoutEffect, useState } from "react";
+import React from "react";
 import { useHistory, useParams } from "react-router";
 import styled from "styled-components";
 
 import { useDocumentTitle } from "@/hooks";
-import { useProjectById, useLoadProject } from "@/hooks/project";
-import { TypeTempModuleConf, TypeTempPageConf } from "types/project";
+import { useLoadProject, useProjectById } from "@/hooks/project";
 
 import { Button, Empty, Spin } from "antd";
 import ModuleSelector from "@/components/Editor/ModuleSelector";
@@ -21,24 +20,9 @@ const Editor: React.FC = () => {
   const { pid } = useParams<{ pid: string }>();
   // 工程数据，undefined
   const [projectData, isLoading] = useProjectById(pid);
-  // 选择的模块数据
-  const [selectedModule, updateModule] = useState<TypeTempModuleConf>();
-  // 选择的页面数据
-  const [selectPage, updatePageData] = useState<TypeTempPageConf>();
 
-  // 载入工程
+  // 加载工程
   useLoadProject(projectData);
-
-  // 默认选择第一个模块和第一个页面
-  useLayoutEffect(() => {
-    const firstModule = projectData?.template.modules[0];
-    if (firstModule) updateModule(firstModule);
-    const firstPage = firstModule?.groups[0].pages[0];
-    if (firstPage) updatePageData(firstPage);
-  }, [projectData?.template.modules]);
-
-  // 预览所需配置
-  // const previewConf = usePreviewConf();
 
   // 还未安装
   if (isLoading) {
@@ -71,38 +55,26 @@ const Editor: React.FC = () => {
   // 更新标题
   updateTitle(projectData.projectInfo.name || "");
 
-  const icons = projectData.template.modules.map(item => ({
-    icon: item.icon, // TODO 默认图标
-    name: item.name
-  }));
-
-  const groups = selectedModule?.groups || [];
-
   // 进入编辑状态
   return (
     <StyleEditor>
       {/* 模块选择器 */}
-      <ModuleSelector
-        icons={icons}
-        onSelected={index => {
-          updateModule(projectData.template.modules[index]);
-        }}
-      />
+      <ModuleSelector />
       {/* 编辑区域 */}
       <StyleEditorContext>
         <EditorToolsBar />
         <StyleEditorMain>
           {/* 页面选择器 */}
           <StylePageSelector>
-            <PageSelector pageGroups={groups} />
+            <PageSelector />
           </StylePageSelector>
           {/* 预览 */}
           <StylePreviewer>
-            <Previewer pageConf={selectPage} />
+            <Previewer />
           </StylePreviewer>
           {/* 素材编辑区 */}
           <StyleResourceContent>
-            <ResourceContext pageConf={selectPage} />
+            <ResourceContext />
           </StyleResourceContent>
         </StyleEditorMain>
       </StyleEditorContext>
