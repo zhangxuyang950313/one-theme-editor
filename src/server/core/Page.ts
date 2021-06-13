@@ -79,10 +79,7 @@ export default class Page {
           item.from?.[0]._attributes?.src || ""
         );
         const to = item.to
-          ? item.to.map(item => ({
-              url: "",
-              path: path.join(this.uiPath, item?._attributes?.src || "")
-            }))
+          ? item.to.map(item => path.join(item?._attributes?.src || ""))
           : [];
         return {
           name: item?._attributes?.description || item?._attributes?.name || "",

@@ -36,6 +36,7 @@ type TypeIndex = {
 export async function createProject(
   data: TypeCreateProjectData
 ): Promise<TypeDatabase<TypeProjectData>> {
+  fse.emptyDirSync(PROJECTS_DIR);
   const projects = fse.readdirSync(PROJECTS_DIR);
   let filename = uuid.v4();
   // 重名检测

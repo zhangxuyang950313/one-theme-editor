@@ -66,10 +66,10 @@ export type TypeProjectData = {
 };
 
 export type TypeResourceImage = {
-  type: "image";
   url: string;
+  target: string;
 };
 export type TypeResourceXml = {
-  type: "xml";
+  content: string;
+  target: string;
 };
-export type TypeResourceMap = TypeResourceImage | TypeResourceXml;

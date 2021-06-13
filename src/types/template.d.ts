@@ -49,7 +49,7 @@ export type TypeTempPageSourceConf = {
   name: string;
   layout: TypeTempLayout;
   from: TypeImageDataVO | null;
-  to: Array<{ url: string; path: string }>;
+  to: string[];
 };
 export type TypeTempPageConf = {
   pathname: string;

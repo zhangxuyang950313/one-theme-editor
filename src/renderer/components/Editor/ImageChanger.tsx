@@ -10,6 +10,9 @@ import { TypeTempPageSourceConf } from "types/template";
 import { useUpdateProject } from "@/hooks/project";
 import { message } from "antd";
 import errCode from "@/core/error-code";
+import { useDispatch, useSelector } from "react-redux";
+import { addResourceImage } from "@/store/modules/resource/action";
+import { findResourceImage } from "@/store/modules/resource/selector";
 
 // 图片素材展示
 function ShowImage(props: { onClick?: () => void; srcUrl: string }) {
@@ -67,6 +70,8 @@ type TypeProps = {
 };
 const ResourceChanger: React.FC<TypeProps> = props => {
   const handleUpdateProject = useUpdateProject();
+  const findImage = useSelector(findResourceImage);
+  const dispatch = useDispatch();
   const { from, to, name } = props.data;
 
   if (!from) return null;
@@ -99,8 +104,8 @@ const ResourceChanger: React.FC<TypeProps> = props => {
       message.warn(errCode[3006]);
       return;
     }
-    to.forEach(item => {
-      item.url = from.url;
+    to.forEach(target => {
+      dispatch(addResourceImage({ url: from.url, target }));
     });
     handleUpdateProject();
   };
@@ -131,8 +136,8 @@ const ResourceChanger: React.FC<TypeProps> = props => {
         />
         <div className="right">
           <ShowImage
-            srcUrl={to?.[0]?.url}
-            onClick={() => handleShowImageFile(to?.[0]?.url)}
+            srcUrl={findImage(to?.[0])?.url || ""}
+            onClick={() => handleShowImageFile(to?.[0])}
           />
         </div>
       </div>

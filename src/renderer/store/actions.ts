@@ -22,19 +22,12 @@ enum ACTION_TYPES { // 修改标题
   // 更新当前选择的模块信息
   SET_SELECTED_MODULE = "SET_SELECTED_MODULE",
   // 更新当前选择的页面信息
-  SET_SELECTED_PAGE = "SET_SELECTED_PAGE"
-  // // 设置工程所属厂商信息
-  // SET_PROJECT_BRAND_INFO = "SET_PROJECT_BRAND_INFO",
-  // // 设置工程UI版本信息
-  // SET_PROJECT_UI_VERSION = "SET_PROJECT_UI_VERSION",
-  // // 设置工程描述信息
-  // SET_PROJECT_DESC_INFO = "SET_PROJECT_DESC_INFO",
-  // // 设置工程原始模板配置
-  // SET_PROJECT_TEMP_CONF = "SET_PROJECT_TEMP_CONF",
-  // // 设置工程预览所需配置
-  // SET_PROJECT_PREVIEW_CONF = "SET_PROJECT_PREVIEW_CONF",
-  // // 设置工程页面配置数据
-  // SET_PROJECT_PAGE_CONF_DATA = "SET_PROJECT_PAGE_CONF_DATA"
+  SET_SELECTED_PAGE = "SET_SELECTED_PAGE",
+
+  // 添加素材
+  ADD_RESOURCE = "ADD_RESOURCE",
+  // 删除素材
+  DEL_RESOURCE = "DEL_RESOURCE"
 }
 
 export default ACTION_TYPES;
