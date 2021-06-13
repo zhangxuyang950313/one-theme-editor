@@ -1,26 +1,17 @@
-import { TypeTempModuleConf, TypeTempPageConf } from "types/project";
+import ACTION_TYPES from "@/store/actions";
+import { updateState } from "@/store/utils";
 import {
   TypeBrandInfo,
   TypeDatabase,
-  // TypePageConf,
-  // TypeTemplateConf,
-  // TypeProjectDesc,
-  // TypeTemplateInfo,
-  // TypeUiVersionConf,
-  TypeProjectData
-} from "src/types/project";
-import ACTION_TYPES from "@/store/actions";
-import { updateState } from "@/store/utils";
-import { TypeProjectDesc } from "./../../../../types/project.d";
-// import { updateProjectById } from "@/api";
+  TypeProjectData,
+  TypeProjectDesc
+} from "types/project";
 import { TypeActions } from "./action";
 
 export type TypeStates = {
   brandInfo: TypeBrandInfo | null;
   projectData: TypeDatabase<TypeProjectData> | null;
   projectInfo: TypeProjectDesc | null;
-  selectedModule: TypeTempModuleConf | null;
-  selectedPage: TypeTempPageConf | null;
   // uiVersion: TypeUiVersionConf | null;
   // projectInfo: TypeProjectDesc | null;
   // templateConf: TypeTemplateInfo | null;
@@ -31,9 +22,7 @@ export type TypeStates = {
 const defaultState: TypeStates = {
   brandInfo: null,
   projectData: null,
-  projectInfo: null,
-  selectedModule: null,
-  selectedPage: null
+  projectInfo: null
   // uiVersion: null,
   // projectInfo: null,
   // templateConf: null,
@@ -52,22 +41,11 @@ export default function ProjectReducer(
       return defaultState;
     }
     case ACTION_TYPES.SET_PROJECT: {
-      // 默认选择第一个模块和第一个页面
-      const firstModule = action.payload?.template.modules[0];
-      const firstPage = firstModule?.groups[0].pages[0];
       return updateState(state, {
         brandInfo: action.payload?.brand || null,
         projectData: action.payload || null,
-        projectInfo: action.payload.projectInfo || null,
-        selectedModule: firstModule || null,
-        selectedPage: firstPage || null
+        projectInfo: action.payload.projectInfo || null
       });
-    }
-    case ACTION_TYPES.SET_SELECTED_MODULE: {
-      return updateState(state, { selectedModule: action.payload });
-    }
-    case ACTION_TYPES.SET_SELECTED_PAGE: {
-      return updateState(state, { selectedPage: action.payload });
     }
     // case ACTION_TYPES.SET_PROJECT_BRAND_INFO: {
     //   return updateState(state, { brandInfo: action.brandInfo });

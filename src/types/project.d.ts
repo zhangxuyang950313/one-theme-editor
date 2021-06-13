@@ -1,5 +1,5 @@
 import { projectInfoConfig } from "renderer/config/editor";
-import { TypeTempFrom, TypeTempLayout, TypeTempTo } from "./xml-result";
+import { TypeTemplateInfo } from "./template.d";
 
 export type TypeBrandInfo = {
   type: string;
@@ -19,65 +19,6 @@ export type TypeUiVersionInfo = {
   code: string;
 };
 
-export type TypeUiVersionConf = TypeUiVersionInfo & {
-  src: string;
-};
-
-export type TypeTempPageGroupConf = {
-  name: string;
-  pages: TypeTempPageConf[];
-};
-
-export type TypeTempModuleConf = {
-  index: number;
-  name: string;
-  icon: string;
-  groups: TypeTempPageGroupConf[];
-};
-
-export type TypeTemplateConf = {
-  key: string;
-  root: string;
-  file: string;
-  name: string;
-  preview: string;
-  version: string;
-  uiVersions: TypeUiVersionConf[];
-};
-
-export type TypeTemplateInfo = {
-  name: string;
-  preview: string;
-  version: string;
-  uiVersions: TypeUiVersionConf[];
-  modules: TypeTempModuleConf[];
-};
-
-export type TypeTempPageConfigConf = {
-  version: string;
-  description: string;
-  screenWidth: string;
-};
-export type TypeTempPageCategoryConf = {
-  tag: string;
-  description: string;
-  type: "image" | "xml" | "";
-};
-export type TypeTempPageSourceConf = {
-  description: string;
-  layout: TypeTempLayout;
-  from: string;
-  to: Array<{ url: string; path: string }>;
-};
-export type TypeTempPageConf = {
-  pathname: string;
-  config: TypeTempPageConfigConf;
-  preview: string;
-  category: TypeTempPageCategoryConf[];
-  source: TypeTempPageSourceConf[];
-  xml: any[];
-};
-
 // 从数据库取出的项目文档数据
 export type TypeDatabase<T = { [x: string]: any }> = T & {
   _id: string;
@@ -87,8 +28,17 @@ export type TypeDatabase<T = { [x: string]: any }> = T & {
 
 // 图片存储数据
 export type TypeImageData = {
-  md5?: string;
+  md5: string;
   base64: string | null;
+};
+
+// 用于前端展示的图片数据
+export type TypeImageDataVO = {
+  url: string;
+  width: number;
+  height: number;
+  size: number;
+  filename: string;
 };
 
 export type TypeImageDataInDoc = TypeDatabase<TypeImageData>;

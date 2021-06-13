@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import { useSelectedPage } from "@/hooks/project";
+import { useSelectedPage } from "@/hooks/template";
 
 const Preview: React.FC = () => {
   const [selectedPage] = useSelectedPage();

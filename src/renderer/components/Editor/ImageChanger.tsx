@@ -7,7 +7,7 @@ import styled from "styled-components";
 import { remote } from "electron";
 
 import { RightCircleOutlined } from "@ant-design/icons";
-import { TypeTempPageSourceConf } from "@/../types/project";
+import { TypeTempPageSourceConf } from "types/template";
 import { useUpdateProject } from "@/hooks/project";
 
 // 图片素材展示
@@ -65,9 +65,10 @@ type TypeProps = {
   data: TypeTempPageSourceConf;
 };
 const ResourceChanger: React.FC<TypeProps> = props => {
-  const [{ width, height }, setImageSize] = useState({ width: 0, height: 0 });
   const handleUpdateProject = useUpdateProject();
-  const { from, to, description } = props.data;
+  const { from, to, name } = props.data;
+
+  if (!from) return null;
   // useEffect(() => {
   //   loadImageUseImgHTML(from).then(({ width, height }) =>
   //     setImageSize({ width, height })
@@ -94,25 +95,29 @@ const ResourceChanger: React.FC<TypeProps> = props => {
   // 中间的快速使用默认素材按钮
   const handleUseDefaultResource = () => {
     to.forEach(item => {
-      item.url = from;
+      item.url = from.url;
     });
     handleUpdateProject();
   };
+  const { width, height, size } = from;
   return (
     <StyleImageChanger>
       {/* 图片描述 */}
       <div className="text description">
-        {description}
+        {name}
         {width && height ? (
-          <span className="image-size">({`${width}×${height}`})</span>
+          <span className="image-size">
+            ({`${width}×${height}`}
+            {size && <span> | {(size / 1024).toFixed(1)}kb</span>})
+          </span>
         ) : null}
       </div>
-      <p className="text filename">{path.basename(from)}</p>
+      <p className="text filename">{from.filename}</p>
       <div className="edit-wrapper">
         <div className="left">
           <ShowImage
-            srcUrl={from}
-            onClick={() => handlePreviewFile(from, description)}
+            srcUrl={from.url}
+            onClick={() => handlePreviewFile(from.url, name)}
           />
         </div>
         <RightCircleOutlined

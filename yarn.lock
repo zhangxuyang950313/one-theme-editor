@@ -1488,6 +1488,13 @@
   resolved "https://registry.npm.taobao.org/@types/lodash/download/@types/lodash-4.14.168.tgz?cache=0&sync_timestamp=1613379222224&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40types%2Flodash%2Fdownload%2F%40types%2Flodash-4.14.168.tgz"
   integrity sha1-/iRjLnm3rePxMoka//hsql5c4Ag=
 
+"@types/md5@^2.3.0":
+  version "2.3.0"
+  resolved "https://registry.nlark.com/@types/md5/download/@types/md5-2.3.0.tgz#3b6a623091160f4dc75be3173e25f2110dc3fa1f"
+  integrity sha1-O2piMJEWD03HW+MXPiXyEQ3D+h8=
+  dependencies:
+    "@types/node" "*"
+
 "@types/mdast@^3.0.0":
   version "3.0.3"
   resolved "https://registry.npm.taobao.org/@types/mdast/download/@types/mdast-3.0.3.tgz"

@@ -75,6 +75,7 @@ export type TypeTempOriginPageConf = TypeExtendsElementCompact<
     source?: TypeExtendsElementCompact<
       {
         description?: string;
+        name?: string;
       },
       {
         layout?: TypeTempLayout[];

@@ -1,8 +1,12 @@
-// 随机字符串，最多11位
 import path from "path";
+import md5 from "md5";
 import fse from "fs-extra";
+import imageSizeOf from "image-size";
+import { TypeImageDataVO } from "types/project.d";
+import { getImageUrlOf } from "@/db-handler/image";
 import errCode from "../renderer/core/error-code";
 
+// 随机字符串，最多11位
 export function getRandomStr(
   len: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 = 11
 ): string {
@@ -85,4 +89,32 @@ export function localImageToBase64Async(file: string): Promise<string> {
     const base64 = fse.readFileSync(file, "base64");
     resolve(`data:image/${extname};base64,${base64}`);
   });
+}
+
+// 获取图片 MD5
+export async function getFileMD5(file: string): Promise<string> {
+  const buff = await fse.readFile(file);
+  return md5(buff);
+}
+
+// 获取图片尺寸
+export function getImageSizeOf(
+  file: string
+): { width: number; height: number } {
+  const dimensions = imageSizeOf(file);
+  return { width: dimensions.width || 0, height: dimensions.height || 0 };
+}
+
+// 获取文件大小
+export async function getFileSizeOf(file: string): Promise<number> {
+  const buff = await fse.readFile(file);
+  return buff.byteLength;
+}
+
+// 获取图片信息
+export async function getImageData(file: string): Promise<TypeImageDataVO> {
+  const url = await getImageUrlOf(file);
+  const size = await getFileSizeOf(file);
+  const { width, height } = getImageSizeOf(file);
+  return { url, width, height, size, filename: path.basename(file) };
 }

@@ -1,19 +1,24 @@
 import path from "path";
+
+import TemplateInfo from "src/data/TemplateInfo";
+import { getImageUrlOf } from "@/db-handler/image";
 import errCode from "renderer/core/error-code";
+import { getImageData } from "common/utils";
+
 import {
   TypeTempPageGroupConf,
   TypeTemplateInfo,
   TypeTempModuleConf,
   TypeTempPageConf,
   TypeUiVersionConf
-} from "types/project";
+} from "types/template";
+import { TypeImageDataVO } from "types/project";
 import {
   TypeOriginTempConf,
   TypeOriginTempPageGroupConf,
   TypeOriginTempModulePageConf
 } from "types/xml-result";
-import TemplateInfo from "src/data/TemplateInfo";
-import { getImageUrlByAbsPath } from "@/db-handler/image";
+
 import { xml2jsonCompact } from "./xmlCompiler";
 import XMLNode from "./XMLNode";
 import Page from "./Page";
@@ -54,7 +59,7 @@ export default class Template {
   }
 
   // 处理成模板根目录
-  resolvePath(relativePath: string): string {
+  private resolvePath(relativePath: string): string {
     return path.join(this.getRootDir(), relativePath);
   }
 
@@ -71,13 +76,14 @@ export default class Template {
   }
 
   // 模板预览图
-  async getPreview(): Promise<string> {
+  async getPreview(): Promise<TypeImageDataVO> {
     const tempData = await this.ensureXmlData();
-    const imageSrc = path.join(
+    const src = path.join(
       this.rootDir,
       tempData.preview?.[0]._attributes.src || ""
     );
-    return getImageUrlByAbsPath(imageSrc);
+    const imageData = await getImageData(src);
+    return imageData;
   }
 
   // 模板支持 ui 版本列表
@@ -93,7 +99,7 @@ export default class Template {
   }
 
   // 页面数据
-  async getPages(
+  private async getPages(
     data: TypeOriginTempModulePageConf[]
   ): Promise<TypeTempPageConf[]> {
     if (!this.uiVersion?.src) {
@@ -112,7 +118,7 @@ export default class Template {
   }
 
   // 页面分组数据
-  async getPageGroup(
+  private async getPageGroup(
     data: TypeOriginTempPageGroupConf[]
   ): Promise<TypeTempPageGroupConf[]> {
     const groupsQueue: Promise<TypeTempPageGroupConf>[] = data.map(
@@ -137,7 +143,7 @@ export default class Template {
           this.rootDir,
           moduleNode.getAttribute("icon")
         );
-        const iconUrl = await getImageUrlByAbsPath(iconSrc);
+        const iconUrl = await getImageUrlOf(iconSrc);
         const result: TypeTempModuleConf = {
           index,
           name: moduleNode.getAttribute("name"),

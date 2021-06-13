@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import { TypeTemplateConf } from "types/project";
+import { TypeTemplateConf } from "types/template";
 
 // components
 import { Card } from "antd";
@@ -19,7 +19,7 @@ const TemplateCard: React.FC<TypeProps> = props => {
       <Card
         hoverable={props.hoverable}
         style={{ width: "100%" }}
-        cover={<img alt={config.name} src={config.preview} />}
+        cover={<img alt={config.name} src={config.preview.url} />}
       >
         <Card.Meta
           title={config.name}

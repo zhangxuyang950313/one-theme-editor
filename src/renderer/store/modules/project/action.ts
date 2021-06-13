@@ -1,18 +1,6 @@
-import { TypeTempModuleConf } from "types/project";
-import {
-  TypeDatabase,
-  TypeProjectData,
-  TypeTempPageConf
-} from "types/project.d";
 import ACTION_TYPES from "@/store/actions";
-// import {
-//   TypeBrandConf,
-//   TypeProjectDesc,
-//   TypeTemplateInfo,
-//   TypeUiVersionConf,
-//   TypeTemplateConf,
-//   TypePageConf
-// } from "src/types/project";
+
+import { TypeDatabase, TypeProjectData } from "types/project.d";
 
 type TypeActionInitProject = {
   type: typeof ACTION_TYPES.INIT_PROJECT;
@@ -25,26 +13,6 @@ type TypeActionSetProject = {
 
 type TypeActionUpdateProject = {
   type: typeof ACTION_TYPES.UPDATE_PROJECT;
-};
-
-type TypeActionSetTempModuleConf = {
-  type: typeof ACTION_TYPES.SET_TEMP_MODULE_CONF;
-  payload: TypeTempModuleConf[];
-};
-
-type TypeActionSetTempPageConf = {
-  type: typeof ACTION_TYPES.SET_TEMP_PAGE_CONF;
-  payload: TypeTempPageConf[];
-};
-
-type TypeActionSetSelectedModule = {
-  type: typeof ACTION_TYPES.SET_SELECTED_MODULE;
-  payload: TypeTempModuleConf;
-};
-
-type TypeActionSetSelectedPage = {
-  type: typeof ACTION_TYPES.SET_SELECTED_PAGE;
-  payload: TypeTempPageConf;
 };
 
 // type TypeSetProjectBrandInfo = {
@@ -80,17 +48,7 @@ type TypeActionSetSelectedPage = {
 export type TypeActions =
   | TypeActionInitProject
   | TypeActionSetProject
-  | TypeActionUpdateProject
-  | TypeActionSetTempModuleConf
-  | TypeActionSetTempPageConf
-  | TypeActionSetSelectedModule
-  | TypeActionSetSelectedPage;
-// | TypeSetProjectBrandInfo
-// | TypeSetProjectUiVersion
-// | TypeSetProjectDescInfo
-// | TypeSetProjectTempConf
-// | TypeSetProjectPreviewConf
-// | TypeSetProjectPageConfData;
+  | TypeActionUpdateProject;
 
 // 初始化工程信息
 export function initProject(): TypeActionInitProject {
@@ -107,34 +65,6 @@ export function setProject(
 // 自动更新工程数据到数据库
 export function updateProject(): TypeActionUpdateProject {
   return { type: ACTION_TYPES.UPDATE_PROJECT };
-}
-
-// 设置当前模板模块信息
-export function setTempModuleConf(
-  payload: TypeTempModuleConf[]
-): TypeActionSetTempModuleConf {
-  return { type: ACTION_TYPES.SET_TEMP_MODULE_CONF, payload };
-}
-
-// 设置当前模板页面信息
-export function setTempPageConf(
-  payload: TypeTempPageConf[]
-): TypeActionSetTempPageConf {
-  return { type: ACTION_TYPES.SET_TEMP_PAGE_CONF, payload };
-}
-
-// 更新当前选择的模块
-export function setSelectedModule(
-  payload: TypeTempModuleConf
-): TypeActionSetSelectedModule {
-  return { type: ACTION_TYPES.SET_SELECTED_MODULE, payload };
-}
-
-// 更新当前选择的页面
-export function setSelectedPage(
-  payload: TypeTempPageConf
-): TypeActionSetSelectedPage {
-  return { type: ACTION_TYPES.SET_SELECTED_PAGE, payload };
 }
 
 // // 设置工程厂商信息

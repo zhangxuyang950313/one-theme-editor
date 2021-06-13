@@ -1,7 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 
-import { useProjectData, useSelectedModule } from "@/hooks/project";
+import { useProjectData } from "@/hooks/project";
+import { useSelectedModule } from "@/hooks/template";
 
 import { Tooltip } from "antd";
 

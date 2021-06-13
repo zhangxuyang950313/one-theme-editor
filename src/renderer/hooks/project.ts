@@ -2,23 +2,15 @@ import _ from "lodash";
 import { useDispatch, useSelector } from "react-redux";
 import { useLayoutEffect, useState, useCallback } from "react";
 import { getProjectById, updateProjectById, getProjectList } from "@/api/index";
-import {
-  TypeDatabase,
-  TypeProjectData,
-  TypeTempModuleConf,
-  TypeTempPageConf
-} from "types/project";
 import { useSelectedBrand } from "@/hooks/template";
+
+import { setProject } from "@/store/modules/project/action";
+import { getProjectData } from "@/store/modules/project/selector";
 import {
-  setProject,
   setSelectedModule,
   setSelectedPage
-} from "@/store/modules/project/action";
-import {
-  getProjectData,
-  getSelectedModule,
-  getSelectedPage
-} from "@/store/modules/project/selector";
+} from "@/store/modules/template/action";
+import { TypeDatabase, TypeProjectData } from "types/project";
 
 // 获取项目列表
 type TypeIsLoading = boolean;
@@ -82,6 +74,11 @@ export function useLoadProject(projectData: TypeProjectDataInDoc | null): void {
     if (!projectData) return;
     console.log("载入工程：", projectData);
     dispatch(setProject(projectData));
+    // 默认选择第一个模块和第一个页面
+    const firstModule = projectData?.template.modules[0];
+    const firstPage = firstModule?.groups[0].pages[0];
+    dispatch(setSelectedModule(firstModule));
+    dispatch(setSelectedPage(firstPage));
   }, [dispatch, projectData]);
 }
 
@@ -108,28 +105,4 @@ export function useUpdateProject(): () => void {
     }
   };
   return handleUpdate;
-}
-
-// 获取当前选择的模块
-export function useSelectedModule(): [
-  TypeTempModuleConf | null,
-  (data: TypeTempModuleConf) => void
-] {
-  const dispatch = useDispatch();
-  return [
-    useSelector(getSelectedModule),
-    data => dispatch(setSelectedModule(data))
-  ];
-}
-
-// 获取当前选择的页面
-export function useSelectedPage(): [
-  TypeTempPageConf | null,
-  (data: TypeTempPageConf) => void
-] {
-  const dispatch = useDispatch();
-  return [
-    useSelector(getSelectedPage),
-    data => dispatch(setSelectedPage(data))
-  ];
 }

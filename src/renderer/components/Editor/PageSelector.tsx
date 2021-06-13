@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import { useSelectedModule } from "@/hooks/project";
+import { useSelectedModule } from "@/hooks/template";
 
 import { Collapse } from "antd";
 

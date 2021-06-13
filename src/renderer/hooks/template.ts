@@ -1,14 +1,28 @@
 import { useLayoutEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  setBrandInfoList,
-  updateSelectedBrand
-} from "@/store/modules/template/action";
-import { getSelectedBrand } from "@/store/modules/template/selector";
-import { TypeBrandConf, TypeTemplateConf } from "src/types/project";
+import { message } from "antd";
+
 import { getBrandConfList, getTempConfList } from "@/api/index";
 import errCode from "@/core/error-code";
-import { message } from "antd";
+
+import {
+  setBrandInfoList,
+  updateSelectedBrand,
+  setSelectedModule,
+  setSelectedPage
+} from "@/store/modules/template/action";
+import {
+  getSelectedBrand,
+  getSelectedModule,
+  getSelectedPage
+} from "@/store/modules/template/selector";
+
+import {
+  TypeTempModuleConf,
+  TypeTempPageConf,
+  TypeTemplateConf
+} from "types/template";
+import { TypeBrandConf } from "types/project";
 
 // 获取配置的厂商列表
 export function useBrandInfoList(): TypeBrandConf[] {
@@ -61,3 +75,27 @@ export function useTemplateList(): [TypeTemplateConf[], boolean] {
 
 // 获取预览数据
 // export function usePreview
+
+// 获取当前选择的模块
+export function useSelectedModule(): [
+  TypeTempModuleConf | null,
+  (data: TypeTempModuleConf) => void
+] {
+  const dispatch = useDispatch();
+  return [
+    useSelector(getSelectedModule),
+    data => dispatch(setSelectedModule(data))
+  ];
+}
+
+// 获取当前选择的页面
+export function useSelectedPage(): [
+  TypeTempPageConf | null,
+  (data: TypeTempPageConf) => void
+] {
+  const dispatch = useDispatch();
+  return [
+    useSelector(getSelectedPage),
+    data => dispatch(setSelectedPage(data))
+  ];
+}

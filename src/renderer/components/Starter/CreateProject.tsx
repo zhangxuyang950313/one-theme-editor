@@ -5,7 +5,8 @@ import _ from "lodash";
 import { isDev } from "@/core/constant";
 import errCode from "@/core/error-code";
 import { useSelectedBrand, useTemplateList } from "@/hooks/template";
-import { TypeTemplateConf, TypeProjectDesc } from "src/types/project";
+import { TypeProjectDesc } from "types/project.d";
+import { TypeTemplateConf } from "types/template.d";
 
 // components
 import { Modal, Button, message, Form } from "antd";

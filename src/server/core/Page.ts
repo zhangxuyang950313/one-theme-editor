@@ -1,12 +1,13 @@
 import path from "path";
+import { getImageData } from "common/utils";
 import {
   TypeTempPageConf,
   TypeTempPageConfigConf,
   TypeTempPageSourceConf,
   TypeTempPageCategoryConf
-} from "types/project";
+} from "types/template";
 import { TypeTempLayout, TypeTempOriginPageConf } from "types/xml-result";
-import { getImageUrlByAbsPath } from "@/db-handler/image";
+import { getImageUrlOf } from "@/db-handler/image";
 import { xml2jsonCompact } from "./xmlCompiler";
 import XMLNode from "./XMLNode";
 
@@ -36,7 +37,7 @@ export default class Page {
       this.dirWithUiPath,
       xmlData.preview?.[0]._attributes.src || ""
     );
-    return getImageUrlByAbsPath(previewSrc);
+    return getImageUrlOf(previewSrc);
   }
 
   async getConfig(): Promise<TypeTempPageConfigConf> {
@@ -61,7 +62,7 @@ export default class Page {
 
   async getSourceList(): Promise<TypeTempPageSourceConf[]> {
     const xmlData = await this.ensureXmlData();
-    const queue =
+    const queue: Promise<TypeTempPageSourceConf>[] =
       xmlData.source?.map(async item => {
         const layout: TypeTempLayout = {};
         if (item.layout) {
@@ -73,19 +74,22 @@ export default class Page {
           layout.align = layoutNode.getAttribute("align", "left");
           layout.alignV = layoutNode.getAttribute("alignV", "top");
         }
-        const description = item?._attributes?.description || "";
         const fromSrc = path.resolve(
           this.dirWithUiPath,
           item.from?.[0]._attributes?.src || ""
         );
-        const fromUrl = await getImageUrlByAbsPath(fromSrc);
         const to = item.to
           ? item.to.map(item => ({
               url: "",
               path: path.join(this.uiPath, item?._attributes?.src || "")
             }))
           : [];
-        return { description, layout, from: fromUrl, to };
+        return {
+          name: item?._attributes?.description || item?._attributes?.name || "",
+          from: await getImageData(fromSrc),
+          to,
+          layout
+        };
       }) || [];
 
     return Promise.all(queue);

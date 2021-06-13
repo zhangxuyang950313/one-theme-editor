@@ -1,12 +1,19 @@
 import ACTION_TYPES from "@/store/actions";
 import { updateState } from "@/store/utils";
-import { TypeBrandConf, TypeTemplateInfo } from "src/types/project";
+import { TypeBrandConf } from "types/project";
+import {
+  TypeTemplateInfo,
+  TypeTempModuleConf,
+  TypeTempPageConf
+} from "types/template";
 import { TypeActions } from "./action";
 
 // main states
 export type TypeStates = {
   brandInfoList: TypeBrandConf[];
   selectedBrand: TypeBrandConf | null;
+  selectedModule: TypeTempModuleConf | null;
+  selectedPage: TypeTempPageConf | null;
   templateList: TypeTemplateInfo[];
 };
 
@@ -16,6 +23,8 @@ const templateState: TypeStates = {
   brandInfoList: [],
   // 选择的手机品牌信息
   selectedBrand: null,
+  selectedModule: null,
+  selectedPage: null,
   // 模板列表
   templateList: []
 };
@@ -32,6 +41,12 @@ export default function TemplateReducer(
     // 更新选择的手机品牌信息
     case ACTION_TYPES.SET_SELECTED_BRAND: {
       return updateState(state, { selectedBrand: action.brandInfo });
+    }
+    case ACTION_TYPES.SET_SELECTED_MODULE: {
+      return updateState(state, { selectedModule: action.payload || null });
+    }
+    case ACTION_TYPES.SET_SELECTED_PAGE: {
+      return updateState(state, { selectedPage: action.payload || null });
     }
     default:
       return state;

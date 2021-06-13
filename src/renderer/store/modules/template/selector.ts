@@ -21,3 +21,15 @@ export const getTemplateList = createSelector(
   getTemplateState,
   state => state.templateList
 );
+
+// 获取当前模块
+export const getSelectedModule = createSelector(
+  getTemplateState,
+  state => state.selectedModule
+);
+
+// 获取当前页面
+export const getSelectedPage = createSelector(
+  getTemplateState,
+  state => state.selectedPage
+);

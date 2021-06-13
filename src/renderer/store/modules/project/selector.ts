@@ -16,18 +16,6 @@ export const getProjectData = createSelector(
   state => state.projectData
 );
 
-// 获取当前模块
-export const getSelectedModule = createSelector(
-  getProjectState,
-  state => state.selectedModule
-);
-
-// 获取当前页面
-export const getSelectedPage = createSelector(
-  getProjectState,
-  state => state.selectedPage
-);
-
 // // 获取工程ui版本信息
 // export const getProjectUiVersion = createSelector(
 //   getState,

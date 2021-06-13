@@ -1,6 +1,7 @@
-import { useSelectedPage } from "@/hooks/project";
 import React from "react";
 import styled from "styled-components";
+
+import { useSelectedPage } from "@/hooks/template";
 
 import ImageChanger from "./ImageChanger";
 
