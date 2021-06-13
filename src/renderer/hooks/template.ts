@@ -52,8 +52,8 @@ export function useSelectedBrand(): TypeBrandConf | null {
 export function useTemplateList(): [TypeTemplateConf[], boolean] {
   const [value, updateValue] = useState<TypeTemplateConf[]>([]);
   const [loading, updateLoading] = useState(true);
-  const dispatch = useDispatch();
   const brandInfo = useSelectedBrand();
+  const dispatch = useDispatch();
   useLayoutEffect(() => {
     if (!brandInfo) return;
     getTempConfList(brandInfo)

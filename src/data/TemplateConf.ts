@@ -1,4 +1,5 @@
-import { TypeTemplateConf, TypeUiVersionConf } from "../types/project.d";
+import { TypeImageDataVO } from "types/project.d";
+import { TypeTemplateConf, TypeUiVersionConf } from "../types/template";
 
 /**
  * 模板的预览信息
@@ -10,7 +11,7 @@ export default class TemplateConf {
   private file = "";
   private name = "";
   private version = "";
-  private preview = "";
+  private preview: TypeImageDataVO | null = null;
   private uiVersions: TypeUiVersionConf[] = [];
 
   setKey(key: string): void {
@@ -43,10 +44,10 @@ export default class TemplateConf {
   getVersion(): string {
     return this.version;
   }
-  setPreview(preview: string): void {
+  setPreview(preview: TypeImageDataVO): void {
     this.preview = preview;
   }
-  getPreview(): string {
+  getPreview(): TypeImageDataVO | null {
     return this.preview;
   }
   setUiVersions(uiVersions: TypeUiVersionConf[]): void {

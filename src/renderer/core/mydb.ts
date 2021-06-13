@@ -1,5 +1,5 @@
 import fse from "fs-extra";
-import { getRandomStr } from "./utils";
+import uuid from "uuid";
 
 type TypeDocument = {
   _id: string;
@@ -37,7 +37,7 @@ export default class MyDatabase {
   async insert<T>(di: T): Promise<T & TypeDocument> {
     const time = new Date().getTime();
     const data = {
-      _id: getRandomStr(),
+      _id: uuid.v4(),
       ...di,
       createAt: time,
       updateAt: time

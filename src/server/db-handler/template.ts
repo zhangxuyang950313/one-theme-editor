@@ -1,21 +1,16 @@
 import path from "path";
 import fse from "fs-extra";
 import _ from "lodash";
-import { TypeOriginBrandConf } from "types/xml-result";
-import {
-  TypeBrandConf,
-  TypeCreateProjectData,
-  TypeTemplateConf,
-  TypeTemplateInfo
-} from "types/project";
+import * as uuid from "uuid";
 import TemplateData from "src/data/TemplateConf";
-import TemplateInfo from "src/data/TemplateInfo";
-import { HOST, PORT } from "common/config";
+// import TemplateInfo from "src/data/TemplateInfo";
 import { TEMPLATE_CONFIG, getTempDirByBrand } from "common/paths";
-import { getRandomStr, localImageToBase64Async } from "common/utils";
+import { TypeOriginBrandConf } from "types/xml-result";
+import { TypeBrandConf, TypeCreateProjectData } from "types/project";
+import { TypeTemplateConf, TypeTemplateInfo } from "types/template";
+
 import { xml2jsonCompact } from "../core/xmlCompiler";
 import Template from "../core/Template";
-import { insertImageData } from "./image";
 
 // 解析厂商配置
 export async function compileBrandConf(): Promise<TypeBrandConf[]> {
@@ -41,10 +36,8 @@ export const getTempDescFileList = (brandInfo: TypeBrandConf): string[] => {
 async function compileTempConf(file: string): Promise<TypeTemplateConf> {
   const template = new Template(file);
   const templateData = new TemplateData();
-  const key = getRandomStr();
-  const root = path.dirname(file);
-  templateData.setKey(key);
-  templateData.setRoot(root);
+  templateData.setKey(uuid.v4());
+  templateData.setRoot(path.dirname(file));
   templateData.setFile(file);
   templateData.setName(await template.getName());
   templateData.setPreview(await template.getPreview());
@@ -87,7 +80,7 @@ export async function compileTempInfo(
   // );
   const template = new Template(projectData.templateConf.file);
   template.setUiVersion(projectData.uiVersionConf);
-  const templateInfo = new TemplateInfo();
+  // const templateInfo = new TemplateInfo();
   // templateInfo.set
   // return templateInfo.getData();
   return template.getTempInfo();

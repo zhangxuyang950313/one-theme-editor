@@ -1,8 +1,8 @@
 import path from "path";
 import fse from "fs-extra";
+import * as uuid from "uuid";
 import Nedb from "nedb-promises";
 import { PROJECTS_DIR } from "common/paths";
-import { getRandomStr } from "common/utils";
 import {
   TypeDatabase,
   TypeCreateProjectData,
@@ -37,10 +37,10 @@ export async function createProject(
   data: TypeCreateProjectData
 ): Promise<TypeDatabase<TypeProjectData>> {
   const projects = fse.readdirSync(PROJECTS_DIR);
-  let filename = getRandomStr();
+  let filename = uuid.v4();
   // 重名检测
   while (projects.includes(filename)) {
-    filename = getRandomStr();
+    filename = uuid.v4();
   }
   const file = path.resolve(PROJECTS_DIR, filename);
   const { brandConf, uiVersionConf } = data;
