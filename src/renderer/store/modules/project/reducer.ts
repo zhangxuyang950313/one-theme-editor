@@ -1,6 +1,6 @@
 import { TypeTempModuleConf, TypeTempPageConf } from "types/project";
 import {
-  TypeBrandConf,
+  TypeBrandInfo,
   TypeDatabase,
   // TypePageConf,
   // TypeTemplateConf,
@@ -11,12 +11,14 @@ import {
 } from "src/types/project";
 import ACTION_TYPES from "@/store/actions";
 import { updateState } from "@/store/utils";
+import { TypeProjectDesc } from "./../../../../types/project.d";
 // import { updateProjectById } from "@/api";
 import { TypeActions } from "./action";
 
 export type TypeStates = {
-  brandInfo: TypeBrandConf | null;
+  brandInfo: TypeBrandInfo | null;
   projectData: TypeDatabase<TypeProjectData> | null;
+  projectInfo: TypeProjectDesc | null;
   selectedModule: TypeTempModuleConf | null;
   selectedPage: TypeTempPageConf | null;
   // uiVersion: TypeUiVersionConf | null;
@@ -29,6 +31,7 @@ export type TypeStates = {
 const defaultState: TypeStates = {
   brandInfo: null,
   projectData: null,
+  projectInfo: null,
   selectedModule: null,
   selectedPage: null
   // uiVersion: null,
@@ -53,9 +56,11 @@ export default function ProjectReducer(
       const firstModule = action.payload?.template.modules[0];
       const firstPage = firstModule?.groups[0].pages[0];
       return updateState(state, {
-        projectData: action.payload,
-        selectedModule: firstModule,
-        selectedPage: firstPage
+        brandInfo: action.payload?.brand || null,
+        projectData: action.payload || null,
+        projectInfo: action.payload.projectInfo || null,
+        selectedModule: firstModule || null,
+        selectedPage: firstPage || null
       });
     }
     case ACTION_TYPES.SET_SELECTED_MODULE: {

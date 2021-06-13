@@ -29,6 +29,7 @@ export type TypeTempPageGroupConf = {
 };
 
 export type TypeTempModuleConf = {
+  index: number;
   name: string;
   icon: string;
   groups: TypeTempPageGroupConf[];

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 
 import { useProjectData, useSelectedModule } from "@/hooks/project";
@@ -7,9 +7,13 @@ import { Tooltip } from "antd";
 
 // 模块选择器
 const ModuleSelector: React.FC = () => {
-  const [selectedIndex, updateIndex] = useState(0);
   const [projectData] = useProjectData();
-  const [, updateModule] = useSelectedModule();
+  const [selectedModule, updateModule] = useSelectedModule();
+
+  if (!selectedModule) {
+    console.log("selectedModule 为空");
+    return null;
+  }
 
   if (!Array.isArray(projectData?.template.modules)) {
     console.log("modules 为空");
@@ -22,11 +26,8 @@ const ModuleSelector: React.FC = () => {
         return (
           <StyleIcon
             key={key}
-            isActive={selectedIndex === key}
-            onClick={() => {
-              updateIndex(key);
-              updateModule(item);
-            }}
+            isActive={selectedModule.index === item.index}
+            onClick={() => updateModule(item)}
           >
             <Tooltip title={item.name} placement="right">
               <img className="icon" alt="" src={item.icon} />
@@ -46,8 +47,7 @@ const StyleModuleSelector = styled.div`
   border-right: ${({ theme }) => theme["@border-color-base"]} 1px solid;
   padding: 80px 0;
 `;
-type TypeStyleIconProps = { isActive: boolean };
-const StyleIcon = styled.div<TypeStyleIconProps>`
+const StyleIcon = styled.div<{ isActive: boolean }>`
   cursor: pointer;
   width: ${({ isActive }) => (isActive ? "55px" : "45px")};
   opacity: ${({ isActive }) => (isActive ? 1 : 0.4)};
