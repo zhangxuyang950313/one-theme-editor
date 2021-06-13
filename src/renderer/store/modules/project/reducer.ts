@@ -4,7 +4,8 @@ import {
   TypeBrandInfo,
   TypeDatabase,
   TypeProjectData,
-  TypeProjectDesc
+  TypeProjectDesc,
+  TypeResourceMap
 } from "types/project";
 import { TypeActions } from "./action";
 
@@ -12,6 +13,7 @@ export type TypeStates = {
   brandInfo: TypeBrandInfo | null;
   projectData: TypeDatabase<TypeProjectData> | null;
   projectInfo: TypeProjectDesc | null;
+  resourceMapList: TypeResourceMap[];
   // uiVersion: TypeUiVersionConf | null;
   // projectInfo: TypeProjectDesc | null;
   // templateConf: TypeTemplateInfo | null;
@@ -22,7 +24,8 @@ export type TypeStates = {
 const defaultState: TypeStates = {
   brandInfo: null,
   projectData: null,
-  projectInfo: null
+  projectInfo: null,
+  resourceMapList: []
   // uiVersion: null,
   // projectInfo: null,
   // templateConf: null,

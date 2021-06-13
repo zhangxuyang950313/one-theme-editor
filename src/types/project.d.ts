@@ -64,3 +64,12 @@ export type TypeProjectData = {
   uiVersion: TypeUiVersionInfo;
   template: TypeTemplateInfo;
 };
+
+export type TypeResourceImage = {
+  type: "image";
+  url: string;
+};
+export type TypeResourceXml = {
+  type: "xml";
+};
+export type TypeResourceMap = TypeResourceImage | TypeResourceXml;

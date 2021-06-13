@@ -1,14 +1,15 @@
 /**
  * 图片替换单元组件
  */
-import path from "path";
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import { remote } from "electron";
 
 import { RightCircleOutlined } from "@ant-design/icons";
 import { TypeTempPageSourceConf } from "types/template";
 import { useUpdateProject } from "@/hooks/project";
+import { message } from "antd";
+import errCode from "@/core/error-code";
 
 // 图片素材展示
 function ShowImage(props: { onClick?: () => void; srcUrl: string }) {
@@ -94,6 +95,10 @@ const ResourceChanger: React.FC<TypeProps> = props => {
   };
   // 中间的快速使用默认素材按钮
   const handleUseDefaultResource = () => {
+    if (!(Array.isArray(to) && to.length > 0)) {
+      message.warn(errCode[3006]);
+      return;
+    }
     to.forEach(item => {
       item.url = from.url;
     });
