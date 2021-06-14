@@ -132,7 +132,7 @@
 <source name="游戏中心">
     <layout x="415" y="1700" w="186" h="186" align="center" alignV="center"/>
     <from src="../icons/res/com.xiaomi.gamecenter.png"/>
-    <to src="icons/res/com.android.fileexplorer.png"/>
+    <to src="icons/res/com.xiaomi.gamecenter.png"/>
 </source>
 <color description="图标文字">
     <layout x="415" y="1850" size="36" align="center" alignV="center" text="游戏中心"/>

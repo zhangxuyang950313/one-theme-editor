@@ -1,10 +1,11 @@
 import path from "path";
 import fse from "fs-extra";
 import Nedb from "nedb-promises";
+import image2base64 from "image-to-base64";
 import { USER_DATA } from "common/paths";
-import { TypeImageData, TypeImageDataInDoc } from "types/project";
 import { HOST, PORT } from "common/config";
-import { getFileMD5, localImageToBase64Async } from "common/utils";
+import { getFileMD5 } from "common/utils";
+import { TypeImageData, TypeImageDataInDoc } from "types/project";
 
 const imageDBFile = path.resolve(USER_DATA, "image");
 fse.ensureFileSync(imageDBFile);
@@ -14,20 +15,20 @@ const imageDB = new Nedb({
   timestampData: true
 });
 
-export async function insertImageData(
+export async function ensureImageData(
   data: TypeImageData
 ): Promise<TypeImageDataInDoc> {
+  const count = await imageDB.count({ md5: data.md5 });
+  if (count > 0) {
+    return imageDB.update<TypeImageData>({ md5: data.md5 }, data, {
+      returnUpdatedDocs: true
+    });
+  }
   return imageDB.insert<TypeImageData>(data);
 }
 
-export async function findImageData(id: string): Promise<TypeImageDataInDoc> {
-  return imageDB.findOne({ _id: id });
-}
-
-export async function getImageUrl(data: TypeImageData): Promise<string> {
-  // TODO: 根据 md5 获取相同缓存图片
-  const { _id } = await insertImageData(data);
-  return `http://${HOST}:${PORT}/image/${_id}`;
+export async function findImageData(md5: string): Promise<TypeImageDataInDoc> {
+  return imageDB.findOne<TypeImageData>({ md5 });
 }
 
 // 传入一个绝对路径，解析图片存入数据库并返回图片 url
@@ -40,7 +41,8 @@ export async function getImageUrlOf(file: string): Promise<string> {
     console.warn(`路径 ${file}不存在`);
     return "";
   }
-  const base64 = await localImageToBase64Async(file);
+  const base64 = await image2base64(file);
   const md5 = await getFileMD5(file);
-  return getImageUrl({ md5, base64 });
+  await ensureImageData({ md5, base64 });
+  return `http://${HOST}:${PORT}/image/${md5}`;
 }

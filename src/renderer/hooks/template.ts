@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { message } from "antd";
 
 import { getBrandConfList, getTempConfList } from "@/api/index";
-import errCode from "@/core/error-code";
+import ERR_CODE from "@/core/error-code";
 
 import {
   setBrandInfoList,
@@ -65,7 +65,7 @@ export function useTemplateList(): [TypeTemplateConf[], boolean] {
         }, 300);
       })
       .catch(err => {
-        const content = errCode[3002];
+        const content = ERR_CODE[3002];
         message.error({ content });
         console.log(`${content}: ${err}`);
       });

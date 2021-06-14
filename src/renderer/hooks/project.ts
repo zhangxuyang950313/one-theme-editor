@@ -17,7 +17,7 @@ import {
 } from "@/store/modules/template/action";
 import { TypeDatabase, TypeProjectData } from "types/project";
 
-import errCode from "renderer/core/error-code";
+import ERR_CODE from "renderer/core/error-code";
 
 // 获取项目列表
 type TypeIsLoading = boolean;
@@ -114,7 +114,7 @@ export function useUpdateProject(): () => void {
         ])
       ).then(data => {
         if (!data) {
-          message.error(errCode[2003]);
+          message.error(ERR_CODE[2003]);
           return;
         }
         dispatch(setProject(data));

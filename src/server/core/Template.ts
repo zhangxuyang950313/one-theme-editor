@@ -2,7 +2,6 @@ import path from "path";
 
 import TemplateInfo from "src/data/TemplateInfo";
 import { getImageUrlOf } from "@/db-handler/image";
-import errCode from "renderer/core/error-code";
 import { getImageData } from "common/utils";
 
 import {
@@ -19,6 +18,8 @@ import {
   TypeOriginTempModulePageConf
 } from "types/xml-result";
 
+import ERR_CODE from "renderer/core/error-code";
+
 import { xml2jsonCompact } from "./xmlCompiler";
 import XMLNode from "./XMLNode";
 import Page from "./Page";
@@ -33,7 +34,7 @@ export default class Template {
   private uiVersion?: TypeUiVersionConf;
   constructor(descFile: string) {
     if (!descFile) {
-      throw new Error(errCode[3005]);
+      throw new Error(ERR_CODE[3005]);
     }
     this.descFile = descFile;
     this.rootDir = path.dirname(descFile);
@@ -103,7 +104,7 @@ export default class Template {
     data: TypeOriginTempModulePageConf[]
   ): Promise<TypeTempPageConf[]> {
     if (!this.uiVersion?.src) {
-      throw new Error(errCode[3004]);
+      throw new Error(ERR_CODE[3004]);
     }
     const uiPath = this.uiVersion.src;
     // 这里是在选择模板版本后得到的目标模块目录

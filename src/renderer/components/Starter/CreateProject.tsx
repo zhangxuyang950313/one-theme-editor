@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import _ from "lodash";
+import * as uuid from "uuid";
 
 import { isDev } from "@/core/constant";
-import errCode from "@/core/error-code";
+import ERR_CODE from "@/core/error-code";
 import { useSelectedBrand, useTemplateList } from "@/hooks/template";
 import { TypeProjectDesc } from "types/project.d";
 import { TypeTemplateConf } from "types/template.d";
@@ -48,7 +49,7 @@ const CreateProject: React.FC<TypeProps> = props => {
 
   // 表单默认值
   const initialValues = {
-    name: isDev ? "测试" : "",
+    name: isDev ? `测试${uuid.v4()}` : "",
     designer: isDev ? "测试" : "",
     author: isDev ? "测试" : "",
     version: "1.0.0",
@@ -114,7 +115,7 @@ const CreateProject: React.FC<TypeProps> = props => {
       );
       if (!uiVersion) {
         message.warn({
-          content: errCode[2002],
+          content: ERR_CODE[2002],
           duration: 1000
         });
         return;
@@ -218,7 +219,7 @@ const CreateProject: React.FC<TypeProps> = props => {
           );
         }
         message.info({
-          content: errCode[3001],
+          content: ERR_CODE[3001],
           duration: 1000
         });
         jumpStep(0);

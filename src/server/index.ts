@@ -1,5 +1,6 @@
 import express from "express";
 import bodyParser from "body-parser";
+import FileType from "file-type";
 import { PORT, HOST } from "common/config";
 import API from "common/api";
 import { TypeCreateProjectData } from "types/project";
@@ -52,13 +53,19 @@ app.use((req, res, next) => {
 //   }
 // );
 
-app.get<{ id: string }, any, any, any>("/image/:id", (req, res) => {
-  findImageData(req.params.id).then(async data => {
+app.get<{ md5: string }, any, any, any>("/image/:md5", (req, res) => {
+  findImageData(req.params.md5).then(async data => {
     const buffer = Buffer.from(
       data.base64?.replace(/^data:image\/\w+;base64,/, "") || "",
       "base64"
     );
-    res.send(buffer);
+    const fileType = await FileType.fromBuffer(buffer);
+    if (fileType) {
+      res.set({ "Content-Type": fileType.mime });
+      res.send(buffer);
+    } else {
+      res.status(400);
+    }
   });
 });
 

@@ -1,4 +1,4 @@
-const errCode = {
+const ERR_CODE = {
   // 工程相关
   2000: "创建工程出错",
   2001: "工程不存在",
@@ -21,4 +21,4 @@ const errCode = {
   4002: "图片加载失败"
 };
 
-export default errCode;
+export default ERR_CODE;

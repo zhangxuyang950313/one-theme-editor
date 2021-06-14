@@ -9,7 +9,7 @@ import { RightCircleOutlined } from "@ant-design/icons";
 import { TypeTempPageSourceConf } from "types/template";
 import { useUpdateProject } from "@/hooks/project";
 import { message } from "antd";
-import errCode from "@/core/error-code";
+import ERR_CODE from "@/core/error-code";
 import { useDispatch, useSelector } from "react-redux";
 import { addProjectImage } from "@/store/modules/project/action";
 import { findProjectImage } from "@/store/modules/project/selector";
@@ -101,7 +101,7 @@ const ResourceChanger: React.FC<TypeProps> = props => {
   // 中间的快速使用默认素材按钮
   const handleUseDefaultResource = () => {
     if (!(Array.isArray(to) && to.length > 0)) {
-      message.warn(errCode[3006]);
+      message.warn(ERR_CODE[3006]);
       return;
     }
     to.forEach(target => {

@@ -4,7 +4,7 @@ import fse from "fs-extra";
 import imageSizeOf from "image-size";
 import { TypeImageDataVO } from "types/project.d";
 import { getImageUrlOf } from "@/db-handler/image";
-import errCode from "../renderer/core/error-code";
+import ERR_CODE from "../renderer/core/error-code";
 
 // 随机字符串，最多11位
 export function getRandomStr(
@@ -66,29 +66,30 @@ export function checkPathExists(file: string): string {
 }
 
 // 本地图片转 base64 同步方法
-export function localImageToBase64Sync(file: string): string {
-  if (!file) return "";
+export function localImageToBase64Sync(
+  file: string
+): { ext: string; base64: string } {
+  const result = { ext: "", base64: "" };
+  if (!file) return result;
   const extname = path.extname(file).replace(/^\./, "");
-  if (!checkPathExists(file) || !extname) return "";
+  if (!checkPathExists(file) || !extname) return result;
   const base64 = fse.readFileSync(file, "base64");
-  return `data:image/${extname};base64,${base64}`;
+  result.ext = extname;
+  result.base64 = `data:image/${extname};base64,${base64}`;
+  return result;
 }
 
 // 本地图片转 base64 异步方法
-export function localImageToBase64Async(file: string): Promise<string> {
-  return new Promise((resolve, reject) => {
-    if (!file) {
-      reject(new Error(`${errCode[4000]}: ${file}`));
-      return;
-    }
-    const extname = path.extname(file).replace(/^\./, "");
-    if (!checkPathExists(file) || !extname) {
-      reject(new Error(`${errCode[4001]}: ${file}`));
-      return;
-    }
-    const base64 = fse.readFileSync(file, "base64");
-    resolve(`data:image/${extname};base64,${base64}`);
-  });
+export async function localImageToBase64Async(file: string): Promise<string> {
+  if (!file) {
+    throw new Error(`${ERR_CODE[4000]}: ${file}`);
+  }
+  const extname = path.extname(file).replace(/^\./, "");
+  if (!checkPathExists(file) || !extname) {
+    throw new Error(`${ERR_CODE[4001]}: ${file}`);
+  }
+  const base64 = await fse.readFile(file, "base64");
+  return `data:image/${extname};base64,${base64}`;
 }
 
 // 获取图片 MD5

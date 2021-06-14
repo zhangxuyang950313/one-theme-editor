@@ -8,7 +8,7 @@ import {
   TypeCreateProjectData,
   TypeProjectData
 } from "types/project";
-import errCode from "renderer/core/error-code";
+import ERR_CODE from "renderer/core/error-code";
 import ProjectData from "src/data/ProjectData";
 import { compileTempInfo } from "./template";
 
@@ -40,6 +40,7 @@ async function rebuildIndex() {
     .filter(o => fse.existsSync(o)); // 排除不在的路径
   projectFiles.forEach(async file => {
     const project = await createNedb(file).findOne<TypeProjectData>({});
+    if (!project) return;
     const count = await projectIndexDB.count({ uuid: project.uuid });
     if (count === 0) {
       projectIndexDB.insert<TypeIndex>({
@@ -110,7 +111,7 @@ export async function getProjectList(
 // 通过 _id 获取工程数据库实例
 async function getProjectDB(uuid: string): Promise<Nedb> {
   const data = await projectIndexDB.findOne<TypeIndex>({ uuid });
-  if (!data?.uuid) throw new Error(errCode[2001]);
+  if (!data?.uuid) throw new Error(ERR_CODE[2001]);
   return createNedb(path.join(PROJECTS_DIR, data.uuid));
 }
 
@@ -130,6 +131,6 @@ export async function updateProject(
   const updatedData = projectDB.update<TypeCreateProjectData>({ uuid }, data, {
     returnUpdatedDocs: true
   });
-  if (!updatedData) throw new Error(errCode[2004]);
+  if (!updatedData) throw new Error(ERR_CODE[2004]);
   return updatedData;
 }
