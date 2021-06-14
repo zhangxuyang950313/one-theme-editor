@@ -14,27 +14,22 @@ const Sidebar: React.FC = props => {
   const currentBrandInfo = useSelectedBrand();
   const dispatch = useDispatch();
 
-  if (!currentBrandInfo) return null;
-
   const renderMenu = () => {
-    if (brandInfoList) {
-      const menuItem = brandInfoList.map(item => (
-        <Menu.Item key={item.templateDir}>{item.name}主题</Menu.Item>
-      ));
-      return (
-        <Menu
-          className="menu"
-          selectedKeys={[currentBrandInfo.templateDir]}
-          onSelect={v => {
-            const brandInfo = brandInfoList.find(o => v.key === o.templateDir);
-            if (brandInfo) dispatch(updateSelectedBrand(brandInfo));
-          }}
-        >
-          {menuItem}
-        </Menu>
-      );
-    }
-    return null;
+    if (!brandInfoList || !currentBrandInfo) return null;
+    return (
+      <Menu
+        className="menu"
+        selectedKeys={[currentBrandInfo.templateDir]}
+        onSelect={v => {
+          const brandInfo = brandInfoList.find(o => v.key === o.templateDir);
+          if (brandInfo) dispatch(updateSelectedBrand(brandInfo));
+        }}
+      >
+        {brandInfoList.map(item => (
+          <Menu.Item key={item.templateDir}>{item.name}主题</Menu.Item>
+        ))}
+      </Menu>
+    );
   };
 
   return (

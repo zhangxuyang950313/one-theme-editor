@@ -4,7 +4,9 @@ import {
   TypeBrandInfo,
   TypeDatabase,
   TypeProjectData,
-  TypeProjectDesc
+  TypeProjectDesc,
+  TypeProjectImage,
+  TypeProjectXml
 } from "types/project";
 import { TypeActions } from "./action";
 
@@ -12,6 +14,8 @@ export type TypeStates = {
   brandInfo: TypeBrandInfo | null;
   projectData: TypeDatabase<TypeProjectData> | null;
   projectInfo: TypeProjectDesc | null;
+  imageList: TypeProjectImage[];
+  xmlList: TypeProjectXml[];
   // uiVersion: TypeUiVersionConf | null;
   // projectInfo: TypeProjectDesc | null;
   // templateConf: TypeTemplateInfo | null;
@@ -22,7 +26,9 @@ export type TypeStates = {
 const defaultState: TypeStates = {
   brandInfo: null,
   projectData: null,
-  projectInfo: null
+  projectInfo: null,
+  imageList: [],
+  xmlList: []
   // uiVersion: null,
   // projectInfo: null,
   // templateConf: null,
@@ -45,6 +51,20 @@ export default function ProjectReducer(
         brandInfo: action.payload?.brand || null,
         projectData: action.payload || null,
         projectInfo: action.payload.projectInfo || null
+      });
+    }
+    // 添加图片资源
+    case ACTION_TYPES.ADD_RESOURCE: {
+      return updateState(state, {
+        imageList: [...state.imageList, action.payload]
+      });
+    }
+    // 删除图片资源
+    case ACTION_TYPES.DEL_RESOURCE: {
+      return updateState(state, {
+        imageList: state.imageList.filter(
+          item => action.payload.target !== item.target
+        )
       });
     }
     // case ACTION_TYPES.SET_PROJECT_BRAND_INFO: {

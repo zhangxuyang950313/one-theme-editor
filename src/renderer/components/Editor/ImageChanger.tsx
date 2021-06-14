@@ -11,8 +11,8 @@ import { useUpdateProject } from "@/hooks/project";
 import { message } from "antd";
 import errCode from "@/core/error-code";
 import { useDispatch, useSelector } from "react-redux";
-import { addResourceImage } from "@/store/modules/resource/action";
-import { findResourceImage } from "@/store/modules/resource/selector";
+import { addProjectImage } from "@/store/modules/project/action";
+import { findProjectImage } from "@/store/modules/project/selector";
 
 // 图片素材展示
 function ShowImage(props: { onClick?: () => void; srcUrl: string }) {
@@ -70,7 +70,7 @@ type TypeProps = {
 };
 const ResourceChanger: React.FC<TypeProps> = props => {
   const handleUpdateProject = useUpdateProject();
-  const findImage = useSelector(findResourceImage);
+  const findImage = useSelector(findProjectImage);
   const dispatch = useDispatch();
   const { from, to, name } = props.data;
 
@@ -105,7 +105,7 @@ const ResourceChanger: React.FC<TypeProps> = props => {
       return;
     }
     to.forEach(target => {
-      dispatch(addResourceImage({ url: from.url, target }));
+      dispatch(addProjectImage({ url: from.url, target }));
     });
     handleUpdateProject();
   };

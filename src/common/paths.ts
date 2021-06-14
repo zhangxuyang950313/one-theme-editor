@@ -13,6 +13,9 @@ export const USER_CACHE = path.resolve(USER_DATA, "cache");
 // 工程目录
 export const PROJECTS_DIR = path.resolve(USER_DATA, "projects");
 
+// 工程文件索引
+export const PROJECT_INDEX = path.resolve(PROJECTS_DIR, "index");
+
 // 资源目录
 export const RESOURCE_DIR = path.resolve(STATIC_DIR, "resource");
 

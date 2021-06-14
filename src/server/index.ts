@@ -1,9 +1,10 @@
 import express from "express";
 import bodyParser from "body-parser";
 import { PORT, HOST } from "common/config";
+import API from "common/api";
 import { TypeCreateProjectData } from "types/project";
 import {
-  findProjectById,
+  findProjectByUUID,
   getProjectList,
   createProject,
   updateProject
@@ -62,7 +63,7 @@ app.get<{ id: string }, any, any, any>("/image/:id", (req, res) => {
 });
 
 // 获取厂商列表
-app.get("/brand/list", (req, res) => {
+app.get(API.GET_BRAND_LIST, (req, res) => {
   compileBrandConf()
     .then(brandConfList => {
       res.send(send.success(brandConfList));
@@ -73,21 +74,24 @@ app.get("/brand/list", (req, res) => {
 });
 
 // 模板列表
-app.get<any, any, any, { brandType: string }>("/template/list", (req, res) => {
-  getTemplates(req.query.brandType)
-    .then(templateConfList => {
-      res.send(send.success(templateConfList));
-    })
-    .catch(err => {
-      console.log(err);
-      res.status(400).send(send.fail(err));
-    });
-});
+app.get<any, any, any, { brandType: string }>(
+  API.GET_TEMPLATE_LIST,
+  (req, res) => {
+    getTemplates(req.query.brandType)
+      .then(templateConfList => {
+        res.send(send.success(templateConfList));
+      })
+      .catch(err => {
+        console.log(err);
+        res.status(400).send(send.fail(err));
+      });
+  }
+);
 
 // ---------------工程信息--------------- //
 // 添加工程
 app.post<any, any, TypeCreateProjectData, any>(
-  "/project/create",
+  API.CREATE_PROJECT,
   (req, res) => {
     createProject(req.body)
       .then(projectData => {
@@ -101,19 +105,22 @@ app.post<any, any, TypeCreateProjectData, any>(
 );
 
 // 获取工程列表
-app.get<any, any, any, { brandType: string }>("/project/list", (req, res) => {
-  getProjectList(req.query.brandType)
-    .then(projectData => {
-      res.send(send.success(projectData));
-    })
-    .catch(err => {
-      res.status(400).send(send.fail(err));
-    });
-});
+app.get<any, any, any, { brandType: string }>(
+  API.GET_PROJECT_LIST,
+  (req, res) => {
+    getProjectList(req.query.brandType)
+      .then(projectData => {
+        res.send(send.success(projectData));
+      })
+      .catch(err => {
+        res.status(400).send(send.fail(err));
+      });
+  }
+);
 
 // 通过参数获取工程
-app.get<any, any, any, { id: string }>("/project/find", (req, res) => {
-  findProjectById(req.query.id)
+app.get<{ uuid: string }>(`${API.GET_PROJECT}/:uuid`, (req, res) => {
+  findProjectByUUID(req.params.uuid)
     .then(projectData => {
       res.send(send.success(projectData));
     })
@@ -123,8 +130,8 @@ app.get<any, any, any, { id: string }>("/project/find", (req, res) => {
 });
 
 // 更新数据
-app.post<{ id: string }>("/project/update/:id", (req, res) => {
-  updateProject(req.params.id, req.body)
+app.post<{ uuid: string }>(`${API.UPDATE_PROJECT}/:uuid`, (req, res) => {
+  updateProject(req.params.uuid, req.body)
     .then(projectData => {
       res.send(send.success(projectData));
     })

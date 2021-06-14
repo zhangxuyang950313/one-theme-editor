@@ -16,6 +16,17 @@ export const getProjectData = createSelector(
   state => state.projectData
 );
 
+export const getProjectImageList = createSelector(
+  getProjectState,
+  state => state.imageList
+);
+
+export const findProjectImage = createSelector(
+  getProjectState,
+  state => (target: string) =>
+    state.imageList.find(item => item.target === target)
+);
+
 // // 获取工程ui版本信息
 // export const getProjectUiVersion = createSelector(
 //   getState,

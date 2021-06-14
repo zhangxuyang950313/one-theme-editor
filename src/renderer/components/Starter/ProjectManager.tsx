@@ -34,7 +34,7 @@ const ProjectManager: React.FC = () => {
                 hoverable
                 projectInfo={item.projectInfo}
                 onClick={() => {
-                  history.push(`/editor/${item._id}`);
+                  history.push(`/editor/${item.uuid}`);
                 }}
               />
             </div>

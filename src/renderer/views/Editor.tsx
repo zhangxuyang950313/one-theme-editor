@@ -17,9 +17,9 @@ const Editor: React.FC = () => {
   const [, updateTitle] = useDocumentTitle();
   const history = useHistory();
   // 从路由参数中获得工程 id
-  const { pid } = useParams<{ pid: string }>();
+  const { uuid } = useParams<{ uuid: string }>();
   // 工程数据，undefined
-  const [projectData, isLoading] = useProjectById(pid);
+  const [projectData, isLoading] = useProjectById(uuid);
 
   // 加载工程
   useLoadProject(projectData);

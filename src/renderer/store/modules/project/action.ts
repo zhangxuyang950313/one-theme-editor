@@ -1,6 +1,10 @@
 import ACTION_TYPES from "@/store/actions";
 
-import { TypeDatabase, TypeProjectData } from "types/project.d";
+import {
+  TypeDatabase,
+  TypeProjectData,
+  TypeProjectImage
+} from "types/project.d";
 
 type TypeActionInitProject = {
   type: typeof ACTION_TYPES.INIT_PROJECT;
@@ -13,6 +17,16 @@ type TypeActionSetProject = {
 
 type TypeActionUpdateProject = {
   type: typeof ACTION_TYPES.UPDATE_PROJECT;
+};
+
+type TypeActionAddProjectImage = {
+  type: typeof ACTION_TYPES.ADD_RESOURCE;
+  payload: TypeProjectImage;
+};
+
+type TypeActionDelProjectImage = {
+  type: typeof ACTION_TYPES.DEL_RESOURCE;
+  payload: TypeProjectImage;
 };
 
 // type TypeSetProjectBrandInfo = {
@@ -48,7 +62,9 @@ type TypeActionUpdateProject = {
 export type TypeActions =
   | TypeActionInitProject
   | TypeActionSetProject
-  | TypeActionUpdateProject;
+  | TypeActionUpdateProject
+  | TypeActionAddProjectImage
+  | TypeActionDelProjectImage;
 
 // 初始化工程信息
 export function initProject(): TypeActionInitProject {
@@ -65,6 +81,18 @@ export function setProject(
 // 自动更新工程数据到数据库
 export function updateProject(): TypeActionUpdateProject {
   return { type: ACTION_TYPES.UPDATE_PROJECT };
+}
+
+export function addProjectImage(
+  payload: TypeProjectImage
+): TypeActionAddProjectImage {
+  return { type: ACTION_TYPES.ADD_RESOURCE, payload };
+}
+
+export function delProjectImage(
+  payload: TypeProjectImage
+): TypeActionDelProjectImage {
+  return { type: ACTION_TYPES.DEL_RESOURCE, payload };
 }
 
 // // 设置工程厂商信息

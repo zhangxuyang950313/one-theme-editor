@@ -1,7 +1,12 @@
 import _ from "lodash";
 import { useDispatch, useSelector } from "react-redux";
 import { useLayoutEffect, useState, useCallback } from "react";
-import { getProjectById, updateProjectById, getProjectList } from "@/api/index";
+import { message } from "antd";
+import {
+  getProjectByUUID,
+  updateProjectByUUID,
+  getProjectList
+} from "@/api/index";
 import { useSelectedBrand } from "@/hooks/template";
 
 import { setProject } from "@/store/modules/project/action";
@@ -11,6 +16,8 @@ import {
   setSelectedPage
 } from "@/store/modules/template/action";
 import { TypeDatabase, TypeProjectData } from "types/project";
+
+import errCode from "renderer/core/error-code";
 
 // 获取项目列表
 type TypeIsLoading = boolean;
@@ -42,28 +49,28 @@ export function useProjectList(): TypeReturnData {
 
 // 使用 id 获取工程信息
 export function useProjectById(
-  id: string
+  uuid: string
 ): [TypeProjectDataInDoc | null, boolean] {
   const [project, updateProject] = useState<TypeProjectDataInDoc | null>(null);
   const [loading, updateLoading] = useState(true);
   useLayoutEffect(() => {
-    console.log(`准备获取工程（${id}）`);
-    getProjectById(id)
+    console.log(`准备获取工程（${uuid}）`);
+    getProjectByUUID(uuid)
       .then(async project => {
         await new Promise(resolve => setTimeout(resolve, 300));
         return project;
       })
       .then(project => {
-        console.log(`获取工程（${id}）成功`, project);
+        console.log(`获取工程（${uuid}）成功`, project);
         updateProject(project);
       })
       .catch(err => {
-        console.warn(`获取工程（${id}）失败`, err);
+        console.warn(`获取工程（${uuid}）失败`, err);
       })
       .finally(() => {
         updateLoading(false);
       });
-  }, [id]);
+  }, [uuid]);
   return [project, loading];
 }
 
@@ -95,11 +102,21 @@ export function useUpdateProject(): () => void {
   const dispatch = useDispatch();
   const projectData = useSelector(getProjectData);
   const handleUpdate = () => {
-    if (projectData && projectData._id) {
-      updateProjectById(
-        projectData._id,
-        _.pick(projectData, ["brand", "projectInfo", "uiVersion", "template"])
+    if (projectData && projectData.uuid) {
+      updateProjectByUUID(
+        projectData.uuid,
+        _.pick(projectData, [
+          "uuid",
+          "brand",
+          "projectInfo",
+          "uiVersion",
+          "template"
+        ])
       ).then(data => {
+        if (!data) {
+          message.error(errCode[2003]);
+          return;
+        }
         dispatch(setProject(data));
       });
     }

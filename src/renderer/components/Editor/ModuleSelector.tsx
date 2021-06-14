@@ -15,8 +15,8 @@ const ModuleSelector: React.FC = () => {
     console.log("selectedModule 为空");
     return null;
   }
-
-  if (!Array.isArray(projectData?.template.modules)) {
+  console.log({ projectData });
+  if (!Array.isArray(projectData?.template?.modules)) {
     console.log("modules 为空");
     return null;
   }
