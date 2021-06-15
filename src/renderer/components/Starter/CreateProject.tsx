@@ -6,7 +6,7 @@ import * as uuid from "uuid";
 import { isDev } from "@/core/constant";
 import ERR_CODE from "@/core/error-code";
 import { useSelectedBrand, useTemplateList } from "@/hooks/template";
-import { TypeProjectDesc } from "types/project.d";
+import { TypeProjectInfo } from "types/project.d";
 import { TypeTemplateConf } from "types/template.d";
 
 // components
@@ -23,7 +23,7 @@ import ProjectCard from "./ProjectCard";
 
 // 创建主题按钮
 type TypeProps = {
-  onProjectCreated: (projectInfo: TypeProjectDesc) => Promise<void>;
+  onProjectCreated: (projectInfo: TypeProjectInfo) => Promise<void>;
 };
 const CreateProject: React.FC<TypeProps> = props => {
   // 机型配置
@@ -37,11 +37,11 @@ const CreateProject: React.FC<TypeProps> = props => {
   // 当前步骤
   const [curStep, setCurStep] = useState(0);
   // 填写完成的项目数据
-  const [projectInfo, setProjectInfo] = useState<TypeProjectDesc>();
+  const [projectInfo, setProjectInfo] = useState<TypeProjectInfo>();
   // 创建状态
   const [isCreating, updateCreating] = useState(false);
   // 表单实例
-  const [form] = Form.useForm<TypeProjectDesc>();
+  const [form] = Form.useForm<TypeProjectInfo>();
 
   if (!brandConf) {
     return null;

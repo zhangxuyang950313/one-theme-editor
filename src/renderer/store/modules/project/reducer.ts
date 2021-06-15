@@ -4,7 +4,7 @@ import {
   TypeBrandInfo,
   TypeDatabase,
   TypeProjectData,
-  TypeProjectDesc,
+  TypeProjectInfo,
   TypeProjectImage,
   TypeProjectXml
 } from "types/project";
@@ -13,7 +13,7 @@ import { TypeActions } from "./action";
 export type TypeStates = {
   brandInfo: TypeBrandInfo | null;
   projectData: TypeDatabase<TypeProjectData> | null;
-  projectInfo: TypeProjectDesc | null;
+  projectInfo: TypeProjectInfo | null;
   imageList: TypeProjectImage[];
   xmlList: TypeProjectXml[];
   // uiVersion: TypeUiVersionConf | null;

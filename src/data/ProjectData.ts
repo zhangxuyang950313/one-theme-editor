@@ -2,14 +2,14 @@ import { TypeTemplateInfo } from "types/template";
 import {
   TypeBrandInfo,
   TypeProjectData,
-  TypeProjectDesc,
+  TypeProjectInfo,
   TypeUiVersionInfo
 } from "../types/project";
 
 export default class ProjectData {
   private uuid = "";
   private brand: TypeBrandInfo | null = null;
-  private projectInfo: TypeProjectDesc | null = null;
+  private projectInfo: TypeProjectInfo | null = null;
   private uiVersion: TypeUiVersionInfo | null = null;
   private template: TypeTemplateInfo | null = null;
 
@@ -29,10 +29,10 @@ export default class ProjectData {
   }
 
   // 工程信息
-  setProjectInfo(data: TypeProjectDesc): void {
+  setProjectInfo(data: TypeProjectInfo): void {
     this.projectInfo = data;
   }
-  getProjectInfo(): TypeProjectDesc | null {
+  getProjectInfo(): TypeProjectInfo | null {
     return this.projectInfo;
   }
 

@@ -1,7 +1,8 @@
 import React, { forwardRef, useImperativeHandle } from "react";
 import styled from "styled-components";
 
-import { TypeProjectDesc, TypeUiVersionConf } from "types/project";
+import { TypeProjectInfo } from "types/project";
+import { TypeUiVersionConf } from "types/template";
 
 // components
 import { Form, FormInstance } from "antd";
@@ -17,11 +18,11 @@ type TypeProps = {
   // ui 版本列表，用于渲染 select
   uiVersions: TypeUiVersionConf[];
   // 初始化数据
-  initialValues: TypeProjectDesc | undefined;
-  form: FormInstance<TypeProjectDesc>;
+  initialValues: TypeProjectInfo | undefined;
+  form: FormInstance<TypeProjectInfo>;
 };
 
-type TypeRef = FormInstance<TypeProjectDesc>;
+type TypeRef = FormInstance<TypeProjectInfo>;
 
 // 主题信息表单
 function ProjectInfoForm(props: TypeProps, ref: React.ForwardedRef<TypeRef>) {
@@ -29,12 +30,12 @@ function ProjectInfoForm(props: TypeProps, ref: React.ForwardedRef<TypeRef>) {
 
   useImperativeHandle(ref, () => form);
 
-  const onInputChange = (field: keyof TypeProjectDesc) => {
+  const onInputChange = (field: keyof TypeProjectInfo) => {
     return (event: React.ChangeEvent<HTMLInputElement>) => {
       form.setFieldsValue({ [field]: event.target.value });
     };
   };
-  const onSelectChange = (field: keyof TypeProjectDesc) => {
+  const onSelectChange = (field: keyof TypeProjectInfo) => {
     return (value: string) => {
       form.setFieldsValue({ [field]: value });
     };

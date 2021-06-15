@@ -1,2 +1,5 @@
-<brand name="小米" templateDir="xm" type="xiaomi"/>
+<brand name="小米" templateDir="xm" type="xiaomi">
+  <!-- <template name="浅色模板" description="xm/light/description.xml">
+  <template name="深色模板" description="xm/dark/description.xml"> -->
+</brand>
 <brand name="华为" templateDir="hw" type="huawei"/>

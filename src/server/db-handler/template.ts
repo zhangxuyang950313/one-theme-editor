@@ -75,14 +75,10 @@ async function compileTempConf(file: string): Promise<TypeTemplateConf> {
 export async function compileTempInfo(
   projectData: TypeCreateProjectData
 ): Promise<TypeTemplateInfo> {
-  // const templateData = await xml2jsonCompact<TypeOriginTempConf>(
-  //   projectData.templateConf.file
-  // );
-  const template = new Template(projectData.templateConf.file);
-  template.setUiVersion(projectData.uiVersionConf);
-  // const templateInfo = new TemplateInfo();
-  // templateInfo.set
-  // return templateInfo.getData();
+  const template = new Template(
+    projectData.templateConf.file,
+    projectData.uiVersionConf
+  );
   return template.getTempInfo();
 }
 

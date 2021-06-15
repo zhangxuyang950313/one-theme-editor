@@ -32,16 +32,12 @@ export default class Template {
   // 模板解析数据
   private xmlData!: TypeOriginTempConf;
   private uiVersion?: TypeUiVersionConf;
-  constructor(descFile: string) {
-    if (!descFile) {
-      throw new Error(ERR_CODE[3005]);
-    }
+  constructor(descFile: string, uiVersionConf?: TypeUiVersionConf) {
+    if (!descFile) throw new Error(ERR_CODE[3005]);
+
     this.descFile = descFile;
     this.rootDir = path.dirname(descFile);
-  }
-
-  setUiVersion(data: TypeUiVersionConf): void {
-    this.uiVersion = data;
+    this.uiVersion = uiVersionConf;
   }
 
   private async ensureXmlData(): Promise<TypeOriginTempConf> {
