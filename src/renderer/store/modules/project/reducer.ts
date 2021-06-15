@@ -55,8 +55,12 @@ export default function ProjectReducer(
     }
     // 添加图片资源
     case ACTION_TYPES.ADD_RESOURCE: {
+      if (!action.payload) return state;
       return updateState(state, {
-        imageList: [...state.imageList, action.payload]
+        imageList: state.imageList
+          // 覆盖重复的
+          .filter(o => o.target !== action.payload.target)
+          .concat(action.payload)
       });
     }
     // 删除图片资源

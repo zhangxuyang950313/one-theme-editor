@@ -27,6 +27,11 @@ export const findProjectImage = createSelector(
     state.imageList.find(item => item.target === target)
 );
 
+// 当前素材总大小
+export const currentImageSize = createSelector(getProjectState, state =>
+  state.imageList.reduce((t, o) => (t += o.size), 0)
+);
+
 // // 获取工程ui版本信息
 // export const getProjectUiVersion = createSelector(
 //   getState,

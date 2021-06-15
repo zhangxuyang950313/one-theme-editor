@@ -105,7 +105,7 @@ const ResourceChanger: React.FC<TypeProps> = props => {
       return;
     }
     to.forEach(target => {
-      dispatch(addProjectImage({ url: from.url, target }));
+      dispatch(addProjectImage({ url: from.url, target, size: from.size }));
     });
     handleUpdateProject();
   };

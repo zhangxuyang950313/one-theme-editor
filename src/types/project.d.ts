@@ -69,6 +69,7 @@ export type TypeProjectData = {
 export type TypeProjectImage = {
   url: string;
   target: string;
+  size: number;
 };
 export type TypeProjectXml = {
   content: string;
