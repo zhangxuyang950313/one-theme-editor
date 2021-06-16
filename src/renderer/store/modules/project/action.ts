@@ -3,7 +3,7 @@ import ACTION_TYPES from "@/store/actions";
 import {
   TypeDatabase,
   TypeProjectData,
-  TypeProjectImage
+  TypeImageMapper
 } from "types/project.d";
 
 type TypeActionInitProject = {
@@ -19,14 +19,14 @@ type TypeActionUpdateProject = {
   type: typeof ACTION_TYPES.UPDATE_PROJECT;
 };
 
-type TypeActionAddProjectImage = {
-  type: typeof ACTION_TYPES.ADD_RESOURCE;
-  payload: TypeProjectImage;
+type TypeActionAddImageMapper = {
+  type: typeof ACTION_TYPES.ADD_IMAGE_MAPPER;
+  payload: TypeImageMapper;
 };
 
-type TypeActionDelProjectImage = {
-  type: typeof ACTION_TYPES.DEL_RESOURCE;
-  payload: TypeProjectImage;
+type TypeActionDelImageMapper = {
+  type: typeof ACTION_TYPES.DEL_IMAGE_MAPPER;
+  payload: TypeImageMapper;
 };
 
 // type TypeSetProjectBrandInfo = {
@@ -63,36 +63,36 @@ export type TypeActions =
   | TypeActionInitProject
   | TypeActionSetProject
   | TypeActionUpdateProject
-  | TypeActionAddProjectImage
-  | TypeActionDelProjectImage;
+  | TypeActionAddImageMapper
+  | TypeActionDelImageMapper;
 
 // 初始化工程信息
-export function initProject(): TypeActionInitProject {
+export function actionInitProject(): TypeActionInitProject {
   return { type: ACTION_TYPES.INIT_PROJECT };
 }
 
 // 设置工程数据
-export function setProject(
+export function actionSetProject(
   projectData: TypeDatabase<TypeProjectData>
 ): TypeActionSetProject {
   return { type: ACTION_TYPES.SET_PROJECT, payload: projectData };
 }
 
-// 自动更新工程数据到数据库
-export function updateProject(): TypeActionUpdateProject {
+// 更新工程数据到数据库
+export function actionUpdateProject(): TypeActionUpdateProject {
   return { type: ACTION_TYPES.UPDATE_PROJECT };
 }
 
-export function addProjectImage(
-  payload: TypeProjectImage
-): TypeActionAddProjectImage {
-  return { type: ACTION_TYPES.ADD_RESOURCE, payload };
+export function actionAddProjectImage(
+  payload: TypeImageMapper
+): TypeActionAddImageMapper {
+  return { type: ACTION_TYPES.ADD_IMAGE_MAPPER, payload };
 }
 
-export function delProjectImage(
-  payload: TypeProjectImage
-): TypeActionDelProjectImage {
-  return { type: ACTION_TYPES.DEL_RESOURCE, payload };
+export function actionDelProjectImage(
+  payload: TypeImageMapper
+): TypeActionDelImageMapper {
+  return { type: ACTION_TYPES.DEL_IMAGE_MAPPER, payload };
 }
 
 // // 设置工程厂商信息

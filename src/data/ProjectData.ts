@@ -3,8 +3,10 @@ import {
   TypeBrandInfo,
   TypeProjectData,
   TypeProjectInfo,
-  TypeUiVersionInfo
-} from "../types/project";
+  TypeUiVersionInfo,
+  TypeImageData,
+  TypeImageMapper
+} from "types/project";
 
 export default class ProjectData {
   private uuid = "";
@@ -12,6 +14,8 @@ export default class ProjectData {
   private projectInfo: TypeProjectInfo | null = null;
   private uiVersion: TypeUiVersionInfo | null = null;
   private template: TypeTemplateInfo | null = null;
+  private imageDataList: TypeImageData[] = [];
+  private imageMapperList: TypeImageMapper[] = [];
 
   setUuid(uuid: string): void {
     this.uuid = uuid;
@@ -62,7 +66,9 @@ export default class ProjectData {
       brand: this.brand,
       projectInfo: this.projectInfo,
       uiVersion: this.uiVersion,
-      template: this.template
+      template: this.template,
+      imageDataList: this.imageDataList,
+      imageMapperList: this.imageMapperList
     };
     return data;
   }

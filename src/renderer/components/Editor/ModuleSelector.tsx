@@ -9,10 +9,10 @@ import { Tooltip } from "antd";
 // 模块选择器
 const ModuleSelector: React.FC = () => {
   const [projectData] = useProjectData();
-  const [selectedModule, updateModule] = useSelectedModule();
+  const [currentModule, updateModule] = useSelectedModule();
 
-  if (!selectedModule) {
-    console.log("selectedModule 为空");
+  if (!currentModule) {
+    console.log("currentModule 为空");
     return null;
   }
   console.log({ projectData });
@@ -23,11 +23,11 @@ const ModuleSelector: React.FC = () => {
 
   return (
     <StyleModuleSelector>
-      {projectData?.template.modules.map((item, key) => {
+      {projectData?.template?.modules.map((item, key) => {
         return (
           <StyleIcon
             key={key}
-            isActive={selectedModule.index === item.index}
+            isActive={currentModule.index === item.index}
             onClick={() => updateModule(item)}
           >
             <Tooltip title={item.name} placement="right">

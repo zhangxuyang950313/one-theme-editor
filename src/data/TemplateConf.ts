@@ -1,5 +1,5 @@
 import { TypeImageDataVO } from "types/project.d";
-import { TypeTemplateConf, TypeUiVersionConf } from "../types/template";
+import { TypeTemplateConf, TypeUiVersionConf } from "types/template";
 
 /**
  * 模板的预览信息

@@ -6,11 +6,11 @@ import { useSelectedPage } from "@/hooks/template";
 import ImageChanger from "./ImageChanger";
 
 const ResourceContext: React.FC = () => {
-  const [selectedPage] = useSelectedPage();
-  if (!selectedPage) return null;
+  const [currentPage] = useSelectedPage();
+  if (!currentPage) return null;
   return (
     <StyleResourceContext>
-      {selectedPage.source.map((item, index) => (
+      {currentPage.source.map((item, index) => (
         <ImageChanger key={index} data={item} />
       ))}
     </StyleResourceContext>

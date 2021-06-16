@@ -7,8 +7,8 @@ import { Collapse } from "antd";
 
 // 页面选择器
 const PageSelector: React.FC = () => {
-  const [selectedModule] = useSelectedModule();
-  const pageGroups = selectedModule?.groups;
+  const [currentModule] = useSelectedModule();
+  const pageGroups = currentModule?.groups;
   if (!pageGroups) {
     console.log("页面分组为空");
     return null;

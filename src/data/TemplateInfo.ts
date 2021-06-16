@@ -1,9 +1,9 @@
-import { TypeImageDataVO } from "types/project.d";
+import { TypeImageDataVO } from "types/project";
 import {
   TypeTemplateInfo,
   TypeTempModuleConf,
   TypeUiVersionConf
-} from "types/template.d";
+} from "types/template";
 
 /**
  * 模板的配置数据

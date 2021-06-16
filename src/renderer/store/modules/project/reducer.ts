@@ -1,72 +1,48 @@
 import ACTION_TYPES from "@/store/actions";
 import { updateState } from "@/store/utils";
-import {
-  TypeBrandInfo,
-  TypeDatabase,
-  TypeProjectData,
-  TypeProjectInfo,
-  TypeProjectImage,
-  TypeProjectXml
-} from "types/project";
+import { TypeProjectDataInDoc } from "types/project";
 import { TypeActions } from "./action";
 
-export type TypeStates = {
-  brandInfo: TypeBrandInfo | null;
-  projectData: TypeDatabase<TypeProjectData> | null;
-  projectInfo: TypeProjectInfo | null;
-  imageList: TypeProjectImage[];
-  xmlList: TypeProjectXml[];
-  // uiVersion: TypeUiVersionConf | null;
-  // projectInfo: TypeProjectDesc | null;
-  // templateConf: TypeTemplateInfo | null;
-  // previewConf: TypeTemplateConf | null;
-  // pageConfData: TypePageConf[];
-};
-
-const defaultState: TypeStates = {
-  brandInfo: null,
-  projectData: null,
+const defaultState: TypeProjectDataInDoc = {
+  uuid: null,
+  brand: null,
   projectInfo: null,
-  imageList: [],
-  xmlList: []
-  // uiVersion: null,
-  // projectInfo: null,
-  // templateConf: null,
-  // previewConf: null,
-  // pageConfData: []
+  uiVersion: null,
+  template: null,
+  imageDataList: [],
+  imageMapperList: [],
+  _id: "",
+  createAt: undefined,
+  updateAt: undefined
 };
 
-const projectState: TypeStates = { ...defaultState };
+const projectState: TypeProjectDataInDoc = { ...defaultState };
 
 export default function ProjectReducer(
-  state: TypeStates = projectState,
+  state: TypeProjectDataInDoc = projectState,
   action: TypeActions
-): TypeStates {
+): TypeProjectDataInDoc {
   switch (action.type) {
     case ACTION_TYPES.INIT_PROJECT: {
       return defaultState;
     }
     case ACTION_TYPES.SET_PROJECT: {
-      return updateState(state, {
-        brandInfo: action.payload?.brand || null,
-        projectData: action.payload || null,
-        projectInfo: action.payload.projectInfo || null
-      });
+      return updateState(state, { ...action.payload });
     }
     // 添加图片资源
-    case ACTION_TYPES.ADD_RESOURCE: {
+    case ACTION_TYPES.ADD_IMAGE_MAPPER: {
       if (!action.payload) return state;
       return updateState(state, {
-        imageList: state.imageList
+        imageMapperList: state.imageMapperList
           // 覆盖重复的
           .filter(o => o.target !== action.payload.target)
           .concat(action.payload)
       });
     }
     // 删除图片资源
-    case ACTION_TYPES.DEL_RESOURCE: {
+    case ACTION_TYPES.DEL_IMAGE_MAPPER: {
       return updateState(state, {
-        imageList: state.imageList.filter(
+        imageMapperList: state.imageMapperList.filter(
           item => action.payload.target !== item.target
         )
       });

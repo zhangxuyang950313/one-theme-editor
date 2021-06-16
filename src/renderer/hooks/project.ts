@@ -1,3 +1,4 @@
+import store from "@/store";
 import _ from "lodash";
 import { useDispatch, useSelector } from "react-redux";
 import { useLayoutEffect, useState, useCallback } from "react";
@@ -9,7 +10,7 @@ import {
 } from "@/api/index";
 import { useSelectedBrand } from "@/hooks/template";
 
-import { setProject } from "@/store/modules/project/action";
+import { actionSetProject } from "@/store/modules/project/action";
 import { getProjectData } from "@/store/modules/project/selector";
 import {
   setSelectedModule,
@@ -80,12 +81,12 @@ export function useLoadProject(projectData: TypeProjectDataInDoc | null): void {
   useLayoutEffect(() => {
     if (!projectData) return;
     console.log("载入工程：", projectData);
-    dispatch(setProject(projectData));
+    dispatch(actionSetProject(projectData));
     // 默认选择第一个模块和第一个页面
-    const firstModule = projectData?.template.modules[0];
+    const firstModule = projectData?.template?.modules[0];
     const firstPage = firstModule?.groups[0].pages[0];
-    dispatch(setSelectedModule(firstModule));
-    dispatch(setSelectedPage(firstPage));
+    if (firstModule) dispatch(setSelectedModule(firstModule));
+    if (firstPage) dispatch(setSelectedPage(firstPage));
   }, [dispatch, projectData]);
 }
 
@@ -95,29 +96,34 @@ export function useProjectData(): [
   (data: TypeProjectDataInDoc) => void
 ] {
   const dispatch = useDispatch();
-  return [useSelector(getProjectData), data => dispatch(setProject(data))];
+  return [
+    useSelector(getProjectData),
+    data => dispatch(actionSetProject(data))
+  ];
 }
 
+// 更新缓存在 state.project.projectData 的所有数据
 export function useUpdateProject(): () => void {
   const dispatch = useDispatch();
   const projectData = useSelector(getProjectData);
   const handleUpdate = () => {
     if (projectData && projectData.uuid) {
       updateProjectByUUID(
-        projectData.uuid,
         _.pick(projectData, [
           "uuid",
           "brand",
           "projectInfo",
           "uiVersion",
-          "template"
+          "template",
+          "imageDataList",
+          "imageMapperList"
         ])
       ).then(data => {
         if (!data) {
           message.error(ERR_CODE[2003]);
           return;
         }
-        dispatch(setProject(data));
+        dispatch(actionSetProject(data));
       });
     }
   };

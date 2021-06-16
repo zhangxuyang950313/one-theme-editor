@@ -78,12 +78,11 @@ export async function getProjectByUUID(
 
 // 通过 _id 更新工程
 export async function updateProjectByUUID(
-  uuid: string,
   data: TypeProjectData
 ): Promise<TypeDatabase<TypeProjectData>> {
   return http
     .post<TypeResponseFrame<TypeDatabase<TypeProjectData>>>(
-      `${API.UPDATE_PROJECT}/${uuid}`,
+      `${API.UPDATE_PROJECT}/${data.uuid}`,
       data
     )
     .then(data => data.data.data);

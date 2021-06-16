@@ -4,11 +4,11 @@ import styled from "styled-components";
 import { useSelectedPage } from "@/hooks/template";
 
 const Preview: React.FC = () => {
-  const [selectedPage] = useSelectedPage();
-  if (!selectedPage) return null;
+  const [currentPage] = useSelectedPage();
+  if (!currentPage) return null;
   return (
     <StylePreviewer>
-      <StyleImage src={selectedPage.preview} alt={selectedPage.pathname} />
+      <StyleImage src={currentPage.preview} alt={currentPage.pathname} />
     </StylePreviewer>
   );
 };

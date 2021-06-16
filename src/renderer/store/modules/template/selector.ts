@@ -13,7 +13,7 @@ export const getBrandInfoList = createSelector(
 // 获取前选择的厂商信息
 export const getSelectedBrand = createSelector(
   getTemplateState,
-  state => state.selectedBrand
+  state => state.currentBrand
 );
 
 // 获取模板列表
@@ -25,11 +25,11 @@ export const getTemplateList = createSelector(
 // 获取当前模块
 export const getSelectedModule = createSelector(
   getTemplateState,
-  state => state.selectedModule
+  state => state.currentModule
 );
 
 // 获取当前页面
 export const getSelectedPage = createSelector(
   getTemplateState,
-  state => state.selectedPage
+  state => state.currentPage
 );

@@ -11,7 +11,7 @@ import { useUpdateProject } from "@/hooks/project";
 import { message } from "antd";
 import ERR_CODE from "@/core/error-code";
 import { useDispatch, useSelector } from "react-redux";
-import { addProjectImage } from "@/store/modules/project/action";
+import { actionAddProjectImage } from "@/store/modules/project/action";
 import { findProjectImage } from "@/store/modules/project/selector";
 
 // 图片素材展示
@@ -105,9 +105,13 @@ const ResourceChanger: React.FC<TypeProps> = props => {
       return;
     }
     to.forEach(target => {
-      dispatch(addProjectImage({ url: from.url, target, size: from.size }));
+      dispatch(
+        actionAddProjectImage({ url: from.url, target, size: from.size })
+      );
     });
-    handleUpdateProject();
+    setTimeout(() => {
+      handleUpdateProject();
+    }, 1000);
   };
   const { width, height, size } = from;
   return (

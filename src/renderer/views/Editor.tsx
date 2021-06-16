@@ -53,7 +53,7 @@ const Editor: React.FC = () => {
   }
 
   // 更新标题
-  updateTitle(projectData.projectInfo.name || "");
+  updateTitle(projectData?.projectInfo?.name || "");
 
   // 进入编辑状态
   return (
