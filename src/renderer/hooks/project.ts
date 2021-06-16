@@ -112,7 +112,7 @@ export function useUpdateProject(): () => void {
         _.pick(projectData, [
           "uuid",
           "brand",
-          "projectInfo",
+          "description",
           "uiVersion",
           "template",
           "imageDataList",

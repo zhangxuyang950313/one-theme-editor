@@ -1,10 +1,10 @@
-import { TypeBrandConf, TypeProjectInfo } from "types/project";
+import { TypeBrandConf, TypeProjectDescription } from "types/project";
 import { TypeTemplateInfo, TypeUiVersionConf } from "types/template";
 
 export type TypeCreateProject = {
   brandInfo: TypeBrandConf;
   uiVersion: TypeUiVersionConf;
-  projectInfo: TypeProjectInfo;
+  description: TypeProjectDescription;
   templateConf: TypeTemplateInfo;
 };
 

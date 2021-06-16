@@ -24,8 +24,8 @@ function createNedb(filename: string) {
 
 // 创建索引，加速查找
 type TypeIndex = {
-  uuid: string;
-  brandType: string;
+  uuid: string | null;
+  brandType: string | null;
 };
 const projectIndexDB = createNedb(PROJECT_INDEX);
 rebuildIndex();
@@ -45,7 +45,7 @@ async function rebuildIndex() {
     if (count === 0) {
       projectIndexDB.insert<TypeIndex>({
         uuid: project.uuid,
-        brandType: project.brand.type
+        brandType: project.brand?.type || null
       });
       console.log(`$重建索引: "${project.uuid}"]`);
     }
@@ -67,7 +67,7 @@ export async function createProject(
   const template = await compileTempInfo(data);
   // 组装数据
   const projectData = new ProjectData();
-  projectData.setProjectInfo(data.projectInfo);
+  projectData.setDescription(data.description);
   projectData.setUuid(filename);
   projectData.setBrand({
     type: data.brandConf.type,

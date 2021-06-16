@@ -10,7 +10,7 @@ export type TypeBrandConf = TypeBrandInfo & {
   templateDir: string;
 };
 
-export type TypeProjectInfo = {
+export type TypeProjectDescription = {
   [k in keyof typeof projectInfoConfig]: string;
 };
 
@@ -51,7 +51,7 @@ export type TypePageConf = {
 };
 
 export type TypeCreateProjectData = {
-  projectInfo: TypeProjectDesc;
+  description: TypeProjectDesc;
   uiVersionConf: TypeUiVersionConf;
   brandConf: TypeBrandConf;
   templateConf: TypeTemplateConf;
@@ -61,7 +61,7 @@ export type TypeCreateProjectData = {
 export type TypeProjectData = {
   uuid: string | null;
   brand: TypeBrandInfo | null;
-  projectInfo: TypeProjectInfo | null;
+  description: TypeProjectDescription | null;
   uiVersion: TypeUiVersionInfo | null;
   template: TypeTemplateInfo | null;
   imageDataList: TypeImageData[];

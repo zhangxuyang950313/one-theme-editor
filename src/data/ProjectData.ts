@@ -2,7 +2,7 @@ import { TypeTemplateInfo } from "types/template";
 import {
   TypeBrandInfo,
   TypeProjectData,
-  TypeProjectInfo,
+  TypeProjectDescription,
   TypeUiVersionInfo,
   TypeImageData,
   TypeImageMapper
@@ -11,7 +11,7 @@ import {
 export default class ProjectData {
   private uuid = "";
   private brand: TypeBrandInfo | null = null;
-  private projectInfo: TypeProjectInfo | null = null;
+  private description: TypeProjectDescription | null = null;
   private uiVersion: TypeUiVersionInfo | null = null;
   private template: TypeTemplateInfo | null = null;
   private imageDataList: TypeImageData[] = [];
@@ -33,11 +33,11 @@ export default class ProjectData {
   }
 
   // 工程信息
-  setProjectInfo(data: TypeProjectInfo): void {
-    this.projectInfo = data;
+  setDescription(data: TypeProjectDescription): void {
+    this.description = data;
   }
-  getProjectInfo(): TypeProjectInfo | null {
-    return this.projectInfo;
+  getProjectInfo(): TypeProjectDescription | null {
+    return this.description;
   }
 
   // UI版本
@@ -57,14 +57,14 @@ export default class ProjectData {
   }
 
   getData(): TypeProjectData {
-    if (!this.projectInfo) throw new Error("主题信息为空");
+    if (!this.description) throw new Error("主题信息为空");
     if (!this.brand) throw new Error("机型信息为空");
     if (!this.uiVersion) throw new Error("UI版本为空");
     if (!this.template) throw new Error("模板信息为空");
     const data: TypeProjectData = {
       uuid: this.uuid,
       brand: this.brand,
-      projectInfo: this.projectInfo,
+      description: this.description,
       uiVersion: this.uiVersion,
       template: this.template,
       imageDataList: this.imageDataList,

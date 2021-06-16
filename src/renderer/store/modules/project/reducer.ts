@@ -6,7 +6,7 @@ import { TypeActions } from "./action";
 const defaultState: TypeProjectDataInDoc = {
   uuid: null,
   brand: null,
-  projectInfo: null,
+  description: null,
   uiVersion: null,
   template: null,
   imageDataList: [],
@@ -54,7 +54,7 @@ export default function ProjectReducer(
     //   return updateState(state, { uiVersion: action.uiVersion });
     // }
     // case ACTION_TYPES.SET_PROJECT_DESC_INFO: {
-    //   return updateState(state, { projectInfo: action.info });
+    //   return updateState(state, { description: action.info });
     // }
     // case ACTION_TYPES.SET_PROJECT_TEMP_CONF: {
     //   return updateState(state, { templateConf: action.tempConf });

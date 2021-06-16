@@ -32,7 +32,7 @@ const ProjectManager: React.FC = () => {
             <div className="project-card" key={key}>
               <ProjectCard
                 hoverable
-                projectInfo={item.projectInfo}
+                description={item?.description}
                 onClick={() => {
                   history.push(`/editor/${item.uuid}`);
                 }}

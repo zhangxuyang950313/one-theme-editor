@@ -6,7 +6,7 @@ import * as uuid from "uuid";
 import { isDev } from "@/core/constant";
 import ERR_CODE from "@/core/error-code";
 import { useSelectedBrand, useTemplateList } from "@/hooks/template";
-import { TypeProjectInfo } from "types/project.d";
+import { TypeProjectDescription } from "types/project.d";
 import { TypeTemplateConf } from "types/template.d";
 
 // components
@@ -23,7 +23,7 @@ import ProjectCard from "./ProjectCard";
 
 // 创建主题按钮
 type TypeProps = {
-  onProjectCreated: (projectInfo: TypeProjectInfo) => Promise<void>;
+  onProjectCreated: (description: TypeProjectDescription) => Promise<void>;
 };
 const CreateProject: React.FC<TypeProps> = props => {
   // 机型配置
@@ -37,11 +37,11 @@ const CreateProject: React.FC<TypeProps> = props => {
   // 当前步骤
   const [curStep, setCurStep] = useState(0);
   // 填写完成的项目数据
-  const [projectInfo, setProjectInfo] = useState<TypeProjectInfo>();
+  const [description, setDescription] = useState<TypeProjectDescription>();
   // 创建状态
   const [isCreating, updateCreating] = useState(false);
   // 表单实例
-  const [form] = Form.useForm<TypeProjectInfo>();
+  const [form] = Form.useForm<TypeProjectDescription>();
 
   if (!brandConf) {
     return null;
@@ -69,7 +69,7 @@ const CreateProject: React.FC<TypeProps> = props => {
   const init = () => {
     jumpStep(0);
     updateTempConf(undefined);
-    setProjectInfo(undefined);
+    setDescription(undefined);
     form.resetFields();
   };
 
@@ -95,7 +95,7 @@ const CreateProject: React.FC<TypeProps> = props => {
       form
         .validateFields()
         .then(data => {
-          setProjectInfo(data);
+          setDescription(data);
           nextStep();
         })
         .catch(console.warn);
@@ -103,7 +103,7 @@ const CreateProject: React.FC<TypeProps> = props => {
     }
     // 创建工程
     if (curStep === 2) {
-      if (!projectInfo || !selectedTemp) {
+      if (!description || !selectedTemp) {
         message.warn({
           content: "创建失败",
           duration: 1000
@@ -123,20 +123,20 @@ const CreateProject: React.FC<TypeProps> = props => {
       updateCreating(true);
       // TODO 使用选择的模板路径生成 tempConf
       await createProject({
-        projectInfo,
+        description,
         brandConf,
         uiVersionConf: uiVersion,
         templateConf: selectedTemp
       }).then(data => {
         console.log("创建工程：", data);
-        props.onProjectCreated(projectInfo);
+        props.onProjectCreated(description);
         closeModal();
         init();
         updateCreating(false);
       });
       // project.create().then(data => {
       //   console.log("创建工程：", data);
-      //   props.onProjectCreated(projectInfo);
+      //   props.onProjectCreated(description);
       //   closeModal();
       //   init();
       //   updateCreating(false);
@@ -230,10 +230,10 @@ const CreateProject: React.FC<TypeProps> = props => {
         return (
           <StyleConfirmInfo>
             <div className="template-card">
-              <ProjectCard projectInfo={form.getFieldsValue()} />
+              <ProjectCard description={form.getFieldsValue()} />
             </div>
             <div className="project-info">
-              <ProjectInfo projectInfo={form.getFieldsValue()} />
+              <ProjectInfo description={form.getFieldsValue()} />
             </div>
           </StyleConfirmInfo>
         );

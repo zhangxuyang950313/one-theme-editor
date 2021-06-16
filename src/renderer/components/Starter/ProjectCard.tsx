@@ -3,20 +3,20 @@ import styled from "styled-components";
 
 import { Card } from "antd";
 
-import { TypeProjectInfo } from "src/types/project";
+import { TypeProjectDescription } from "src/types/project";
 
 type TypeProps = {
   hoverable?: boolean;
-  projectInfo: TypeProjectInfo;
-  onClick?: (data: TypeProjectInfo) => void;
+  description: TypeProjectDescription;
+  onClick?: (data: TypeProjectDescription) => void;
 };
 // 工程卡片展示
 function ProjectCard(props: TypeProps): JSX.Element {
-  const { projectInfo } = props;
+  const { description } = props;
   return (
     <StyleProjectCard
       data-hoverable={props.hoverable}
-      onClick={() => props.onClick && props.onClick(projectInfo)}
+      onClick={() => props.onClick && props.onClick(description)}
     >
       <Card
         hoverable={props.hoverable}
@@ -29,8 +29,8 @@ function ProjectCard(props: TypeProps): JSX.Element {
         }
       >
         <Card.Meta
-          title={projectInfo.name}
-          description={projectInfo.uiVersion}
+          title={description.name}
+          description={description.uiVersion}
         />
       </Card>
     </StyleProjectCard>

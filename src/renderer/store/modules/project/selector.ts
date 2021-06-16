@@ -38,7 +38,7 @@ export const currentImageSize = createSelector(getProjectState, state =>
 // // 获取工程描述信息
 // export const getProjectDescInfo = createSelector(
 //   getState,
-//   state => state.projectInfo
+//   state => state.description
 // );
 
 // // 获取工程模板
