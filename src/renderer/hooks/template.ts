@@ -13,14 +13,17 @@ import {
 } from "@/store/modules/template/action";
 import {
   getSelectedBrand,
-  getSelectedModule,
-  getSelectedPage
+  getCurrentModule,
+  getCurrentPage,
+  getCurrentModuleList,
+  getCurrentPageGroupList
 } from "@/store/modules/template/selector";
 
 import {
   TypeTempModuleConf,
   TypeTempPageConf,
-  TypeTemplateConf
+  TypeTemplateConf,
+  TypeTempPageGroupConf
 } from "types/template";
 import { TypeBrandConf } from "types/project";
 
@@ -73,29 +76,36 @@ export function useTemplateList(): [TypeTemplateConf[], boolean] {
   return [value, loading];
 }
 
-// 获取预览数据
-// export function usePreview
+// 当前模板模块列表
+export function useTemplateModules(): TypeTempModuleConf[] {
+  return useSelector(getCurrentModuleList);
+}
 
 // 获取当前选择的模块
-export function useSelectedModule(): [
+export function useCurrentModule(): [
   TypeTempModuleConf | null,
   (data: TypeTempModuleConf) => void
 ] {
   const dispatch = useDispatch();
   return [
-    useSelector(getSelectedModule),
+    useSelector(getCurrentModule),
     data => dispatch(ActionSetCurrentBrand(data))
   ];
 }
 
+// 当前选择的模块页面组列表
+export function useTemplatePageGroups(): TypeTempPageGroupConf[] {
+  return useSelector(getCurrentPageGroupList);
+}
+
 // 获取当前选择的页面
-export function useSelectedPage(): [
+export function useCurrentPage(): [
   TypeTempPageConf | null,
   (data: TypeTempPageConf) => void
 ] {
   const dispatch = useDispatch();
   return [
-    useSelector(getSelectedPage),
+    useSelector(getCurrentPage),
     data => dispatch(ActionSetCurrentPage(data))
   ];
 }

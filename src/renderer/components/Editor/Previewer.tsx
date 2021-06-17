@@ -1,10 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 
-import { useSelectedPage } from "@/hooks/template";
+import { useCurrentPage } from "@/hooks/template";
 
 const Preview: React.FC = () => {
-  const [currentPage] = useSelectedPage();
+  const [currentPage] = useCurrentPage();
   if (!currentPage) return null;
   return (
     <StylePreviewer>

@@ -16,20 +16,32 @@ export const getSelectedBrand = createSelector(
   state => state.currentBrand
 );
 
-// 获取模板列表
-export const getTemplateList = createSelector(
+// 获取当前模板
+export const getCurrentTemplate = createSelector(
   getTemplateState,
-  state => state.templateList
+  state => state.currentTemplate
+);
+
+// 获取模块列表
+export const getCurrentModuleList = createSelector(
+  getCurrentTemplate,
+  state => state?.modules || []
 );
 
 // 获取当前模块
-export const getSelectedModule = createSelector(
+export const getCurrentModule = createSelector(
   getTemplateState,
   state => state.currentModule
 );
 
+// 获取页面组列表
+export const getCurrentPageGroupList = createSelector(
+  getCurrentModule,
+  state => state?.groups || []
+);
+
 // 获取当前页面
-export const getSelectedPage = createSelector(
+export const getCurrentPage = createSelector(
   getTemplateState,
   state => state.currentPage
 );

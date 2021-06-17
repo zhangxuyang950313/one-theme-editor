@@ -1,27 +1,27 @@
 import React from "react";
 import styled from "styled-components";
 
-import { useSelectedPage } from "@/hooks/template";
+import { useCurrentPage } from "@/hooks/template";
 
 import ImageChanger from "./ImageChanger";
 
-const ResourceContext: React.FC = () => {
-  const [currentPage] = useSelectedPage();
+const ResourceContent: React.FC = () => {
+  const [currentPage] = useCurrentPage();
   if (!currentPage) return null;
   return (
-    <StyleResourceContext>
+    <StyleResourceContent>
       {currentPage.source.map((item, index) => (
         <ImageChanger key={index} data={item} />
       ))}
-    </StyleResourceContext>
+    </StyleResourceContent>
   );
 };
 
-const StyleResourceContext = styled.div`
+const StyleResourceContent = styled.div`
   /* width: 280px; */
   overflow: auto;
   padding: 20px;
   box-sizing: border-box;
 `;
 
-export default ResourceContext;
+export default ResourceContent;

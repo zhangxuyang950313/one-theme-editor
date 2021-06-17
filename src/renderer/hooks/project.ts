@@ -19,12 +19,12 @@ import {
 } from "types/project";
 
 import ERR_CODE from "renderer/core/error-code";
+import { useDocumentTitle } from "./index";
 
 // 获取项目列表
 type TypeIsLoading = boolean;
 type TypeRefreshFn = () => Promise<void>;
 type TypeReturnData = [TypeProjectDataInDoc[], TypeRefreshFn, TypeIsLoading];
-
 export function useProjectList(): TypeReturnData {
   // 使用机型进行隔离查询
   const currentBrandInfo = useSelectedBrand();
@@ -47,8 +47,24 @@ export function useProjectList(): TypeReturnData {
   return [value, refresh, loading];
 }
 
-// 使用 id 获取工程信息
-export function useProjectById(
+// 载入工程，将 projectData 载入 redux
+export function useLoadProject(project: TypeProjectDataInDoc | null): void {
+  const dispatch = useDispatch();
+  useLayoutEffect(() => {
+    if (!project) return;
+    console.log("载入工程：", project);
+    dispatch(ActionSetProjectData(project));
+    dispatch(ActionSetCurrentTemplate(project.template));
+    // 默认选择第一个模块和第一个页面
+    const firstModule = project?.template?.modules[0];
+    const firstPage = firstModule?.groups[0].pages[0];
+    if (firstModule) dispatch(ActionSetCurrentBrand(firstModule));
+    if (firstPage) dispatch(ActionSetCurrentPage(firstPage));
+  }, [dispatch, project]);
+}
+
+// 从数据库安装工程
+export function useSetupProjectByUUID(
   uuid: string
 ): [TypeProjectDataInDoc | null, boolean] {
   const [project, updateProject] = useState<TypeProjectDataInDoc | null>(null);
@@ -71,49 +87,27 @@ export function useProjectById(
         updateLoading(false);
       });
   }, [uuid]);
+  useLoadProject(project);
   return [project, loading];
 }
 
-// 载入工程，即将 projectData 载入 redux
-export function useLoadProject(project: TypeProjectDataInDoc | null): void {
-  const dispatch = useDispatch();
-  useLayoutEffect(() => {
-    if (!project) return;
-    console.log("载入工程：", project);
-    dispatch(ActionSetProjectData(project));
-    dispatch(ActionSetCurrentTemplate(project.template));
-    // 默认选择第一个模块和第一个页面
-    const firstModule = project?.template?.modules[0];
-    const firstPage = firstModule?.groups[0].pages[0];
-    if (firstModule) dispatch(ActionSetCurrentBrand(firstModule));
-    if (firstPage) dispatch(ActionSetCurrentPage(firstPage));
-  }, [dispatch, project]);
-}
-
 // 获取当前工程数据
-export function useProjectData(): [
-  TypeProjectStateInStore | null,
-  (project: TypeProjectDataInDoc) => void
-] {
-  const dispatch = useDispatch();
-  return [
-    useSelector(getProjectData),
-    project => {
-      dispatch(ActionSetProjectData(project));
-      dispatch(ActionSetCurrentTemplate(project.template));
-    }
-  ];
+export function useProjectData(): TypeProjectStateInStore | null {
+  const [, updateTitle] = useDocumentTitle();
+  const projectData = useSelector(getProjectData);
+  updateTitle(projectData?.description?.name || "");
+  return projectData;
 }
 
 // 添加图片资源映射
 export function useAddImageMapper(): (data: TypeImageMapper) => Promise<void> {
   const uuid = useSelector(getProjectUUID);
   const dispatch = useDispatch();
+  // 更新标题
   return async data => {
     if (!uuid) throw new Error(ERR_CODE[2004]);
     const project = await addImageMapper(uuid, data);
     dispatch(ActionSetProjectData(project));
-    dispatch(ActionSetCurrentTemplate(project.template));
   };
 }
 

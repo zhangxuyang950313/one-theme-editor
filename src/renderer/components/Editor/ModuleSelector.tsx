@@ -1,29 +1,28 @@
 import React from "react";
 import styled from "styled-components";
 
-import { useProjectData } from "@/hooks/project";
-import { useSelectedModule } from "@/hooks/template";
+import { useTemplateModules, useCurrentModule } from "@/hooks/template";
 
 import { Tooltip } from "antd";
 
 // 模块选择器
 const ModuleSelector: React.FC = () => {
-  const [projectData] = useProjectData();
-  const [currentModule, updateModule] = useSelectedModule();
+  const tempModuleList = useTemplateModules();
+  const [currentModule, updateModule] = useCurrentModule();
 
   if (!currentModule) {
     console.log("currentModule 为空");
     return null;
   }
-  console.log({ projectData });
-  if (!Array.isArray(projectData?.template?.modules)) {
+
+  if (tempModuleList.length === 0) {
     console.log("modules 为空");
     return null;
   }
 
   return (
     <StyleModuleSelector>
-      {projectData?.template?.modules.map((item, key) => {
+      {tempModuleList.map((item, key) => {
         return (
           <StyleIcon
             key={key}

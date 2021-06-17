@@ -1,15 +1,14 @@
 import React from "react";
 import styled from "styled-components";
 
-import { useSelectedModule } from "@/hooks/template";
+import { useTemplatePageGroups } from "@/hooks/template";
 
 import { Collapse } from "antd";
 
 // 页面选择器
 const PageSelector: React.FC = () => {
-  const [currentModule] = useSelectedModule();
-  const pageGroups = currentModule?.groups;
-  if (!pageGroups) {
+  const pageGroups = useTemplatePageGroups();
+  if (pageGroups.length === 0) {
     console.log("页面分组为空");
     return null;
   }

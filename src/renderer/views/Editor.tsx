@@ -2,27 +2,24 @@ import React from "react";
 import { useHistory, useParams } from "react-router";
 import styled from "styled-components";
 
-import { useDocumentTitle } from "@/hooks";
-import { useLoadProject, useProjectById } from "@/hooks/project";
+import { useProjectData, useSetupProjectByUUID } from "@/hooks/project";
 
 import { Button, Empty, Spin } from "antd";
 import ModuleSelector from "@/components/Editor/ModuleSelector";
 import EditorToolsBar from "@/components/Editor/ToolsBar";
 import PageSelector from "@/components/Editor/PageSelector";
 import Previewer from "@/components/Editor/Previewer";
-import ResourceContext from "@/components/Editor/ResourceContext";
+import ResourceContent from "@/components/Editor/ResourceContent";
 import { StyleBorderRight } from "@/style";
 
 const Editor: React.FC = () => {
-  const [, updateTitle] = useDocumentTitle();
   const history = useHistory();
   // 从路由参数中获得工程 id
   const { uuid } = useParams<{ uuid: string }>();
   // 工程数据，undefined
-  const [projectData, isLoading] = useProjectById(uuid);
+  const [, isLoading] = useSetupProjectByUUID(uuid);
 
-  // 加载工程
-  useLoadProject(projectData);
+  const projectData = useProjectData();
 
   // 还未安装
   if (isLoading) {
@@ -52,16 +49,13 @@ const Editor: React.FC = () => {
     );
   }
 
-  // 更新标题
-  updateTitle(projectData?.description?.name || "");
-
   // 进入编辑状态
   return (
     <StyleEditor>
       {/* 模块选择器 */}
       <ModuleSelector />
       {/* 编辑区域 */}
-      <StyleEditorContext>
+      <StyleEditorContent>
         <EditorToolsBar />
         <StyleEditorMain>
           {/* 页面选择器 */}
@@ -74,10 +68,10 @@ const Editor: React.FC = () => {
           </StylePreviewer>
           {/* 素材编辑区 */}
           <StyleResourceContent>
-            <ResourceContext />
+            <ResourceContent />
           </StyleResourceContent>
         </StyleEditorMain>
-      </StyleEditorContext>
+      </StyleEditorContent>
     </StyleEditor>
   );
 };
@@ -97,7 +91,7 @@ const StyleEditor = styled.div`
   display: flex;
 `;
 
-const StyleEditorContext = styled.div`
+const StyleEditorContent = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
