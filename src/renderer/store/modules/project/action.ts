@@ -32,24 +32,24 @@ export type TypeActions =
   | TypeActionDelImageMapper;
 
 // 初始化工程信息
-export function actionInitProject(): TypeActionInitProject {
+export function ActionInitProject(): TypeActionInitProject {
   return { type: ACTION_TYPES.INIT_PROJECT };
 }
 
 // 设置工程数据
-export function actionSetProject(
+export function ActionSetProjectData(
   projectData: TypeDatabase<TypeProjectData>
 ): TypeActionSetProjectData {
   return { type: ACTION_TYPES.SET_PROJECT_DATA, payload: projectData };
 }
 
-export function actionAddProjectImage(
+export function ActionAddProjectImage(
   payload: TypeImageMapper
 ): TypeActionAddImageMapper {
   return { type: ACTION_TYPES.ADD_IMAGE_MAPPER, payload };
 }
 
-export function actionDelProjectImage(
+export function ActionDelProjectImage(
   payload: TypeImageMapper
 ): TypeActionDelImageMapper {
   return { type: ACTION_TYPES.DEL_IMAGE_MAPPER, payload };

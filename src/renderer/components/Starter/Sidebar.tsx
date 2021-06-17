@@ -5,7 +5,7 @@ import { useBrandInfoList, useSelectedBrand } from "@/hooks/template";
 
 import { Menu } from "antd";
 import { useDispatch } from "react-redux";
-import { setSelectedBrand } from "@/store/modules/template/action";
+import { ActionSetSelectedBrand } from "@/store/modules/template/action";
 import TopInfo from "./TopInfo";
 
 // 欢迎页侧边栏
@@ -22,7 +22,7 @@ const Sidebar: React.FC = props => {
         selectedKeys={[currentBrandInfo.templateDir]}
         onSelect={v => {
           const brandInfo = brandInfoList.find(o => v.key === o.templateDir);
-          if (brandInfo) dispatch(setSelectedBrand(brandInfo));
+          if (brandInfo) dispatch(ActionSetSelectedBrand(brandInfo));
         }}
       >
         {brandInfoList.map(item => (

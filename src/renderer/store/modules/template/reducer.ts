@@ -11,8 +11,8 @@ import { TypeActions } from "./action";
 // main states
 export type TypeStates = {
   brandInfoList: TypeBrandConf[];
-  currentTemplate: TypeTemplateInfo | null;
   currentBrand: TypeBrandConf | null;
+  currentTemplate: TypeTemplateInfo | null;
   currentModule: TypeTempModuleConf | null;
   currentPage: TypeTempPageConf | null;
 };
@@ -21,9 +21,9 @@ export type TypeStates = {
 const templateState: TypeStates = {
   // 品牌列表
   brandInfoList: [],
+  currentBrand: null,
   // 当前模板信息
   currentTemplate: null,
-  currentBrand: null,
   currentModule: null,
   currentPage: null
 };
@@ -40,7 +40,6 @@ export default function TemplateReducer(
     case ACTION_TYPES.SET_SELECTED_BRAND: {
       return updateState(state, { currentBrand: action.brandInfo });
     }
-
     case ACTION_TYPES.SET_CURRENT_TEMPLATE: {
       return updateState(state, { currentTemplate: action.payload });
     }

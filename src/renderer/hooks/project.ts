@@ -2,14 +2,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLayoutEffect, useState, useCallback } from "react";
 import { addImageMapper, getProjectByUUID, getProjectList } from "@/api/index";
 import { useSelectedBrand } from "@/hooks/template";
-import { actionSetProject } from "@/store/modules/project/action";
+import { ActionSetProjectData } from "@/store/modules/project/action";
 import {
   getProjectData,
   getProjectUUID
 } from "@/store/modules/project/selector";
 import {
-  setCurrentBrand,
-  setCurrentPage
+  ActionSetCurrentBrand,
+  ActionSetCurrentPage,
+  ActionSetCurrentTemplate
 } from "@/store/modules/template/action";
 import {
   TypeImageMapper,
@@ -74,29 +75,33 @@ export function useProjectById(
 }
 
 // 载入工程，即将 projectData 载入 redux
-export function useLoadProject(projectData: TypeProjectDataInDoc | null): void {
+export function useLoadProject(project: TypeProjectDataInDoc | null): void {
   const dispatch = useDispatch();
   useLayoutEffect(() => {
-    if (!projectData) return;
-    console.log("载入工程：", projectData);
-    dispatch(actionSetProject(projectData));
+    if (!project) return;
+    console.log("载入工程：", project);
+    dispatch(ActionSetProjectData(project));
+    dispatch(ActionSetCurrentTemplate(project.template));
     // 默认选择第一个模块和第一个页面
-    const firstModule = projectData?.template?.modules[0];
+    const firstModule = project?.template?.modules[0];
     const firstPage = firstModule?.groups[0].pages[0];
-    if (firstModule) dispatch(setCurrentBrand(firstModule));
-    if (firstPage) dispatch(setCurrentPage(firstPage));
-  }, [dispatch, projectData]);
+    if (firstModule) dispatch(ActionSetCurrentBrand(firstModule));
+    if (firstPage) dispatch(ActionSetCurrentPage(firstPage));
+  }, [dispatch, project]);
 }
 
 // 获取当前工程数据
 export function useProjectData(): [
   TypeProjectStateInStore | null,
-  (data: TypeProjectDataInDoc) => void
+  (project: TypeProjectDataInDoc) => void
 ] {
   const dispatch = useDispatch();
   return [
     useSelector(getProjectData),
-    data => dispatch(actionSetProject(data))
+    project => {
+      dispatch(ActionSetProjectData(project));
+      dispatch(ActionSetCurrentTemplate(project.template));
+    }
   ];
 }
 
@@ -107,7 +112,8 @@ export function useAddImageMapper(): (data: TypeImageMapper) => Promise<void> {
   return async data => {
     if (!uuid) throw new Error(ERR_CODE[2004]);
     const project = await addImageMapper(uuid, data);
-    dispatch(actionSetProject(project));
+    dispatch(ActionSetProjectData(project));
+    dispatch(ActionSetCurrentTemplate(project.template));
   };
 }
 

@@ -42,28 +42,35 @@ export type TypeActions =
   | TypeActionSetCurrentPage;
 
 // 设置厂商信息列表
-export function setBrandInfoList(
+export function ActionSetBrandInfoList(
   brandInfoList: TypeBrandConf[]
 ): TypeSetBrandInfoList {
   return { type: ACTION_TYPES.SET_BRAND_LIST, brandInfoList };
 }
 
 // 设置选择的厂商信息
-export function setSelectedBrand(
+export function ActionSetSelectedBrand(
   brandInfo: TypeBrandConf
 ): TypeActionSetBrandInfo {
   return { type: ACTION_TYPES.SET_SELECTED_BRAND, brandInfo };
 }
 
-// 更新当前选择的模块
-export function setCurrentBrand(
+// 设置当前模板
+export function ActionSetCurrentTemplate(
+  payload: TypeTemplateInfo
+): TypeActionSetCurrentTemplate {
+  return { type: ACTION_TYPES.SET_CURRENT_TEMPLATE, payload };
+}
+
+// 设置当前模块配置
+export function ActionSetCurrentBrand(
   payload: TypeTempModuleConf
 ): TypeActionSetCurrentModule {
   return { type: ACTION_TYPES.SET_CURRENT_MODULE, payload };
 }
 
-// 更新当前选择的页面
-export function setCurrentPage(
+// 设置当前页面配置
+export function ActionSetCurrentPage(
   payload: TypeTempPageConf
 ): TypeActionSetCurrentPage {
   return { type: ACTION_TYPES.SET_CURRENT_PAGE, payload };

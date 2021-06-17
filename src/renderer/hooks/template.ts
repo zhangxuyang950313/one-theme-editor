@@ -6,10 +6,10 @@ import { getBrandConfList, getTempConfList } from "@/api/index";
 import ERR_CODE from "@/core/error-code";
 
 import {
-  setBrandInfoList,
-  setSelectedBrand,
-  setCurrentBrand,
-  setCurrentPage
+  ActionSetBrandInfoList,
+  ActionSetSelectedBrand,
+  ActionSetCurrentBrand,
+  ActionSetCurrentPage
 } from "@/store/modules/template/action";
 import {
   getSelectedBrand,
@@ -35,8 +35,8 @@ export function useBrandInfoList(): TypeBrandConf[] {
         if (!t.some(item => item.templateDir === o.templateDir)) t.push(o);
         return t;
       }, []);
-      dispatch(setBrandInfoList(list));
-      dispatch(setSelectedBrand(list[0]));
+      dispatch(ActionSetBrandInfoList(list));
+      dispatch(ActionSetSelectedBrand(list[0]));
       updateValue(list);
     });
   }, [dispatch]);
@@ -84,7 +84,7 @@ export function useSelectedModule(): [
   const dispatch = useDispatch();
   return [
     useSelector(getSelectedModule),
-    data => dispatch(setCurrentBrand(data))
+    data => dispatch(ActionSetCurrentBrand(data))
   ];
 }
 
@@ -94,5 +94,8 @@ export function useSelectedPage(): [
   (data: TypeTempPageConf) => void
 ] {
   const dispatch = useDispatch();
-  return [useSelector(getSelectedPage), data => dispatch(setCurrentPage(data))];
+  return [
+    useSelector(getSelectedPage),
+    data => dispatch(ActionSetCurrentPage(data))
+  ];
 }
