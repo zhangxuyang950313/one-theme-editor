@@ -7,9 +7,9 @@ import ERR_CODE from "@/core/error-code";
 
 import {
   setBrandInfoList,
-  updateSelectedBrand,
-  setSelectedModule,
-  setSelectedPage
+  setSelectedBrand,
+  setCurrentBrand,
+  setCurrentPage
 } from "@/store/modules/template/action";
 import {
   getSelectedBrand,
@@ -36,7 +36,7 @@ export function useBrandInfoList(): TypeBrandConf[] {
         return t;
       }, []);
       dispatch(setBrandInfoList(list));
-      dispatch(updateSelectedBrand(list[0]));
+      dispatch(setSelectedBrand(list[0]));
       updateValue(list);
     });
   }, [dispatch]);
@@ -84,7 +84,7 @@ export function useSelectedModule(): [
   const dispatch = useDispatch();
   return [
     useSelector(getSelectedModule),
-    data => dispatch(setSelectedModule(data))
+    data => dispatch(setCurrentBrand(data))
   ];
 }
 
@@ -94,8 +94,5 @@ export function useSelectedPage(): [
   (data: TypeTempPageConf) => void
 ] {
   const dispatch = useDispatch();
-  return [
-    useSelector(getSelectedPage),
-    data => dispatch(setSelectedPage(data))
-  ];
+  return [useSelector(getSelectedPage), data => dispatch(setCurrentPage(data))];
 }

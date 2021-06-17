@@ -14,7 +14,7 @@ export default function ProjectReducer(
     case ACTION_TYPES.INIT_PROJECT: {
       return defaultState;
     }
-    case ACTION_TYPES.SET_PROJECT: {
+    case ACTION_TYPES.SET_PROJECT_DATA: {
       return action.payload || defaultState;
     }
     default: {

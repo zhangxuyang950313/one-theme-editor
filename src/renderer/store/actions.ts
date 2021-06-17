@@ -1,5 +1,7 @@
-enum ACTION_TYPES { // 修改标题
+enum ACTION_TYPES {
+  // 修改标题
   SET_WINDOW_TITLE = "SET_WINDOW_TITLE",
+
   // 设置厂商品牌列表
   SET_BRAND_LIST = "SET_BRAND_LIST",
   // 设置当前选择的厂商
@@ -8,26 +10,19 @@ enum ACTION_TYPES { // 修改标题
   // 初始化工程信息
   INIT_PROJECT = "INIT_PROJECT",
   // 设置工程新数据
-  SET_PROJECT = "SET_PROJECT",
-  // 设置工程信息
-  SET_PROJECT_INFO = "SET_PROJECT_INFO",
-  // 更新工程信息
-  UPDATE_PROJECT = "UPDATE_PROJECT",
+  SET_PROJECT_DATA = "SET_PROJECT_DATA",
 
-  // 设置模块配置
-  SET_TEMP_MODULE_CONF = "SET_TEMP_MODULE_CONF",
-  // 设置页面配置
-  SET_TEMP_PAGE_CONF = "SET_TEMP_MODULE_CONF",
-
-  // 更新当前选择的模块信息
-  SET_SELECTED_MODULE = "SET_SELECTED_MODULE",
-  // 更新当前选择的页面信息
-  SET_SELECTED_PAGE = "SET_SELECTED_PAGE",
+  // 设置当前模板信息
+  SET_CURRENT_TEMPLATE = "SET_CURRENT_TEMPLATE",
+  // 设置当前选择的模块信息
+  SET_CURRENT_MODULE = "SET_CURRENT_MODULE",
+  // 设置当前选择的页面信息
+  SET_CURRENT_PAGE = "SET_CURRENT_PAGE",
 
   // 添加素材
-  ADD_IMAGE_MAPPER = "ADD_RESOURCE",
+  ADD_IMAGE_MAPPER = "ADD_IMAGE_MAPPER",
   // 删除素材
-  DEL_IMAGE_MAPPER = "DEL_RESOURCE"
+  DEL_IMAGE_MAPPER = "DEL_IMAGE_MAPPER"
 }
 
 export default ACTION_TYPES;

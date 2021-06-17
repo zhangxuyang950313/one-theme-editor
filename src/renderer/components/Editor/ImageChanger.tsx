@@ -74,15 +74,6 @@ const ResourceChanger: React.FC<TypeProps> = props => {
   const { from, to, name } = props.data;
 
   if (!from) return null;
-  // useEffect(() => {
-  //   loadImageUseImgHTML(from).then(({ width, height }) =>
-  //     setImageSize({ width, height })
-  //   );
-  // }, [from]);
-  // const watchFileOptions = { interval: 100 };
-  // fs.watchFile(to, watchFileOptions, (e, f) => {
-  //   loadWorkImage();
-  // });
   /**
    * 点击原始素材，mac 支持小窗预览
    * @param from

@@ -10,13 +10,9 @@ type TypeActionInitProject = {
   type: typeof ACTION_TYPES.INIT_PROJECT;
 };
 
-type TypeActionSetProject = {
-  type: typeof ACTION_TYPES.SET_PROJECT;
+type TypeActionSetProjectData = {
+  type: typeof ACTION_TYPES.SET_PROJECT_DATA;
   payload: TypeDatabase<TypeProjectData>;
-};
-
-type TypeActionUpdateProject = {
-  type: typeof ACTION_TYPES.UPDATE_PROJECT;
 };
 
 type TypeActionAddImageMapper = {
@@ -31,8 +27,7 @@ type TypeActionDelImageMapper = {
 
 export type TypeActions =
   | TypeActionInitProject
-  | TypeActionSetProject
-  | TypeActionUpdateProject
+  | TypeActionSetProjectData
   | TypeActionAddImageMapper
   | TypeActionDelImageMapper;
 
@@ -44,13 +39,8 @@ export function actionInitProject(): TypeActionInitProject {
 // 设置工程数据
 export function actionSetProject(
   projectData: TypeDatabase<TypeProjectData>
-): TypeActionSetProject {
-  return { type: ACTION_TYPES.SET_PROJECT, payload: projectData };
-}
-
-// 更新工程数据到数据库
-export function actionUpdateProject(): TypeActionUpdateProject {
-  return { type: ACTION_TYPES.UPDATE_PROJECT };
+): TypeActionSetProjectData {
+  return { type: ACTION_TYPES.SET_PROJECT_DATA, payload: projectData };
 }
 
 export function actionAddProjectImage(

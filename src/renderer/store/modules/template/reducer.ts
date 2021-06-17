@@ -11,22 +11,21 @@ import { TypeActions } from "./action";
 // main states
 export type TypeStates = {
   brandInfoList: TypeBrandConf[];
+  currentTemplate: TypeTemplateInfo | null;
   currentBrand: TypeBrandConf | null;
   currentModule: TypeTempModuleConf | null;
   currentPage: TypeTempPageConf | null;
-  templateList: TypeTemplateInfo[];
 };
 
 // 通用的数据
 const templateState: TypeStates = {
   // 品牌列表
   brandInfoList: [],
-
+  // 当前模板信息
+  currentTemplate: null,
   currentBrand: null,
   currentModule: null,
-  currentPage: null,
-  // 模板列表
-  templateList: []
+  currentPage: null
 };
 
 export default function TemplateReducer(
@@ -38,15 +37,18 @@ export default function TemplateReducer(
     case ACTION_TYPES.SET_BRAND_LIST: {
       return updateState(state, { brandInfoList: action.brandInfoList });
     }
-    // 更新选择的手机品牌信息
     case ACTION_TYPES.SET_SELECTED_BRAND: {
       return updateState(state, { currentBrand: action.brandInfo });
     }
-    case ACTION_TYPES.SET_SELECTED_MODULE: {
-      return updateState(state, { currentModule: action.payload || null });
+
+    case ACTION_TYPES.SET_CURRENT_TEMPLATE: {
+      return updateState(state, { currentTemplate: action.payload });
     }
-    case ACTION_TYPES.SET_SELECTED_PAGE: {
-      return updateState(state, { currentPage: action.payload || null });
+    case ACTION_TYPES.SET_CURRENT_MODULE: {
+      return updateState(state, { currentModule: action.payload });
+    }
+    case ACTION_TYPES.SET_CURRENT_PAGE: {
+      return updateState(state, { currentPage: action.payload });
     }
     default:
       return state;

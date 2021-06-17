@@ -8,8 +8,8 @@ import {
   getProjectUUID
 } from "@/store/modules/project/selector";
 import {
-  setSelectedModule,
-  setSelectedPage
+  setCurrentBrand,
+  setCurrentPage
 } from "@/store/modules/template/action";
 import {
   TypeImageMapper,
@@ -83,8 +83,8 @@ export function useLoadProject(projectData: TypeProjectDataInDoc | null): void {
     // 默认选择第一个模块和第一个页面
     const firstModule = projectData?.template?.modules[0];
     const firstPage = firstModule?.groups[0].pages[0];
-    if (firstModule) dispatch(setSelectedModule(firstModule));
-    if (firstPage) dispatch(setSelectedPage(firstPage));
+    if (firstModule) dispatch(setCurrentBrand(firstModule));
+    if (firstPage) dispatch(setCurrentPage(firstPage));
   }, [dispatch, projectData]);
 }
 
