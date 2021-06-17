@@ -2,7 +2,7 @@
  * 图片替换单元组件
  */
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { remote } from "electron";
 
 import styled from "styled-components";
@@ -11,7 +11,6 @@ import { RightCircleOutlined } from "@ant-design/icons";
 
 import { TypeTempPageSourceConf } from "types/template";
 import { findProjectImage } from "@/store/modules/project/selector";
-import { addImageMapper } from "@/api";
 import ERR_CODE from "@/core/error-code";
 import { useAddImageMapper } from "@/hooks/project";
 
@@ -105,7 +104,7 @@ const ResourceChanger: React.FC<TypeProps> = props => {
       return;
     }
     to.forEach(target => {
-      handleAddImageMapper({ url: from.url, target, size: from.size });
+      handleAddImageMapper({ ...from, target });
     });
   };
   const { width, height, size } = from;

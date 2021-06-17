@@ -2,9 +2,9 @@ import path from "path";
 import md5 from "md5";
 import fse from "fs-extra";
 import imageSizeOf from "image-size";
-import { TypeImageDataVO } from "types/project.d";
-import { getImageUrlOf } from "@/db-handler/image";
-import ERR_CODE from "../renderer/core/error-code";
+import { TypeImageDataVO } from "types/project";
+import { getImageUrlOf } from "server/db-handler/image";
+import ERR_CODE from "renderer/core/error-code";
 
 // 随机字符串，最多11位
 export function getRandomStr(
@@ -115,7 +115,8 @@ export async function getFileSizeOf(file: string): Promise<number> {
 // 获取图片信息
 export async function getImageData(file: string): Promise<TypeImageDataVO> {
   const url = await getImageUrlOf(file);
+  const md5 = path.basename(url);
   const size = await getFileSizeOf(file);
   const { width, height } = getImageSizeOf(file);
-  return { url, width, height, size, filename: path.basename(file) };
+  return { url, md5, width, height, size, filename: path.basename(file) };
 }

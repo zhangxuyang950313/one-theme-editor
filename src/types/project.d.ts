@@ -35,6 +35,7 @@ export type TypeImageData = {
 // 用于前端展示的图片数据
 export type TypeImageDataVO = {
   url: string;
+  md5: string;
   width: number;
   height: number;
   size: number;
@@ -72,6 +73,7 @@ export type TypeProjectDataInDoc = TypeDatabase<TypeProjectData>;
 
 export type TypeImageMapper = {
   url: string;
+  md5: string;
   target: string;
   size: number;
 };
