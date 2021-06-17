@@ -7,12 +7,11 @@ import {
   TypeCreateProjectData,
   TypeProjectDescription,
   TypeUiVersionInfo,
-  TypeBrandConf
+  TypeImageMapper
 } from "types/project";
-import { TypeImageMapper } from "./../types/project.d";
 import {
   findProjectByUUID,
-  getProjectList,
+  getProjectListOf,
   createProject,
   updateProject
 } from "./db-handler/project";
@@ -83,10 +82,10 @@ service.get(API.GET_BRAND_LIST, (req, res) => {
 });
 
 // 模板列表
-service.get<any, any, any, { brandType: string }>(
-  API.GET_TEMPLATE_LIST,
+service.get<{ brandType: string }>(
+  `${API.GET_TEMPLATE_LIST}/:brandType`,
   (req, res) => {
-    getTemplates(req.query.brandType)
+    getTemplates(req.params.brandType)
       .then(templateConfList => res.send(result.success(templateConfList)))
       .catch(err => res.status(400).send(result.fail(err)));
   }
@@ -104,10 +103,10 @@ service.post<any, any, TypeCreateProjectData, any>(
 );
 
 // 获取工程列表
-service.get<any, any, any, { brandType: string }>(
-  API.GET_PROJECT_LIST,
+service.get<{ brandType: string }>(
+  `${API.GET_PROJECT_LIST}/:brandType`,
   (req, res) => {
-    getProjectList(req.query.brandType)
+    getProjectListOf(req.params.brandType)
       .then(project => res.send(result.success(project)))
       .catch(err => res.status(400).send(result.fail(err)));
   }

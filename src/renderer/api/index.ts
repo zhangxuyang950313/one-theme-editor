@@ -4,7 +4,6 @@ import {
   TypeCreateProjectData,
   TypeDatabase,
   TypeProjectData
-  // TypeUiVersionConf
 } from "types/project";
 import { TypeTemplateConf } from "types/template";
 import { HOST, PORT } from "common/config";
@@ -31,19 +30,11 @@ export async function getTempConfList(
   brandConf: TypeBrandConf
 ): Promise<TypeTemplateConf[]> {
   return http
-    .get<TypeResponseFrame<TypeTemplateConf[]>>(API.GET_TEMPLATE_LIST, {
-      params: { brandType: brandConf.type }
-    })
+    .get<TypeResponseFrame<TypeTemplateConf[]>>(
+      `${API.GET_TEMPLATE_LIST}/${brandConf.type}`
+    )
     .then(data => data.data.data);
 }
-
-// // 获取模板信息
-// export async function getTemplateInfo(
-//   brandConf: TypeBrandConf,
-//   uiVersionConf: TypeUiVersionConf
-// ) {
-//   // todo
-// }
 
 // 创建工程
 export async function createProject(
@@ -59,13 +50,12 @@ export async function getProjectList(
 ): Promise<TypeDatabase<TypeProjectData>[]> {
   return http
     .get<TypeResponseFrame<TypeDatabase<TypeProjectData>[]>>(
-      API.GET_PROJECT_LIST,
-      { params: { brandType: brandInfo.type } }
+      `${API.GET_PROJECT_LIST}/${brandInfo.type}`
     )
     .then(data => data.data.data);
 }
 
-// 通过 uuid 查询工程
+// 查询工程
 export async function getProjectByUUID(
   uuid: string
 ): Promise<TypeDatabase<TypeProjectData>> {
@@ -76,8 +66,8 @@ export async function getProjectByUUID(
     .then(data => data.data.data);
 }
 
-// 通过 _id 更新工程
-export async function updateProjectByUUID(
+// 更新工程
+export async function updateProject(
   data: TypeProjectData
 ): Promise<TypeDatabase<TypeProjectData>> {
   return http

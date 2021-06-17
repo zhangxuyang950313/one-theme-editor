@@ -1,13 +1,8 @@
-import store from "@/store";
 import _ from "lodash";
 import { useDispatch, useSelector } from "react-redux";
 import { useLayoutEffect, useState, useCallback } from "react";
 import { message } from "antd";
-import {
-  getProjectByUUID,
-  updateProjectByUUID,
-  getProjectList
-} from "@/api/index";
+import { getProjectByUUID, updateProject, getProjectList } from "@/api/index";
 import { useSelectedBrand } from "@/hooks/template";
 
 import { actionSetProject } from "@/store/modules/project/action";
@@ -108,7 +103,7 @@ export function useUpdateProject(): () => void {
   const projectData = useSelector(getProjectData);
   const handleUpdate = () => {
     if (projectData && projectData.uuid) {
-      updateProjectByUUID(
+      updateProject(
         _.pick(projectData, [
           "uuid",
           "brand",
