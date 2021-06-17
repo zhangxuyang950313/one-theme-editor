@@ -3,7 +3,13 @@ import bodyParser from "body-parser";
 import FileType from "file-type";
 import { PORT, HOST } from "common/config";
 import API from "common/api";
-import { TypeCreateProjectData } from "types/project";
+import {
+  TypeCreateProjectData,
+  TypeProjectDescription,
+  TypeUiVersionInfo,
+  TypeBrandConf
+} from "types/project";
+import { TypeImageMapper } from "./../types/project.d";
 import {
   findProjectByUUID,
   getProjectList,
@@ -13,7 +19,7 @@ import {
 import { getTemplates, compileBrandConf } from "./db-handler/template";
 import { findImageData } from "./db-handler/image";
 
-const send = {
+const result = {
   success: (data: any) => {
     return { msg: "success", data: data || null };
   },
@@ -22,11 +28,11 @@ const send = {
   }
 };
 
-const app = express();
+const service = express();
 const rawParser = bodyParser.json();
-app.use(rawParser);
+service.use(rawParser);
 
-app.use((req, res, next) => {
+service.use((req, res, next) => {
   //判断路径
   if (req.path !== "/" && !req.path.includes(".")) {
     res.set({
@@ -53,7 +59,7 @@ app.use((req, res, next) => {
 //   }
 // );
 
-app.get<{ md5: string }, any, any, any>("/image/:md5", (req, res) => {
+service.get<{ md5: string }, any, any, any>("/image/:md5", (req, res) => {
   findImageData(req.params.md5).then(async data => {
     const buffer = Buffer.from(
       data.base64?.replace(/^data:image\/\w+;base64,/, "") || "",
@@ -70,82 +76,96 @@ app.get<{ md5: string }, any, any, any>("/image/:md5", (req, res) => {
 });
 
 // 获取厂商列表
-app.get(API.GET_BRAND_LIST, (req, res) => {
+service.get(API.GET_BRAND_LIST, (req, res) => {
   compileBrandConf()
-    .then(brandConfList => {
-      res.send(send.success(brandConfList));
-    })
-    .catch(err => {
-      res.status(400).send(send.fail(err));
-    });
+    .then(brandConfList => res.send(result.success(brandConfList)))
+    .catch(err => res.status(400).send(result.fail(err)));
 });
 
 // 模板列表
-app.get<any, any, any, { brandType: string }>(
+service.get<any, any, any, { brandType: string }>(
   API.GET_TEMPLATE_LIST,
   (req, res) => {
     getTemplates(req.query.brandType)
-      .then(templateConfList => {
-        res.send(send.success(templateConfList));
-      })
-      .catch(err => {
-        console.log(err);
-        res.status(400).send(send.fail(err));
-      });
+      .then(templateConfList => res.send(result.success(templateConfList)))
+      .catch(err => res.status(400).send(result.fail(err)));
   }
 );
 
 // ---------------工程信息--------------- //
 // 添加工程
-app.post<any, any, TypeCreateProjectData, any>(
+service.post<any, any, TypeCreateProjectData, any>(
   API.CREATE_PROJECT,
   (req, res) => {
     createProject(req.body)
-      .then(projectData => {
-        res.send(send.success(projectData));
-      })
-      .catch(err => {
-        console.error(err);
-        res.status(400).send(send.fail(err));
-      });
+      .then(project => res.send(result.success(project)))
+      .catch(err => res.status(400).send(result.fail(err)));
   }
 );
 
 // 获取工程列表
-app.get<any, any, any, { brandType: string }>(
+service.get<any, any, any, { brandType: string }>(
   API.GET_PROJECT_LIST,
   (req, res) => {
     getProjectList(req.query.brandType)
-      .then(projectData => {
-        res.send(send.success(projectData));
-      })
-      .catch(err => {
-        res.status(400).send(send.fail(err));
-      });
+      .then(project => res.send(result.success(project)))
+      .catch(err => res.status(400).send(result.fail(err)));
   }
 );
 
 // 通过参数获取工程
-app.get<{ uuid: string }>(`${API.GET_PROJECT}/:uuid`, (req, res) => {
+service.get<{ uuid: string }>(`${API.GET_PROJECT}/:uuid`, (req, res) => {
   findProjectByUUID(req.params.uuid)
-    .then(projectData => {
-      res.send(send.success(projectData));
-    })
-    .catch(err => {
-      res.status(400).send(send.fail(err.message));
-    });
+    .then(project => res.send(result.success(project)))
+    .catch(err => res.status(400).send(result.fail(err)));
 });
 
 // 更新数据
-app.post<{ uuid: string }>(`${API.UPDATE_PROJECT}/:uuid`, (req, res) => {
+service.post<{ uuid: string }>(`${API.UPDATE_PROJECT}/:uuid`, (req, res) => {
   updateProject(req.params.uuid, req.body)
-    .then(projectData => {
-      res.send(send.success(projectData));
-    })
-    .catch(err => {
-      res.send(send.fail(err));
-    });
+    .then(project => res.send(result.success(project)))
+    .catch(err => res.status(400).send(result.fail(err)));
 });
+
+// 更新工程描述信息
+service.post<{ uuid: string }, any, TypeProjectDescription>(
+  `${API.UPDATE_DESCRIPTION}/:uuid`,
+  (req, res) => {
+    updateProject(req.params.uuid, { description: req.body })
+      .then(project => res.send(result.success(project)))
+      .catch(err => res.status(400).send(result.fail(err)));
+  }
+);
+
+// 更新工程ui版本
+service.post<{ uuid: string }, any, TypeUiVersionInfo>(
+  `${API.UPDATE_UI_VERSION}/:uuid`,
+  (req, res) => {
+    updateProject(req.params.uuid, { uiVersion: req.body })
+      .then(project => res.send(result.success(project)))
+      .catch(err => res.status(400).send(result.fail(err)));
+  }
+);
+
+// 增加一个程图片映射列表
+service.post<{ uuid: string }, any, TypeImageMapper>(
+  `${API.ADD_IMAGE_MAPPER}/:uuid`,
+  (req, res) => {
+    updateProject(req.params.uuid, { $push: req.body })
+      .then(project => res.send(result.success(project)))
+      .catch(err => res.status(400).send(result.fail(err)));
+  }
+);
+
+// 删除一个工程图片映射列表
+service.post<{ uuid: string }, any, TypeImageMapper>(
+  `${API.DEL_IMAGE_MAPPER}/:uuid`,
+  (req, res) => {
+    updateProject(req.params.uuid, { $pull: req.body })
+      .then(project => res.send(result.success(project)))
+      .catch(err => res.status(400).send(result.fail(err)));
+  }
+);
 
 // // 删除一个工程
 // app.delete("/project", (req, res) => {
@@ -171,6 +191,6 @@ app.post<{ uuid: string }>(`${API.UPDATE_PROJECT}/:uuid`, (req, res) => {
 //     });
 // });
 
-app.listen(PORT, function () {
+service.listen(PORT, function () {
   console.log("应用实例，访问地址为 http://%s:%s", HOST, PORT);
 });

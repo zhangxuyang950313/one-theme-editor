@@ -24,8 +24,8 @@ function createNedb(filename: string) {
 
 // 创建索引，加速查找
 type TypeIndex = {
-  uuid: string | null;
-  brandType: string | null;
+  uuid: string;
+  brandType: string;
 };
 const projectIndexDB = createNedb(PROJECT_INDEX);
 rebuildIndex();
@@ -42,10 +42,10 @@ async function rebuildIndex() {
     const project = await createNedb(file).findOne<TypeProjectData>({});
     if (!project) return;
     const count = await projectIndexDB.count({ uuid: project.uuid });
-    if (count === 0) {
+    if (count === 0 && project.uuid && project.brand?.type) {
       projectIndexDB.insert<TypeIndex>({
         uuid: project.uuid,
-        brandType: project.brand?.type || null
+        brandType: project.brand?.type
       });
       console.log(`$重建索引: "${project.uuid}"]`);
     }
@@ -108,29 +108,41 @@ export async function getProjectList(
     );
 }
 
-// 通过 _id 获取工程数据库实例
+// 获取工程数据库实例
 async function getProjectDB(uuid: string): Promise<Nedb> {
   const data = await projectIndexDB.findOne<TypeIndex>({ uuid });
   if (!data?.uuid) throw new Error(ERR_CODE[2001]);
   return createNedb(path.join(PROJECTS_DIR, data.uuid));
 }
 
-// 通过 uuid 查找工程
+// 查找工程
 export async function findProjectByUUID(
   uuid: string
 ): Promise<TypeDatabase<TypeCreateProjectData> | null> {
   return (await getProjectDB(uuid)).findOne({ uuid });
 }
 
-// 通过 uuid 更新一个工程数据
-export async function updateProject(
+// 更新工程数据
+export async function updateProject<
+  T = Partial<TypeProjectData>,
+  O = { [K in keyof T]: T[K] }
+>(
   uuid: string,
-  data: TypeCreateProjectData
-): Promise<TypeDatabase<TypeCreateProjectData>> {
+  data:
+    | T
+    | { $push: O }
+    | { $pull: O }
+    | { $addToSet: O }
+    | { $pop: O }
+    | { $set: O }
+    | { $unset: O }
+): Promise<TypeDatabase<TypeProjectData> | null> {
   const projectDB = await getProjectDB(uuid);
-  const updatedData = projectDB.update<TypeCreateProjectData>({ uuid }, data, {
+  const updated = await projectDB.update<TypeProjectData>({ uuid }, data, {
+    multi: true,
+    upsert: true,
     returnUpdatedDocs: true
   });
-  if (!updatedData) throw new Error(ERR_CODE[2004]);
-  return updatedData;
+  if (!updated) throw new Error(ERR_CODE[2004]);
+  return updated.length > 0 ? updated[0] : null;
 }
