@@ -104,7 +104,7 @@ const ResourceChanger: React.FC<TypeProps> = props => {
       return;
     }
     to.forEach(target => {
-      handleAddImageMapper({ ...from, target });
+      handleAddImageMapper({ ...from, target }).catch(message.warn);
     });
   };
   const { width, height, size } = from;

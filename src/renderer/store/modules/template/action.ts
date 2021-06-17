@@ -1,6 +1,6 @@
 import ACTION_TYPES from "@/store/actions";
-import { TypeBrandConf } from "types/project.d";
-import { TypeTempModuleConf, TypeTempPageConf } from "types/template.d";
+import { TypeBrandConf } from "types/project";
+import { TypeTempModuleConf, TypeTempPageConf } from "types/template";
 
 // 更新品牌信息列表
 type TypeSetBrandInfoList = {

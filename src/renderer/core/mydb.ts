@@ -3,8 +3,8 @@ import uuid from "uuid";
 
 type TypeDocument = {
   _id: string;
-  createAt: Date;
-  updateAt: Date;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 export type TypeOptions = {
@@ -39,15 +39,15 @@ export default class MyDatabase {
     const data = {
       _id: uuid.v4(),
       ...di,
-      createAt: time,
-      updateAt: time
+      createdAt: time,
+      updatedAt: time
     };
     this.data.push(data);
     await this.save();
     return {
       ...data,
-      createAt: new Date(data.createAt),
-      updateAt: new Date(data.updateAt)
+      createdAt: new Date(data.createdAt),
+      updatedAt: new Date(data.updatedAt)
     };
   }
 
@@ -64,7 +64,7 @@ export default class MyDatabase {
     di: T
   ): Promise<(T & TypeDocument) | null> {
     const data = this.findById<T>(id);
-    Object.assign(data, { ...di, updateAt: new Date().getTime() });
+    Object.assign(data, { ...di, updatedAt: new Date().getTime() });
     await this.save();
     return data;
   }

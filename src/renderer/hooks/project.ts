@@ -1,9 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useLayoutEffect, useState, useCallback } from "react";
-import { message } from "antd";
 import { addImageMapper, getProjectByUUID, getProjectList } from "@/api/index";
 import { useSelectedBrand } from "@/hooks/template";
-
 import { actionSetProject } from "@/store/modules/project/action";
 import {
   getProjectData,
@@ -13,14 +11,17 @@ import {
   setSelectedModule,
   setSelectedPage
 } from "@/store/modules/template/action";
-import { TypeDatabase, TypeProjectData, TypeImageMapper } from "types/project";
+import {
+  TypeImageMapper,
+  TypeProjectDataInDoc,
+  TypeProjectStateInStore
+} from "types/project";
 
 import ERR_CODE from "renderer/core/error-code";
 
 // 获取项目列表
 type TypeIsLoading = boolean;
 type TypeRefreshFn = () => Promise<void>;
-type TypeProjectDataInDoc = TypeDatabase<TypeProjectData>;
 type TypeReturnData = [TypeProjectDataInDoc[], TypeRefreshFn, TypeIsLoading];
 
 export function useProjectList(): TypeReturnData {
@@ -89,7 +90,7 @@ export function useLoadProject(projectData: TypeProjectDataInDoc | null): void {
 
 // 获取当前工程数据
 export function useProjectData(): [
-  TypeProjectDataInDoc | null,
+  TypeProjectStateInStore | null,
   (data: TypeProjectDataInDoc) => void
 ] {
   const dispatch = useDispatch();
@@ -100,10 +101,11 @@ export function useProjectData(): [
 }
 
 // 添加图片资源映射
-export function useAddImageMapper(): (data: TypeImageMapper) => void {
+export function useAddImageMapper(): (data: TypeImageMapper) => Promise<void> {
   const uuid = useSelector(getProjectUUID);
   const dispatch = useDispatch();
   return async data => {
+    if (!uuid) throw new Error(ERR_CODE[2004]);
     const project = await addImageMapper(uuid, data);
     dispatch(actionSetProject(project));
   };

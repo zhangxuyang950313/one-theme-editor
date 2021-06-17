@@ -6,8 +6,8 @@ import * as uuid from "uuid";
 import { isDev } from "@/core/constant";
 import ERR_CODE from "@/core/error-code";
 import { useSelectedBrand, useTemplateList } from "@/hooks/template";
-import { TypeProjectDescription } from "types/project.d";
-import { TypeTemplateConf } from "types/template.d";
+import { TypeProjectDescription } from "types/project";
+import { TypeTemplateConf } from "types/template";
 
 // components
 import { Modal, Button, message, Form } from "antd";

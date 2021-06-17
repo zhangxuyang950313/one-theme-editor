@@ -1,5 +1,5 @@
 import { projectInfoConfig } from "renderer/config/editor";
-import { TypeTemplateInfo } from "./template.d";
+import { TypeTemplateInfo } from "./template";
 
 export type TypeBrandInfo = {
   type: string;
@@ -10,6 +10,7 @@ export type TypeBrandConf = TypeBrandInfo & {
   templateDir: string;
 };
 
+// 工程描述信息
 export type TypeProjectDescription = {
   [k in keyof typeof projectInfoConfig]: string;
 };
@@ -19,11 +20,18 @@ export type TypeUiVersionInfo = {
   code: string;
 };
 
-// 从数据库取出的项目文档数据
-export type TypeDatabase<T = { [x: string]: any }> = T & {
-  _id: string;
-  createAt?: Date;
-  updateAt?: Date;
+// 预览页面配置储存数据
+export type TypePageConf = {
+  key: string;
+  md5?: string;
+  conf: TypeTempPageConf | null;
+};
+
+export type TypeCreateProjectData = {
+  description: TypeProjectDesc;
+  uiVersionConf: TypeUiVersionConf;
+  brandConf: TypeBrandConf;
+  templateConf: TypeTemplateConf;
 };
 
 // 图片存储数据
@@ -42,20 +50,16 @@ export type TypeImageDataVO = {
   filename: string;
 };
 
-export type TypeImageDataInDoc = TypeDatabase<TypeImageData>;
-
-// 预览页面配置储存数据
-export type TypePageConf = {
-  key: string;
-  md5?: string;
-  conf: TypeTempPageConf | null;
+export type TypeImageMapper = {
+  url: string;
+  md5: string;
+  target: string;
+  size: number;
 };
 
-export type TypeCreateProjectData = {
-  description: TypeProjectDesc;
-  uiVersionConf: TypeUiVersionConf;
-  brandConf: TypeBrandConf;
-  templateConf: TypeTemplateConf;
+export type TypeXmlMapper = {
+  content: string;
+  target: string;
 };
 
 // 打包所有信息
@@ -69,15 +73,18 @@ export type TypeProjectData = {
   xmlMapperList: TypeXmlMapper[];
 };
 
+// 从数据库取出的项目文档数据
+export type TypeDatabase<T = { [x: string]: any }> = T & {
+  _id: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+};
+
+// 在数据库中的图片数据
+export type TypeImageDataInDoc = TypeDatabase<TypeImageData>;
+
+// 在数据库中的工程信息
 export type TypeProjectDataInDoc = TypeDatabase<TypeProjectData>;
 
-export type TypeImageMapper = {
-  url: string;
-  md5: string;
-  target: string;
-  size: number;
-};
-export type TypeXmlMapper = {
-  content: string;
-  target: string;
-};
+// 在 redux 缓存中的工程信息
+export type TypeProjectStateInStore = Partial<TypeProjectDataInDoc>;
