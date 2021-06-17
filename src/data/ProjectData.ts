@@ -4,8 +4,8 @@ import {
   TypeProjectData,
   TypeProjectDescription,
   TypeUiVersionInfo,
-  TypeImageData,
-  TypeImageMapper
+  TypeImageMapper,
+  TypeXmlMapper
 } from "types/project";
 
 export default class ProjectData {
@@ -14,7 +14,7 @@ export default class ProjectData {
   private description: TypeProjectDescription | null = null;
   private uiVersion: TypeUiVersionInfo | null = null;
   private template: TypeTemplateInfo | null = null;
-  private imageDataList: TypeImageData[] = [];
+  private xmlMapperList: TypeXmlMapper[] = [];
   private imageMapperList: TypeImageMapper[] = [];
 
   setUuid(uuid: string): void {
@@ -67,8 +67,8 @@ export default class ProjectData {
       description: this.description,
       uiVersion: this.uiVersion,
       template: this.template,
-      imageDataList: this.imageDataList,
-      imageMapperList: this.imageMapperList
+      imageMapperList: this.imageMapperList,
+      xmlMapperList: this.xmlMapperList
     };
     return data;
   }

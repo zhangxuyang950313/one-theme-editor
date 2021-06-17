@@ -9,8 +9,8 @@ const defaultState: TypeProjectDataInDoc = {
   description: null,
   uiVersion: null,
   template: null,
-  imageDataList: [],
   imageMapperList: [],
+  xmlMapperList: [],
   _id: "",
   createAt: undefined,
   updateAt: undefined

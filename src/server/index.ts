@@ -150,7 +150,7 @@ service.post<{ uuid: string }, any, TypeUiVersionInfo>(
 service.post<{ uuid: string }, any, TypeImageMapper>(
   `${API.ADD_IMAGE_MAPPER}/:uuid`,
   (req, res) => {
-    updateProject(req.params.uuid, { $push: req.body })
+    updateProject(req.params.uuid, { $push: { imageMapperList: req.body } })
       .then(project => res.send(result.success(project)))
       .catch(err => res.status(400).send(result.fail(err)));
   }
@@ -160,7 +160,7 @@ service.post<{ uuid: string }, any, TypeImageMapper>(
 service.post<{ uuid: string }, any, TypeImageMapper>(
   `${API.DEL_IMAGE_MAPPER}/:uuid`,
   (req, res) => {
-    updateProject(req.params.uuid, { $pull: req.body })
+    updateProject(req.params.uuid, { $pull: { imageMapperList: req.body } })
       .then(project => res.send(result.success(project)))
       .catch(err => res.status(400).send(result.fail(err)));
   }

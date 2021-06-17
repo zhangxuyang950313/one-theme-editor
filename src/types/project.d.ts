@@ -59,13 +59,13 @@ export type TypeCreateProjectData = {
 
 // 打包所有信息
 export type TypeProjectData = {
-  uuid: string | null;
-  brand: TypeBrandInfo | null;
-  description: TypeProjectDescription | null;
-  uiVersion: TypeUiVersionInfo | null;
-  template: TypeTemplateInfo | null;
-  imageDataList: TypeImageData[];
+  uuid: string;
+  brand: TypeBrandInfo;
+  description: TypeProjectDescription;
+  uiVersion: TypeUiVersionInfo;
+  template: TypeTemplateInfo;
   imageMapperList: TypeImageMapper[];
+  xmlMapperList: TypeXmlMapper[];
 };
 
 export type TypeProjectDataInDoc = TypeDatabase<TypeProjectData>;
@@ -75,7 +75,7 @@ export type TypeImageMapper = {
   target: string;
   size: number;
 };
-export type TypeProjectXml = {
+export type TypeXmlMapper = {
   content: string;
   target: string;
 };

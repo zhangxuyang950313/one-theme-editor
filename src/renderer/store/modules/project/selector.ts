@@ -13,6 +13,12 @@ export const getProjectBrandInfo = createSelector(
 // 获取工程数据
 export const getProjectData = createSelector(getProjectState, state => state);
 
+// 获取工程 uuid
+export const getProjectUUID = createSelector(
+  getProjectState,
+  state => state.uuid
+);
+
 export const getProjectImageList = createSelector(
   getProjectState,
   state => state.imageMapperList || []

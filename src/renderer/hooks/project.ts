@@ -1,17 +1,19 @@
-import _ from "lodash";
 import { useDispatch, useSelector } from "react-redux";
 import { useLayoutEffect, useState, useCallback } from "react";
 import { message } from "antd";
-import { getProjectByUUID, updateProject, getProjectList } from "@/api/index";
+import { addImageMapper, getProjectByUUID, getProjectList } from "@/api/index";
 import { useSelectedBrand } from "@/hooks/template";
 
 import { actionSetProject } from "@/store/modules/project/action";
-import { getProjectData } from "@/store/modules/project/selector";
+import {
+  getProjectData,
+  getProjectUUID
+} from "@/store/modules/project/selector";
 import {
   setSelectedModule,
   setSelectedPage
 } from "@/store/modules/template/action";
-import { TypeDatabase, TypeProjectData } from "types/project";
+import { TypeDatabase, TypeProjectData, TypeImageMapper } from "types/project";
 
 import ERR_CODE from "renderer/core/error-code";
 
@@ -97,30 +99,40 @@ export function useProjectData(): [
   ];
 }
 
-// 更新缓存在 state.project.projectData 的所有数据
-export function useUpdateProject(): () => void {
+// 添加图片资源映射
+export function useAddImageMapper(): (data: TypeImageMapper) => void {
+  const uuid = useSelector(getProjectUUID);
   const dispatch = useDispatch();
-  const projectData = useSelector(getProjectData);
-  const handleUpdate = () => {
-    if (projectData && projectData.uuid) {
-      updateProject(
-        _.pick(projectData, [
-          "uuid",
-          "brand",
-          "description",
-          "uiVersion",
-          "template",
-          "imageDataList",
-          "imageMapperList"
-        ])
-      ).then(data => {
-        if (!data) {
-          message.error(ERR_CODE[2003]);
-          return;
-        }
-        dispatch(actionSetProject(data));
-      });
-    }
+  return async data => {
+    const project = await addImageMapper(uuid, data);
+    dispatch(actionSetProject(project));
   };
-  return handleUpdate;
 }
+
+// // 更新缓存在 state.project.projectData 的所有数据
+// export function useUpdateProject(): () => void {
+//   const dispatch = useDispatch();
+//   const projectData = useSelector(getProjectData);
+//   const handleUpdate = () => {
+//     if (projectData && projectData.uuid) {
+//       updateProject(
+//         _.pick(projectData, [
+//           "uuid",
+//           "brand",
+//           "description",
+//           "uiVersion",
+//           "template",
+//           "imageDataList",
+//           "imageMapperList"
+//         ])
+//       ).then(data => {
+//         if (!data) {
+//           message.error(ERR_CODE[2003]);
+//           return;
+//         }
+//         dispatch(actionSetProject(data));
+//       });
+//     }
+//   };
+//   return handleUpdate;
+// }

@@ -2,17 +2,18 @@
  * 图片替换单元组件
  */
 import React from "react";
-import styled from "styled-components";
+import { useDispatch, useSelector } from "react-redux";
 import { remote } from "electron";
 
-import { RightCircleOutlined } from "@ant-design/icons";
-import { TypeTempPageSourceConf } from "types/template";
-import { useUpdateProject } from "@/hooks/project";
+import styled from "styled-components";
 import { message } from "antd";
-import ERR_CODE from "@/core/error-code";
-import { useDispatch, useSelector } from "react-redux";
-import { actionAddProjectImage } from "@/store/modules/project/action";
+import { RightCircleOutlined } from "@ant-design/icons";
+
+import { TypeTempPageSourceConf } from "types/template";
 import { findProjectImage } from "@/store/modules/project/selector";
+import { addImageMapper } from "@/api";
+import ERR_CODE from "@/core/error-code";
+import { useAddImageMapper } from "@/hooks/project";
 
 // 图片素材展示
 function ShowImage(props: { onClick?: () => void; srcUrl: string }) {
@@ -69,9 +70,8 @@ type TypeProps = {
   data: TypeTempPageSourceConf;
 };
 const ResourceChanger: React.FC<TypeProps> = props => {
-  const handleUpdateProject = useUpdateProject();
+  const handleAddImageMapper = useAddImageMapper();
   const findImage = useSelector(findProjectImage);
-  const dispatch = useDispatch();
   const { from, to, name } = props.data;
 
   if (!from) return null;
@@ -105,13 +105,8 @@ const ResourceChanger: React.FC<TypeProps> = props => {
       return;
     }
     to.forEach(target => {
-      dispatch(
-        actionAddProjectImage({ url: from.url, target, size: from.size })
-      );
+      handleAddImageMapper({ url: from.url, target, size: from.size });
     });
-    setTimeout(() => {
-      handleUpdateProject();
-    }, 1000);
   };
   const { width, height, size } = from;
   return (

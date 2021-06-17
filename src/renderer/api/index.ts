@@ -2,8 +2,9 @@ import axios from "axios";
 import {
   TypeBrandConf,
   TypeCreateProjectData,
-  TypeDatabase,
-  TypeProjectData
+  TypeImageMapper,
+  TypeProjectData,
+  TypeProjectDataInDoc
 } from "types/project";
 import { TypeTemplateConf } from "types/template";
 import { HOST, PORT } from "common/config";
@@ -47,9 +48,9 @@ export async function createProject(
 // 获取工程列表
 export async function getProjectList(
   brandInfo: TypeBrandConf
-): Promise<TypeDatabase<TypeProjectData>[]> {
+): Promise<TypeProjectDataInDoc[]> {
   return http
-    .get<TypeResponseFrame<TypeDatabase<TypeProjectData>[]>>(
+    .get<TypeResponseFrame<TypeProjectDataInDoc[]>>(
       `${API.GET_PROJECT_LIST}/${brandInfo.type}`
     )
     .then(data => data.data.data);
@@ -58,21 +59,32 @@ export async function getProjectList(
 // 查询工程
 export async function getProjectByUUID(
   uuid: string
-): Promise<TypeDatabase<TypeProjectData>> {
+): Promise<TypeProjectDataInDoc> {
   return http
-    .get<TypeResponseFrame<TypeDatabase<TypeProjectData>>>(
-      `${API.GET_PROJECT}/${uuid}`
-    )
+    .get<TypeResponseFrame<TypeProjectDataInDoc>>(`${API.GET_PROJECT}/${uuid}`)
     .then(data => data.data.data);
 }
 
 // 更新工程
 export async function updateProject(
   data: TypeProjectData
-): Promise<TypeDatabase<TypeProjectData>> {
+): Promise<TypeProjectDataInDoc> {
   return http
-    .post<TypeResponseFrame<TypeDatabase<TypeProjectData>>>(
+    .post<TypeResponseFrame<TypeProjectDataInDoc>>(
       `${API.UPDATE_PROJECT}/${data.uuid}`,
+      data
+    )
+    .then(data => data.data.data);
+}
+
+// 增加图片映射
+export async function addImageMapper(
+  uuid: string,
+  data: TypeImageMapper
+): Promise<TypeProjectDataInDoc> {
+  return http
+    .post<TypeResponseFrame<TypeProjectDataInDoc>>(
+      `${API.ADD_IMAGE_MAPPER}/${uuid}`,
       data
     )
     .then(data => data.data.data);
