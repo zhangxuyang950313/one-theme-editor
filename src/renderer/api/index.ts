@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { Canceler } from "axios";
 import {
   TypeBrandConf,
   TypeCreateProjectData,
@@ -10,18 +10,23 @@ import { TypeTemplateConf } from "types/template";
 import { HOST, PORT } from "common/config";
 import API from "common/api";
 
-const http = axios.create({
-  baseURL: `http://${HOST}:${PORT}`
-});
+type TypeGetCanceler = (c: Canceler) => void;
 
 type TypeResponseFrame<T> = {
   msg: "success" | "fail";
   data: T;
 };
 
+const createHttp = (getCanceler?: TypeGetCanceler) => {
+  return axios.create({
+    baseURL: `http://${HOST}:${PORT}`,
+    cancelToken: getCanceler && new axios.CancelToken(getCanceler)
+  });
+};
+
 // 获取厂商列表
 export async function getBrandConfList(): Promise<TypeBrandConf[]> {
-  return http
+  return createHttp()
     .get<TypeResponseFrame<TypeBrandConf[]>>(API.GET_BRAND_LIST)
     .then(data => data.data.data);
 }
@@ -30,7 +35,7 @@ export async function getBrandConfList(): Promise<TypeBrandConf[]> {
 export async function getTempConfList(
   brandConf: TypeBrandConf
 ): Promise<TypeTemplateConf[]> {
-  return http
+  return createHttp()
     .get<TypeResponseFrame<TypeTemplateConf[]>>(
       `${API.GET_TEMPLATE_LIST}/${brandConf.type}`
     )
@@ -41,15 +46,16 @@ export async function getTempConfList(
 export async function createProject(
   data: TypeCreateProjectData
 ): Promise<TypeProjectData> {
-  return http
+  return createHttp()
     .post<TypeResponseFrame<TypeProjectData>>(API.CREATE_PROJECT, data)
     .then(data => data.data.data);
 }
 // 获取工程列表
 export async function getProjectList(
-  brandInfo: TypeBrandConf
+  brandInfo: TypeBrandConf,
+  canceler?: TypeGetCanceler
 ): Promise<TypeProjectDataInDoc[]> {
-  return http
+  return createHttp(canceler)
     .get<TypeResponseFrame<TypeProjectDataInDoc[]>>(
       `${API.GET_PROJECT_LIST}/${brandInfo.type}`
     )
@@ -58,9 +64,10 @@ export async function getProjectList(
 
 // 查询工程
 export async function getProjectByUUID(
-  uuid: string
+  uuid: string,
+  canceler?: TypeGetCanceler
 ): Promise<TypeProjectDataInDoc> {
-  return http
+  return createHttp(canceler)
     .get<TypeResponseFrame<TypeProjectDataInDoc>>(`${API.GET_PROJECT}/${uuid}`)
     .then(data => data.data.data);
 }
@@ -69,7 +76,7 @@ export async function getProjectByUUID(
 export async function updateProject(
   data: TypeProjectData
 ): Promise<TypeProjectDataInDoc> {
-  return http
+  return createHttp()
     .post<TypeResponseFrame<TypeProjectDataInDoc>>(
       `${API.UPDATE_PROJECT}/${data.uuid}`,
       data
@@ -82,7 +89,7 @@ export async function addImageMapper(
   uuid: string,
   data: TypeImageMapper
 ): Promise<TypeProjectDataInDoc> {
-  return http
+  return createHttp()
     .post<TypeResponseFrame<TypeProjectDataInDoc>>(
       `${API.ADD_IMAGE_MAPPER}/${uuid}`,
       data

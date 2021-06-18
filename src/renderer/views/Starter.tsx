@@ -4,12 +4,12 @@ import styled from "styled-components";
 // components
 import Sidebar from "@/components/Starter/Sidebar";
 import ProjectManager from "@/components/Starter/ProjectManager";
-import { useDocumentTitle } from "@/hooks";
+import { presetTitle, useDocumentTitle } from "@/hooks/index";
 
 // 开始页面
 const Starter: React.FC = () => {
-  const [, , setPresetTitle] = useDocumentTitle();
-  setPresetTitle("main");
+  const [, setTitle] = useDocumentTitle();
+  setTitle(presetTitle.default);
 
   return (
     <StyleHome>

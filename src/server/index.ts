@@ -58,6 +58,7 @@ service.use((req, res, next) => {
 //   }
 // );
 
+// 图片服务
 service.get<{ md5: string }, any, any, any>("/image/:md5", (req, res) => {
   findImageData(req.params.md5).then(async data => {
     const buffer = Buffer.from(

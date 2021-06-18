@@ -1,4 +1,4 @@
-import { TypeUiVersionInfo, TypeImageDataVO } from "./project.d";
+import { TypeUiVersionInfo, TypeImageMapper, TypeImageFrom } from "./project.d";
 import { TypeTempLayout } from "./xml-result.d";
 
 export type TypeUiVersionConf = TypeUiVersionInfo & {
@@ -22,14 +22,14 @@ export type TypeTemplateConf = {
   root: string;
   file: string;
   name: string;
-  preview: TypeImageDataVO | null;
+  preview: TypeImageMapper | null;
   version: string;
   uiVersions: TypeUiVersionConf[];
 };
 
 export type TypeTemplateInfo = {
   name: string;
-  preview: TypeImageDataVO | null;
+  preview: TypeImageMapper | null;
   version: string;
   uiVersions: TypeUiVersionConf[];
   modules: TypeTempModuleConf[];
@@ -40,17 +40,20 @@ export type TypeTempPageConfigConf = {
   description: string;
   screenWidth: string;
 };
+
 export type TypeTempPageCategoryConf = {
   tag: string;
   description: string;
   type: "image" | "xml" | "";
 };
+
 export type TypeTempPageSourceConf = {
   name: string;
   layout: TypeTempLayout;
-  from: TypeImageDataVO | null;
+  from: TypeImageFrom | null;
   to: string[];
 };
+
 export type TypeTempPageConf = {
   pathname: string;
   config: TypeTempPageConfigConf;

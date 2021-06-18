@@ -1,4 +1,4 @@
-import { TypeImageDataVO } from "types/project";
+import { TypeImageMapper } from "types/project";
 import {
   TypeTemplateInfo,
   TypeTempModuleConf,
@@ -13,7 +13,7 @@ import {
 export default class TemplateInfo {
   private name = "";
   private version = "";
-  private preview: TypeImageDataVO | null = null;
+  private preview: TypeImageMapper | null = null;
   private uiVersions: TypeUiVersionConf[] = [];
   private modules: TypeTempModuleConf[] = [];
 
@@ -29,10 +29,10 @@ export default class TemplateInfo {
   getVersion(): string {
     return this.version;
   }
-  setPreview(preview: TypeImageDataVO): void {
+  setPreview(preview: TypeImageMapper): void {
     this.preview = preview;
   }
-  getPreview(): TypeImageDataVO | null {
+  getPreview(): TypeImageMapper | null {
     return this.preview;
   }
   setUiVersions(uiVersions: TypeUiVersionConf[]): void {

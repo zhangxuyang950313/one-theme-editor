@@ -77,7 +77,7 @@ export function useTemplateList(): [TypeTemplateConf[], boolean] {
 }
 
 // 当前模板模块列表
-export function useTemplateModules(): TypeTempModuleConf[] {
+export function useCurrentModuleList(): TypeTempModuleConf[] {
   return useSelector(getCurrentModuleList);
 }
 
@@ -94,7 +94,7 @@ export function useCurrentModule(): [
 }
 
 // 当前选择的模块页面组列表
-export function useTemplatePageGroups(): TypeTempPageGroupConf[] {
+export function useCurrentPageGroupList(): TypeTempPageGroupConf[] {
   return useSelector(getCurrentPageGroupList);
 }
 

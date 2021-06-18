@@ -1,24 +1,42 @@
 import React from "react";
 import { useHistory, useParams } from "react-router";
+
 import styled from "styled-components";
-
-import { useProjectData, useSetupProjectByUUID } from "@/hooks/project";
-
 import { Button, Empty, Spin } from "antd";
 import ModuleSelector from "@/components/Editor/ModuleSelector";
 import EditorToolsBar from "@/components/Editor/ToolsBar";
 import PageSelector from "@/components/Editor/PageSelector";
 import Previewer from "@/components/Editor/Previewer";
 import ResourceContent from "@/components/Editor/ResourceContent";
+
+import { useProjectData, useLoadProjectByUUID } from "@/hooks/project";
 import { StyleBorderRight } from "@/style";
+
+// 主编辑区域
+const EditorMain: React.FC = () => {
+  return (
+    <StyleEditorMain>
+      {/* 页面选择器 */} 
+      <StylePageSelector>
+        <PageSelector />
+      </StylePageSelector>
+      {/* 预览 */}
+      <StylePreviewer>
+        <Previewer />
+      </StylePreviewer>
+      {/* 素材编辑区 */}
+      <StyleResourceContent>
+        <ResourceContent />
+      </StyleResourceContent>
+    </StyleEditorMain>
+  );
+};
 
 const Editor: React.FC = () => {
   const history = useHistory();
-  // 从路由参数中获得工程 id
+  // 从路由参数中获得工程 uuid
   const { uuid } = useParams<{ uuid: string }>();
-  // 工程数据，undefined
-  const [, isLoading] = useSetupProjectByUUID(uuid);
-
+  const [, isLoading] = useLoadProjectByUUID(uuid);
   const projectData = useProjectData();
 
   // 还未安装
@@ -56,21 +74,10 @@ const Editor: React.FC = () => {
       <ModuleSelector />
       {/* 编辑区域 */}
       <StyleEditorContent>
+        {/* 工具栏 */}
         <EditorToolsBar />
-        <StyleEditorMain>
-          {/* 页面选择器 */}
-          <StylePageSelector>
-            <PageSelector />
-          </StylePageSelector>
-          {/* 预览 */}
-          <StylePreviewer>
-            <Previewer />
-          </StylePreviewer>
-          {/* 素材编辑区 */}
-          <StyleResourceContent>
-            <ResourceContent />
-          </StyleResourceContent>
-        </StyleEditorMain>
+        {/* 主编辑区域 */}
+        <EditorMain />
       </StyleEditorContent>
     </StyleEditor>
   );

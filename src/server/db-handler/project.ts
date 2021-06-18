@@ -75,9 +75,11 @@ export async function createProject(
 export async function getProjectListOf(
   brandType: string
 ): Promise<TypeDatabase<TypeProjectData>[]> {
-  return await projectDB.find<TypeProjectData>({
-    "brand.type": brandType
-  });
+  return await projectDB
+    .find<TypeProjectData>({
+      "brand.type": brandType
+    })
+    .sort({ updatedAt: -1 });
 }
 
 // 查找工程

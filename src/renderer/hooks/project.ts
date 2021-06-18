@@ -1,17 +1,18 @@
+import { Canceler } from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { useLayoutEffect, useState, useCallback } from "react";
+import { useLayoutEffect, useEffect, useState, useCallback } from "react";
 import { addImageMapper, getProjectByUUID, getProjectList } from "@/api/index";
 import { useSelectedBrand } from "@/hooks/template";
-import { ActionSetProjectData } from "@/store/modules/project/action";
-import {
-  getProjectData,
-  getProjectUUID
-} from "@/store/modules/project/selector";
 import {
   ActionSetCurrentBrand,
   ActionSetCurrentPage,
   ActionSetCurrentTemplate
 } from "@/store/modules/template/action";
+import { ActionSetProjectData } from "@/store/modules/project/action";
+import {
+  getProjectData,
+  getProjectUUID
+} from "@/store/modules/project/selector";
 import {
   TypeImageMapper,
   TypeProjectDataInDoc,
@@ -23,27 +24,44 @@ import { useDocumentTitle } from "./index";
 
 // 获取项目列表
 type TypeIsLoading = boolean;
-type TypeRefreshFn = () => Promise<void>;
-type TypeReturnData = [TypeProjectDataInDoc[], TypeRefreshFn, TypeIsLoading];
+type TypeRefreshFunc = () => Promise<void>;
+type TypeReturnData = [TypeProjectDataInDoc[], TypeRefreshFunc, TypeIsLoading];
 export function useProjectList(): TypeReturnData {
   // 使用机型进行隔离查询
-  const currentBrandInfo = useSelectedBrand();
+  const selectedBrand = useSelectedBrand();
   const [value, updateValue] = useState<TypeProjectDataInDoc[]>([]);
   const [loading, updateLoading] = useState<boolean>(true);
+  const [canceler, updateCanceler] = useState<Canceler>();
+
+  console.log({ canceler });
 
   const refresh = useCallback(async () => {
     updateLoading(true);
-    setTimeout(async () => {
-      if (!currentBrandInfo) return;
-      const projects = await getProjectList(currentBrandInfo);
-      console.log("获取工程列表：", projects);
-      updateValue(projects);
-      updateLoading(false);
-    }, 300);
-  }, [currentBrandInfo]);
+    console.log("refresh");
+    if (!selectedBrand) return;
+    return getProjectList(selectedBrand, c => {
+      updateCanceler(() => c);
+    })
+      .then(projects => {
+        console.log("获取工程列表：", projects);
+        updateValue(projects);
+      })
+      .catch(console.log)
+      .finally(() => {
+        updateLoading(false);
+      });
+  }, [selectedBrand]);
+
   useLayoutEffect(() => {
-    refresh();
-  }, [refresh]);
+    if (selectedBrand) refresh();
+  }, [selectedBrand, refresh]);
+
+  useEffect(() => {
+    return () => 
+      canceler && canceler()
+    
+  }, []);
+
   return [value, refresh, loading];
 }
 
@@ -63,19 +81,20 @@ export function useLoadProject(project: TypeProjectDataInDoc | null): void {
   }, [dispatch, project]);
 }
 
-// 从数据库安装工程
-export function useSetupProjectByUUID(
+/**
+ * 安装工程，传入 uuid，从数据库中查找后调用 useLoadProject 载入
+ * @param uuid
+ * @returns
+ */
+export function useLoadProjectByUUID(
   uuid: string
 ): [TypeProjectDataInDoc | null, boolean] {
   const [project, updateProject] = useState<TypeProjectDataInDoc | null>(null);
   const [loading, updateLoading] = useState(true);
   useLayoutEffect(() => {
+    let cancel;
     console.log(`准备获取工程（${uuid}）`);
-    getProjectByUUID(uuid)
-      .then(async project => {
-        await new Promise(resolve => setTimeout(resolve, 300));
-        return project;
-      })
+    getProjectByUUID(uuid, canceler => (cancel = canceler))
       .then(project => {
         console.log(`获取工程（${uuid}）成功`, project);
         updateProject(project);
@@ -86,6 +105,7 @@ export function useSetupProjectByUUID(
       .finally(() => {
         updateLoading(false);
       });
+    return cancel;
   }, [uuid]);
   useLoadProject(project);
   return [project, loading];
@@ -95,7 +115,9 @@ export function useSetupProjectByUUID(
 export function useProjectData(): TypeProjectStateInStore | null {
   const [, updateTitle] = useDocumentTitle();
   const projectData = useSelector(getProjectData);
-  updateTitle(projectData?.description?.name || "");
+  if (projectData?.description?.name) {
+    updateTitle(projectData.description.name);
+  }
   return projectData;
 }
 

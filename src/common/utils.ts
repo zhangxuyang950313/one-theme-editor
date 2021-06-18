@@ -2,7 +2,7 @@ import path from "path";
 import md5 from "md5";
 import fse from "fs-extra";
 import imageSizeOf from "image-size";
-import { TypeImageDataVO } from "types/project";
+import { TypeImageFrom } from "types/project";
 import { getImageUrlOf } from "server/db-handler/image";
 import ERR_CODE from "renderer/core/error-code";
 
@@ -113,7 +113,7 @@ export async function getFileSizeOf(file: string): Promise<number> {
 }
 
 // 获取图片信息
-export async function getImageData(file: string): Promise<TypeImageDataVO> {
+export async function getImageData(file: string): Promise<TypeImageFrom> {
   const url = await getImageUrlOf(file);
   const md5 = path.basename(url);
   const size = await getFileSizeOf(file);

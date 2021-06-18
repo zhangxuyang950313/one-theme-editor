@@ -1,24 +1,30 @@
 import React from "react";
 import styled from "styled-components";
 
-import { useTemplatePageGroups } from "@/hooks/template";
+import { useCurrentPage, useCurrentPageGroupList } from "@/hooks/template";
 
 import { Collapse } from "antd";
 
 // 页面选择器
 const PageSelector: React.FC = () => {
-  const pageGroups = useTemplatePageGroups();
-  if (pageGroups.length === 0) {
+  const pageGroupList = useCurrentPageGroupList();
+  const [, setCurrentPage] = useCurrentPage();
+  if (pageGroupList.length === 0) {
     console.log("页面分组为空");
     return null;
   }
   return (
-    <Collapse bordered={false} defaultActiveKey={Object.keys(pageGroups)}>
-      {pageGroups.map((group, key) => (
+    <Collapse bordered={false} defaultActiveKey={Object.keys(pageGroupList)}>
+      {pageGroupList.map((group, key) => (
         <Collapse.Panel header={group.name} key={key}>
           <StylePagePreview>
             {group.pages.map((page, index) => (
-              <StyleImage key={index} alt={page.pathname} src={page.preview} />
+              <StyleImage
+                key={index}
+                alt={page.pathname}
+                src={page.preview}
+                onClick={() => setCurrentPage(page)}
+              />
             ))}
           </StylePagePreview>
         </Collapse.Panel>

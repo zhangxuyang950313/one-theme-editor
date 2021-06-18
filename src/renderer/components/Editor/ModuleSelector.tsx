@@ -1,14 +1,14 @@
 import React from "react";
 import styled from "styled-components";
 
-import { useTemplateModules, useCurrentModule } from "@/hooks/template";
+import { useCurrentModuleList, useCurrentModule } from "@/hooks/template";
 
 import { Tooltip } from "antd";
 
 // 模块选择器
 const ModuleSelector: React.FC = () => {
-  const tempModuleList = useTemplateModules();
-  const [currentModule, updateModule] = useCurrentModule();
+  const tempModuleList = useCurrentModuleList();
+  const [currentModule, setCurrentModule] = useCurrentModule();
 
   if (!currentModule) {
     console.log("currentModule 为空");
@@ -27,7 +27,7 @@ const ModuleSelector: React.FC = () => {
           <StyleIcon
             key={key}
             isActive={currentModule.index === item.index}
-            onClick={() => updateModule(item)}
+            onClick={() => setCurrentModule(item)}
           >
             <Tooltip title={item.name} placement="right">
               <img className="icon" alt="" src={item.icon} />

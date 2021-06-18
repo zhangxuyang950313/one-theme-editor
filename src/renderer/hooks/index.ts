@@ -1,23 +1,21 @@
 import { useCallback, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 // import { getImageByPath, getImageListByPaths } from "@/core/data";
 import { InputProps } from "antd";
 
+import { ActionSetWindowTitle } from "@/store/modules/base/action";
+import { getWindowTitle } from "@/store/modules/base/selector";
+
 // 设置页面标题
-const tt = {
-  main: "一个主题编辑器"
-};
-export function useDocumentTitle(): [
-  string,
-  (title: string) => void,
-  (k: keyof typeof tt) => void
-] {
-  const setTitle = (title: string) => {
-    document.title = title;
-  };
-  const setPreset = (name: "main") => {
-    setTitle(tt[name] || "");
-  };
-  return [document.title, setTitle, setPreset];
+export enum presetTitle {
+  default = "一个主题编辑器"
+}
+export function useDocumentTitle(): [string, typeof setTitleMethod] {
+  const dispatch = useDispatch();
+  const windowTitle = useSelector(getWindowTitle);
+  const setTitleMethod = (title: string) =>
+    setTimeout(() => dispatch(ActionSetWindowTitle(title)));
+  return [windowTitle, setTitleMethod];
 }
 
 // 获取输入的值
@@ -25,12 +23,11 @@ type TypeUseInputValueReturn = {
   value: string;
   onChange: InputProps["onChange"];
 };
-export function useInputValue(initialValue: string): TypeUseInputValueReturn {
-  const [value, setValue] = useState(initialValue);
-  const onInputChange: InputProps["onChange"] = event => {
-    setValue(event.currentTarget.value);
+export function useInputValue(initialVal: string): TypeUseInputValueReturn {
+  const [value, updateVal] = useState(initialVal);
+  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    updateVal(event.currentTarget.value);
   };
-  const onChange = useCallback(onInputChange, []);
   return { value, onChange };
 }
 

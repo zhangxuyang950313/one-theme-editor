@@ -11,8 +11,9 @@ import { RightCircleOutlined } from "@ant-design/icons";
 
 import { TypeTempPageSourceConf } from "types/template";
 import { findProjectImage } from "@/store/modules/project/selector";
-import ERR_CODE from "@/core/error-code";
 import { useAddImageMapper } from "@/hooks/project";
+
+import ERR_CODE from "@/core/error-code";
 
 // 图片素材展示
 function ShowImage(props: { onClick?: () => void; srcUrl: string }) {
@@ -65,13 +66,10 @@ const StyleImageBackground = styled.div<{ srcUrl: string }>`
   }
 `;
 
-type TypeProps = {
-  data: TypeTempPageSourceConf;
-};
-const ResourceChanger: React.FC<TypeProps> = props => {
+const ImageChanger: React.FC<TypeTempPageSourceConf> = sourceConf => {
   const handleAddImageMapper = useAddImageMapper();
   const findImage = useSelector(findProjectImage);
-  const { from, to, name } = props.data;
+  const { from, to, name } = sourceConf;
 
   if (!from) return null;
   /**
@@ -111,7 +109,7 @@ const ResourceChanger: React.FC<TypeProps> = props => {
           </span>
         ) : null}
       </div>
-      <p className="text filename">{from.filename}</p>
+      <p className="text filename">{to[0] || from.filename}</p>
       <div className="edit-wrapper">
         <div className="left">
           <ShowImage
@@ -179,4 +177,4 @@ const StyleImageChanger = styled.div`
     }
   }
 `;
-export default ResourceChanger;
+export default ImageChanger;

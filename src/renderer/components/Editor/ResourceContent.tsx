@@ -10,8 +10,8 @@ const ResourceContent: React.FC = () => {
   if (!currentPage) return null;
   return (
     <StyleResourceContent>
-      {currentPage.source.map((item, index) => (
-        <ImageChanger key={index} data={item} />
+      {currentPage.source.map((sourceConf, key) => (
+        <ImageChanger key={key} {...sourceConf} />
       ))}
     </StyleResourceContent>
   );

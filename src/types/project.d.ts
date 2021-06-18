@@ -41,7 +41,7 @@ export type TypeImageData = {
 };
 
 // 用于前端展示的图片数据
-export type TypeImageDataVO = {
+export type TypeImageFrom = {
   url: string;
   md5: string;
   width: number;
@@ -50,11 +50,8 @@ export type TypeImageDataVO = {
   filename: string;
 };
 
-export type TypeImageMapper = {
-  url: string;
-  md5: string;
+export type TypeImageMapper = TypeImageFrom & {
   target: string;
-  size: number;
 };
 
 export type TypeXmlMapper = {
