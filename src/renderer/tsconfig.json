@@ -24,6 +24,7 @@
       "common/*": ["../common/*"],
       "server/*": ["../server/*"],
       "renderer/*": ["../renderer/*"],
+      "hooks/*": ["./hooks/*"],
       "types/*": ["../types/*"]
     },
     "types": ["webpack", "webpack-env", "node"]

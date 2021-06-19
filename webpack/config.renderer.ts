@@ -13,6 +13,7 @@ import EslintPlugin from "eslint-webpack-plugin";
 import { CleanWebpackPlugin } from "clean-webpack-plugin";
 import ReactRefreshPlugin from "@pmmmwh/react-refresh-webpack-plugin";
 import {
+  alias,
   rootDir,
   extensions,
   outputDir,
@@ -150,11 +151,9 @@ const config: webpack.ConfigurationFactory = (env, args) => {
     },
     resolve: {
       alias: {
-        "src": path.resolve(rootDir, "src"),
-        "server": path.resolve(rootDir, "src/server"),
-        "common": path.resolve(rootDir, "src/common"),
-        "renderer": path.resolve(rootDir, "src/renderer"),
-        "@": path.resolve(rootDir, "src/renderer")
+        ...alias,
+        "@": path.resolve(rootDir, "src/renderer"),
+        "hooks": path.resolve(rootDir, "src/renderer/hooks")
       },
       extensions
     },

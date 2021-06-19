@@ -27,7 +27,7 @@ import {
   TypeTempPageGroupConf
 } from "types/template";
 import { TypeBrandConf } from "types/project";
-import { useAsyncUpdater } from ".";
+import { useAsyncUpdater } from "./index";
 
 // 获取配置的厂商列表
 export function useBrandInfoList(): TypeBrandConf[] {
