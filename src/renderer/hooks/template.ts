@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { message } from "antd";
 
 import { getBrandConfList, getTempConfList } from "@/api/index";
-import ERR_CODE from "@/core/error-code";
 
 import {
   ActionSetBrandInfoList,
@@ -18,6 +17,8 @@ import {
   getCurrentModuleList,
   getCurrentPageGroupList
 } from "@/store/modules/template/selector";
+
+import ERR_CODE from "@/core/error-code";
 
 import {
   TypeTempModuleConf,

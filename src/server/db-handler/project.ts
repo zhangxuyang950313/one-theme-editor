@@ -3,11 +3,9 @@ import fse from "fs-extra";
 import { v4 as genUUID } from "uuid";
 import Nedb from "nedb-promises";
 import { PROJECTS_DB } from "common/paths";
-import {
-  TypeDatabase,
-  TypeCreateProjectData,
-  TypeProjectData
-} from "types/project";
+
+import { TypeDatabase } from "types/index";
+import { TypeCreateProjectData, TypeProjectData } from "types/project";
 import ERR_CODE from "renderer/core/error-code";
 import ProjectData from "src/data/ProjectData";
 import { compileTempInfo } from "./template";

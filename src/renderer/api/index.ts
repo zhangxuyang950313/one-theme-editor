@@ -4,7 +4,7 @@ import {
   TypeCreateProjectData,
   TypeImageMapper,
   TypeProjectData,
-  TypeProjectDataInDoc
+  TypeProjectDataDoc
 } from "types/project";
 import { TypeTemplateConf } from "types/template";
 import { HOST, PORT } from "common/config";
@@ -54,9 +54,9 @@ export async function createProject(
 export async function getProjectList(
   brandInfo: TypeBrandConf,
   canceler?: TypeGetCanceler
-): Promise<TypeProjectDataInDoc[]> {
+): Promise<TypeProjectDataDoc[]> {
   return createHttp(canceler)
-    .get<TypeResponseFrame<TypeProjectDataInDoc[]>>(
+    .get<TypeResponseFrame<TypeProjectDataDoc[]>>(
       `${API.GET_PROJECT_LIST}/${brandInfo.type}`
     )
     .then(data => data.data.data);
@@ -66,18 +66,18 @@ export async function getProjectList(
 export async function getProjectByUUID(
   uuid: string,
   canceler?: TypeGetCanceler
-): Promise<TypeProjectDataInDoc> {
+): Promise<TypeProjectDataDoc> {
   return createHttp(canceler)
-    .get<TypeResponseFrame<TypeProjectDataInDoc>>(`${API.GET_PROJECT}/${uuid}`)
+    .get<TypeResponseFrame<TypeProjectDataDoc>>(`${API.GET_PROJECT}/${uuid}`)
     .then(data => data.data.data);
 }
 
 // 更新工程
 export async function updateProject(
   data: TypeProjectData
-): Promise<TypeProjectDataInDoc> {
+): Promise<TypeProjectDataDoc> {
   return createHttp()
-    .post<TypeResponseFrame<TypeProjectDataInDoc>>(
+    .post<TypeResponseFrame<TypeProjectDataDoc>>(
       `${API.UPDATE_PROJECT}/${data.uuid}`,
       data
     )
@@ -88,9 +88,9 @@ export async function updateProject(
 export async function addImageMapper(
   uuid: string,
   data: TypeImageMapper
-): Promise<TypeProjectDataInDoc> {
+): Promise<TypeProjectDataDoc> {
   return createHttp()
-    .post<TypeResponseFrame<TypeProjectDataInDoc>>(
+    .post<TypeResponseFrame<TypeProjectDataDoc>>(
       `${API.ADD_IMAGE_MAPPER}/${uuid}`,
       data
     )

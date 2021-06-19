@@ -1,7 +1,7 @@
 import ACTION_TYPES from "@/store/actions";
 import { TypeBrandConf } from "types/project";
 import {
-  TypeTemplateInfo,
+  TypeTemplateData,
   TypeTempModuleConf,
   TypeTempPageConf
 } from "types/template";
@@ -20,7 +20,7 @@ type TypeActionSetBrandInfo = {
 
 type TypeActionSetCurrentTemplate = {
   type: typeof ACTION_TYPES.SET_CURRENT_TEMPLATE;
-  payload: TypeTemplateInfo;
+  payload: TypeTemplateData;
 };
 
 type TypeActionSetCurrentModule = {
@@ -57,7 +57,7 @@ export function ActionSetSelectedBrand(
 
 // 设置当前模板
 export function ActionSetCurrentTemplate(
-  payload: TypeTemplateInfo
+  payload: TypeTemplateData
 ): TypeActionSetCurrentTemplate {
   return { type: ACTION_TYPES.SET_CURRENT_TEMPLATE, payload };
 }

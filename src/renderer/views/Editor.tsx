@@ -16,7 +16,7 @@ import { StyleBorderRight } from "@/style";
 const EditorMain: React.FC = () => {
   return (
     <StyleEditorMain>
-      {/* 页面选择器 */} 
+      {/* 页面选择器 */}
       <StylePageSelector>
         <PageSelector />
       </StylePageSelector>

@@ -1,10 +1,7 @@
 import ACTION_TYPES from "@/store/actions";
 
-import {
-  TypeDatabase,
-  TypeProjectData,
-  TypeImageMapper
-} from "types/project.d";
+import { TypeDatabase } from "types/index";
+import { TypeProjectData, TypeImageMapper } from "types/project";
 
 type TypeActionInitProject = {
   type: typeof ACTION_TYPES.INIT_PROJECT;

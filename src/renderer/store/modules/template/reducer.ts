@@ -2,7 +2,7 @@ import ACTION_TYPES from "@/store/actions";
 import { updateState } from "@/store/utils";
 import { TypeBrandConf } from "types/project";
 import {
-  TypeTemplateInfo,
+  TypeTemplateData,
   TypeTempModuleConf,
   TypeTempPageConf
 } from "types/template";
@@ -12,7 +12,7 @@ import { TypeActions } from "./action";
 export type TypeStates = {
   brandInfoList: TypeBrandConf[];
   currentBrand: TypeBrandConf | null;
-  currentTemplate: TypeTemplateInfo | null;
+  currentTemplate: TypeTemplateData | null;
   currentModule: TypeTempModuleConf | null;
   currentPage: TypeTempPageConf | null;
 };

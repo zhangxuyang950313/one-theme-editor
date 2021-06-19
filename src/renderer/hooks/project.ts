@@ -15,7 +15,7 @@ import {
 } from "@/store/modules/project/selector";
 import {
   TypeImageMapper,
-  TypeProjectDataInDoc,
+  TypeProjectDataDoc,
   TypeProjectStateInStore
 } from "types/project";
 
@@ -25,11 +25,11 @@ import { useDocumentTitle } from "./index";
 // 获取项目列表
 type TypeIsLoading = boolean;
 type TypeRefreshFunc = () => Promise<void>;
-type TypeReturnData = [TypeProjectDataInDoc[], TypeRefreshFunc, TypeIsLoading];
+type TypeReturnData = [TypeProjectDataDoc[], TypeRefreshFunc, TypeIsLoading];
 export function useProjectList(): TypeReturnData {
   // 使用机型进行隔离查询
   const selectedBrand = useSelectedBrand();
-  const [value, updateValue] = useState<TypeProjectDataInDoc[]>([]);
+  const [value, updateValue] = useState<TypeProjectDataDoc[]>([]);
   const [loading, updateLoading] = useState<boolean>(true);
   const [canceler, updateCanceler] = useState<Canceler>();
 
@@ -57,16 +57,14 @@ export function useProjectList(): TypeReturnData {
   }, [selectedBrand, refresh]);
 
   useEffect(() => {
-    return () => 
-      canceler && canceler()
-    
+    return () => canceler && canceler();
   }, []);
 
   return [value, refresh, loading];
 }
 
 // 载入工程，将 projectData 载入 redux
-export function useLoadProject(project: TypeProjectDataInDoc | null): void {
+export function useLoadProject(project: TypeProjectDataDoc | null): void {
   const dispatch = useDispatch();
   useLayoutEffect(() => {
     if (!project) return;
@@ -88,8 +86,8 @@ export function useLoadProject(project: TypeProjectDataInDoc | null): void {
  */
 export function useLoadProjectByUUID(
   uuid: string
-): [TypeProjectDataInDoc | null, boolean] {
-  const [project, updateProject] = useState<TypeProjectDataInDoc | null>(null);
+): [TypeProjectDataDoc | null, boolean] {
+  const [project, updateProject] = useState<TypeProjectDataDoc | null>(null);
   const [loading, updateLoading] = useState(true);
   useLayoutEffect(() => {
     let cancel;

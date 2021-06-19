@@ -7,7 +7,7 @@ import TemplateData from "src/data/TemplateConf";
 import { TEMPLATE_CONFIG, getTempDirByBrand } from "common/paths";
 import { TypeOriginBrandConf } from "types/xml-result";
 import { TypeBrandConf, TypeCreateProjectData } from "types/project";
-import { TypeTemplateConf, TypeTemplateInfo } from "types/template";
+import { TypeTemplateConf, TypeTemplateData } from "types/template";
 
 import { xml2jsonCompact } from "../core/xmlCompiler";
 import Template from "../core/Template";
@@ -74,7 +74,7 @@ async function compileTempConf(file: string): Promise<TypeTemplateConf> {
 
 export async function compileTempInfo(
   projectData: TypeCreateProjectData
-): Promise<TypeTemplateInfo> {
+): Promise<TypeTemplateData> {
   const template = new Template(
     projectData.templateConf.file,
     projectData.uiVersionConf

@@ -5,7 +5,7 @@ import image2base64 from "image-to-base64";
 import { USER_DATA } from "common/paths";
 import { HOST, PORT } from "common/config";
 import { getFileMD5 } from "common/utils";
-import { TypeImageData, TypeImageDataInDoc } from "types/project";
+import { TypeImageData, TypeImageDataDoc } from "types/project";
 
 const imageDBFile = path.resolve(USER_DATA, "image");
 fse.ensureFileSync(imageDBFile);
@@ -17,7 +17,7 @@ const imageDB = new Nedb({
 
 export async function ensureImageData(
   data: TypeImageData
-): Promise<TypeImageDataInDoc> {
+): Promise<TypeImageDataDoc> {
   const count = await imageDB.count({ md5: data.md5 });
   if (count > 0) {
     return imageDB.update<TypeImageData>({ md5: data.md5 }, data, {
@@ -27,7 +27,9 @@ export async function ensureImageData(
   return imageDB.insert<TypeImageData>(data);
 }
 
-export async function findImageData(md5: string): Promise<TypeImageDataInDoc> {
+export async function findImageData(
+  md5: string
+): Promise<TypeImageDataDoc> {
   return imageDB.findOne<TypeImageData>({ md5 });
 }
 

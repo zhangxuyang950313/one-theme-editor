@@ -1,4 +1,4 @@
-import { TypeTemplateInfo } from "types/template";
+import { TypeTemplateData } from "types/template";
 import {
   TypeBrandInfo,
   TypeProjectData,
@@ -13,7 +13,7 @@ export default class ProjectData {
   private brand: TypeBrandInfo | null = null;
   private description: TypeProjectDescription | null = null;
   private uiVersion: TypeUiVersionInfo | null = null;
-  private template: TypeTemplateInfo | null = null;
+  private template: TypeTemplateData | null = null;
   private xmlMapperList: TypeXmlMapper[] = [];
   private imageMapperList: TypeImageMapper[] = [];
 
@@ -49,10 +49,10 @@ export default class ProjectData {
   }
 
   // 模板信息
-  setTemplate(data: TypeTemplateInfo): void {
+  setTemplate(data: TypeTemplateData): void {
     this.template = data;
   }
-  getTemplate(): TypeTemplateInfo | null {
+  getTemplate(): TypeTemplateData | null {
     return this.template;
   }
 

@@ -1,5 +1,6 @@
 import { projectInfoConfig } from "renderer/config/editor";
-import { TypeTemplateInfo } from "./template";
+import { TypeTemplateData } from "./template";
+import { TypeDatabase } from "./index";
 
 export type TypeBrandInfo = {
   type: string;
@@ -12,7 +13,7 @@ export type TypeBrandConf = TypeBrandInfo & {
 
 // 工程描述信息
 export type TypeProjectDescription = {
-  [k in keyof typeof projectInfoConfig]: string;
+  [k in keyof typeof projectInfoConfig]: string | null;
 };
 
 export type TypeUiVersionInfo = {
@@ -34,14 +35,14 @@ export type TypeCreateProjectData = {
   templateConf: TypeTemplateConf;
 };
 
-// 图片存储数据
+// 图片数据
 export type TypeImageData = {
   md5: string;
   base64: string | null;
 };
 
-// 用于前端展示的图片数据
-export type TypeImageFrom = {
+// 图片相关信息及访问 url
+export type TypeImageContent = {
   url: string;
   md5: string;
   width: number;
@@ -50,7 +51,8 @@ export type TypeImageFrom = {
   filename: string;
 };
 
-export type TypeImageMapper = TypeImageFrom & {
+// 图片映射到目标路径
+export type TypeImageMapper = TypeImageContent & {
   target: string;
 };
 
@@ -65,23 +67,16 @@ export type TypeProjectData = {
   brand: TypeBrandInfo;
   description: TypeProjectDescription;
   uiVersion: TypeUiVersionInfo;
-  template: TypeTemplateInfo;
+  template: TypeTemplateData;
   imageMapperList: TypeImageMapper[];
   xmlMapperList: TypeXmlMapper[];
 };
 
-// 从数据库取出的项目文档数据
-export type TypeDatabase<T = { [x: string]: any }> = T & {
-  _id: string;
-  createdAt?: Date;
-  updatedAt?: Date;
-};
-
 // 在数据库中的图片数据
-export type TypeImageDataInDoc = TypeDatabase<TypeImageData>;
+export type TypeImageDataDoc = TypeDatabase<TypeImageData>;
 
 // 在数据库中的工程信息
-export type TypeProjectDataInDoc = TypeDatabase<TypeProjectData>;
+export type TypeProjectDataDoc = TypeDatabase<TypeProjectData>;
 
-// 在 redux 缓存中的工程信息
-export type TypeProjectStateInStore = Partial<TypeProjectDataInDoc>;
+// 在 redux 缓存中的工程信息， 可能为空值
+export type TypeProjectStateInStore = Partial<TypeProjectDataDoc>;

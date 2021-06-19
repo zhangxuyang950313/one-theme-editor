@@ -1,11 +1,11 @@
 import { TypeBrandConf, TypeProjectDescription } from "types/project";
-import { TypeTemplateInfo, TypeUiVersionConf } from "types/template";
+import { TypeTemplateData, TypeUiVersionConf } from "types/template";
 
 export type TypeCreateProject = {
   brandInfo: TypeBrandConf;
   uiVersion: TypeUiVersionConf;
   description: TypeProjectDescription;
-  templateConf: TypeTemplateInfo;
+  templateConf: TypeTemplateData;
 };
 
 // 主题操作对象

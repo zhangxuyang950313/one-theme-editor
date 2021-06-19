@@ -6,12 +6,12 @@ import { getImageData } from "common/utils";
 
 import {
   TypeTempPageGroupConf,
-  TypeTemplateInfo,
+  TypeTemplateData,
   TypeTempModuleConf,
   TypeTempPageConf,
   TypeUiVersionConf
 } from "types/template";
-import { TypeImageMapper } from "types/project";
+import { TypeImageContent } from "types/project";
 import {
   TypeOriginTempConf,
   TypeOriginTempPageGroupConf,
@@ -73,7 +73,7 @@ export default class Template {
   }
 
   // 模板预览图
-  async getPreview(): Promise<TypeImageMapper> {
+  async getPreview(): Promise<TypeImageContent> {
     const tempData = await this.ensureXmlData();
     const src = path.join(
       this.rootDir,
@@ -152,7 +152,7 @@ export default class Template {
     return await Promise.all(modulesQueue);
   }
 
-  async getTempInfo(): Promise<TypeTemplateInfo> {
+  async getTempInfo(): Promise<TypeTemplateData> {
     const templateInfo = new TemplateInfo();
     templateInfo.setName(await this.getName());
     templateInfo.setVersion(await this.getVersion());
