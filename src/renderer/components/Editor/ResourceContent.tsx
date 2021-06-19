@@ -18,7 +18,7 @@ const ResourceContent: React.FC = () => {
 };
 
 const StyleResourceContent = styled.div`
-  /* width: 280px; */
+  width: 300px;
   overflow: auto;
   padding: 20px;
   box-sizing: border-box;

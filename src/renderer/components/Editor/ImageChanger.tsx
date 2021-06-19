@@ -7,30 +7,81 @@ import { remote } from "electron";
 
 import styled from "styled-components";
 import { message } from "antd";
-import { RightCircleOutlined } from "@ant-design/icons";
+import { RightCircleOutlined, DeleteOutlined } from "@ant-design/icons";
 
 import { TypeTempPageSourceConf } from "types/template";
 import { findProjectImage } from "@/store/modules/project/selector";
-import { useAddImageMapper } from "@/hooks/project";
+import { useAddImageMapper, useDelImageMapper } from "@/hooks/project";
 
 import ERR_CODE from "@/core/error-code";
 
 // 图片素材展示
-function ShowImage(props: { onClick?: () => void; srcUrl: string }) {
-  return (
-    <StyleImageBackground srcUrl={props.srcUrl}>
-      {props.srcUrl && (
+type TypePropsOfShowImage = {
+  srcUrl: string | null;
+  onClick?: () => void;
+  // showHandler 时就要强制传入 target
+} & (
+  | { showHandler: true; target: string[] }
+  | { showHandler?: false; target?: string[] }
+);
+function ImageShower(props: TypePropsOfShowImage) {
+  const { srcUrl, showHandler, target, onClick } = props;
+  const handelDelImageMapper = useDelImageMapper();
+  const Content: React.FC = () => {
+    return (
+      <StyleImageBackground srcUrl={srcUrl}>
         <div
           className="preview"
-          can-click={String(!!props.onClick)}
-          onClick={() => props.onClick && props.onClick()}
+          can-click={String(!!onClick)}
+          onClick={() => onClick && onClick()}
         />
+      </StyleImageBackground>
+    );
+  };
+  return (
+    <StyleShowImage>
+      <Content />
+      {/* 支持操作 */}
+      {showHandler && (
+        <div className="handler">
+          <DeleteOutlined
+            className="delete"
+            onClick={() => {
+              if (!target) return;
+              target.forEach(handelDelImageMapper);
+            }}
+          />
+        </div>
       )}
-    </StyleImageBackground>
+    </StyleShowImage>
   );
 }
 
-const StyleImageBackground = styled.div<{ srcUrl: string }>`
+const StyleShowImage = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+
+  .handler {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-size: 20px;
+    margin: 0 10px;
+    .delete {
+      cursor: pointer;
+      color: red;
+      &:hover {
+        opacity: 0.8;
+      }
+      &:active {
+        opacity: 0.5;
+      }
+    }
+  }
+`;
+
+const StyleImageBackground = styled.div<{ srcUrl: string | null }>`
   position: relative;
   width: 84px;
   height: 84px;
@@ -53,7 +104,7 @@ const StyleImageBackground = styled.div<{ srcUrl: string }>`
     top: 0;
     width: 100%;
     height: 100%;
-    background: center/contain url(${({ srcUrl }) => srcUrl}) no-repeat;
+    background: center/contain url(${({ srcUrl }) => srcUrl || ""}) no-repeat;
     &[can-click="true"] {
       cursor: pointer;
       transform: scale(0.8);
@@ -97,6 +148,7 @@ const ImageChanger: React.FC<TypeTempPageSourceConf> = sourceConf => {
     });
   };
   const { width, height, size } = from;
+  const targetImage = findImage(to?.[0]);
   return (
     <StyleImageChanger>
       {/* 图片描述 */}
@@ -109,11 +161,15 @@ const ImageChanger: React.FC<TypeTempPageSourceConf> = sourceConf => {
           </span>
         ) : null}
       </div>
-      <p className="text filename">{to[0] || from.filename}</p>
+      {to.map(item => (
+        <p key={item} className="text filename">
+          {item || from.filename}
+        </p>
+      ))}
       <div className="edit-wrapper">
         <div className="left">
-          <ShowImage
-            srcUrl={from.url}
+          <ImageShower
+            srcUrl={from.url || ""}
             onClick={() => handlePreviewFile(from.url, name)}
           />
         </div>
@@ -122,8 +178,10 @@ const ImageChanger: React.FC<TypeTempPageSourceConf> = sourceConf => {
           onClick={handleUseDefaultResource}
         />
         <div className="right">
-          <ShowImage
-            srcUrl={findImage(to?.[0])?.url || ""}
+          <ImageShower
+            showHandler
+            srcUrl={targetImage?.url || null}
+            target={to}
             onClick={() => handleShowImageFile(to?.[0])}
           />
         </div>
@@ -155,6 +213,10 @@ const StyleImageChanger = styled.div`
     font-size: 10px;
     color: ${({ theme }) => theme["@text-color-secondary"]};
     user-select: text;
+    max-width: 100%;
+    /* overflow-x: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap; */
   }
   .edit-wrapper {
     display: flex;

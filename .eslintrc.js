@@ -84,7 +84,7 @@ module.exports = {
     "@typescript-eslint/no-unused-vars": isDev ? "warn" : "error", // 未使用的值作为警告
     "@typescript-eslint/no-explicit-any": "off",
     "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "warn", // hooks 规则
+    "react-hooks/exhaustive-deps": "off", // hooks 规则
     "prefer-template": "error", // 使用模板字符串
     "no-useless-concat": "error", // 进制没必要的字符串拼接
     "no-duplicate-imports": "warn", // 禁止重复导入

@@ -27,11 +27,13 @@ import {
   TypeTempPageGroupConf
 } from "types/template";
 import { TypeBrandConf } from "types/project";
+import { useAsyncUpdater } from ".";
 
 // 获取配置的厂商列表
 export function useBrandInfoList(): TypeBrandConf[] {
   const [value, updateValue] = useState<TypeBrandConf[]>([]);
   const dispatch = useDispatch();
+  const registerUpdater = useAsyncUpdater();
   useLayoutEffect(() => {
     getBrandConfList().then(conf => {
       // 添加默认小米，去重
@@ -39,9 +41,11 @@ export function useBrandInfoList(): TypeBrandConf[] {
         if (!t.some(item => item.templateDir === o.templateDir)) t.push(o);
         return t;
       }, []);
-      dispatch(ActionSetBrandInfoList(list));
-      dispatch(ActionSetSelectedBrand(list[0]));
-      updateValue(list);
+      registerUpdater(() => {
+        dispatch(ActionSetBrandInfoList(list));
+        dispatch(ActionSetSelectedBrand(list[0]));
+        updateValue(list);
+      });
     });
   }, [dispatch]);
   return value;
@@ -56,6 +60,7 @@ export function useSelectedBrand(): TypeBrandConf | null {
 export function useTemplateList(): [TypeTemplateConf[], boolean] {
   const [value, updateValue] = useState<TypeTemplateConf[]>([]);
   const [loading, updateLoading] = useState(true);
+  // const registerUpdater = useAsyncUpdater();
   const brandInfo = useSelectedBrand();
   const dispatch = useDispatch();
   useLayoutEffect(() => {
@@ -64,9 +69,7 @@ export function useTemplateList(): [TypeTemplateConf[], boolean] {
       .then(tempConfList => {
         console.log("模板列表：", tempConfList);
         updateValue(tempConfList);
-        setTimeout(() => {
-          updateLoading(false);
-        }, 300);
+        updateLoading(false);
       })
       .catch(err => {
         const content = ERR_CODE[3002];

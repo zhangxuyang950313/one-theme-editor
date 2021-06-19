@@ -1,7 +1,12 @@
-import { Canceler } from "axios";
+import { useLayoutEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLayoutEffect, useEffect, useState, useCallback } from "react";
-import { addImageMapper, getProjectByUUID, getProjectList } from "@/api/index";
+import {
+  addImageMapper,
+  delImageMapper,
+  getProjectByUUID,
+  getProjectList
+} from "@/api/index";
+import { useAxiosCanceler } from "@/hooks/index";
 import { useSelectedBrand } from "@/hooks/template";
 import {
   ActionSetCurrentBrand,
@@ -31,17 +36,12 @@ export function useProjectList(): TypeReturnData {
   const selectedBrand = useSelectedBrand();
   const [value, updateValue] = useState<TypeProjectDataDoc[]>([]);
   const [loading, updateLoading] = useState<boolean>(true);
-  const [canceler, updateCanceler] = useState<Canceler>();
-
-  console.log({ canceler });
+  const registerCancelToken = useAxiosCanceler();
 
   const refresh = useCallback(async () => {
     updateLoading(true);
-    console.log("refresh");
     if (!selectedBrand) return;
-    return getProjectList(selectedBrand, c => {
-      updateCanceler(() => c);
-    })
+    return getProjectList(selectedBrand, registerCancelToken)
       .then(projects => {
         console.log("获取工程列表：", projects);
         updateValue(projects);
@@ -55,11 +55,6 @@ export function useProjectList(): TypeReturnData {
   useLayoutEffect(() => {
     if (selectedBrand) refresh();
   }, [selectedBrand, refresh]);
-
-  useEffect(() => {
-    return () => canceler && canceler();
-  }, []);
-
   return [value, refresh, loading];
 }
 
@@ -89,10 +84,12 @@ export function useLoadProjectByUUID(
 ): [TypeProjectDataDoc | null, boolean] {
   const [project, updateProject] = useState<TypeProjectDataDoc | null>(null);
   const [loading, updateLoading] = useState(true);
+  const registerCancelToken = useAxiosCanceler();
+
   useLayoutEffect(() => {
     let cancel;
     console.log(`准备获取工程（${uuid}）`);
-    getProjectByUUID(uuid, canceler => (cancel = canceler))
+    getProjectByUUID(uuid, registerCancelToken)
       .then(project => {
         console.log(`获取工程（${uuid}）成功`, project);
         updateProject(project);
@@ -127,6 +124,18 @@ export function useAddImageMapper(): (data: TypeImageMapper) => Promise<void> {
   return async data => {
     if (!uuid) throw new Error(ERR_CODE[2004]);
     const project = await addImageMapper(uuid, data);
+    dispatch(ActionSetProjectData(project));
+  };
+}
+
+// 删除图片资源映射
+export function useDelImageMapper(): (target: string) => Promise<void> {
+  const uuid = useSelector(getProjectUUID);
+  const dispatch = useDispatch();
+  // 更新标题
+  return async target => {
+    if (!uuid) throw new Error(ERR_CODE[2004]);
+    const project = await delImageMapper(uuid, target);
     dispatch(ActionSetProjectData(project));
   };
 }

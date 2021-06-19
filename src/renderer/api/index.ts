@@ -96,3 +96,16 @@ export async function addImageMapper(
     )
     .then(data => data.data.data);
 }
+
+// 删除图片映射
+export async function delImageMapper(
+  uuid: string,
+  target: string
+): Promise<TypeProjectDataDoc> {
+  return createHttp()
+    .post<TypeResponseFrame<TypeProjectDataDoc>>(
+      `${API.DEL_IMAGE_MAPPER}/${uuid}`,
+      { target }
+    )
+    .then(data => data.data.data);
+}

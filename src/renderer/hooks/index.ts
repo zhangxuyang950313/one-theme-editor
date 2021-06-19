@@ -1,4 +1,5 @@
-import { useCallback, useState } from "react";
+import { Canceler } from "axios";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 // import { getImageByPath, getImageListByPaths } from "@/core/data";
 import { InputProps } from "antd";
@@ -29,6 +30,32 @@ export function useInputValue(initialVal: string): TypeUseInputValueReturn {
     updateVal(event.currentTarget.value);
   };
   return { value, onChange };
+}
+
+/**
+ * axios 请求取消 hooks
+ * @returns 返回一个注册函数用于 axios CancelToken
+ */
+export function useAxiosCanceler(): (c: Canceler) => void {
+  const [canceler, updateCanceler] = useState<Canceler>();
+  useEffect(() => () => canceler && canceler("组件销毁，取消请求"), []);
+  return (c: Canceler) => updateCanceler(() => c);
+}
+
+/**
+ * 用于在异步更新数据时组件提前销毁的情况
+ * hooks 会在当前组件存活时进行数据更新，调用 updater
+ * @returns 返回一个注册函数传入要更新数据的方法
+ */
+export function useAsyncUpdater(): (updater: () => void) => void {
+  const [isDestroyed, updateDestroyed] = useState(false);
+  useEffect(() => updateDestroyed(false), []); // 组件初始化
+  useEffect(() => () => updateDestroyed(true), []); // 组件销毁
+
+  return (updater: () => void) => {
+    if (isDestroyed) return;
+    updater();
+  };
 }
 
 // // 异步从数据库获取缓存的图片
