@@ -42,17 +42,18 @@ export type TypeImageData = {
 };
 
 // 图片相关信息及访问 url
-export type TypeImageContent = {
+export type TypeImageInfo = {
   url: string;
   md5: string;
   width: number;
   height: number;
   size: number;
   filename: string;
+  ninePatch: boolean;
 };
 
 // 图片映射到目标路径
-export type TypeImageMapper = TypeImageContent & {
+export type TypeImageMapper = TypeImageInfo & {
   target: string;
 };
 

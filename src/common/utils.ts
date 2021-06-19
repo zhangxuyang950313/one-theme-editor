@@ -2,7 +2,7 @@ import path from "path";
 import md5 from "md5";
 import fse from "fs-extra";
 import imageSizeOf from "image-size";
-import { TypeImageFrom } from "types/project";
+import { TypeImageInfo } from "types/project";
 import { getImageUrlOf } from "server/db-handler/image";
 import ERR_CODE from "renderer/core/error-code";
 
@@ -113,10 +113,24 @@ export async function getFileSizeOf(file: string): Promise<number> {
 }
 
 // 获取图片信息
-export async function getImageData(file: string): Promise<TypeImageFrom> {
+export async function getImageData(file: string): Promise<TypeImageInfo> {
+  const ninePatch = isNinePatchPath(file);
   const url = await getImageUrlOf(file);
   const md5 = path.basename(url);
   const size = await getFileSizeOf(file);
   const { width, height } = getImageSizeOf(file);
-  return { url, md5, width, height, size, filename: path.basename(file) };
+  return {
+    url,
+    md5,
+    width,
+    height,
+    size,
+    filename: path.basename(file),
+    ninePatch
+  };
+}
+
+// is .9 path
+export function isNinePatchPath(file: string): boolean {
+  return /\.9\.png$/.test(file);
 }

@@ -1,4 +1,4 @@
-import { TypeUiVersionInfo, TypeImageContent } from "./project.d";
+import { TypeUiVersionInfo, TypeImageInfo } from "./project.d";
 import { TypeTempLayout } from "./xml-result.d";
 
 export type TypeUiVersionConf = TypeUiVersionInfo & {
@@ -25,7 +25,7 @@ export type TypeTemplateConf = {
   root: string;
   file: string;
   name: string;
-  preview: TypeImageContent | null;
+  preview: TypeImageInfo | null;
   version: string;
   uiVersions: TypeUiVersionConf[];
 };
@@ -52,7 +52,7 @@ export type TypeTempPageCategoryConf = {
 export type TypeTempPageSourceConf = {
   name: string;
   layout: TypeTempLayout;
-  from: TypeImageContent | null;
+  from: TypeImageInfo | null;
   to: string[];
 };
 

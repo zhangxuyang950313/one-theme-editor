@@ -11,7 +11,7 @@ import {
   TypeTempPageConf,
   TypeUiVersionConf
 } from "types/template";
-import { TypeImageContent } from "types/project";
+import { TypeImageInfo } from "types/project";
 import {
   TypeOriginTempConf,
   TypeOriginTempPageGroupConf,
@@ -73,7 +73,7 @@ export default class Template {
   }
 
   // 模板预览图
-  async getPreview(): Promise<TypeImageContent> {
+  async getPreview(): Promise<TypeImageInfo> {
     const tempData = await this.ensureXmlData();
     const src = path.join(
       this.rootDir,

@@ -6,8 +6,13 @@ import { useSelector } from "react-redux";
 import { remote } from "electron";
 
 import styled from "styled-components";
-import { message } from "antd";
-import { RightCircleOutlined, DeleteOutlined } from "@ant-design/icons";
+import { notification } from "antd";
+import {
+  RightCircleOutlined,
+  DeleteOutlined,
+  FormOutlined,
+  ImportOutlined
+} from "@ant-design/icons";
 
 import { TypeTempPageSourceConf } from "types/template";
 import { findProjectImage } from "@/store/modules/project/selector";
@@ -38,21 +43,34 @@ function ImageShower(props: TypePropsOfShowImage) {
       </StyleImageBackground>
     );
   };
+  const Handler: React.FC = () => {
+    // 导入按钮
+    const ImportButton = <ImportOutlined className="press import" />;
+    // .9编辑按钮
+    const EditButton = <FormOutlined className="press edit" />;
+    // 删除按钮
+    const DeleteButton = (
+      <DeleteOutlined
+        className="press delete"
+        onClick={() => {
+          if (!target) return;
+          target.forEach(handelDelImageMapper);
+        }}
+      />
+    );
+    return (
+      <div className="handler">
+        {ImportButton}
+        {srcUrl && EditButton}
+        {srcUrl && DeleteButton}
+      </div>
+    );
+  };
   return (
     <StyleShowImage>
       <Content />
       {/* 支持操作 */}
-      {showHandler && (
-        <div className="handler">
-          <DeleteOutlined
-            className="delete"
-            onClick={() => {
-              if (!target) return;
-              target.forEach(handelDelImageMapper);
-            }}
-          />
-        </div>
-      )}
+      {showHandler && <Handler />}
     </StyleShowImage>
   );
 }
@@ -65,18 +83,28 @@ const StyleShowImage = styled.div`
   .handler {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-around;
     font-size: 20px;
     margin: 0 10px;
-    .delete {
+    .press {
       cursor: pointer;
-      color: red;
       &:hover {
         opacity: 0.8;
       }
       &:active {
         opacity: 0.5;
       }
+    }
+    .import {
+      font-size: 19px;
+      color: gray;
+    }
+    .edit {
+      font-size: 18px;
+      color: gray;
+    }
+    .delete {
+      color: red;
     }
   }
 `;
@@ -140,11 +168,13 @@ const ImageChanger: React.FC<TypeTempPageSourceConf> = sourceConf => {
   // 中间的快速使用默认素材按钮
   const handleUseDefaultResource = () => {
     if (!(Array.isArray(to) && to.length > 0)) {
-      message.warn(ERR_CODE[3006]);
+      notification.warn({ message: `"${name}"${ERR_CODE[3006]}` });
       return;
     }
     to.forEach(target => {
-      handleAddImageMapper({ ...from, target }).catch(message.warn);
+      handleAddImageMapper({ ...from, target }).catch(({ message }) =>
+        notification.warn({ message })
+      );
     });
   };
   const { width, height, size } = from;

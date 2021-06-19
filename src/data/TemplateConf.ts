@@ -1,4 +1,4 @@
-import { TypeImageContent } from "types/project.d";
+import { TypeImageInfo } from "types/project.d";
 import { TypeTemplateConf, TypeUiVersionConf } from "types/template";
 
 /**
@@ -11,7 +11,7 @@ export default class TemplateConf {
   private file = "";
   private name = "";
   private version = "";
-  private preview: TypeImageContent | null = null;
+  private preview: TypeImageInfo | null = null;
   private uiVersions: TypeUiVersionConf[] = [];
 
   setKey(key: string): void {
@@ -44,10 +44,10 @@ export default class TemplateConf {
   getVersion(): string {
     return this.version;
   }
-  setPreview(preview: TypeImageContent): void {
+  setPreview(preview: TypeImageInfo): void {
     this.preview = preview;
   }
-  getPreview(): TypeImageContent | null {
+  getPreview(): TypeImageInfo | null {
     return this.preview;
   }
   setUiVersions(uiVersions: TypeUiVersionConf[]): void {
