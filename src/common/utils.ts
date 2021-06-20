@@ -6,6 +6,8 @@ import { TypeImageInfo } from "types/project";
 import { getImageUrlOf } from "server/db-handler/image";
 import ERR_CODE from "renderer/core/error-code";
 
+export const base64Regex = /^data:image\/\w+;base64,/;
+
 // 随机字符串，最多11位
 export function getRandomStr(
   len: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 = 11
@@ -90,6 +92,35 @@ export async function localImageToBase64Async(file: string): Promise<string> {
   }
   const base64 = await fse.readFile(file, "base64");
   return `data:image/${extname};base64,${base64}`;
+}
+
+// // 检测 base64 是否是图片
+// export function checkBase64IsImage(base64: string): boolean {
+//   return base64Regex.test(base64);
+// }
+
+export function imageBase64ToBuffer(base64: string): Buffer | null {
+  // if (!checkBase64IsImage(base64)) return null;
+  return Buffer.from(base64.replace(base64Regex, ""), "base64");
+}
+
+// 将图片 base64 写入文件
+// 路径和文件不存在会自动创建并写入
+// 若已存在会返回一个执行覆盖的方法，外部进行二次确认覆盖操作
+export async function base64ToLocalFile(
+  target: string,
+  base64: string
+): Promise<(() => void) | void> {
+  const buff = imageBase64ToBuffer(base64);
+  if (!buff) return Promise.reject(new Error("失败"));
+  const writeFile = () => {
+    fse.ensureDirSync(path.dirname(target));
+    return fse.writeFile(target, buff);
+  };
+  if (fse.existsSync(target)) {
+    return Promise.resolve(writeFile);
+  }
+  return writeFile();
 }
 
 // 获取图片 MD5

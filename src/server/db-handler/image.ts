@@ -27,9 +27,7 @@ export async function ensureImageData(
   return imageDB.insert<TypeImageData>(data);
 }
 
-export async function findImageData(
-  md5: string
-): Promise<TypeImageDataDoc> {
+export async function findImageData(md5: string): Promise<TypeImageDataDoc> {
   return imageDB.findOne<TypeImageData>({ md5 });
 }
 

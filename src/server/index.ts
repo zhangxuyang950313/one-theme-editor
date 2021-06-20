@@ -1,8 +1,9 @@
 import express from "express";
 import bodyParser from "body-parser";
 import FileType from "file-type";
-import { PORT, HOST } from "common/config";
 import API from "common/api";
+import { PORT, HOST } from "common/config";
+import { imageBase64ToBuffer } from "common/utils";
 import {
   TypeCreateProjectData,
   TypeProjectDescription,
@@ -61,17 +62,16 @@ service.use((req, res, next) => {
 // 图片服务
 service.get<{ md5: string }, any, any, any>("/image/:md5", (req, res) => {
   findImageData(req.params.md5).then(async data => {
-    const buffer = Buffer.from(
-      data.base64?.replace(/^data:image\/\w+;base64,/, "") || "",
-      "base64"
-    );
+    if (!data.base64) return res.status(400);
+
+    const buffer = imageBase64ToBuffer(data.base64);
+    if (!buffer) return res.status(400);
+
     const fileType = await FileType.fromBuffer(buffer);
-    if (fileType) {
-      res.set({ "Content-Type": fileType.mime });
-      res.send(buffer);
-    } else {
-      res.status(400);
-    }
+    if (!fileType) return res.status(400);
+
+    res.set({ "Content-Type": fileType.mime });
+    res.send(buffer);
   });
 });
 

@@ -2,13 +2,19 @@ import path from "path";
 import fse from "fs-extra";
 import { v4 as genUUID } from "uuid";
 import Nedb from "nedb-promises";
-import { PROJECTS_DB } from "common/paths";
 
+import { PROJECTS_DB } from "common/paths";
 import { TypeDatabase } from "types/index";
-import { TypeCreateProjectData, TypeProjectData } from "types/project";
+import {
+  TypeCreateProjectData,
+  TypeProjectData,
+  TypeProjectDataDoc
+} from "types/project";
 import ERR_CODE from "renderer/core/error-code";
 import ProjectData from "src/data/ProjectData";
+import { base64ToLocalFile } from "@/../common/utils";
 import { compileTempInfo } from "./template";
+import { findImageData } from "./image";
 
 // TODO: 创建数据库有个坑，如果 filename 文件内容不是 nedb 能接受的数据格式则会导致服务崩溃
 function createNedb(filename: string) {
@@ -22,6 +28,27 @@ function createNedb(filename: string) {
 
 // 频繁修改工程数据，常驻内存
 const projectDB = createNedb(PROJECTS_DB);
+
+// 把 imageMapper 内容同步到本地
+export async function imageMapperSyncToLocal(
+  uuid: string
+): Promise<Promise<(() => void) | void>[]> {
+  return projectDB
+    .findOne<TypeProjectDataDoc>({ uuid })
+    .then(project => {
+      const { imageMapperList, localPath } = project;
+      if (!localPath) return Promise.all([]);
+      return imageMapperList.map(async item => {
+        const filename = path.resolve(localPath, item.target);
+        const imageData = await findImageData(item.md5);
+        // TODO: 失败的都默认通过，后面应把失败的返回出去以供提示
+        if (!imageData.base64) return Promise.resolve();
+        return base64ToLocalFile(filename, imageData.base64).then(next => {
+          if (next) next();
+        });
+      });
+    });
+}
 
 // rebuildIndex();
 
@@ -106,6 +133,7 @@ export async function updateProject<
     upsert: true,
     returnUpdatedDocs: true
   });
+  imageMapperSyncToLocal(uuid);
   if (!updated) throw new Error(ERR_CODE[2004]);
   return updated.length > 0 ? updated[0] : null;
 }

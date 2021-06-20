@@ -100,9 +100,9 @@
 <source name="小米商城">
     <layout x="670" y="1400" w="186" h="186" align="center" alignV="center"/>
     <from src="../icons/res/com.xiaomi.shop.png"/>
-    <to src="icons/res/com.xiaomi.padshop"/>
-    <to src="icons/res/com.xiaomi.shop"/>
-    <to src="icons/res/com.xiaomi.shop.activity.MainTabActivity.shop"/>
+    <to src="icons/res/com.xiaomi.padshop.png"/>
+    <to src="icons/res/com.xiaomi.shop.png"/>
+    <to src="icons/res/com.xiaomi.shop.activity.MainTabActivity.shop.png"/>
 </source>
 <color name="图标文字">
     <layout x="670" y="1550" size="36" align="center" alignV="center" text="小米商城"/>
@@ -141,7 +141,7 @@
 <source name="手机管家">
     <layout x="670" y="1700" w="186" h="186" align="center" alignV="center"/>
     <from src="../icons/res/com.miui.securitycenter.png"/>
-    <to src="icons/res/com.xiaomi.padshop.png"/>
+    <to src="icons/res/com.miui.securitycenter.png"/>
 </source>
 <color description="图标文字">
     <layout x="670" y="1850" size="36" align="center" alignV="center" text="手机管家"/>
