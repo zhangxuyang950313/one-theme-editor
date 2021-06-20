@@ -11,10 +11,10 @@ export const USER_DATA = path.resolve(__dirname, "../userData");
 export const USER_CACHE = path.resolve(USER_DATA, "cache");
 
 // 工程列表数据
-export const PROJECTS_DB = path.resolve(USER_DATA, "projects.db");
+export const PROJECTS_DB = path.resolve(USER_DATA, "projects");
 
 // 图片缓存数据
-export const IMAGE_DATA_DB = path.resolve(USER_DATA, "imageData.db");
+export const IMAGE_DATA_DB = path.resolve(USER_DATA, "imageData");
 
 // // 工程文件索引
 // export const PROJECT_INDEX = path.resolve(PROJECTS_DIR, "index");

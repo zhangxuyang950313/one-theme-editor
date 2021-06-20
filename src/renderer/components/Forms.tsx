@@ -7,7 +7,7 @@ import {
   Select,
   SelectProps
 } from "antd";
-import { TypeUiVersionConf } from "types/project";
+import { TypeUiVersionConf } from "types/template";
 import { projectInfoConfig } from "@/config/editor";
 
 function getRuleNormalized(label: React.ReactNode) {
@@ -100,3 +100,10 @@ export function ProjectUIVersion(props: {
       }))
   );
 }
+
+// 本地路径
+export const ProjectLocalDir: React.FC<InputProps> = props => {
+  const label = "本地目录";
+  const name = "local";
+  return getInputForm({ label, name }, props);
+};

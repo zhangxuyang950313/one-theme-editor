@@ -36,7 +36,12 @@ const StyleProjectInfo = styled.div`
     display: flex;
     justify-content: space-between;
     .label {
+      flex-shrink: 0;
       font-weight: 500;
+    }
+    .content {
+      width: 100%;
+      text-align: right;
     }
   }
 `;

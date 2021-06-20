@@ -20,7 +20,10 @@ npm install
 #### 启动
 
 ```bash
-npm start
+# 启动主程序
+npm start 
+# 启动服务
+npm run start:server
 ```
 
 #### 构建

@@ -33,6 +33,7 @@ export type TypeCreateProjectData = {
   uiVersionConf: TypeUiVersionConf;
   brandConf: TypeBrandConf;
   templateConf: TypeTemplateConf;
+  localPath?: string;
 };
 
 // 图片数据
@@ -71,6 +72,7 @@ export type TypeProjectData = {
   template: TypeTemplateData;
   imageMapperList: TypeImageMapper[];
   xmlMapperList: TypeXmlMapper[];
+  localPath: string | null;
 };
 
 // 在数据库中的图片数据

@@ -66,6 +66,7 @@ export async function createProject(
     code: data.uiVersionConf.code
   });
   projectData.setTemplate(template);
+  projectData.setLocalPath(data.localPath);
   return await projectDB.insert(projectData.getData());
 }
 
@@ -74,9 +75,7 @@ export async function getProjectListOf(
   brandType: string
 ): Promise<TypeDatabase<TypeProjectData>[]> {
   return await projectDB
-    .find<TypeProjectData>({
-      "brand.type": brandType
-    })
+    .find<TypeProjectData>({ "brand.type": brandType })
     .sort({ updatedAt: -1 });
 }
 

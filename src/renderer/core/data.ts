@@ -9,7 +9,7 @@
 //   ? path.resolve(remote.app.getAppPath(), "../userCache")
 //   : remote.app.getPath("userData");
 
-// const projectData = path.resolve(userDataPath, "store/project.db");
+// const projectData = path.resolve(userDataPath, "store/project");
 
 // const db: Record<string, Database> = {
 //   // 项目工程数据

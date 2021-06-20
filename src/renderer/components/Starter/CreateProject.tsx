@@ -1,25 +1,27 @@
-import React, { useState } from "react";
+import path from "path";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import _ from "lodash";
 import * as uuid from "uuid";
+import { remote } from "electron";
+import fse from "fs-extra";
 
 import { isDev } from "@/core/constant";
 import ERR_CODE from "@/core/error-code";
 import { useSelectedBrand, useTemplateList } from "@/hooks/template";
 import { TypeProjectDescription } from "types/project";
 import { TypeTemplateConf } from "types/template";
+import { createProject } from "@/api";
 
 // components
-import { Modal, Button, message, Form } from "antd";
+import { Modal, Button, message, Form, Input } from "antd";
+import { FileAddOutlined } from "@ant-design/icons";
 import Steps from "@/components/Steps";
 import ProjectInfo from "@/components/ProjectInfo";
 import ProjectInfoForm from "@/components/ProjectInfoForm";
-import { createProject } from "@/api";
 import TemplateManager from "./TemplateManager";
 import TemplateCard from "./TemplateCard";
 import ProjectCard from "./ProjectCard";
-
-// root
 
 // 创建主题按钮
 type TypeProps = {
@@ -36,8 +38,10 @@ const CreateProject: React.FC<TypeProps> = props => {
   const [selectedTemp, updateTempConf] = useState<TypeTemplateConf>();
   // 当前步骤
   const [curStep, setCurStep] = useState(0);
-  // 填写完成的项目数据
+  // 填写工程描述
   const [description, setDescription] = useState<TypeProjectDescription>();
+  // 填写本地目录
+  const localPathRef = useRef<string>();
   // 创建状态
   const [isCreating, updateCreating] = useState(false);
   // 表单实例
@@ -89,61 +93,17 @@ const CreateProject: React.FC<TypeProps> = props => {
   };
 
   // 下一步
-  const handleNext = async () => {
-    // 校验表单
-    if (curStep === 1) {
-      form
-        .validateFields()
-        .then(data => {
-          setDescription(data);
-          nextStep();
-        })
-        .catch(console.warn);
-      return;
-    }
-    // 创建工程
-    if (curStep === 2) {
-      if (!description || !selectedTemp) {
-        message.warn({
-          content: "创建失败",
-          duration: 1000
-        });
-        return;
-      }
-      const uiVersion = selectedTemp.uiVersions.find(
-        o => o.code === form.getFieldValue("uiVersion")
-      );
-      if (!uiVersion) {
-        message.warn({
-          content: ERR_CODE[2002],
-          duration: 1000
-        });
-        return;
-      }
-      updateCreating(true);
-      // TODO 使用选择的模板路径生成 tempConf
-      await createProject({
-        description,
-        brandConf,
-        uiVersionConf: uiVersion,
-        templateConf: selectedTemp
-      }).then(data => {
-        console.log("创建工程：", data);
-        props.onProjectCreated(description);
-        closeModal();
-        init();
-        updateCreating(false);
+  const handleNext = () => {
+    steps[curStep]
+      .next()
+      .then(nextStep)
+      .catch(err => {
+        if (typeof err.message === "string") {
+          message.warn({ content: err.message });
+        } else {
+          message.warn({ content: "未知错误" });
+        }
       });
-      // project.create().then(data => {
-      //   console.log("创建工程：", data);
-      //   props.onProjectCreated(description);
-      //   closeModal();
-      //   init();
-      //   updateCreating(false);
-      // });
-      return;
-    }
-    nextStep();
   };
 
   // 主动关闭
@@ -156,6 +116,186 @@ const CreateProject: React.FC<TypeProps> = props => {
         init();
       }
     });
+  };
+
+  const steps = [
+    {
+      name: "选择模板",
+      Component() {
+        return (
+          <TemplateManager
+            isLoading={isLoading}
+            templateList={templateList}
+            selectedTemp={selectedTemp}
+            onSelected={updateTempConf}
+          />
+        );
+      },
+      // 校验表单
+      async next() {
+        return selectedTemp || Promise.reject(new Error("请选择模板"));
+      }
+    },
+    {
+      name: "填写信息",
+      Component() {
+        const uiVersions = selectedTemp?.uiVersions;
+        useEffect(() => {
+          if (!(Array.isArray(uiVersions) && uiVersions.length > 0)) {
+            message.info({ content: ERR_CODE[3001] });
+            init();
+          } else if (!selectedTemp) {
+            message.info({ content: ERR_CODE[3002] });
+            init();
+          }
+        }, []);
+        // 模板版本
+        if (!selectedTemp) return null;
+        return (
+          <StyleFillInfo>
+            {/* 模板预览 */}
+            <div className="template-card">
+              <TemplateCard config={selectedTemp} />
+            </div>
+            {/* 填写信息 */}
+            <div className="project-info">
+              <ProjectInfoForm
+                uiVersions={uiVersions || []}
+                form={form}
+                initialValues={initialValues}
+              />
+            </div>
+          </StyleFillInfo>
+        );
+      },
+      async next() {
+        return form
+          .validateFields()
+          .then(setDescription)
+          .catch(() => {
+            throw new Error("请填写正确表单");
+          });
+      }
+    },
+    {
+      name: "选择目录",
+      Component() {
+        useEffect(() => {
+          onChange(path.join(remote.app.getPath("desktop"), "test"));
+          if (!description) {
+            message.info({ content: ERR_CODE[3001] });
+          }
+        }, []);
+        const [localPath, setLocalPath] = useState<string>();
+        const onChange = (val: string) => {
+          localPathRef.current = val;
+          setLocalPath(val);
+        };
+        if (!description) {
+          return null;
+        }
+        const selectDir = () => {
+          remote.dialog
+            .showOpenDialog({
+              // https://www.electronjs.org/docs/api/dialog#dialogshowopendialogsyncbrowserwindow-options
+              title: "选择工程文件",
+              properties: ["openDirectory", "createDirectory", "promptToCreate"]
+            })
+            .then(result => {
+              if (result.canceled) return;
+              onChange(result.filePaths[0]);
+            });
+        };
+        return (
+          <StyleConfirmInfo>
+            <StyleSetLocalPath>
+              <p>选择本地目录</p>
+              <div className="input-area">
+                <Input
+                  placeholder="输入或选择目录"
+                  allowClear
+                  value={localPath}
+                  onChange={e => onChange(e.target.value)}
+                />
+                <Button
+                  type="primary"
+                  icon={<FileAddOutlined />}
+                  onClick={selectDir}
+                >
+                  选择
+                </Button>
+              </div>
+            </StyleSetLocalPath>
+            <br />
+            <p>主题信息</p>
+            <StyleFillInfo>
+              <div className="template-card">
+                <ProjectCard description={description} />
+              </div>
+              <div className="project-info">
+                <ProjectInfo description={description} />
+              </div>
+            </StyleFillInfo>
+          </StyleConfirmInfo>
+        );
+      },
+      async next() {
+        const local = localPathRef.current;
+        if (!local) throw new Error("请选择正确的本地路径");
+        if (!fse.existsSync(local)) {
+          await new Promise<void>(resolve => {
+            Modal.confirm({
+              title: "提示",
+              content: `目录"${local}"不存在，是否创建？`,
+              onOk: () => {
+                fse.ensureDirSync(local);
+                resolve();
+              }
+            });
+          });
+        } else if (fse.readdirSync(local).length > 0) {
+          await new Promise<void>(resolve => {
+            Modal.confirm({
+              title: "提示",
+              content: `目录"${local}"为非空目录，可能不是主题目录，是否仍然继续使用此目录？`,
+              onOk: resolve
+            });
+          });
+        }
+        if (!selectedTemp) {
+          throw new Error("创建失败");
+        }
+        const uiVersion = selectedTemp.uiVersions.find(
+          o => o.code === form.getFieldValue("uiVersion")
+        );
+        if (!uiVersion) {
+          throw new Error(ERR_CODE[2002]);
+        }
+        updateCreating(true);
+        // TODO 使用选择的模板路径生成 tempConf
+        return createProject({
+          description,
+          brandConf,
+          uiVersionConf: uiVersion,
+          templateConf: selectedTemp,
+          localPath: localPathRef.current
+        }).then(data => {
+          console.log("创建工程：", data);
+          if (!description) {
+            throw new Error("工程信息为空");
+          }
+          props.onProjectCreated(description);
+          closeModal();
+          updateCreating(false);
+          setTimeout(init, 300);
+        });
+      }
+    }
+  ];
+
+  // 创建主题步骤容器
+  const StepContainer: React.FC = () => {
+    return steps[curStep]?.Component() || null;
   };
 
   // 弹框底部控制按钮
@@ -174,75 +314,9 @@ const CreateProject: React.FC<TypeProps> = props => {
       disabled={!selectedTemp || isCreating}
       loading={isCreating}
     >
-      {curStep < 2 ? "下一步" : "开始"}
+      {curStep < steps.length - 1 ? "下一步" : "开始"}
     </Button>
   ];
-
-  // 创建主题步骤容器
-  const StepContainer = () => {
-    switch (curStep) {
-      // 选择模板
-      case 0: {
-        return (
-          <TemplateManager
-            isLoading={isLoading}
-            templateList={templateList}
-            selectedTemp={selectedTemp}
-            onSelected={updateTempConf}
-          />
-        );
-      }
-      // 填写主题信息
-      case 1: {
-        // 模板版本
-        const uiVersions = selectedTemp?.uiVersions;
-        if (
-          selectedTemp && // 模板信息有效
-          Array.isArray(uiVersions) &&
-          uiVersions.length > 0 // ui 版本信息有效
-        ) {
-          return (
-            <StyleFillInfo>
-              {/* 模板预览 */}
-              <div className="template-card">
-                <TemplateCard config={selectedTemp} />
-              </div>
-              {/* 填写信息 */}
-              <div className="project-info">
-                <ProjectInfoForm
-                  uiVersions={uiVersions}
-                  form={form}
-                  initialValues={initialValues}
-                />
-              </div>
-            </StyleFillInfo>
-          );
-        }
-        message.info({
-          content: ERR_CODE[3001],
-          duration: 1000
-        });
-        jumpStep(0);
-        return null;
-      }
-      // 信息确认
-      case 2: {
-        return (
-          <StyleConfirmInfo>
-            <div className="template-card">
-              <ProjectCard description={form.getFieldsValue()} />
-            </div>
-            <div className="project-info">
-              <ProjectInfo description={form.getFieldsValue()} />
-            </div>
-          </StyleConfirmInfo>
-        );
-      }
-      default: {
-        return null;
-      }
-    }
-  };
 
   return (
     <StyleCreateProject>
@@ -250,7 +324,6 @@ const CreateProject: React.FC<TypeProps> = props => {
         新建主题
       </Button>
       <Modal
-        style={{ minWidth: "500px" }}
         width="700px"
         visible={modalVisible}
         title={`创建${brandConf.name}主题`}
@@ -258,11 +331,10 @@ const CreateProject: React.FC<TypeProps> = props => {
         onCancel={closeModal}
         footer={modalFooter}
       >
-        <Steps steps={["选择模板", "填写信息", "开始创作"]} current={curStep} />
+        <Steps steps={steps.map(o => o.name)} current={curStep} />
         <br />
         <StyleStepContainer>
-          {/*  */}
-          {StepContainer()}
+          <StepContainer />
         </StyleStepContainer>
       </Modal>
     </StyleCreateProject>
@@ -271,9 +343,15 @@ const CreateProject: React.FC<TypeProps> = props => {
 
 const StyleCreateProject = styled.div``;
 
+const StyleSetLocalPath = styled.div`
+  .input-area {
+    display: flex;
+  }
+`;
+
 const StyleStepContainer = styled.div`
-  padding: 10px 0;
   height: 50vh;
+  overflow: auto;
 `;
 
 const StyleFillInfo = styled.div`
@@ -289,6 +367,9 @@ const StyleFillInfo = styled.div`
   }
 `;
 
-const StyleConfirmInfo = styled(StyleFillInfo)``;
+const StyleConfirmInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
 
 export default CreateProject;

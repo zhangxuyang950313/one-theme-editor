@@ -16,6 +16,7 @@ export default class ProjectData {
   private template: TypeTemplateData | null = null;
   private xmlMapperList: TypeXmlMapper[] = [];
   private imageMapperList: TypeImageMapper[] = [];
+  private localPath: string | null = null;
 
   setUuid(uuid: string): void {
     this.uuid = uuid;
@@ -56,6 +57,15 @@ export default class ProjectData {
     return this.template;
   }
 
+  // 本地路径
+  setLocalPath(p?: string): void {
+    if (!p) return;
+    this.localPath = p;
+  }
+  getLocalPath(): string | null {
+    return this.localPath;
+  }
+
   getData(): TypeProjectData {
     if (!this.description) throw new Error("主题信息为空");
     if (!this.brand) throw new Error("机型信息为空");
@@ -68,7 +78,8 @@ export default class ProjectData {
       uiVersion: this.uiVersion,
       template: this.template,
       imageMapperList: this.imageMapperList,
-      xmlMapperList: this.xmlMapperList
+      xmlMapperList: this.xmlMapperList,
+      localPath: this.localPath
     };
     return data;
   }
