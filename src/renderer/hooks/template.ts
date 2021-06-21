@@ -2,7 +2,7 @@ import { useLayoutEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { message } from "antd";
 
-import { getBrandConfList, getTempConfList } from "@/api/index";
+import { getTempConfList, getBrandConfList } from "@/api/index";
 
 import {
   ActionSetBrandInfoList,

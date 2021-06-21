@@ -25,6 +25,7 @@ import {
 } from "types/project";
 
 import ERR_CODE from "renderer/core/error-code";
+import { registerSocket } from "@/api/socket";
 import { useDocumentTitle } from "./index";
 
 // 获取项目列表
@@ -84,15 +85,19 @@ export function useLoadProjectByUUID(
 ): [TypeProjectDataDoc | null, boolean] {
   const [project, updateProject] = useState<TypeProjectDataDoc | null>(null);
   const [loading, updateLoading] = useState(true);
-  const registerCancelToken = useAxiosCanceler();
+  // const registerCancelToken = useAxiosCanceler();
 
   useLayoutEffect(() => {
-    let cancel;
+    // let cancel;
     console.log(`准备获取工程（${uuid}）`);
-    getProjectByUUID(uuid, registerCancelToken)
+    getProjectByUUID(uuid)
       .then(project => {
         console.log(`获取工程（${uuid}）成功`, project);
         updateProject(project);
+        registerSocket.project(project => {
+          console.log(`更新工程数据 ${uuid}`, project);
+          updateProject(project);
+        });
       })
       .catch(err => {
         console.warn(`获取工程（${uuid}）失败`, err);
@@ -100,7 +105,7 @@ export function useLoadProjectByUUID(
       .finally(() => {
         updateLoading(false);
       });
-    return cancel;
+    // return cancel;
   }, [uuid]);
   useLoadProject(project);
   return [project, loading];
