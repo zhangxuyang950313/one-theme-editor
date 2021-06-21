@@ -4,7 +4,6 @@ import { v4 as genUUID } from "uuid";
 import Nedb from "nedb-promises";
 
 import { PROJECTS_DB } from "common/paths";
-import { TypeDatabase } from "types/index";
 import {
   TypeCreateProjectData,
   TypeProjectData,
@@ -77,7 +76,7 @@ export async function imageMapperSyncToLocal(
 // 创建工程
 export async function createProject(
   data: TypeCreateProjectData
-): Promise<TypeDatabase<TypeProjectData>> {
+): Promise<TypeProjectDataDoc> {
   const uuid = genUUID();
   const template = await compileTempInfo(data);
   // 组装数据
@@ -100,7 +99,7 @@ export async function createProject(
 // brandType 筛选所有工程
 export async function getProjectListOf(
   brandType: string
-): Promise<TypeDatabase<TypeProjectData>[]> {
+): Promise<TypeProjectDataDoc[]> {
   return await projectDB
     .find<TypeProjectData>({ "brand.type": brandType })
     .sort({ updatedAt: -1 });
@@ -109,7 +108,7 @@ export async function getProjectListOf(
 // 查找工程
 export async function findProjectByUUID(
   uuid: string
-): Promise<TypeDatabase<TypeCreateProjectData> | null> {
+): Promise<TypeProjectDataDoc | null> {
   return await projectDB.findOne({ uuid });
 }
 
@@ -127,7 +126,7 @@ export async function updateProject<
     | { $pop: O }
     | { $set: O }
     | { $unset: O }
-): Promise<TypeDatabase<TypeProjectData> | null> {
+): Promise<TypeProjectDataDoc | null> {
   const updated = await projectDB.update<TypeProjectData>({ uuid }, data, {
     multi: true,
     upsert: true,

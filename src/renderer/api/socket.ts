@@ -1,9 +1,9 @@
 import io from "socket.io-client";
-import { PORT } from "common/config";
+import { HOST, PORT } from "common/config";
 import SOCKET_EVENT from "common/socketEvent";
 import { TypeProjectDataDoc } from "types/project";
 
-const socket = io(`http://localhost:${PORT}`);
+const socket = io(`ws://${HOST}:${PORT}`);
 
 socket.on("disconnect", () => {
   console.log("断开连接，重连");
@@ -18,19 +18,24 @@ socket.on("disconnect", () => {
  */
 export function registerSocketOf<R, T>(
   event: SOCKET_EVENT,
+  params: T,
   callback: (data: R) => void
 ): (data: T) => typeof socket {
   socket.on(event, callback);
-  return (data: T) => socket.emit(event, data);
+  const invoke = () => socket.emit(event, params);
+  invoke();
+  return invoke;
 }
 
 // 注册工程数据 socket
 export const registerSocket = {
   project(
+    params: string,
     callback: (data: TypeProjectDataDoc) => void
-  ): (data: { uuid: string }) => typeof socket {
-    return registerSocketOf<TypeProjectDataDoc, { uuid: string }>(
+  ): (uuid: string) => typeof socket {
+    return registerSocketOf<TypeProjectDataDoc, string>(
       SOCKET_EVENT.PROJECT,
+      params,
       callback
     );
   }

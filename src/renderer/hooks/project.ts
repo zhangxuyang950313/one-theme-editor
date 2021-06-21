@@ -1,11 +1,6 @@
 import { useLayoutEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  addImageMapper,
-  delImageMapper,
-  getProjectByUUID,
-  getProjectList
-} from "@/api/index";
+import { addImageMapper, delImageMapper, getProjectList } from "@/api/index";
 import { useAxiosCanceler } from "@/hooks/index";
 import { useSelectedBrand } from "@/hooks/template";
 import {
@@ -90,21 +85,27 @@ export function useLoadProjectByUUID(
   useLayoutEffect(() => {
     // let cancel;
     console.log(`准备获取工程（${uuid}）`);
-    getProjectByUUID(uuid)
-      .then(project => {
-        console.log(`获取工程（${uuid}）成功`, project);
-        updateProject(project);
-        registerSocket.project(project => {
-          console.log(`更新工程数据 ${uuid}`, project);
-          updateProject(project);
-        });
-      })
-      .catch(err => {
-        console.warn(`获取工程（${uuid}）失败`, err);
-      })
-      .finally(() => {
-        updateLoading(false);
-      });
+
+    registerSocket.project(uuid, project => {
+      console.log(`更新工程数据 ${uuid}`, project);
+      updateProject(project);
+      if (loading) updateLoading(false);
+    });
+    // getProjectByUUID(uuid)
+    //   .then(project => {
+    //     console.log(`获取工程（${uuid}）成功`, project);
+    //     updateProject(project);
+    //     registerSocket.project(project => {
+    //       console.log(`更新工程数据 ${uuid}`, project);
+    //       updateProject(project);
+    //     });
+    //   })
+    //   .catch(err => {
+    //     console.warn(`获取工程（${uuid}）失败`, err);
+    //   })
+    //   .finally(() => {
+    //     updateLoading(false);
+    //   });
     // return cancel;
   }, [uuid]);
   useLoadProject(project);
