@@ -25,14 +25,14 @@ const createHttp = (getCanceler?: TypeGetCanceler) => {
 };
 
 // 获取厂商列表
-export async function getBrandConfList(): Promise<TypeBrandConf[]> {
+export async function apiGetBrandConfList(): Promise<TypeBrandConf[]> {
   return createHttp()
     .get<TypeResponseFrame<TypeBrandConf[]>>(API.GET_BRAND_LIST)
     .then(data => data.data.data);
 }
 
 // 获取模板列表
-export async function getTempConfList(
+export async function apiGetTempConfList(
   brandConf: TypeBrandConf
 ): Promise<TypeTemplateConf[]> {
   return createHttp()
@@ -43,7 +43,7 @@ export async function getTempConfList(
 }
 
 // 创建工程
-export async function createProject(
+export async function apiCreateProject(
   data: TypeCreateProjectData
 ): Promise<TypeProjectData> {
   return createHttp()
@@ -51,7 +51,7 @@ export async function createProject(
     .then(data => data.data.data);
 }
 // 获取工程列表
-export async function getProjectList(
+export async function apiGetProjectList(
   brandInfo: TypeBrandConf,
   canceler?: TypeGetCanceler
 ): Promise<TypeProjectDataDoc[]> {
@@ -63,7 +63,7 @@ export async function getProjectList(
 }
 
 // 查询工程
-export async function getProjectByUUID(
+export async function apiGetProjectByUUID(
   uuid: string,
   canceler?: TypeGetCanceler
 ): Promise<TypeProjectDataDoc> {
@@ -73,7 +73,7 @@ export async function getProjectByUUID(
 }
 
 // 更新工程
-export async function updateProject(
+export async function apiUpdateProject(
   data: TypeProjectData
 ): Promise<TypeProjectDataDoc> {
   return createHttp()
@@ -85,7 +85,7 @@ export async function updateProject(
 }
 
 // 增加图片映射
-export async function addImageMapper(
+export async function apiAddImageMapper(
   uuid: string,
   data: TypeImageMapper
 ): Promise<TypeProjectDataDoc> {
@@ -98,7 +98,7 @@ export async function addImageMapper(
 }
 
 // 删除图片映射
-export async function delImageMapper(
+export async function apiDelImageMapper(
   uuid: string,
   target: string
 ): Promise<TypeProjectDataDoc> {

@@ -18,25 +18,24 @@ socket.on("disconnect", () => {
  */
 export function registerSocketOf<R, T>(
   event: SOCKET_EVENT,
-  params: T,
-  callback: (data: R) => void
+  data: {
+    params: T;
+    callback: (data: R) => void;
+  }
 ): (data: T) => typeof socket {
-  socket.on(event, callback);
-  const invoke = () => socket.emit(event, params);
+  socket.on(event, data.callback);
+  const invoke = () => socket.emit(event, data.params);
   invoke();
   return invoke;
 }
 
 // 注册工程数据 socket
-export const registerSocket = {
-  project(
-    params: string,
-    callback: (data: TypeProjectDataDoc) => void
-  ): (uuid: string) => typeof socket {
-    return registerSocketOf<TypeProjectDataDoc, string>(
-      SOCKET_EVENT.PROJECT,
-      params,
-      callback
-    );
-  }
-};
+export function socketProject(
+  params: string,
+  callback: (data: TypeProjectDataDoc) => void
+): (uuid: string) => typeof socket {
+  return registerSocketOf<TypeProjectDataDoc, string>(SOCKET_EVENT.PROJECT, {
+    params,
+    callback
+  });
+}

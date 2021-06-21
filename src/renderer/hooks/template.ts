@@ -2,7 +2,7 @@ import { useLayoutEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { message } from "antd";
 
-import { getTempConfList, getBrandConfList } from "@/api/index";
+import { apiGetTempConfList, apiGetBrandConfList } from "@/api/index";
 
 import {
   ActionSetBrandInfoList,
@@ -35,7 +35,7 @@ export function useBrandInfoList(): TypeBrandConf[] {
   const dispatch = useDispatch();
   const registerUpdater = useAsyncUpdater();
   useLayoutEffect(() => {
-    getBrandConfList().then(conf => {
+    apiGetBrandConfList().then(conf => {
       // 添加默认小米，去重
       const list = conf.reduce<TypeBrandConf[]>((t, o) => {
         if (!t.some(item => item.templateDir === o.templateDir)) t.push(o);
@@ -65,7 +65,7 @@ export function useTemplateList(): [TypeTemplateConf[], boolean] {
   const dispatch = useDispatch();
   useLayoutEffect(() => {
     if (!brandInfo) return;
-    getTempConfList(brandInfo)
+    apiGetTempConfList(brandInfo)
       .then(tempConfList => {
         console.log("模板列表：", tempConfList);
         updateValue(tempConfList);

@@ -1,6 +1,11 @@
 import { useLayoutEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addImageMapper, delImageMapper, getProjectList } from "@/api/index";
+import { socketProject } from "@/api/socket";
+import {
+  apiAddImageMapper,
+  apiDelImageMapper,
+  apiGetProjectList
+} from "@/api/index";
 import { useAxiosCanceler } from "@/hooks/index";
 import { useSelectedBrand } from "@/hooks/template";
 import {
@@ -20,7 +25,6 @@ import {
 } from "types/project";
 
 import ERR_CODE from "renderer/core/error-code";
-import { registerSocket } from "@/api/socket";
 import { useDocumentTitle } from "./index";
 
 // 获取项目列表
@@ -37,7 +41,7 @@ export function useProjectList(): TypeReturnData {
   const refresh = useCallback(async () => {
     updateLoading(true);
     if (!selectedBrand) return;
-    return getProjectList(selectedBrand, registerCancelToken)
+    return apiGetProjectList(selectedBrand, registerCancelToken)
       .then(projects => {
         console.log("获取工程列表：", projects);
         updateValue(projects);
@@ -86,7 +90,8 @@ export function useLoadProjectByUUID(
     // let cancel;
     console.log(`准备获取工程（${uuid}）`);
 
-    registerSocket.project(uuid, project => {
+    // 注册 socket
+    socketProject(uuid, project => {
       console.log(`更新工程数据 ${uuid}`, project);
       updateProject(project);
       if (loading) updateLoading(false);
@@ -129,7 +134,7 @@ export function useAddImageMapper(): (data: TypeImageMapper) => Promise<void> {
   // 更新标题
   return async data => {
     if (!uuid) throw new Error(ERR_CODE[2004]);
-    const project = await addImageMapper(uuid, data);
+    const project = await apiAddImageMapper(uuid, data);
     dispatch(ActionSetProjectData(project));
   };
 }
@@ -141,7 +146,7 @@ export function useDelImageMapper(): (target: string) => Promise<void> {
   // 更新标题
   return async target => {
     if (!uuid) throw new Error(ERR_CODE[2004]);
-    const project = await delImageMapper(uuid, target);
+    const project = await apiDelImageMapper(uuid, target);
     dispatch(ActionSetProjectData(project));
   };
 }

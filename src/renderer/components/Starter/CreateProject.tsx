@@ -11,7 +11,7 @@ import ERR_CODE from "@/core/error-code";
 import { useSelectedBrand, useTemplateList } from "@/hooks/template";
 import { TypeProjectDescription } from "types/project";
 import { TypeTemplateConf } from "types/template";
-import { createProject } from "@/api";
+import { apiCreateProject } from "@/api";
 
 // components
 import { Modal, Button, message, Form, Input } from "antd";
@@ -273,7 +273,7 @@ const CreateProject: React.FC<TypeProps> = props => {
         }
         updateCreating(true);
         // TODO 使用选择的模板路径生成 tempConf
-        return createProject({
+        return apiCreateProject({
           description,
           brandConf,
           uiVersionConf: uiVersion,
