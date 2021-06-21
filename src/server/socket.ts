@@ -1,14 +1,16 @@
 import http from "http";
 import { Server, Socket } from "socket.io";
-import SOCKET_EVENT from "common/socketEvent";
+import SOCKET_EVENT from "common/socket-event";
 import { findProjectByUUID } from "./db-handler/project";
+import { syncResource } from "./core/resourceSync";
 
-class SocketInvoke {
+// 快速将 socket event 建立通讯通道
+class SocketEventConnecter {
   private socket: Socket;
   constructor(socket: Socket) {
     this.socket = socket;
   }
-  invoke<P, T>(event: SOCKET_EVENT, method: (data: P) => Promise<T>) {
+  connect<P, T>(event: SOCKET_EVENT, method: (data: P) => Promise<T> | T) {
     return new Promise<T>(resolve => {
       this.socket.on(event, async (data: P) => {
         const result = await method(data);
@@ -29,9 +31,9 @@ export default function registerSocket(server: http.Server): void {
     socket.on("disconnect", () => console.log("断开连接"));
 
     // 创建调用实例
-    const si = new SocketInvoke(socket);
+    const connecter = new SocketEventConnecter(socket);
     // 同步工程数据
-    si.invoke(SOCKET_EVENT.PROJECT, findProjectByUUID);
+    connecter.connect(SOCKET_EVENT.PROJECT, findProjectByUUID);
 
     // 同步工程数据，invoke 对以下代码做了封装，等同于上面的 invoke 方法
     // socket.on(SOCKET_EVENT.PROJECT, uuid => {
@@ -39,5 +41,8 @@ export default function registerSocket(server: http.Server): void {
     //     socket.emit(SOCKET_EVENT.PROJECT, project);
     //   });
     // });
+
+    // 监听文件目录
+    connecter.connect(SOCKET_EVENT.SYNC_RESOURCE, syncResource);
   });
 }

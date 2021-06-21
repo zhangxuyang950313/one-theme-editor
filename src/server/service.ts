@@ -2,7 +2,7 @@ import { Express } from "express";
 import FileType from "file-type";
 import bodyParser from "body-parser";
 import API from "common/api";
-import { imageBase64ToBuffer } from "common/utils";
+import { base64ToBuffer } from "common/utils";
 import {
   TypeCreateProjectData,
   TypeProjectDescription,
@@ -61,7 +61,7 @@ export default function registerService(service: Express): void {
     findImageData(req.params.md5).then(async data => {
       if (!data.base64) return res.status(400);
 
-      const buffer = imageBase64ToBuffer(data.base64);
+      const buffer = base64ToBuffer(data.base64);
       if (!buffer) return res.status(400);
 
       const fileType = await FileType.fromBuffer(buffer);

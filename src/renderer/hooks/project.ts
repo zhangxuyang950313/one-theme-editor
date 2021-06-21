@@ -1,6 +1,6 @@
 import { useLayoutEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { socketProject } from "@/api/socket";
+import { socketProject, socketSyncResource } from "@/api/socket";
 import {
   apiAddImageMapper,
   apiDelImageMapper,
@@ -95,6 +95,9 @@ export function useLoadProjectByUUID(
       console.log(`更新工程数据 ${uuid}`, project);
       updateProject(project);
       if (loading) updateLoading(false);
+    });
+    socketSyncResource(uuid, project => {
+      updateProject(project);
     });
     // getProjectByUUID(uuid)
     //   .then(project => {

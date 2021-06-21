@@ -1,5 +1,5 @@
 import path from "path";
-import { getImageData } from "common/utils";
+import { getImageData, getImageUrlOf } from "common/utils";
 import {
   TypeTempPageConf,
   TypeTempPageConfigConf,
@@ -7,9 +7,8 @@ import {
   TypeTempPageCategoryConf
 } from "types/template";
 import { TypeTempLayout, TypeTempOriginPageConf } from "types/xml-result";
-import { getImageUrlOf } from "@/db-handler/image";
-import { xml2jsonCompact } from "./xmlCompiler";
-import XMLNode from "./XMLNode";
+import { xml2jsonCompact } from "../core/xmlCompiler";
+import XMLNode from "../core/XMLNode";
 
 export default class Page {
   private file: string;
@@ -31,7 +30,7 @@ export default class Page {
     return this.xmlData;
   }
 
-  async getPreview(): Promise<string> {
+  async getPreview(): Promise<string | null> {
     const xmlData = await this.ensureXmlData();
     const previewSrc = path.join(
       this.dirWithUiPath,

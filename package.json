@@ -87,6 +87,7 @@
     "copy-webpack-plugin": "^6.3.2",
     "cross-env": "^7.0.3",
     "css-loader": "^5.2.0",
+    "directory-tree": "^2.2.9",
     "dotenv-webpack": "^7.0.2",
     "electron": "^8.5.5",
     "electron-builder": "^22.10.5",

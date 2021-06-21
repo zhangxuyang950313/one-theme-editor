@@ -6,6 +6,7 @@ import Nedb from "nedb-promises";
 import { PROJECTS_DB } from "common/paths";
 import {
   TypeCreateProjectData,
+  TypeImageMapper,
   TypeProjectData,
   TypeProjectDataDoc
 } from "types/project";
@@ -37,10 +38,12 @@ export async function imageMapperSyncToLocal(
     .then(project => {
       const { imageMapperList, localPath } = project;
       if (!localPath) return Promise.all([]);
+      console.log({ imageMapperList });
       return imageMapperList.map(async item => {
         const filename = path.resolve(localPath, item.target);
-        const imageData = await findImageData(item.md5);
         // TODO: 失败的都默认通过，后面应把失败的返回出去以供提示
+        if (!item.md5) return Promise.resolve();
+        const imageData = await findImageData(item.md5);
         if (!imageData.base64) return Promise.resolve();
         return base64ToLocalFile(filename, imageData.base64).then(next => {
           if (next) next();
@@ -93,14 +96,14 @@ export async function createProject(
   });
   projectData.setTemplate(template);
   projectData.setLocalPath(data.localPath);
-  return await projectDB.insert(projectData.getData());
+  return projectDB.insert(projectData.getData());
 }
 
 // brandType 筛选所有工程
 export async function getProjectListOf(
   brandType: string
 ): Promise<TypeProjectDataDoc[]> {
-  return await projectDB
+  return projectDB
     .find<TypeProjectData>({ "brand.type": brandType })
     .sort({ updatedAt: -1 });
 }
@@ -109,7 +112,7 @@ export async function getProjectListOf(
 export async function findProjectByUUID(
   uuid: string
 ): Promise<TypeProjectDataDoc | null> {
-  return await projectDB.findOne({ uuid });
+  return projectDB.findOne({ uuid });
 }
 
 // 更新工程数据
@@ -132,7 +135,36 @@ export async function updateProject<
     upsert: true,
     returnUpdatedDocs: true
   });
-  imageMapperSyncToLocal(uuid);
+  // imageMapperSyncToLocal(uuid);
   if (!updated) throw new Error(ERR_CODE[2004]);
   return updated.length > 0 ? updated[0] : null;
+}
+
+// export async function addDatabasePropList<T>(data: T, prop: keyof T) {}
+
+// 增加工程 imageMapperList
+export async function addProjectImageMapper(
+  uuid: string,
+  imageMapper: TypeImageMapper
+): Promise<TypeProjectDataDoc | null> {
+  const project = await findProjectByUUID(uuid);
+  if (!project) {
+    throw new Error(ERR_CODE[2001]);
+  }
+  if (!imageMapper) {
+    console.warn("imageMapper is null");
+    return project;
+  }
+  console.log({ imageMapper });
+  return updateProject(uuid, { $addToSet: { imageMapperList: imageMapper } });
+}
+
+// 删除 imageMapperList
+export async function delProjectImageMapper(
+  uuid: string,
+  imageMapper: TypeImageMapper
+): Promise<TypeProjectDataDoc | null> {
+  const project = await findProjectByUUID(uuid);
+  if (!project) throw new Error(ERR_CODE[2001]);
+  return updateProject(uuid, { $pull: { imageMapperList: imageMapper } });
 }

@@ -193,14 +193,17 @@ const ImageChanger: React.FC<TypeTempPageSourceConf> = sourceConf => {
       </div>
       {to.map(item => (
         <p key={item} className="text filename">
-          {item || from.filename}
+          {item || from.filename || ""}
         </p>
       ))}
       <div className="edit-wrapper">
         <div className="left">
           <ImageShower
             srcUrl={from.url || ""}
-            onClick={() => handlePreviewFile(from.url, name)}
+            onClick={() => {
+              if (!from.url) return;
+              handlePreviewFile(from.url, name);
+            }}
           />
         </div>
         <RightCircleOutlined

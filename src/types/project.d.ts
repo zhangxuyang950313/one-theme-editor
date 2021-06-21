@@ -44,16 +44,16 @@ export type TypeImageData = {
 
 // 图片相关信息及访问 url
 export type TypeImageInfo = {
-  url: string;
-  md5: string;
+  url: string | null;
+  md5: string | null;
   width: number;
   height: number;
   size: number;
-  filename: string;
+  filename: string | null;
   ninePatch: boolean;
 };
 
-// 图片映射到目标路径
+// 图片映射信息
 export type TypeImageMapper = TypeImageInfo & {
   target: string;
 };

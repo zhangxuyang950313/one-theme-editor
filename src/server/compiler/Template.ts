@@ -1,8 +1,7 @@
 import path from "path";
 
 import TemplateInfo from "src/data/TemplateInfo";
-import { getImageUrlOf } from "@/db-handler/image";
-import { getImageData } from "common/utils";
+import { getImageData, getImageUrlOf } from "common/utils";
 
 import {
   TypeTempPageGroupConf,
@@ -20,8 +19,8 @@ import {
 
 import ERR_CODE from "renderer/core/error-code";
 
-import { xml2jsonCompact } from "./xmlCompiler";
-import XMLNode from "./XMLNode";
+import { xml2jsonCompact } from "../core/xmlCompiler";
+import XMLNode from "../core/XMLNode";
 import Page from "./Page";
 
 export default class Template {

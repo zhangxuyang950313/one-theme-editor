@@ -22,7 +22,7 @@ const PageSelector: React.FC = () => {
               <StyleImage
                 key={index}
                 alt={page.pathname}
-                src={page.preview}
+                src={page.preview || ""}
                 onClick={() => setCurrentPage(page)}
               />
             ))}

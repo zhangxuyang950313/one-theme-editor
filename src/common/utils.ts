@@ -1,10 +1,14 @@
 import path from "path";
 import md5 from "md5";
 import fse from "fs-extra";
+import FileType from "file-type";
 import imageSizeOf from "image-size";
-import { TypeImageInfo } from "types/project";
-import { getImageUrlOf } from "server/db-handler/image";
+import image2base64 from "image-to-base64";
+import dirTree from "directory-tree";
+import { TypeImageInfo, TypeImageMapper } from "types/project";
+import { HOST, PORT } from "common/config";
 import ERR_CODE from "renderer/core/error-code";
+import { insertImageData } from "src/server/db-handler/image";
 
 export const base64Regex = /^data:image\/\w+;base64,/;
 
@@ -49,10 +53,10 @@ export function pickObjectWithDef<T, U extends keyof T, D>(
 }
 
 // 异步 map
-export async function asyncMap<T = any>(
+export async function asyncMap<T, R>(
   list: T[],
-  callbackfn: (value: T, index: number, array: T[]) => T
-): Promise<T[]> {
+  callbackfn: (value: T, index: number, array: T[]) => Promise<R>
+): Promise<R[]> {
   return await Promise.all(list.map(async (...args) => callbackfn(...args)));
 }
 
@@ -94,13 +98,13 @@ export async function localImageToBase64Async(file: string): Promise<string> {
   return `data:image/${extname};base64,${base64}`;
 }
 
-// // 检测 base64 是否是图片
-// export function checkBase64IsImage(base64: string): boolean {
-//   return base64Regex.test(base64);
-// }
+// 检测 base64 是否是携带图片编码
+export function checkImageBase64Format(base64: string): boolean {
+  return base64Regex.test(base64);
+}
 
-export function imageBase64ToBuffer(base64: string): Buffer | null {
-  // if (!checkBase64IsImage(base64)) return null;
+// bae64 转 buffer
+export function base64ToBuffer(base64: string): Buffer | null {
   return Buffer.from(base64.replace(base64Regex, ""), "base64");
 }
 
@@ -111,7 +115,7 @@ export async function base64ToLocalFile(
   target: string,
   base64: string
 ): Promise<(() => void) | void> {
-  const buff = imageBase64ToBuffer(base64);
+  const buff = base64ToBuffer(base64);
   if (!buff) return Promise.reject(new Error("失败"));
   const writeFile = () => {
     fse.ensureDirSync(path.dirname(target));
@@ -138,17 +142,23 @@ export function getImageSizeOf(
 }
 
 // 获取文件大小
-export async function getFileSizeOf(file: string): Promise<number> {
+export async function getFileSizeOfAsync(file: string): Promise<number> {
   const buff = await fse.readFile(file);
   return buff.byteLength;
 }
 
+// 获取文件大小
+export function getFileSizeOf(file: string): number {
+  return fse.readFileSync(file).byteLength;
+}
+
 // 获取图片信息
 export async function getImageData(file: string): Promise<TypeImageInfo> {
+  const filename = path.basename(file);
   const ninePatch = isNinePatchPath(file);
   const url = await getImageUrlOf(file);
-  const md5 = path.basename(url);
-  const size = await getFileSizeOf(file);
+  const md5 = url ? path.basename(url) : null;
+  const size = getFileSizeOf(file);
   const { width, height } = getImageSizeOf(file);
   return {
     url,
@@ -156,12 +166,69 @@ export async function getImageData(file: string): Promise<TypeImageInfo> {
     width,
     height,
     size,
-    filename: path.basename(file),
+    filename,
     ninePatch
   };
+}
+
+// 获取图片映射信息
+export async function getImageMapper(
+  file: string,
+  root: string
+): Promise<TypeImageMapper> {
+  const imageData = await getImageData(file);
+  return { ...imageData, target: path.relative(root, file) };
+}
+
+// 传入一个绝对路径，解析图片存入数据库并返回图片 url
+export async function getImageUrlOf(file: string): Promise<string | null> {
+  if (!file) {
+    console.warn("图片路径为空");
+    return null;
+  }
+  if (!fse.existsSync(file)) {
+    console.warn(`路径 ${file}不存在`);
+    return null;
+  }
+  const base64 = await image2base64(file);
+  const md5 = await getFileMD5(file);
+  await insertImageData({ md5, base64 });
+  return `http://${HOST}:${PORT}/image/${md5}`;
 }
 
 // is .9 path
 export function isNinePatchPath(file: string): boolean {
   return /\.9\.png$/.test(file);
+}
+
+const IMAGE_EXT = Object.freeze(["png", "jpg", "jpeg", "webp"]);
+
+/**
+ * 文件名为图片，仅支持文件名，如果图片文件名被修改无法判断
+ * 若判断文件名为图片，请使用 fileIsImage
+ * @param filename 文件名
+ * @returns
+ */
+export function filenameIsImage(filename: string): boolean {
+  return IMAGE_EXT.includes(path.extname(filename).replace(/^\./, ""));
+}
+
+/**
+ * 从文件流中获取图片类型，无视文件名称
+ * @param file
+ * @returns
+ */
+export async function fileIsImage(file: string): Promise<boolean> {
+  const fileType = await FileType.fromFile(file);
+  if (!fileType?.ext) return false;
+  return IMAGE_EXT.includes(fileType?.ext);
+}
+
+// 获取一个目录下所有文件
+export function getDirAllFiles(dir: string): dirTree.DirectoryTree[] {
+  const result: dirTree.DirectoryTree[] = [];
+  dirTree(dir, {}, data => {
+    result.push(data);
+  });
+  return result;
 }

@@ -10,7 +10,7 @@ import { TypeBrandConf, TypeCreateProjectData } from "types/project";
 import { TypeTemplateConf, TypeTemplateData } from "types/template";
 
 import { xml2jsonCompact } from "../core/xmlCompiler";
-import Template from "../core/Template";
+import Template from "../compiler/Template";
 
 // 解析厂商配置
 export async function compileBrandConf(): Promise<TypeBrandConf[]> {

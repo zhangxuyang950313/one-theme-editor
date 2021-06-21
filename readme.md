@@ -1,7 +1,7 @@
 ### Electron React TypeScript 模板
 
 #### 介绍
-本模板技术栈：Electron React Reselect TypeScript
+技术栈：Electron React Reselect TypeScript Nedb Socket.io
 样式使用 CSS in JS 方案： styled-component
 
 #### 关于 Electron@8.5.5 版本
@@ -9,6 +9,9 @@
 
 #### 关于 webpack@4.x.x 版本
 目前 webpack 5 还有不少坑，暂时锁定 webpack 4 版本使用
+
+#### 本地 node 版本 >=12.0.0
+image-size 包的限制
 
 
 #### 安装
