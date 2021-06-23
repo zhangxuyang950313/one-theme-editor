@@ -226,7 +226,7 @@ export default function registerService(service: Express): void {
     API.COPY_FILE,
     (req, res) => {
       const { from, to } = req.body;
-      if (fse.existsSync(from)) {
+      if (!fse.existsSync(from)) {
         return res.status(400).send(result.fail(ERR_CODE[4003]));
       }
       fse.copyFileSync(from, to);
@@ -236,7 +236,7 @@ export default function registerService(service: Express): void {
   // 删除本地文件
   service.post<any, any, { file: string }>(API.DELETE_FILE, (req, res) => {
     const { file } = req.body;
-    if (fse.existsSync(file)) {
+    if (!fse.existsSync(file)) {
       return res.status(400).send(result.fail(ERR_CODE[4003]));
     }
     fse

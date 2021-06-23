@@ -1,7 +1,7 @@
 // socket 事件枚举
 enum SOCKET_EVENT {
   // 工程事件
-  PROJECT = "PROJECT",
+  SYNC_PROJECT = "SYNC_PROJECT",
   // 监听资源文件
   SYNC_RESOURCE = "SYNC_RESOURCE"
 }

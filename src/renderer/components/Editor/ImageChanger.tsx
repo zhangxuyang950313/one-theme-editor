@@ -20,10 +20,10 @@ import {
   findProjectImage,
   getProjectLocalPath
 } from "@/store/modules/project/selector";
-import { useDelImageMapper } from "@/hooks/project";
+import { useProjectRoot } from "@/hooks/project";
 
 import ERR_CODE from "@/core/error-code";
-import { apiWriteFile } from "@/api";
+import { apiDeleteFile, apiWriteFile } from "@/api";
 
 // 图片素材展示
 type TypePropsOfShowImage = {
@@ -36,7 +36,7 @@ type TypePropsOfShowImage = {
 );
 function ImageShower(props: TypePropsOfShowImage) {
   const { srcUrl, showHandler, target, onClick } = props;
-  const handelDelImageMapper = useDelImageMapper();
+  const projectRoot = useProjectRoot();
   const Content: React.FC = () => {
     return (
       <StyleImageBackground srcUrl={srcUrl}>
@@ -58,8 +58,12 @@ function ImageShower(props: TypePropsOfShowImage) {
       <DeleteOutlined
         className="press delete"
         onClick={() => {
-          if (!target) return;
-          target.forEach(handelDelImageMapper);
+          if (!target || !projectRoot) return;
+          target.forEach(item => {
+            const file = path.join(projectRoot, item);
+            console.log(`删除图标: ${file}`);
+            apiDeleteFile(file);
+          });
         }}
       />
     );
@@ -152,7 +156,7 @@ const StyleImageBackground = styled.div<{ srcUrl: string | null }>`
 
 const ImageChanger: React.FC<TypeTempPageSourceConf> = sourceConf => {
   const findImage = useSelector(findProjectImage);
-  const localPath = useSelector(getProjectLocalPath);
+  const localPath = useProjectRoot();
   const { from, to, name } = sourceConf;
 
   if (!from) return null;

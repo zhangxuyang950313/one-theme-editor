@@ -20,14 +20,11 @@ socket.on("disconnect", () => {
  */
 export function registerSocketOf<R, T>(
   event: SOCKET_EVENT,
-  data: {
-    param: T;
-    callback: (data: R) => void;
-  }
+  data: { param: T; callback: (data: R) => void }
 ): (data: T) => typeof socket {
   socket.on(event, data.callback);
   const invoke = () => socket.emit(event, data.param);
-  invoke();
+  // invoke();
   return invoke;
 }
 
@@ -36,14 +33,11 @@ export function socketProject(
   uuid: string,
   callback: (data: TypeProjectDataDoc) => void
 ): (uuid: string) => typeof socket {
-  return registerSocketOf<TypeProjectDataDoc, string>(SOCKET_EVENT.PROJECT, {
-    param: uuid,
-    callback
-  });
+  return registerSocketOf(SOCKET_EVENT.SYNC_PROJECT, { param: uuid, callback });
 }
 
 // 注册同步资源 socket
-export function socketSyncResource(
+export function socketResource(
   uuid: string,
   callback: (data: TypeProjectDataDoc) => void
 ): (uuid: string) => typeof socket {

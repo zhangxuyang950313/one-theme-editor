@@ -1,4 +1,5 @@
 import ACTION_TYPES from "@/store/actions";
+import { updateState } from "@/store/utils";
 import { TypeProjectStateInStore } from "types/project";
 import { TypeActions } from "./action";
 
@@ -15,8 +16,13 @@ export default function ProjectReducer(
       return defaultState;
     }
     case ACTION_TYPES.SET_PROJECT_DATA: {
-      if (!action.payload) return state;
       return action.payload;
+    }
+    case ACTION_TYPES.SET_PROJECT_DESCRIPTION: {
+      return updateState(state, { description: action.payload });
+    }
+    case ACTION_TYPES.SET_IMAGE_MAPPER_LIST: {
+      return updateState(state, { imageMapperList: action.payload });
     }
     default: {
       return state;

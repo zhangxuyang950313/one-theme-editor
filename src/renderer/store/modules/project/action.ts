@@ -1,7 +1,10 @@
 import ACTION_TYPES from "@/store/actions";
 
-import { TypeDatabase } from "types/index";
-import { TypeProjectData, TypeImageMapper } from "types/project";
+import {
+  TypeProjectDataDoc,
+  TypeImageMapper,
+  TypeProjectDescription
+} from "types/project";
 
 type TypeActionInitProject = {
   type: typeof ACTION_TYPES.INIT_PROJECT;
@@ -9,24 +12,24 @@ type TypeActionInitProject = {
 
 type TypeActionSetProjectData = {
   type: typeof ACTION_TYPES.SET_PROJECT_DATA;
-  payload: TypeDatabase<TypeProjectData>;
+  payload: TypeProjectDataDoc;
 };
 
-type TypeActionAddImageMapper = {
-  type: typeof ACTION_TYPES.ADD_IMAGE_MAPPER;
-  payload: TypeImageMapper;
+type TypeActionSetProjectDescription = {
+  type: typeof ACTION_TYPES.SET_PROJECT_DESCRIPTION;
+  payload: TypeProjectDescription;
 };
 
-type TypeActionDelImageMapper = {
-  type: typeof ACTION_TYPES.DEL_IMAGE_MAPPER;
-  payload: TypeImageMapper;
+type TypeActionSetImageMapperList = {
+  type: typeof ACTION_TYPES.SET_IMAGE_MAPPER_LIST;
+  payload: TypeImageMapper[];
 };
 
 export type TypeActions =
   | TypeActionInitProject
   | TypeActionSetProjectData
-  | TypeActionAddImageMapper
-  | TypeActionDelImageMapper;
+  | TypeActionSetProjectDescription
+  | TypeActionSetImageMapperList;
 
 // 初始化工程信息
 export function ActionInitProject(): TypeActionInitProject {
@@ -35,19 +38,21 @@ export function ActionInitProject(): TypeActionInitProject {
 
 // 设置工程数据
 export function ActionSetProjectData(
-  projectData: TypeDatabase<TypeProjectData>
+  projectData: TypeProjectDataDoc
 ): TypeActionSetProjectData {
   return { type: ACTION_TYPES.SET_PROJECT_DATA, payload: projectData };
 }
 
-export function ActionAddProjectImage(
-  payload: TypeImageMapper
-): TypeActionAddImageMapper {
-  return { type: ACTION_TYPES.ADD_IMAGE_MAPPER, payload };
+// 设置 description
+export function ActionSetDescription(
+  payload: TypeProjectDescription
+): TypeActionSetProjectDescription {
+  return { type: ACTION_TYPES.SET_PROJECT_DESCRIPTION, payload };
 }
 
-export function ActionDelProjectImage(
-  payload: TypeImageMapper
-): TypeActionDelImageMapper {
-  return { type: ACTION_TYPES.DEL_IMAGE_MAPPER, payload };
+// 设置 imageMapperList
+export function ActionSetImageMapperList(
+  payload: TypeImageMapper[]
+): TypeActionSetImageMapperList {
+  return { type: ACTION_TYPES.SET_IMAGE_MAPPER_LIST, payload };
 }

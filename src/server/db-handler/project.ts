@@ -110,8 +110,10 @@ export async function getProjectListOf(
 // 查找工程
 export async function findProjectByUUID(
   uuid: string
-): Promise<TypeProjectDataDoc | null> {
-  return projectDB.findOne({ uuid });
+): Promise<TypeProjectDataDoc> {
+  const project = await projectDB.findOne<TypeProjectData>({ uuid });
+  if (!project) throw new Error(ERR_CODE[2001]);
+  return project;
 }
 
 // 更新工程数据
@@ -128,15 +130,14 @@ export async function updateProject<
     | { $pop: O }
     | { $set: O }
     | { $unset: O }
-): Promise<TypeProjectDataDoc | null> {
+): Promise<TypeProjectDataDoc> {
   const updated = await projectDB.update<TypeProjectData>({ uuid }, data, {
     multi: true,
     upsert: true,
     returnUpdatedDocs: true
   });
-  // imageMapperSyncToLocal(uuid);
-  if (!updated) throw new Error(ERR_CODE[2004]);
-  return updated.length > 0 ? updated[0] : null;
+  if (updated[0]) return updated[0];
+  else throw new Error(ERR_CODE[2004]);
 }
 
 // export async function addDatabasePropList<T>(data: T, prop: keyof T) {}
@@ -145,24 +146,20 @@ export async function updateProject<
 export async function addProjectImageMapper(
   uuid: string,
   imageMapper: TypeImageMapper
-): Promise<TypeProjectDataDoc | null> {
-  const project = await findProjectByUUID(uuid);
-  if (!project) {
-    throw new Error(ERR_CODE[2001]);
-  }
-  if (!imageMapper) {
-    console.warn("imageMapper is null");
-    return project;
-  }
-  return updateProject(uuid, { $addToSet: { imageMapperList: imageMapper } });
+): Promise<TypeImageMapper[]> {
+  const project = await updateProject(uuid, {
+    $addToSet: { imageMapperList: imageMapper }
+  });
+  return project.imageMapperList;
 }
 
 // 删除 imageMapperList
 export async function delProjectImageMapper(
   uuid: string,
   imageMapper: TypeImageMapper
-): Promise<TypeProjectDataDoc | null> {
-  const project = await findProjectByUUID(uuid);
-  if (!project) throw new Error(ERR_CODE[2001]);
-  return updateProject(uuid, { $pull: { imageMapperList: imageMapper } });
+): Promise<TypeImageMapper[]> {
+  const project = await updateProject(uuid, {
+    $pull: { imageMapperList: imageMapper }
+  });
+  return project.imageMapperList;
 }

@@ -1,9 +1,10 @@
 import { useLayoutEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { socketProject, socketSyncResource } from "@/api/socket";
+import { socketProject, socketResource } from "@/api/socket";
 import {
   apiAddImageMapper,
   apiDelImageMapper,
+  apiGetProjectByUUID,
   apiGetProjectList
 } from "@/api/index";
 import { useAxiosCanceler } from "@/hooks/index";
@@ -16,6 +17,7 @@ import {
 import { ActionSetProjectData } from "@/store/modules/project/action";
 import {
   getProjectData,
+  getProjectLocalPath,
   getProjectUUID
 } from "@/store/modules/project/selector";
 import {
@@ -90,30 +92,29 @@ export function useLoadProjectByUUID(
     // let cancel;
     console.log(`准备获取工程（${uuid}）`);
 
-    // 注册 socket
-    socketProject(uuid, project => {
-      console.log(`更新工程数据 ${uuid}`, project);
-      updateProject(project);
-      if (loading) updateLoading(false);
-    });
-    socketSyncResource(uuid, project => {
-      updateProject(project);
-    });
-    // getProjectByUUID(uuid)
-    //   .then(project => {
-    //     console.log(`获取工程（${uuid}）成功`, project);
-    //     updateProject(project);
-    //     registerSocket.project(project => {
-    //       console.log(`更新工程数据 ${uuid}`, project);
-    //       updateProject(project);
-    //     });
-    //   })
-    //   .catch(err => {
-    //     console.warn(`获取工程（${uuid}）失败`, err);
-    //   })
-    //   .finally(() => {
-    //     updateLoading(false);
-    //   });
+    // // 注册 socket
+    // socketProject(uuid, project => {
+    //   console.log(`更新工程数据 ${uuid}`, project);
+    //   updateProject(project);
+    //   if (loading) updateLoading(false);
+    // });
+    // socketResource(uuid, project => {
+    //   updateProject(project);
+    // });
+    apiGetProjectByUUID(uuid)
+      .then(project => {
+        console.log(`获取工程（${uuid}）成功`, project);
+        updateProject(project);
+        socketResource(uuid, imageMapperList => {
+          console.log("update imageMapperList: ", imageMapperList);
+        });
+      })
+      .catch(err => {
+        console.warn(`获取工程（${uuid}）失败`, err);
+      })
+      .finally(() => {
+        updateLoading(false);
+      });
     // return cancel;
   }, [uuid]);
   useLoadProject(project);
@@ -130,13 +131,18 @@ export function useProjectData(): TypeProjectStateInStore | null {
   return projectData;
 }
 
+// 获取当前工程目录
+export function useProjectRoot(): string | null {
+  return useSelector(getProjectLocalPath);
+}
+
 // 添加图片资源映射
 export function useAddImageMapper(): (data: TypeImageMapper) => Promise<void> {
   const uuid = useSelector(getProjectUUID);
   const dispatch = useDispatch();
   // 更新标题
   return async data => {
-    if (!uuid) throw new Error(ERR_CODE[2004]);
+    if (!uuid) throw new Error(ERR_CODE[2001]);
     const project = await apiAddImageMapper(uuid, data);
     dispatch(ActionSetProjectData(project));
   };
@@ -148,7 +154,7 @@ export function useDelImageMapper(): (target: string) => Promise<void> {
   const dispatch = useDispatch();
   // 更新标题
   return async target => {
-    if (!uuid) throw new Error(ERR_CODE[2004]);
+    if (!uuid) throw new Error(ERR_CODE[2001]);
     const project = await apiDelImageMapper(uuid, target);
     dispatch(ActionSetProjectData(project));
   };
