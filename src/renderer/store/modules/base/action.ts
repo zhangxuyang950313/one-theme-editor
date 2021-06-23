@@ -1,12 +1,15 @@
 import ACTION_TYPES from "@/store/actions";
 
-type TypeUpdateWindowTitle = {
-  type: typeof ACTION_TYPES.SET_WINDOW_TITLE;
-  title: string;
+type TypeActionSetServerPort = {
+  type: typeof ACTION_TYPES.SET_SERVER_PORT;
+  payload: string | number;
 };
 
-export type TypeActions = TypeUpdateWindowTitle;
+export type TypeActions = TypeActionSetServerPort;
 
-export function ActionSetWindowTitle(title: string): TypeUpdateWindowTitle {
-  return { type: ACTION_TYPES.SET_WINDOW_TITLE, title };
+// 设置本次服务端口
+export function ActionSetServerPort(
+  port: string | number
+): TypeActionSetServerPort {
+  return { type: ACTION_TYPES.SET_SERVER_PORT, payload: port };
 }

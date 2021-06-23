@@ -5,6 +5,7 @@ import { TypeTemplateConf } from "types/template";
 
 // components
 import { Card } from "antd";
+import { useImageUrl } from "@/hooks";
 
 type TypeProps = {
   hoverable?: boolean;
@@ -13,13 +14,16 @@ type TypeProps = {
 
 // 模板卡片样式
 const TemplateCard: React.FC<TypeProps> = props => {
+  const getImageURL = useImageUrl();
   const { config } = props;
   return (
     <StyleTemplateCard data-hoverable={props.hoverable}>
       <Card
         hoverable={props.hoverable}
         style={{ width: "100%" }}
-        cover={<img alt={config.name} src={config.preview?.url || ""} />}
+        cover={
+          <img alt={config.name} src={getImageURL(config.preview.md5) || ""} />
+        }
       >
         <Card.Meta
           title={config.name}

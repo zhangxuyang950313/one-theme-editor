@@ -35,9 +35,9 @@ export default function registerSocket(server: http.Server): void {
     const connecter = new SocketConnecter(socket);
     // 同步工程数据
 
-    connecter.connect(SOCKET_EVENT.SYNC_PROJECT, (uuid: string) => {
+    connecter.connect(SOCKET_EVENT.PROJECT, (uuid: string) => {
       findProjectByUUID(uuid).then(project => {
-        socket.emit(SOCKET_EVENT.SYNC_PROJECT, project);
+        socket.emit(SOCKET_EVENT.PROJECT, project);
       });
     });
 
@@ -49,10 +49,9 @@ export default function registerSocket(server: http.Server): void {
     // });
 
     // 监听文件目录
-    connecter.connect(SOCKET_EVENT.SYNC_RESOURCE, (uuid: string) => {
+    connecter.connect(SOCKET_EVENT.IMAGE_MAPPER_LIST, (uuid: string) => {
       syncResource(uuid, imageMapperList => {
-        console.log({ imageMapperList });
-        socket.emit(SOCKET_EVENT.SYNC_RESOURCE, imageMapperList);
+        socket.emit(SOCKET_EVENT.IMAGE_MAPPER_LIST, imageMapperList);
       });
     });
     // socket.on(SOCKET_EVENT.SYNC_RESOURCE, uuid => {

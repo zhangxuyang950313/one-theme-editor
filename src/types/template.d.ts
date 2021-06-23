@@ -25,7 +25,7 @@ export type TypeTemplateConf = {
   root: string;
   file: string;
   name: string;
-  preview: TypeImageInfo | null;
+  preview: TypeImageInfo;
   version: string;
   uiVersions: TypeUiVersionConf[];
 };

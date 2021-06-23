@@ -11,7 +11,7 @@ export default class TemplateConf {
   private file = "";
   private name = "";
   private version = "";
-  private preview: TypeImageInfo | null = null;
+  private preview!: TypeImageInfo;
   private uiVersions: TypeUiVersionConf[] = [];
 
   setKey(key: string): void {
@@ -47,7 +47,7 @@ export default class TemplateConf {
   setPreview(preview: TypeImageInfo): void {
     this.preview = preview;
   }
-  getPreview(): TypeImageInfo | null {
+  getPreview(): TypeImageInfo {
     return this.preview;
   }
   setUiVersions(uiVersions: TypeUiVersionConf[]): void {

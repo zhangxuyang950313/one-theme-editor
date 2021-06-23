@@ -15,19 +15,16 @@ import {
   ImportOutlined
 } from "@ant-design/icons";
 
-import { TypeTempPageSourceConf } from "types/template";
-import {
-  findProjectImage,
-  getProjectLocalPath
-} from "@/store/modules/project/selector";
+import { findProjectImage } from "@/store/modules/project/selector";
 import { useProjectRoot } from "@/hooks/project";
-
-import ERR_CODE from "@/core/error-code";
+import { TypeTempPageSourceConf } from "types/template";
 import { apiDeleteFile, apiWriteFile } from "@/api";
+import ERR_CODE from "@/core/error-code";
+import { useImageUrl } from "@/hooks";
 
 // 图片素材展示
 type TypePropsOfShowImage = {
-  srcUrl: string | null;
+  srcUrl?: string;
   onClick?: () => void;
   // showHandler 时就要强制传入 target
 } & (
@@ -118,7 +115,7 @@ const StyleShowImage = styled.div`
   }
 `;
 
-const StyleImageBackground = styled.div<{ srcUrl: string | null }>`
+const StyleImageBackground = styled.div<{ srcUrl?: string }>`
   position: relative;
   width: 84px;
   height: 84px;
@@ -157,6 +154,7 @@ const StyleImageBackground = styled.div<{ srcUrl: string | null }>`
 const ImageChanger: React.FC<TypeTempPageSourceConf> = sourceConf => {
   const findImage = useSelector(findProjectImage);
   const localPath = useProjectRoot();
+  const getImageURL = useImageUrl();
   const { from, to, name } = sourceConf;
 
   if (!from) return null;
@@ -218,10 +216,9 @@ const ImageChanger: React.FC<TypeTempPageSourceConf> = sourceConf => {
       <div className="edit-wrapper">
         <div className="left">
           <ImageShower
-            srcUrl={from.url || ""}
+            srcUrl={getImageURL(from.md5) || ""}
             onClick={() => {
-              if (!from.url) return;
-              handlePreviewFile(from.url, name);
+              handlePreviewFile(getImageURL(from.md5), name);
             }}
           />
         </div>
@@ -232,7 +229,7 @@ const ImageChanger: React.FC<TypeTempPageSourceConf> = sourceConf => {
         <div className="right">
           <ImageShower
             showHandler
-            srcUrl={targetImage?.url || null}
+            srcUrl={targetImage?.md5 && getImageURL(targetImage.md5)}
             target={to}
             onClick={() => handleShowImageFile(to?.[0])}
           />

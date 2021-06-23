@@ -1,6 +1,6 @@
 import { useLayoutEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { socketProject, socketResource } from "@/api/socket";
+import { socketResource } from "@/api/socket";
 import {
   apiAddImageMapper,
   apiDelImageMapper,
@@ -90,7 +90,7 @@ export function useLoadProjectByUUID(
 
   useLayoutEffect(() => {
     // let cancel;
-    console.log(`准备获取工程（${uuid}）`);
+    console.log(`准备获取工程: ${uuid}`);
 
     // // 注册 socket
     // socketProject(uuid, project => {
@@ -103,14 +103,14 @@ export function useLoadProjectByUUID(
     // });
     apiGetProjectByUUID(uuid)
       .then(project => {
-        console.log(`获取工程（${uuid}）成功`, project);
+        console.log(`获取工程: ${uuid}`, project);
         updateProject(project);
         socketResource(uuid, imageMapperList => {
           console.log("update imageMapperList: ", imageMapperList);
         });
       })
       .catch(err => {
-        console.warn(`获取工程（${uuid}）失败`, err);
+        console.warn(`获取工程失败:${uuid}`, err);
       })
       .finally(() => {
         updateLoading(false);

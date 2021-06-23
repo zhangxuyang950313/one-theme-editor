@@ -2,6 +2,7 @@ import path from "path";
 import fse from "fs-extra";
 import {
   asyncMap,
+  fileIsImage,
   filenameIsImage,
   getDirAllFiles,
   getImageMapper
@@ -52,6 +53,7 @@ export async function syncResource(
   console.log(`监听目录：${root}`);
   fse.watch(root, { recursive: true }, async (event, filename) => {
     console.log(event, filename);
+    if (!fileIsImage(filename)) return;
     const file = path.join(root, filename);
     // 文件内容改变，但名字不变
     if (event === "change") {
@@ -67,8 +69,8 @@ export async function syncResource(
         callback(project);
       } else {
         // 不存在则删除，重命名的旧文件也会走到这里被删除
-        const imageMapper = await getImageMapper(file, root);
-        await delProjectImageMapper(uuid, imageMapper);
+        // const imageMapper = await getImageMapper(file, root);
+        await delProjectImageMapper(uuid, { target: filename });
       }
     }
   });

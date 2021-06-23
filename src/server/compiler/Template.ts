@@ -1,7 +1,7 @@
 import path from "path";
 
 import TemplateInfo from "src/data/TemplateInfo";
-import { getImageData, getImageUrlOf } from "common/utils";
+import { getImageData } from "common/utils";
 
 import {
   TypeTempPageGroupConf,
@@ -76,6 +76,7 @@ export default class Template {
     const tempData = await this.ensureXmlData();
     const src = path.join(
       this.rootDir,
+      // TODO: 默认预览图
       tempData.preview?.[0]._attributes.src || ""
     );
     const imageData = await getImageData(src);
@@ -139,11 +140,11 @@ export default class Template {
           this.rootDir,
           moduleNode.getAttribute("icon")
         );
-        const iconUrl = await getImageUrlOf(iconSrc);
+        const { md5 } = await getImageData(iconSrc);
         const result: TypeTempModuleConf = {
           index,
           name: moduleNode.getAttribute("name"),
-          icon: iconUrl,
+          icon: md5,
           groups: item.group ? await this.getPageGroup(item.group) : []
         };
         return result;

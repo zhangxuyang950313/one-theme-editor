@@ -13,7 +13,7 @@ import {
 export default class TemplateInfo {
   private name = "";
   private version = "";
-  private preview: TypeImageInfo | null = null;
+  private preview!: TypeImageInfo;
   private uiVersions: TypeUiVersionConf[] = [];
   private modules: TypeTempModuleConf[] = [];
 
@@ -32,7 +32,7 @@ export default class TemplateInfo {
   setPreview(preview: TypeImageInfo): void {
     this.preview = preview;
   }
-  getPreview(): TypeImageInfo | null {
+  getPreview(): TypeImageInfo {
     return this.preview;
   }
   setUiVersions(uiVersions: TypeUiVersionConf[]): void {

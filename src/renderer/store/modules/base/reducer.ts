@@ -3,7 +3,7 @@ import { updateState } from "@/store/utils";
 import { TypeActions } from "./action";
 
 const BaseState = {
-  windowTitle: document.title
+  port: 30000
 };
 
 export type TypeBaseState = typeof BaseState;
@@ -13,9 +13,8 @@ export default function BaseReducer(
   action: TypeActions
 ): TypeBaseState {
   switch (action.type) {
-    case ACTION_TYPES.SET_WINDOW_TITLE: {
-      document.title = action.title;
-      return updateState(state, { windowTitle: action.title });
+    case ACTION_TYPES.SET_SERVER_PORT: {
+      return updateState(state, { port: Number(action.payload) || 30000 });
     }
     default:
       return state;

@@ -156,7 +156,7 @@ export async function addProjectImageMapper(
 // 删除 imageMapperList
 export async function delProjectImageMapper(
   uuid: string,
-  imageMapper: TypeImageMapper
+  imageMapper: Partial<TypeImageMapper>
 ): Promise<TypeImageMapper[]> {
   const project = await updateProject(uuid, {
     $pull: { imageMapperList: imageMapper }

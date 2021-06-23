@@ -1,5 +1,5 @@
 import path from "path";
-import { getImageData, getImageUrlOf } from "common/utils";
+import { getImageData } from "common/utils";
 import {
   TypeTempPageConf,
   TypeTempPageConfigConf,
@@ -36,7 +36,8 @@ export default class Page {
       this.dirWithUiPath,
       xmlData.preview?.[0]._attributes.src || ""
     );
-    return getImageUrlOf(previewSrc);
+    const imageData = await getImageData(previewSrc);
+    return imageData.md5;
   }
 
   async getConfig(): Promise<TypeTempPageConfigConf> {

@@ -7,7 +7,7 @@ import image2base64 from "image-to-base64";
 import dirTree from "directory-tree";
 import { HOST, PORT } from "common/config";
 import { insertImageData } from "src/server/db-handler/image";
-import { TypeImageInfo, TypeImageMapper } from "types/project";
+import { TypeImageData, TypeImageMapper } from "types/project";
 import ERR_CODE from "renderer/core/error-code";
 
 export const base64Regex = /^data:image\/\w+;base64,/;
@@ -153,22 +153,25 @@ export function getFileSizeOf(file: string): number {
 }
 
 // 获取图片信息
-export async function getImageData(file: string): Promise<TypeImageInfo> {
-  const filename = path.basename(file);
-  const ninePatch = isNinePatchPath(file);
-  const url = await getImageUrlOf(file);
-  const md5 = url ? path.basename(url) : null;
-  const size = getFileSizeOf(file);
+export async function getImageData(file: string): Promise<TypeImageData> {
+  if (!file) throw new Error(ERR_CODE[4000]);
+  if (!fse.existsSync(file)) throw new Error(`${ERR_CODE[4003]}: ${file}`);
+
+  const buff = await fse.readFile(file);
+  const base64 = buff.toString("base64");
   const { width, height } = getImageSizeOf(file);
-  return {
-    url,
-    md5,
+  const imageData: TypeImageData = {
+    md5: md5(buff),
     width,
     height,
-    size,
-    filename,
-    ninePatch
+    size: getFileSizeOf(file),
+    filename: path.basename(file),
+    ninePatch: isNinePatchPath(file),
+    base64
   };
+  // 同步存储到图片数据库
+  await insertImageData(imageData);
+  return imageData;
 }
 
 // 获取图片映射信息
@@ -177,24 +180,32 @@ export async function getImageMapper(
   root: string
 ): Promise<TypeImageMapper> {
   const imageData = await getImageData(file);
-  return { ...imageData, target: path.relative(root, file) };
+  // TODO: 大集合解构小集合不报错？ 先这么写
+  return {
+    md5: imageData.md5,
+    width: imageData.width,
+    height: imageData.height,
+    size: imageData.size,
+    filename: imageData.filename,
+    ninePatch: imageData.ninePatch,
+    target: path.relative(root, file)
+  };
 }
 
-// 传入一个绝对路径，解析图片存入数据库并返回图片 url
-export async function getImageUrlOf(file: string): Promise<string | null> {
-  if (!file) {
-    console.warn("图片路径为空");
-    return null;
-  }
-  if (!fse.existsSync(file)) {
-    console.warn(`路径 ${file}不存在`);
-    return null;
-  }
-  const base64 = await image2base64(file);
-  const md5 = await getFileMD5(file);
-  await insertImageData({ md5, base64 });
-  return `http://${HOST}:${PORT}/image/${md5}`;
-}
+// // 传入一个绝对路径，解析图片存入数据库并返回图片 url
+// export async function getImageUrlOf(file: string): Promise<string | null> {
+//   if (!file) {
+//     console.warn("图片路径为空");
+//     return null;
+//   }
+//   if (!fse.existsSync(file)) {
+//     console.warn(`路径 ${file}不存在`);
+//     return null;
+//   }
+//   const base64 = await image2base64(file);
+//   const md5 = await getFileMD5(file);
+//   return `http://${HOST}:${PORT}/image/${md5}`;
+// }
 
 // is .9 path
 export function isNinePatchPath(file: string): boolean {

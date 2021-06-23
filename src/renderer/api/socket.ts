@@ -24,7 +24,7 @@ export function registerSocketOf<R, T>(
 ): (data: T) => typeof socket {
   socket.on(event, data.callback);
   const invoke = () => socket.emit(event, data.param);
-  // invoke();
+  invoke();
   return invoke;
 }
 
@@ -33,7 +33,7 @@ export function socketProject(
   uuid: string,
   callback: (data: TypeProjectDataDoc) => void
 ): (uuid: string) => typeof socket {
-  return registerSocketOf(SOCKET_EVENT.SYNC_PROJECT, { param: uuid, callback });
+  return registerSocketOf(SOCKET_EVENT.PROJECT, { param: uuid, callback });
 }
 
 // 注册同步资源 socket
@@ -41,7 +41,7 @@ export function socketResource(
   uuid: string,
   callback: (data: TypeProjectDataDoc) => void
 ): (uuid: string) => typeof socket {
-  return registerSocketOf(SOCKET_EVENT.SYNC_RESOURCE, {
+  return registerSocketOf(SOCKET_EVENT.IMAGE_MAPPER_LIST, {
     param: uuid,
     callback
   });

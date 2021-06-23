@@ -39,17 +39,22 @@ export type TypeCreateProjectData = {
 // 图片数据
 export type TypeImageData = {
   md5: string;
-  base64: string | null;
-};
-
-// 图片相关信息及访问 url
-export type TypeImageInfo = {
-  url: string | null;
-  md5: string | null;
   width: number;
   height: number;
   size: number;
-  filename: string | null;
+  filename: string;
+  ninePatch: boolean;
+  base64: string;
+};
+
+// 图片信息，不存储 base64 信息
+// Omit<TypeImageData, "base64">
+export type TypeImageInfo = {
+  md5: string;
+  width: number;
+  height: number;
+  size: number;
+  filename: string;
   ninePatch: boolean;
 };
 
@@ -74,6 +79,9 @@ export type TypeProjectData = {
   xmlMapperList: TypeXmlMapper[];
   localPath: string | null;
 };
+
+// // 在数据空的图片映射
+// export type TypeImageMapperDoc = Omit<TypeImageInfo, "url">;
 
 // 在数据库中的图片数据
 export type TypeImageDataDoc = TypeDatabase<TypeImageData>;

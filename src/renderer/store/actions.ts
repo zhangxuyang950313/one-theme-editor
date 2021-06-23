@@ -1,6 +1,6 @@
 enum ACTION_TYPES {
-  // 修改标题
-  SET_WINDOW_TITLE = "SET_WINDOW_TITLE",
+  // 设置服务端口
+  SET_SERVER_PORT = "SET_SERVER_PORT",
 
   // 设置厂商品牌列表
   SET_BRAND_LIST = "SET_BRAND_LIST",
