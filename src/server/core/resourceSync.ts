@@ -29,7 +29,7 @@ export async function syncResource(uuid: string): Promise<void> {
     // TODO: 看看是用 filename 还是 buffer 判断图片好一些
     return filenameIsImage(file.name)
       ? await getImageMapper(file.path, root)
-      : Promise.resolve();
+      : null;
   }).then(list => list.filter(Boolean));
   await updateProject(uuid, { $set: { imageMapperList } });
   // 监听文件变化
@@ -47,7 +47,7 @@ export async function syncResource(uuid: string): Promise<void> {
         const imageMapper = await getImageMapper(file, root);
         await addProjectImageMapper(uuid, imageMapper);
       } else {
-        // 不存在则删除
+        // 不存在则删除，重命名的旧文件也会走到这里被删除
         const imageMapper = await getImageMapper(file, root);
         await delProjectImageMapper(uuid, imageMapper);
       }

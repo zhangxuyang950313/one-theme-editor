@@ -19,6 +19,12 @@ export const getProjectUUID = createSelector(
   state => state.uuid
 );
 
+// 获取工程本地路径
+export const getProjectLocalPath = createSelector(
+  getProjectState,
+  state => state.localPath
+);
+
 export const getProjectImageList = createSelector(
   getProjectState,
   state => state.imageMapperList || []

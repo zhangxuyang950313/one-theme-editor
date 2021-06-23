@@ -30,7 +30,7 @@ const ModuleSelector: React.FC = () => {
             onClick={() => setCurrentModule(item)}
           >
             <Tooltip title={item.name} placement="right">
-              <img className="icon" alt="" src={item.icon} />
+              <img className="icon" alt="" src={item.icon || ""} />
             </Tooltip>
           </StyleIcon>
         );

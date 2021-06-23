@@ -1,4 +1,6 @@
 import axios, { Canceler } from "axios";
+import { HOST, PORT } from "common/config";
+import API from "common/api";
 import {
   TypeBrandConf,
   TypeCreateProjectData,
@@ -7,15 +9,9 @@ import {
   TypeProjectDataDoc
 } from "types/project";
 import { TypeTemplateConf } from "types/template";
-import { HOST, PORT } from "common/config";
-import API from "common/api";
+import { TypeFileData, TypeResponseFrame } from "types/request";
 
 type TypeGetCanceler = (c: Canceler) => void;
-
-type TypeResponseFrame<T> = {
-  msg: "success" | "fail";
-  data: T;
-};
 
 const createHttp = (getCanceler?: TypeGetCanceler) => {
   return axios.create({
@@ -108,4 +104,31 @@ export async function apiDelImageMapper(
       { target }
     )
     .then(data => data.data.data);
+}
+
+// 写入文件
+export async function apiWriteFile(
+  fileData: TypeFileData,
+  to: string
+): Promise<TypeResponseFrame> {
+  return createHttp()
+    .post<TypeResponseFrame>(API.WRITE_FILE, { fileData, to })
+    .then(data => data.data);
+}
+
+// 复制文件
+export async function apiCopyFile(
+  from: string,
+  to: string
+): Promise<TypeResponseFrame> {
+  return createHttp()
+    .post<TypeResponseFrame>(API.COPY_FILE, { from, to })
+    .then(data => data.data);
+}
+
+// 删除文件
+export async function apiDeleteFile(file: string): Promise<TypeResponseFrame> {
+  return createHttp()
+    .post<TypeResponseFrame>(API.DELETE_FILE, { file })
+    .then(data => data.data);
 }

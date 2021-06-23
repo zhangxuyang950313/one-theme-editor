@@ -38,15 +38,14 @@ export async function imageMapperSyncToLocal(
     .then(project => {
       const { imageMapperList, localPath } = project;
       if (!localPath) return Promise.all([]);
-      console.log({ imageMapperList });
       return imageMapperList.map(async item => {
         const filename = path.resolve(localPath, item.target);
         // TODO: 失败的都默认通过，后面应把失败的返回出去以供提示
         if (!item.md5) return Promise.resolve();
         const imageData = await findImageData(item.md5);
         if (!imageData.base64) return Promise.resolve();
-        return base64ToLocalFile(filename, imageData.base64).then(next => {
-          if (next) next();
+        return base64ToLocalFile(filename, imageData.base64).then(rewrite => {
+          rewrite && rewrite();
         });
       });
     });
@@ -155,7 +154,6 @@ export async function addProjectImageMapper(
     console.warn("imageMapper is null");
     return project;
   }
-  console.log({ imageMapper });
   return updateProject(uuid, { $addToSet: { imageMapperList: imageMapper } });
 }
 

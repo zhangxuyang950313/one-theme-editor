@@ -5,10 +5,10 @@ import FileType from "file-type";
 import imageSizeOf from "image-size";
 import image2base64 from "image-to-base64";
 import dirTree from "directory-tree";
-import { TypeImageInfo, TypeImageMapper } from "types/project";
 import { HOST, PORT } from "common/config";
-import ERR_CODE from "renderer/core/error-code";
 import { insertImageData } from "src/server/db-handler/image";
+import { TypeImageInfo, TypeImageMapper } from "types/project";
+import ERR_CODE from "renderer/core/error-code";
 
 export const base64Regex = /^data:image\/\w+;base64,/;
 

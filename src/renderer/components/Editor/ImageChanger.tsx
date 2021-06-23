@@ -1,6 +1,7 @@
 /**
  * 图片替换单元组件
  */
+import path from "path";
 import React from "react";
 import { useSelector } from "react-redux";
 import { remote } from "electron";
@@ -15,10 +16,14 @@ import {
 } from "@ant-design/icons";
 
 import { TypeTempPageSourceConf } from "types/template";
-import { findProjectImage } from "@/store/modules/project/selector";
-import { useAddImageMapper, useDelImageMapper } from "@/hooks/project";
+import {
+  findProjectImage,
+  getProjectLocalPath
+} from "@/store/modules/project/selector";
+import { useDelImageMapper } from "@/hooks/project";
 
 import ERR_CODE from "@/core/error-code";
+import { apiWriteFile } from "@/api";
 
 // 图片素材展示
 type TypePropsOfShowImage = {
@@ -146,8 +151,8 @@ const StyleImageBackground = styled.div<{ srcUrl: string | null }>`
 `;
 
 const ImageChanger: React.FC<TypeTempPageSourceConf> = sourceConf => {
-  const handleAddImageMapper = useAddImageMapper();
   const findImage = useSelector(findProjectImage);
+  const localPath = useSelector(getProjectLocalPath);
   const { from, to, name } = sourceConf;
 
   if (!from) return null;
@@ -172,9 +177,19 @@ const ImageChanger: React.FC<TypeTempPageSourceConf> = sourceConf => {
       return;
     }
     to.forEach(target => {
-      handleAddImageMapper({ ...from, target }).catch(({ message }) =>
-        notification.warn({ message })
-      );
+      const err = () =>
+        notification.warn({ message: `${ERR_CODE[4004]}(${from.filename})` });
+      if (!from.md5) {
+        console.warn("from.md5 为空", from);
+        err();
+        return;
+      }
+      if (!localPath) {
+        console.warn("localPath 为空");
+        err();
+        return;
+      }
+      apiWriteFile({ md5: from.md5 }, path.join(localPath, target));
     });
   };
   const { width, height, size } = from;

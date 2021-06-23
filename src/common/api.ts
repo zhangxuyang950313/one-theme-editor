@@ -20,6 +20,12 @@ const API = {
   // 获取工程列表
   GET_PROJECT_LIST: "/project/list",
   // 通过 id 获取工程信息
-  GET_PROJECT: "/project/get"
+  GET_PROJECT: "/project/get",
+  // 复制文件
+  COPY_FILE: "/file/copy",
+  // 写入本地文件
+  WRITE_FILE: "/file/write",
+  // 删除本地文件
+  DELETE_FILE: "/file/delete"
 };
 export default API;

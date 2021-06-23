@@ -1,14 +1,18 @@
+import path from "path";
+import fse from "fs-extra";
 import { Express } from "express";
 import FileType from "file-type";
 import bodyParser from "body-parser";
 import API from "common/api";
-import { base64ToBuffer } from "common/utils";
+import { base64ToBuffer, base64ToLocalFile } from "common/utils";
 import {
   TypeCreateProjectData,
   TypeProjectDescription,
   TypeUiVersionInfo,
   TypeImageMapper
 } from "types/project";
+import { TypeFileData } from "types/request";
+import ERR_CODE from "../renderer/core/error-code";
 import {
   findProjectByUUID,
   getProjectListOf,
@@ -19,7 +23,7 @@ import { getTemplates, compileBrandConf } from "./db-handler/template";
 import { findImageData } from "./db-handler/image";
 
 const result = {
-  success: (data: any) => {
+  success: (data?: any) => {
     return { msg: "success", data: data || null };
   },
   fail: (err: any) => {
@@ -187,4 +191,57 @@ export default function registerService(service: Express): void {
   //       res.send(send.fail(err));
   //     });
   // });
+
+  // 写入本地文件
+  service.post<any, any, { fileData: TypeFileData; to: string }>(
+    API.WRITE_FILE,
+    async (req, res) => {
+      try {
+        const { fileData, to } = req.body;
+        const { url, base64 } = fileData;
+        let md5 = fileData.md5;
+        // base64 直接写入
+        if (base64) {
+          await base64ToLocalFile(to, base64).then(rw => rw && rw());
+        }
+
+        // md5 去查数据库获得 base64 再写入
+        if (!md5 && url) md5 = path.basename(url);
+        if (!md5) throw new Error("md5 为空");
+
+        const imageData = await findImageData(md5);
+        if (imageData.base64) {
+          await base64ToLocalFile(to, imageData.base64).then(rw => rw && rw());
+          return res.send(result.success());
+        } else throw new Error(`图片数据库获取${md5}失败`);
+      } catch (err) {
+        // console.error(err);
+        res.status(400).send(result.fail(`${ERR_CODE[4002]}, ${err}`));
+      }
+    }
+  );
+
+  // 复制本地文件
+  service.post<any, any, { from: string; to: string }>(
+    API.COPY_FILE,
+    (req, res) => {
+      const { from, to } = req.body;
+      if (fse.existsSync(from)) {
+        return res.status(400).send(result.fail(ERR_CODE[4003]));
+      }
+      fse.copyFileSync(from, to);
+      return res.send(result.success());
+    }
+  );
+  // 删除本地文件
+  service.post<any, any, { file: string }>(API.DELETE_FILE, (req, res) => {
+    const { file } = req.body;
+    if (fse.existsSync(file)) {
+      return res.status(400).send(result.fail(ERR_CODE[4003]));
+    }
+    fse
+      .remove(file)
+      .then(() => res.send(result.success()))
+      .catch(err => res.status(400).send(result.fail(err)));
+  });
 }
