@@ -48,15 +48,7 @@ export type TypeImageData = {
 };
 
 // 图片信息，不存储 base64 信息
-// Omit<TypeImageData, "base64">
-export type TypeImageInfo = {
-  md5: string;
-  width: number;
-  height: number;
-  size: number;
-  filename: string;
-  ninePatch: boolean;
-};
+export type TypeImageInfo = Omit<TypeImageData, "base64">;
 
 // 图片映射信息
 export type TypeImageMapper = TypeImageInfo & {

@@ -64,7 +64,9 @@ export async function syncImageMapperList(
     await syncLocalDirImageToMapperList(uuid);
     const { imageMapperList } = await findProjectByUUID(uuid);
     // TODO: 观察下图片多的时候性能
+    console.time("equal耗时");
     if (_.isEqual(previous, imageMapperList)) return;
+    console.timeEnd("equal耗时");
     callback(imageMapperList);
     previous = imageMapperList;
   };

@@ -258,7 +258,9 @@ const CreateProject: React.FC<TypeProps> = props => {
             Modal.confirm({
               title: "提示",
               content: `目录"${local}"为非空目录，可能不是主题目录，是否仍然继续使用此目录？`,
-              onOk: resolve
+              onOk: () => {
+                resolve();
+              }
             });
           });
         }

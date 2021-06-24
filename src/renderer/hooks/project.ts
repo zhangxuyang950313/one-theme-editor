@@ -19,7 +19,7 @@ import {
 } from "@/store/modules/project/selector";
 import { TypeProjectDataDoc, TypeProjectStateInStore } from "types/project";
 
-// import ERR_CODE from "renderer/core/error-code";
+import ERR_CODE from "renderer/core/error-code";
 import { useDocumentTitle } from "./index";
 
 // 获取项目列表
@@ -99,13 +99,14 @@ export function useLoadProjectByUUID(
       .then(project => {
         console.log(`获取工程: ${uuid}`, project);
         updateProject(project);
+        // 注册 imageMapperList socket
         socketImageMapperList(uuid, imageMapperList => {
           console.log("update imageMapperList: ", imageMapperList);
           dispatch(ActionSetImageMapperList(imageMapperList));
         });
       })
       .catch(err => {
-        console.warn(`获取工程失败:${uuid}`, err);
+        console.warn(`${ERR_CODE[2005]}: ${uuid}`, err);
       })
       .finally(() => {
         updateLoading(false);

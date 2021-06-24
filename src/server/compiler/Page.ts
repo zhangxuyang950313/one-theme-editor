@@ -1,5 +1,5 @@
 import path from "path";
-import { getImageData } from "common/utils";
+import { getFileMD5, getImageData } from "common/utils";
 import {
   TypeTempPageConf,
   TypeTempPageConfigConf,
@@ -12,15 +12,13 @@ import XMLNode from "../core/XMLNode";
 
 export default class Page {
   private file: string;
-  private dirWithUiPath: string;
+  private dirWithUIPath: string;
   private pathname: string;
-  private uiPath: string;
   private xmlData!: TypeTempOriginPageConf;
-  constructor(props: { file: string; pathname: string; uiPath: string }) {
+  constructor(props: { file: string; pathname: string }) {
     this.file = props.file;
     this.pathname = props.pathname;
-    this.uiPath = props.uiPath;
-    this.dirWithUiPath = path.dirname(props.file);
+    this.dirWithUIPath = path.dirname(props.file);
   }
 
   private async ensureXmlData() {
@@ -30,14 +28,13 @@ export default class Page {
     return this.xmlData;
   }
 
-  async getPreview(): Promise<string | null> {
+  async getPreviewMD5(): Promise<string> {
     const xmlData = await this.ensureXmlData();
     const previewSrc = path.join(
-      this.dirWithUiPath,
+      this.dirWithUIPath,
       xmlData.preview?.[0]._attributes.src || ""
     );
-    const imageData = await getImageData(previewSrc);
-    return imageData.md5;
+    return getFileMD5(previewSrc);
   }
 
   async getConfig(): Promise<TypeTempPageConfigConf> {
@@ -75,15 +72,23 @@ export default class Page {
           layout.alignV = layoutNode.getAttribute("alignV", "top");
         }
         const fromSrc = path.resolve(
-          this.dirWithUiPath,
+          this.dirWithUIPath,
           item.from?.[0]._attributes?.src || ""
         );
         const to = item.to
           ? item.to.map(item => path.join(item?._attributes?.src || ""))
           : [];
+        const {
+          md5,
+          width,
+          height,
+          size,
+          filename,
+          ninePatch
+        } = await getImageData(fromSrc);
         return {
           name: item?._attributes?.description || item?._attributes?.name || "",
-          from: await getImageData(fromSrc),
+          from: { md5, width, height, size, filename, ninePatch },
           to,
           layout
         };
@@ -112,7 +117,7 @@ export default class Page {
     return {
       pathname: this.pathname,
       config: await this.getConfig(),
-      preview: await this.getPreview(),
+      preview: await this.getPreviewMD5(),
       category: await this.getCategoryList(),
       source: await this.getSourceList(),
       xml: []

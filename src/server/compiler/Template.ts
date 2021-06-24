@@ -1,7 +1,7 @@
 import path from "path";
 
 import TemplateInfo from "src/data/TemplateInfo";
-import { getImageData } from "common/utils";
+import { getFileMD5, getImageData } from "common/utils";
 
 import {
   TypeTempPageGroupConf,
@@ -79,15 +79,15 @@ export default class Template {
       // TODO: 默认预览图
       tempData.preview?.[0]._attributes.src || ""
     );
-    const imageData = await getImageData(src);
-    return {
-      md5: imageData.md5,
-      width: imageData.width,
-      height: imageData.height,
-      size: imageData.size,
-      filename: imageData.filename,
-      ninePatch: imageData.ninePatch
-    };
+    const {
+      md5,
+      width,
+      height,
+      size,
+      filename,
+      ninePatch
+    } = await getImageData(src);
+    return { md5, width, height, size, filename, ninePatch };
   }
 
   // 模板支持 ui 版本列表
@@ -115,7 +115,7 @@ export default class Template {
       const pageNode = new XMLNode(item);
       const pathname = path.join(uiPath, pageNode.getAttribute("src"));
       const file = path.join(this.rootDir, pathname);
-      const page = new Page({ file, pathname, uiPath });
+      const page = new Page({ file, pathname });
       return page.getData();
     });
     return await Promise.all(pagesQueue);
@@ -147,7 +147,7 @@ export default class Template {
           this.rootDir,
           moduleNode.getAttribute("icon")
         );
-        const { md5 } = await getImageData(iconSrc);
+        const md5 = await getFileMD5(iconSrc);
         const result: TypeTempModuleConf = {
           index,
           name: moduleNode.getAttribute("name"),
