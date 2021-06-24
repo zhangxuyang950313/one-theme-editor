@@ -2,13 +2,18 @@ import React from "react";
 import styled from "styled-components";
 
 import { useCurrentPage } from "@/hooks/template";
+import { useImageUrl } from "@/hooks";
 
 const Preview: React.FC = () => {
   const [currentPage] = useCurrentPage();
+  const getImageURL = useImageUrl();
   if (!currentPage) return null;
   return (
     <StylePreviewer>
-      <StyleImage src={currentPage.preview || ""} alt={currentPage.pathname} />
+      <StyleImage
+        src={getImageURL(currentPage.preview)}
+        alt={currentPage.pathname}
+      />
     </StylePreviewer>
   );
 };

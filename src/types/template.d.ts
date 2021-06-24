@@ -13,7 +13,7 @@ export type TypeTempPageGroupConf = {
 export type TypeTempModuleConf = {
   index: number;
   name: string;
-  icon: string | null;
+  icon: string;
   groups: TypeTempPageGroupConf[];
 };
 
@@ -59,7 +59,7 @@ export type TypeTempPageSourceConf = {
 export type TypeTempPageConf = {
   pathname: string;
   config: TypeTempPageConfigConf;
-  preview: string | null;
+  preview: string;
   category: TypeTempPageCategoryConf[];
   source: TypeTempPageSourceConf[];
   xml: any[];

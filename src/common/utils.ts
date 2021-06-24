@@ -190,21 +190,6 @@ export async function getImageMapper(
   };
 }
 
-// // 传入一个绝对路径，解析图片存入数据库并返回图片 url
-// export async function getImageUrlOf(file: string): Promise<string | null> {
-//   if (!file) {
-//     console.warn("图片路径为空");
-//     return null;
-//   }
-//   if (!fse.existsSync(file)) {
-//     console.warn(`路径 ${file}不存在`);
-//     return null;
-//   }
-//   const base64 = await image2base64(file);
-//   const md5 = await getFileMD5(file);
-//   return `http://${HOST}:${PORT}/image/${md5}`;
-// }
-
 // is .9 path
 export function isNinePatchPath(file: string): boolean {
   return /\.9\.png$/.test(file);
