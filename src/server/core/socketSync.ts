@@ -19,7 +19,6 @@ import { TypeImageMapper } from "types/project";
 // 本地目标路径的所有图片数据同步到 projectData.imageMapperList 数据库中
 // 保持数据库中的图片数据和本地一致
 async function syncLocalDirImageToMapperList(uuid: string) {
-  console.log("开始监听imageMapperList", uuid);
   const { imageMapperList, localPath } = await findProjectByUUID(uuid);
   const localTargets = getDirAllFiles(localPath)
     // 过滤文件名不是图片的
@@ -58,17 +57,16 @@ export async function syncImageMapperList(
   uuid: string,
   callback: (x: TypeImageMapper[]) => void
 ): Promise<void> {
-  let previous: TypeImageMapper[] | undefined;
+  let previousImageMapperList: TypeImageMapper[] | undefined;
   const { localPath } = await findProjectByUUID(uuid);
   const handleSync = async () => {
+    console.log("handleSync");
     await syncLocalDirImageToMapperList(uuid);
     const { imageMapperList } = await findProjectByUUID(uuid);
     // TODO: 观察下图片多的时候性能
-    console.time("equal耗时");
-    if (_.isEqual(previous, imageMapperList)) return;
-    console.timeEnd("equal耗时");
+    if (_.isEqual(previousImageMapperList, imageMapperList)) return;
     callback(imageMapperList);
-    previous = imageMapperList;
+    previousImageMapperList = imageMapperList;
   };
   await handleSync();
   /**
@@ -78,5 +76,10 @@ export async function syncImageMapperList(
    * 在 Windows 上，如果监视目录被移动或重命名，则不会触发任何事件。 删除监视目录时报 EPERM 错误。
    */
   console.log(`监听目录：${localPath}`);
-  fse.watch(localPath, { recursive: true }, handleSync);
+  // let previousFiles
+  fse.watch(localPath, { recursive: true }, (event, filename) => {
+    console.log({ event, filename });
+    // previousFiles = getDirAllFiles(localPath).map(o=>o.)
+    handleSync();
+  });
 }

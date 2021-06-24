@@ -172,8 +172,5 @@ export async function updateProjectImageMapper(
   await delProjectImageMapper(uuid, {
     target: imageMapper.target
   });
-  const project = await updateProject(uuid, {
-    $push: { imageMapperList: imageMapper }
-  });
-  return project.imageMapperList;
+  return addProjectImageMapper(uuid, imageMapper);
 }
