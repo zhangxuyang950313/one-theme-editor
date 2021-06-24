@@ -60,7 +60,6 @@ export function useSelectedBrand(): TypeBrandConf | null {
 export function useTemplateList(): [TypeTemplateConf[], boolean] {
   const [value, updateValue] = useState<TypeTemplateConf[]>([]);
   const [loading, updateLoading] = useState(true);
-  // const registerUpdater = useAsyncUpdater();
   const brandInfo = useSelectedBrand();
   const dispatch = useDispatch();
   useLayoutEffect(() => {

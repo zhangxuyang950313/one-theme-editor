@@ -80,7 +80,14 @@ export default class Template {
       tempData.preview?.[0]._attributes.src || ""
     );
     const imageData = await getImageData(src);
-    return imageData;
+    return {
+      md5: imageData.md5,
+      width: imageData.width,
+      height: imageData.height,
+      size: imageData.size,
+      filename: imageData.filename,
+      ninePatch: imageData.ninePatch
+    };
   }
 
   // 模板支持 ui 版本列表

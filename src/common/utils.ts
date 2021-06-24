@@ -3,9 +3,7 @@ import md5 from "md5";
 import fse from "fs-extra";
 import FileType from "file-type";
 import imageSizeOf from "image-size";
-import image2base64 from "image-to-base64";
 import dirTree from "directory-tree";
-import { HOST, PORT } from "common/config";
 import { insertImageData } from "src/server/db-handler/image";
 import { TypeImageData, TypeImageMapper } from "types/project";
 import ERR_CODE from "renderer/core/error-code";
@@ -156,7 +154,7 @@ export function getFileSizeOf(file: string): number {
 export async function getImageData(file: string): Promise<TypeImageData> {
   if (!file) throw new Error(ERR_CODE[4000]);
   if (!fse.existsSync(file)) throw new Error(`${ERR_CODE[4003]}: ${file}`);
-
+  // TODO: 可以去图片数据库先查一下是否有，没有的话再进行接下来的步骤
   const buff = await fse.readFile(file);
   const base64 = buff.toString("base64");
   const { width, height } = getImageSizeOf(file);

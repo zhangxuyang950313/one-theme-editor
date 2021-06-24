@@ -1,8 +1,7 @@
 import path from "path";
 import fse from "fs-extra";
-import { Express } from "express";
+import express, { Express } from "express";
 import FileType from "file-type";
-import bodyParser from "body-parser";
 import API from "common/api";
 import { base64ToBuffer, base64ToLocalFile } from "common/utils";
 import {
@@ -32,7 +31,12 @@ const result = {
 };
 
 export default function registerService(service: Express): void {
-  service.use(bodyParser.json());
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  service.use(express.json());
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  service.use(express.urlencoded({ extended: false }));
   service.use((req, res, next) => {
     //判断路径
     if (req.path !== "/" && !req.path.includes(".")) {
@@ -98,6 +102,7 @@ export default function registerService(service: Express): void {
   service.post<any, any, TypeCreateProjectData, any>(
     API.CREATE_PROJECT,
     (req, res) => {
+      console.log(req.body);
       createProject(req.body)
         .then(project => res.send(result.success(project)))
         .catch(err => res.status(400).send(result.fail(err)));
