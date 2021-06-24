@@ -1,7 +1,7 @@
 import io from "socket.io-client";
 import { HOST, PORT } from "common/config";
 import SOCKET_EVENT from "common/socket-event";
-import { TypeProjectDataDoc } from "types/project";
+import { TypeImageMapper, TypeProjectDataDoc } from "types/project";
 
 const socket = io(`ws://${HOST}:${PORT}`);
 
@@ -36,10 +36,10 @@ export function socketProject(
   return registerSocketOf(SOCKET_EVENT.PROJECT, { param: uuid, callback });
 }
 
-// 注册同步资源 socket
-export function socketResource(
+// 注册同步图片映射 socket
+export function socketImageMapperList(
   uuid: string,
-  callback: (data: TypeProjectDataDoc) => void
+  callback: (data: TypeImageMapper[]) => void
 ): (uuid: string) => typeof socket {
   return registerSocketOf(SOCKET_EVENT.IMAGE_MAPPER_LIST, {
     param: uuid,

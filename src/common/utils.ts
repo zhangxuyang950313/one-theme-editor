@@ -213,9 +213,13 @@ export function filenameIsImage(filename: string): boolean {
  * @returns
  */
 export async function fileIsImage(file: string): Promise<boolean> {
-  const fileType = await FileType.fromFile(file);
-  if (!fileType?.ext) return false;
-  return IMAGE_EXT.includes(fileType?.ext);
+  try {
+    const fileType = await FileType.fromFile(file);
+    if (!fileType?.ext) return false;
+    return IMAGE_EXT.includes(fileType?.ext);
+  } catch (err) {
+    return false;
+  }
 }
 
 // 获取一个目录下所有文件
@@ -225,4 +229,9 @@ export function getDirAllFiles(dir: string): dirTree.DirectoryTree[] {
     result.push(data);
   });
   return result;
+}
+
+// 两个数组的并集
+export function union(arr1: string[], arr2: string[]): string[] {
+  return Array.from(new Set([...arr1, ...arr2]));
 }

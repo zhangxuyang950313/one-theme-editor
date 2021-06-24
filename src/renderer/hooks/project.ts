@@ -1,12 +1,7 @@
 import { useLayoutEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { socketResource } from "@/api/socket";
-import {
-  apiAddImageMapper,
-  apiDelImageMapper,
-  apiGetProjectByUUID,
-  apiGetProjectList
-} from "@/api/index";
+import { socketImageMapperList } from "@/api/socket";
+import { apiGetProjectByUUID, apiGetProjectList } from "@/api/index";
 import { useAxiosCanceler } from "@/hooks/index";
 import { useSelectedBrand } from "@/hooks/template";
 import {
@@ -14,19 +9,17 @@ import {
   ActionSetCurrentPage,
   ActionSetCurrentTemplate
 } from "@/store/modules/template/action";
-import { ActionSetProjectData } from "@/store/modules/project/action";
+import {
+  ActionSetImageMapperList,
+  ActionSetProjectData
+} from "@/store/modules/project/action";
 import {
   getProjectData,
-  getProjectLocalPath,
-  getProjectUUID
+  getProjectLocalPath
 } from "@/store/modules/project/selector";
-import {
-  TypeImageMapper,
-  TypeProjectDataDoc,
-  TypeProjectStateInStore
-} from "types/project";
+import { TypeProjectDataDoc, TypeProjectStateInStore } from "types/project";
 
-import ERR_CODE from "renderer/core/error-code";
+// import ERR_CODE from "renderer/core/error-code";
 import { useDocumentTitle } from "./index";
 
 // 获取项目列表
@@ -86,6 +79,7 @@ export function useLoadProjectByUUID(
 ): [TypeProjectDataDoc | null, boolean] {
   const [project, updateProject] = useState<TypeProjectDataDoc | null>(null);
   const [loading, updateLoading] = useState(true);
+  const dispatch = useDispatch();
   // const registerCancelToken = useAxiosCanceler();
 
   useLayoutEffect(() => {
@@ -105,8 +99,9 @@ export function useLoadProjectByUUID(
       .then(project => {
         console.log(`获取工程: ${uuid}`, project);
         updateProject(project);
-        socketResource(uuid, imageMapperList => {
+        socketImageMapperList(uuid, imageMapperList => {
           console.log("update imageMapperList: ", imageMapperList);
+          dispatch(ActionSetImageMapperList(imageMapperList));
         });
       })
       .catch(err => {
@@ -136,29 +131,29 @@ export function useProjectRoot(): string | null {
   return useSelector(getProjectLocalPath);
 }
 
-// 添加图片资源映射
-export function useAddImageMapper(): (data: TypeImageMapper) => Promise<void> {
-  const uuid = useSelector(getProjectUUID);
-  const dispatch = useDispatch();
-  // 更新标题
-  return async data => {
-    if (!uuid) throw new Error(ERR_CODE[2001]);
-    const project = await apiAddImageMapper(uuid, data);
-    dispatch(ActionSetProjectData(project));
-  };
-}
+// // 添加图片资源映射
+// export function useAddImageMapper(): (data: TypeImageMapper) => Promise<void> {
+//   const uuid = useSelector(getProjectUUID);
+//   const dispatch = useDispatch();
+//   // 更新标题
+//   return async data => {
+//     if (!uuid) throw new Error(ERR_CODE[2001]);
+//     const project = await apiAddImageMapper(uuid, data);
+//     dispatch(ActionSetProjectData(project));
+//   };
+// }
 
-// 删除图片资源映射
-export function useDelImageMapper(): (target: string) => Promise<void> {
-  const uuid = useSelector(getProjectUUID);
-  const dispatch = useDispatch();
-  // 更新标题
-  return async target => {
-    if (!uuid) throw new Error(ERR_CODE[2001]);
-    const project = await apiDelImageMapper(uuid, target);
-    dispatch(ActionSetProjectData(project));
-  };
-}
+// // 删除图片资源映射
+// export function useDelImageMapper(): (target: string) => Promise<void> {
+//   const uuid = useSelector(getProjectUUID);
+//   const dispatch = useDispatch();
+//   // 更新标题
+//   return async target => {
+//     if (!uuid) throw new Error(ERR_CODE[2001]);
+//     const project = await apiDelImageMapper(uuid, target);
+//     dispatch(ActionSetProjectData(project));
+//   };
+// }
 
 // // 更新缓存在 state.project.projectData 的所有数据
 // export function useUpdateProject(): () => void {

@@ -132,8 +132,8 @@ export async function updateProject<
     | { $unset: O }
 ): Promise<TypeProjectDataDoc> {
   const updated = await projectDB.update<TypeProjectData>({ uuid }, data, {
-    multi: true,
-    upsert: true,
+    multi: true, // 更新所有匹配项目
+    upsert: true, // 不存在则创建
     returnUpdatedDocs: true
   });
   if (updated[0]) return updated[0];
@@ -142,7 +142,7 @@ export async function updateProject<
 
 // export async function addDatabasePropList<T>(data: T, prop: keyof T) {}
 
-// 增加工程 imageMapperList
+// 增加 imageMapperList
 export async function addProjectImageMapper(
   uuid: string,
   imageMapper: TypeImageMapper
@@ -160,6 +160,20 @@ export async function delProjectImageMapper(
 ): Promise<TypeImageMapper[]> {
   const project = await updateProject(uuid, {
     $pull: { imageMapperList: imageMapper }
+  });
+  return project.imageMapperList;
+}
+
+// 更新 imageMapperList
+export async function updateProjectImageMapper(
+  uuid: string,
+  imageMapper: TypeImageMapper
+): Promise<TypeImageMapper[]> {
+  await delProjectImageMapper(uuid, {
+    target: imageMapper.target
+  });
+  const project = await updateProject(uuid, {
+    $push: { imageMapperList: imageMapper }
   });
   return project.imageMapperList;
 }

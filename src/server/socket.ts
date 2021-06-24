@@ -2,7 +2,7 @@ import http from "http";
 import { Server, Socket } from "socket.io";
 import SOCKET_EVENT from "common/socket-event";
 import { findProjectByUUID } from "./db-handler/project";
-import { syncResource } from "./core/socketSync";
+import { syncImageMapperList } from "./core/socketSync";
 
 // 快速将 socket event 建立通讯通道
 class SocketConnecter {
@@ -10,6 +10,7 @@ class SocketConnecter {
   constructor(socket: Socket) {
     this.socket = socket;
   }
+  // 快速注册 socket 的通讯协议
   connect<P, R, T>(
     event: SOCKET_EVENT,
     method: (data: P, cb: (d: R) => void) => Promise<T> | T
@@ -48,16 +49,7 @@ export default function registerSocket(server: http.Server): void {
     //   });
     // });
 
-    // 监听文件目录
-    connecter.connect(SOCKET_EVENT.IMAGE_MAPPER_LIST, (uuid: string) => {
-      syncResource(uuid, imageMapperList => {
-        socket.emit(SOCKET_EVENT.IMAGE_MAPPER_LIST, imageMapperList);
-      });
-    });
-    // socket.on(SOCKET_EVENT.SYNC_RESOURCE, uuid => {
-    //   syncResource(uuid, project => {
-    //     socket.emit(SOCKET_EVENT.PROJECT, project);
-    //   });
-    // });
+    // 监听 image 素材
+    connecter.connect(SOCKET_EVENT.IMAGE_MAPPER_LIST, syncImageMapperList);
   });
 }

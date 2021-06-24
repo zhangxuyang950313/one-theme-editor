@@ -21,10 +21,8 @@ enum ACTION_TYPES {
   // 设置当前选择的页面信息
   SET_CURRENT_PAGE = "SET_CURRENT_PAGE",
 
-  // 添加素材
-  SET_IMAGE_MAPPER_LIST = "ADD_IMAGE_MAPPER",
-  // 删除素材
-  DEL_IMAGE_MAPPER = "DEL_IMAGE_MAPPER"
+  // 设置 store.project.imageMapperList
+  SET_IMAGE_MAPPER_LIST = "SET_IMAGE_MAPPER_LIST"
 }
 
 export default ACTION_TYPES;

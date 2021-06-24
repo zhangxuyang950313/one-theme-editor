@@ -153,25 +153,25 @@ export default function registerService(service: Express): void {
     }
   );
 
-  // 增加一个程图片映射列表
-  service.post<{ uuid: string }, any, TypeImageMapper>(
-    `${API.ADD_IMAGE_MAPPER}/:uuid`,
-    (req, res) => {
-      updateProject(req.params.uuid, { $push: { imageMapperList: req.body } })
-        .then(project => res.send(result.success(project)))
-        .catch(err => res.status(400).send(result.fail(err)));
-    }
-  );
+  // // 增加一个程图片映射列表
+  // service.post<{ uuid: string }, any, TypeImageMapper>(
+  //   `${API.ADD_IMAGE_MAPPER}/:uuid`,
+  //   (req, res) => {
+  //     updateProject(req.params.uuid, { $push: { imageMapperList: req.body } })
+  //       .then(project => res.send(result.success(project)))
+  //       .catch(err => res.status(400).send(result.fail(err)));
+  //   }
+  // );
 
-  // 删除一个工程图片映射列表
-  service.post<{ uuid: string }, any, TypeImageMapper>(
-    `${API.DEL_IMAGE_MAPPER}/:uuid`,
-    (req, res) => {
-      updateProject(req.params.uuid, { $pull: { imageMapperList: req.body } })
-        .then(project => res.send(result.success(project)))
-        .catch(err => res.status(400).send(result.fail(err)));
-    }
-  );
+  // // 删除一个工程图片映射列表
+  // service.post<{ uuid: string }, any, TypeImageMapper>(
+  //   `${API.DEL_IMAGE_MAPPER}/:uuid`,
+  //   (req, res) => {
+  //     updateProject(req.params.uuid, { $pull: { imageMapperList: req.body } })
+  //       .then(project => res.send(result.success(project)))
+  //       .catch(err => res.status(400).send(result.fail(err)));
+  //   }
+  // );
 
   // // 删除一个工程
   // app.delete("/project", (req, res) => {

@@ -77,7 +77,7 @@ export type TypeProjectData = {
   template: TypeTemplateData;
   imageMapperList: TypeImageMapper[];
   xmlMapperList: TypeXmlMapper[];
-  localPath: string | null;
+  localPath: string;
 };
 
 // // 在数据空的图片映射
