@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='utf-8' standalone='yes' ?>
 
-<description name="浅色模板" version="1.0"/>
+<description name="MIUI 12" version="1.0"/>
+
 <!-- 预览静态图 -->
 <preview src="preview/preview.jpg"/>
 

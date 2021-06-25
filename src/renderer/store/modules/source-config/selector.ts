@@ -11,15 +11,21 @@ export const getBrandInfoList = createSelector(
 );
 
 // 获取前选择的厂商信息
-export const getSelectedBrand = createSelector(
+export const getSelectedBrandConf = createSelector(
   getSourceConfigState,
   state => state.currentBrandConf
 );
 
-// 获取当前预览配置信息
+// 获取当前资源配置信息
 export const getCurrentSourceConfig = createSelector(
   getSourceConfigState,
   state => state.currentConfig
+);
+
+// 获取当前资源配置预览信息
+export const getCurrentSourceDescription = createSelector(
+  getSourceConfigState,
+  state => state.currentDescription
 );
 
 // 获取模块列表

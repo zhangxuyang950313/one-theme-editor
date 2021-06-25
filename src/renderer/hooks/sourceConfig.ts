@@ -13,10 +13,11 @@ import {
   ActionSetBrandInfoList,
   ActionSetSelectedBrand,
   ActionSetCurrentBrand,
-  ActionSetCurrentPage
+  ActionSetCurrentPage,
+  ActionSetSourceDescriptionList
 } from "@/store/modules/source-config/action";
 import {
-  getSelectedBrand,
+  getSelectedBrandConf,
   getCurrentModule,
   getCurrentPage,
   getCurrentModuleList,
@@ -59,7 +60,7 @@ export function useBrandConfList(): TypeBrandConf[] {
 
 // 当前选择的厂商信息
 export function useSelectedBrandConf(): TypeBrandConf | null {
-  return useSelector(getSelectedBrand);
+  return useSelector(getSelectedBrandConf);
 }
 
 // 获取配置预览列表
@@ -74,6 +75,7 @@ export function useSourceDescriptionList(): [TypeSourceDescription[], boolean] {
       .then(data => {
         console.log("配置预览列表：", data);
         updateValue(data);
+        dispatch(ActionSetSourceDescriptionList(data));
       })
       .catch(err => {
         const content = ERR_CODE[3002];

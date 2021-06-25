@@ -65,7 +65,15 @@ export function useServerHost(): string {
   return `http://localhost:${serverPort}`;
 }
 
-// 生成用于工程显示的图片url
+// 生成绝对正确路径的图片 url
+export function useImageUrl(): (x: TypeImagePathLike) => TypeImagePathLike {
+  const host = useServerHost();
+  return file => {
+    return `${host}/image?file=${file}`;
+  };
+}
+
+// 生成用于工程显示的图片 url
 export function useProjectImageUrl(): (
   x: TypeImagePathLike
 ) => TypeImagePathLike {

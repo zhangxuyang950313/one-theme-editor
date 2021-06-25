@@ -2,15 +2,10 @@ import ACTION_TYPES from "@/store/actions";
 import { TypeBrandConf } from "types/project";
 import {
   TypeSourceConfig,
+  TypeSourceDescription,
   TypeSourceModuleConf,
   TypeSourcePageConf
 } from "types/source-config";
-
-// 设置模板路径
-type TypeSetTemplatePath = {
-  type: typeof ACTION_TYPES.SET_TEMPLATE_PATH;
-  payload: string;
-};
 
 // 设置品牌信息列表
 type TypeSetBrandInfoList = {
@@ -24,10 +19,20 @@ type TypeActionSetBrandInfo = {
   brandInfo: TypeBrandConf;
 };
 
-// 设置素材配置预览
-type TypeActionSetCurrentSourceDescription = {
-  type: typeof ACTION_TYPES.SET_SOURCE_DESCRIPTION;
+type TypeActionSetSourceConfig = {
+  type: typeof ACTION_TYPES.SET_SOURCE_CONFIG;
   payload: TypeSourceConfig;
+};
+
+type TypeActionSetSourceDescriptionList = {
+  type: typeof ACTION_TYPES.SET_SOURCE_DESCRIPTION_LIST;
+  payload: TypeSourceDescription[];
+};
+
+// 设置素材配置预览
+type TypeActionSetSourceDescription = {
+  type: typeof ACTION_TYPES.SET_SOURCE_DESCRIPTION;
+  payload: TypeSourceDescription;
 };
 
 // 设置模块
@@ -44,17 +49,13 @@ type TypeActionSetCurrentPage = {
 
 // main actions
 export type TypeActions =
-  | TypeSetTemplatePath
   | TypeSetBrandInfoList
+  | TypeActionSetSourceDescriptionList
   | TypeActionSetBrandInfo
-  | TypeActionSetCurrentSourceDescription
+  | TypeActionSetSourceConfig
+  | TypeActionSetSourceDescription
   | TypeActionSetCurrentModule
   | TypeActionSetCurrentPage;
-
-// 设置模板路径
-export function ActionSetTemplatePath(payload: string): TypeSetTemplatePath {
-  return { type: ACTION_TYPES.SET_TEMPLATE_PATH, payload };
-}
 
 // 设置厂商信息列表
 export function ActionSetBrandInfoList(
@@ -70,10 +71,17 @@ export function ActionSetSelectedBrand(
   return { type: ACTION_TYPES.SET_SELECTED_BRAND, brandInfo };
 }
 
-// 设置当前资源配置
-export function ActionSetSourceConfig(
-  payload: TypeSourceConfig
-): TypeActionSetCurrentSourceDescription {
+// 设置当前资源配置预览列表
+export function ActionSetSourceDescriptionList(
+  payload: TypeSourceDescription[]
+): TypeActionSetSourceDescriptionList {
+  return { type: ACTION_TYPES.SET_SOURCE_DESCRIPTION_LIST, payload };
+}
+
+// 设置当前资源预览配置
+export function ActionSetSourceDescription(
+  payload: TypeSourceDescription
+): TypeActionSetSourceDescription {
   return { type: ACTION_TYPES.SET_SOURCE_DESCRIPTION, payload };
 }
 

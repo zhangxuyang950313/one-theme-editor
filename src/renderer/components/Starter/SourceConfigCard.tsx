@@ -1,3 +1,4 @@
+import path from "path";
 import React from "react";
 import styled from "styled-components";
 
@@ -5,7 +6,7 @@ import { TypeSourceDescription } from "types/source-config";
 
 // components
 import { Card } from "antd";
-import { useSourceImageUrl } from "@/hooks";
+import { useImageUrl } from "@/hooks";
 
 type TypeProps = {
   hoverable?: boolean;
@@ -14,16 +15,15 @@ type TypeProps = {
 
 // 配置卡片
 const SourceConfigCard: React.FC<TypeProps> = props => {
-  const getImageURL = useSourceImageUrl();
+  const getImageURL = useImageUrl();
   const { config } = props;
+  const imgUrl = getImageURL(path.join(config.root, config.preview));
   return (
     <StyleSourceConfigCard data-hoverable={props.hoverable}>
       <Card
         hoverable={props.hoverable}
         style={{ width: "100%" }}
-        cover={
-          <img alt={config.name} src={getImageURL(config.preview) || ""} />
-        }
+        cover={<img alt={config.name} src={imgUrl} />}
       >
         <Card.Meta title={config.name} description={config.uiVersion.name} />
       </Card>
