@@ -4,6 +4,7 @@ import { v4 as genUUID } from "uuid";
 import Nedb from "nedb-promises";
 
 import { PROJECTS_DB } from "common/paths";
+import { base64ToLocalFile } from "common/utils";
 import {
   TypeCreateProjectData,
   TypeImageMapper,
@@ -11,9 +12,8 @@ import {
   TypeProjectDataDoc
 } from "types/project";
 import ERR_CODE from "renderer/core/error-code";
-import ProjectData from "src/data/ProjectData";
-import { base64ToLocalFile } from "@/../common/utils";
-import { compileTempInfo } from "./template";
+import ProjectData from "@/data/ProjectData";
+import { compileSourceConfig } from "@/compiler/sourceConfig";
 import { findImageData } from "./image";
 
 // TODO: 创建数据库有个坑，如果 filename 文件内容不是 nedb 能接受的数据格式则会导致服务崩溃
@@ -80,7 +80,7 @@ export async function createProject(
   data: TypeCreateProjectData
 ): Promise<TypeProjectDataDoc> {
   const uuid = genUUID();
-  const template = await compileTempInfo(data);
+  const template = await compileSourceConfig(data);
   // 组装数据
   const projectData = new ProjectData();
   projectData.setDescription(data.description);

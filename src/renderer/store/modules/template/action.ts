@@ -4,7 +4,7 @@ import {
   TypeTemplateData,
   TypeTempModuleConf,
   TypeTempPageConf
-} from "types/template";
+} from "types/sourceConfig";
 
 // 设置模板路径
 type TypeSetTemplatePath = {

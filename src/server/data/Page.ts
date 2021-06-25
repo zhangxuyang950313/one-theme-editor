@@ -1,14 +1,14 @@
 import path from "path";
 import { getFileMD5, getImageData } from "common/utils";
 import {
-  TypeTempPageConf,
-  TypeTempPageConfigConf,
-  TypeTempPageSourceConf,
-  TypeTempPageCategoryConf
-} from "types/template";
+  TypeSourcePageConf,
+  TypeSourcePageInfoConf,
+  TypeSourcePageSourceConf,
+  TypeSourceFileCategoryConf
+} from "types/sourceConfig";
 import { TypeTempLayout, TypeTempOriginPageConf } from "types/xml-result";
-import { xml2jsonCompact } from "../core/xmlCompiler";
-import XMLNode from "../core/XMLNode";
+import { xml2jsonCompact } from "@/compiler/xmlCompiler";
+import XMLNode from "@/core/XMLNode";
 
 export default class Page {
   private file: string;
@@ -37,7 +37,7 @@ export default class Page {
     return getFileMD5(previewSrc);
   }
 
-  async getConfig(): Promise<TypeTempPageConfigConf> {
+  async getConfig(): Promise<TypeSourcePageInfoConf> {
     const xmlData = await this.ensureXmlData();
     return {
       version: xmlData.config?.[0]._attributes?.version || "",
@@ -46,7 +46,7 @@ export default class Page {
     };
   }
 
-  async getCategoryList(): Promise<TypeTempPageCategoryConf[]> {
+  async getCategoryList(): Promise<TypeSourceFileCategoryConf[]> {
     const xmlData = await this.ensureXmlData();
     return (
       xmlData.category?.map(item => ({
@@ -57,9 +57,9 @@ export default class Page {
     );
   }
 
-  async getSourceList(): Promise<TypeTempPageSourceConf[]> {
+  async getSourceList(): Promise<TypeSourcePageSourceConf[]> {
     const xmlData = await this.ensureXmlData();
-    const queue: Promise<TypeTempPageSourceConf>[] =
+    const queue: Promise<TypeSourcePageSourceConf>[] =
       xmlData.source?.map(async item => {
         const layout: TypeTempLayout = {};
         if (item.layout) {
@@ -113,7 +113,7 @@ export default class Page {
   //   const xmlData = await this.ensureXmlData();
   // }
 
-  async getData(): Promise<TypeTempPageConf> {
+  async getData(): Promise<TypeSourcePageConf> {
     return {
       pathname: this.pathname,
       config: await this.getConfig(),

@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import { TypeSourceConfig } from "types/template";
+import { TypeSourceConfig } from "types/sourceConfig";
 
 // components
 import { Card } from "antd";

@@ -17,7 +17,7 @@ import {
 
 import { findProjectImage } from "@/store/modules/project/selector";
 import { useProjectRoot } from "@/hooks/project";
-import { TypeTempPageSourceConf } from "types/template";
+import { TypeTempPageSourceConf } from "types/sourceConfig";
 import { apiDeleteFile, apiWriteFile } from "@/api";
 import ERR_CODE from "@/core/error-code";
 import { useImageUrl } from "@/hooks";

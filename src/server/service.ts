@@ -4,17 +4,20 @@ import express, { Express } from "express";
 import FileType from "file-type";
 import API from "common/api";
 import { base64ToLocalFile } from "common/utils";
-import { TypeUiVersion } from "types/template";
+import { TypeUiVersion } from "types/sourceConfig";
 import { TypeCreateProjectData, TypeProjectDescription } from "types/project";
 import { TypeFileData } from "types/request";
-import ERR_CODE from "../renderer/core/error-code";
+import ERR_CODE from "renderer/core/error-code";
+import {
+  compileSourceDescriptionList,
+  readBrandConf
+} from "./compiler/sourceConfig";
 import {
   findProjectByUUID,
   getProjectListOf,
   createProject,
   updateProject
 } from "./db-handler/project";
-import { getConfigPreview, compileBrandConf } from "./db-handler/template";
 import { findImageData } from "./db-handler/image";
 
 const result = {
@@ -60,7 +63,10 @@ export default function registerService(service: Express): void {
   //   }
   // );
 
-  // 图片服务
+  /**
+   * 图片服务
+   * @params file 图片本地路径
+   */
   service.get<any, any, any, { file: string }>("/image", async (req, res) => {
     try {
       const { file } = req.query;
@@ -79,10 +85,10 @@ export default function registerService(service: Express): void {
     }
   });
 
-  // 获取厂商列表
+  // 获取厂商配置列表
   service.get(API.GET_BRAND_LIST, async (req, res) => {
     try {
-      const brandConfList = await compileBrandConf();
+      const brandConfList = await readBrandConf();
       res.send(result.success(brandConfList));
     } catch (err) {
       res.status(400).send(result.fail(err.message));
@@ -94,7 +100,9 @@ export default function registerService(service: Express): void {
     `${API.GET_SOURCE_CONFIG_LIST}/:brandType`,
     async (req, res) => {
       try {
-        const configPreview = await getConfigPreview(req.params.brandType);
+        const configPreview = await compileSourceDescriptionList(
+          req.params.brandType
+        );
         res.send(result.success(configPreview));
       } catch (err) {
         res.status(400).send(result.fail(err.message));

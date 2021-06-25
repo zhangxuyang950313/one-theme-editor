@@ -25,7 +25,10 @@ export const RESOURCE_DIR = path.resolve(STATIC_DIR, "resource");
 export const BINARY_DIR = path.resolve(RESOURCE_DIR, "binary");
 
 // 配置目录
-export const FRAMEWORK_DIR = path.resolve(RESOURCE_DIR, "sourceConfig");
+export const SOURCE_CONFIG_DIR = path.resolve(RESOURCE_DIR, "sourceConfig");
 
 // 模板总配置文件
-export const TEMPLATE_CONFIG = path.resolve(FRAMEWORK_DIR, "config.json");
+export const SOuRCE_CONFIG_FILE = path.resolve(
+  SOURCE_CONFIG_DIR,
+  "config.json"
+);

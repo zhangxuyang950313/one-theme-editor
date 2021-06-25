@@ -1,15 +1,14 @@
 import path from "path";
 
-import TemplateInfo from "src/data/TemplateInfo";
 import { getFileMD5, getImageData } from "common/utils";
 
 import {
-  TypeTempPageGroupConf,
-  TypeTemplateData,
-  TypeTempModuleConf,
-  TypeTempPageConf,
+  TypeSourcePageGroupConf,
+  TypeSourceConfig,
+  TypeSourceModuleConf,
+  TypeSourcePageConf,
   TypeUiVersion
-} from "types/template";
+} from "types/sourceConfig";
 import { TypeImageInfo } from "types/project";
 import {
   TypeOriginTempConf,
@@ -17,13 +16,13 @@ import {
   TypeOriginTempModulePageConf
 } from "types/xml-result";
 
+import Page from "@/data/Page";
+import XMLNode from "@/core/XMLNode";
+import { xml2jsonCompact } from "@/compiler/xmlCompiler";
+
 import ERR_CODE from "renderer/core/error-code";
 
-import { xml2jsonCompact } from "../core/xmlCompiler";
-import XMLNode from "../core/XMLNode";
-import Page from "./Page";
-
-export default class Template {
+export default class SourceConfig {
   // description.xml 路径
   private descFile = "";
   // description.xml 所在目录，即模板根目录
@@ -101,7 +100,7 @@ export default class Template {
   // 页面数据
   private async getPages(
     data: TypeOriginTempModulePageConf[]
-  ): Promise<TypeTempPageConf[]> {
+  ): Promise<TypeSourcePageConf[]> {
     // 这里是在选择模板版本后得到的目标模块目录
     const pagesQueue = data.map(item => {
       const pageNode = new XMLNode(item);
@@ -116,8 +115,8 @@ export default class Template {
   // 页面分组数据
   private async getPageGroup(
     data: TypeOriginTempPageGroupConf[]
-  ): Promise<TypeTempPageGroupConf[]> {
-    const groupsQueue: Promise<TypeTempPageGroupConf>[] = data.map(
+  ): Promise<TypeSourcePageGroupConf[]> {
+    const groupsQueue: Promise<TypeSourcePageGroupConf>[] = data.map(
       async item => {
         const groupNode = new XMLNode(item);
         return {
@@ -130,9 +129,9 @@ export default class Template {
   }
 
   // 模块数据
-  async getModules(): Promise<TypeTempModuleConf[]> {
+  async getModules(): Promise<TypeSourceModuleConf[]> {
     const tempData = await this.ensureXmlData();
-    const modulesQueue: Promise<TypeTempModuleConf>[] =
+    const modulesQueue: Promise<TypeSourceModuleConf>[] =
       tempData.module?.map(async (item, index) => {
         const moduleNode = new XMLNode(item);
         const iconSrc = path.join(
@@ -140,7 +139,7 @@ export default class Template {
           moduleNode.getAttribute("icon")
         );
         const md5 = await getFileMD5(iconSrc);
-        const result: TypeTempModuleConf = {
+        const result: TypeSourceModuleConf = {
           index,
           name: moduleNode.getAttribute("name"),
           icon: md5,
@@ -151,13 +150,13 @@ export default class Template {
     return await Promise.all(modulesQueue);
   }
 
-  async getTempInfo(): Promise<TypeTemplateData> {
-    const templateInfo = new TemplateInfo();
-    templateInfo.setName(await this.getName());
-    templateInfo.setVersion(await this.getVersion());
-    templateInfo.setPreview(await this.getPreview());
-    templateInfo.setUiVersion(await this.getUiVersion());
-    templateInfo.setModules(await this.getModules());
-    return templateInfo.getData();
+  async getData(): Promise<TypeSourceConfig> {
+    return {
+      name: await this.getName(),
+      version: await this.getVersion(),
+      preview: await this.getPreview(),
+      uiVersion: await this.getUiVersion(),
+      modules: await this.getModules()
+    };
   }
 }

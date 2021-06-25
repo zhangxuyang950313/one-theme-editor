@@ -1,11 +1,8 @@
 import { TypeImageInfo } from "types/project.d";
-import { TypeSourceConfig, TypeUiVersion } from "types/template";
+import { TypeSourceDescription, TypeUiVersion } from "types/sourceConfig";
 
-/**
- * 模板的预览信息
- * 用于选择模板时的必要信息，由于此时的模板版本还未知，故不能生成模板映射数据
- */
-export default class SourceConfig {
+// 素材配置的描述信息
+export default class SourceDescription {
   private key = "";
   private root = "";
   private file = "";
@@ -56,7 +53,7 @@ export default class SourceConfig {
   getUiVersion(): TypeUiVersion {
     return this.uiVersion;
   }
-  getData(): TypeSourceConfig {
+  getData(): TypeSourceDescription {
     return {
       key: this.getKey(),
       root: this.getRoot(),

@@ -8,7 +8,7 @@ import {
   TypeProjectData,
   TypeProjectDataDoc
 } from "types/project";
-import { TypeSourceConfig } from "types/template";
+import { TypeSourceConfig } from "types/sourceConfig";
 import { TypeFileData, TypeResponseFrame } from "types/request";
 
 type TypeGetCanceler = (c: Canceler) => void;

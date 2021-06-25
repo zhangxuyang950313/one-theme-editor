@@ -8,7 +8,7 @@ import { isDev } from "@/core/constant";
 import ERR_CODE from "@/core/error-code";
 import { useSelectedBrandConf, useSourceConfigList } from "@/hooks/template";
 import { TypeProjectDescription } from "types/project";
-import { TypeSourceConfig } from "types/template";
+import { TypeSourceConfig } from "types/sourceConfig";
 import { apiCreateProject } from "@/api";
 
 // components

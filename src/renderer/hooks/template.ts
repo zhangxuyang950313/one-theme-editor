@@ -25,7 +25,7 @@ import {
   TypeTempPageConf,
   TypeSourceConfig,
   TypeTempPageGroupConf
-} from "types/template";
+} from "types/sourceConfig";
 import { TypeBrandConf } from "types/project";
 import { useAsyncUpdater } from "./index";
 

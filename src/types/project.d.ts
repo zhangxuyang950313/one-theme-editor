@@ -1,5 +1,9 @@
 import { projectInfoConfig } from "renderer/config/editor";
-import { TypeSourceConfig, TypeTemplateData, TypeUiVersion } from "./template";
+import {
+  TypeSourceDescription,
+  TypeSourceConfig,
+  TypeUiVersion
+} from "./template";
 import { TypeDatabase } from "./index";
 
 export type TypeBrandInfo = {
@@ -27,7 +31,7 @@ export type TypeCreateProjectData = {
   description: TypeProjectDesc;
   uiVersion: TypeUiVersion;
   brandConf: TypeBrandConf;
-  configPreview: TypeSourceConfig;
+  configPreview: TypeSourceDescription;
   localPath?: string;
 };
 
@@ -61,7 +65,7 @@ export type TypeProjectData = {
   brand: TypeBrandInfo;
   description: TypeProjectDescription;
   uiVersion: TypeUiVersion;
-  template: TypeTemplateData;
+  template: TypeSourceConfig;
   imageMapperList: TypeImageMapper[];
   xmlMapperList: TypeXmlMapper[];
   localPath: string;
