@@ -2,6 +2,9 @@ enum ACTION_TYPES {
   // 设置服务端口
   SET_SERVER_PORT = "SET_SERVER_PORT",
 
+  // 设置模板本地路径
+  SET_TEMPLATE_PATH = "SET_TEMPLATE_PATH",
+
   // 设置厂商品牌列表
   SET_BRAND_LIST = "SET_BRAND_LIST",
   // 设置当前选择的厂商

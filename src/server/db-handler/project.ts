@@ -90,8 +90,8 @@ export async function createProject(
     name: data.brandConf.name
   });
   projectData.setUiVersion({
-    name: data.uiVersionConf.name,
-    code: data.uiVersionConf.code
+    name: data.uiVersion.name,
+    code: data.uiVersion.code
   });
   projectData.setTemplate(template);
   projectData.setLocalPath(data.localPath);

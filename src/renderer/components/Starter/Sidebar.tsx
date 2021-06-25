@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import { useBrandInfoList, useSelectedBrand } from "@/hooks/template";
+import { useBrandConfList, useSelectedBrandConf } from "@/hooks/template";
 
 import { Menu } from "antd";
 import { useDispatch } from "react-redux";
@@ -10,23 +10,23 @@ import TopInfo from "./TopInfo";
 
 // 欢迎页侧边栏
 const Sidebar: React.FC = props => {
-  const brandInfoList = useBrandInfoList();
-  const currentBrandInfo = useSelectedBrand();
+  const brandConfList = useBrandConfList();
+  const currentBrandConf = useSelectedBrandConf();
   const dispatch = useDispatch();
 
   const renderMenu = () => {
-    if (!brandInfoList || !currentBrandInfo) return null;
+    if (!brandConfList || !currentBrandConf) return null;
     return (
       <Menu
         className="menu"
-        selectedKeys={[currentBrandInfo.templateDir]}
+        selectedKeys={[currentBrandConf.type]}
         onSelect={v => {
-          const brandInfo = brandInfoList.find(o => v.key === o.templateDir);
+          const brandInfo = brandConfList.find(o => v.key === o.type);
           if (brandInfo) dispatch(ActionSetSelectedBrand(brandInfo));
         }}
       >
-        {brandInfoList.map(item => (
-          <Menu.Item key={item.templateDir}>{item.name}主题</Menu.Item>
+        {brandConfList.map(item => (
+          <Menu.Item key={item.type}>{item.name}</Menu.Item>
         ))}
       </Menu>
     );

@@ -6,28 +6,37 @@ import {
   TypeTempPageConf
 } from "types/template";
 
-// 更新品牌信息列表
+// 设置模板路径
+type TypeSetTemplatePath = {
+  type: typeof ACTION_TYPES.SET_TEMPLATE_PATH;
+  payload: string;
+};
+
+// 设置品牌信息列表
 type TypeSetBrandInfoList = {
   type: typeof ACTION_TYPES.SET_BRAND_LIST;
   brandInfoList: TypeBrandConf[];
 };
 
-// 更新品牌信息
+// 设置品牌信息
 type TypeActionSetBrandInfo = {
   type: typeof ACTION_TYPES.SET_SELECTED_BRAND;
   brandInfo: TypeBrandConf;
 };
 
+// 设置模板
 type TypeActionSetCurrentTemplate = {
   type: typeof ACTION_TYPES.SET_CURRENT_TEMPLATE;
   payload: TypeTemplateData;
 };
 
+// 设置模块
 type TypeActionSetCurrentModule = {
   type: typeof ACTION_TYPES.SET_CURRENT_MODULE;
   payload: TypeTempModuleConf;
 };
 
+// 设置页面
 type TypeActionSetCurrentPage = {
   type: typeof ACTION_TYPES.SET_CURRENT_PAGE;
   payload: TypeTempPageConf;
@@ -35,11 +44,17 @@ type TypeActionSetCurrentPage = {
 
 // main actions
 export type TypeActions =
+  | TypeSetTemplatePath
   | TypeSetBrandInfoList
   | TypeActionSetBrandInfo
   | TypeActionSetCurrentTemplate
   | TypeActionSetCurrentModule
   | TypeActionSetCurrentPage;
+
+// 设置模板路径
+export function ActionSetTemplatePath(payload: string): TypeSetTemplatePath {
+  return { type: ACTION_TYPES.SET_TEMPLATE_PATH, payload };
+}
 
 // 设置厂商信息列表
 export function ActionSetBrandInfoList(

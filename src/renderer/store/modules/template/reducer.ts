@@ -10,6 +10,7 @@ import { TypeActions } from "./action";
 
 // main states
 export type TypeStates = {
+  templateLocalPath: string | null;
   brandInfoList: TypeBrandConf[];
   currentBrand: TypeBrandConf | null;
   currentTemplate: TypeTemplateData | null;
@@ -19,6 +20,8 @@ export type TypeStates = {
 
 // 通用的数据
 const templateState: TypeStates = {
+  // 本地模板路径
+  templateLocalPath: null,
   // 品牌列表
   brandInfoList: [],
   currentBrand: null,
@@ -33,7 +36,9 @@ export default function TemplateReducer(
   action: TypeActions
 ): TypeStates {
   switch (action.type) {
-    // 更新品牌信息列表
+    case ACTION_TYPES.SET_TEMPLATE_PATH: {
+      return updateState(state, { templateLocalPath: action.payload });
+    }
     case ACTION_TYPES.SET_BRAND_LIST: {
       return updateState(state, { brandInfoList: action.brandInfoList });
     }

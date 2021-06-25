@@ -17,7 +17,7 @@ export type TypeOriginTempConf = Partial<{
   module: TypeOriginTempModuleConf[];
 }>;
 export type TypeOriginUiVersionConf = TypeAttrsContent<
-  Partial<{ name: string; src: string; code: string }>
+  Partial<{ name: string; code: string }>
 >;
 export type TypeOriginTempModuleConf = TypeAttrsContent<
   Partial<{ name: string; icon: string }>
@@ -30,14 +30,14 @@ export type TypeOriginTempPageGroupConf = TypeAttrsContent<
   Partial<{ name: string }>
 > & { page?: TypeOriginTempModulePageConf[] };
 
-// 厂商配置原始信息
-export type TypeOriginBrandConf = Partial<{
-  brand: TypeAttrsContent<{
-    name: string;
-    templateDir: string;
-    type: string;
-  }>[];
-}>;
+// // 厂商配置原始信息
+// export type TypeOriginBrandConf = Partial<{
+//   brand: TypeAttrsContent<{
+//     name: string;
+//     dir: string;
+//     type: string;
+//   }>[];
+// }>;
 
 // 页面配置原始信息
 export type TypeTempLayout = TypeExtendsElementCompact<{

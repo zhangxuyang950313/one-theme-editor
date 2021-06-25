@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { socketImageMapperList } from "@/api/socket";
 import { apiGetProjectByUUID, apiGetProjectList } from "@/api/index";
 import { useAxiosCanceler } from "@/hooks/index";
-import { useSelectedBrand } from "@/hooks/template";
+import { useSelectedBrandConf } from "@/hooks/template";
 import {
   ActionSetCurrentBrand,
   ActionSetCurrentPage,
@@ -28,7 +28,7 @@ type TypeRefreshFunc = () => Promise<void>;
 type TypeReturnData = [TypeProjectDataDoc[], TypeRefreshFunc, TypeIsLoading];
 export function useProjectList(): TypeReturnData {
   // 使用机型进行隔离查询
-  const selectedBrand = useSelectedBrand();
+  const selectedBrand = useSelectedBrandConf();
   const [value, updateValue] = useState<TypeProjectDataDoc[]>([]);
   const [loading, updateLoading] = useState<boolean>(true);
   const registerCancelToken = useAxiosCanceler();

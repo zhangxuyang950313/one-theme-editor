@@ -1,10 +1,10 @@
 const API = {
   // 获取厂商信息列表
   GET_BRAND_LIST: "/brand/list",
-  // 获取模板列表
-  GET_TEMPLATE_LIST: "/template/list",
+  // 获取配置预览列表
+  GET_SOURCE_CONFIG_LIST: "/source-config/list",
   // 获取模板配置
-  GET_TEMPLATE_CONF: "/template/conf",
+  GET_SOURCE_CONFIG_DATA: "/source-config/data",
   // 创建工程
   CREATE_PROJECT: "/project/create",
   // 更新工程

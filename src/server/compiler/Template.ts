@@ -8,7 +8,7 @@ import {
   TypeTemplateData,
   TypeTempModuleConf,
   TypeTempPageConf,
-  TypeUiVersionConf
+  TypeUiVersion
 } from "types/template";
 import { TypeImageInfo } from "types/project";
 import {
@@ -30,8 +30,8 @@ export default class Template {
   private rootDir = "";
   // 模板解析数据
   private xmlData!: TypeOriginTempConf;
-  private uiVersion?: TypeUiVersionConf;
-  constructor(descFile: string, uiVersionConf?: TypeUiVersionConf) {
+  private uiVersion?: TypeUiVersion;
+  constructor(descFile: string, uiVersionConf?: TypeUiVersion) {
     if (!descFile) throw new Error(ERR_CODE[3005]);
 
     this.descFile = descFile;
@@ -90,15 +90,11 @@ export default class Template {
     return { md5, width, height, size, filename, ninePatch };
   }
 
-  // 模板支持 ui 版本列表
-  async getUiVersions(): Promise<TypeUiVersionConf[]> {
+  // 模板信息
+  async getUiVersion(): Promise<TypeUiVersion> {
     const tempData = await this.ensureXmlData();
-    const uiVersions: TypeUiVersionConf[] =
-      tempData.uiVersion?.map(item => ({
-        name: item._attributes.name || "",
-        code: item._attributes.code || "",
-        src: item._attributes.src || ""
-      })) || [];
+    const { name = "", code = "" } = tempData?.uiVersion?.[0]._attributes || {};
+    const uiVersions: TypeUiVersion = { name, code };
     return uiVersions;
   }
 
@@ -106,14 +102,10 @@ export default class Template {
   private async getPages(
     data: TypeOriginTempModulePageConf[]
   ): Promise<TypeTempPageConf[]> {
-    if (!this.uiVersion?.src) {
-      throw new Error(ERR_CODE[3004]);
-    }
-    const uiPath = this.uiVersion.src;
     // 这里是在选择模板版本后得到的目标模块目录
     const pagesQueue = data.map(item => {
       const pageNode = new XMLNode(item);
-      const pathname = path.join(uiPath, pageNode.getAttribute("src"));
+      const pathname = path.join(this.rootDir, pageNode.getAttribute("src"));
       const file = path.join(this.rootDir, pathname);
       const page = new Page({ file, pathname });
       return page.getData();
@@ -164,7 +156,7 @@ export default class Template {
     templateInfo.setName(await this.getName());
     templateInfo.setVersion(await this.getVersion());
     templateInfo.setPreview(await this.getPreview());
-    templateInfo.setUiVersions(await this.getUiVersions());
+    templateInfo.setUiVersion(await this.getUiVersion());
     templateInfo.setModules(await this.getModules());
     return templateInfo.getData();
   }

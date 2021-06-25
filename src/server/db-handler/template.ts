@@ -1,94 +1,66 @@
 import path from "path";
 import fse from "fs-extra";
-import _ from "lodash";
 import * as uuid from "uuid";
-import TemplateData from "src/data/TemplateConf";
-// import TemplateInfo from "src/data/TemplateInfo";
-import { TEMPLATE_CONFIG, getTempDirByBrand } from "common/paths";
-import { TypeOriginBrandConf } from "types/xml-result";
+import SourceConfig from "src/data/SourceConfig";
+import Template from "server/compiler/Template";
+import { TEMPLATE_CONFIG, FRAMEWORK_DIR } from "common/paths";
 import { TypeBrandConf, TypeCreateProjectData } from "types/project";
-import { TypeTemplateConf, TypeTemplateData } from "types/template";
+import { TypeSourceConfig, TypeTemplateData } from "types/template";
 
-import { xml2jsonCompact } from "../core/xmlCompiler";
-import Template from "../compiler/Template";
+import ERR_CODE from "renderer/core/error-code";
 
 // 解析厂商配置
 export async function compileBrandConf(): Promise<TypeBrandConf[]> {
-  const data = await xml2jsonCompact<TypeOriginBrandConf>(TEMPLATE_CONFIG);
-  if (!Array.isArray(data.brand)) return Promise.resolve([]);
-  return data.brand.map(item =>
-    _.pick(item._attributes, ["name", "templateDir", "type"])
+  if (!fse.existsSync(TEMPLATE_CONFIG)) {
+    throw new Error(ERR_CODE[4003]);
+  }
+  const config: TypeBrandConf[] = JSON.parse(
+    fse.readFileSync(TEMPLATE_CONFIG, "utf-8")
   );
+  return config;
 }
 
-// 模板描述文件列表
-export const getTempDescFileList = (brandInfo: TypeBrandConf): string[] => {
-  const brandTemplate = getTempDirByBrand(brandInfo);
-  return fse.existsSync(brandTemplate)
-    ? fse
-        .readdirSync(brandTemplate)
-        .map(dir => path.resolve(brandTemplate, dir, "description.xml"))
-        .filter(fse.existsSync) // 排除不存在 description.xml 的目录
-    : [];
-};
-
-// 解析模板配置信息，该数据用于选择模板的预览，不需要全部解析，且此时并不知道选择的版本
-async function compileTempConf(file: string): Promise<TypeTemplateConf> {
-  const template = new Template(file);
-  const templateData = new TemplateData();
-  templateData.setKey(uuid.v4());
-  templateData.setRoot(path.dirname(file));
-  templateData.setFile(file);
-  templateData.setName(await template.getName());
-  templateData.setPreview(await template.getPreview());
-  templateData.setVersion(await template.getVersion());
-  templateData.setUiVersions(await template.getUiVersions());
-  return templateData.getData();
-  // return {
-  //   // root,
-  //   key,
-  //   name: description?.[0]?._attributes?.name || "",
-  //   version: description?.[0]._attributes?.version || "",
-  //   cover: `http://${HOST}:${PORT}/image/${_id}`,
-  //   uiVersions:
-  //     uiVersion?.map(o => ({
-  //       name: o._attributes.name || "",
-  //       src: o._attributes.src || "",
-  //       code: o._attributes.code || ""
-  //     })) || []
-  //   // modules:
-  //   //   modules?.map(moduleItem => ({
-  //   //     name: moduleItem._attributes.name || "",
-  //   //     icon: moduleItem._attributes.icon || "",
-  //   //     previewClass:
-  //   //       moduleItem.class?.map(classItem => ({
-  //   //         name: classItem._attributes?.name || "",
-  //   //         pages:
-  //   //           classItem.page
-  //   //             ?.map(page => page._attributes?.src || "")
-  //   //             ?.filter(Boolean) || []
-  //   //       })) || []
-  //   //   })) || []
-  // };
+/**
+ * 解析配置部分用于预览的信息
+ * 只解析 description.xml 不需要全部解析
+ * @param descFile description.xml 路径
+ * @returns
+ */
+async function compileSourceConfig(
+  descFile: string
+): Promise<TypeSourceConfig> {
+  const template = new Template(descFile);
+  const sourceConfig = new SourceConfig();
+  sourceConfig.setKey(uuid.v4());
+  sourceConfig.setFile(descFile);
+  sourceConfig.setRoot(path.dirname(descFile));
+  sourceConfig.setName(await template.getName());
+  sourceConfig.setPreview(await template.getPreview());
+  sourceConfig.setVersion(await template.getVersion());
+  sourceConfig.setUiVersion(await template.getUiVersion());
+  return sourceConfig.getData();
 }
 
 export async function compileTempInfo(
   projectData: TypeCreateProjectData
 ): Promise<TypeTemplateData> {
   const template = new Template(
-    projectData.templateConf.file,
-    projectData.uiVersionConf
+    projectData.configPreview.file,
+    projectData.uiVersion
   );
   return template.getTempInfo();
 }
 
 // 获取对应厂商模板
-export async function getTemplates(
+export async function getConfigPreview(
   brandType: string
-): Promise<TypeTemplateConf[]> {
-  const brandInfoList = await compileBrandConf();
-  const brandInfo = brandInfoList.find(item => item.type === brandType);
-  if (!brandInfo) return [];
-  const queue = getTempDescFileList(brandInfo).map(compileTempConf);
+): Promise<TypeSourceConfig[]> {
+  const brandConfList = await compileBrandConf();
+  const brandConf = brandConfList.find(item => item.type === brandType);
+  if (!brandConf) return [];
+  const queue = brandConf.sourceConfigs
+    .map(item => path.join(FRAMEWORK_DIR, item, "description.xml"))
+    .filter(item => fse.existsSync(item))
+    .map(compileSourceConfig);
   return await Promise.all(queue);
 }

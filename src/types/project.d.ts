@@ -1,5 +1,5 @@
 import { projectInfoConfig } from "renderer/config/editor";
-import { TypeTemplateData } from "./template";
+import { TypeSourceConfig, TypeTemplateData, TypeUiVersion } from "./template";
 import { TypeDatabase } from "./index";
 
 export type TypeBrandInfo = {
@@ -8,17 +8,12 @@ export type TypeBrandInfo = {
 };
 
 export type TypeBrandConf = TypeBrandInfo & {
-  templateDir: string;
+  sourceConfigs: string[];
 };
 
 // 工程描述信息
 export type TypeProjectDescription = {
   [k in keyof typeof projectInfoConfig]: string | null;
-};
-
-export type TypeUiVersionInfo = {
-  name: string;
-  code: string;
 };
 
 // 预览页面配置储存数据
@@ -30,9 +25,9 @@ export type TypePageConf = {
 
 export type TypeCreateProjectData = {
   description: TypeProjectDesc;
-  uiVersionConf: TypeUiVersionConf;
+  uiVersion: TypeUiVersion;
   brandConf: TypeBrandConf;
-  templateConf: TypeTemplateConf;
+  configPreview: TypeSourceConfig;
   localPath?: string;
 };
 
@@ -65,7 +60,7 @@ export type TypeProjectData = {
   uuid: string;
   brand: TypeBrandInfo;
   description: TypeProjectDescription;
-  uiVersion: TypeUiVersionInfo;
+  uiVersion: TypeUiVersion;
   template: TypeTemplateData;
   imageMapperList: TypeImageMapper[];
   xmlMapperList: TypeXmlMapper[];

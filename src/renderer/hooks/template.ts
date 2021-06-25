@@ -2,7 +2,7 @@ import { useLayoutEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { message } from "antd";
 
-import { apiGetTempConfList, apiGetBrandConfList } from "@/api/index";
+import { apiGetSourceConfigList, apiGetBrandConfList } from "@/api/index";
 
 import {
   ActionSetBrandInfoList,
@@ -23,14 +23,14 @@ import ERR_CODE from "@/core/error-code";
 import {
   TypeTempModuleConf,
   TypeTempPageConf,
-  TypeTemplateConf,
+  TypeSourceConfig,
   TypeTempPageGroupConf
 } from "types/template";
 import { TypeBrandConf } from "types/project";
 import { useAsyncUpdater } from "./index";
 
 // 获取配置的厂商列表
-export function useBrandInfoList(): TypeBrandConf[] {
+export function useBrandConfList(): TypeBrandConf[] {
   const [value, updateValue] = useState<TypeBrandConf[]>([]);
   const dispatch = useDispatch();
   const registerUpdater = useAsyncUpdater();
@@ -38,7 +38,7 @@ export function useBrandInfoList(): TypeBrandConf[] {
     apiGetBrandConfList().then(conf => {
       // 添加默认小米，去重
       const list = conf.reduce<TypeBrandConf[]>((t, o) => {
-        if (!t.some(item => item.templateDir === o.templateDir)) t.push(o);
+        if (!t.some(item => item.type === o.type)) t.push(o);
         return t;
       }, []);
       registerUpdater(() => {
@@ -52,19 +52,19 @@ export function useBrandInfoList(): TypeBrandConf[] {
 }
 
 // 当前选择的厂商信息
-export function useSelectedBrand(): TypeBrandConf | null {
+export function useSelectedBrandConf(): TypeBrandConf | null {
   return useSelector(getSelectedBrand);
 }
 
-// 获取模板列表
-export function useTemplateList(): [TypeTemplateConf[], boolean] {
-  const [value, updateValue] = useState<TypeTemplateConf[]>([]);
+// 获取配置列表
+export function useSourceConfigList(): [TypeSourceConfig[], boolean] {
+  const [value, updateValue] = useState<TypeSourceConfig[]>([]);
   const [loading, updateLoading] = useState(true);
-  const brandInfo = useSelectedBrand();
+  const brandConf = useSelectedBrandConf();
   const dispatch = useDispatch();
   useLayoutEffect(() => {
-    if (!brandInfo) return;
-    apiGetTempConfList(brandInfo)
+    if (!brandConf) return;
+    apiGetSourceConfigList(brandConf.type)
       .then(tempConfList => {
         console.log("模板列表：", tempConfList);
         updateValue(tempConfList);
@@ -75,7 +75,7 @@ export function useTemplateList(): [TypeTemplateConf[], boolean] {
         message.error({ content });
         console.log(`${content}: ${err}`);
       });
-  }, [brandInfo, dispatch]);
+  }, [brandConf, dispatch]);
   return [value, loading];
 }
 

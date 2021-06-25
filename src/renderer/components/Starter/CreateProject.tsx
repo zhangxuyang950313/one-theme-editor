@@ -1,26 +1,25 @@
 import path from "path";
+import fse from "fs-extra";
 import React, { useEffect, useRef, useState } from "react";
-import styled from "styled-components";
-import _ from "lodash";
 import * as uuid from "uuid";
 import { remote } from "electron";
-import fse from "fs-extra";
 
 import { isDev } from "@/core/constant";
 import ERR_CODE from "@/core/error-code";
-import { useSelectedBrand, useTemplateList } from "@/hooks/template";
+import { useSelectedBrandConf, useSourceConfigList } from "@/hooks/template";
 import { TypeProjectDescription } from "types/project";
-import { TypeTemplateConf } from "types/template";
+import { TypeSourceConfig } from "types/template";
 import { apiCreateProject } from "@/api";
 
 // components
+import styled from "styled-components";
 import { Modal, Button, message, Form, Input } from "antd";
 import { FileAddOutlined } from "@ant-design/icons";
 import Steps from "@/components/Steps";
 import ProjectInfo from "@/components/ProjectInfo";
 import ProjectInfoForm from "@/components/ProjectInfoForm";
-import TemplateManager from "./TemplateManager";
-import TemplateCard from "./TemplateCard";
+import SourceConfigManager from "./SourceConfigManager";
+import SourceConfigCard from "./SourceConfigCard";
 import ProjectCard from "./ProjectCard";
 
 // 创建主题按钮
@@ -29,13 +28,13 @@ type TypeProps = {
 };
 const CreateProject: React.FC<TypeProps> = props => {
   // 机型配置
-  const brandConf = useSelectedBrand();
+  const brandConf = useSelectedBrandConf();
   // 弹框控制
   const [modalVisible, setModalVisible] = useState(false);
   // 模板列表
-  const [templateList, isLoading] = useTemplateList();
+  const [sourceConfigList, isLoading] = useSourceConfigList();
   // 选择的模板
-  const [selectedTemp, updateTempConf] = useState<TypeTemplateConf>();
+  const [selectedConf, setConfPreview] = useState<TypeSourceConfig>();
   // 当前步骤
   const [curStep, setCurStep] = useState(0);
   // 填写工程描述
@@ -57,7 +56,7 @@ const CreateProject: React.FC<TypeProps> = props => {
     designer: isDev ? "测试" : "",
     author: isDev ? "测试" : "",
     version: "1.0.0",
-    uiVersion: _.last(selectedTemp?.uiVersions)?.code || ""
+    uiVersion: "10"
   };
 
   // 步骤控制
@@ -72,7 +71,7 @@ const CreateProject: React.FC<TypeProps> = props => {
   // 复位
   const init = () => {
     jumpStep(0);
-    updateTempConf(undefined);
+    setConfPreview(undefined);
     setDescription(undefined);
     form.resetFields();
   };
@@ -123,47 +122,39 @@ const CreateProject: React.FC<TypeProps> = props => {
       name: "选择模板",
       Component() {
         return (
-          <TemplateManager
+          <SourceConfigManager
             isLoading={isLoading}
-            templateList={templateList}
-            selectedTemp={selectedTemp}
-            onSelected={updateTempConf}
+            sourceConfigList={sourceConfigList}
+            selectedConf={selectedConf}
+            onSelected={setConfPreview}
           />
         );
       },
       // 校验表单
       async next() {
-        return selectedTemp || Promise.reject(new Error("请选择模板"));
+        return selectedConf || Promise.reject(new Error("请选择模板"));
       }
     },
     {
       name: "填写信息",
       Component() {
-        const uiVersions = selectedTemp?.uiVersions;
         useEffect(() => {
-          if (!(Array.isArray(uiVersions) && uiVersions.length > 0)) {
-            message.info({ content: ERR_CODE[3001] });
-            init();
-          } else if (!selectedTemp) {
+          if (!selectedConf) {
             message.info({ content: ERR_CODE[3002] });
             init();
           }
         }, []);
         // 模板版本
-        if (!selectedTemp) return null;
+        if (!selectedConf) return null;
         return (
           <StyleFillInfo>
             {/* 模板预览 */}
             <div className="template-card">
-              <TemplateCard config={selectedTemp} />
+              <SourceConfigCard config={selectedConf} />
             </div>
             {/* 填写信息 */}
             <div className="project-info">
-              <ProjectInfoForm
-                uiVersions={uiVersions || []}
-                form={form}
-                initialValues={initialValues}
-              />
+              <ProjectInfoForm form={form} initialValues={initialValues} />
             </div>
           </StyleFillInfo>
         );
@@ -264,22 +255,16 @@ const CreateProject: React.FC<TypeProps> = props => {
             });
           });
         }
-        if (!selectedTemp) {
+        if (!selectedConf) {
           throw new Error("创建失败");
-        }
-        const uiVersion = selectedTemp.uiVersions.find(
-          o => o.code === form.getFieldValue("uiVersion")
-        );
-        if (!uiVersion) {
-          throw new Error(ERR_CODE[2002]);
         }
         updateCreating(true);
         // TODO 使用选择的模板路径生成 tempConf
         return apiCreateProject({
           description,
           brandConf,
-          uiVersionConf: uiVersion,
-          templateConf: selectedTemp,
+          uiVersion: selectedConf.uiVersion,
+          configPreview: selectedConf,
           localPath: localPathRef.current
         }).then(data => {
           console.log("创建工程：", data);
@@ -313,7 +298,7 @@ const CreateProject: React.FC<TypeProps> = props => {
       key="next"
       type="primary"
       onClick={handleNext}
-      disabled={!selectedTemp || isCreating}
+      disabled={!selectedConf || isCreating}
       loading={isCreating}
     >
       {curStep < steps.length - 1 ? "下一步" : "开始"}

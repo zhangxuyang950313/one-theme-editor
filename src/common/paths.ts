@@ -1,5 +1,4 @@
 import path from "path";
-import { TypeBrandConf } from "types/project";
 
 // 静态资源目录
 export const STATIC_DIR = path.resolve(__dirname, "../static");
@@ -25,13 +24,8 @@ export const RESOURCE_DIR = path.resolve(STATIC_DIR, "resource");
 // 二进制目录
 export const BINARY_DIR = path.resolve(RESOURCE_DIR, "binary");
 
-// 模板目录
-export const TEMPLATE_DIR = path.resolve(RESOURCE_DIR, "templates");
+// 配置目录
+export const FRAMEWORK_DIR = path.resolve(RESOURCE_DIR, "sourceConfig");
 
 // 模板总配置文件
-export const TEMPLATE_CONFIG = path.resolve(TEMPLATE_DIR, "config.xml");
-
-// 获取对应机型的模板目录
-export const getTempDirByBrand = (brandInfo: TypeBrandConf): string => {
-  return path.resolve(TEMPLATE_DIR, brandInfo.templateDir);
-};
+export const TEMPLATE_CONFIG = path.resolve(FRAMEWORK_DIR, "config.json");

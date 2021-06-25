@@ -1,8 +1,9 @@
-import { TypeUiVersionInfo, TypeImageInfo } from "./project.d";
+import { TypeImageInfo } from "./project.d";
 import { TypeTempLayout } from "./xml-result.d";
 
-export type TypeUiVersionConf = TypeUiVersionInfo & {
-  src: string;
+export type TypeUiVersion = {
+  name: string;
+  code: string;
 };
 
 export type TypeTempPageGroupConf = {
@@ -17,22 +18,20 @@ export type TypeTempModuleConf = {
   groups: TypeTempPageGroupConf[];
 };
 
-/**
- * 模板预览配置（因为在创建工程之前，没有 ui 版本信息，无法确认使用哪个模板）
- */
-export type TypeTemplateConf = {
+// 预览配置
+export type TypeSourceConfig = {
   key: string;
   root: string;
   file: string;
   name: string;
   preview: TypeImageInfo;
   version: string;
-  uiVersions: TypeUiVersionConf[];
+  uiVersion: TypeUiVersion;
 };
 
 export type TypeTemplateData = Pick<
-  TypeTemplateConf,
-  "name" | "preview" | "version" | "uiVersions"
+  TypeSourceConfig,
+  "name" | "preview" | "version" | "uiVersion"
 > & {
   modules: TypeTempModuleConf[];
 };

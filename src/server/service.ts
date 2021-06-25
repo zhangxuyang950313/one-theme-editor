@@ -3,13 +3,9 @@ import fse from "fs-extra";
 import express, { Express } from "express";
 import FileType from "file-type";
 import API from "common/api";
-import { base64ToBuffer, base64ToLocalFile } from "common/utils";
-import {
-  TypeCreateProjectData,
-  TypeProjectDescription,
-  TypeUiVersionInfo,
-  TypeImageMapper
-} from "types/project";
+import { base64ToLocalFile } from "common/utils";
+import { TypeUiVersion } from "types/template";
+import { TypeCreateProjectData, TypeProjectDescription } from "types/project";
 import { TypeFileData } from "types/request";
 import ERR_CODE from "../renderer/core/error-code";
 import {
@@ -18,7 +14,7 @@ import {
   createProject,
   updateProject
 } from "./db-handler/project";
-import { getTemplates, compileBrandConf } from "./db-handler/template";
+import { getConfigPreview, compileBrandConf } from "./db-handler/template";
 import { findImageData } from "./db-handler/image";
 
 const result = {
@@ -65,35 +61,44 @@ export default function registerService(service: Express): void {
   // );
 
   // 图片服务
-  service.get<{ md5: string }, any, any, any>("/image/:md5", (req, res) => {
-    findImageData(req.params.md5).then(async data => {
-      if (!data.base64) return res.status(400);
-
-      const buffer = base64ToBuffer(data.base64);
-      if (!buffer) return res.status(400);
-
-      const fileType = await FileType.fromBuffer(buffer);
-      if (!fileType) return res.status(400);
-
+  service.get<any, any, any, { file: string }>("/image", async (req, res) => {
+    try {
+      const { file } = req.query;
+      if (!fse.existsSync(file)) {
+        throw new Error(ERR_CODE[4003]);
+      }
+      const buff = fse.readFileSync(file);
+      const fileType = await FileType.fromBuffer(buff);
+      if (!fileType) {
+        throw new Error(ERR_CODE[4003]);
+      }
       res.set({ "Content-Type": fileType.mime });
-      res.send(buffer);
-    });
+      res.send(buff);
+    } catch (err) {
+      res.status(400).send(err.message);
+    }
   });
 
   // 获取厂商列表
-  service.get(API.GET_BRAND_LIST, (req, res) => {
-    compileBrandConf()
-      .then(brandConfList => res.send(result.success(brandConfList)))
-      .catch(err => res.status(400).send(result.fail(err)));
+  service.get(API.GET_BRAND_LIST, async (req, res) => {
+    try {
+      const brandConfList = await compileBrandConf();
+      res.send(result.success(brandConfList));
+    } catch (err) {
+      res.status(400).send(result.fail(err.message));
+    }
   });
 
-  // 模板列表
+  // 获取配置列表
   service.get<{ brandType: string }>(
-    `${API.GET_TEMPLATE_LIST}/:brandType`,
-    (req, res) => {
-      getTemplates(req.params.brandType)
-        .then(templateConfList => res.send(result.success(templateConfList)))
-        .catch(err => res.status(400).send(result.fail(err)));
+    `${API.GET_SOURCE_CONFIG_LIST}/:brandType`,
+    async (req, res) => {
+      try {
+        const configPreview = await getConfigPreview(req.params.brandType);
+        res.send(result.success(configPreview));
+      } catch (err) {
+        res.status(400).send(result.fail(err.message));
+      }
     }
   );
 
@@ -144,7 +149,7 @@ export default function registerService(service: Express): void {
   );
 
   // 更新工程ui版本
-  service.post<{ uuid: string }, any, TypeUiVersionInfo>(
+  service.post<{ uuid: string }, any, TypeUiVersion>(
     `${API.UPDATE_UI_VERSION}/:uuid`,
     (req, res) => {
       updateProject(req.params.uuid, { uiVersion: req.body })

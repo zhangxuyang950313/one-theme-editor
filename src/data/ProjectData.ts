@@ -1,9 +1,8 @@
-import { TypeTemplateData } from "types/template";
+import { TypeTemplateData, TypeUiVersion } from "types/template";
 import {
   TypeBrandInfo,
   TypeProjectData,
   TypeProjectDescription,
-  TypeUiVersionInfo,
   TypeImageMapper,
   TypeXmlMapper
 } from "types/project";
@@ -12,7 +11,7 @@ export default class ProjectData {
   private uuid = "";
   private brand: TypeBrandInfo | null = null;
   private description: TypeProjectDescription | null = null;
-  private uiVersion: TypeUiVersionInfo | null = null;
+  private uiVersion: TypeUiVersion | null = null;
   private template: TypeTemplateData | null = null;
   private xmlMapperList: TypeXmlMapper[] = [];
   private imageMapperList: TypeImageMapper[] = [];
@@ -42,10 +41,10 @@ export default class ProjectData {
   }
 
   // UI版本
-  setUiVersion(data: TypeUiVersionInfo): void {
+  setUiVersion(data: TypeUiVersion): void {
     this.uiVersion = data;
   }
-  getUiVersion(): TypeUiVersionInfo | null {
+  getUiVersion(): TypeUiVersion | null {
     return this.uiVersion;
   }
 
@@ -71,6 +70,7 @@ export default class ProjectData {
     if (!this.brand) throw new Error("机型信息为空");
     if (!this.uiVersion) throw new Error("UI版本为空");
     if (!this.template) throw new Error("模板信息为空");
+    if (!this.localPath) throw new Error("本地路径为空");
     const data: TypeProjectData = {
       uuid: this.uuid,
       brand: this.brand,

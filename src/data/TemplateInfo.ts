@@ -2,7 +2,7 @@ import { TypeImageInfo } from "types/project";
 import {
   TypeTemplateData,
   TypeTempModuleConf,
-  TypeUiVersionConf
+  TypeUiVersion
 } from "types/template";
 
 /**
@@ -14,7 +14,7 @@ export default class TemplateInfo {
   private name = "";
   private version = "";
   private preview!: TypeImageInfo;
-  private uiVersions: TypeUiVersionConf[] = [];
+  private uiVersion!: TypeUiVersion;
   private modules: TypeTempModuleConf[] = [];
 
   setName(name: string): void {
@@ -35,11 +35,11 @@ export default class TemplateInfo {
   getPreview(): TypeImageInfo {
     return this.preview;
   }
-  setUiVersions(uiVersions: TypeUiVersionConf[]): void {
-    this.uiVersions = uiVersions;
+  setUiVersion(uiVersion: TypeUiVersion): void {
+    this.uiVersion = uiVersion;
   }
-  getUiVersions(): TypeUiVersionConf[] {
-    return this.uiVersions;
+  getUiVersion(): TypeUiVersion {
+    return this.uiVersion;
   }
   setModules(modules: TypeTempModuleConf[]): void {
     this.modules = modules;
@@ -52,7 +52,7 @@ export default class TemplateInfo {
       name: this.getName(),
       version: this.getVersion(),
       preview: this.getPreview(),
-      uiVersions: this.getUiVersions(),
+      uiVersion: this.getUiVersion(),
       modules: this.getModules()
     };
   }
