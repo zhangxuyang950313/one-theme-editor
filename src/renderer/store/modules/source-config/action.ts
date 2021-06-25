@@ -1,9 +1,9 @@
 import ACTION_TYPES from "@/store/actions";
 import { TypeBrandConf } from "types/project";
 import {
-  TypeTemplateData,
-  TypeTempModuleConf,
-  TypeTempPageConf
+  TypeSourceConfig,
+  TypeSourceModuleConf,
+  TypeSourcePageConf
 } from "types/source-config";
 
 // 设置模板路径
@@ -15,7 +15,7 @@ type TypeSetTemplatePath = {
 // 设置品牌信息列表
 type TypeSetBrandInfoList = {
   type: typeof ACTION_TYPES.SET_BRAND_LIST;
-  brandInfoList: TypeBrandConf[];
+  brandConfList: TypeBrandConf[];
 };
 
 // 设置品牌信息
@@ -24,22 +24,22 @@ type TypeActionSetBrandInfo = {
   brandInfo: TypeBrandConf;
 };
 
-// 设置模板
-type TypeActionSetCurrentTemplate = {
-  type: typeof ACTION_TYPES.SET_CURRENT_TEMPLATE;
-  payload: TypeTemplateData;
+// 设置素材配置预览
+type TypeActionSetCurrentSourceDescription = {
+  type: typeof ACTION_TYPES.SET_SOURCE_DESCRIPTION;
+  payload: TypeSourceConfig;
 };
 
 // 设置模块
 type TypeActionSetCurrentModule = {
-  type: typeof ACTION_TYPES.SET_CURRENT_MODULE;
-  payload: TypeTempModuleConf;
+  type: typeof ACTION_TYPES.SET_SOURCE_CONFIG_MODULE;
+  payload: TypeSourceModuleConf;
 };
 
 // 设置页面
 type TypeActionSetCurrentPage = {
-  type: typeof ACTION_TYPES.SET_CURRENT_PAGE;
-  payload: TypeTempPageConf;
+  type: typeof ACTION_TYPES.SET_SOURCE_CONFIG_PAGE;
+  payload: TypeSourcePageConf;
 };
 
 // main actions
@@ -47,7 +47,7 @@ export type TypeActions =
   | TypeSetTemplatePath
   | TypeSetBrandInfoList
   | TypeActionSetBrandInfo
-  | TypeActionSetCurrentTemplate
+  | TypeActionSetCurrentSourceDescription
   | TypeActionSetCurrentModule
   | TypeActionSetCurrentPage;
 
@@ -58,9 +58,9 @@ export function ActionSetTemplatePath(payload: string): TypeSetTemplatePath {
 
 // 设置厂商信息列表
 export function ActionSetBrandInfoList(
-  brandInfoList: TypeBrandConf[]
+  brandConfList: TypeBrandConf[]
 ): TypeSetBrandInfoList {
-  return { type: ACTION_TYPES.SET_BRAND_LIST, brandInfoList };
+  return { type: ACTION_TYPES.SET_BRAND_LIST, brandConfList };
 }
 
 // 设置选择的厂商信息
@@ -70,23 +70,23 @@ export function ActionSetSelectedBrand(
   return { type: ACTION_TYPES.SET_SELECTED_BRAND, brandInfo };
 }
 
-// 设置当前模板
-export function ActionSetCurrentTemplate(
-  payload: TypeTemplateData
-): TypeActionSetCurrentTemplate {
-  return { type: ACTION_TYPES.SET_CURRENT_TEMPLATE, payload };
+// 设置当前资源配置
+export function ActionSetSourceConfig(
+  payload: TypeSourceConfig
+): TypeActionSetCurrentSourceDescription {
+  return { type: ACTION_TYPES.SET_SOURCE_DESCRIPTION, payload };
 }
 
 // 设置当前模块配置
 export function ActionSetCurrentBrand(
-  payload: TypeTempModuleConf
+  payload: TypeSourceModuleConf
 ): TypeActionSetCurrentModule {
-  return { type: ACTION_TYPES.SET_CURRENT_MODULE, payload };
+  return { type: ACTION_TYPES.SET_SOURCE_CONFIG_MODULE, payload };
 }
 
 // 设置当前页面配置
 export function ActionSetCurrentPage(
-  payload: TypeTempPageConf
+  payload: TypeSourcePageConf
 ): TypeActionSetCurrentPage {
-  return { type: ACTION_TYPES.SET_CURRENT_PAGE, payload };
+  return { type: ACTION_TYPES.SET_SOURCE_CONFIG_PAGE, payload };
 }

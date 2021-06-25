@@ -1,11 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 
-import { useBrandConfList, useSelectedBrandConf } from "@/hooks/template";
+import { useBrandConfList, useSelectedBrandConf } from "@/hooks/sourceConfig";
 
 import { Menu } from "antd";
 import { useDispatch } from "react-redux";
-import { ActionSetSelectedBrand } from "@/store/modules/template/action";
+import { ActionSetSelectedBrand } from "@/store/modules/source-config/action";
 import TopInfo from "./TopInfo";
 
 // 欢迎页侧边栏

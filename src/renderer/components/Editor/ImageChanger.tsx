@@ -15,7 +15,7 @@ import {
 } from "@ant-design/icons";
 
 // script
-import { useImageUrl } from "@/hooks";
+import { useProjectImageUrl } from "@/hooks";
 import { apiCopyFile, apiDeleteFile } from "@/api";
 import { useProjectRoot } from "@/hooks/project";
 import { findProjectImage } from "@/store/modules/project/selector";
@@ -154,7 +154,7 @@ const StyleImageBackground = styled.div<{ srcUrl?: string }>`
 const ImageChanger: React.FC<TypeSourcePageSourceConf> = sourceConf => {
   const findImage = useSelector(findProjectImage);
   const localPath = useProjectRoot();
-  const getImageURL = useImageUrl();
+  const getImageURL = useProjectImageUrl();
   const { from, to, name } = sourceConf;
 
   if (!from) return null;

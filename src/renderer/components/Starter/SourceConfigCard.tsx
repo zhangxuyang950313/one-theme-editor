@@ -1,20 +1,20 @@
 import React from "react";
 import styled from "styled-components";
 
-import { TypeSourceConfig } from "types/source-config";
+import { TypeSourceDescription } from "types/source-config";
 
 // components
 import { Card } from "antd";
-import { useImageUrl } from "@/hooks";
+import { useSourceImageUrl } from "@/hooks";
 
 type TypeProps = {
   hoverable?: boolean;
-  config: TypeSourceConfig;
+  config: TypeSourceDescription;
 };
 
 // 配置卡片
 const SourceConfigCard: React.FC<TypeProps> = props => {
-  const getImageURL = useImageUrl();
+  const getImageURL = useSourceImageUrl();
   const { config } = props;
   return (
     <StyleSourceConfigCard data-hoverable={props.hoverable}>
@@ -22,7 +22,7 @@ const SourceConfigCard: React.FC<TypeProps> = props => {
         hoverable={props.hoverable}
         style={{ width: "100%" }}
         cover={
-          <img alt={config.name} src={getImageURL(config.preview.md5) || ""} />
+          <img alt={config.name} src={getImageURL(config.preview) || ""} />
         }
       >
         <Card.Meta title={config.name} description={config.uiVersion.name} />

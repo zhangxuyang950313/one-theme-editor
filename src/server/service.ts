@@ -95,6 +95,19 @@ export default function registerService(service: Express): void {
     }
   });
 
+  // 获取配置预览列表
+  service.get<{ brandType: string }>(
+    `${API.GET_SOURCE_DESCRIPTION_LIST}/:brandType`,
+    async (req, res) => {
+      try {
+        const { brandType } = req.params;
+        const configPreview = await compileSourceDescriptionList(brandType);
+        res.send(result.success(configPreview));
+      } catch (err) {
+        res.status(400).send(result.fail(err.message));
+      }
+    }
+  );
   // 获取配置列表
   service.get<{ brandType: string }>(
     `${API.GET_SOURCE_CONFIG_LIST}/:brandType`,

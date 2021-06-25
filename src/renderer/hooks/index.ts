@@ -1,8 +1,13 @@
+import path from "path";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Canceler } from "axios";
-import { useEffect, useState } from "react";
 import { InputProps } from "antd";
+
+import { TypeImagePathLike } from "types/index";
 import { getServerPort } from "@/store/modules/base/selector";
+import { getProjectLocalPath } from "@/store/modules/project/selector";
+import { getCurrentSourceConfig } from "@/store/modules/source-config/selector";
 
 // 设置页面标题
 export enum presetTitle {
@@ -54,8 +59,32 @@ export function useAsyncUpdater(): (updater: () => void) => void {
   };
 }
 
-// 生成用于显示的图片url
-export function useImageUrl(): (md5: string) => string {
+// 生成当前服务域名
+export function useServerHost(): string {
   const serverPort = useSelector(getServerPort);
-  return md5 => `http://localhost:${serverPort}/image/${md5}`;
+  return `http://localhost:${serverPort}`;
+}
+
+// 生成用于工程显示的图片url
+export function useProjectImageUrl(): (
+  x: TypeImagePathLike
+) => TypeImagePathLike {
+  const host = useServerHost();
+  const localPath = useSelector(getProjectLocalPath);
+  return relative => {
+    const file = path.join(localPath || "", relative);
+    return `${host}/image?file=${file}`;
+  };
+}
+
+// 生成用于配置图片显示的 url
+export function useSourceImageUrl(): (
+  x: TypeImagePathLike
+) => TypeImagePathLike {
+  const host = useServerHost();
+  const currentSourceConfig = useSelector(getCurrentSourceConfig);
+  return relative => {
+    const file = path.join(currentSourceConfig?.root || "", relative);
+    return `${host}/image?file=${file}`;
+  };
 }

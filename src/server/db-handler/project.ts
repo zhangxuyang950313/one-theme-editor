@@ -4,16 +4,15 @@ import { v4 as UUID } from "uuid";
 import Nedb from "nedb-promises";
 
 import { PROJECTS_DB } from "common/paths";
-import { base64ToLocalFile } from "common/utils";
 import {
   TypeCreateProjectData,
   TypeImageMapper,
   TypeProjectData,
   TypeProjectDataDoc
 } from "types/project";
+
+import SourceConfig from "server/data/SourceConfig";
 import ERR_CODE from "renderer/core/error-code";
-import { compileSourceConfig } from "@/compiler/source-config";
-import { findImageData } from "./image";
 
 // TODO: 创建数据库有个坑，如果 filename 文件内容不是 nedb 能接受的数据格式则会导致服务崩溃
 function createNedb(filename: string) {
@@ -78,8 +77,11 @@ const projectDB = createNedb(PROJECTS_DB);
 export async function createProject(
   data: TypeCreateProjectData
 ): Promise<TypeProjectDataDoc> {
-  const sourceConfig = await compileSourceConfig(data);
-  const { uiVersion, brandConf, localPath } = data;
+  const { uiVersion, brandConf, localPath, sourceDescription } = data;
+  const sourceConfig = await new SourceConfig(
+    sourceDescription.file,
+    uiVersion
+  ).getData();
   const projectData: TypeProjectData = {
     uuid: UUID(),
     description: data.description,

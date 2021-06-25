@@ -8,8 +8,8 @@ import {
   TypeProjectData,
   TypeProjectDataDoc
 } from "types/project";
-import { TypeSourceConfig } from "types/source-config";
-import { TypeFileData, TypeResponseFrame } from "types/request";
+import { TypeSourceConfig, TypeSourceDescription } from "types/source-config";
+import { TypeResponseFrame } from "types/request";
 
 type TypeGetCanceler = (c: Canceler) => void;
 
@@ -27,7 +27,18 @@ export async function apiGetBrandConfList(): Promise<TypeBrandConf[]> {
     .then(data => data.data.data);
 }
 
-// 获取厂商配置
+// 获取厂商配置描述列表
+export async function apiGetSourceDescriptionList(
+  brandType: TypeBrandConf["type"]
+): Promise<TypeSourceDescription[]> {
+  return createHttp()
+    .get<TypeResponseFrame<TypeSourceDescription[]>>(
+      `${API.GET_SOURCE_DESCRIPTION_LIST}/${brandType}`
+    )
+    .then(data => data.data.data);
+}
+
+// 获取厂商配置列表
 export async function apiGetSourceConfigList(
   brandType: TypeBrandConf["type"]
 ): Promise<TypeSourceConfig[]> {

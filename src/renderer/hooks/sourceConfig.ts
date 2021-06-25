@@ -1,32 +1,38 @@
 import { useLayoutEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
 import { message } from "antd";
 
-import { apiGetSourceConfigList, apiGetBrandConfList } from "@/api/index";
+import {
+  apiGetSourceConfigList,
+  apiGetBrandConfList,
+  apiGetSourceDescriptionList
+} from "@/api/index";
 
 import {
   ActionSetBrandInfoList,
   ActionSetSelectedBrand,
   ActionSetCurrentBrand,
   ActionSetCurrentPage
-} from "@/store/modules/template/action";
+} from "@/store/modules/source-config/action";
 import {
   getSelectedBrand,
   getCurrentModule,
   getCurrentPage,
   getCurrentModuleList,
   getCurrentPageGroupList
-} from "@/store/modules/template/selector";
-
-import ERR_CODE from "@/core/error-code";
+} from "@/store/modules/source-config/selector";
 
 import {
-  TypeTempModuleConf,
-  TypeTempPageConf,
   TypeSourceConfig,
-  TypeTempPageGroupConf
+  TypeSourceDescription,
+  TypeSourcePageGroupConf,
+  TypeSourceModuleConf,
+  TypeSourcePageConf
 } from "types/source-config";
 import { TypeBrandConf } from "types/project";
+
+import ERR_CODE from "@/core/error-code";
 import { useAsyncUpdater } from "./index";
 
 // 获取配置的厂商列表
@@ -56,6 +62,31 @@ export function useSelectedBrandConf(): TypeBrandConf | null {
   return useSelector(getSelectedBrand);
 }
 
+// 获取配置预览列表
+export function useSourceDescriptionList(): [TypeSourceDescription[], boolean] {
+  const [value, updateValue] = useState<TypeSourceDescription[]>([]);
+  const [loading, updateLoading] = useState(true);
+  const brandConf = useSelectedBrandConf();
+  const dispatch = useDispatch();
+  useLayoutEffect(() => {
+    if (!brandConf) return;
+    apiGetSourceDescriptionList(brandConf.type)
+      .then(data => {
+        console.log("配置预览列表：", data);
+        updateValue(data);
+      })
+      .catch(err => {
+        const content = ERR_CODE[3002];
+        message.error({ content });
+        console.log(`${content}: ${err}`);
+      })
+      .finally(() => {
+        updateLoading(false);
+      });
+  }, [brandConf, dispatch]);
+  return [value, loading];
+}
+
 // 获取配置列表
 export function useSourceConfigList(): [TypeSourceConfig[], boolean] {
   const [value, updateValue] = useState<TypeSourceConfig[]>([]);
@@ -65,29 +96,31 @@ export function useSourceConfigList(): [TypeSourceConfig[], boolean] {
   useLayoutEffect(() => {
     if (!brandConf) return;
     apiGetSourceConfigList(brandConf.type)
-      .then(tempConfList => {
-        console.log("模板列表：", tempConfList);
-        updateValue(tempConfList);
-        updateLoading(false);
+      .then(data => {
+        console.log("配置列表", data);
+        updateValue(data);
       })
       .catch(err => {
         const content = ERR_CODE[3002];
         message.error({ content });
         console.log(`${content}: ${err}`);
+      })
+      .finally(() => {
+        updateLoading(false);
       });
   }, [brandConf, dispatch]);
   return [value, loading];
 }
 
 // 当前模板模块列表
-export function useCurrentModuleList(): TypeTempModuleConf[] {
+export function useCurrentModuleList(): TypeSourceModuleConf[] {
   return useSelector(getCurrentModuleList);
 }
 
 // 获取当前选择的模块
 export function useCurrentModule(): [
-  TypeTempModuleConf | null,
-  (data: TypeTempModuleConf) => void
+  TypeSourceModuleConf | null,
+  (data: TypeSourceModuleConf) => void
 ] {
   const dispatch = useDispatch();
   return [
@@ -97,14 +130,14 @@ export function useCurrentModule(): [
 }
 
 // 当前选择的模块页面组列表
-export function useCurrentPageGroupList(): TypeTempPageGroupConf[] {
+export function useCurrentPageGroupList(): TypeSourcePageGroupConf[] {
   return useSelector(getCurrentPageGroupList);
 }
 
 // 获取当前选择的页面
 export function useCurrentPage(): [
-  TypeTempPageConf | null,
-  (data: TypeTempPageConf) => void
+  TypeSourcePageConf | null,
+  (data: TypeSourcePageConf) => void
 ] {
   const dispatch = useDispatch();
   return [

@@ -1,5 +1,5 @@
 import path from "path";
-import { getFileMD5, getImageData } from "common/utils";
+
 import {
   TypeSourcePageConf,
   TypeSourcePageInfoConf,
@@ -8,6 +8,7 @@ import {
 } from "types/source-config";
 import { TypeTempLayout, TypeTempOriginPageConf } from "types/xml-result";
 import { xml2jsonCompact } from "@/compiler/xml";
+import { getImageData } from "common/utils";
 import XMLNode from "@/core/XMLNode";
 
 export default class Page {

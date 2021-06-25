@@ -1,7 +1,5 @@
 import path from "path";
 
-import { asyncMap, getFileMD5 } from "common/utils";
-
 import {
   TypeSourcePageGroupConf,
   TypeSourceConfig,
@@ -14,13 +12,14 @@ import {
   TypeOriginTempPageGroupConf,
   TypeOriginTempModulePageConf
 } from "types/xml-result";
+import { TypeImagePathLike } from "types/index";
 
 import Page from "@/data/Page";
 import XMLNode from "@/core/XMLNode";
 import { xml2jsonCompact } from "@/compiler/xml";
+import { asyncMap } from "common/utils";
 
 import ERR_CODE from "renderer/core/error-code";
-import { TypeImagePathLike } from "@/../types";
 
 // 解析 sourceConfig 所有数据
 export default class SourceConfig {
@@ -129,6 +128,8 @@ export default class SourceConfig {
 
   async getData(): Promise<TypeSourceConfig> {
     return {
+      file: this.descFile,
+      root: this.rootDir,
       name: await this.getName(),
       version: await this.getVersion(),
       preview: await this.getPreview(),

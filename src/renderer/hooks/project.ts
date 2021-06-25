@@ -3,12 +3,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { socketImageMapperList } from "@/api/socket";
 import { apiGetProjectByUUID, apiGetProjectList } from "@/api/index";
 import { useAxiosCanceler } from "@/hooks/index";
-import { useSelectedBrandConf } from "@/hooks/template";
+import { useSelectedBrandConf } from "@/hooks/sourceConfig";
 import {
   ActionSetCurrentBrand,
   ActionSetCurrentPage,
-  ActionSetCurrentTemplate
-} from "@/store/modules/template/action";
+  ActionSetSourceConfig
+} from "@/store/modules/source-config/action";
 import {
   ActionSetImageMapperList,
   ActionSetProjectData
@@ -60,9 +60,9 @@ export function useLoadProject(project: TypeProjectDataDoc | null): void {
     if (!project) return;
     console.log("载入工程：", project);
     dispatch(ActionSetProjectData(project));
-    dispatch(ActionSetCurrentTemplate(project.template));
+    dispatch(ActionSetSourceConfig(project.sourceConfig));
     // 默认选择第一个模块和第一个页面
-    const firstModule = project?.template?.modules[0];
+    const firstModule = project?.sourceConfig?.modules[0];
     const firstPage = firstModule?.groups[0].pages[0];
     if (firstModule) dispatch(ActionSetCurrentBrand(firstModule));
     if (firstPage) dispatch(ActionSetCurrentPage(firstPage));

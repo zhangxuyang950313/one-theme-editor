@@ -2,35 +2,35 @@ import { createSelector } from "reselect";
 import { TypeStoreState } from "@/store/index";
 
 // 数据
-const getTemplateState = (state: TypeStoreState) => state.template;
+const getSourceConfigState = (state: TypeStoreState) => state.sourceConfig;
 
 // 获取厂商信息列表
 export const getBrandInfoList = createSelector(
-  getTemplateState,
-  state => state.brandInfoList
+  getSourceConfigState,
+  state => state.brandConfList
 );
 
 // 获取前选择的厂商信息
 export const getSelectedBrand = createSelector(
-  getTemplateState,
-  state => state.currentBrand
+  getSourceConfigState,
+  state => state.currentBrandConf
 );
 
-// 获取当前模板
-export const getCurrentTemplate = createSelector(
-  getTemplateState,
-  state => state.currentTemplate
+// 获取当前预览配置信息
+export const getCurrentSourceConfig = createSelector(
+  getSourceConfigState,
+  state => state.currentConfig
 );
 
 // 获取模块列表
 export const getCurrentModuleList = createSelector(
-  getCurrentTemplate,
+  getCurrentSourceConfig,
   state => state?.modules || []
 );
 
 // 获取当前模块
 export const getCurrentModule = createSelector(
-  getTemplateState,
+  getSourceConfigState,
   state => state.currentModule
 );
 
@@ -42,6 +42,6 @@ export const getCurrentPageGroupList = createSelector(
 
 // 获取当前页面
 export const getCurrentPage = createSelector(
-  getTemplateState,
+  getSourceConfigState,
   state => state.currentPage
 );

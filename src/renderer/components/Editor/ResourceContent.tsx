@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import { useCurrentPage } from "@/hooks/template";
+import { useCurrentPage } from "@/hooks/sourceConfig";
 
 import ImageChanger from "./ImageChanger";
 

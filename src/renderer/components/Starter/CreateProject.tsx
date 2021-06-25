@@ -1,14 +1,17 @@
 import path from "path";
 import fse from "fs-extra";
 import React, { useEffect, useRef, useState } from "react";
-import * as uuid from "uuid";
+import { v4 as UUID } from "uuid";
 import { remote } from "electron";
 
 import { isDev } from "@/core/constant";
 import ERR_CODE from "@/core/error-code";
-import { useSelectedBrandConf, useSourceConfigList } from "@/hooks/template";
+import {
+  useSelectedBrandConf,
+  useSourceDescriptionList
+} from "@/hooks/sourceConfig";
 import { TypeProjectDescription } from "types/project";
-import { TypeSourceConfig } from "types/source-config";
+import { TypeSourceDescription } from "types/source-config";
 import { apiCreateProject } from "@/api";
 
 // components
@@ -32,9 +35,12 @@ const CreateProject: React.FC<TypeProps> = props => {
   // 弹框控制
   const [modalVisible, setModalVisible] = useState(false);
   // 模板列表
-  const [sourceConfigList, isLoading] = useSourceConfigList();
+  const [sourceDescList, isLoading] = useSourceDescriptionList();
   // 选择的模板
-  const [selectedConf, setConfPreview] = useState<TypeSourceConfig>();
+  const [
+    selectedSourceDesc,
+    setSourceDescription
+  ] = useState<TypeSourceDescription>();
   // 当前步骤
   const [curStep, setCurStep] = useState(0);
   // 填写工程描述
@@ -52,7 +58,7 @@ const CreateProject: React.FC<TypeProps> = props => {
 
   // 表单默认值
   const initialValues = {
-    name: isDev ? `测试${uuid.v4()}` : "",
+    name: isDev ? `测试${UUID()}` : "",
     designer: isDev ? "测试" : "",
     author: isDev ? "测试" : "",
     version: "1.0.0",
@@ -71,7 +77,7 @@ const CreateProject: React.FC<TypeProps> = props => {
   // 复位
   const init = () => {
     jumpStep(0);
-    setConfPreview(undefined);
+    setSourceDescription(undefined);
     setDescription(undefined);
     form.resetFields();
   };
@@ -124,33 +130,33 @@ const CreateProject: React.FC<TypeProps> = props => {
         return (
           <SourceConfigManager
             isLoading={isLoading}
-            sourceConfigList={sourceConfigList}
-            selectedConf={selectedConf}
-            onSelected={setConfPreview}
+            sourceConfigList={sourceDescList}
+            selectedSourceConfig={selectedSourceDesc}
+            onSelected={setSourceDescription}
           />
         );
       },
       // 校验表单
       async next() {
-        return selectedConf || Promise.reject(new Error("请选择模板"));
+        return selectedSourceDesc || Promise.reject(new Error("请选择模板"));
       }
     },
     {
       name: "填写信息",
       Component() {
         useEffect(() => {
-          if (!selectedConf) {
+          if (!selectedSourceDesc) {
             message.info({ content: ERR_CODE[3002] });
             init();
           }
         }, []);
         // 模板版本
-        if (!selectedConf) return null;
+        if (!selectedSourceDesc) return null;
         return (
           <StyleFillInfo>
             {/* 模板预览 */}
             <div className="template-card">
-              <SourceConfigCard config={selectedConf} />
+              <SourceConfigCard config={selectedSourceDesc} />
             </div>
             {/* 填写信息 */}
             <div className="project-info">
@@ -255,7 +261,7 @@ const CreateProject: React.FC<TypeProps> = props => {
             });
           });
         }
-        if (!selectedConf) {
+        if (!selectedSourceDesc) {
           throw new Error("创建失败");
         }
         updateCreating(true);
@@ -263,9 +269,9 @@ const CreateProject: React.FC<TypeProps> = props => {
         return apiCreateProject({
           description,
           brandConf,
-          uiVersion: selectedConf.uiVersion,
-          configPreview: selectedConf,
-          localPath: localPathRef.current
+          uiVersion: selectedSourceDesc.uiVersion,
+          sourceDescription: selectedSourceDesc,
+          localPath: localPathRef.current || ""
         }).then(data => {
           console.log("创建工程：", data);
           if (!description) {
@@ -298,7 +304,7 @@ const CreateProject: React.FC<TypeProps> = props => {
       key="next"
       type="primary"
       onClick={handleNext}
-      disabled={!selectedConf || isCreating}
+      disabled={!selectedSourceDesc || isCreating}
       loading={isCreating}
     >
       {curStep < steps.length - 1 ? "下一步" : "开始"}

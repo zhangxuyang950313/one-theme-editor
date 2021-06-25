@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import { TypeSourceConfig } from "types/source-config";
+import { TypeSourceDescription } from "types/source-config";
 
 // components
 import { CheckCircleTwoTone } from "@ant-design/icons";
@@ -10,14 +10,19 @@ import SourceConfigCard from "./SourceConfigCard";
 
 type TypeProps = {
   isLoading: boolean;
-  sourceConfigList: TypeSourceConfig[];
-  selectedConf: TypeSourceConfig | undefined;
-  onSelected: (config?: TypeSourceConfig) => void;
+  sourceConfigList: TypeSourceDescription[];
+  selectedSourceConfig: TypeSourceDescription | undefined;
+  onSelected: (config?: TypeSourceDescription) => void;
 };
 
 // 配置管理
 const SourceConfigManager: React.FC<TypeProps> = props => {
-  const { sourceConfigList, selectedConf, isLoading, onSelected } = props;
+  const {
+    sourceConfigList,
+    selectedSourceConfig,
+    isLoading,
+    onSelected
+  } = props;
 
   if (isLoading) {
     return (
@@ -41,9 +46,9 @@ const SourceConfigManager: React.FC<TypeProps> = props => {
 
   return (
     <StyleSourceConfigCard>
-      {sourceConfigList.map((template, key) => {
-        const isActive = selectedConf?.key === template.key;
-        const isInit = !selectedConf?.key;
+      {sourceConfigList.map((item, key) => {
+        const isActive = selectedSourceConfig?.key === item.key;
+        const isInit = !selectedSourceConfig?.key;
         return (
           <StyleCardContainer
             key={key}
@@ -51,10 +56,10 @@ const SourceConfigManager: React.FC<TypeProps> = props => {
             isActive={isActive}
             onClick={() => {
               // 点选中的恢复初始状态
-              onSelected(isActive ? undefined : template);
+              onSelected(isActive ? undefined : item);
             }}
           >
-            <SourceConfigCard hoverable config={template} />
+            <SourceConfigCard hoverable config={item} />
             <CheckCircleTwoTone className="check-icon" />
           </StyleCardContainer>
         );

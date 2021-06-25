@@ -1,16 +1,16 @@
 import React from "react";
 import styled from "styled-components";
 
-import { useCurrentModuleList, useCurrentModule } from "@/hooks/template";
+import { useCurrentModuleList, useCurrentModule } from "@/hooks/sourceConfig";
 
 import { Tooltip } from "antd";
-import { useImageUrl } from "@/hooks";
+import { useProjectImageUrl } from "@/hooks";
 
 // 模块选择器
 const ModuleSelector: React.FC = () => {
   const tempModuleList = useCurrentModuleList();
   const [currentModule, setCurrentModule] = useCurrentModule();
-  const getImageURL = useImageUrl();
+  const getImageURL = useProjectImageUrl();
 
   if (!currentModule) {
     console.log("currentModule 为空");

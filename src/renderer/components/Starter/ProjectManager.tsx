@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useHistory } from "react-router";
 
 import { useProjectList } from "@/hooks/project";
-import { useSelectedBrandConf } from "@/hooks/template";
+import { useSelectedBrandConf } from "@/hooks/sourceConfig";
 
 import { Empty, Spin } from "antd";
 import ProjectCard from "./ProjectCard";

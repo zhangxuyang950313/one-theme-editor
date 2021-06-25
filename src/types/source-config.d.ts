@@ -2,7 +2,7 @@ import { TypeImageData } from "./project";
 import { TypeTempLayout } from "./xml-result";
 import { TypeImagePathLike } from "./index";
 
-// 预览配置
+// 资源预览配置
 export type TypeSourceDescription = {
   key: string;
   root: string;
@@ -11,6 +11,11 @@ export type TypeSourceDescription = {
   preview: TypeImagePathLike;
   version: string;
   uiVersion: TypeUiVersion;
+};
+
+// 资源配置
+export type TypeSourceConfig = Omit<TypeSourceDescription, "key"> & {
+  modules: TypeSourceModuleConf[];
 };
 
 // 版本信息
@@ -63,12 +68,4 @@ export type TypeSourcePageConf = {
   category: TypeSourceFileCategoryConf[];
   source: TypeSourcePageSourceConf[];
   xml: any[];
-};
-
-// 资源配置
-export type TypeSourceConfig = Pick<
-  TypeSourceDescription,
-  "name" | "preview" | "version" | "uiVersion"
-> & {
-  modules: TypeSourceModuleConf[];
 };
