@@ -1,67 +1,35 @@
-import { TypeImageInfo } from "types/project.d";
-import { TypeSourceDescription, TypeUiVersion } from "types/sourceConfig";
+import path from "path";
+import { v4 as getUUID } from "uuid";
+import { TypeSourceDescription } from "types/source-config";
+import SourceConfig from "@/data/SourceConfig";
+import ERR_CODE from "src//renderer/core/error-code";
 
-// 素材配置的描述信息
+/**
+ * 解析配置配置的简短信息
+ * 只解析 description.xml 不需要全部解析
+ * @param descFile description.xml 路径
+ * @returns
+ */
 export default class SourceDescription {
-  private key = "";
-  private root = "";
-  private file = "";
-  private name = "";
-  private version = "";
-  private preview!: TypeImageInfo;
-  private uiVersion!: TypeUiVersion;
+  private root?: string;
+  private file?: string;
+  private sourceConfig: SourceConfig;
+  constructor(descFile: string) {
+    this.file = descFile;
+    this.root = path.dirname(descFile);
+    this.sourceConfig = new SourceConfig(descFile);
+  }
 
-  setKey(key: string): void {
-    this.key = key;
-  }
-  getKey(): string {
-    return this.key;
-  }
-  setRoot(root: string): void {
-    this.root = root;
-  }
-  getRoot(): string {
-    return this.root;
-  }
-  setFile(file: string): void {
-    this.file = file;
-  }
-  getFile(): string {
-    return this.file;
-  }
-  setName(name: string): void {
-    this.name = name;
-  }
-  getName(): string {
-    return this.name;
-  }
-  setVersion(version: string): void {
-    this.version = version;
-  }
-  getVersion(): string {
-    return this.version;
-  }
-  setPreview(preview: TypeImageInfo): void {
-    this.preview = preview;
-  }
-  getPreview(): TypeImageInfo {
-    return this.preview;
-  }
-  setUiVersion(uiVersion: TypeUiVersion): void {
-    this.uiVersion = uiVersion;
-  }
-  getUiVersion(): TypeUiVersion {
-    return this.uiVersion;
-  }
-  getData(): TypeSourceDescription {
+  async getData(): Promise<TypeSourceDescription> {
+    if (!this.file || !this.root) throw new Error(ERR_CODE[4005]);
     return {
-      key: this.getKey(),
-      root: this.getRoot(),
-      file: this.getFile(),
-      name: this.getName(),
-      version: this.getVersion(),
-      preview: this.getPreview(),
-      uiVersion: this.getUiVersion()
+      key: getUUID(),
+      root: this.root,
+      file: this.file,
+      name: await this.sourceConfig.getName(),
+      version: await this.sourceConfig.getVersion(),
+      preview: await this.sourceConfig.getPreview(),
+      uiVersion: await this.sourceConfig.getUiVersion()
     };
   }
 }

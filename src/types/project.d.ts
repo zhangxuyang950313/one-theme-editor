@@ -3,7 +3,7 @@ import {
   TypeSourceDescription,
   TypeSourceConfig,
   TypeUiVersion
-} from "./template";
+} from "./source-config";
 import { TypeDatabase } from "./index";
 
 export type TypeBrandInfo = {
@@ -31,8 +31,8 @@ export type TypeCreateProjectData = {
   description: TypeProjectDesc;
   uiVersion: TypeUiVersion;
   brandConf: TypeBrandConf;
-  configPreview: TypeSourceDescription;
-  localPath?: string;
+  sourceDescription: TypeSourceDescription;
+  localPath: string;
 };
 
 // 图片数据
@@ -43,14 +43,10 @@ export type TypeImageData = {
   size: number;
   filename: string;
   ninePatch: boolean;
-  base64: string;
 };
 
-// 图片信息，不存储 base64 信息
-export type TypeImageInfo = Omit<TypeImageData, "base64">;
-
 // 图片映射信息
-export type TypeImageMapper = TypeImageInfo & {
+export type TypeImageMapper = TypeImageData & {
   target: string;
 };
 
@@ -63,16 +59,16 @@ export type TypeXmlMapper = {
 export type TypeProjectData = {
   uuid: string;
   brand: TypeBrandInfo;
+  localPath: string;
   description: TypeProjectDescription;
   uiVersion: TypeUiVersion;
-  template: TypeSourceConfig;
+  sourceConfig: TypeSourceConfig;
   imageMapperList: TypeImageMapper[];
   xmlMapperList: TypeXmlMapper[];
-  localPath: string;
 };
 
 // // 在数据空的图片映射
-// export type TypeImageMapperDoc = Omit<TypeImageInfo, "url">;
+// export type TypeImageMapperDoc = Omit<TypeImageData, "url">;
 
 // 在数据库中的图片数据
 export type TypeImageDataDoc = TypeDatabase<TypeImageData>;

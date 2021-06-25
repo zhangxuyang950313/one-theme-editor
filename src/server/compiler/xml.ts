@@ -48,8 +48,7 @@ export async function xml2jsonNormalized(
     throw new Error(`文件${file}不存在`);
   }
   const data = await fse.readFile(file, { encoding: "utf-8" });
-  const xmlData = xml2js(data, { ...config, ...options });
-  return xmlData;
+  return xml2js(data, { ...config, ...options });
 }
 
 // 解析 xml 返回对象形式的紧凑数据

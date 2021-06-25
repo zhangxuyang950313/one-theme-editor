@@ -1,6 +1,6 @@
 import path from "path";
 
-import { getFileMD5, getImageData } from "common/utils";
+import { asyncMap, getFileMD5 } from "common/utils";
 
 import {
   TypeSourcePageGroupConf,
@@ -8,8 +8,7 @@ import {
   TypeSourceModuleConf,
   TypeSourcePageConf,
   TypeUiVersion
-} from "types/sourceConfig";
-import { TypeImageInfo } from "types/project";
+} from "types/source-config";
 import {
   TypeOriginTempConf,
   TypeOriginTempPageGroupConf,
@@ -18,10 +17,12 @@ import {
 
 import Page from "@/data/Page";
 import XMLNode from "@/core/XMLNode";
-import { xml2jsonCompact } from "@/compiler/xmlCompiler";
+import { xml2jsonCompact } from "@/compiler/xml";
 
 import ERR_CODE from "renderer/core/error-code";
+import { TypeImagePathLike } from "@/../types";
 
+// 解析 sourceConfig 所有数据
 export default class SourceConfig {
   // description.xml 路径
   private descFile = "";
@@ -55,7 +56,7 @@ export default class SourceConfig {
 
   // 处理成模板根目录
   private resolvePath(relativePath: string): string {
-    return path.join(this.getRootDir(), relativePath);
+    return path.join(this.rootDir, relativePath);
   }
 
   // 模板名称
@@ -71,30 +72,17 @@ export default class SourceConfig {
   }
 
   // 模板预览图
-  async getPreview(): Promise<TypeImageInfo> {
+  async getPreview(): Promise<TypeImagePathLike> {
     const tempData = await this.ensureXmlData();
-    const src = path.join(
-      this.rootDir,
-      // TODO: 默认预览图
-      tempData.preview?.[0]._attributes.src || ""
-    );
-    const {
-      md5,
-      width,
-      height,
-      size,
-      filename,
-      ninePatch
-    } = await getImageData(src);
-    return { md5, width, height, size, filename, ninePatch };
+    // TODO: 默认预览图
+    return tempData.preview?.[0]._attributes.src || "";
   }
 
   // 模板信息
   async getUiVersion(): Promise<TypeUiVersion> {
     const tempData = await this.ensureXmlData();
     const { name = "", code = "" } = tempData?.uiVersion?.[0]._attributes || {};
-    const uiVersions: TypeUiVersion = { name, code };
-    return uiVersions;
+    return { name, code };
   }
 
   // 页面数据
@@ -102,52 +90,41 @@ export default class SourceConfig {
     data: TypeOriginTempModulePageConf[]
   ): Promise<TypeSourcePageConf[]> {
     // 这里是在选择模板版本后得到的目标模块目录
-    const pagesQueue = data.map(item => {
+    return asyncMap(data, item => {
       const pageNode = new XMLNode(item);
       const pathname = path.join(this.rootDir, pageNode.getAttribute("src"));
       const file = path.join(this.rootDir, pathname);
-      const page = new Page({ file, pathname });
-      return page.getData();
+      return new Page({ file, pathname }).getData();
     });
-    return await Promise.all(pagesQueue);
   }
 
   // 页面分组数据
   private async getPageGroup(
     data: TypeOriginTempPageGroupConf[]
   ): Promise<TypeSourcePageGroupConf[]> {
-    const groupsQueue: Promise<TypeSourcePageGroupConf>[] = data.map(
-      async item => {
-        const groupNode = new XMLNode(item);
-        return {
-          name: groupNode.getAttribute("name"),
-          pages: item.page ? await this.getPages(item.page) : []
-        };
-      }
-    );
-    return await Promise.all(groupsQueue);
+    return asyncMap(data, async item => {
+      const groupNode = new XMLNode(item);
+      return {
+        name: groupNode.getAttribute("name"),
+        pages: item.page ? await this.getPages(item.page) : []
+      };
+    });
   }
 
   // 模块数据
   async getModules(): Promise<TypeSourceModuleConf[]> {
-    const tempData = await this.ensureXmlData();
-    const modulesQueue: Promise<TypeSourceModuleConf>[] =
-      tempData.module?.map(async (item, index) => {
-        const moduleNode = new XMLNode(item);
-        const iconSrc = path.join(
-          this.rootDir,
-          moduleNode.getAttribute("icon")
-        );
-        const md5 = await getFileMD5(iconSrc);
-        const result: TypeSourceModuleConf = {
-          index,
-          name: moduleNode.getAttribute("name"),
-          icon: md5,
-          groups: item.group ? await this.getPageGroup(item.group) : []
-        };
-        return result;
-      }) || [];
-    return await Promise.all(modulesQueue);
+    const sourceData = await this.ensureXmlData();
+    if (!Array.isArray(sourceData.module)) return [];
+    return asyncMap(sourceData.module, async (item, index) => {
+      const moduleNode = new XMLNode(item);
+      const result: TypeSourceModuleConf = {
+        index,
+        name: moduleNode.getAttribute("name"),
+        icon: moduleNode.getAttribute("icon"),
+        groups: item.group ? await this.getPageGroup(item.group) : []
+      };
+      return result;
+    });
   }
 
   async getData(): Promise<TypeSourceConfig> {

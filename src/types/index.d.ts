@@ -4,3 +4,6 @@ export type TypeDatabase<T = { [x: string]: any }> = T & {
   createdAt?: Date;
   updatedAt?: Date;
 };
+
+// 图片路径
+export type TypeImagePathLike = string;

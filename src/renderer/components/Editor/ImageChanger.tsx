@@ -1,11 +1,10 @@
-/**
- * 图片替换单元组件
- */
+// 图片替换单元组件
 import path from "path";
 import React from "react";
 import { useSelector } from "react-redux";
 import { remote } from "electron";
 
+// components
 import styled from "styled-components";
 import { notification } from "antd";
 import {
@@ -15,12 +14,13 @@ import {
   ImportOutlined
 } from "@ant-design/icons";
 
-import { findProjectImage } from "@/store/modules/project/selector";
-import { useProjectRoot } from "@/hooks/project";
-import { TypeTempPageSourceConf } from "types/sourceConfig";
-import { apiDeleteFile, apiWriteFile } from "@/api";
-import ERR_CODE from "@/core/error-code";
+// script
 import { useImageUrl } from "@/hooks";
+import { apiCopyFile, apiDeleteFile } from "@/api";
+import { useProjectRoot } from "@/hooks/project";
+import { findProjectImage } from "@/store/modules/project/selector";
+import { TypeSourcePageSourceConf } from "types/source-config";
+import ERR_CODE from "@/core/error-code";
 
 // 图片素材展示
 type TypePropsOfShowImage = {
@@ -151,7 +151,7 @@ const StyleImageBackground = styled.div<{ srcUrl?: string }>`
   }
 `;
 
-const ImageChanger: React.FC<TypeTempPageSourceConf> = sourceConf => {
+const ImageChanger: React.FC<TypeSourcePageSourceConf> = sourceConf => {
   const findImage = useSelector(findProjectImage);
   const localPath = useProjectRoot();
   const getImageURL = useImageUrl();
@@ -191,7 +191,10 @@ const ImageChanger: React.FC<TypeTempPageSourceConf> = sourceConf => {
         err();
         return;
       }
-      apiWriteFile({ md5: from.md5 }, path.join(localPath, target));
+      apiCopyFile(
+        path.join(localPath, from.filename),
+        path.join(localPath, target)
+      );
     });
   };
   const { width, height, size } = from;

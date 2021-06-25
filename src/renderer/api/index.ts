@@ -8,7 +8,7 @@ import {
   TypeProjectData,
   TypeProjectDataDoc
 } from "types/project";
-import { TypeSourceConfig } from "types/sourceConfig";
+import { TypeSourceConfig } from "types/source-config";
 import { TypeFileData, TypeResponseFrame } from "types/request";
 
 type TypeGetCanceler = (c: Canceler) => void;
@@ -106,15 +106,15 @@ export async function apiDelImageMapper(
     .then(data => data.data.data);
 }
 
-// 写入文件
-export async function apiWriteFile(
-  fileData: TypeFileData,
-  to: string
-): Promise<TypeResponseFrame> {
-  return createHttp()
-    .post<TypeResponseFrame>(API.WRITE_FILE, { fileData, to })
-    .then(data => data.data);
-}
+// // 写入文件
+// export async function apiWriteFile(
+//   fileData: TypeFileData,
+//   to: string
+// ): Promise<TypeResponseFrame> {
+//   return createHttp()
+//     .post<TypeResponseFrame>(API.WRITE_FILE, { fileData, to })
+//     .then(data => data.data);
+// }
 
 // 复制文件
 export async function apiCopyFile(

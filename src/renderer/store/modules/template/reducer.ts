@@ -5,7 +5,7 @@ import {
   TypeTemplateData,
   TypeTempModuleConf,
   TypeTempPageConf
-} from "types/sourceConfig";
+} from "types/source-config";
 import { TypeActions } from "./action";
 
 // main states

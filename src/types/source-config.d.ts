@@ -1,5 +1,6 @@
-import { TypeImageInfo } from "./project.d";
-import { TypeTempLayout } from "./xml-result.d";
+import { TypeImageData } from "./project";
+import { TypeTempLayout } from "./xml-result";
+import { TypeImagePathLike } from "./index";
 
 // 预览配置
 export type TypeSourceDescription = {
@@ -7,7 +8,7 @@ export type TypeSourceDescription = {
   root: string;
   file: string;
   name: string;
-  preview: TypeImageInfo;
+  preview: TypeImagePathLike;
   version: string;
   uiVersion: TypeUiVersion;
 };
@@ -50,7 +51,7 @@ export type TypeSourceFileCategoryConf = {
 export type TypeSourcePageSourceConf = {
   name: string;
   layout: TypeTempLayout; // 预览所需坐标
-  from: TypeImageInfo | null;
+  from: TypeImageData | null;
   to: string[];
 };
 
@@ -58,7 +59,7 @@ export type TypeSourcePageSourceConf = {
 export type TypeSourcePageConf = {
   pathname: string;
   config: TypeSourcePageInfoConf;
-  preview: string;
+  preview: TypeImagePathLike;
   category: TypeSourceFileCategoryConf[];
   source: TypeSourcePageSourceConf[];
   xml: any[];

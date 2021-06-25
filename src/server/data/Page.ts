@@ -5,9 +5,9 @@ import {
   TypeSourcePageInfoConf,
   TypeSourcePageSourceConf,
   TypeSourceFileCategoryConf
-} from "types/sourceConfig";
+} from "types/source-config";
 import { TypeTempLayout, TypeTempOriginPageConf } from "types/xml-result";
-import { xml2jsonCompact } from "@/compiler/xmlCompiler";
+import { xml2jsonCompact } from "@/compiler/xml";
 import XMLNode from "@/core/XMLNode";
 
 export default class Page {
@@ -28,13 +28,9 @@ export default class Page {
     return this.xmlData;
   }
 
-  async getPreviewMD5(): Promise<string> {
+  async getPreview(): Promise<string> {
     const xmlData = await this.ensureXmlData();
-    const previewSrc = path.join(
-      this.dirWithUIPath,
-      xmlData.preview?.[0]._attributes.src || ""
-    );
-    return getFileMD5(previewSrc);
+    return xmlData.preview?.[0]._attributes.src || "";
   }
 
   async getConfig(): Promise<TypeSourcePageInfoConf> {
@@ -117,7 +113,7 @@ export default class Page {
     return {
       pathname: this.pathname,
       config: await this.getConfig(),
-      preview: await this.getPreviewMD5(),
+      preview: await this.getPreview(),
       category: await this.getCategoryList(),
       source: await this.getSourceList(),
       xml: []

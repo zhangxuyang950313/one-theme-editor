@@ -1,6 +1,6 @@
 import path from "path";
 import fse from "fs-extra";
-import { v4 as genUUID } from "uuid";
+import { v4 as UUID } from "uuid";
 import Nedb from "nedb-promises";
 
 import { PROJECTS_DB } from "common/paths";
@@ -12,8 +12,7 @@ import {
   TypeProjectDataDoc
 } from "types/project";
 import ERR_CODE from "renderer/core/error-code";
-import ProjectData from "@/data/ProjectData";
-import { compileSourceConfig } from "@/compiler/sourceConfig";
+import { compileSourceConfig } from "@/compiler/source-config";
 import { findImageData } from "./image";
 
 // TODO: 创建数据库有个坑，如果 filename 文件内容不是 nedb 能接受的数据格式则会导致服务崩溃
@@ -29,27 +28,27 @@ function createNedb(filename: string) {
 // 频繁修改工程数据，常驻内存
 const projectDB = createNedb(PROJECTS_DB);
 
-// 把 imageMapper 内容同步到本地
-export async function imageMapperSyncToLocal(
-  uuid: string
-): Promise<Promise<(() => void) | void>[]> {
-  return projectDB
-    .findOne<TypeProjectDataDoc>({ uuid })
-    .then(project => {
-      const { imageMapperList, localPath } = project;
-      if (!localPath) return Promise.all([]);
-      return imageMapperList.map(async item => {
-        const filename = path.resolve(localPath, item.target);
-        // TODO: 失败的都默认通过，后面应把失败的返回出去以供提示
-        if (!item.md5) return Promise.resolve();
-        const imageData = await findImageData(item.md5);
-        if (!imageData.base64) return Promise.resolve();
-        return base64ToLocalFile(filename, imageData.base64).then(rewrite => {
-          rewrite && rewrite();
-        });
-      });
-    });
-}
+// // 把 imageMapper 内容同步到本地
+// export async function imageMapperSyncToLocal(
+//   uuid: string
+// ): Promise<Promise<(() => void) | void>[]> {
+//   return projectDB
+//     .findOne<TypeProjectDataDoc>({ uuid })
+//     .then(project => {
+//       const { imageMapperList, localPath } = project;
+//       if (!localPath) return Promise.all([]);
+//       return imageMapperList.map(async item => {
+//         const filename = path.resolve(localPath, item.target);
+//         // TODO: 失败的都默认通过，后面应把失败的返回出去以供提示
+//         if (!item.md5) return Promise.resolve();
+//         const imageData = await findImageData(item.md5);
+//         if (!imageData.base64) return Promise.resolve();
+//         return base64ToLocalFile(filename, imageData.base64).then(rewrite => {
+//           rewrite && rewrite();
+//         });
+//       });
+//     });
+// }
 
 // rebuildIndex();
 
@@ -79,23 +78,22 @@ export async function imageMapperSyncToLocal(
 export async function createProject(
   data: TypeCreateProjectData
 ): Promise<TypeProjectDataDoc> {
-  const uuid = genUUID();
-  const template = await compileSourceConfig(data);
-  // 组装数据
-  const projectData = new ProjectData();
-  projectData.setDescription(data.description);
-  projectData.setUuid(uuid);
-  projectData.setBrand({
-    type: data.brandConf.type,
-    name: data.brandConf.name
-  });
-  projectData.setUiVersion({
-    name: data.uiVersion.name,
-    code: data.uiVersion.code
-  });
-  projectData.setTemplate(template);
-  projectData.setLocalPath(data.localPath);
-  return projectDB.insert(projectData.getData());
+  const sourceConfig = await compileSourceConfig(data);
+  const { uiVersion, brandConf, localPath } = data;
+  const projectData: TypeProjectData = {
+    uuid: UUID(),
+    description: data.description,
+    brand: {
+      type: brandConf.type,
+      name: brandConf.name
+    },
+    uiVersion,
+    sourceConfig,
+    localPath,
+    imageMapperList: [],
+    xmlMapperList: []
+  };
+  return projectDB.insert(projectData);
 }
 
 // brandType 筛选所有工程

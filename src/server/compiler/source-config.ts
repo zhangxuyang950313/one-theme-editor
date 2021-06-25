@@ -1,11 +1,10 @@
 import path from "path";
 import fse from "fs-extra";
-import * as uuid from "uuid";
 import SourceConfig from "@/data/SourceConfig";
 import SourceDescription from "@/data/SourceDescription";
 import { SOURCE_CONFIG_DIR, SOuRCE_CONFIG_FILE } from "common/paths";
 import { TypeBrandConf, TypeCreateProjectData } from "types/project";
-import { TypeSourceDescription, TypeSourceConfig } from "types/sourceConfig";
+import { TypeSourceDescription, TypeSourceConfig } from "types/source-config";
 
 import ERR_CODE from "renderer/core/error-code";
 
@@ -15,27 +14,6 @@ export async function readBrandConf(): Promise<TypeBrandConf[]> {
     throw new Error(ERR_CODE[4003]);
   }
   return JSON.parse(fse.readFileSync(SOuRCE_CONFIG_FILE, "utf-8"));
-}
-
-/**
- * 解析配置配置的简短信息
- * 只解析 description.xml 不需要全部解析
- * @param descFile description.xml 路径
- * @returns
- */
-async function compileSourceDescription(
-  descFile: string
-): Promise<TypeSourceDescription> {
-  const sourceConfig = new SourceConfig(descFile);
-  const sourceDescription = new SourceDescription();
-  sourceDescription.setKey(uuid.v4());
-  sourceDescription.setFile(descFile);
-  sourceDescription.setRoot(path.dirname(descFile));
-  sourceDescription.setName(await sourceConfig.getName());
-  sourceDescription.setPreview(await sourceConfig.getPreview());
-  sourceDescription.setVersion(await sourceConfig.getVersion());
-  sourceDescription.setUiVersion(await sourceConfig.getUiVersion());
-  return sourceDescription.getData();
 }
 
 /**
@@ -52,7 +30,7 @@ export async function compileSourceDescriptionList(
   const queue = brandConf.sourceConfigs
     .map(item => path.join(SOURCE_CONFIG_DIR, item, "description.xml"))
     .filter(item => fse.existsSync(item))
-    .map(compileSourceDescription);
+    .map(item => new SourceDescription(item).getData());
   return await Promise.all(queue);
 }
 
@@ -65,7 +43,7 @@ export async function compileSourceConfig(
   projectData: TypeCreateProjectData
 ): Promise<TypeSourceConfig> {
   const sourceConfig = new SourceConfig(
-    projectData.configPreview.file,
+    projectData.sourceDescription.file,
     projectData.uiVersion
   );
   return sourceConfig.getData();

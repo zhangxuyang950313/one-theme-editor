@@ -4,14 +4,14 @@ import express, { Express } from "express";
 import FileType from "file-type";
 import API from "common/api";
 import { base64ToLocalFile } from "common/utils";
-import { TypeUiVersion } from "types/sourceConfig";
+import { TypeUiVersion } from "types/source-config";
 import { TypeCreateProjectData, TypeProjectDescription } from "types/project";
 import { TypeFileData } from "types/request";
 import ERR_CODE from "renderer/core/error-code";
 import {
   compileSourceDescriptionList,
   readBrandConf
-} from "./compiler/sourceConfig";
+} from "./compiler/source-config";
 import {
   findProjectByUUID,
   getProjectListOf,
@@ -210,34 +210,34 @@ export default function registerService(service: Express): void {
   //     });
   // });
 
-  // 写入本地文件
-  service.post<any, any, { fileData: TypeFileData; to: string }>(
-    API.WRITE_FILE,
-    async (req, res) => {
-      try {
-        const { fileData, to } = req.body;
-        const { url, base64 } = fileData;
-        let md5 = fileData.md5;
-        // base64 直接写入
-        if (base64) {
-          await base64ToLocalFile(to, base64).then(rw => rw && rw());
-        }
+  // // 写入本地文件
+  // service.post<any, any, { fileData: TypeFileData; to: string }>(
+  //   API.WRITE_FILE,
+  //   async (req, res) => {
+  //     try {
+  //       const { fileData, to } = req.body;
+  //       const { url, base64 } = fileData;
+  //       let md5 = fileData.md5;
+  //       // base64 直接写入
+  //       if (base64) {
+  //         await base64ToLocalFile(to, base64).then(rw => rw && rw());
+  //       }
 
-        // md5 去查数据库获得 base64 再写入
-        if (!md5 && url) md5 = path.basename(url);
-        if (!md5) throw new Error("md5 为空");
+  //       // md5 去查数据库获得 base64 再写入
+  //       if (!md5 && url) md5 = path.basename(url);
+  //       if (!md5) throw new Error("md5 为空");
 
-        const imageData = await findImageData(md5);
-        if (imageData.base64) {
-          await base64ToLocalFile(to, imageData.base64).then(rw => rw && rw());
-          return res.send(result.success());
-        } else throw new Error(`图片数据库获取${md5}失败`);
-      } catch (err) {
-        // console.error(err);
-        res.status(400).send(result.fail(`${ERR_CODE[4002]}, ${err}`));
-      }
-    }
-  );
+  //       const imageData = await findImageData(md5);
+  //       if (imageData.base64) {
+  //         await base64ToLocalFile(to, imageData.base64).then(rw => rw && rw());
+  //         return res.send(result.success());
+  //       } else throw new Error(`图片数据库获取${md5}失败`);
+  //     } catch (err) {
+  //       // console.error(err);
+  //       res.status(400).send(result.fail(`${ERR_CODE[4002]}, ${err}`));
+  //     }
+  //   }
+  // );
 
   // 复制本地文件
   service.post<any, any, { from: string; to: string }>(
