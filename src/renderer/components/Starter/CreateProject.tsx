@@ -83,49 +83,14 @@ const CreateProject: React.FC<TypeProps> = props => {
   };
 
   // 开始创建主题
-  const handleCreateProject = () => {
+  const handleStartCreate = () => {
     // init();
     openModal();
   };
 
-  // 上一步
-  const handlePrev = () => {
-    if (curStep === 0) {
-      handleCancel();
-      return;
-    }
-    prevStep();
-  };
-
-  // 下一步
-  const handleNext = () => {
-    steps[curStep]
-      .next()
-      .then(nextStep)
-      .catch(err => {
-        if (typeof err.message === "string") {
-          message.warn({ content: err.message });
-        } else {
-          message.warn({ content: "未知错误" });
-        }
-      });
-  };
-
-  // 主动关闭
-  const handleCancel = () => {
-    Modal.confirm({
-      title: "提示",
-      content: "填写的信息将不被保存，确定取消创建主题？",
-      onOk: () => {
-        closeModal();
-        init();
-      }
-    });
-  };
-
   const steps = [
     {
-      name: "选择模板",
+      name: "选择版本",
       Component() {
         return (
           <SourceConfigManager
@@ -136,9 +101,25 @@ const CreateProject: React.FC<TypeProps> = props => {
           />
         );
       },
-      // 校验表单
-      async next() {
-        return selectedSourceDesc || Promise.reject(new Error("请选择模板"));
+      cancel: {
+        disabled: isCreating,
+        handleCancel: () => {
+          Modal.confirm({
+            title: "提示",
+            content: "填写的信息将不被保存，确定取消创建主题？",
+            onOk: () => {
+              closeModal();
+              init();
+            }
+          });
+        }
+      },
+      next: {
+        disabled: isCreating || !selectedSourceDesc,
+        async handleNext() {
+          if (selectedSourceDesc) nextStep();
+          else message.warn({ content: "请选择版本" });
+        }
       }
     },
     {
@@ -165,13 +146,35 @@ const CreateProject: React.FC<TypeProps> = props => {
           </StyleFillInfo>
         );
       },
-      async next() {
-        return form
-          .validateFields()
-          .then(setDescription)
-          .catch(() => {
-            throw new Error("请填写正确表单");
-          });
+      prev: {
+        disabled: isCreating,
+        handlePrev: prevStep
+      },
+      next: {
+        disabled: isCreating,
+        async handleNext() {
+          return form
+            .validateFields()
+            .then(setDescription)
+            .then(nextStep)
+            .catch(() => {
+              throw new Error("请填写正确表单");
+            });
+        }
+      }
+    },
+    {
+      name: "选择模板",
+      Component() {
+        return null;
+      },
+      prev: {
+        disabled: isCreating,
+        handlePrev: prevStep
+      },
+      next: {
+        disabled: isCreating,
+        handleNext: nextStep
       }
     },
     {
@@ -236,52 +239,59 @@ const CreateProject: React.FC<TypeProps> = props => {
           </StyleConfirmInfo>
         );
       },
-      async next() {
-        const local = localPathRef.current;
-        if (!local) throw new Error("请选择正确的本地路径");
-        if (!fse.existsSync(local)) {
-          await new Promise<void>(resolve => {
-            Modal.confirm({
-              title: "提示",
-              content: `目录"${local}"不存在，是否创建？`,
-              onOk: () => {
-                fse.ensureDirSync(local);
-                resolve();
-              }
+      prev: {
+        disabled: isCreating,
+        handlePrev: prevStep
+      },
+      start: {
+        disabled: isCreating,
+        async handleStart() {
+          const local = localPathRef.current;
+          if (!local) throw new Error("请选择正确的本地路径");
+          if (!fse.existsSync(local)) {
+            await new Promise<void>(resolve => {
+              Modal.confirm({
+                title: "提示",
+                content: `目录"${local}"不存在，是否创建？`,
+                onOk: () => {
+                  fse.ensureDirSync(local);
+                  resolve();
+                }
+              });
             });
-          });
-        } else if (fse.readdirSync(local).length > 0) {
-          await new Promise<void>(resolve => {
-            Modal.confirm({
-              title: "提示",
-              content: `目录"${local}"为非空目录，可能不是主题目录，是否仍然继续使用此目录？`,
-              onOk: () => {
-                resolve();
-              }
+          } else if (fse.readdirSync(local).length > 0) {
+            await new Promise<void>(resolve => {
+              Modal.confirm({
+                title: "提示",
+                content: `目录"${local}"为非空目录，可能不是主题目录，是否仍然继续使用此目录？`,
+                onOk: () => {
+                  resolve();
+                }
+              });
             });
-          });
-        }
-        if (!selectedSourceDesc) {
-          throw new Error("创建失败");
-        }
-        updateCreating(true);
-        // TODO 使用选择的模板路径生成 tempConf
-        return apiCreateProject({
-          description,
-          brandConf,
-          uiVersion: selectedSourceDesc.uiVersion,
-          sourceDescription: selectedSourceDesc,
-          localPath: localPathRef.current || ""
-        }).then(data => {
-          console.log("创建工程：", data);
-          if (!description) {
-            throw new Error("工程信息为空");
           }
-          props.onProjectCreated(description);
-          closeModal();
-          updateCreating(false);
-          setTimeout(init, 300);
-        });
+          if (!selectedSourceDesc) {
+            throw new Error("创建失败");
+          }
+          updateCreating(true);
+          // TODO 使用选择的模板路径生成 tempConf
+          return apiCreateProject({
+            description,
+            brandConf,
+            uiVersion: selectedSourceDesc.uiVersion,
+            sourceDescription: selectedSourceDesc,
+            localPath: localPathRef.current || ""
+          }).then(data => {
+            console.log("创建工程：", data);
+            if (!description) {
+              throw new Error("工程信息为空");
+            }
+            props.onProjectCreated(description);
+            closeModal();
+            updateCreating(false);
+            setTimeout(init, 300);
+          });
+        }
       }
     }
   ];
@@ -291,29 +301,70 @@ const CreateProject: React.FC<TypeProps> = props => {
     return steps[curStep]?.Component() || null;
   };
 
+  const CancelButton = () => {
+    const step = steps[curStep];
+    if (!step.cancel) return null;
+    return (
+      <Button
+        onClick={step.cancel.handleCancel}
+        disabled={step.cancel.disabled}
+      >
+        取消
+      </Button>
+    );
+  };
+
+  const PrevButton = () => {
+    const step = steps[curStep];
+    if (!step.prev) return null;
+    return (
+      <Button onClick={step.prev.handlePrev} disabled={step.prev.disabled}>
+        上一步
+      </Button>
+    );
+  };
+
+  const NextButton = () => {
+    const step = steps[curStep];
+    if (!step.next) return null;
+    return (
+      <Button
+        type="primary"
+        onClick={step.next.handleNext}
+        disabled={step.next.disabled}
+        loading={isCreating}
+      >
+        下一步
+      </Button>
+    );
+  };
+
+  const StartButton = () => {
+    const step = steps[curStep];
+    if (!step.start) return null;
+    return (
+      <Button
+        type="primary"
+        onClick={step.start.handleStart}
+        disabled={step.start?.disabled}
+        loading={isCreating}
+      >
+        开始
+      </Button>
+    );
+  };
+
   // 弹框底部控制按钮
   const modalFooter = [
-    <Button
-      key="prev"
-      onClick={curStep > 0 ? handlePrev : handleCancel}
-      disabled={isCreating}
-    >
-      {curStep > 0 ? "上一步" : "取消"}
-    </Button>,
-    <Button
-      key="next"
-      type="primary"
-      onClick={handleNext}
-      disabled={!selectedSourceDesc || isCreating}
-      loading={isCreating}
-    >
-      {curStep < steps.length - 1 ? "下一步" : "开始"}
-    </Button>
+    <CancelButton key="cancel" />,
+    <PrevButton key="prev" />,
+    <NextButton key="next" />,
+    <StartButton key="start" />
   ];
 
   return (
     <StyleCreateProject>
-      <Button type="primary" onClick={handleCreateProject}>
+      <Button type="primary" onClick={handleStartCreate}>
         新建主题
       </Button>
       <Modal

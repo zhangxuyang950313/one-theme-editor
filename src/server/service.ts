@@ -1,13 +1,10 @@
-import path from "path";
 import fse from "fs-extra";
 import express, { Express } from "express";
 import FileType from "file-type";
 import API from "common/api";
-import { base64ToLocalFile } from "common/utils";
+import ERR_CODE from "renderer/core/error-code";
 import { TypeUiVersion } from "types/source-config";
 import { TypeCreateProjectData, TypeProjectDescription } from "types/project";
-import { TypeFileData } from "types/request";
-import ERR_CODE from "renderer/core/error-code";
 import {
   compileSourceDescriptionList,
   readBrandConf
@@ -18,7 +15,6 @@ import {
   createProject,
   updateProject
 } from "./db-handler/project";
-import { findImageData } from "./db-handler/image";
 
 const result = {
   success: (data?: any) => {
