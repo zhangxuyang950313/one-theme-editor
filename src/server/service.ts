@@ -1,13 +1,10 @@
 import fse from "fs-extra";
-import express, { Express } from "express";
 import FileType from "file-type";
+import express, { Express } from "express";
 import API from "common/api";
 import ERR_CODE from "renderer/core/error-code";
 import { TypeUiVersion } from "types/source-config";
-import {
-  TypeCreateProjectPayload,
-  TypeProjectDescription
-} from "types/project";
+import { TypeCreateProjectPayload, TypeProjectInfo } from "types/project";
 import {
   compileSourceDescriptionList,
   readBrandConf
@@ -100,36 +97,40 @@ export default function registerService(service: Express): void {
     async (req, res) => {
       try {
         const { brandType } = req.params;
-        const configPreview = await compileSourceDescriptionList(brandType);
-        res.send(result.success(configPreview));
-      } catch (err) {
-        res.status(400).send(result.fail(err.message));
-      }
-    }
-  );
-  // 获取配置列表
-  service.get<{ brandType: string }>(
-    `${API.GET_SOURCE_CONFIG_LIST}/:brandType`,
-    async (req, res) => {
-      try {
-        const configPreview = await compileSourceDescriptionList(
-          req.params.brandType
-        );
-        res.send(result.success(configPreview));
+        const sourceDescription = await compileSourceDescriptionList(brandType);
+        res.send(result.success(sourceDescription));
       } catch (err) {
         res.status(400).send(result.fail(err.message));
       }
     }
   );
 
+  // // 获取配置列表
+  // service.get<{ brandType: string }>(
+  //   `${API.GET_SOURCE_CONFIG_LIST}/:brandType`,
+  //   async (req, res) => {
+  //     try {
+  //       const configPreview = await compileSourceDescriptionList(
+  //         req.params.brandType
+  //       );
+  //       res.send(result.success(configPreview));
+  //     } catch (err) {
+  //       res.status(400).send(result.fail(err.message));
+  //     }
+  //   }
+  // );
+
   // ---------------工程信息--------------- //
   // 添加工程
   service.post<any, any, TypeCreateProjectPayload, any>(
     API.CREATE_PROJECT,
-    (req, res) => {
-      createProject(req.body)
-        .then(project => res.send(result.success(project)))
-        .catch(err => res.status(400).send(result.fail(err)));
+    async (req, res) => {
+      try {
+        const project = await createProject(req.body);
+        res.send(result.success(project));
+      } catch (err) {
+        res.status(400).send(result.fail(err.message));
+      }
     }
   );
 
@@ -158,7 +159,7 @@ export default function registerService(service: Express): void {
   });
 
   // 更新工程描述信息
-  service.post<{ uuid: string }, any, TypeProjectDescription>(
+  service.post<{ uuid: string }, any, TypeProjectInfo>(
     `${API.UPDATE_DESCRIPTION}/:uuid`,
     (req, res) => {
       updateProject(req.params.uuid, { description: req.body })

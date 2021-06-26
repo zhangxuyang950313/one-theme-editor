@@ -90,9 +90,8 @@ export default class SourceConfig {
     // 这里是在选择模板版本后得到的目标模块目录
     return asyncMap(data, item => {
       const pageNode = new XMLNode(item);
-      const pathname = path.join(this.rootDir, pageNode.getAttribute("src"));
-      const file = path.join(this.rootDir, pathname);
-      return new Page({ file, pathname }).getData();
+      const file = path.join(this.rootDir, pageNode.getAttribute("src"));
+      return new Page(file).getData();
     });
   }
 
@@ -133,7 +132,7 @@ export default class SourceConfig {
     return {
       key: UUID(),
       file: this.descFile,
-      root: this.rootDir,
+      namespace: this.rootDir,
       name: await this.getName(),
       version: await this.getVersion(),
       preview: await this.getPreview(),

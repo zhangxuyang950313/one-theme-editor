@@ -17,7 +17,9 @@ type TypeProps = {
 const SourceConfigCard: React.FC<TypeProps> = props => {
   const getImageURL = useImageUrl();
   const { config } = props;
-  const imgUrl = getImageURL(path.join(config.root, config.preview));
+  const imgUrl = getImageURL(
+    path.join(config.rootDir, config.namespace, config.preview)
+  );
   return (
     <StyleSourceConfigCard data-hoverable={props.hoverable}>
       <Card

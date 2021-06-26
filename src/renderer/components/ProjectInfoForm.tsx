@@ -1,7 +1,7 @@
 import React, { forwardRef, useImperativeHandle } from "react";
 import styled from "styled-components";
 
-import { TypeProjectDescription } from "types/project";
+import { TypeProjectInfo } from "types/project";
 
 // components
 import { Form, FormInstance } from "antd";
@@ -14,11 +14,11 @@ import {
 
 type TypeProps = {
   // 初始化数据
-  initialValues: TypeProjectDescription | undefined;
-  form: FormInstance<TypeProjectDescription>;
+  initialValues: TypeProjectInfo | undefined;
+  form: FormInstance<TypeProjectInfo>;
 };
 
-type TypeRef = FormInstance<TypeProjectDescription>;
+type TypeRef = FormInstance<TypeProjectInfo>;
 
 // 主题信息表单
 function ProjectInfoForm(props: TypeProps, ref: React.ForwardedRef<TypeRef>) {
@@ -26,7 +26,7 @@ function ProjectInfoForm(props: TypeProps, ref: React.ForwardedRef<TypeRef>) {
 
   useImperativeHandle(ref, () => form);
 
-  const onInputChange = (field: keyof TypeProjectDescription) => {
+  const onInputChange = (field: keyof TypeProjectInfo) => {
     return (event: React.ChangeEvent<HTMLInputElement>) => {
       form.setFieldsValue({ [field]: event.target.value });
     };

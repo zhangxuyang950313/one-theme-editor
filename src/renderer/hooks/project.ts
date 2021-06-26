@@ -120,8 +120,8 @@ export function useLoadProjectByUUID(
 export function useProjectData(): TypeProjectStateInStore | null {
   const [, updateTitle] = useDocumentTitle();
   const projectData = useSelector(getProjectData);
-  if (projectData?.description?.name) {
-    updateTitle(projectData.description.name);
+  if (projectData?.projectInfo?.name) {
+    updateTitle(projectData.projectInfo.name);
   }
   return projectData;
 }

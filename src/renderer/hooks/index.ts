@@ -78,9 +78,9 @@ export function useProjectImageUrl(): (
   x: TypeImagePathLike
 ) => TypeImagePathLike {
   const host = useServerHost();
-  const localPath = useSelector(getProjectLocalPath);
+  const projectRoot = useSelector(getProjectLocalPath);
   return relative => {
-    const file = path.join(localPath || "", relative);
+    const file = path.join(projectRoot || "", relative);
     return `${host}/image?file=${file}`;
   };
 }
@@ -92,7 +92,11 @@ export function useSourceImageUrl(): (
   const host = useServerHost();
   const currentSourceConfig = useSelector(getCurrentSourceConfig);
   return relative => {
-    const file = path.join(currentSourceConfig?.root || "", relative);
+    const file = path.join(
+      currentSourceConfig?.rootDir || "",
+      currentSourceConfig?.namespace || "",
+      relative
+    );
     return `${host}/image?file=${file}`;
   };
 }

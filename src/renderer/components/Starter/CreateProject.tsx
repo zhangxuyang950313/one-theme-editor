@@ -9,7 +9,7 @@ import {
   useSelectedBrandConf,
   useSourceDescriptionList
 } from "@/hooks/sourceConfig";
-import { TypeProjectDescription } from "types/project";
+import { TypeProjectInfo } from "types/project";
 import { TypeSourceDescription } from "types/source-config";
 import { apiCreateProject } from "@/api";
 
@@ -23,7 +23,7 @@ import SourceConfigManager from "./SourceConfigManager";
 
 // 创建主题按钮
 type TypeProps = {
-  onProjectCreated: (description: TypeProjectDescription) => Promise<void>;
+  onProjectCreated: (projectInfo: TypeProjectInfo) => Promise<void>;
 };
 const CreateProject: React.FC<TypeProps> = props => {
   // 机型配置
@@ -37,13 +37,13 @@ const CreateProject: React.FC<TypeProps> = props => {
   // 当前步骤
   const [curStep, setCurStep] = useState(0);
   // 填写工程描述
-  const [description, setDescription] = useState<TypeProjectDescription>();
+  const [projectInfo, setProjectInfo] = useState<TypeProjectInfo>();
   // 填写本地目录
-  const localPathRef = useRef<string>();
+  const projectRootRef = useRef<string>();
   // 创建状态
   const [isCreating, updateCreating] = useState(false);
   // 表单实例
-  const [form] = Form.useForm<TypeProjectDescription>();
+  const [form] = Form.useForm<TypeProjectInfo>();
 
   if (!brandConf) {
     return null;
@@ -71,7 +71,7 @@ const CreateProject: React.FC<TypeProps> = props => {
   const init = () => {
     jumpStep(0);
     setSourceDesc(undefined);
-    setDescription(undefined);
+    setProjectInfo(undefined);
     form.resetFields();
   };
 
@@ -115,9 +115,9 @@ const CreateProject: React.FC<TypeProps> = props => {
           // }
           onChange(path.join(remote.app.getPath("desktop"), "test"));
         }, []);
-        const [localPath, setLocalPath] = useState<string>();
+        const [projectRoot, setLocalPath] = useState<string>();
         const onChange = (val: string) => {
-          localPathRef.current = val;
+          projectRootRef.current = val;
           setLocalPath(val);
         };
         const selectDir = () => {
@@ -148,7 +148,7 @@ const CreateProject: React.FC<TypeProps> = props => {
                   <Input
                     placeholder="输入或选择目录"
                     allowClear
-                    value={localPath}
+                    value={projectRoot}
                     onChange={e => onChange(e.target.value)}
                   />
                   <Button
@@ -190,7 +190,7 @@ const CreateProject: React.FC<TypeProps> = props => {
         async handleNext() {
           return form
             .validateFields()
-            .then(setDescription)
+            .then(setProjectInfo)
             .then(nextStep)
             .catch(() => {
               throw new Error("请填写正确表单");
@@ -211,7 +211,7 @@ const CreateProject: React.FC<TypeProps> = props => {
       start: {
         disabled: isCreating,
         async handleStart() {
-          const local = localPathRef.current;
+          const local = projectRootRef.current;
           if (!local) throw new Error("请选择正确的本地路径");
           if (!fse.existsSync(local)) {
             await new Promise<void>(resolve => {
@@ -238,19 +238,24 @@ const CreateProject: React.FC<TypeProps> = props => {
           if (!selectedSourceDesc) {
             throw new Error("未选择版本");
           }
+          if (!projectInfo) {
+            throw new Error("信息为空");
+          }
           updateCreating(true);
-          // TODO 使用选择的模板路径生成 tempConf
           return apiCreateProject({
-            description,
-            brandConf,
-            sourceDescription: selectedSourceDesc,
-            localPath: localPathRef.current || ""
+            projectRoot: projectRootRef.current || "",
+            sourceNamespace: selectedSourceDesc.namespace,
+            brandInfo: {
+              name: brandConf.name,
+              type: brandConf.type
+            },
+            projectInfo
           }).then(data => {
             console.log("创建工程：", data);
-            if (!description) {
+            if (!projectInfo) {
               throw new Error("工程信息为空");
             }
-            props.onProjectCreated(description);
+            props.onProjectCreated(projectInfo);
             closeModal();
             updateCreating(false);
             setTimeout(init, 300);
@@ -267,7 +272,7 @@ const CreateProject: React.FC<TypeProps> = props => {
     //         message.info({ content: ERR_CODE[3001] });
     //       }
     //     }, []);
-    //     const [localPath, setLocalPath] = useState<string>();
+    //     const [projectRoot, setLocalPath] = useState<string>();
     //     const onChange = (val: string) => {
     //       localPathRef.current = val;
     //       setLocalPath(val);
@@ -295,7 +300,7 @@ const CreateProject: React.FC<TypeProps> = props => {
     //             <Input
     //               placeholder="输入或选择目录"
     //               allowClear
-    //               value={localPath}
+    //               value={projectRoot}
     //               onChange={e => onChange(e.target.value)}
     //             />
     //             <Button
@@ -362,7 +367,7 @@ const CreateProject: React.FC<TypeProps> = props => {
     //         brandConf,
     //         uiVersion: selectedSourceDesc.uiVersion,
     //         sourceDescription: selectedSourceDesc,
-    //         localPath: localPathRef.current || ""
+    //         projectRoot: localPathRef.current || ""
     //       }).then(data => {
     //         console.log("创建工程：", data);
     //         if (!description) {

@@ -1,18 +1,18 @@
 import React from "react";
 import styled from "styled-components";
 
-import { TypeProjectDescription } from "types/project";
+import { TypeProjectInfo } from "types/project";
 
 import { Divider } from "antd";
 import { projectInfoConfig } from "@/config/editor";
 
 type TypeProps = {
-  description: TypeProjectDescription;
+  description: TypeProjectInfo;
 };
 const ProjectInfo: React.FC<TypeProps> = props => {
   const { description } = props;
   const list = Object.values<{
-    key: keyof TypeProjectDescription;
+    key: keyof TypeProjectInfo;
     name: string;
   }>(projectInfoConfig);
   return (

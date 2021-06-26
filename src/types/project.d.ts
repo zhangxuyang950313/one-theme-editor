@@ -1,9 +1,5 @@
 import { projectInfoConfig } from "renderer/config/editor";
-import {
-  TypeSourceDescription,
-  TypeSourceConfig,
-  TypeUiVersion
-} from "./source-config";
+import { TypeSourceConfig, TypeUiVersion } from "./source-config";
 import { TypeDatabase } from "./index";
 
 export type TypeBrandInfo = {
@@ -16,7 +12,7 @@ export type TypeBrandConf = TypeBrandInfo & {
 };
 
 // 工程描述信息
-export type TypeProjectDescription = {
+export type TypeProjectInfo = {
   [k in keyof typeof projectInfoConfig]: string | null;
 };
 
@@ -29,10 +25,10 @@ export type TypePageConf = {
 
 // 创建工程载荷
 export type TypeCreateProjectPayload = {
-  description: TypeProjectDesc;
-  brandConf: TypeBrandConf;
-  sourceDescription: TypeSourceDescription;
-  localPath: string;
+  projectRoot: string;
+  sourceNamespace: string;
+  brandInfo: TypeBrandInfo;
+  projectInfo: TypeProjectInfo;
 };
 
 // 图片数据
@@ -59,8 +55,8 @@ export type TypeXmlMapper = {
 export type TypeProjectData = {
   uuid: string;
   brandInfo: TypeBrandInfo;
-  localPath: string;
-  description: TypeProjectDescription;
+  projectRoot: string;
+  projectInfo: TypeProjectInfo;
   uiVersion: TypeUiVersion;
   sourceConfig: TypeSourceConfig;
   imageMapperList: TypeImageMapper[];

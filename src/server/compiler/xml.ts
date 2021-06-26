@@ -1,5 +1,6 @@
 import fse from "fs-extra";
 import { xml2js, Options, Element, ElementCompact } from "xml-js";
+import ERR_CODE from "renderer/core/error-code";
 
 const config: Options.XML2JS = {
   trim: true,
@@ -55,7 +56,7 @@ export async function xml2jsonNormalized(
 export async function xml2jsonCompact<T = ElementCompact>(
   file: string
 ): Promise<T | Partial<T>> {
-  if (!fse.existsSync(file)) return Promise.resolve({});
+  if (!fse.existsSync(file)) throw new Error(ERR_CODE[4005]);
   return xml2jsonNormalized(file, { compact: true });
 }
 

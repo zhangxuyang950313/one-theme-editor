@@ -153,7 +153,7 @@ const StyleImageBackground = styled.div<{ srcUrl?: string }>`
 
 const ImageChanger: React.FC<TypeSourcePageSourceConf> = sourceConf => {
   const findImage = useSelector(findProjectImage);
-  const localPath = useProjectRoot();
+  const projectRoot = useProjectRoot();
   const getImageURL = useProjectImageUrl();
   const { from, to, name } = sourceConf;
 
@@ -186,14 +186,14 @@ const ImageChanger: React.FC<TypeSourcePageSourceConf> = sourceConf => {
         err();
         return;
       }
-      if (!localPath) {
-        console.warn("localPath 为空");
+      if (!projectRoot) {
+        console.warn("projectRoot 为空");
         err();
         return;
       }
       apiCopyFile(
-        path.join(localPath, from.filename),
-        path.join(localPath, target)
+        path.join(projectRoot, from.filename),
+        path.join(projectRoot, target)
       );
     });
   };

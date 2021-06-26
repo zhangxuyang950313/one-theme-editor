@@ -1,24 +1,27 @@
 import path from "path";
+import fse from "fs-extra";
 import { v4 as UUID } from "uuid";
-import { xml2jsonCompact } from "@/compiler/xml";
-import { TypeSourceDescription, TypeUiVersion } from "types/source-config";
-import { TypeOriginTempConf } from "types/xml-result";
 import { TypeImagePathLike } from "types/index";
+import { TypeOriginTempConf } from "types/xml-result";
+import { TypeSourceDescription, TypeUiVersion } from "types/source-config";
+import { SOURCE_CONFIG_DIR } from "server/core/paths";
+import { xml2jsonCompact } from "@/compiler/xml";
+import XMLNode from "@/core/XMLNode";
 import ERR_CODE from "renderer/core/error-code";
 
 // 解析 sourceConfig 所有数据
 export default class SourceDescription {
-  // description.xml 路径
+  private rootDir = SOURCE_CONFIG_DIR;
   private descFile = "";
-  // description.xml 所在目录，即模板根目录
-  private rootDir = "";
+  private namespace = "";
   // 模板解析数据
   private xmlData!: TypeOriginTempConf;
-  constructor(descFile: string) {
-    if (!descFile) throw new Error(ERR_CODE[3005]);
-
+  static filename = "description.xml";
+  constructor(namespace: string, filename = SourceDescription.filename) {
+    const descFile = path.join(this.getRootDir(), namespace, filename);
+    if (!fse.existsSync(descFile)) throw new Error(ERR_CODE[3005]);
+    this.namespace = namespace;
     this.descFile = descFile;
-    this.rootDir = path.dirname(descFile);
   }
 
   protected async ensureXmlData(): Promise<TypeOriginTempConf> {
@@ -28,42 +31,52 @@ export default class SourceDescription {
     return this.xmlData;
   }
 
-  getDescFile(): string {
-    return this.descFile;
-  }
-
   getRootDir(): string {
     return this.rootDir;
   }
 
+  getNamespace(): string {
+    return this.namespace;
+  }
+
+  getDescFile(): string {
+    return this.descFile;
+  }
+
   // 处理成模板根目录
   private resolvePath(relativePath: string): string {
-    return path.join(this.rootDir, relativePath);
+    return path.join(this.namespace, relativePath);
   }
 
   // 模板名称
   async getName(): Promise<string> {
-    const tempData = await this.ensureXmlData();
-    return tempData.description?.[0]._attributes.name || "";
+    const xmlData = await this.ensureXmlData();
+    return new XMLNode(xmlData)
+      .getFirstChildOf("description")
+      .getAttribute("name");
   }
 
   // 模板版本
   async getVersion(): Promise<string> {
-    const tempData = await this.ensureXmlData();
-    return tempData.description?.[0]._attributes.version || "";
+    const xmlData = await this.ensureXmlData();
+    return new XMLNode(xmlData)
+      .getFirstChildOf("description")
+      .getAttribute("version");
   }
 
   // 模板预览图
   async getPreview(): Promise<TypeImagePathLike> {
-    const tempData = await this.ensureXmlData();
+    const xmlData = await this.ensureXmlData();
     // TODO: 默认预览图
-    return tempData.preview?.[0]._attributes.src || "";
+    return new XMLNode(xmlData)
+      .getFirstChildOf("description")
+      .getAttribute("src");
   }
 
   // 模板信息
   async getUiVersion(): Promise<TypeUiVersion> {
-    const confData = await this.ensureXmlData();
-    const { name = "", code = "" } = confData?.uiVersion?.[0]._attributes || {};
+    const xmlData = await this.ensureXmlData();
+    const { name = "", code = "" } = xmlData?.uiVersion?.[0]._attributes || {};
     return { name, code };
   }
 
@@ -74,8 +87,7 @@ export default class SourceDescription {
   async getDescription(): Promise<TypeSourceDescription> {
     return {
       key: UUID(),
-      file: this.getDescFile(),
-      root: this.getRootDir(),
+      namespace: this.getNamespace(),
       name: await this.getName(),
       version: await this.getVersion(),
       preview: await this.getPreview(),

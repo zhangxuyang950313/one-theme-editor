@@ -3,7 +3,7 @@ import fse from "fs-extra";
 import { v4 as UUID } from "uuid";
 import Nedb from "nedb-promises";
 
-import { PROJECTS_DB } from "common/paths";
+import { PROJECTS_DB } from "server/core/paths";
 import {
   TypeCreateProjectPayload,
   TypeImageMapper,
@@ -34,10 +34,10 @@ const projectDB = createNedb(PROJECTS_DB);
 //   return projectDB
 //     .findOne<TypeProjectDataDoc>({ uuid })
 //     .then(project => {
-//       const { imageMapperList, localPath } = project;
-//       if (!localPath) return Promise.all([]);
+//       const { imageMapperList, projectRoot } = project;
+//       if (!projectRoot) return Promise.all([]);
 //       return imageMapperList.map(async item => {
-//         const filename = path.resolve(localPath, item.target);
+//         const filename = path.resolve(projectRoot, item.target);
 //         // TODO: 失败的都默认通过，后面应把失败的返回出去以供提示
 //         if (!item.md5) return Promise.resolve();
 //         const imageData = await findImageData(item.md5);
@@ -77,20 +77,15 @@ const projectDB = createNedb(PROJECTS_DB);
 export async function createProject(
   data: TypeCreateProjectPayload
 ): Promise<TypeProjectDataDoc> {
-  const { brandConf, localPath, sourceDescription } = data;
-  const sourceConfig = await new SourceConfig(
-    sourceDescription.file
-  ).getConfig();
+  const { brandInfo, projectInfo, projectRoot, sourceNamespace } = data;
+  const sourceConfig = await new SourceConfig(sourceNamespace).getConfig();
   const projectData: TypeProjectData = {
     uuid: UUID(),
-    description: data.description,
-    brandInfo: {
-      type: brandConf.type,
-      name: brandConf.name
-    },
-    uiVersion: sourceDescription.uiVersion,
+    projectInfo,
+    brandInfo,
+    uiVersion: sourceConfig.uiVersion,
     sourceConfig,
-    localPath,
+    projectRoot,
     imageMapperList: [],
     xmlMapperList: []
   };

@@ -19,24 +19,24 @@ import { TypeImageMapper } from "types/project";
 // 本地目标路径的所有图片数据同步到 projectData.imageMapperList 数据库中
 // 保持数据库中的图片数据和本地一致
 async function syncLocalDirImageToMapperList(uuid: string) {
-  const { imageMapperList, localPath } = await findProjectByUUID(uuid);
-  const localTargets = getDirAllFiles(localPath)
+  const { imageMapperList, projectRoot } = await findProjectByUUID(uuid);
+  const localTargets = getDirAllFiles(projectRoot)
     // 过滤文件名不是图片的
     // TODO: 可以使用 fileIsImage 来判断，这样可以容错忘记写后缀名的图片（优化点）
     .filter(item => filenameIsImage(item.name))
     // map 成相对路径，便于和 imageMapperList 做对比
-    .map(item => path.relative(localPath, item.path));
+    .map(item => path.relative(projectRoot, item.path));
   const mapperTargets = imageMapperList.map(item => item.target);
   // 并集数据库和本地的图片
   const targets = union(localTargets, mapperTargets);
   // 全遍历
   return asyncMap(targets, async target => {
-    const absPath = path.join(localPath, target);
+    const absPath = path.join(projectRoot, target);
     const mapper = imageMapperList.find(o => o.target === target);
     if (fse.existsSync(absPath)) {
       if (mapper?.md5 !== (await getFileMD5(absPath))) {
         console.log("增加图片:", target);
-        const imageMapper = await getImageMapper(absPath, localPath);
+        const imageMapper = await getImageMapper(absPath, projectRoot);
         await updateProjectImageMapper(uuid, imageMapper);
       }
     } else if (mapper) {
@@ -58,7 +58,7 @@ export async function syncImageMapperList(
   callback: (x: TypeImageMapper[]) => void
 ): Promise<void> {
   let previousImageMapperList: TypeImageMapper[] | undefined;
-  const { localPath } = await findProjectByUUID(uuid);
+  const { projectRoot } = await findProjectByUUID(uuid);
   const handleSync = async () => {
     console.log("handleSync");
     await syncLocalDirImageToMapperList(uuid);
@@ -75,11 +75,11 @@ export async function syncImageMapperList(
    * 递归选项仅在 macOS 和 Windows 上受支持。 当在不支持它的平台上使用该选项时，将抛出 ERR_FEATURE_UNAVAILABLE_ON_PLATFORM 异常。
    * 在 Windows 上，如果监视目录被移动或重命名，则不会触发任何事件。 删除监视目录时报 EPERM 错误。
    */
-  console.log(`监听目录：${localPath}`);
+  console.log(`监听目录：${projectRoot}`);
   // let previousFiles
-  fse.watch(localPath, { recursive: true }, (event, filename) => {
+  fse.watch(projectRoot, { recursive: true }, (event, filename) => {
     console.log({ event, filename });
-    // previousFiles = getDirAllFiles(localPath).map(o=>o.)
+    // previousFiles = getDirAllFiles(projectRoot).map(o=>o.)
     handleSync();
   });
 }

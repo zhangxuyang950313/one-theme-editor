@@ -22,11 +22,13 @@ export default class SourceConfig extends SourceDescription {
   ): Promise<TypeSourcePageConf[]> {
     // 这里是在选择模板版本后得到的目标模块目录
     return asyncMap(data, item => {
-      const rootDir = this.getRootDir();
       const pageNode = new XMLNode(item);
-      const pathname = path.join(rootDir, pageNode.getAttribute("src"));
-      const file = path.join(rootDir, pathname);
-      return new Page({ file, pathname }).getData();
+      const pageFile = path.join(
+        super.getRootDir(),
+        super.getNamespace(),
+        pageNode.getAttribute("src")
+      );
+      return new Page(pageFile).getData();
     });
   }
 

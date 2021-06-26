@@ -6,7 +6,6 @@
 <preview src="preview/preview.jpg"/>
 
 <!-- 模板描述 -->
-<!-- <description name="MIUI 11" code="9"/> -->
 <uiVersion name="MIUI 12" code="10"/>
 
 <!-- 壁纸 -->

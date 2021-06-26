@@ -1,7 +1,8 @@
 import path from "path";
+import { asyncMap } from "common/utils";
 import fse from "fs-extra";
 import SourceConfig from "@/data/SourceConfig";
-import { SOURCE_CONFIG_DIR, SOuRCE_CONFIG_FILE } from "common/paths";
+import { SOURCE_CONFIG_DIR, SOuRCE_CONFIG_FILE } from "server/core/paths";
 import { TypeBrandConf } from "types/project";
 import { TypeSourceDescription } from "types/source-config";
 
@@ -25,10 +26,13 @@ export async function compileSourceDescriptionList(
 ): Promise<TypeSourceDescription[]> {
   const brandConfList = await readBrandConf();
   const brandConf = brandConfList.find(item => item.type === brandType);
-  if (!brandConf) return [];
-  const queue = brandConf.sourceConfigs
-    .map(item => path.join(SOURCE_CONFIG_DIR, item, "description.xml"))
-    .filter(item => fse.existsSync(item))
-    .map(item => new SourceConfig(item).getDescription());
-  return await Promise.all(queue);
+  if (!brandConf?.sourceConfigs) return [];
+  const ensureConfigs = brandConf.sourceConfigs.filter(namespace =>
+    fse.existsSync(
+      path.join(SOURCE_CONFIG_DIR, namespace, SourceConfig.filename)
+    )
+  );
+  return asyncMap(ensureConfigs, namespace =>
+    new SourceConfig(namespace).getDescription()
+  );
 }

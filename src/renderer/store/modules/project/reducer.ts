@@ -18,8 +18,8 @@ export default function ProjectReducer(
     case ACTION_TYPES.SET_PROJECT_DATA: {
       return action.payload;
     }
-    case ACTION_TYPES.SET_PROJECT_DESCRIPTION: {
-      return updateState(state, { description: action.payload });
+    case ACTION_TYPES.SET_PROJECT_INFO: {
+      return updateState(state, { projectInfo: action.payload });
     }
     case ACTION_TYPES.SET_IMAGE_MAPPER_LIST: {
       return updateState(state, { imageMapperList: action.payload });

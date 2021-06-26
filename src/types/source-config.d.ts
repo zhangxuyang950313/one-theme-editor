@@ -5,8 +5,7 @@ import { TypeImagePathLike } from "./index";
 // 资源预览配置
 export type TypeSourceDescription = {
   key: string;
-  root: string;
-  file: string;
+  namespace: string;
   name: string;
   preview: TypeImagePathLike;
   version: string;

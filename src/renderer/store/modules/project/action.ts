@@ -3,7 +3,7 @@ import ACTION_TYPES from "@/store/actions";
 import {
   TypeProjectDataDoc,
   TypeImageMapper,
-  TypeProjectDescription
+  TypeProjectInfo
 } from "types/project";
 
 type TypeActionInitProject = {
@@ -15,9 +15,9 @@ type TypeActionSetProjectData = {
   payload: TypeProjectDataDoc;
 };
 
-type TypeActionSetProjectDescription = {
-  type: typeof ACTION_TYPES.SET_PROJECT_DESCRIPTION;
-  payload: TypeProjectDescription;
+type TypeActionSetProjectInfo = {
+  type: typeof ACTION_TYPES.SET_PROJECT_INFO;
+  payload: TypeProjectInfo;
 };
 
 type TypeActionSetImageMapperList = {
@@ -28,7 +28,7 @@ type TypeActionSetImageMapperList = {
 export type TypeActions =
   | TypeActionInitProject
   | TypeActionSetProjectData
-  | TypeActionSetProjectDescription
+  | TypeActionSetProjectInfo
   | TypeActionSetImageMapperList;
 
 // 初始化工程信息
@@ -45,9 +45,9 @@ export function ActionSetProjectData(
 
 // 设置 description
 export function ActionSetDescription(
-  payload: TypeProjectDescription
-): TypeActionSetProjectDescription {
-  return { type: ACTION_TYPES.SET_PROJECT_DESCRIPTION, payload };
+  payload: TypeProjectInfo
+): TypeActionSetProjectInfo {
+  return { type: ACTION_TYPES.SET_PROJECT_INFO, payload };
 }
 
 // 设置 imageMapperList

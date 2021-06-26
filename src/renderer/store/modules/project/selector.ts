@@ -22,7 +22,7 @@ export const getProjectUUID = createSelector(
 // 获取工程本地路径
 export const getProjectLocalPath = createSelector(
   getProjectState,
-  state => state.localPath || null
+  state => state.projectRoot || null
 );
 
 export const getProjectImageList = createSelector(

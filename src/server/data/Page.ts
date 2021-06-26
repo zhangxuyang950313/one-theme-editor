@@ -14,12 +14,11 @@ import XMLNode from "@/core/XMLNode";
 export default class Page {
   private file: string;
   private dirWithUIPath: string;
-  private pathname: string;
   private xmlData!: TypeTempOriginPageConf;
-  constructor(props: { file: string; pathname: string }) {
-    this.file = props.file;
-    this.pathname = props.pathname;
-    this.dirWithUIPath = path.dirname(props.file);
+  constructor(file: string) {
+    this.file = file;
+    // this.pathname = props.pathname;
+    this.dirWithUIPath = path.dirname(file);
   }
 
   private async ensureXmlData() {
@@ -36,10 +35,11 @@ export default class Page {
 
   async getConfig(): Promise<TypeSourcePageInfoConf> {
     const xmlData = await this.ensureXmlData();
+    const configNode = new XMLNode(xmlData).getFirstChildOf("config");
     return {
-      version: xmlData.config?.[0]._attributes?.version || "",
-      description: xmlData.config?.[0]._attributes?.description || "",
-      screenWidth: xmlData.config?.[0]._attributes?.screenWidth || ""
+      version: configNode.getAttribute("version"),
+      description: configNode.getAttribute("description"),
+      screenWidth: configNode.getAttribute("screenWidth")
     };
   }
 
@@ -112,7 +112,7 @@ export default class Page {
 
   async getData(): Promise<TypeSourcePageConf> {
     return {
-      pathname: this.pathname,
+      pathname: "",
       config: await this.getConfig(),
       preview: await this.getPreview(),
       category: await this.getCategoryList(),
