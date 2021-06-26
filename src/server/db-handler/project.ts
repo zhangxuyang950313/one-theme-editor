@@ -78,7 +78,9 @@ export async function createProject(
   data: TypeCreateProjectPayload
 ): Promise<TypeProjectDataDoc> {
   const { brandConf, localPath, sourceDescription } = data;
-  const sourceConfig = await new SourceConfig(sourceDescription.file).getData();
+  const sourceConfig = await new SourceConfig(
+    sourceDescription.file
+  ).getConfig();
   const projectData: TypeProjectData = {
     uuid: UUID(),
     description: data.description,

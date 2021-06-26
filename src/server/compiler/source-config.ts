@@ -1,6 +1,6 @@
 import path from "path";
 import fse from "fs-extra";
-import SourceDescription from "@/data/SourceDescription";
+import SourceConfig from "@/data/SourceConfig";
 import { SOURCE_CONFIG_DIR, SOuRCE_CONFIG_FILE } from "common/paths";
 import { TypeBrandConf } from "types/project";
 import { TypeSourceDescription } from "types/source-config";
@@ -29,6 +29,6 @@ export async function compileSourceDescriptionList(
   const queue = brandConf.sourceConfigs
     .map(item => path.join(SOURCE_CONFIG_DIR, item, "description.xml"))
     .filter(item => fse.existsSync(item))
-    .map(item => new SourceDescription(item).getData());
+    .map(item => new SourceConfig(item).getDescription());
   return await Promise.all(queue);
 }
