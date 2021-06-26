@@ -3,7 +3,7 @@ import { HOST, PORT } from "common/config";
 import API from "common/api";
 import {
   TypeBrandConf,
-  TypeCreateProjectData,
+  TypeCreateProjectPayload,
   TypeImageMapper,
   TypeProjectData,
   TypeProjectDataDoc
@@ -51,7 +51,7 @@ export async function apiGetSourceConfigList(
 
 // 创建工程
 export async function apiCreateProject(
-  data: TypeCreateProjectData
+  data: TypeCreateProjectPayload
 ): Promise<TypeProjectData> {
   return createHttp()
     .post<TypeResponseFrame<TypeProjectData>>(API.CREATE_PROJECT, data)

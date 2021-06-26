@@ -6,8 +6,7 @@ import { useAxiosCanceler } from "@/hooks/index";
 import { useSelectedBrandConf } from "@/hooks/sourceConfig";
 import {
   ActionSetCurrentBrand,
-  ActionSetCurrentPage,
-  ActionSetSourceDescription
+  ActionSetCurrentPage
 } from "@/store/modules/source-config/action";
 import {
   ActionSetImageMapperList,

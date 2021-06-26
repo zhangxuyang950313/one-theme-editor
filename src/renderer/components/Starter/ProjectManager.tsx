@@ -59,7 +59,7 @@ const ProjectManager: React.FC = () => {
     <StyleProjectManager>
       <div className="top-container">
         <div className="title">
-          <h2>{brandInfo?.name || ""}主题列表</h2>
+          <h2>{brandInfo?.name || ""}列表</h2>
           <p>新建{projects.length > 0 ? "或选择" : ""}一个主题开始创作</p>
         </div>
         <div className="button">

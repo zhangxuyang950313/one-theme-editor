@@ -27,9 +27,9 @@ export type TypePageConf = {
   conf: TypeTempPageConf | null;
 };
 
-export type TypeCreateProjectData = {
+// 创建工程载荷
+export type TypeCreateProjectPayload = {
   description: TypeProjectDesc;
-  uiVersion: TypeUiVersion;
   brandConf: TypeBrandConf;
   sourceDescription: TypeSourceDescription;
   localPath: string;
@@ -58,7 +58,7 @@ export type TypeXmlMapper = {
 // 打包所有信息
 export type TypeProjectData = {
   uuid: string;
-  brand: TypeBrandInfo;
+  brandInfo: TypeBrandInfo;
   localPath: string;
   description: TypeProjectDescription;
   uiVersion: TypeUiVersion;

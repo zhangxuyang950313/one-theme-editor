@@ -1,9 +1,9 @@
 import path from "path";
 
 import {
-  TypeSourcePageGroupConf,
   TypeSourceConfig,
   TypeSourceModuleConf,
+  TypeSourcePageGroupConf,
   TypeSourcePageConf,
   TypeUiVersion
 } from "types/source-config";
@@ -29,13 +29,11 @@ export default class SourceConfig {
   private rootDir = "";
   // 模板解析数据
   private xmlData!: TypeOriginTempConf;
-  private uiVersion?: TypeUiVersion;
-  constructor(descFile: string, uiVersionConf?: TypeUiVersion) {
+  constructor(descFile: string) {
     if (!descFile) throw new Error(ERR_CODE[3005]);
 
     this.descFile = descFile;
     this.rootDir = path.dirname(descFile);
-    this.uiVersion = uiVersionConf;
   }
 
   private async ensureXmlData(): Promise<TypeOriginTempConf> {
@@ -79,8 +77,8 @@ export default class SourceConfig {
 
   // 模板信息
   async getUiVersion(): Promise<TypeUiVersion> {
-    const tempData = await this.ensureXmlData();
-    const { name = "", code = "" } = tempData?.uiVersion?.[0]._attributes || {};
+    const confData = await this.ensureXmlData();
+    const { name = "", code = "" } = confData?.uiVersion?.[0]._attributes || {};
     return { name, code };
   }
 

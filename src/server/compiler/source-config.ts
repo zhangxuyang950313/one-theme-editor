@@ -1,10 +1,9 @@
 import path from "path";
 import fse from "fs-extra";
-import SourceConfig from "@/data/SourceConfig";
 import SourceDescription from "@/data/SourceDescription";
 import { SOURCE_CONFIG_DIR, SOuRCE_CONFIG_FILE } from "common/paths";
-import { TypeBrandConf, TypeCreateProjectData } from "types/project";
-import { TypeSourceDescription, TypeSourceConfig } from "types/source-config";
+import { TypeBrandConf } from "types/project";
+import { TypeSourceDescription } from "types/source-config";
 
 import ERR_CODE from "renderer/core/error-code";
 
@@ -32,19 +31,4 @@ export async function compileSourceDescriptionList(
     .filter(item => fse.existsSync(item))
     .map(item => new SourceDescription(item).getData());
   return await Promise.all(queue);
-}
-
-/**
- * 解析素材配置
- * @param projectData
- * @returns
- */
-export async function compileSourceConfig(
-  projectData: TypeCreateProjectData
-): Promise<TypeSourceConfig> {
-  const sourceConfig = new SourceConfig(
-    projectData.sourceDescription.file,
-    projectData.uiVersion
-  );
-  return sourceConfig.getData();
 }

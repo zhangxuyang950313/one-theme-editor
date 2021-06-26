@@ -4,7 +4,10 @@ import FileType from "file-type";
 import API from "common/api";
 import ERR_CODE from "renderer/core/error-code";
 import { TypeUiVersion } from "types/source-config";
-import { TypeCreateProjectData, TypeProjectDescription } from "types/project";
+import {
+  TypeCreateProjectPayload,
+  TypeProjectDescription
+} from "types/project";
 import {
   compileSourceDescriptionList,
   readBrandConf
@@ -121,10 +124,9 @@ export default function registerService(service: Express): void {
 
   // ---------------工程信息--------------- //
   // 添加工程
-  service.post<any, any, TypeCreateProjectData, any>(
+  service.post<any, any, TypeCreateProjectPayload, any>(
     API.CREATE_PROJECT,
     (req, res) => {
-      console.log(req.body);
       createProject(req.body)
         .then(project => res.send(result.success(project)))
         .catch(err => res.status(400).send(result.fail(err)));

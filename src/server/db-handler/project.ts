@@ -5,7 +5,7 @@ import Nedb from "nedb-promises";
 
 import { PROJECTS_DB } from "common/paths";
 import {
-  TypeCreateProjectData,
+  TypeCreateProjectPayload,
   TypeImageMapper,
   TypeProjectData,
   TypeProjectDataDoc
@@ -75,21 +75,18 @@ const projectDB = createNedb(PROJECTS_DB);
 
 // 创建工程
 export async function createProject(
-  data: TypeCreateProjectData
+  data: TypeCreateProjectPayload
 ): Promise<TypeProjectDataDoc> {
-  const { uiVersion, brandConf, localPath, sourceDescription } = data;
-  const sourceConfig = await new SourceConfig(
-    sourceDescription.file,
-    uiVersion
-  ).getData();
+  const { brandConf, localPath, sourceDescription } = data;
+  const sourceConfig = await new SourceConfig(sourceDescription.file).getData();
   const projectData: TypeProjectData = {
     uuid: UUID(),
     description: data.description,
-    brand: {
+    brandInfo: {
       type: brandConf.type,
       name: brandConf.name
     },
-    uiVersion,
+    uiVersion: sourceDescription.uiVersion,
     sourceConfig,
     localPath,
     imageMapperList: [],

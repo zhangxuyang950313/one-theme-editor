@@ -7,7 +7,7 @@ const getProjectState = (state: TypeStoreState) => state.project;
 // 获取厂商信息
 export const getProjectBrandInfo = createSelector(
   getProjectState,
-  state => state.brand
+  state => state.brandInfo
 );
 
 // 获取工程数据

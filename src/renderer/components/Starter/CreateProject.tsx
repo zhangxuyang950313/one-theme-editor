@@ -5,7 +5,6 @@ import { v4 as UUID } from "uuid";
 import { remote } from "electron";
 
 import { isDev } from "@/core/constant";
-import ERR_CODE from "@/core/error-code";
 import {
   useSelectedBrandConf,
   useSourceDescriptionList
@@ -16,14 +15,11 @@ import { apiCreateProject } from "@/api";
 
 // components
 import styled from "styled-components";
-import { Modal, Button, message, Form, Input } from "antd";
+import { Modal, Button, Form, Input, message } from "antd";
 import { FileAddOutlined } from "@ant-design/icons";
 import Steps from "@/components/Steps";
-import ProjectInfo from "@/components/ProjectInfo";
 import ProjectInfoForm from "@/components/ProjectInfoForm";
 import SourceConfigManager from "./SourceConfigManager";
-import SourceConfigCard from "./SourceConfigCard";
-import ProjectCard from "./ProjectCard";
 
 // 创建主题按钮
 type TypeProps = {
@@ -37,10 +33,7 @@ const CreateProject: React.FC<TypeProps> = props => {
   // 模板列表
   const [sourceDescList, isLoading] = useSourceDescriptionList();
   // 选择的模板
-  const [
-    selectedSourceDesc,
-    setSourceDescription
-  ] = useState<TypeSourceDescription>();
+  const [selectedSourceDesc, setSourceDesc] = useState<TypeSourceDescription>();
   // 当前步骤
   const [curStep, setCurStep] = useState(0);
   // 填写工程描述
@@ -77,7 +70,7 @@ const CreateProject: React.FC<TypeProps> = props => {
   // 复位
   const init = () => {
     jumpStep(0);
-    setSourceDescription(undefined);
+    setSourceDesc(undefined);
     setDescription(undefined);
     form.resetFields();
   };
@@ -88,19 +81,97 @@ const CreateProject: React.FC<TypeProps> = props => {
     openModal();
   };
 
+  // 每一步配置
   const steps = [
+    // {
+    //   name: "选择版本",
+    //   // 内容
+    //   Component() {
+    //     return (
+    //       <SourceConfigManager
+    //         isLoading={isLoading}
+    //         sourceConfigList={sourceDescList}
+    //         selectedSourceConfig={selectedSourceDesc}
+    //         onSelected={setSourceDescription}
+    //       />
+    //     );
+    //   },
+    //   // 下一步
+    //   next: {
+    //     disabled: isCreating || !selectedSourceDesc,
+    //     async handleNext() {
+    //       if (selectedSourceDesc) nextStep();
+    //       else message.warn({ content: "请选择版本" });
+    //     }
+    //   }
+    // },
     {
-      name: "选择版本",
+      name: "主题信息",
       Component() {
+        useEffect(() => {
+          // if (!selectedSourceDesc) {
+          //   message.info({ content: ERR_CODE[3002] });
+          //   init();
+          // }
+          onChange(path.join(remote.app.getPath("desktop"), "test"));
+        }, []);
+        const [localPath, setLocalPath] = useState<string>();
+        const onChange = (val: string) => {
+          localPathRef.current = val;
+          setLocalPath(val);
+        };
+        const selectDir = () => {
+          remote.dialog
+            .showOpenDialog({
+              // https://www.electronjs.org/docs/api/dialog#dialogshowopendialogsyncbrowserwindow-options
+              title: "选择工程文件",
+              properties: ["openDirectory", "createDirectory", "promptToCreate"]
+            })
+            .then(result => {
+              if (result.canceled) return;
+              onChange(result.filePaths[0]);
+            });
+        };
+        // 模板版本
+        // if (!selectedSourceDesc) return null;
         return (
-          <SourceConfigManager
-            isLoading={isLoading}
-            sourceConfigList={sourceDescList}
-            selectedSourceConfig={selectedSourceDesc}
-            onSelected={setSourceDescription}
-          />
+          <StyleFillInfo>
+            {/* 模板预览 */}
+            {/* <div className="template-card">
+              <SourceConfigCard config={selectedSourceDesc} />
+            </div> */}
+            {/* 填写信息 */}
+            <div className="project-info">
+              <StyleSetLocalPath>
+                <p>选择本地目录</p>
+                <div className="input-area">
+                  <Input
+                    placeholder="输入或选择目录"
+                    allowClear
+                    value={localPath}
+                    onChange={e => onChange(e.target.value)}
+                  />
+                  <Button
+                    type="primary"
+                    icon={<FileAddOutlined />}
+                    onClick={selectDir}
+                  >
+                    选择
+                  </Button>
+                </div>
+              </StyleSetLocalPath>
+              <SourceConfigManager
+                isLoading={isLoading}
+                sourceConfigList={sourceDescList}
+                selectedSourceConfig={selectedSourceDesc}
+                onSelected={setSourceDesc}
+              />
+              <ProjectInfoForm form={form} initialValues={initialValues} />
+            </div>
+          </StyleFillInfo>
         );
       },
+      // 取消
       cancel: {
         disabled: isCreating,
         handleCancel: () => {
@@ -113,42 +184,6 @@ const CreateProject: React.FC<TypeProps> = props => {
             }
           });
         }
-      },
-      next: {
-        disabled: isCreating || !selectedSourceDesc,
-        async handleNext() {
-          if (selectedSourceDesc) nextStep();
-          else message.warn({ content: "请选择版本" });
-        }
-      }
-    },
-    {
-      name: "填写信息",
-      Component() {
-        useEffect(() => {
-          if (!selectedSourceDesc) {
-            message.info({ content: ERR_CODE[3002] });
-            init();
-          }
-        }, []);
-        // 模板版本
-        if (!selectedSourceDesc) return null;
-        return (
-          <StyleFillInfo>
-            {/* 模板预览 */}
-            <div className="template-card">
-              <SourceConfigCard config={selectedSourceDesc} />
-            </div>
-            {/* 填写信息 */}
-            <div className="project-info">
-              <ProjectInfoForm form={form} initialValues={initialValues} />
-            </div>
-          </StyleFillInfo>
-        );
-      },
-      prev: {
-        disabled: isCreating,
-        handlePrev: prevStep
       },
       next: {
         disabled: isCreating,
@@ -172,77 +207,7 @@ const CreateProject: React.FC<TypeProps> = props => {
         disabled: isCreating,
         handlePrev: prevStep
       },
-      next: {
-        disabled: isCreating,
-        handleNext: nextStep
-      }
-    },
-    {
-      name: "选择目录",
-      Component() {
-        useEffect(() => {
-          onChange(path.join(remote.app.getPath("desktop"), "test"));
-          if (!description) {
-            message.info({ content: ERR_CODE[3001] });
-          }
-        }, []);
-        const [localPath, setLocalPath] = useState<string>();
-        const onChange = (val: string) => {
-          localPathRef.current = val;
-          setLocalPath(val);
-        };
-        if (!description) {
-          return null;
-        }
-        const selectDir = () => {
-          remote.dialog
-            .showOpenDialog({
-              // https://www.electronjs.org/docs/api/dialog#dialogshowopendialogsyncbrowserwindow-options
-              title: "选择工程文件",
-              properties: ["openDirectory", "createDirectory", "promptToCreate"]
-            })
-            .then(result => {
-              if (result.canceled) return;
-              onChange(result.filePaths[0]);
-            });
-        };
-        return (
-          <StyleConfirmInfo>
-            <StyleSetLocalPath>
-              <p>选择本地目录</p>
-              <div className="input-area">
-                <Input
-                  placeholder="输入或选择目录"
-                  allowClear
-                  value={localPath}
-                  onChange={e => onChange(e.target.value)}
-                />
-                <Button
-                  type="primary"
-                  icon={<FileAddOutlined />}
-                  onClick={selectDir}
-                >
-                  选择
-                </Button>
-              </div>
-            </StyleSetLocalPath>
-            <br />
-            <p>主题信息</p>
-            <StyleFillInfo>
-              <div className="template-card">
-                <ProjectCard description={description} />
-              </div>
-              <div className="project-info">
-                <ProjectInfo description={description} />
-              </div>
-            </StyleFillInfo>
-          </StyleConfirmInfo>
-        );
-      },
-      prev: {
-        disabled: isCreating,
-        handlePrev: prevStep
-      },
+      // 开始
       start: {
         disabled: isCreating,
         async handleStart() {
@@ -271,14 +236,13 @@ const CreateProject: React.FC<TypeProps> = props => {
             });
           }
           if (!selectedSourceDesc) {
-            throw new Error("创建失败");
+            throw new Error("未选择版本");
           }
           updateCreating(true);
           // TODO 使用选择的模板路径生成 tempConf
           return apiCreateProject({
             description,
             brandConf,
-            uiVersion: selectedSourceDesc.uiVersion,
             sourceDescription: selectedSourceDesc,
             localPath: localPathRef.current || ""
           }).then(data => {
@@ -294,6 +258,124 @@ const CreateProject: React.FC<TypeProps> = props => {
         }
       }
     }
+    // {
+    //   name: "选择目录",
+    //   Component() {
+    //     useEffect(() => {
+    //       onChange(path.join(remote.app.getPath("desktop"), "test"));
+    //       if (!description) {
+    //         message.info({ content: ERR_CODE[3001] });
+    //       }
+    //     }, []);
+    //     const [localPath, setLocalPath] = useState<string>();
+    //     const onChange = (val: string) => {
+    //       localPathRef.current = val;
+    //       setLocalPath(val);
+    //     };
+    //     if (!description) {
+    //       return null;
+    //     }
+    //     const selectDir = () => {
+    //       remote.dialog
+    //         .showOpenDialog({
+    //           // https://www.electronjs.org/docs/api/dialog#dialogshowopendialogsyncbrowserwindow-options
+    //           title: "选择工程文件",
+    //           properties: ["openDirectory", "createDirectory", "promptToCreate"]
+    //         })
+    //         .then(result => {
+    //           if (result.canceled) return;
+    //           onChange(result.filePaths[0]);
+    //         });
+    //     };
+    //     return (
+    //       <StyleConfirmInfo>
+    //         <StyleSetLocalPath>
+    //           <p>选择本地目录</p>
+    //           <div className="input-area">
+    //             <Input
+    //               placeholder="输入或选择目录"
+    //               allowClear
+    //               value={localPath}
+    //               onChange={e => onChange(e.target.value)}
+    //             />
+    //             <Button
+    //               type="primary"
+    //               icon={<FileAddOutlined />}
+    //               onClick={selectDir}
+    //             >
+    //               选择
+    //             </Button>
+    //           </div>
+    //         </StyleSetLocalPath>
+    //         <br />
+    //         <p>主题信息</p>
+    //         <StyleFillInfo>
+    //           <div className="template-card">
+    //             <ProjectCard description={description} />
+    //           </div>
+    //           <div className="project-info">
+    //             <ProjectInfo description={description} />
+    //           </div>
+    //         </StyleFillInfo>
+    //       </StyleConfirmInfo>
+    //     );
+    //   },
+    //   prev: {
+    //     disabled: isCreating,
+    //     handlePrev: prevStep
+    //   },
+    //   // 开始
+    //   start: {
+    //     disabled: isCreating,
+    //     async handleStart() {
+    //       const local = localPathRef.current;
+    //       if (!local) throw new Error("请选择正确的本地路径");
+    //       if (!fse.existsSync(local)) {
+    //         await new Promise<void>(resolve => {
+    //           Modal.confirm({
+    //             title: "提示",
+    //             content: `目录"${local}"不存在，是否创建？`,
+    //             onOk: () => {
+    //               fse.ensureDirSync(local);
+    //               resolve();
+    //             }
+    //           });
+    //         });
+    //       } else if (fse.readdirSync(local).length > 0) {
+    //         await new Promise<void>(resolve => {
+    //           Modal.confirm({
+    //             title: "提示",
+    //             content: `目录"${local}"为非空目录，可能不是主题目录，是否仍然继续使用此目录？`,
+    //             onOk: () => {
+    //               resolve();
+    //             }
+    //           });
+    //         });
+    //       }
+    //       if (!selectedSourceDesc) {
+    //         throw new Error("创建失败");
+    //       }
+    //       updateCreating(true);
+    //       // TODO 使用选择的模板路径生成 tempConf
+    //       return apiCreateProject({
+    //         description,
+    //         brandConf,
+    //         uiVersion: selectedSourceDesc.uiVersion,
+    //         sourceDescription: selectedSourceDesc,
+    //         localPath: localPathRef.current || ""
+    //       }).then(data => {
+    //         console.log("创建工程：", data);
+    //         if (!description) {
+    //           throw new Error("工程信息为空");
+    //         }
+    //         props.onProjectCreated(description);
+    //         closeModal();
+    //         updateCreating(false);
+    //         setTimeout(init, 300);
+    //       });
+    //     }
+    //   }
+    // }
   ];
 
   // 创建主题步骤容器
@@ -345,7 +427,11 @@ const CreateProject: React.FC<TypeProps> = props => {
     return (
       <Button
         type="primary"
-        onClick={step.start.handleStart}
+        onClick={() =>
+          step.start
+            .handleStart()
+            .catch(err => message.error({ content: err.message }))
+        }
         disabled={step.start?.disabled}
         loading={isCreating}
       >
@@ -370,12 +456,14 @@ const CreateProject: React.FC<TypeProps> = props => {
       <Modal
         width="700px"
         visible={modalVisible}
-        title={`创建${brandConf.name}主题`}
+        title={`创建${brandConf.name}`}
         destroyOnClose={true}
         onCancel={closeModal}
         footer={modalFooter}
       >
-        <Steps steps={steps.map(o => o.name)} current={curStep} />
+        <div className="step">
+          <Steps steps={steps.map(o => o.name)} current={curStep} />
+        </div>
         <br />
         <StyleStepContainer>
           <StepContainer />
@@ -385,7 +473,11 @@ const CreateProject: React.FC<TypeProps> = props => {
   );
 };
 
-const StyleCreateProject = styled.div``;
+const StyleCreateProject = styled.div`
+  .step {
+    padding: 0 50px;
+  }
+`;
 
 const StyleSetLocalPath = styled.div`
   .input-area {
@@ -400,7 +492,7 @@ const StyleStepContainer = styled.div`
 
 const StyleFillInfo = styled.div`
   display: flex;
-  padding: 10px;
+  padding: 10px 0;
   .template-card {
     flex-shrink: 0;
     width: 200px;
@@ -409,11 +501,6 @@ const StyleFillInfo = styled.div`
     width: 100%;
     margin-left: 30px;
   }
-`;
-
-const StyleConfirmInfo = styled.div`
-  display: flex;
-  flex-direction: column;
 `;
 
 export default CreateProject;

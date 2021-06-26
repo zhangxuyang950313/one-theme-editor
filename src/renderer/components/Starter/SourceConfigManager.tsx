@@ -71,7 +71,7 @@ const SourceConfigManager: React.FC<TypeProps> = props => {
 const StyleSourceConfigCard = styled.div`
   display: flex;
   flex-wrap: wrap;
-  height: 50vh;
+  height: 350px;
   overflow-y: auto;
   .center {
     margin: auto;
