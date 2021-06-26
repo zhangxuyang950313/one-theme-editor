@@ -21,7 +21,8 @@ import {
   getCurrentModule,
   getCurrentPage,
   getCurrentModuleList,
-  getCurrentPageGroupList
+  getCurrentPageGroupList,
+  getCurrentSourceConfigRoot
 } from "@/store/modules/source-config/selector";
 
 import {
@@ -35,6 +36,16 @@ import { TypeBrandConf } from "types/project";
 
 import ERR_CODE from "@/core/error-code";
 import { useAsyncUpdater } from "./index";
+
+// 获取当前资源配置目录
+export function useSourceConfigRoot(): string | null {
+  return useSelector(getCurrentSourceConfigRoot);
+}
+
+// 当前选择的厂商信息
+export function useSelectedBrandConf(): TypeBrandConf | null {
+  return useSelector(getSelectedBrandConf);
+}
 
 // 获取配置的厂商列表
 export function useBrandConfList(): TypeBrandConf[] {
@@ -56,11 +67,6 @@ export function useBrandConfList(): TypeBrandConf[] {
     });
   }, [dispatch]);
   return value;
-}
-
-// 当前选择的厂商信息
-export function useSelectedBrandConf(): TypeBrandConf | null {
-  return useSelector(getSelectedBrandConf);
 }
 
 // 获取配置预览列表

@@ -14,7 +14,6 @@ export type TypeStates = {
   brandConfList: TypeBrandConf[];
   descriptionList: TypeSourceDescription[];
   currentConfig: TypeSourceConfig | null;
-  currentDescription: TypeSourceDescription | null;
   currentBrandConf: TypeBrandConf | null;
   currentModule: TypeSourceModuleConf | null;
   currentPage: TypeSourcePageConf | null;
@@ -27,7 +26,6 @@ const templateState: TypeStates = {
   // 配置预览列表
   descriptionList: [],
   currentConfig: null,
-  currentDescription: null,
   currentBrandConf: null,
   currentModule: null,
   currentPage: null
@@ -49,9 +47,6 @@ export default function TemplateReducer(
     }
     case ACTION_TYPES.SET_SELECTED_BRAND: {
       return updateState(state, { currentBrandConf: action.brandInfo });
-    }
-    case ACTION_TYPES.SET_SOURCE_DESCRIPTION: {
-      return updateState(state, { currentDescription: action.payload });
     }
     case ACTION_TYPES.SET_SOURCE_CONFIG_MODULE: {
       return updateState(state, { currentModule: action.payload });

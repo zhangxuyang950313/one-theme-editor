@@ -10,10 +10,7 @@ const Preview: React.FC = () => {
   if (!currentPage) return null;
   return (
     <StylePreviewer>
-      <StyleImage
-        src={getImageURL(currentPage.preview)}
-        alt={currentPage.pathname}
-      />
+      <StyleImage src={getImageURL(currentPage.preview)} alt="" />
     </StylePreviewer>
   );
 };

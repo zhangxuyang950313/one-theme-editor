@@ -29,12 +29,6 @@ type TypeActionSetSourceDescriptionList = {
   payload: TypeSourceDescription[];
 };
 
-// 设置素材配置预览
-type TypeActionSetSourceDescription = {
-  type: typeof ACTION_TYPES.SET_SOURCE_DESCRIPTION;
-  payload: TypeSourceDescription;
-};
-
 // 设置模块
 type TypeActionSetCurrentModule = {
   type: typeof ACTION_TYPES.SET_SOURCE_CONFIG_MODULE;
@@ -51,7 +45,6 @@ type TypeActionSetCurrentPage = {
 export type TypeActions =
   | TypeSetBrandInfoList
   | TypeActionSetSourceDescriptionList
-  | TypeActionSetSourceDescription
   | TypeActionSetSourceConfig
   | TypeActionSetBrandInfo
   | TypeActionSetCurrentModule
@@ -69,13 +62,6 @@ export function ActionSetSourceDescriptionList(
   payload: TypeSourceDescription[]
 ): TypeActionSetSourceDescriptionList {
   return { type: ACTION_TYPES.SET_SOURCE_DESCRIPTION_LIST, payload };
-}
-
-// 设置当前资源预览配置
-export function ActionSetSourceDescription(
-  payload: TypeSourceDescription
-): TypeActionSetSourceDescription {
-  return { type: ACTION_TYPES.SET_SOURCE_DESCRIPTION, payload };
 }
 
 // 设置当前资源配置

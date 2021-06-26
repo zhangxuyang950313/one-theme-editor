@@ -1,12 +1,12 @@
 // 图片替换单元组件
 import path from "path";
+import fse from "fs-extra";
 import React from "react";
-import { useSelector } from "react-redux";
 import { remote } from "electron";
 
 // components
 import styled from "styled-components";
-import { notification } from "antd";
+import { message, notification } from "antd";
 import {
   RightCircleOutlined,
   DeleteOutlined,
@@ -15,10 +15,10 @@ import {
 } from "@ant-design/icons";
 
 // script
-import { useProjectImageUrl, useSourceImageUrl } from "@/hooks";
 import { apiCopyFile, apiDeleteFile } from "@/api";
+import { useProjectImageUrl, useSourceImageUrl } from "@/hooks";
 import { useProjectRoot } from "@/hooks/project";
-import { findProjectImage } from "@/store/modules/project/selector";
+import { useSourceConfigRoot } from "@/hooks/sourceConfig";
 import { TypeSourcePageSourceConf } from "types/source-config";
 import ERR_CODE from "@/core/error-code";
 
@@ -57,9 +57,9 @@ function ImageShower(props: TypePropsOfShowImage) {
         onClick={() => {
           if (!target || !projectRoot) return;
           target.forEach(item => {
-            const file = path.join(projectRoot, item);
-            console.log(`删除图标: ${file}`);
-            apiDeleteFile(file);
+            // const file = path.join(projectRoot, item);
+            console.log(`删除图标: ${item}`);
+            apiDeleteFile(item);
           });
         }}
       />
@@ -152,8 +152,8 @@ const StyleImageBackground = styled.div<{ srcUrl?: string }>`
 `;
 
 const ImageChanger: React.FC<TypeSourcePageSourceConf> = sourceConf => {
-  const findImage = useSelector(findProjectImage);
   const projectRoot = useProjectRoot();
+  const sourceConfigRoot = useSourceConfigRoot();
   const projectImgURL = useProjectImageUrl();
   const sourceImgURL = useSourceImageUrl();
   const { from, to, name } = sourceConf;
@@ -179,6 +179,10 @@ const ImageChanger: React.FC<TypeSourcePageSourceConf> = sourceConf => {
       notification.warn({ message: `"${name}"${ERR_CODE[3006]}` });
       return;
     }
+    if (!sourceConfigRoot) {
+      message.warn({ content: ERR_CODE[3008] });
+      return;
+    }
     to.forEach(target => {
       const err = () =>
         notification.warn({ message: `${ERR_CODE[4004]}(${from.filename})` });
@@ -188,13 +192,16 @@ const ImageChanger: React.FC<TypeSourcePageSourceConf> = sourceConf => {
         return;
       }
       apiCopyFile(
-        path.join(projectRoot, from.filename),
+        path.join(sourceConfigRoot, from.pathname),
         path.join(projectRoot, target)
       );
     });
   };
   const { width, height, size } = from;
-  const targetImage = findImage(to?.[0]);
+  const targetImage = to?.[0];
+  const targetList = to
+    .map(item => path.join(projectRoot || "", item))
+    .filter(fse.existsSync);
   return (
     <StyleImageChanger>
       {/* 图片描述 */}
@@ -228,8 +235,8 @@ const ImageChanger: React.FC<TypeSourcePageSourceConf> = sourceConf => {
         <div className="right">
           <ImageShower
             showHandler
-            srcUrl={targetImage?.md5 && projectImgURL(targetImage.md5)}
-            target={to}
+            srcUrl={projectImgURL(targetImage)}
+            target={targetList}
             onClick={() => handleShowImageFile(to?.[0])}
           />
         </div>

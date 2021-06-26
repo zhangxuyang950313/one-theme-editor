@@ -106,7 +106,7 @@ export function useProjectImageUrl(): (
   const host = useServerHost();
   const projectRoot = useSelector(getProjectLocalPath);
   return relative => {
-    const file = path.join(projectRoot || "", relative);
+    const file = path.join(projectRoot || "", relative || "");
     return `${host}/image?file=${file}`;
   };
 }
