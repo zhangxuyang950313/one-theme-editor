@@ -3,7 +3,7 @@ import fse from "fs-extra";
 import { v4 as UUID } from "uuid";
 import Nedb from "nedb-promises";
 
-import { PROJECTS_DB } from "server/core/paths";
+import { PROJECTS_DB } from "server/core/path-config";
 import {
   TypeCreateProjectPayload,
   TypeImageMapper,
@@ -97,7 +97,7 @@ export async function getProjectListOf(
   brandType: string
 ): Promise<TypeProjectDataDoc[]> {
   return projectDB
-    .find<TypeProjectData>({ "brand.type": brandType })
+    .find<TypeProjectData>({ "brandInfo.type": brandType })
     .sort({ updatedAt: -1 });
 }
 

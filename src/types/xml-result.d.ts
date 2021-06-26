@@ -10,25 +10,23 @@ type TypeExtendsElementCompact<A, E = { [x: string]: any }> = E &
   };
 
 // 模板配置原始信息
-export type TypeOriginTempConf = Partial<{
+export type TypeOriginSourceConf = Partial<{
   description: TypeAttrsContent<Partial<{ name: string; version: string }>>[];
   preview: TypeAttrsContent<Partial<{ src: string }>>[];
   uiVersion: TypeOriginUiVersionConf[];
-  module: TypeOriginTempModuleConf[];
+  module: TypeOriginModuleConf[];
 }>;
 export type TypeOriginUiVersionConf = TypeAttrsContent<
   Partial<{ name: string; code: string }>
 >;
-export type TypeOriginTempModuleConf = TypeAttrsContent<
+export type TypeOriginModuleConf = TypeAttrsContent<
   Partial<{ name: string; icon: string }>
 > &
-  Partial<{ group: TypeOriginTempPageGroupConf[] }>;
-export type TypeOriginTempModulePageConf = TypeAttrsContent<
-  Partial<{ src: string }>
->;
-export type TypeOriginTempPageGroupConf = TypeAttrsContent<
+  Partial<{ group: TypeOriginPageGroupConf[] }>;
+export type TypeOriginPageConf = TypeAttrsContent<Partial<{ src: string }>>;
+export type TypeOriginPageGroupConf = TypeAttrsContent<
   Partial<{ name: string }>
-> & { page?: TypeOriginTempModulePageConf[] };
+> & { page?: TypeOriginPageConf[] };
 
 // // 厂商配置原始信息
 // export type TypeOriginBrandConf = Partial<{
@@ -40,7 +38,7 @@ export type TypeOriginTempPageGroupConf = TypeAttrsContent<
 // }>;
 
 // 页面配置原始信息
-export type TypeTempLayout = TypeExtendsElementCompact<{
+export type TypeSourceLayout = TypeExtendsElementCompact<{
   x?: string;
   y?: string;
   w?: string;
@@ -56,9 +54,9 @@ export type TypeTempLayout = TypeExtendsElementCompact<{
 //     text: string;
 //   }
 // >;
-export type TypeTempFrom = TypeExtendsElementCompact<{ src?: string }>;
-export type TypeTempTo = TypeExtendsElementCompact<{ src?: string }>;
-export type TypeTempOriginPageConf = TypeExtendsElementCompact<
+export type TypeSourceFrom = TypeExtendsElementCompact<{ src?: string }>;
+export type TypeSourceTo = TypeExtendsElementCompact<{ src?: string }>;
+export type TypeSourceOriginPageConf = TypeExtendsElementCompact<
   never,
   {
     config?: TypeExtendsElementCompact<{
@@ -78,9 +76,9 @@ export type TypeTempOriginPageConf = TypeExtendsElementCompact<
         name?: string;
       },
       {
-        layout?: TypeTempLayout[];
-        from?: TypeTempFrom[];
-        to?: TypeTempTo[];
+        layout?: TypeSourceLayout[];
+        from?: TypeSourceFrom[];
+        to?: TypeSourceTo[];
       }
     >[];
   }

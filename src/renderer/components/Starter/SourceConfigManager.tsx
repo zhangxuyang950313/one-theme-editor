@@ -59,7 +59,7 @@ const SourceConfigManager: React.FC<TypeProps> = props => {
               onSelected(isActive ? undefined : item);
             }}
           >
-            <SourceConfigCard hoverable config={item} />
+            <SourceConfigCard hoverable sourceDescription={item} />
             <CheckCircleTwoTone className="check-icon" />
           </StyleCardContainer>
         );

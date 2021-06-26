@@ -33,14 +33,14 @@ export default function registerSocket(server: http.Server): void {
     socket.on("disconnect", () => console.log("断开连接"));
 
     // 创建调用实例
-    const connecter = new SocketConnecter(socket);
+    // const connecter = new SocketConnecter(socket);
     // 同步工程数据
 
-    connecter.connect(SOCKET_EVENT.PROJECT, (uuid: string) => {
-      findProjectByUUID(uuid).then(project => {
-        socket.emit(SOCKET_EVENT.PROJECT, project);
-      });
-    });
+    // connecter.connect(SOCKET_EVENT.PROJECT, (uuid: string) => {
+    //   findProjectByUUID(uuid).then(project => {
+    //     socket.emit(SOCKET_EVENT.PROJECT, project);
+    //   });
+    // });
 
     // // 同步工程数据，connect 对以下代码做了封装，等同于上面的 invoke 方法
     // socket.on(SOCKET_EVENT.PROJECT, uuid => {
@@ -50,6 +50,6 @@ export default function registerSocket(server: http.Server): void {
     // });
 
     // 监听 image 素材
-    connecter.connect(SOCKET_EVENT.IMAGE_MAPPER_LIST, syncImageMapperList);
+    // connecter.connect(SOCKET_EVENT.IMAGE_MAPPER_LIST, syncImageMapperList);
   });
 }

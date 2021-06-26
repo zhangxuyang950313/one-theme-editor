@@ -4,13 +4,13 @@ import styled from "styled-components";
 import { useCurrentPage, useCurrentPageGroupList } from "@/hooks/sourceConfig";
 
 import { Collapse } from "antd";
-import { useProjectImageUrl } from "@/hooks";
+import { useSourceImageUrl } from "@/hooks";
 
 // 页面选择器
 const PageSelector: React.FC = () => {
   const pageGroupList = useCurrentPageGroupList();
   const [, setCurrentPage] = useCurrentPage();
-  const getImageURL = useProjectImageUrl();
+  const sourceImageURL = useSourceImageUrl();
   if (pageGroupList.length === 0) {
     console.log("页面分组为空");
     return null;
@@ -23,8 +23,8 @@ const PageSelector: React.FC = () => {
             {group.pages.map((page, index) => (
               <StyleImage
                 key={index}
-                alt={page.pathname}
-                src={getImageURL(page.preview)}
+                alt={page.preview}
+                src={sourceImageURL(page.preview)}
                 onClick={() => setCurrentPage(page)}
               />
             ))}

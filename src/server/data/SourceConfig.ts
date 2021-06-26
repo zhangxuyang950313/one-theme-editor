@@ -6,10 +6,7 @@ import {
   TypeSourcePageGroupConf,
   TypeSourcePageConf
 } from "types/source-config";
-import {
-  TypeOriginTempPageGroupConf,
-  TypeOriginTempModulePageConf
-} from "types/xml-result";
+import { TypeOriginPageGroupConf, TypeOriginPageConf } from "types/xml-result";
 import Page from "@/data/Page";
 import XMLNode from "@/core/XMLNode";
 import SourceDescription from "@/data/SourceDescription";
@@ -18,7 +15,7 @@ import SourceDescription from "@/data/SourceDescription";
 export default class SourceConfig extends SourceDescription {
   // 页面数据
   private async getPages(
-    data: TypeOriginTempModulePageConf[]
+    data: TypeOriginPageConf[]
   ): Promise<TypeSourcePageConf[]> {
     // 这里是在选择模板版本后得到的目标模块目录
     return asyncMap(data, item => {
@@ -28,13 +25,13 @@ export default class SourceConfig extends SourceDescription {
         super.getNamespace(),
         pageNode.getAttribute("src")
       );
-      return new Page(pageFile).getData();
+      return new Page(pageFile, super.getNamespace()).getData();
     });
   }
 
   // 页面分组数据
   private async getPageGroup(
-    data: TypeOriginTempPageGroupConf[]
+    data: TypeOriginPageGroupConf[]
   ): Promise<TypeSourcePageGroupConf[]> {
     return asyncMap(data, async item => {
       const groupNode = new XMLNode(item);

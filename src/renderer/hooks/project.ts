@@ -6,7 +6,8 @@ import { useAxiosCanceler } from "@/hooks/index";
 import { useSelectedBrandConf } from "@/hooks/sourceConfig";
 import {
   ActionSetCurrentBrand,
-  ActionSetCurrentPage
+  ActionSetCurrentPage,
+  ActionSetSourceConfig
 } from "@/store/modules/source-config/action";
 import {
   ActionSetImageMapperList,
@@ -59,7 +60,7 @@ export function useLoadProject(project: TypeProjectDataDoc | null): void {
     if (!project) return;
     console.log("载入工程：", project);
     dispatch(ActionSetProjectData(project));
-    // dispatch(ActionSetSourceConfig(project.sourceConfig));
+    dispatch(ActionSetSourceConfig(project.sourceConfig));
     // 默认选择第一个模块和第一个页面
     const firstModule = project?.sourceConfig?.modules[0];
     const firstPage = firstModule?.groups[0].pages[0];

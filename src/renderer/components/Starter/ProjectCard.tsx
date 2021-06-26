@@ -7,16 +7,16 @@ import { TypeProjectInfo } from "src/types/project";
 
 type TypeProps = {
   hoverable?: boolean;
-  description: TypeProjectInfo;
+  projectInfo: TypeProjectInfo;
   onClick?: (data: TypeProjectInfo) => void;
 };
 // 工程卡片展示
 function ProjectCard(props: TypeProps): JSX.Element {
-  const { description } = props;
+  const { projectInfo } = props;
   return (
     <StyleProjectCard
       data-hoverable={props.hoverable}
-      onClick={() => props.onClick && props.onClick(description)}
+      onClick={() => props.onClick && props.onClick(projectInfo)}
     >
       <Card
         hoverable={props.hoverable}
@@ -29,8 +29,8 @@ function ProjectCard(props: TypeProps): JSX.Element {
         }
       >
         <Card.Meta
-          title={description.name}
-          description={description.uiVersion}
+          title={projectInfo?.name}
+          description={projectInfo?.uiVersion}
         />
       </Card>
     </StyleProjectCard>

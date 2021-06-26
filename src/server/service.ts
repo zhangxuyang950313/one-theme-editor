@@ -3,6 +3,7 @@ import FileType from "file-type";
 import express, { Express } from "express";
 import API from "common/api";
 import ERR_CODE from "renderer/core/error-code";
+import * as PATHS from "@/core/path-config";
 import { TypeUiVersion } from "types/source-config";
 import { TypeCreateProjectPayload, TypeProjectInfo } from "types/project";
 import {
@@ -78,6 +79,15 @@ export default function registerService(service: Express): void {
       res.send(buff);
     } catch (err) {
       res.status(400).send(err.message);
+    }
+  });
+
+  // 获取路径配置
+  service.get(API.GET_PATH_CONFIG, async (req, res) => {
+    try {
+      res.send(result.success(PATHS));
+    } catch (err) {
+      res.status(400).send(result.fail(err.message));
     }
   });
 

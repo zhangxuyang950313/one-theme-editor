@@ -10,6 +10,7 @@ import {
 } from "types/project";
 import { TypeSourceConfig, TypeSourceDescription } from "types/source-config";
 import { TypeResponseFrame } from "types/request";
+import * as paths from "server/core/path-config";
 
 type TypeGetCanceler = (c: Canceler) => void;
 
@@ -19,6 +20,13 @@ const createHttp = (getCanceler?: TypeGetCanceler) => {
     cancelToken: getCanceler && new axios.CancelToken(getCanceler)
   });
 };
+
+// 获取路径信息
+export async function apiGetPathConfig(): Promise<typeof paths> {
+  return createHttp()
+    .get<TypeResponseFrame<typeof paths>>(API.GET_PATH_CONFIG)
+    .then(data => data.data.data);
+}
 
 // 获取厂商列表
 export async function apiGetBrandConfList(): Promise<TypeBrandConf[]> {

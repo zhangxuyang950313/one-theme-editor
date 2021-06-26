@@ -4,13 +4,13 @@ import styled from "styled-components";
 import { useCurrentModuleList, useCurrentModule } from "@/hooks/sourceConfig";
 
 import { Tooltip } from "antd";
-import { useProjectImageUrl } from "@/hooks";
+import { useSourceImageUrl } from "@/hooks";
 
 // 模块选择器
 const ModuleSelector: React.FC = () => {
   const tempModuleList = useCurrentModuleList();
   const [currentModule, setCurrentModule] = useCurrentModule();
-  const getImageURL = useProjectImageUrl();
+  const getImageURL = useSourceImageUrl();
 
   if (!currentModule) {
     console.log("currentModule 为空");

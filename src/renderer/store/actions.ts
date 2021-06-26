@@ -1,6 +1,8 @@
 enum ACTION_TYPES {
   // 设置服务端口
   SET_SERVER_PORT = "SET_SERVER_PORT",
+  // 设置路径配置
+  SET_PATH_CONFIG = "SET_PATH_CONFIG",
 
   // 设置厂商品牌列表
   SET_BRAND_LIST = "SET_BRAND_LIST",

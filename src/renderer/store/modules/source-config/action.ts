@@ -51,9 +51,9 @@ type TypeActionSetCurrentPage = {
 export type TypeActions =
   | TypeSetBrandInfoList
   | TypeActionSetSourceDescriptionList
-  | TypeActionSetBrandInfo
-  | TypeActionSetSourceConfig
   | TypeActionSetSourceDescription
+  | TypeActionSetSourceConfig
+  | TypeActionSetBrandInfo
   | TypeActionSetCurrentModule
   | TypeActionSetCurrentPage;
 
@@ -62,13 +62,6 @@ export function ActionSetBrandInfoList(
   brandConfList: TypeBrandConf[]
 ): TypeSetBrandInfoList {
   return { type: ACTION_TYPES.SET_BRAND_LIST, brandConfList };
-}
-
-// 设置选择的厂商信息
-export function ActionSetSelectedBrand(
-  brandInfo: TypeBrandConf
-): TypeActionSetBrandInfo {
-  return { type: ACTION_TYPES.SET_SELECTED_BRAND, brandInfo };
 }
 
 // 设置当前资源配置预览列表
@@ -83,6 +76,20 @@ export function ActionSetSourceDescription(
   payload: TypeSourceDescription
 ): TypeActionSetSourceDescription {
   return { type: ACTION_TYPES.SET_SOURCE_DESCRIPTION, payload };
+}
+
+// 设置当前资源配置
+export function ActionSetSourceConfig(
+  payload: TypeSourceConfig
+): TypeActionSetSourceConfig {
+  return { type: ACTION_TYPES.SET_SOURCE_CONFIG, payload };
+}
+
+// 设置选择的厂商信息
+export function ActionSetSelectedBrand(
+  brandInfo: TypeBrandConf
+): TypeActionSetBrandInfo {
+  return { type: ACTION_TYPES.SET_SELECTED_BRAND, brandInfo };
 }
 
 // 设置当前模块配置

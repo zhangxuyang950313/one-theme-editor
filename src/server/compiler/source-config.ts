@@ -2,7 +2,7 @@ import path from "path";
 import { asyncMap } from "common/utils";
 import fse from "fs-extra";
 import SourceConfig from "@/data/SourceConfig";
-import { SOURCE_CONFIG_DIR, SOuRCE_CONFIG_FILE } from "server/core/paths";
+import { SOURCE_CONFIG_DIR, SOuRCE_CONFIG_FILE } from "server/core/path-config";
 import { TypeBrandConf } from "types/project";
 import { TypeSourceDescription } from "types/source-config";
 

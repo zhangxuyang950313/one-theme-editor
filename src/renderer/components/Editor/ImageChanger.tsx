@@ -15,7 +15,7 @@ import {
 } from "@ant-design/icons";
 
 // script
-import { useProjectImageUrl } from "@/hooks";
+import { useProjectImageUrl, useSourceImageUrl } from "@/hooks";
 import { apiCopyFile, apiDeleteFile } from "@/api";
 import { useProjectRoot } from "@/hooks/project";
 import { findProjectImage } from "@/store/modules/project/selector";
@@ -154,7 +154,8 @@ const StyleImageBackground = styled.div<{ srcUrl?: string }>`
 const ImageChanger: React.FC<TypeSourcePageSourceConf> = sourceConf => {
   const findImage = useSelector(findProjectImage);
   const projectRoot = useProjectRoot();
-  const getImageURL = useProjectImageUrl();
+  const projectImgURL = useProjectImageUrl();
+  const sourceImgURL = useSourceImageUrl();
   const { from, to, name } = sourceConf;
 
   if (!from) return null;
@@ -181,11 +182,6 @@ const ImageChanger: React.FC<TypeSourcePageSourceConf> = sourceConf => {
     to.forEach(target => {
       const err = () =>
         notification.warn({ message: `${ERR_CODE[4004]}(${from.filename})` });
-      if (!from.md5) {
-        console.warn("from.md5 为空", from);
-        err();
-        return;
-      }
       if (!projectRoot) {
         console.warn("projectRoot 为空");
         err();
@@ -219,9 +215,9 @@ const ImageChanger: React.FC<TypeSourcePageSourceConf> = sourceConf => {
       <div className="edit-wrapper">
         <div className="left">
           <ImageShower
-            srcUrl={getImageURL(from.md5) || ""}
+            srcUrl={sourceImgURL(from.pathname) || ""}
             onClick={() => {
-              handlePreviewFile(getImageURL(from.md5), name);
+              handlePreviewFile(projectImgURL(from.pathname), name);
             }}
           />
         </div>
@@ -232,7 +228,7 @@ const ImageChanger: React.FC<TypeSourcePageSourceConf> = sourceConf => {
         <div className="right">
           <ImageShower
             showHandler
-            srcUrl={targetImage?.md5 && getImageURL(targetImage.md5)}
+            srcUrl={targetImage?.md5 && projectImgURL(targetImage.md5)}
             target={to}
             onClick={() => handleShowImageFile(to?.[0])}
           />

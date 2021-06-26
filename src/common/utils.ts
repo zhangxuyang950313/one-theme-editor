@@ -156,7 +156,6 @@ export async function getImageData(file: string): Promise<TypeImageData> {
   if (!fse.existsSync(file)) throw new Error(`${ERR_CODE[4003]}: ${file}`);
   // TODO: 可以去图片数据库先查一下是否有，没有的话再进行接下来的步骤
   const buff = await fse.readFile(file);
-  const base64 = buff.toString("base64");
   const { width, height } = getImageSizeOf(file);
   const imageData: TypeImageData = {
     md5: md5(buff),
@@ -164,8 +163,7 @@ export async function getImageData(file: string): Promise<TypeImageData> {
     height,
     size: getFileSizeOf(file),
     filename: path.basename(file),
-    ninePatch: isNinePatchPath(file),
-    base64
+    ninePatch: isNinePatchPath(file)
   };
   // 同步存储到图片数据库
   await insertImageData(imageData);

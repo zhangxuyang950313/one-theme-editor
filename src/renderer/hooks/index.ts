@@ -1,13 +1,15 @@
 import path from "path";
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useLayoutEffect, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Canceler } from "axios";
-import { InputProps } from "antd";
+import { InputProps, message } from "antd";
 
-import { TypeImagePathLike } from "types/index";
-import { getServerPort } from "@/store/modules/base/selector";
+import { TypeImagePathLike, TypePathConfig } from "types/index";
+import { getPathConfig, getServerPort } from "@/store/modules/base/selector";
 import { getProjectLocalPath } from "@/store/modules/project/selector";
 import { getCurrentSourceConfig } from "@/store/modules/source-config/selector";
+import { apiGetPathConfig } from "@/api";
+import { ActionSetPathConfig } from "@/store/modules/base/action";
 
 // 设置页面标题
 export enum presetTitle {
@@ -59,10 +61,34 @@ export function useAsyncUpdater(): (updater: () => void) => void {
   };
 }
 
+// 获取编辑器路径配置
+export function usePathConfig(): TypePathConfig | null {
+  return useSelector(getPathConfig);
+}
+
 // 生成当前服务域名
 export function useServerHost(): string {
   const serverPort = useSelector(getServerPort);
   return `http://localhost:${serverPort}`;
+}
+
+// 初始化编辑器
+export function useInitEditor(): boolean {
+  const [loading, updateLoading] = useState(true);
+  const dispatch = useDispatch();
+  useLayoutEffect(() => {
+    apiGetPathConfig()
+      .then(async data => {
+        dispatch(ActionSetPathConfig(data));
+        console.log(data);
+        await new Promise(resolve => setTimeout(resolve, 300));
+        updateLoading(false);
+      })
+      .catch(err => {
+        message.error({ content: err.message });
+      });
+  }, []);
+  return loading;
 }
 
 // 生成绝对正确路径的图片 url
@@ -90,10 +116,11 @@ export function useSourceImageUrl(): (
   x: TypeImagePathLike
 ) => TypeImagePathLike {
   const host = useServerHost();
+  const pathConfig = usePathConfig();
   const currentSourceConfig = useSelector(getCurrentSourceConfig);
   return relative => {
     const file = path.join(
-      currentSourceConfig?.rootDir || "",
+      pathConfig?.SOURCE_CONFIG_DIR || "",
       currentSourceConfig?.namespace || "",
       relative
     );

@@ -6,31 +6,46 @@ import {
   TypeSourcePageSourceConf,
   TypeSourceFileCategoryConf
 } from "types/source-config";
-import { TypeTempLayout, TypeTempOriginPageConf } from "types/xml-result";
-import { xml2jsonCompact } from "@/compiler/xml";
+import { TypeSourceLayout, TypeSourceOriginPageConf } from "types/xml-result";
 import { getImageData } from "common/utils";
+import { xml2jsonCompact } from "@/compiler/xml";
+import { SOURCE_CONFIG_DIR } from "server/core/path-config";
 import XMLNode from "@/core/XMLNode";
 
 export default class Page {
-  private file: string;
-  private dirWithUIPath: string;
-  private xmlData!: TypeTempOriginPageConf;
-  constructor(file: string) {
-    this.file = file;
-    // this.pathname = props.pathname;
-    this.dirWithUIPath = path.dirname(file);
+  private rootDir: string;
+  private pageFile: string;
+  private xmlData!: TypeSourceOriginPageConf;
+  constructor(pageFile: string, namespace: string) {
+    this.pageFile = pageFile;
+    this.rootDir = path.join(SOURCE_CONFIG_DIR, namespace);
   }
 
   private async ensureXmlData() {
     if (!this.xmlData) {
-      this.xmlData = await xml2jsonCompact(this.file);
+      this.xmlData = await xml2jsonCompact(this.pageFile);
     }
     return this.xmlData;
   }
 
+  // 处理当前页面资源的相对路径
+  private relativePathname(file: string) {
+    return path.join(
+      path.relative(this.rootDir, path.dirname(this.pageFile)),
+      file
+    );
+  }
+
+  // 处理当前页面资源的绝对路径
+  private resolvePathname(file: string) {
+    return path.join(path.dirname(this.pageFile), file);
+  }
+
   async getPreview(): Promise<string> {
     const xmlData = await this.ensureXmlData();
-    return xmlData.preview?.[0]._attributes.src || "";
+    return this.relativePathname(
+      new XMLNode(xmlData).getFirstChildOf("preview").getAttribute("src")
+    );
   }
 
   async getConfig(): Promise<TypeSourcePageInfoConf> {
@@ -45,22 +60,28 @@ export default class Page {
 
   async getCategoryList(): Promise<TypeSourceFileCategoryConf[]> {
     const xmlData = await this.ensureXmlData();
-    return (
-      xmlData.category?.map(item => ({
-        tag: item._attributes?.tag || "",
-        description: item._attributes?.description || "",
-        type: item._attributes?.type || ""
-      })) || []
-    );
+    const categoryNodes = new XMLNode(xmlData).getChildrenOf("category");
+    return categoryNodes.map(item => {
+      const categoryNode = new XMLNode(item);
+      return {
+        tag: categoryNode.getAttribute("tag"),
+        description: categoryNode.getAttribute("description"),
+        type: categoryNode.getAttribute("type")
+      };
+    });
   }
 
   async getSourceList(): Promise<TypeSourcePageSourceConf[]> {
     const xmlData = await this.ensureXmlData();
     const queue: Promise<TypeSourcePageSourceConf>[] =
       xmlData.source?.map(async item => {
-        const layout: TypeTempLayout = {};
+        const currentNode = new XMLNode(item);
+        const name =
+          currentNode.getAttribute("description") ||
+          currentNode.getAttribute("name");
+        const layout: TypeSourceLayout = {};
         if (item.layout) {
-          const layoutNode = new XMLNode(item.layout[0]);
+          const layoutNode = currentNode.getFirstChildOf("layout");
           layout.x = layoutNode.getAttribute("x");
           layout.y = layoutNode.getAttribute("y");
           layout.w = layoutNode.getAttribute("w");
@@ -68,27 +89,17 @@ export default class Page {
           layout.align = layoutNode.getAttribute("align", "left");
           layout.alignV = layoutNode.getAttribute("alignV", "top");
         }
-        const fromSrc = path.resolve(
-          this.dirWithUIPath,
-          item.from?.[0]._attributes?.src || ""
-        );
-        const to = item.to
-          ? item.to.map(item => path.join(item?._attributes?.src || ""))
-          : [];
-        const {
-          md5,
-          width,
-          height,
-          size,
-          filename,
-          ninePatch
-        } = await getImageData(fromSrc);
-        return {
-          name: item?._attributes?.description || item?._attributes?.name || "",
-          from: { md5, width, height, size, filename, ninePatch },
-          to,
-          layout
+        const pathname = currentNode
+          .getFirstChildOf("from")
+          .getAttribute("src");
+        const imageData = await getImageData(this.resolvePathname(pathname));
+        const from = {
+          pathname: this.relativePathname(pathname),
+          ...imageData
         };
+        const toNodes = currentNode.getChildrenOf("to");
+        const to = toNodes.map(item => new XMLNode(item).getAttribute("src"));
+        return { name, from, to, layout };
       }) || [];
 
     return Promise.all(queue);
@@ -112,7 +123,6 @@ export default class Page {
 
   async getData(): Promise<TypeSourcePageConf> {
     return {
-      pathname: "",
       config: await this.getConfig(),
       preview: await this.getPreview(),
       category: await this.getCategoryList(),

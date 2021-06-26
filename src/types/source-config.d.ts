@@ -1,5 +1,5 @@
 import { TypeImageData } from "./project";
-import { TypeTempLayout } from "./xml-result";
+import { TypeSourceLayout } from "./xml-result";
 import { TypeImagePathLike } from "./index";
 
 // 资源预览配置
@@ -48,20 +48,19 @@ export type TypeSourcePageInfoConf = {
 export type TypeSourceFileCategoryConf = {
   tag: string;
   description: string;
-  type: "image" | "xml" | "";
+  type: "image" | "xml" | "" | string;
 };
 
 // 预览页面资源素材配置
 export type TypeSourcePageSourceConf = {
   name: string;
-  layout: TypeTempLayout; // 预览所需坐标
-  from: TypeImageData | null;
+  layout: TypeSourceLayout; // 预览所需坐标
+  from: (TypeImageData & { pathname: TypeImagePathLike }) | null;
   to: string[];
 };
 
 // 预览单个页面配置
 export type TypeSourcePageConf = {
-  pathname: string;
   config: TypeSourcePageInfoConf;
   preview: TypeImagePathLike;
   category: TypeSourceFileCategoryConf[];

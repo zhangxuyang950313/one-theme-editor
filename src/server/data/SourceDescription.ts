@@ -2,9 +2,9 @@ import path from "path";
 import fse from "fs-extra";
 import { v4 as UUID } from "uuid";
 import { TypeImagePathLike } from "types/index";
-import { TypeOriginTempConf } from "types/xml-result";
+import { TypeOriginSourceConf } from "types/xml-result";
 import { TypeSourceDescription, TypeUiVersion } from "types/source-config";
-import { SOURCE_CONFIG_DIR } from "server/core/paths";
+import { SOURCE_CONFIG_DIR } from "server/core/path-config";
 import { xml2jsonCompact } from "@/compiler/xml";
 import XMLNode from "@/core/XMLNode";
 import ERR_CODE from "renderer/core/error-code";
@@ -15,7 +15,7 @@ export default class SourceDescription {
   private descFile = "";
   private namespace = "";
   // 模板解析数据
-  private xmlData!: TypeOriginTempConf;
+  private xmlData!: TypeOriginSourceConf;
   static filename = "description.xml";
   constructor(namespace: string, filename = SourceDescription.filename) {
     const descFile = path.join(this.getRootDir(), namespace, filename);
@@ -24,9 +24,9 @@ export default class SourceDescription {
     this.descFile = descFile;
   }
 
-  protected async ensureXmlData(): Promise<TypeOriginTempConf> {
+  protected async ensureXmlData(): Promise<TypeOriginSourceConf> {
     if (!this.xmlData) {
-      this.xmlData = await xml2jsonCompact<TypeOriginTempConf>(this.descFile);
+      this.xmlData = await xml2jsonCompact<TypeOriginSourceConf>(this.descFile);
     }
     return this.xmlData;
   }
@@ -68,9 +68,7 @@ export default class SourceDescription {
   async getPreview(): Promise<TypeImagePathLike> {
     const xmlData = await this.ensureXmlData();
     // TODO: 默认预览图
-    return new XMLNode(xmlData)
-      .getFirstChildOf("description")
-      .getAttribute("src");
+    return new XMLNode(xmlData).getFirstChildOf("preview").getAttribute("src");
   }
 
   // 模板信息
