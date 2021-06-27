@@ -1,7 +1,7 @@
 // 图片替换单元组件
 import path from "path";
 import fse from "fs-extra";
-import React from "react";
+import React, { useState } from "react";
 import { remote } from "electron";
 
 // components
@@ -16,7 +16,11 @@ import {
 
 // script
 import { apiCopyFile, apiDeleteFile } from "@/api";
-import { useImagePrefix, useProjectImageUrl } from "@/hooks/index";
+import {
+  useImagePrefix,
+  useFSWatcherInstance,
+  useToListWatcher
+} from "@/hooks/index";
 import { useProjectRoot } from "@/hooks/project";
 import { useSourceConfigRoot } from "@/hooks/sourceConfig";
 import { TypeSCPageSourceConf } from "types/source-config";
@@ -151,11 +155,12 @@ const StyleImageBackground = styled.div<{ srcUrl?: string }>`
 `;
 
 const ImageChanger: React.FC<TypeSCPageSourceConf> = sourceConf => {
+  const { from, to } = sourceConf;
   const sourceConfigRoot = useSourceConfigRoot();
   const projectRoot = useProjectRoot();
   const imagePrefix = useImagePrefix();
+  const absoluteTo = useToListWatcher(to.filter(Boolean));
 
-  const { from, to } = sourceConf;
   if (!sourceConf || !from || !sourceConfigRoot || !projectRoot) return null;
 
   // 素材绝对路径
@@ -163,15 +168,9 @@ const ImageChanger: React.FC<TypeSCPageSourceConf> = sourceConf => {
 
   // 素材映射绝对路径列表
   const absoluteToList = to
-    .map(item => path.join(projectRoot || "", item))
+    .filter(Boolean)
+    .map(item => path.join(projectRoot, item))
     .filter(fse.existsSync);
-
-  // 至少拿出一个可用于展示的图片本地路径
-  const getAbsoluteTo = () => {
-    const target = (to || []).filter(Boolean)[0];
-    return target ? path.join(projectRoot, target) : "";
-  };
-  const absoluteTo = getAbsoluteTo();
 
   /**
    * 点击原始素材，mac 支持小窗预览

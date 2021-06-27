@@ -217,6 +217,47 @@ export function useWatchFile(
   return status;
 }
 
+// 返回一个 chokidar 监听实例，自动在组件卸载时释放监听
+export function useFSWatcherInstance(): chokidar.FSWatcher {
+  const [watcher] = useState(new chokidar.FSWatcher());
+  useEffect(() => {
+    return () => {
+      watcher.close();
+    };
+  }, []);
+  return watcher;
+}
+
+export function useToListWatcher(toList: string[]): string {
+  const watcher = useFSWatcherInstance();
+  const projectRoot = useProjectRoot();
+  const [url, setUrl] = useState("");
+
+  console.log({ toList });
+  useEffect(() => {
+    if (!projectRoot) return;
+
+    watcher.add(toList.map(to => path.join(projectRoot, to)));
+    watcher
+      .on(FILE_STATUS.ADD, file => {
+        console.log(FILE_STATUS.ADD, file);
+        setUrl("");
+        setUrl(file);
+      })
+      .on(FILE_STATUS.CHANGE, file => {
+        console.log(FILE_STATUS.CHANGE, file);
+        setUrl("");
+        setUrl(file);
+      })
+      .on(FILE_STATUS.UNLINK, file => {
+        console.log(FILE_STATUS.UNLINK, file);
+        setUrl("");
+      });
+  }, []);
+
+  return url;
+}
+
 export function useWatchProjectFile(
   relative: string | string[]
 ): ReturnType<typeof useWatchFile> {
