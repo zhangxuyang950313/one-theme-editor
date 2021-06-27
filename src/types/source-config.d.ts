@@ -48,8 +48,8 @@ export type TypeSCFileCategoryConf = {
 // 预览页面资源素材配置
 export type TypeSCPageSourceConf = {
   name: string;
-  layout: TypeXMLSourceLayout; // 预览所需坐标
-  from: (TypeImageData & { pathname: TypeImagePathLike }) | null;
+  layout: TypeXMLSourceLayout; // 预览布局信息
+  from: (TypeImageData & { relativePath: TypeImagePathLike }) | null;
   to: string[];
 };
 

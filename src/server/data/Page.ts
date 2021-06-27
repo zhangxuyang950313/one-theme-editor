@@ -93,8 +93,8 @@ export default class Page {
           .getFirstChildOf("from")
           .getAttribute("src");
         const imageData = await getImageData(this.resolvePathname(pathname));
-        const from = {
-          pathname: this.relativePathname(pathname),
+        const from: TypeSCPageSourceConf["from"] = {
+          relativePath: this.relativePathname(pathname),
           ...imageData
         };
         const toNodes = currentNode.getChildrenOf("to");

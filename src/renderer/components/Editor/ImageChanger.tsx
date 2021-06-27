@@ -16,7 +16,7 @@ import {
 
 // script
 import { apiCopyFile, apiDeleteFile } from "@/api";
-import { useImagePrefix } from "@/hooks";
+import { useImagePrefix, useProjectImageUrl } from "@/hooks/index";
 import { useProjectRoot } from "@/hooks/project";
 import { useSourceConfigRoot } from "@/hooks/sourceConfig";
 import { TypeSCPageSourceConf } from "types/source-config";
@@ -151,12 +151,15 @@ const StyleImageBackground = styled.div<{ srcUrl?: string }>`
 `;
 
 const ImageChanger: React.FC<TypeSCPageSourceConf> = sourceConf => {
-  const projectRoot = useProjectRoot();
   const sourceConfigRoot = useSourceConfigRoot();
+  const projectRoot = useProjectRoot();
   const imagePrefix = useImagePrefix();
 
   const { from, to } = sourceConf;
-  if (!sourceConfigRoot || !from || !projectRoot) return null;
+  if (!sourceConf || !from || !sourceConfigRoot || !projectRoot) return null;
+
+  // 素材绝对路径
+  const absoluteFrom = path.join(sourceConfigRoot, from.relativePath);
 
   // 素材映射绝对路径列表
   const absoluteToList = to
@@ -169,9 +172,6 @@ const ImageChanger: React.FC<TypeSCPageSourceConf> = sourceConf => {
     return target ? path.join(projectRoot, target) : "";
   };
   const absoluteTo = getAbsoluteTo();
-
-  // 素材绝对路径
-  const absoluteFrom = path.join(sourceConfigRoot, from.pathname);
 
   /**
    * 点击原始素材，mac 支持小窗预览
@@ -205,7 +205,7 @@ const ImageChanger: React.FC<TypeSCPageSourceConf> = sourceConf => {
         return;
       }
       apiCopyFile(
-        path.join(sourceConfigRoot, from.pathname),
+        path.join(sourceConfigRoot, from.relativePath),
         path.join(projectRoot, target)
       );
     });
@@ -222,9 +222,9 @@ const ImageChanger: React.FC<TypeSCPageSourceConf> = sourceConf => {
           </span>
         ) : null}
       </div>
-      {to.map(item => (
-        <p key={item} className="text pathname">
-          {item || from.filename || ""}
+      {to.map(relativePath => (
+        <p key={relativePath} className="text to-relative-path">
+          {relativePath}
         </p>
       ))}
       <div className="edit-wrapper">
@@ -273,7 +273,7 @@ const StyleImageChanger = styled.div`
       color: ${({ theme }) => theme["@text-color"]};
     }
   }
-  .pathname {
+  .to-relative-path {
     font-size: 10px;
     color: ${({ theme }) => theme["@text-color-secondary"]};
     user-select: text;

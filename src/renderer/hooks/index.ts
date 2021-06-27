@@ -1,5 +1,4 @@
 import path from "path";
-import { useSourceConfigRoot } from "@/hooks/sourceConfig";
 import chokidar from "chokidar";
 import { Canceler } from "axios";
 import { useLayoutEffect, useEffect, useState } from "react";
@@ -7,10 +6,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { InputProps, message } from "antd";
 import { apiGetPathConfig } from "@/api";
 import { useProjectRoot } from "@/hooks/project";
+import { useSourceConfigRoot } from "@/hooks/sourceConfig";
 import { getPathConfig, getServerPort } from "@/store/modules/base/selector";
 import { ActionSetPathConfig } from "@/store/modules/base/action";
 import { TypePathConfig } from "types/index";
-import { useSourceConfig } from "./sourceConfig";
 
 // 设置页面标题
 export enum presetTitle {
@@ -108,17 +107,62 @@ export function useImageUrl(filepath?: string): string {
   return filepath ? prefix + filepath : "";
 }
 
-// 生成用于工程显示的图片 url
-export function useProjectImageUrl(): (x: string) => string {
+/**
+ * 将本地图片生成用于工程显示的图片 url
+ * @param relativePath
+ * ```
+ * const getProjectImageUrl = useProjectImageUrl();
+ * const url = getProjectImageUrl("/local/path/to/project/image");
+ * ```
+ * or
+ * ```
+ * const url = useProjectImageUrl("/local/path/to/project/image");
+ * ```
+ */
+export function useProjectImageUrl(relativePath: string): string;
+export function useProjectImageUrl(): (relativePath?: string) => string;
+export function useProjectImageUrl(
+  relativePath?: string | null
+): string | ((relativePath?: string) => string) {
   const prefix = useImagePrefix();
   const projectRoot = useProjectRoot();
-  return relative => prefix + path.join(projectRoot || "", relative || "");
+
+  if (relativePath) {
+    return projectRoot ? prefix + path.join(projectRoot, relativePath) : "";
+  }
+
+  return relative => {
+    if (!projectRoot || !relative) return "";
+    return prefix + path.join(projectRoot, relative);
+  };
 }
 
-// 生成用于配置图片显示的 url
-export function useSourceImageUrl(): (x: string) => string {
+/**
+ * 将本地图片生成用于配置显示的图片 url
+ * @param relativePath
+ * ```
+ * const getSourceImageUrl = useSourceImageUrl();
+ * const url = useSourceImageUrl("/local/path/to/sourceConfig/image");
+ * ```
+ * or
+ * ```
+ * const url = useSourceImageUrl("/local/path/to/sourceConfig/image");
+ * ```
+ */
+export function useSourceImageUrl(relativePath: string): string;
+export function useSourceImageUrl(): (relativePath?: string) => string;
+export function useSourceImageUrl(
+  relativePath?: string | null
+): string | ((relativePath?: string) => string) {
   const prefix = useImagePrefix();
   const sourceConfigRoot = useSourceConfigRoot();
+
+  if (relativePath) {
+    return sourceConfigRoot
+      ? prefix + path.join(sourceConfigRoot, relativePath)
+      : "";
+  }
+
   return relative => {
     if (!sourceConfigRoot || !relative) return "";
     return prefix + path.join(sourceConfigRoot, relative);
@@ -143,25 +187,25 @@ export function useWatchFile(
     console.log("watch", file);
     const watcher = chokidar
       .watch(file)
-      .on(FILE_STATUS.ADD, p => {
-        console.log("add", p);
+      .on(FILE_STATUS.ADD, filepath => {
+        console.log(FILE_STATUS.ADD, filepath);
         setStatus({
           event: FILE_STATUS.ADD,
-          file: p
+          file: filepath
         });
       })
-      .on("change", p => {
-        console.log("change", p);
+      .on(FILE_STATUS.CHANGE, filepath => {
+        console.log(FILE_STATUS.CHANGE, filepath);
         setStatus({
           event: FILE_STATUS.CHANGE,
-          file: p
+          file: filepath
         });
       })
-      .on("unlink", p => {
-        console.log("unlink", p);
+      .on(FILE_STATUS.UNLINK, filepath => {
+        console.log(FILE_STATUS.UNLINK, filepath);
         setStatus({
           event: FILE_STATUS.UNLINK,
-          file: p
+          file: filepath
         });
       });
     return () => {
