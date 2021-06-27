@@ -16,11 +16,7 @@ import {
 
 // script
 import { apiCopyFile, apiDeleteFile } from "@/api";
-import {
-  useImagePrefix,
-  useFSWatcherInstance,
-  useToListWatcher
-} from "@/hooks/index";
+import { useImagePrefix, useToListWatcher } from "@/hooks/index";
 import { useProjectRoot } from "@/hooks/project";
 import { useSourceConfigRoot } from "@/hooks/sourceConfig";
 import { TypeSCPageSourceConf } from "types/source-config";
@@ -159,18 +155,23 @@ const ImageChanger: React.FC<TypeSCPageSourceConf> = sourceConf => {
   const sourceConfigRoot = useSourceConfigRoot();
   const projectRoot = useProjectRoot();
   const imagePrefix = useImagePrefix();
-  const absoluteTo = useToListWatcher(to.filter(Boolean));
+  const absoluteToList = useToListWatcher(to.filter(Boolean));
+
+  console.log({ absoluteToList });
 
   if (!sourceConf || !from || !sourceConfigRoot || !projectRoot) return null;
 
   // 素材绝对路径
   const absoluteFrom = path.join(sourceConfigRoot, from.relativePath);
 
-  // 素材映射绝对路径列表
-  const absoluteToList = to
-    .filter(Boolean)
-    .map(item => path.join(projectRoot, item))
-    .filter(fse.existsSync);
+  // 筛选一个有效的用于展示
+  const absoluteToForShow = absoluteToList.filter(Boolean)[0];
+
+  // // 素材映射绝对路径列表
+  // const absoluteToList = to
+  //   .filter(Boolean)
+  //   .map(item => path.join(projectRoot, item))
+  //   .filter(fse.existsSync);
 
   /**
    * 点击原始素材，mac 支持小窗预览
@@ -221,11 +222,20 @@ const ImageChanger: React.FC<TypeSCPageSourceConf> = sourceConf => {
           </span>
         ) : null}
       </div>
-      {to.map(relativePath => (
-        <p key={relativePath} className="text to-relative-path">
-          {relativePath}
-        </p>
-      ))}
+      {to.map(relativePath => {
+        const relativeList = absoluteToList.map(item =>
+          path.relative(projectRoot, item)
+        );
+        return (
+          <p
+            key={relativePath}
+            className="text to-relative-path"
+            data-exists={String(relativeList.includes(relativePath))}
+          >
+            {relativePath}
+          </p>
+        );
+      })}
       <div className="edit-wrapper">
         <div className="left">
           <ImageShower
@@ -243,9 +253,9 @@ const ImageChanger: React.FC<TypeSCPageSourceConf> = sourceConf => {
         <div className="right">
           <ImageShower
             showHandler
-            srcUrl={imagePrefix + absoluteTo}
+            srcUrl={imagePrefix + absoluteToForShow}
             to={absoluteToList}
-            onClick={() => showImageFileInFolder(absoluteTo)}
+            onClick={() => showImageFileInFolder(absoluteToForShow)}
           />
         </div>
       </div>
@@ -280,6 +290,9 @@ const StyleImageChanger = styled.div`
     /* overflow-x: hidden;
     text-overflow: ellipsis;
     white-space: nowrap; */
+    &[data-exists="true"] {
+      color: green;
+    }
   }
   .edit-wrapper {
     display: flex;

@@ -1,4 +1,5 @@
 import path from "path";
+import fse from "fs-extra";
 import chokidar from "chokidar";
 import { Canceler } from "axios";
 import { useLayoutEffect, useEffect, useState } from "react";
@@ -228,34 +229,36 @@ export function useFSWatcherInstance(): chokidar.FSWatcher {
   return watcher;
 }
 
-export function useToListWatcher(toList: string[]): string {
+// 监听模板列表文件
+export function useToListWatcher(toList: string[]): string[] {
   const watcher = useFSWatcherInstance();
   const projectRoot = useProjectRoot();
-  const [url, setUrl] = useState("");
+  const [list, setList] = useState<string[]>([]);
 
-  console.log({ toList });
   useEffect(() => {
     if (!projectRoot) return;
-
-    watcher.add(toList.map(to => path.join(projectRoot, to)));
+    const absoluteList = toList.map(to => path.join(projectRoot, to));
+    setList(absoluteList.filter(item => fse.existsSync(item)));
+    watcher.add(absoluteList);
     watcher
       .on(FILE_STATUS.ADD, file => {
         console.log(FILE_STATUS.ADD, file);
-        setUrl("");
-        setUrl(file);
+        setList(absoluteList.concat(file));
       })
       .on(FILE_STATUS.CHANGE, file => {
         console.log(FILE_STATUS.CHANGE, file);
-        setUrl("");
-        setUrl(file);
+        setList([...absoluteList]);
       })
       .on(FILE_STATUS.UNLINK, file => {
         console.log(FILE_STATUS.UNLINK, file);
-        setUrl("");
+        setList(absoluteList.filter(item => item !== file));
       });
+    return () => {
+      watcher.unwatch(absoluteList);
+    };
   }, []);
 
-  return url;
+  return list;
 }
 
 export function useWatchProjectFile(
