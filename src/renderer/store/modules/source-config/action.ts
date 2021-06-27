@@ -3,8 +3,8 @@ import { TypeBrandConf } from "types/project";
 import {
   TypeSourceConfig,
   TypeSourceDescription,
-  TypeSourceModuleConf,
-  TypeSourcePageConf
+  TypeSCModuleConf,
+  TypeSCPageConf
 } from "types/source-config";
 
 // 设置品牌信息列表
@@ -32,13 +32,13 @@ type TypeActionSetSourceDescriptionList = {
 // 设置模块
 type TypeActionSetCurrentModule = {
   type: typeof ACTION_TYPES.SET_SOURCE_CONFIG_MODULE;
-  payload: TypeSourceModuleConf;
+  payload: TypeSCModuleConf;
 };
 
 // 设置页面
 type TypeActionSetCurrentPage = {
   type: typeof ACTION_TYPES.SET_SOURCE_CONFIG_PAGE;
-  payload: TypeSourcePageConf;
+  payload: TypeSCPageConf;
 };
 
 // main actions
@@ -80,14 +80,14 @@ export function ActionSetSelectedBrand(
 
 // 设置当前模块配置
 export function ActionSetCurrentBrand(
-  payload: TypeSourceModuleConf
+  payload: TypeSCModuleConf
 ): TypeActionSetCurrentModule {
   return { type: ACTION_TYPES.SET_SOURCE_CONFIG_MODULE, payload };
 }
 
 // 设置当前页面配置
 export function ActionSetCurrentPage(
-  payload: TypeSourcePageConf
+  payload: TypeSCPageConf
 ): TypeActionSetCurrentPage {
   return { type: ACTION_TYPES.SET_SOURCE_CONFIG_PAGE, payload };
 }

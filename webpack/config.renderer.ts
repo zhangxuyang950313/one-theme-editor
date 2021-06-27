@@ -86,7 +86,7 @@ const config: webpack.ConfigurationFactory = (env, args) => {
     output: {
       // 输出目录
       path: outputDir.render,
-      // publicPath: "http://localhost:30000",
+      // publicPath: "http://localhost:30000/image?file=",
       filename: isDev ? "js/[name].js" : "js/[name].[contenthash:8].js",
       chunkFilename: isDev
         ? "js/[name].chunk.js"

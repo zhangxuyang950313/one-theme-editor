@@ -2,8 +2,9 @@ import path from "path";
 import fse from "fs-extra";
 import { v4 as UUID } from "uuid";
 import { TypeImagePathLike } from "types/index";
-import { TypeOriginSourceConf } from "types/xml-result";
-import { TypeSourceDescription, TypeUiVersion } from "types/source-config";
+import { TypeXMLSourceConf } from "types/xml-result";
+import { TypeUiVersion } from "types/project";
+import { TypeSourceDescription } from "types/source-config";
 import { SOURCE_CONFIG_DIR } from "server/core/path-config";
 import { xml2jsonCompact } from "@/compiler/xml";
 import XMLNode from "@/core/XMLNode";
@@ -15,7 +16,7 @@ export default class SourceDescription {
   private descFile = "";
   private namespace = "";
   // 模板解析数据
-  private xmlData!: TypeOriginSourceConf;
+  private xmlData!: TypeXMLSourceConf;
   static filename = "description.xml";
   constructor(namespace: string, filename = SourceDescription.filename) {
     const descFile = path.join(this.getRootDir(), namespace, filename);
@@ -24,9 +25,9 @@ export default class SourceDescription {
     this.descFile = descFile;
   }
 
-  protected async ensureXmlData(): Promise<TypeOriginSourceConf> {
+  protected async ensureXmlData(): Promise<TypeXMLSourceConf> {
     if (!this.xmlData) {
-      this.xmlData = await xml2jsonCompact<TypeOriginSourceConf>(this.descFile);
+      this.xmlData = await xml2jsonCompact<TypeXMLSourceConf>(this.descFile);
     }
     return this.xmlData;
   }

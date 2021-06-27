@@ -1,12 +1,12 @@
 import path from "path";
 
 import {
-  TypeSourcePageConf,
-  TypeSourcePageInfoConf,
-  TypeSourcePageSourceConf,
-  TypeSourceFileCategoryConf
+  TypeSCPageConf,
+  TypeSCPageInfoConf,
+  TypeSCPageSourceConf,
+  TypeSCFileCategoryConf
 } from "types/source-config";
-import { TypeSourceLayout, TypeSourceOriginPageConf } from "types/xml-result";
+import { TypeXMLSourceLayout, TypeXMLPageConf } from "types/xml-result";
 import { getImageData } from "common/utils";
 import { xml2jsonCompact } from "@/compiler/xml";
 import { SOURCE_CONFIG_DIR } from "server/core/path-config";
@@ -15,7 +15,7 @@ import XMLNode from "@/core/XMLNode";
 export default class Page {
   private rootDir: string;
   private pageFile: string;
-  private xmlData!: TypeSourceOriginPageConf;
+  private xmlData!: TypeXMLPageConf;
   constructor(pageFile: string, namespace: string) {
     this.pageFile = pageFile;
     this.rootDir = path.join(SOURCE_CONFIG_DIR, namespace);
@@ -48,7 +48,7 @@ export default class Page {
     );
   }
 
-  async getConfig(): Promise<TypeSourcePageInfoConf> {
+  async getConfig(): Promise<TypeSCPageInfoConf> {
     const xmlData = await this.ensureXmlData();
     const configNode = new XMLNode(xmlData).getFirstChildOf("config");
     return {
@@ -58,7 +58,7 @@ export default class Page {
     };
   }
 
-  async getCategoryList(): Promise<TypeSourceFileCategoryConf[]> {
+  async getCategoryList(): Promise<TypeSCFileCategoryConf[]> {
     const xmlData = await this.ensureXmlData();
     const categoryNodes = new XMLNode(xmlData).getChildrenOf("category");
     return categoryNodes.map(item => {
@@ -71,15 +71,15 @@ export default class Page {
     });
   }
 
-  async getSourceList(): Promise<TypeSourcePageSourceConf[]> {
+  async getSourceList(): Promise<TypeSCPageSourceConf[]> {
     const xmlData = await this.ensureXmlData();
-    const queue: Promise<TypeSourcePageSourceConf>[] =
+    const queue: Promise<TypeSCPageSourceConf>[] =
       xmlData.source?.map(async item => {
         const currentNode = new XMLNode(item);
         const name =
           currentNode.getAttribute("description") ||
           currentNode.getAttribute("name");
-        const layout: TypeSourceLayout = {};
+        const layout: TypeXMLSourceLayout = {};
         if (item.layout) {
           const layoutNode = currentNode.getFirstChildOf("layout");
           layout.x = layoutNode.getAttribute("x");
@@ -121,7 +121,7 @@ export default class Page {
   //   const xmlData = await this.ensureXmlData();
   // }
 
-  async getData(): Promise<TypeSourcePageConf> {
+  async getData(): Promise<TypeSCPageConf> {
     return {
       config: await this.getConfig(),
       preview: await this.getPreview(),

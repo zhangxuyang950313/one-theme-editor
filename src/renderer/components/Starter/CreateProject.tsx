@@ -6,7 +6,7 @@ import { remote } from "electron";
 
 import { isDev } from "@/core/constant";
 import {
-  useSelectedBrandConf,
+  useCurrentBrandConf,
   useSourceDescriptionList
 } from "@/hooks/sourceConfig";
 import { TypeProjectInfo } from "types/project";
@@ -27,7 +27,7 @@ type TypeProps = {
 };
 const CreateProject: React.FC<TypeProps> = props => {
   // 机型配置
-  const brandConf = useSelectedBrandConf();
+  const brandConf = useCurrentBrandConf();
   // 弹框控制
   const [modalVisible, setModalVisible] = useState(false);
   // 模板列表

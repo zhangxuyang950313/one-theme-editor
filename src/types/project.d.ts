@@ -1,5 +1,5 @@
 import { projectInfoConfig } from "renderer/config/editor";
-import { TypeSourceConfig, TypeUiVersion } from "./source-config";
+import { TypeSourceConfig } from "./source-config";
 import { TypeDatabase } from "./index";
 
 export type TypeBrandInfo = {
@@ -9,6 +9,12 @@ export type TypeBrandInfo = {
 
 export type TypeBrandConf = TypeBrandInfo & {
   sourceConfigs: string[];
+};
+
+// 版本信息
+export type TypeUiVersion = {
+  name: string;
+  code: string;
 };
 
 // 工程描述信息

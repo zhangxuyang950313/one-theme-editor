@@ -4,8 +4,11 @@ import express, { Express } from "express";
 import API from "common/api";
 import ERR_CODE from "renderer/core/error-code";
 import * as PATHS from "@/core/path-config";
-import { TypeUiVersion } from "types/source-config";
-import { TypeCreateProjectPayload, TypeProjectInfo } from "types/project";
+import {
+  TypeCreateProjectPayload,
+  TypeProjectInfo,
+  TypeUiVersion
+} from "types/project";
 import {
   compileSourceDescriptionList,
   readBrandConf
@@ -78,7 +81,7 @@ export default function registerService(service: Express): void {
       res.set({ "Content-Type": fileType.mime });
       res.send(buff);
     } catch (err) {
-      res.status(400).send(err.message);
+      res.send(err.message);
     }
   });
 

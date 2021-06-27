@@ -2,11 +2,11 @@ import React from "react";
 import styled from "styled-components";
 
 import { useCurrentPage } from "@/hooks/sourceConfig";
-import { useProjectImageUrl } from "@/hooks";
+import { useSourceImageUrl } from "@/hooks";
 
 const Preview: React.FC = () => {
   const [currentPage] = useCurrentPage();
-  const getImageURL = useProjectImageUrl();
+  const getImageURL = useSourceImageUrl();
   if (!currentPage) return null;
   return (
     <StylePreviewer>

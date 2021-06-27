@@ -10,16 +10,16 @@ type TypeExtendsElementCompact<A, E = { [x: string]: any }> = E &
   };
 
 // 模板配置原始信息
-export type TypeOriginSourceConf = Partial<{
+export type TypeXMLSourceConf = Partial<{
   description: TypeAttrsContent<Partial<{ name: string; version: string }>>[];
   preview: TypeAttrsContent<Partial<{ src: string }>>[];
-  uiVersion: TypeOriginUiVersionConf[];
-  module: TypeOriginModuleConf[];
+  uiVersion: TypeXMLUiVersionConf[];
+  module: TypeXMLModuleConf[];
 }>;
-export type TypeOriginUiVersionConf = TypeAttrsContent<
+export type TypeXMLUiVersionConf = TypeAttrsContent<
   Partial<{ name: string; code: string }>
 >;
-export type TypeOriginModuleConf = TypeAttrsContent<
+export type TypeXMLModuleConf = TypeAttrsContent<
   Partial<{ name: string; icon: string }>
 > &
   Partial<{ group: TypeOriginPageGroupConf[] }>;
@@ -38,7 +38,7 @@ export type TypeOriginPageGroupConf = TypeAttrsContent<
 // }>;
 
 // 页面配置原始信息
-export type TypeSourceLayout = TypeExtendsElementCompact<{
+export type TypeXMLSourceLayout = TypeExtendsElementCompact<{
   x?: string;
   y?: string;
   w?: string;
@@ -54,9 +54,9 @@ export type TypeSourceLayout = TypeExtendsElementCompact<{
 //     text: string;
 //   }
 // >;
-export type TypeSourceFrom = TypeExtendsElementCompact<{ src?: string }>;
-export type TypeSourceTo = TypeExtendsElementCompact<{ src?: string }>;
-export type TypeSourceOriginPageConf = TypeExtendsElementCompact<
+export type TypeXMLSourceFrom = TypeExtendsElementCompact<{ src?: string }>;
+export type TypeXMLSourceTo = TypeExtendsElementCompact<{ src?: string }>;
+export type TypeXMLPageConf = TypeExtendsElementCompact<
   never,
   {
     config?: TypeExtendsElementCompact<{
@@ -76,9 +76,9 @@ export type TypeSourceOriginPageConf = TypeExtendsElementCompact<
         name?: string;
       },
       {
-        layout?: TypeSourceLayout[];
-        from?: TypeSourceFrom[];
-        to?: TypeSourceTo[];
+        layout?: TypeXMLSourceLayout[];
+        from?: TypeXMLSourceFrom[];
+        to?: TypeXMLSourceTo[];
       }
     >[];
   }

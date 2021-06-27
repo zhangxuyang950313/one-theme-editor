@@ -5,7 +5,22 @@ import { TypeStoreState } from "@/store/index";
 // 数据
 const getSourceConfigState = (state: TypeStoreState) => state.sourceConfig;
 
-const getBaseState = (state: TypeStoreState) => state.base;
+// 获取当前资源配置信息
+export const getSourceConfig = createSelector(
+  getSourceConfigState,
+  state => state.currentConfig
+);
+
+// 获取当前资源配置根目录
+export const getSourceConfigRoot = createSelector(
+  (state: TypeStoreState) => state,
+  state => {
+    const dir = state.base.pathConfig?.SOURCE_CONFIG_DIR;
+    const ns = state.sourceConfig.currentConfig?.namespace;
+    if (!dir || !ns) return "";
+    return path.join(dir, ns);
+  }
+);
 
 // 获取厂商信息列表
 export const getBrandInfoList = createSelector(
@@ -14,20 +29,14 @@ export const getBrandInfoList = createSelector(
 );
 
 // 获取前选择的厂商信息
-export const getSelectedBrandConf = createSelector(
+export const getCurrentBrandConf = createSelector(
   getSourceConfigState,
   state => state.currentBrandConf
 );
 
-// 获取当前资源配置信息
-export const getCurrentSourceConfig = createSelector(
-  getSourceConfigState,
-  state => state.currentConfig
-);
-
 // 获取模块列表
-export const getCurrentModuleList = createSelector(
-  getCurrentSourceConfig,
+export const getSCModuleList = createSelector(
+  getSourceConfig,
   state => state?.modules || []
 );
 
@@ -47,14 +56,4 @@ export const getCurrentPageGroupList = createSelector(
 export const getCurrentPage = createSelector(
   getSourceConfigState,
   state => state.currentPage
-);
-
-// 获取当前资源配置根目录
-export const getCurrentSourceConfigRoot = createSelector(
-  (state: TypeStoreState) => state,
-  state =>
-    path.join(
-      state.base.pathConfig?.SOURCE_CONFIG_DIR || "",
-      state.sourceConfig.currentConfig?.namespace || ""
-    )
 );

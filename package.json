@@ -1,7 +1,7 @@
 {
-  "name": "electron-react-ts",
-  "version": "1.0.0",
-  "description": "Electron + React",
+  "name": "one-theme-editor",
+  "version": "0.0.1",
+  "description": "一个主题编辑器，就够了",
   "keywords": [],
   "author": {
     "name": "Sunny",

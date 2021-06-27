@@ -15,16 +15,14 @@ type TypeProps = {
 
 // 配置卡片
 const SourceConfigCard: React.FC<TypeProps> = props => {
-  const pathConfig = usePathConfig();
-  const getImageURL = useImageUrl();
   const { sourceDescription } = props;
-  const imgUrl = getImageURL(
-    path.join(
-      pathConfig?.SOURCE_CONFIG_DIR || "",
-      sourceDescription.namespace,
-      sourceDescription.preview
-    )
+  const pathConfig = usePathConfig();
+  const imageFilepath = path.join(
+    pathConfig?.SOURCE_CONFIG_DIR || "",
+    sourceDescription.namespace,
+    sourceDescription.preview
   );
+  const imgUrl = useImageUrl(imageFilepath);
   return (
     <StyleSourceConfigCard data-hoverable={props.hoverable}>
       <Card

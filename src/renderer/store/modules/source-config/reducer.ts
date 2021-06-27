@@ -4,8 +4,8 @@ import { TypeBrandConf } from "types/project";
 import {
   TypeSourceConfig,
   TypeSourceDescription,
-  TypeSourceModuleConf,
-  TypeSourcePageConf
+  TypeSCModuleConf,
+  TypeSCPageConf
 } from "types/source-config";
 import { TypeActions } from "./action";
 
@@ -15,8 +15,8 @@ export type TypeStates = {
   descriptionList: TypeSourceDescription[];
   currentConfig: TypeSourceConfig | null;
   currentBrandConf: TypeBrandConf | null;
-  currentModule: TypeSourceModuleConf | null;
-  currentPage: TypeSourcePageConf | null;
+  currentModule: TypeSCModuleConf | null;
+  currentPage: TypeSCPageConf | null;
 };
 
 // 通用的数据

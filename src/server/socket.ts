@@ -51,5 +51,6 @@ export default function registerSocket(server: http.Server): void {
 
     // 监听 image 素材
     // connecter.connect(SOCKET_EVENT.IMAGE_MAPPER_LIST, syncImageMapperList);
+    // connecter.connect(SOCKET_EVENT.WATCH_FILE);
   });
 }

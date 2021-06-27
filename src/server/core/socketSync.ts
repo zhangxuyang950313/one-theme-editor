@@ -1,13 +1,15 @@
 import path from "path";
-import fse from "fs-extra";
 import _ from "lodash";
+import fse from "fs-extra";
+import chokidar from "chokidar";
 import {
   asyncMap,
   filenameIsImage,
   getDirAllFiles,
   getFileMD5,
   getImageMapper,
-  union
+  union,
+  watchProjectDir
 } from "common/utils";
 import {
   delProjectImageMapper,
@@ -83,3 +85,14 @@ export async function syncImageMapperList(
     handleSync();
   });
 }
+
+// /**
+//  *
+//  */
+// export async function syncFileList(pathname: string) {
+//   chokidar
+//     .watch(pathname,{cwd:pathname})
+//     .on("add", pathname => {})
+//     .on("change", pathname => {})
+//     .on("unlink", pathname => {});
+// }

@@ -10,8 +10,9 @@
 #### 关于 webpack@4.x.x 版本
 目前 webpack 5 还有不少坑，暂时锁定 webpack 4 版本使用
 
-#### 本地 node 版本 >=12.0.0
-image-size 包的限制
+#### 本地 node 版本 >=14.0.0
+image-size 包的限制 >=12
+electron-builder 限制 >=14
 
 
 #### 安装

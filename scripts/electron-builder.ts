@@ -1,7 +1,7 @@
 import { Configuration } from 'electron-builder'
 const buildOptions:Configuration =  {
-  productName: "electron-react-ts",
-  appId: "com.electron.react-ts",
+  productName: "one-theme-editor",
+  appId: "com.editor.theme.TypeSourceOriginPageConf",
   copyright: "sunny-20200321",
   extends: null,
   compression: "store",

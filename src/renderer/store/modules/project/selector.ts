@@ -20,7 +20,7 @@ export const getProjectUUID = createSelector(
 );
 
 // 获取工程本地路径
-export const getProjectLocalPath = createSelector(
+export const getProjectRoot = createSelector(
   getProjectState,
   state => state.projectRoot || null
 );

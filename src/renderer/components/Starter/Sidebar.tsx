@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import { useBrandConfList, useSelectedBrandConf } from "@/hooks/sourceConfig";
+import { useBrandConfList, useCurrentBrandConf } from "@/hooks/sourceConfig";
 
 import { Menu } from "antd";
 import { useDispatch } from "react-redux";
@@ -11,7 +11,7 @@ import TopInfo from "./TopInfo";
 // 欢迎页侧边栏
 const Sidebar: React.FC = props => {
   const brandConfList = useBrandConfList();
-  const currentBrandConf = useSelectedBrandConf();
+  const currentBrandConf = useCurrentBrandConf();
   const dispatch = useDispatch();
 
   const renderMenu = () => {

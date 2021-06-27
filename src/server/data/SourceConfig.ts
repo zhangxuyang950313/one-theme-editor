@@ -2,9 +2,9 @@ import path from "path";
 import { asyncMap } from "common/utils";
 import {
   TypeSourceConfig,
-  TypeSourceModuleConf,
-  TypeSourcePageGroupConf,
-  TypeSourcePageConf
+  TypeSCModuleConf,
+  TypeSCPageGroupConf,
+  TypeSCPageConf
 } from "types/source-config";
 import { TypeOriginPageGroupConf, TypeOriginPageConf } from "types/xml-result";
 import Page from "@/data/Page";
@@ -16,7 +16,7 @@ export default class SourceConfig extends SourceDescription {
   // 页面数据
   private async getPages(
     data: TypeOriginPageConf[]
-  ): Promise<TypeSourcePageConf[]> {
+  ): Promise<TypeSCPageConf[]> {
     // 这里是在选择模板版本后得到的目标模块目录
     return asyncMap(data, item => {
       const pageNode = new XMLNode(item);
@@ -32,7 +32,7 @@ export default class SourceConfig extends SourceDescription {
   // 页面分组数据
   private async getPageGroup(
     data: TypeOriginPageGroupConf[]
-  ): Promise<TypeSourcePageGroupConf[]> {
+  ): Promise<TypeSCPageGroupConf[]> {
     return asyncMap(data, async item => {
       const groupNode = new XMLNode(item);
       return {
@@ -43,12 +43,12 @@ export default class SourceConfig extends SourceDescription {
   }
 
   // 模块数据
-  async getModules(): Promise<TypeSourceModuleConf[]> {
+  async getModules(): Promise<TypeSCModuleConf[]> {
     const sourceData = await super.ensureXmlData();
     if (!Array.isArray(sourceData.module)) return [];
     return asyncMap(sourceData.module, async (item, index) => {
       const moduleNode = new XMLNode(item);
-      const result: TypeSourceModuleConf = {
+      const result: TypeSCModuleConf = {
         index,
         name: moduleNode.getAttribute("name"),
         icon: moduleNode.getAttribute("icon"),

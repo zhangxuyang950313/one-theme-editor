@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { socketImageMapperList } from "@/api/socket";
 import { apiGetProjectByUUID, apiGetProjectList } from "@/api/index";
 import { useAxiosCanceler } from "@/hooks/index";
-import { useSelectedBrandConf } from "@/hooks/sourceConfig";
+import { useCurrentBrandConf } from "@/hooks/sourceConfig";
 import {
   ActionSetCurrentBrand,
   ActionSetCurrentPage,
@@ -15,7 +15,7 @@ import {
 } from "@/store/modules/project/action";
 import {
   getProjectData,
-  getProjectLocalPath
+  getProjectRoot
 } from "@/store/modules/project/selector";
 import { TypeProjectDataDoc, TypeProjectStateInStore } from "types/project";
 
@@ -28,7 +28,7 @@ type TypeRefreshFunc = () => Promise<void>;
 type TypeReturnData = [TypeProjectDataDoc[], TypeRefreshFunc, TypeIsLoading];
 export function useProjectList(): TypeReturnData {
   // 使用机型进行隔离查询
-  const selectedBrand = useSelectedBrandConf();
+  const selectedBrand = useCurrentBrandConf();
   const [value, updateValue] = useState<TypeProjectDataDoc[]>([]);
   const [loading, updateLoading] = useState<boolean>(true);
   const registerCancelToken = useAxiosCanceler();
@@ -129,7 +129,7 @@ export function useProjectData(): TypeProjectStateInStore | null {
 
 // 获取当前工程目录
 export function useProjectRoot(): string | null {
-  return useSelector(getProjectLocalPath);
+  return useSelector(getProjectRoot);
 }
 
 // // 添加图片资源映射

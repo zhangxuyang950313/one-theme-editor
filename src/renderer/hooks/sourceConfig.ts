@@ -17,34 +17,46 @@ import {
   ActionSetSourceDescriptionList
 } from "@/store/modules/source-config/action";
 import {
-  getSelectedBrandConf,
+  getCurrentBrandConf,
   getCurrentModule,
   getCurrentPage,
-  getCurrentModuleList,
+  getSCModuleList,
   getCurrentPageGroupList,
-  getCurrentSourceConfigRoot
+  getSourceConfigRoot,
+  getSourceConfig
 } from "@/store/modules/source-config/selector";
 
 import {
   TypeSourceConfig,
   TypeSourceDescription,
-  TypeSourcePageGroupConf,
-  TypeSourceModuleConf,
-  TypeSourcePageConf
+  TypeSCPageGroupConf,
+  TypeSCModuleConf,
+  TypeSCPageConf
 } from "types/source-config";
 import { TypeBrandConf } from "types/project";
 
 import ERR_CODE from "@/core/error-code";
 import { useAsyncUpdater } from "./index";
 
+// 获取当前资源配置数据
+export function useSourceConfig(): TypeSourceConfig | null {
+  return useSelector(getSourceConfig);
+}
+
 // 获取当前资源配置目录
 export function useSourceConfigRoot(): string | null {
-  return useSelector(getCurrentSourceConfigRoot);
+  return useSelector(getSourceConfigRoot);
+}
+
+// 获取当前资源配置命名空间
+export function useNamespace(): string | null {
+  const sourceConfig = useSourceConfig();
+  return sourceConfig?.namespace || null;
 }
 
 // 当前选择的厂商信息
-export function useSelectedBrandConf(): TypeBrandConf | null {
-  return useSelector(getSelectedBrandConf);
+export function useCurrentBrandConf(): TypeBrandConf | null {
+  return useSelector(getCurrentBrandConf);
 }
 
 // 获取配置的厂商列表
@@ -73,7 +85,7 @@ export function useBrandConfList(): TypeBrandConf[] {
 export function useSourceDescriptionList(): [TypeSourceDescription[], boolean] {
   const [value, updateValue] = useState<TypeSourceDescription[]>([]);
   const [loading, updateLoading] = useState(true);
-  const brandConf = useSelectedBrandConf();
+  const brandConf = useCurrentBrandConf();
   const dispatch = useDispatch();
   useLayoutEffect(() => {
     if (!brandConf) return;
@@ -99,7 +111,7 @@ export function useSourceDescriptionList(): [TypeSourceDescription[], boolean] {
 export function useSourceConfigList(): [TypeSourceConfig[], boolean] {
   const [value, updateValue] = useState<TypeSourceConfig[]>([]);
   const [loading, updateLoading] = useState(true);
-  const brandConf = useSelectedBrandConf();
+  const brandConf = useCurrentBrandConf();
   const dispatch = useDispatch();
   useLayoutEffect(() => {
     if (!brandConf) return;
@@ -120,15 +132,15 @@ export function useSourceConfigList(): [TypeSourceConfig[], boolean] {
   return [value, loading];
 }
 
-// 当前模板模块列表
-export function useCurrentModuleList(): TypeSourceModuleConf[] {
-  return useSelector(getCurrentModuleList);
+// 当前配置模块列表
+export function useCurrentModuleList(): TypeSCModuleConf[] {
+  return useSelector(getSCModuleList);
 }
 
 // 获取当前选择的模块
 export function useCurrentModule(): [
-  TypeSourceModuleConf | null,
-  (data: TypeSourceModuleConf) => void
+  TypeSCModuleConf | null,
+  (data: TypeSCModuleConf) => void
 ] {
   const dispatch = useDispatch();
   return [
@@ -138,14 +150,14 @@ export function useCurrentModule(): [
 }
 
 // 当前选择的模块页面组列表
-export function useCurrentPageGroupList(): TypeSourcePageGroupConf[] {
+export function useCurrentPageGroupList(): TypeSCPageGroupConf[] {
   return useSelector(getCurrentPageGroupList);
 }
 
 // 获取当前选择的页面
 export function useCurrentPage(): [
-  TypeSourcePageConf | null,
-  (data: TypeSourcePageConf) => void
+  TypeSCPageConf | null,
+  (data: TypeSCPageConf) => void
 ] {
   const dispatch = useDispatch();
   return [

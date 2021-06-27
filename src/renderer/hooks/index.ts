@@ -1,15 +1,16 @@
 import path from "path";
+import { useSourceConfigRoot } from "@/hooks/sourceConfig";
+import chokidar from "chokidar";
+import { Canceler } from "axios";
 import { useLayoutEffect, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Canceler } from "axios";
 import { InputProps, message } from "antd";
-
-import { TypeImagePathLike, TypePathConfig } from "types/index";
-import { getPathConfig, getServerPort } from "@/store/modules/base/selector";
-import { getProjectLocalPath } from "@/store/modules/project/selector";
-import { getCurrentSourceConfig } from "@/store/modules/source-config/selector";
 import { apiGetPathConfig } from "@/api";
+import { useProjectRoot } from "@/hooks/project";
+import { getPathConfig, getServerPort } from "@/store/modules/base/selector";
 import { ActionSetPathConfig } from "@/store/modules/base/action";
+import { TypePathConfig } from "types/index";
+import { useSourceConfig } from "./sourceConfig";
 
 // 设置页面标题
 export enum presetTitle {
@@ -91,39 +92,99 @@ export function useInitEditor(): boolean {
   return loading;
 }
 
-// 生成绝对正确路径的图片 url
-export function useImageUrl(): (x: TypeImagePathLike) => TypeImagePathLike {
+// 返回图片前缀
+export function useImagePrefix(): string {
   const host = useServerHost();
-  return file => {
-    return `${host}/image?file=${file}`;
-  };
+  return `${host}/image?file=`;
+}
+
+/**
+ * 将本地路径输出为图片服务路径用于展示
+ * @param filepath 本地路径
+ * @returns
+ */
+export function useImageUrl(filepath?: string): string {
+  const prefix = useImagePrefix();
+  return filepath ? prefix + filepath : "";
 }
 
 // 生成用于工程显示的图片 url
-export function useProjectImageUrl(): (
-  x: TypeImagePathLike
-) => TypeImagePathLike {
-  const host = useServerHost();
-  const projectRoot = useSelector(getProjectLocalPath);
-  return relative => {
-    const file = path.join(projectRoot || "", relative || "");
-    return `${host}/image?file=${file}`;
-  };
+export function useProjectImageUrl(): (x: string) => string {
+  const prefix = useImagePrefix();
+  const projectRoot = useProjectRoot();
+  return relative => prefix + path.join(projectRoot || "", relative || "");
 }
 
 // 生成用于配置图片显示的 url
-export function useSourceImageUrl(): (
-  x: TypeImagePathLike
-) => TypeImagePathLike {
-  const host = useServerHost();
-  const pathConfig = usePathConfig();
-  const currentSourceConfig = useSelector(getCurrentSourceConfig);
+export function useSourceImageUrl(): (x: string) => string {
+  const prefix = useImagePrefix();
+  const sourceConfigRoot = useSourceConfigRoot();
   return relative => {
-    const file = path.join(
-      pathConfig?.SOURCE_CONFIG_DIR || "",
-      currentSourceConfig?.namespace || "",
-      relative
-    );
-    return `${host}/image?file=${file}`;
+    if (!sourceConfigRoot || !relative) return "";
+    return prefix + path.join(sourceConfigRoot, relative);
+  };
+}
+
+// 监听文件，初始化或删除返回空字符串
+export enum FILE_STATUS {
+  ADD = "add",
+  CHANGE = "change",
+  UNLINK = "unlink"
+}
+export function useWatchFile(
+  file: string | string[]
+): { event: FILE_STATUS; file: string } {
+  const [status, setStatus] = useState({
+    event: FILE_STATUS.ADD,
+    file: Array.isArray(file) ? file[0] : file
+  });
+  useEffect(() => {
+    if (!file) return;
+    console.log("watch", file);
+    const watcher = chokidar
+      .watch(file)
+      .on(FILE_STATUS.ADD, p => {
+        console.log("add", p);
+        setStatus({
+          event: FILE_STATUS.ADD,
+          file: p
+        });
+      })
+      .on("change", p => {
+        console.log("change", p);
+        setStatus({
+          event: FILE_STATUS.CHANGE,
+          file: p
+        });
+      })
+      .on("unlink", p => {
+        console.log("unlink", p);
+        setStatus({
+          event: FILE_STATUS.UNLINK,
+          file: p
+        });
+      });
+    return () => {
+      console.log("unwatch", file);
+      watcher.unwatch(file);
+      watcher.close();
+    };
+  }, []);
+  return status;
+}
+
+export function useWatchProjectFile(
+  relative: string | string[]
+): ReturnType<typeof useWatchFile> {
+  const projectRoot = useProjectRoot();
+  const files = Array.isArray(relative)
+    ? relative.flatMap(item =>
+        projectRoot ? [path.join(projectRoot, item)] : []
+      )
+    : [relative];
+  const status = useWatchFile(files);
+  return {
+    event: status.event,
+    file: projectRoot ? path.join(projectRoot, status.file) : ""
   };
 }

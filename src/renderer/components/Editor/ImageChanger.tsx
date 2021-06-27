@@ -16,23 +16,23 @@ import {
 
 // script
 import { apiCopyFile, apiDeleteFile } from "@/api";
-import { useProjectImageUrl, useSourceImageUrl } from "@/hooks";
+import { useImagePrefix } from "@/hooks";
 import { useProjectRoot } from "@/hooks/project";
 import { useSourceConfigRoot } from "@/hooks/sourceConfig";
-import { TypeSourcePageSourceConf } from "types/source-config";
+import { TypeSCPageSourceConf } from "types/source-config";
 import ERR_CODE from "@/core/error-code";
 
 // 图片素材展示
 type TypePropsOfShowImage = {
   srcUrl?: string;
   onClick?: () => void;
-  // showHandler 时就要强制传入 target
+  // showHandler 时就要强制传入 to 列表
 } & (
-  | { showHandler: true; target: string[] }
-  | { showHandler?: false; target?: string[] }
+  | { showHandler: true; to: string[] }
+  | { showHandler?: false; to?: string[] }
 );
 function ImageShower(props: TypePropsOfShowImage) {
-  const { srcUrl, showHandler, target, onClick } = props;
+  const { srcUrl, showHandler, to, onClick } = props;
   const projectRoot = useProjectRoot();
   const Content: React.FC = () => {
     return (
@@ -55,9 +55,8 @@ function ImageShower(props: TypePropsOfShowImage) {
       <DeleteOutlined
         className="press delete"
         onClick={() => {
-          if (!target || !projectRoot) return;
-          target.forEach(item => {
-            // const file = path.join(projectRoot, item);
+          if (!to || !projectRoot) return;
+          to.forEach(item => {
             console.log(`删除图标: ${item}`);
             apiDeleteFile(item);
           });
@@ -151,32 +150,46 @@ const StyleImageBackground = styled.div<{ srcUrl?: string }>`
   }
 `;
 
-const ImageChanger: React.FC<TypeSourcePageSourceConf> = sourceConf => {
+const ImageChanger: React.FC<TypeSCPageSourceConf> = sourceConf => {
   const projectRoot = useProjectRoot();
   const sourceConfigRoot = useSourceConfigRoot();
-  const projectImgURL = useProjectImageUrl();
-  const sourceImgURL = useSourceImageUrl();
-  const { from, to, name } = sourceConf;
+  const imagePrefix = useImagePrefix();
 
-  if (!from) return null;
+  const { from, to } = sourceConf;
+  if (!sourceConfigRoot || !from || !projectRoot) return null;
+
+  // 素材映射绝对路径列表
+  const absoluteToList = to
+    .map(item => path.join(projectRoot || "", item))
+    .filter(fse.existsSync);
+
+  // 至少拿出一个可用于展示的图片本地路径
+  const getAbsoluteTo = () => {
+    const target = (to || []).filter(Boolean)[0];
+    return target ? path.join(projectRoot, target) : "";
+  };
+  const absoluteTo = getAbsoluteTo();
+
+  // 素材绝对路径
+  const absoluteFrom = path.join(sourceConfigRoot, from.pathname);
+
   /**
    * 点击原始素材，mac 支持小窗预览
-   * @param from
-   * @param description
+   * @param filepath
+   * @param name
    */
-  const handlePreviewFile = (from: string, description: string) => {
+  const previewFile = (filepath: string, name: string) => {
     if (process.platform !== "darwin") return;
-    const currentWindow = remote.getCurrentWindow();
-    currentWindow.previewFile(from, description);
+    remote.getCurrentWindow().previewFile(filepath, name);
   };
   // 点击素材图片
-  const handleShowImageFile = (target: string) => {
+  const showImageFileInFolder = (target: string) => {
     remote.shell.showItemInFolder(target);
   };
   // 中间的快速使用默认素材按钮
-  const handleUseDefaultResource = () => {
+  const copyDefaultImage = () => {
     if (!(Array.isArray(to) && to.length > 0)) {
-      notification.warn({ message: `"${name}"${ERR_CODE[3006]}` });
+      notification.warn({ message: `"${sourceConf.name}"${ERR_CODE[3006]}` });
       return;
     }
     if (!sourceConfigRoot) {
@@ -197,47 +210,43 @@ const ImageChanger: React.FC<TypeSourcePageSourceConf> = sourceConf => {
       );
     });
   };
-  const { width, height, size } = from;
-  const targetImage = to?.[0];
-  const targetList = to
-    .map(item => path.join(projectRoot || "", item))
-    .filter(fse.existsSync);
   return (
     <StyleImageChanger>
       {/* 图片描述 */}
       <div className="text description">
-        {name}
-        {width && height ? (
+        {sourceConf.name}
+        {from.width && from.height ? (
           <span className="image-size">
-            ({`${width}×${height}`}
-            {size && <span> | {(size / 1024).toFixed(1)}kb</span>})
+            ({`${from.width}×${from.height}`}
+            {from.size && <span> | {(from.size / 1024).toFixed(1)}kb</span>})
           </span>
         ) : null}
       </div>
       {to.map(item => (
-        <p key={item} className="text filename">
+        <p key={item} className="text pathname">
           {item || from.filename || ""}
         </p>
       ))}
       <div className="edit-wrapper">
         <div className="left">
           <ImageShower
-            srcUrl={sourceImgURL(from.pathname) || ""}
+            srcUrl={imagePrefix + absoluteFrom}
             onClick={() => {
-              handlePreviewFile(projectImgURL(from.pathname), name);
+              if (process.platform !== "darwin") {
+                showImageFileInFolder(absoluteFrom);
+              } else {
+                previewFile(absoluteFrom, sourceConf.name);
+              }
             }}
           />
         </div>
-        <RightCircleOutlined
-          className="center"
-          onClick={handleUseDefaultResource}
-        />
+        <RightCircleOutlined className="center" onClick={copyDefaultImage} />
         <div className="right">
           <ImageShower
             showHandler
-            srcUrl={projectImgURL(targetImage)}
-            target={targetList}
-            onClick={() => handleShowImageFile(to?.[0])}
+            srcUrl={imagePrefix + absoluteTo}
+            to={absoluteToList}
+            onClick={() => showImageFileInFolder(absoluteTo)}
           />
         </div>
       </div>
@@ -264,7 +273,7 @@ const StyleImageChanger = styled.div`
       color: ${({ theme }) => theme["@text-color"]};
     }
   }
-  .filename {
+  .pathname {
     font-size: 10px;
     color: ${({ theme }) => theme["@text-color-secondary"]};
     user-select: text;

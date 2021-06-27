@@ -1,5 +1,5 @@
-import { TypeImageData } from "./project";
-import { TypeSourceLayout } from "./xml-result";
+import { TypeImageData, TypeUiVersion } from "./project";
+import { TypeXMLSourceLayout } from "./xml-result";
 import { TypeImagePathLike } from "./index";
 
 // 资源预览配置
@@ -14,56 +14,50 @@ export type TypeSourceDescription = {
 
 // 资源配置
 export type TypeSourceConfig = Omit<TypeSourceDescription, "key"> & {
-  modules: TypeSourceModuleConf[];
-};
-
-// 版本信息
-export type TypeUiVersion = {
-  name: string;
-  code: string;
+  modules: TypeSCModuleConf[];
 };
 
 // 预览模块
-export type TypeSourceModuleConf = {
+export type TypeSCModuleConf = {
   index: number;
   name: string;
   icon: string;
-  groups: TypeSourcePageGroupConf[];
+  groups: TypeSCPageGroupConf[];
 };
 
 // 预览页面组
-export type TypeSourcePageGroupConf = {
+export type TypeSCPageGroupConf = {
   name: string;
-  pages: TypeSourcePageConf[];
+  pages: TypeSCPageConf[];
 };
 
 // 预览页面信息
-export type TypeSourcePageInfoConf = {
+export type TypeSCPageInfoConf = {
   version: string;
   description: string;
   screenWidth: string;
 };
 
 // 资源文件类型
-export type TypeSourceFileCategoryConf = {
+export type TypeSCFileCategoryConf = {
   tag: string;
   description: string;
   type: "image" | "xml" | "" | string;
 };
 
 // 预览页面资源素材配置
-export type TypeSourcePageSourceConf = {
+export type TypeSCPageSourceConf = {
   name: string;
-  layout: TypeSourceLayout; // 预览所需坐标
+  layout: TypeXMLSourceLayout; // 预览所需坐标
   from: (TypeImageData & { pathname: TypeImagePathLike }) | null;
   to: string[];
 };
 
 // 预览单个页面配置
-export type TypeSourcePageConf = {
-  config: TypeSourcePageInfoConf;
+export type TypeSCPageConf = {
+  config: TypeSCPageInfoConf;
   preview: TypeImagePathLike;
-  category: TypeSourceFileCategoryConf[];
-  source: TypeSourcePageSourceConf[];
+  category: TypeSCFileCategoryConf[];
+  source: TypeSCPageSourceConf[];
   xml: any[];
 };
