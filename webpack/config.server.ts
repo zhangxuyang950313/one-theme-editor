@@ -35,6 +35,10 @@ const config: webpack.ConfigurationFactory = (env, args) => {
       },
       extensions
     },
+
+    externals: {
+      fsevents: "fsevents"
+    },
     module: {
       rules: [
         {

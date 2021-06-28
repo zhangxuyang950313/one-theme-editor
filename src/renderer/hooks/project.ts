@@ -1,6 +1,5 @@
 import { useLayoutEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { socketImageMapperList } from "@/api/socket";
 import { apiGetProjectByUUID, apiGetProjectList } from "@/api/index";
 import { useAxiosCanceler } from "@/hooks/index";
 import { useCurrentBrandConf } from "@/hooks/sourceConfig";
@@ -9,10 +8,7 @@ import {
   ActionSetCurrentPage,
   ActionSetSourceConfig
 } from "@/store/modules/source-config/action";
-import {
-  ActionSetImageMapperList,
-  ActionSetProjectData
-} from "@/store/modules/project/action";
+import { ActionSetProjectData } from "@/store/modules/project/action";
 import {
   getProjectData,
   getProjectRoot
@@ -79,7 +75,7 @@ export function useLoadProjectByUUID(
 ): [TypeProjectDataDoc | null, boolean] {
   const [project, updateProject] = useState<TypeProjectDataDoc | null>(null);
   const [loading, updateLoading] = useState(true);
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   // const registerCancelToken = useAxiosCanceler();
 
   useLayoutEffect(() => {
@@ -99,11 +95,6 @@ export function useLoadProjectByUUID(
       .then(project => {
         console.log(`获取工程: ${uuid}`, project);
         updateProject(project);
-        // 注册 imageMapperList socket
-        socketImageMapperList(uuid, imageMapperList => {
-          console.log("update imageMapperList: ", imageMapperList);
-          dispatch(ActionSetImageMapperList(imageMapperList));
-        });
       })
       .catch(err => {
         console.warn(`${ERR_CODE[2005]}: ${uuid}`, err);

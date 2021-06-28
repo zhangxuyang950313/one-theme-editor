@@ -1,4 +1,3 @@
-import path from "path";
 import fse from "fs-extra";
 import React, { useEffect, useRef, useState } from "react";
 import { v4 as UUID } from "uuid";
@@ -113,7 +112,8 @@ const CreateProject: React.FC<TypeProps> = props => {
           //   message.info({ content: ERR_CODE[3002] });
           //   init();
           // }
-          onChange(path.join(remote.app.getPath("desktop"), "test"));
+          // onChange(path.join(remote.app.getPath("desktop"), "test"));
+          onChange("/Users/zhangxuyang/mine/theme-test");
         }, []);
         const [projectRoot, setLocalPath] = useState<string>();
         const onChange = (val: string) => {

@@ -37,12 +37,13 @@ export function socketProject(
 }
 
 // 注册同步图片映射 socket
-export function socketImageMapperList(
+export function socketWatchFile(
   uuid: string,
+  list: string[],
   callback: (data: TypeImageMapper[]) => void
-): (uuid: string) => typeof socket {
-  return registerSocketOf(SOCKET_EVENT.IMAGE_MAPPER_LIST, {
-    param: uuid,
+): (data: { uuid: string; list: string[] }) => typeof socket {
+  return registerSocketOf(SOCKET_EVENT.WATCH_FILE, {
+    param: { uuid, list },
     callback
   });
 }

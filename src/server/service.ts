@@ -1,3 +1,4 @@
+import { message } from "antd";
 import fse from "fs-extra";
 import FileType from "file-type";
 import express, { Express } from "express";
@@ -268,23 +269,33 @@ export default function registerService(service: Express): void {
   service.post<any, any, { from: string; to: string }>(
     API.COPY_FILE,
     (req, res) => {
-      const { from, to } = req.body;
-      if (!fse.existsSync(from)) {
-        return res.status(400).send(result.fail(ERR_CODE[4003]));
+      try {
+        const { from, to } = req.body;
+        if (!fse.existsSync(from)) {
+          res.status(400).send(result.fail(ERR_CODE[4003]));
+          return;
+        }
+        fse.copySync(from, to);
+        // fse.createReadStream(from).pipe(fse.createWriteStream(to)).destroy();
+        res.send(result.success());
+      } catch (err) {
+        console.log(err);
+        res.status(400).send(result.fail(err.message));
       }
-      fse.copyFileSync(from, to);
-      return res.send(result.success());
     }
   );
   // 删除本地文件
   service.post<any, any, { file: string }>(API.DELETE_FILE, (req, res) => {
-    const { file } = req.body;
-    if (!fse.existsSync(file)) {
-      return res.status(400).send(result.fail(ERR_CODE[4003]));
+    try {
+      const { file } = req.body;
+      if (!fse.existsSync(file)) {
+        res.status(400).send(result.fail(ERR_CODE[4003]));
+        return;
+      }
+      fse.unlinkSync(file);
+      res.send(result.success());
+    } catch (err) {
+      res.status(400).send(result.fail(err.message));
     }
-    fse
-      .remove(file)
-      .then(() => res.send(result.success()))
-      .catch(err => res.status(400).send(result.fail(err)));
   });
 }

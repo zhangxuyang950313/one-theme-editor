@@ -13,7 +13,7 @@ export async function readBrandConf(): Promise<TypeBrandConf[]> {
   if (!fse.existsSync(SOuRCE_CONFIG_FILE)) {
     throw new Error(ERR_CODE[4003]);
   }
-  return JSON.parse(fse.readFileSync(SOuRCE_CONFIG_FILE, "utf-8"));
+  return fse.readJsonSync(SOuRCE_CONFIG_FILE);
 }
 
 /**

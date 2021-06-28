@@ -1,4 +1,5 @@
 import http from "http";
+import logSymbols from "log-symbols";
 import express from "express";
 import { PORT, HOST } from "common/config";
 import registerService from "./service";
@@ -15,5 +16,8 @@ registerService(service);
 registerSocket(server);
 
 server.listen(PORT, function () {
-  console.log("应用实例，访问地址为 http://%s:%s", HOST, PORT);
+  console.log(
+    logSymbols.success,
+    `应用实例，访问地址为 http://${HOST}:${PORT}`
+  );
 });

@@ -1,17 +1,18 @@
 // 图片替换单元组件
 import path from "path";
-import fse from "fs-extra";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { remote } from "electron";
 
 // components
 import styled from "styled-components";
-import { message, notification } from "antd";
+import { notification } from "antd";
 import {
   RightCircleOutlined,
   DeleteOutlined,
   FormOutlined,
-  ImportOutlined
+  ImportOutlined,
+  CheckCircleTwoTone,
+  CloseCircleTwoTone
 } from "@ant-design/icons";
 
 // script
@@ -24,19 +25,24 @@ import ERR_CODE from "@/core/error-code";
 
 // 图片素材展示
 type TypePropsOfShowImage = {
-  srcUrl?: string;
+  filepath?: string;
   onClick?: () => void;
   // showHandler 时就要强制传入 to 列表
 } & (
-  | { showHandler: true; to: string[] }
-  | { showHandler?: false; to?: string[] }
+  | { showHandler: true; absoluteToList: string[] }
+  | { showHandler?: false; absoluteToList?: string[] }
 );
 function ImageShower(props: TypePropsOfShowImage) {
-  const { srcUrl, showHandler, to, onClick } = props;
-  const projectRoot = useProjectRoot();
+  const { filepath, showHandler, absoluteToList, onClick } = props;
+  const imagePrefix = useImagePrefix();
+  const [count, updateCount] = useState(0);
+  const url = filepath ? `${imagePrefix + filepath}&count=${count}` : "";
+  useEffect(() => {
+    updateCount(count + 1);
+  }, [filepath]);
   const Content: React.FC = () => {
     return (
-      <StyleImageBackground srcUrl={srcUrl}>
+      <StyleImageBackground srcUrl={url}>
         <div
           className="preview"
           can-click={String(!!onClick)}
@@ -55,10 +61,11 @@ function ImageShower(props: TypePropsOfShowImage) {
       <DeleteOutlined
         className="press delete"
         onClick={() => {
-          if (!to || !projectRoot) return;
-          to.forEach(item => {
-            console.log(`删除图标: ${item}`);
-            apiDeleteFile(item);
+          if (!Array.isArray(absoluteToList)) return;
+          absoluteToList.forEach((item, index) => {
+            setTimeout(() => {
+              apiDeleteFile(item);
+            }, index * 100);
           });
         }}
       />
@@ -66,8 +73,8 @@ function ImageShower(props: TypePropsOfShowImage) {
     return (
       <div className="handler">
         {ImportButton}
-        {srcUrl && EditButton}
-        {srcUrl && DeleteButton}
+        {filepath && EditButton}
+        {filepath && DeleteButton}
       </div>
     );
   };
@@ -152,26 +159,25 @@ const StyleImageBackground = styled.div<{ srcUrl?: string }>`
 
 const ImageChanger: React.FC<TypeSCPageSourceConf> = sourceConf => {
   const { from, to } = sourceConf;
-  const sourceConfigRoot = useSourceConfigRoot();
   const projectRoot = useProjectRoot();
-  const imagePrefix = useImagePrefix();
-  const absoluteToList = useToListWatcher(to.filter(Boolean));
-
-  console.log({ absoluteToList });
+  const sourceConfigRoot = useSourceConfigRoot();
+  const newRelativeToList = useToListWatcher(to);
 
   if (!sourceConf || !from || !sourceConfigRoot || !projectRoot) return null;
 
   // 素材绝对路径
   const absoluteFrom = path.join(sourceConfigRoot, from.relativePath);
 
-  // 筛选一个有效的用于展示
-  const absoluteToForShow = absoluteToList.filter(Boolean)[0];
+  // 目标素材绝对路径列表
+  const absoluteToLIst = to.map(item => path.join(projectRoot, item));
 
-  // // 素材映射绝对路径列表
-  // const absoluteToList = to
-  //   .filter(Boolean)
-  //   .map(item => path.join(projectRoot, item))
-  //   .filter(fse.existsSync);
+  // 更新后的模板绝对路径列表
+  const newAbsoluteToList = newRelativeToList.map(item =>
+    path.join(projectRoot, item)
+  );
+
+  // 筛选一个有效的用于展示
+  const absoluteToForShow = newAbsoluteToList[0] || "";
 
   /**
    * 点击原始素材，mac 支持小窗预览
@@ -192,22 +198,10 @@ const ImageChanger: React.FC<TypeSCPageSourceConf> = sourceConf => {
       notification.warn({ message: `"${sourceConf.name}"${ERR_CODE[3006]}` });
       return;
     }
-    if (!sourceConfigRoot) {
-      message.warn({ content: ERR_CODE[3008] });
-      return;
-    }
-    to.forEach(target => {
-      const err = () =>
-        notification.warn({ message: `${ERR_CODE[4004]}(${from.filename})` });
-      if (!projectRoot) {
-        console.warn("projectRoot 为空");
-        err();
-        return;
-      }
-      apiCopyFile(
-        path.join(sourceConfigRoot, from.relativePath),
-        path.join(projectRoot, target)
-      );
+    absoluteToLIst.forEach((target, index) => {
+      // setTimeout(() => {
+      apiCopyFile(absoluteFrom, target);
+      // }, index * 100);
     });
   };
   return (
@@ -223,23 +217,31 @@ const ImageChanger: React.FC<TypeSCPageSourceConf> = sourceConf => {
         ) : null}
       </div>
       {to.map(relativePath => {
-        const relativeList = absoluteToList.map(item =>
-          path.relative(projectRoot, item)
-        );
+        const basename = path.basename(relativePath);
+        // const hasIt = fse.existsSync(path.join(projectRoot, relativePath));
+        const hasIt = new Set(newRelativeToList).has(relativePath);
+        const absPath = path.join(projectRoot, relativePath);
         return (
           <p
-            key={relativePath}
-            className="text to-relative-path"
-            data-exists={String(relativeList.includes(relativePath))}
+            key={basename}
+            className="text to-basename"
+            data-exists={String(hasIt)}
+            onClick={() => hasIt && showImageFileInFolder(absPath)}
           >
-            {relativePath}
+            {hasIt ? (
+              <CheckCircleTwoTone twoToneColor="#52c41a" />
+            ) : (
+              <CloseCircleTwoTone twoToneColor="#ff0000" />
+            )}
+            &ensp;
+            {basename}
           </p>
         );
       })}
       <div className="edit-wrapper">
         <div className="left">
           <ImageShower
-            srcUrl={imagePrefix + absoluteFrom}
+            filepath={absoluteFrom}
             onClick={() => {
               if (process.platform !== "darwin") {
                 showImageFileInFolder(absoluteFrom);
@@ -249,12 +251,12 @@ const ImageChanger: React.FC<TypeSCPageSourceConf> = sourceConf => {
             }}
           />
         </div>
-        <RightCircleOutlined className="center" onClick={copyDefaultImage} />
+        <RightCircleOutlined className="center " onClick={copyDefaultImage} />
         <div className="right">
           <ImageShower
             showHandler
-            srcUrl={imagePrefix + absoluteToForShow}
-            to={absoluteToList}
+            filepath={absoluteToForShow}
+            absoluteToList={newAbsoluteToList}
             onClick={() => showImageFileInFolder(absoluteToForShow)}
           />
         </div>
@@ -282,7 +284,7 @@ const StyleImageChanger = styled.div`
       color: ${({ theme }) => theme["@text-color"]};
     }
   }
-  .to-relative-path {
+  .to-basename {
     font-size: 10px;
     color: ${({ theme }) => theme["@text-color-secondary"]};
     user-select: text;
@@ -291,7 +293,10 @@ const StyleImageChanger = styled.div`
     text-overflow: ellipsis;
     white-space: nowrap; */
     &[data-exists="true"] {
-      color: green;
+      cursor: pointer;
+    }
+    &[data-exists="false"] {
+      opacity: 0.5;
     }
   }
   .edit-wrapper {

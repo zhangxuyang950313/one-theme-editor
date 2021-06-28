@@ -8,8 +8,7 @@ import {
   getDirAllFiles,
   getFileMD5,
   getImageMapper,
-  union,
-  watchProjectDir
+  union
 } from "common/utils";
 import {
   delProjectImageMapper,
@@ -86,13 +85,41 @@ export async function syncImageMapperList(
   });
 }
 
-// /**
-//  *
-//  */
-// export async function syncFileList(pathname: string) {
-//   chokidar
-//     .watch(pathname,{cwd:pathname})
-//     .on("add", pathname => {})
-//     .on("change", pathname => {})
-//     .on("unlink", pathname => {});
-// }
+/**
+ *
+ */
+export enum FILE_STATUS {
+  ADD = "add",
+  CHANGE = "change",
+  UNLINK = "unlink"
+}
+export async function watchFiles(
+  uuid: string,
+  list: string[],
+  callback: (data: { event: FILE_STATUS; relativePath: string }) => void
+): Promise<void> {
+  const project = await findProjectByUUID(uuid);
+  const watcher = new chokidar.FSWatcher({
+    cwd: project.projectRoot
+  });
+  // 设定监听最大值
+  // TODO：如果超过会是什么样
+  watcher.setMaxListeners(100);
+  watcher
+    // 增加/重命名
+    .on(FILE_STATUS.ADD, relativePath => {
+      console.log(FILE_STATUS.ADD, relativePath);
+      callback({ event: FILE_STATUS.ADD, relativePath });
+    })
+    // 变更
+    .on(FILE_STATUS.CHANGE, relativePath => {
+      console.log(FILE_STATUS.CHANGE, relativePath);
+      callback({ event: FILE_STATUS.CHANGE, relativePath });
+    })
+    // 删除/移动/重命名
+    .on(FILE_STATUS.UNLINK, relativePath => {
+      console.log(FILE_STATUS.UNLINK, relativePath);
+      callback({ event: FILE_STATUS.UNLINK, relativePath });
+    })
+    .add(list);
+}

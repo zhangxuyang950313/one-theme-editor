@@ -4,6 +4,7 @@ import webpack, { DefinePlugin, HotModuleReplacementPlugin } from "webpack";
 import WebpackDevServer from "webpack-dev-server";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
+import PostcssPresetEnv from "postcss-preset-env";
 import CopyWebpackPlugin from "copy-webpack-plugin";
 import DotEnvPlugin from "dotenv-webpack";
 import EslintPlugin from "eslint-webpack-plugin";
@@ -44,8 +45,17 @@ const getCssLoaders = (options: { isDev: boolean; importLoaders: number }) => {
         sourceMap: options.isDev
       }
     },
-    { loader: "scoped-css-loader" }
-  ];
+    { loader: "scoped-css-loader" },
+    {
+      loader: "postcss-loader",
+      options: {
+        postcssOptions: {
+          ident: "postcss",
+          plugins: () => [PostcssPresetEnv()]
+        }
+      }
+    }
+  ].filter(Boolean);
 };
 
 const devServer: WebpackDevServer.Configuration = {
@@ -101,6 +111,9 @@ const config: webpack.ConfigurationFactory = (env, args) => {
       // this defaults to 'window', but by setting it to 'this' then
       // module chunks which are built will work in web workers as well.
       globalObject: "this"
+    },
+    externals: {
+      fsevents: "fsevents"
     },
     optimization: {
       minimize: !isDev,
@@ -159,6 +172,10 @@ const config: webpack.ConfigurationFactory = (env, args) => {
     },
     module: {
       rules: [
+        {
+          test: /\.node$/,
+          use: "node-loader"
+        },
         {
           // npm i babel-loader @babel/core @babel/preset-env -D
           test: /\.(js|mjs|jsx|ts|tsx)$/,
@@ -271,12 +288,12 @@ const config: webpack.ConfigurationFactory = (env, args) => {
           }
         })
       }),
-      // new MiniCssExtractPlugin({
-      //   filename: isDev ? "css/[name].css" : "css/[name].[contenthash:8].css",
-      //   chunkFilename: isDev
-      //     ? "css/[name].chunk.css"
-      //     : "css/[name].[contenthash:8].chunk.css"
-      // }),
+      new MiniCssExtractPlugin({
+        filename: isDev ? "css/[name].css" : "css/[name].[contenthash:8].css",
+        chunkFilename: isDev
+          ? "css/[name].chunk.css"
+          : "css/[name].[contenthash:8].chunk.css"
+      }),
       new WebpackBar({
         name: `渲染进程编译中...(${args.mode})`,
         color: "green",

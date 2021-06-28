@@ -9,10 +9,19 @@
 
 #### 关于 webpack@4.x.x 版本
 目前 webpack 5 还有不少坑，暂时锁定 webpack 4 版本使用
+以下包（或类型）严格按照版本使用，因为其内部会指定 webpack ^5，会导致类型报错甚至无法运行
+稳定后升 webpack5
+- mini-css-extract-plugin        @1.4.0
+- @types/mini-css-extract-plugin @1.4.0 
+- postcss-loader                 @4.3.0
+- 其他参照 package.json
+- 特别注意的在这里补充，不要乱升
+- 升的时候选择 fixable，然后删 node_modules 测试
 
 #### 本地 node 版本 >=14.0.0
-image-size 包的限制 >=12
-electron-builder 限制 >=14
+image-size        >=12
+electron-builder  >=14
+log-symbols       >=14
 
 
 #### 安装
