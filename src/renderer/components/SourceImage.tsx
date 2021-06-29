@@ -7,7 +7,7 @@ import { useLoadImageByPath } from "@/hooks/image";
  * 用于显示本地路径的图片
  * @param props 和 img 标签具有相同的属性
  */
-const LocalImage: React.FC<JSX.IntrinsicElements["img"]> = props => {
+const SourceImage: React.FC<JSX.IntrinsicElements["img"]> = props => {
   const [url] = useLoadImageByPath(props.src);
   const show =
     url &&
@@ -17,4 +17,4 @@ const LocalImage: React.FC<JSX.IntrinsicElements["img"]> = props => {
   return show ? <img {...props} src={url} alt={props.src} /> : null;
 };
 
-export default LocalImage;
+export default SourceImage;

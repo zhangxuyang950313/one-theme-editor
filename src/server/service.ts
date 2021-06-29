@@ -78,26 +78,28 @@ export default function registerService(service: Express): void {
    * 图片服务
    * @params file 图片本地路径
    */
-  service.get<{ file: string }, Buffer, never>(
-    `${API.IMAGE}:file`,
-    async (req, res) => {
-      try {
-        const file = req.params.file;
-        if (!fse.existsSync(file)) {
-          throw new Error(ERR_CODE[4003]);
-        }
-        const buff = fse.readFileSync(file);
-        const fileType = await FileType.fromBuffer(buff);
-        if (!fileType) {
-          throw new Error(ERR_CODE[4003]);
-        }
-        res.set({ "Content-Type": fileType.mime });
-        res.send(buff);
-      } catch (err) {
-        res.send(err.message);
+  service.get<
+    never, // reqParams
+    Buffer, // resBody
+    never, // reqBody
+    { filepath: string } // reqQuery
+  >(`${API.IMAGE}`, async (req, res) => {
+    try {
+      const filepath = req.query.filepath;
+      if (!fse.existsSync(filepath)) {
+        throw new Error(ERR_CODE[4003]);
       }
+      const buff = fse.readFileSync(filepath);
+      const fileType = await FileType.fromBuffer(buff);
+      if (!fileType) {
+        throw new Error(ERR_CODE[4003]);
+      }
+      res.set({ "Content-Type": fileType.mime });
+      res.send(buff);
+    } catch (err) {
+      res.send(err.message);
     }
-  );
+  });
 
   // 获取路径配置
   service.get(API.GET_PATH_CONFIG, async (req, res) => {
@@ -149,19 +151,17 @@ export default function registerService(service: Express): void {
 
   // ---------------工程信息--------------- //
   // 添加工程
-  service.post<
-    any,
-    any,
-    TypeResult<TypeProjectDataDoc>,
-    TypeCreateProjectPayload
-  >(API.CREATE_PROJECT, async (req, res) => {
-    try {
-      const project = await createProject(req.body);
-      res.send(result.success(project));
-    } catch (err) {
-      res.status(400).send(result.fail(err.message));
+  service.post<never, TypeResult<TypeProjectDataDoc>, TypeCreateProjectPayload>(
+    API.CREATE_PROJECT,
+    async (req, res) => {
+      try {
+        const project = await createProject(req.body);
+        res.send(result.success(project));
+      } catch (err) {
+        res.status(400).send(result.fail(err.message));
+      }
     }
-  });
+  );
 
   // 获取工程列表
   service.get<{ brandType: string }, any, TypeResult<TypeProjectDataDoc>>(

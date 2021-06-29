@@ -5,14 +5,20 @@ import { useServerHost } from "hooks/index";
 import { useProjectRoot } from "hooks/project";
 import { useSourceConfigRoot } from "hooks/sourceConfig";
 
+// 返回图片前缀
+export function useImagePrefix(): string {
+  const host = useServerHost();
+  return `${host}/image?filepath=`;
+}
+
 /**
- * 预加载图片，防止切换闪烁或者从上到下加载不好的体验
+ * 预加载图片，加载完成后刷新 url,防止切换闪烁或者从上到下加载不好的体验
  * @param src
  * @returns 加载成功返回 url 失败返回空字符串
  */
 export function useLoadImage(src = ""): [string, (x: string) => void] {
-  const [preloadUrl, setPreloadURL] = useState(src);
-  const [finalUrl, setFinalURL] = useState(src);
+  const [preloadUrl, handleReload] = useState(src);
+  const [url, setFinalURL] = useState(src);
   const [img] = useState(new Image());
 
   useEffect(() => {
@@ -30,42 +36,55 @@ export function useLoadImage(src = ""): [string, (x: string) => void] {
       img.onerror = () => Function.prototype;
     };
   }, [preloadUrl]);
-  return [finalUrl, setPreloadURL];
+  return [url, handleReload];
 }
 
-// 返回图片前缀
-export function useImagePrefix(): string {
-  const host = useServerHost();
-  return `${host}/image?file=`;
+/**
+ * 使用图片路径来预加载图片，基于 useLoadImage
+ * @param filepath
+ * @returns
+ */
+export function useLoadImageByPath(
+  filepath = ""
+): [string, (x: string) => void] {
+  const [imageUrl, doRefreshUrl] = useImageUrl(filepath);
+  const [url, handlePreload] = useLoadImage(imageUrl);
+  useEffect(() => {
+    handlePreload(imageUrl);
+  }, [imageUrl]);
+  return [url, doRefreshUrl];
 }
 
 /**
  * 将本地路径输出为图片服务路径用于展示
- * @param filepath 本地路径
+ * @param filepathVal 本地路径
  * @returns
  */
-export function useImageUrl(filepath?: string): string {
+export function useImageUrl(filepathVal = ""): [string, (x: string) => void] {
   const prefix = useImagePrefix();
-  // 预加载
-  const [url] = useLoadImage(filepath ? prefix + filepath : "");
-  return url;
+  const [filepath, doRefreshUrl] = useState(filepathVal);
+  const [src, setSrc] = useLoadImage(); // 预加载
+  useEffect(() => {
+    setSrc(filepath ? prefix + filepath : "");
+  }, [filepath]);
+  return [src, doRefreshUrl];
 }
 
 /**
- * 将本地图片生成用于工程显示的图片 url
+ * 返回一个由本地图片生成用于工程显示的图片 url
  * @param relativePath
  * ```
- * const getProjectImageUrl = useProjectImageUrl();
+ * const getProjectImageUrl = useGetProjectImageUrl();
  * const url = getProjectImageUrl("/local/path/to/project/image");
  * ```
  * or
  * ```
- * const url = useProjectImageUrl("/local/path/to/project/image");
+ * const url = useGetProjectImageUrl("/local/path/to/project/image");
  * ```
  */
-export function useProjectImageUrl(relativePath: string): string;
-export function useProjectImageUrl(): (relativePath?: string) => string;
-export function useProjectImageUrl(
+export function useGetProjectImageUrl(relativePath: string): string;
+export function useGetProjectImageUrl(): (relativePath?: string) => string;
+export function useGetProjectImageUrl(
   relativePath?: string | null
 ): string | ((relativePath?: string) => string) {
   const prefix = useImagePrefix();
@@ -82,20 +101,20 @@ export function useProjectImageUrl(
 }
 
 /**
- * 将本地图片生成用于配置显示的图片 url
+ * 返回一个由本地图片生成用于配置显示的图片 url
  * @param relativePath
  * ```
- * const getSourceImageUrl = useSourceImageUrl();
- * const url = useSourceImageUrl("/local/path/to/sourceConfig/image");
+ * const getSourceImageUrl = useGetSourceImageUrl();
+ * const url = useGetSourceImageUrl("/local/path/to/sourceConfig/image");
  * ```
  * or
  * ```
- * const url = useSourceImageUrl("/local/path/to/sourceConfig/image");
+ * const url = useGetSourceImageUrl("/local/path/to/sourceConfig/image");
  * ```
  */
-export function useSourceImageUrl(relativePath: string): string;
-export function useSourceImageUrl(): (relativePath?: string) => string;
-export function useSourceImageUrl(
+export function useGetSourceImageUrl(relativePath: string): string;
+export function useGetSourceImageUrl(): (relativePath?: string) => string;
+export function useGetSourceImageUrl(
   relativePath?: string | null
 ): string | ((relativePath?: string) => string) {
   const prefix = useImagePrefix();
@@ -111,4 +130,22 @@ export function useSourceImageUrl(
     if (!sourceConfigRoot || !relative) return "";
     return prefix + path.join(sourceConfigRoot, relative);
   };
+}
+
+/**
+ * 动态 SourceImageUrl，导出一个 state 数据和重新获取的方法
+ * @param relativePath
+ * @returns
+ */
+export function useSourceImageUrl(
+  relativePath = ""
+): [string, (x: string) => void] {
+  const [relative, setRelative] = useState(relativePath);
+  const [sourceUrl, setSourceUrl] = useState("");
+  const getSourceImageUrl = useGetSourceImageUrl();
+
+  useEffect(() => {
+    setSourceUrl(getSourceImageUrl(relative));
+  }, [relative]);
+  return [sourceUrl, setRelative];
 }

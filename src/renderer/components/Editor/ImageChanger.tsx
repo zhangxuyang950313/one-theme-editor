@@ -17,7 +17,7 @@ import {
 
 // script
 import { apiCopyFile, apiDeleteFile } from "@/api";
-import { useImagePrefix, useLoadImage } from "@/hooks/image";
+import { useLoadImageByPath } from "@/hooks/image";
 import { useProjectRoot } from "@/hooks/project";
 import { useToListWatcher } from "@/hooks/fileWatcher";
 import { useSourceConfigRoot } from "@/hooks/sourceConfig";
@@ -37,22 +37,27 @@ type TypePropsOfShowImage = {
   | { showHandler?: false; absoluteToList?: string[] }
 );
 function ImageShower(props: TypePropsOfShowImage) {
-  const { filepath, showHandler, absoluteToList, onClick, onImport, onDelete } =
-    props;
-  const imagePrefix = useImagePrefix();
+  const {
+    //
+    filepath,
+    showHandler,
+    absoluteToList,
+    onClick,
+    onImport,
+    onDelete
+  } = props;
+
+  // 图片参数改变，用于重载
   const [count, updateCount] = useState(0);
 
   // 图片预加载
-  const [url, setUrl] = useLoadImage();
-
-  useEffect(() => {
-    updateCount(count + 1);
-  }, [absoluteToList]);
+  const [url, handleReload] = useLoadImageByPath(filepath);
 
   // 图片重载
   useEffect(() => {
-    setUrl(filepath ? `${imagePrefix + filepath}&count=${count}` : "");
-  }, [count]);
+    handleReload(filepath ? `${filepath}&count=${count}` : "");
+    updateCount(count + 1);
+  }, [absoluteToList]);
 
   const Content: React.FC = () => {
     return (

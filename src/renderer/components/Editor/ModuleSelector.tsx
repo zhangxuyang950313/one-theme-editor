@@ -5,13 +5,13 @@ import logSymbols from "log-symbols";
 import { useCurrentModuleList, useCurrentModule } from "@/hooks/sourceConfig";
 
 import { Tooltip } from "antd";
-import { useSourceImageUrl } from "hooks/image";
+import { useGetSourceImageUrl } from "hooks/image";
 
 // 模块选择器
 const ModuleSelector: React.FC = () => {
   const tempModuleList = useCurrentModuleList();
   const [currentModule, setCurrentModule] = useCurrentModule();
-  const getImageURL = useSourceImageUrl();
+  const getImageURL = useGetSourceImageUrl();
 
   if (!currentModule) {
     console.log(logSymbols.error, "currentModule 为空");

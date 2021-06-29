@@ -47,7 +47,7 @@
 </source>
 
 <!-- 第一排图标 -->
-<!-- <source name="天气">
+<source name="天气">
     <layout x="168" y="1100" w="186" h="186" align="center" alignV="center"/>
     <from src="../icons/res/com.miui.weather2.png"/>
     <tp src="icons/res/com.miui.weather2.png"/>
@@ -82,11 +82,11 @@
 <color name="图标文字">
     <layout x="925" y="1250" size="36" align="center" alignV="center" text="主题壁纸"/>
     <value class="" default="#ffffffff"/>
-</color> -->
+</color> 
 
 
 <!-- 第二排图标 -->
-<!-- <source name="日历">
+<source name="日历">
     <layout x="168" y="1400" w="186" h="186" align="center" alignV="center"/>
     <from src="../icons/res/com.android.calendar.png"/>
     <to src="icons/res/com.android.calendar.png"/>
@@ -123,11 +123,11 @@
 <color description="设置">
     <layout x="925" y="1550" size="36" align="center" alignV="center" text="设置"/>
     <value class="" default="#ffffffff"/>
-</color> -->
+</color> 
 
 
 <!-- 第三排图标 -->
-<!-- <source name="应用商店">
+<source name="应用商店">
     <layout x="168" y="1700" w="186" h="186" align="center" alignV="center"/>
     <from src="../icons/res/com.xiaomi.market.png"/>
     <to src="icons/res/com.xiaomi.market.png"/>
@@ -162,10 +162,10 @@
 <color description="图标文字">
     <layout x="925" y="1850" size="36" align="center" alignV="center" text="米家"/>
     <value class="" default="#ffffffff"/>
-</color> -->
+</color> 
 
 <!-- 分页器 -->
-<!-- <source name="分页器（负一屏）">
+<source name="分页器（负一屏）">
     <layout x="500" y="1950" w="40" h="40" align="center" alignV="center"/>
     <from src="../com.miui.home/res/drawable-xxhdpi/workspace_assistantpoint.png"/>
     <to src="com.miui.home/res/drawable-xxhdpi/workspace_assistantpoint.png"/>
@@ -180,5 +180,3 @@
     <from src="../com.miui.home/res/drawable-xxhdpi/workspace_seekpoint_normal.png"/>
     <to src="com.miui.home/res/drawable-xxhdpi/workspace_seekpoint_normal.png"/>
 </source>
-
- -->
