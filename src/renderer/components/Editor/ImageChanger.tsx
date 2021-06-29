@@ -28,13 +28,22 @@ import ERR_CODE from "@/core/error-code";
 type TypePropsOfShowImage = {
   filepath?: string;
   onClick?: () => void;
+  onImportSource?: () => void;
+  onDeleteSource?: () => void;
   // showHandler 时就要强制传入 to 列表
 } & (
   | { showHandler: true; absoluteToList: string[] }
   | { showHandler?: false; absoluteToList?: string[] }
 );
 function ImageShower(props: TypePropsOfShowImage) {
-  const { filepath, showHandler, absoluteToList, onClick } = props;
+  const {
+    filepath,
+    showHandler,
+    absoluteToList,
+    onClick,
+    onImportSource,
+    onDeleteSource
+  } = props;
   const imagePrefix = useImagePrefix();
   const [count, updateCount] = useState(0);
 
@@ -61,23 +70,23 @@ function ImageShower(props: TypePropsOfShowImage) {
       </StyleImageBackground>
     );
   };
+
+  // 右侧图片操作区
   const Handler: React.FC = () => {
     // 导入按钮
-    const ImportButton = <ImportOutlined className="press import" />;
+    const ImportButton = (
+      <ImportOutlined
+        className="press import"
+        onClick={() => onImportSource && onImportSource()}
+      />
+    );
     // .9编辑按钮
     const EditButton = <FormOutlined className="press edit" />;
     // 删除按钮
     const DeleteButton = (
       <DeleteOutlined
         className="press delete"
-        onClick={() => {
-          if (!Array.isArray(absoluteToList)) return;
-          absoluteToList.forEach((item, index) => {
-            setTimeout(() => {
-              apiDeleteFile(item);
-            }, index * 100);
-          });
-        }}
+        onClick={() => onDeleteSource && onDeleteSource()}
       />
     );
     return (
@@ -180,7 +189,7 @@ const ImageChanger: React.FC<TypeSCPageSourceConf> = sourceConf => {
   const absoluteFrom = path.join(sourceConfigRoot, from.relativePath);
 
   // 目标素材绝对路径列表
-  const absoluteToLIst = to.map(item => path.join(projectRoot, item));
+  const absoluteToList = to.map(item => path.join(projectRoot, item));
 
   // 更新后的模板绝对路径列表
   const newAbsoluteToList = newRelativeToList.map(item =>
@@ -199,20 +208,41 @@ const ImageChanger: React.FC<TypeSCPageSourceConf> = sourceConf => {
     if (process.platform !== "darwin") return;
     remote.getCurrentWindow().previewFile(filepath, name);
   };
-  // 点击素材图片
-  const showImageFileInFolder = (target: string) => {
-    remote.shell.showItemInFolder(target);
-  };
-  // 中间的快速使用默认素材按钮
-  const copyDefaultImage = () => {
+  // 拷贝到模板素材
+  const copyToWith = (file: string) => {
     if (!(Array.isArray(to) && to.length > 0)) {
       notification.warn({ message: `"${sourceConf.name}"${ERR_CODE[3006]}` });
       return;
     }
-    absoluteToLIst.forEach((target, index) => {
-      // setTimeout(() => {
-      apiCopyFile(absoluteFrom, target);
-      // }, index * 100);
+    absoluteToList.forEach(target => {
+      apiCopyFile(file, target);
+    });
+  };
+  // 手动选取素材
+  const handleImport = () => {
+    // 选择图片添加
+    remote.dialog
+      .showOpenDialog({
+        title: "选择素材",
+        properties: ["openFile", "createDirectory"]
+      })
+      .then(result => {
+        if (result.canceled) return;
+        console.log(result);
+        copyToWith(result.filePaths[0]);
+      });
+  };
+  // 拷贝默认素材
+  const handleCopyDefault = () => {
+    copyToWith(absoluteFrom);
+  };
+  // 删除素材
+  const handleDelete = () => {
+    if (!Array.isArray(absoluteToList)) return;
+    absoluteToList.forEach((item, index) => {
+      setTimeout(() => {
+        apiDeleteFile(item);
+      }, index * 100);
     });
   };
   return (
@@ -237,7 +267,7 @@ const ImageChanger: React.FC<TypeSCPageSourceConf> = sourceConf => {
             key={basename}
             className="text to-basename"
             data-exists={String(hasIt)}
-            onClick={() => hasIt && showImageFileInFolder(absPath)}
+            onClick={() => hasIt && remote.shell.showItemInFolder(absPath)}
           >
             {hasIt ? (
               <CheckCircleTwoTone twoToneColor="#52c41a" />
@@ -255,20 +285,22 @@ const ImageChanger: React.FC<TypeSCPageSourceConf> = sourceConf => {
             filepath={absoluteFrom}
             onClick={() => {
               if (process.platform !== "darwin") {
-                showImageFileInFolder(absoluteFrom);
+                remote.shell.showItemInFolder(absoluteFrom);
               } else {
                 previewFile(absoluteFrom, sourceConf.name);
               }
             }}
           />
         </div>
-        <RightCircleOutlined className="center " onClick={copyDefaultImage} />
+        <RightCircleOutlined className="center " onClick={handleCopyDefault} />
         <div className="right">
           <ImageShower
             showHandler
             filepath={absoluteToForShow}
             absoluteToList={newAbsoluteToList}
-            onClick={() => showImageFileInFolder(absoluteToForShow)}
+            onClick={() => remote.shell.showItemInFolder(absoluteToForShow)}
+            onImportSource={handleImport}
+            onDeleteSource={handleDelete}
           />
         </div>
       </div>

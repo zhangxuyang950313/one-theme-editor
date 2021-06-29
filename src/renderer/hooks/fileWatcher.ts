@@ -87,8 +87,6 @@ export function useToListWatcher(toList: string[]): string[] {
         // 变更
         .on(FILE_STATUS.CHANGE, relative => {
           console.log(FILE_STATUS.CHANGE, relative);
-          set.delete(relative);
-          setList([]);
           set.add(relative);
           updateList();
         })
