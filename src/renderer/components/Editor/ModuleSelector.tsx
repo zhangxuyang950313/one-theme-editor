@@ -6,7 +6,7 @@ import { useCurrentModuleList, useCurrentModule } from "@/hooks/sourceConfig";
 
 import { Tooltip } from "antd";
 import { useGetSourceImageUrl } from "hooks/image";
-import SourceImage from "../Image/SourceImage";
+// import SourceImage from "../Image/SourceImage";
 
 // 模块选择器
 const ModuleSelector: React.FC = () => {
@@ -34,8 +34,8 @@ const ModuleSelector: React.FC = () => {
             onClick={() => setCurrentModule(item)}
           >
             <Tooltip title={item.name} placement="right">
-              {/* <img className="icon" alt="" src={getImageURL(item.icon)} /> */}
-              <SourceImage src={item.icon} />
+              <img className="icon" alt="" src={getImageURL(item.icon)} />
+              {/* <SourceImage className="icon" src={item.icon} /> */}
             </Tooltip>
           </StyleIcon>
         );
@@ -53,7 +53,6 @@ const StyleModuleSelector = styled.div`
   padding: 80px 0;
 `;
 const StyleIcon = styled.div<{ isActive: boolean }>`
-  cursor: pointer;
   width: ${({ isActive }) => (isActive ? "55px" : "45px")};
   opacity: ${({ isActive }) => (isActive ? 1 : 0.4)};
   margin: 20px auto;
@@ -62,6 +61,7 @@ const StyleIcon = styled.div<{ isActive: boolean }>`
   }
   transition: 0.4s all ease;
   .icon {
+    cursor: pointer;
     width: 100%;
   }
   .name {

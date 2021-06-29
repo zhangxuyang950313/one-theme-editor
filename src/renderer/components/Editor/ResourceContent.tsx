@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import { useCurrentPage } from "@/hooks/sourceConfig";
 
-import ImageChanger from "./ImageChanger";
+import ImageController from "@/components/ImageController/index";
 
 const ResourceContent: React.FC = () => {
   const [currentPage] = useCurrentPage();
@@ -11,7 +11,7 @@ const ResourceContent: React.FC = () => {
   return (
     <StyleResourceContent>
       {currentPage.source.map((sourceConf, key) => (
-        <ImageChanger key={key} {...sourceConf} />
+        <ImageController key={key} {...sourceConf} />
       ))}
     </StyleResourceContent>
   );

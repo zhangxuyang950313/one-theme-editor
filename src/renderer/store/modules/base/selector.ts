@@ -1,5 +1,5 @@
 import { createSelector } from "reselect";
-import { TypeStoreState } from "../../index";
+import { TypeStoreState } from "@/store/index";
 
 // 基础通用数据
 const getBaseState = (state: TypeStoreState) => state.base;

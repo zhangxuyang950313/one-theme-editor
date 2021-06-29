@@ -10,19 +10,12 @@
 <category tag="dimen" 		description="尺寸值" 	type="xml"/>
 <category tag="integer" 	description="整型值" 	type="xml"/>
 
-<source name="小米商城">
-    <layout x="670" y="1400" w="186" h="186" align="center" alignV="center"/>
-    <from src="../icons/res/com.xiaomi.shop.png"/>
-    <to src="icons/res/com.xiaomi.padshop.png"/>
-    <to src="icons/res/com.xiaomi.shop.png"/>
-    <to src="icons/res/com.xiaomi.shop.activity.MainTabActivity.shop.png"/>
-</source>
 <!-- 图片资源 -->
-<!-- <source name="桌面壁纸">
+<source name="桌面壁纸">
     <layout x="540" y="0" w="1080" h="2340" align="center"/>
     <from src="./default_wallpaper.jpg"/>
     <to src="wallpaper/default_wallpaper.jpg"/>
-</source> -->
+</source>
 
 <!-- 底栏图标 -->
 <source name="拨号">

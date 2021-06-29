@@ -14,7 +14,7 @@ const BaseState: TypeBaseState = {
 };
 
 export default function BaseReducer(
-  state: TypeBaseState = BaseState,
+  state = BaseState,
   action: TypeActions
 ): TypeBaseState {
   switch (action.type) {

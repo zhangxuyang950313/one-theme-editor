@@ -10,11 +10,9 @@ const SourceImage: React.FC<JSX.IntrinsicElements["img"]> = props => {
   const [sourceUrl, updateSourceUrl] = useSourceImageUrl(props.src);
   const [url, doReload] = useLoadImage(sourceUrl);
 
-  console.log({ url });
   useEffect(() => {
     if (!props.src) return;
     updateSourceUrl(props.src);
-    console.log({ sourceUrl });
   }, [props.src]);
 
   useEffect(() => {

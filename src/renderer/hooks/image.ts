@@ -17,26 +17,30 @@ export function useImagePrefix(): string {
  * @returns 加载成功返回 url 失败返回空字符串
  */
 export function useLoadImage(src = ""): [string, (x: string) => void] {
-  const [preloadUrl, handleReload] = useState(src);
-  const [url, setFinalURL] = useState(src);
+  const [url, setFinalURL] = useState("");
   const [img] = useState(new Image());
 
-  useEffect(() => {
+  const doReload = (preloadUrl: string) => {
     // 空值直接返回
     if (!preloadUrl) {
-      setFinalURL("");
       return;
     }
     img.onload = () => setFinalURL(preloadUrl);
     img.onerror = () => setFinalURL("");
     img.src = preloadUrl;
+  };
+
+  useEffect(() => {
+    if (src) doReload(src);
+
     // 卸载数据响应
     return () => {
       img.onload = () => Function.prototype;
       img.onerror = () => Function.prototype;
     };
-  }, [preloadUrl]);
-  return [url, handleReload];
+  }, []);
+
+  return [url, doReload];
 }
 
 /**
@@ -47,27 +51,45 @@ export function useLoadImage(src = ""): [string, (x: string) => void] {
 export function useLoadImageByPath(
   filepath = ""
 ): [string, (x: string) => void] {
-  const [imageUrl, doRefreshUrl] = useImageUrl(filepath);
+  const [imageUrl, updateUrl] = useImageUrl(filepath);
   const [url, handlePreload] = useLoadImage(imageUrl);
+
   useEffect(() => {
     handlePreload(imageUrl);
   }, [imageUrl]);
-  return [url, doRefreshUrl];
+
+  return [url, updateUrl];
 }
+
+// /**
+//  * 将本地路径预加载输出为图片服务路径用于展示
+//  * @param filepathVal 本地路径
+//  * @returns
+//  */
+// export function useImageUrlPreload(
+//   filepathVal = ""
+// ): [string, (x: string) => void] {
+//   const prefix = useImagePrefix();
+//   const [filepath, doRefreshUrl] = useState(filepathVal);
+//   const [url, doReload] = useLoadImage(); // 预加载
+
+//   useEffect(() => {
+//     if (!filepath) return;
+//     doReload(prefix + filepath);
+//   }, [filepath]);
+
+//   return [url, doRefreshUrl];
+// }
 
 /**
  * 将本地路径输出为图片服务路径用于展示
- * @param filepathVal 本地路径
+ * @param filepathVal
  * @returns
  */
 export function useImageUrl(filepathVal = ""): [string, (x: string) => void] {
   const prefix = useImagePrefix();
-  const [filepath, doRefreshUrl] = useState(filepathVal);
-  const [src, setSrc] = useLoadImage(); // 预加载
-  useEffect(() => {
-    setSrc(filepath ? prefix + filepath : "");
-  }, [filepath]);
-  return [src, doRefreshUrl];
+  const [filepath, setFilePath] = useState(filepathVal);
+  return [filepath ? prefix + filepath : "", setFilePath];
 }
 
 /**

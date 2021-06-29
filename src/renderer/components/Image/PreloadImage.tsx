@@ -8,17 +8,17 @@ import { useLoadImage } from "@/hooks/image";
  * @param props 和 img 标签具有相同的属性
  */
 const PreloadImage: React.FC<JSX.IntrinsicElements["img"]> = props => {
-  const [imageUrl, doReload] = useLoadImage(props.src);
+  const [url, doReload] = useLoadImage(props.src);
 
   useEffect(() => {
     if (!props.src) return;
     doReload(props.src);
   }, [props.src]);
 
-  if (!imageUrl || !props.src) return null;
+  if (!url || !props.src) return null;
   return (
     <StylePreloadImage>
-      <img {...props} src={imageUrl} alt={props.src} />
+      <img {...props} src={url} alt="" />
     </StylePreloadImage>
   );
 };
