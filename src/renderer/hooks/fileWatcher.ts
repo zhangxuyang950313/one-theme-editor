@@ -34,11 +34,15 @@ export function useFSWatcherMultiInstance(
   count: number,
   options?: chokidar.WatchOptions
 ): chokidar.FSWatcher[] {
-  const [watchers] = useState(
-    new Array(count).fill(0).map(() => new chokidar.FSWatcher(options))
-  );
+  const mapWatchers = () => {
+    return new Array(count).fill(0).map(() => new chokidar.FSWatcher(options));
+  };
+  const [watchers, setWatchers] = useState<chokidar.FSWatcher[]>(mapWatchers());
   useEffect(() => {
+    console.log("创建watcher");
+    setWatchers(mapWatchers());
     return () => {
+      console.log("关闭watcher");
       watchers.forEach(item => item.close());
     };
   }, []);

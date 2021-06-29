@@ -18,8 +18,8 @@ import {
 // script
 import { apiCopyFile, apiDeleteFile } from "@/api";
 import { useImagePrefix, useLoadImage } from "@/hooks/image";
-import { useToListWatcher } from "@/hooks/fileWatcher";
 import { useProjectRoot } from "@/hooks/project";
+import { useToListWatcher } from "@/hooks/fileWatcher";
 import { useSourceConfigRoot } from "@/hooks/sourceConfig";
 import { TypeSCPageSourceConf } from "types/source-config";
 import ERR_CODE from "@/core/error-code";
@@ -28,22 +28,17 @@ import ERR_CODE from "@/core/error-code";
 type TypePropsOfShowImage = {
   filepath?: string;
   onClick?: () => void;
-  onImportSource?: () => void;
-  onDeleteSource?: () => void;
+  onImport?: () => void;
+  onEdit?: () => void;
+  onDelete?: () => void;
   // showHandler 时就要强制传入 to 列表
 } & (
   | { showHandler: true; absoluteToList: string[] }
   | { showHandler?: false; absoluteToList?: string[] }
 );
 function ImageShower(props: TypePropsOfShowImage) {
-  const {
-    filepath,
-    showHandler,
-    absoluteToList,
-    onClick,
-    onImportSource,
-    onDeleteSource
-  } = props;
+  const { filepath, showHandler, absoluteToList, onClick, onImport, onDelete } =
+    props;
   const imagePrefix = useImagePrefix();
   const [count, updateCount] = useState(0);
 
@@ -77,7 +72,7 @@ function ImageShower(props: TypePropsOfShowImage) {
     const ImportButton = (
       <ImportOutlined
         className="press import"
-        onClick={() => onImportSource && onImportSource()}
+        onClick={() => onImport && onImport()}
       />
     );
     // .9编辑按钮
@@ -86,7 +81,7 @@ function ImageShower(props: TypePropsOfShowImage) {
     const DeleteButton = (
       <DeleteOutlined
         className="press delete"
-        onClick={() => onDeleteSource && onDeleteSource()}
+        onClick={() => onDelete && onDelete()}
       />
     );
     return (
@@ -299,8 +294,8 @@ const ImageChanger: React.FC<TypeSCPageSourceConf> = sourceConf => {
             filepath={absoluteToForShow}
             absoluteToList={newAbsoluteToList}
             onClick={() => remote.shell.showItemInFolder(absoluteToForShow)}
-            onImportSource={handleImport}
-            onDeleteSource={handleDelete}
+            onImport={handleImport}
+            onDelete={handleDelete}
           />
         </div>
       </div>

@@ -16,7 +16,11 @@ export function useLoadImage(src = ""): [string, (x: string) => void] {
   const [img] = useState(new Image());
 
   useEffect(() => {
-    if (!preloadUrl) return;
+    // 空值直接返回
+    if (!preloadUrl) {
+      setFinalURL("");
+      return;
+    }
     img.onload = () => setFinalURL(preloadUrl);
     img.onerror = () => setFinalURL("");
     img.src = preloadUrl;
