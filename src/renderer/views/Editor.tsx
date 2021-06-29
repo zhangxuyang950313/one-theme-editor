@@ -1,46 +1,46 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useHistory, useParams } from "react-router";
+
 import styled from "styled-components";
-
-import { useDocumentTitle } from "@/hooks";
-import { useProjectById } from "@/hooks/project";
-import { TypeTempModuleConf } from "@/types/project";
-
 import { Button, Empty, Spin } from "antd";
 import ModuleSelector from "@/components/Editor/ModuleSelector";
 import EditorToolsBar from "@/components/Editor/ToolsBar";
 import PageSelector from "@/components/Editor/PageSelector";
-import ResourceContext from "@/components/Editor/ResourceContext";
-import Project from "@/core/Project";
+import Previewer from "@/components/Editor/Previewer";
+import ResourceContent from "@/components/Editor/ResourceContent";
+
+import { useProjectData, useLoadProjectByUUID } from "@/hooks/project";
+import { StyleBorderRight } from "@/style";
+
+// 主编辑区域
+const EditorMain: React.FC = () => {
+  return (
+    <StyleEditorMain>
+      {/* 页面选择器 */}
+      <StylePageSelector>
+        <PageSelector />
+      </StylePageSelector>
+      {/* 预览 */}
+      <StylePreviewer>
+        <Previewer />
+      </StylePreviewer>
+      {/* 素材编辑区 */}
+      <StyleResourceContent>
+        <ResourceContent />
+      </StyleResourceContent>
+    </StyleEditorMain>
+  );
+};
 
 const Editor: React.FC = () => {
-  const [, updateTitle] = useDocumentTitle();
   const history = useHistory();
-  // 从路由参数中获得项目 id
-  const { pid } = useParams<{ pid: string }>();
-  // 项目数据，null 表示未找到
-  const projectData = useProjectById(pid);
-  // 选择的模块数据
-  const [selectedModule, updateModule] = useState<TypeTempModuleConf>();
-  // 工程实例
-  const [project, updateProject] = useState<Project>();
-
-  // 默认选择第一个模块
-  useEffect(() => {
-    const firstModule = projectData?.templateConf.modules[0];
-    if (firstModule) updateModule(firstModule);
-  }, [projectData?.templateConf.modules]);
-
-  // 安装主题
-  useEffect(() => {
-    if (!projectData) return;
-    const project = new Project(projectData);
-    updateProject(project);
-    project.setup(projectData);
-  }, [projectData]);
+  // 从路由参数中获得工程 uuid
+  const { uuid } = useParams<{ uuid: string }>();
+  const [, isLoading] = useLoadProjectByUUID(uuid);
+  const projectData = useProjectData();
 
   // 还未安装
-  if (!project?.isInitialized) {
+  if (isLoading) {
     return (
       <StyleEditorEmpty>
         <Spin tip="加载中" />
@@ -49,7 +49,7 @@ const Editor: React.FC = () => {
   }
 
   // 空状态
-  if (!projectData) {
+  if (projectData === null) {
     return (
       <StyleEditorEmpty>
         <Empty
@@ -66,26 +66,19 @@ const Editor: React.FC = () => {
       </StyleEditorEmpty>
     );
   }
-  updateTitle(projectData?.projectInfo.name || "");
-  console.log({ project: projectData });
+
+  // 进入编辑状态
   return (
     <StyleEditor>
       {/* 模块选择器 */}
-      <ModuleSelector
-        icons={projectData.previewConf.modules.map(item =>
-          project.getBase64ByKey(item.icon)
-        )}
-        onSelected={index => {
-          updateModule(projectData.previewConf.modules[index]);
-        }}
-      />
-      <StyleEditorContext>
+      <ModuleSelector />
+      {/* 编辑区域 */}
+      <StyleEditorContent>
+        {/* 工具栏 */}
         <EditorToolsBar />
-        <StyleEditorMain>
-          <PageSelector previewClass={selectedModule?.previewClass || []} />
-          <ResourceContext />
-        </StyleEditorMain>
-      </StyleEditorContext>
+        {/* 主编辑区域 */}
+        <EditorMain />
+      </StyleEditorContent>
     </StyleEditor>
   );
 };
@@ -105,7 +98,7 @@ const StyleEditor = styled.div`
   display: flex;
 `;
 
-const StyleEditorContext = styled.div`
+const StyleEditorContent = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -113,8 +106,28 @@ const StyleEditorContext = styled.div`
 
 const StyleEditorMain = styled.div`
   display: flex;
+  overflow: hidden;
   height: 100%;
-  /* flex-grow: 1; */
+  flex-grow: 1;
+  box-sizing: border-box;
+`;
+
+const StylePageSelector = styled(StyleBorderRight)`
+  width: 260px;
+  flex-shrink: 0;
+  overflow: auto;
+`;
+
+const StylePreviewer = styled(StyleBorderRight)`
+  width: 360px;
+  padding: 20px;
+  overflow: auto;
+`;
+
+const StyleResourceContent = styled(StyleBorderRight)`
+  overflow: auto;
+  box-sizing: border-box;
+  /* flex-shrink: 0; */
 `;
 
 export default Editor;

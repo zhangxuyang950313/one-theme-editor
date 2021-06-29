@@ -1,11 +1,31 @@
-// 修改标题
-export const SET_WINDOW_TITLE = "SET_WINDOW_TITLE";
+enum ACTION_TYPES {
+  // 设置服务端口
+  SET_SERVER_PORT = "SET_SERVER_PORT",
+  // 设置路径配置
+  SET_PATH_CONFIG = "SET_PATH_CONFIG",
 
-// 更新厂商品牌列表
-export const SET_BRAND_INFO_LIST = "SET_BRAND_INFO_LIST";
+  // 设置厂商品牌列表
+  SET_BRAND_LIST = "SET_BRAND_LIST",
+  // 设置当前选择的厂商
+  SET_SELECTED_BRAND = "SET_SELECTED_BRAND",
+  // 设置资源配置数据
+  SET_SOURCE_CONFIG = "SET_SOURCE_CONFIG",
+  // 设置资源预览列表
+  SET_SOURCE_DESCRIPTION_LIST = "SET_SOURCE_DESCRIPTION_LIST",
+  // 设置当前选择的模块信息
+  SET_SOURCE_CONFIG_MODULE = "SET_SOURCE_CONFIG_MODULE",
+  // 设置当前选择的页面信息
+  SET_SOURCE_CONFIG_PAGE = "SET_SOURCE_CONFIG_PAGE",
 
-// 更新当前选择的厂商
-export const SET_BRAND_INFO = "SET_BRAND_INFO";
+  // 初始化工程信息
+  INIT_PROJECT = "INIT_PROJECT",
+  // 设置工程新数据
+  SET_PROJECT_DATA = "SET_PROJECT_DATA",
+  // 设置工程描述数据
+  SET_PROJECT_INFO = "SET_PROJECT_INFO",
 
-// 更新模板列表
-export const SET_TEMPLATE_LIST = "SET_TEMPLATE_LIST";
+  // 设置 store.project.imageMapperList
+  SET_IMAGE_MAPPER_LIST = "SET_IMAGE_MAPPER_LIST"
+}
+
+export default ACTION_TYPES;

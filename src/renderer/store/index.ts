@@ -16,3 +16,5 @@ export type TypeStoreState = typeof state;
 export default store;
 
 export * as selectors from "./selectors";
+
+export * as reducers from "./reducers";

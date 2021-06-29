@@ -7,7 +7,7 @@ import {
   Select,
   SelectProps
 } from "antd";
-import { TypeTempUiVersionConf } from "@/types/project";
+import { TypeUiVersion } from "types/project";
 import { projectInfoConfig } from "@/config/editor";
 
 function getRuleNormalized(label: React.ReactNode) {
@@ -85,18 +85,23 @@ export function ProjectVersion(inputProps: InputProps): JSX.Element {
 
 // UI版本
 export function ProjectUIVersion(props: {
-  uiVersions: TypeTempUiVersionConf[];
+  uiVersions: TypeUiVersion[];
   onChange: SelectProps<any>["onChange"];
 }): JSX.Element {
   const { name: label, key: name } = projectInfoConfig.uiVersion;
   return getSelectForm(
     { label, name },
     { onChange: props.onChange },
-    props.uiVersions
-      .filter(item => item.src && item.name)
-      .map(item => ({
-        value: item.code || "",
-        label: item.name || ""
-      }))
+    props.uiVersions.map(item => ({
+      value: item.code || "",
+      label: item.name || ""
+    }))
   );
 }
+
+// 本地路径
+export const ProjectLocalDir: React.FC<InputProps> = props => {
+  const label = "本地目录";
+  const name = "local";
+  return getInputForm({ label, name }, props);
+};

@@ -1,28 +1,40 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
+import logSymbols from "log-symbols";
 
-type TypeProps = {
-  icons: string[];
-  onSelected: (x: number) => void;
-};
+import { useCurrentModuleList, useCurrentModule } from "@/hooks/sourceConfig";
+
+import { Tooltip } from "antd";
+import { useSourceImageUrl } from "hooks/image";
+
 // 模块选择器
-const ModuleSelector: React.FC<TypeProps> = props => {
-  const { icons, onSelected } = props;
-  const [selectedIndex, updateIndex] = useState(0);
+const ModuleSelector: React.FC = () => {
+  const tempModuleList = useCurrentModuleList();
+  const [currentModule, setCurrentModule] = useCurrentModule();
+  const getImageURL = useSourceImageUrl();
+
+  if (!currentModule) {
+    console.log(logSymbols.error, "currentModule 为空");
+    return null;
+  }
+
+  if (tempModuleList.length === 0) {
+    console.log(logSymbols.error, "modules 为空");
+    return null;
+  }
 
   return (
     <StyleModuleSelector>
-      {icons.map((item, key) => {
+      {tempModuleList.map((item, key) => {
         return (
           <StyleIcon
             key={key}
-            isActive={selectedIndex === key}
-            onClick={() => {
-              updateIndex(key);
-              onSelected(key);
-            }}
+            isActive={currentModule.index === item.index}
+            onClick={() => setCurrentModule(item)}
           >
-            <img className="icon" alt="" src={item} />
+            <Tooltip title={item.name} placement="right">
+              <img className="icon" alt="" src={getImageURL(item.icon)} />
+            </Tooltip>
           </StyleIcon>
         );
       })}
@@ -38,8 +50,7 @@ const StyleModuleSelector = styled.div`
   border-right: ${({ theme }) => theme["@border-color-base"]} 1px solid;
   padding: 80px 0;
 `;
-type TypeStyleIconProps = { isActive: boolean };
-const StyleIcon = styled.div<TypeStyleIconProps>`
+const StyleIcon = styled.div<{ isActive: boolean }>`
   cursor: pointer;
   width: ${({ isActive }) => (isActive ? "55px" : "45px")};
   opacity: ${({ isActive }) => (isActive ? 1 : 0.4)};
@@ -50,6 +61,10 @@ const StyleIcon = styled.div<TypeStyleIconProps>`
   transition: 0.4s all ease;
   .icon {
     width: 100%;
+  }
+  .name {
+    font-size: 12px;
+    text-align: center;
   }
 `;
 

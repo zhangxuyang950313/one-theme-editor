@@ -65,3 +65,10 @@ export const extensions = [
   ".less",
   ".scss"
 ];
+
+export const alias = {
+  src: path.resolve(rootDir, "src"),
+  server: path.resolve(rootDir, "src/server"),
+  common: path.resolve(rootDir, "src/common"),
+  renderer: path.resolve(rootDir, "src/renderer")
+};

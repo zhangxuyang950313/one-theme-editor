@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config version="1.0.0" description="锁屏壁纸" screenWidth="1080"/>
+
+<preview src="./default_lock_wallpaper.jpg"/>
+
+<category tag="source" description="图片" type="image"/>
+
+<source description="锁屏壁纸">
+    <layout x="0" y="0" w="1080" h="2340"/>
+    <from src="./default_lock_wallpaper.jpg"/>
+    <to src="wallpaper/default_lock_wallpaper.jpg"/>
+</source>

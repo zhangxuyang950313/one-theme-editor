@@ -1,14 +1,14 @@
 import { Configuration } from 'electron-builder'
-const buildOptions:Configuration =  {
-  productName: "electron-react-ts",
-  appId: "com.electron.react-ts",
+const buildOptions: Configuration =  {
+  productName: "one-theme-editor",
+  appId: "com.editor.theme.TypeSourceOriginPageConf",
   copyright: "sunny-20200321",
   extends: null,
   compression: "store",
-  asar: true,
+  asar: false,
   // extraResources: [{ from: "static", to: "app/static" }],
   extraMetadata: { main: "release.main/index.js" },
-  files: ["release.renderer/**/*", "release.main/**/*", "static/**/*"],
+  files: ["release.renderer/**/*", "release.main/**/*", "release.server/**/*", "static/**/*"],
   // mac: {
   //   target: "dmg",
   //   icon: "icons/icon.png"

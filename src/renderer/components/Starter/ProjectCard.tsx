@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import { Card } from "antd";
 
-import { TypeProjectInfo } from "@/types/project";
+import { TypeProjectInfo } from "src/types/project";
 
 type TypeProps = {
   hoverable?: boolean;
@@ -29,8 +29,8 @@ function ProjectCard(props: TypeProps): JSX.Element {
         }
       >
         <Card.Meta
-          title={projectInfo.name}
-          description={projectInfo.uiVersion}
+          title={projectInfo?.name}
+          description={projectInfo?.uiVersion}
         />
       </Card>
     </StyleProjectCard>

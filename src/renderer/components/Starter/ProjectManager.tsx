@@ -2,48 +2,56 @@ import React from "react";
 import styled from "styled-components";
 import { useHistory } from "react-router";
 
-import { TypeBrandInfo } from "@/types/project";
 import { useProjectList } from "@/hooks/project";
+import { useCurrentBrandConf } from "@/hooks/sourceConfig";
 
 import { Empty, Spin } from "antd";
 import ProjectCard from "./ProjectCard";
 import CreateProject from "./CreateProject";
 
-type TypeProps = {
-  // 使用机型进行隔离查询
-  brandInfo: TypeBrandInfo;
-};
-function ProjectManager(props: TypeProps): JSX.Element {
-  const { brandInfo } = props;
-  const [projects, refreshList, isLoading] = useProjectList(brandInfo);
+const ProjectManager: React.FC = () => {
+  const brandInfo = useCurrentBrandConf();
+  const [projects, refreshList, isLoading] = useProjectList();
   const history = useHistory();
 
   // 列表加载中、空、正常状态
   const getProjectListContent = () => {
+    // 加载状态
     if (isLoading) {
       return (
-        <Spin className="auto-margin" tip="加载中..." spinning={isLoading} />
+        <StyleCenterContainer>
+          <Spin className="auto-margin" tip="加载中..." spinning={isLoading} />
+        </StyleCenterContainer>
       );
     }
+
     if (projects.length > 0) {
-      return projects.map((item, key) => (
-        <div className="project-card" key={key}>
-          <ProjectCard
-            hoverable
-            projectInfo={item.projectInfo}
-            onClick={() => {
-              history.push(`/editor/${item._id}`);
-            }}
-          />
-        </div>
-      ));
+      return (
+        <StyleProjectList>
+          {projects.map((item, key) => (
+            <div className="project-card" key={key}>
+              <ProjectCard
+                hoverable
+                projectInfo={item?.projectInfo}
+                onClick={() => {
+                  history.push(`/editor/${item.uuid}`);
+                }}
+              />
+            </div>
+          ))}
+        </StyleProjectList>
+      );
     }
+
+    // 空项目
     return (
-      <Empty
-        className="auto-margin"
-        image={Empty.PRESENTED_IMAGE_SIMPLE}
-        description="空空如也，快去创建一个主题吧"
-      />
+      <StyleCenterContainer>
+        <Empty
+          className="auto-margin"
+          image={Empty.PRESENTED_IMAGE_SIMPLE}
+          description="空空如也，快去创建一个主题吧"
+        />
+      </StyleCenterContainer>
     );
   };
 
@@ -51,7 +59,7 @@ function ProjectManager(props: TypeProps): JSX.Element {
     <StyleProjectManager>
       <div className="top-container">
         <div className="title">
-          <h2>{brandInfo?.name || ""}主题列表</h2>
+          <h2>{brandInfo?.name || ""}列表</h2>
           <p>新建{projects.length > 0 ? "或选择" : ""}一个主题开始创作</p>
         </div>
         <div className="button">
@@ -60,10 +68,10 @@ function ProjectManager(props: TypeProps): JSX.Element {
         </div>
       </div>
       {/* 工程列表 */}
-      <StyleProjectList>{getProjectListContent()}</StyleProjectList>
+      {getProjectListContent()}
     </StyleProjectManager>
   );
-}
+};
 
 const StyleProjectManager = styled.div`
   display: flex;
@@ -100,15 +108,20 @@ const StyleProjectList = styled.div`
   flex-wrap: wrap;
   flex-grow: 0;
   padding: 20px 30px 0 30px;
-  height: 100%;
   overflow-y: auto;
-  .auto-margin {
-    margin: auto;
-  }
   .project-card {
     width: 150px;
     height: 267px;
     margin: 0 20px 20px 0;
+  }
+`;
+
+const StyleCenterContainer = styled.div`
+  display: flex;
+  flex-grow: 0;
+  height: 100%;
+  .auto-margin {
+    margin: auto;
   }
 `;
 

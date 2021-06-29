@@ -1,35 +1,50 @@
 import React from "react";
 import styled from "styled-components";
 
+import { useCurrentPage, useCurrentPageGroupList } from "@/hooks/sourceConfig";
+
 import { Collapse } from "antd";
-import { TypeTempPreviewClassConf } from "@/types/project";
+import { useSourceImageUrl } from "hooks/image";
 
 // 页面选择器
-type TypeProps = {
-  previewClass: TypeTempPreviewClassConf[];
-};
-const PageSelector: React.FC<TypeProps> = props => {
-  const { previewClass } = props;
+const PageSelector: React.FC = () => {
+  const pageGroupList = useCurrentPageGroupList();
+  const [, setCurrentPage] = useCurrentPage();
+  const sourceImageURL = useSourceImageUrl();
+  if (pageGroupList.length === 0) {
+    console.log("页面分组为空");
+    return null;
+  }
   return (
-    <StylePageSelector>
-      <Collapse
-        bordered={false}
-        defaultActiveKey={Object.keys(previewClass).map(o => Number(o))}
-      >
-        {previewClass.map((item, key) => {
-          return (
-            <Collapse.Panel header={item.name} key={key}>
-              {/* <img src={item.pages}/> */}
-            </Collapse.Panel>
-          );
-        })}
-      </Collapse>
-    </StylePageSelector>
+    <Collapse bordered={false} defaultActiveKey={Object.keys(pageGroupList)}>
+      {pageGroupList.map((group, key) => (
+        <Collapse.Panel header={group.name} key={key}>
+          <StylePagePreview>
+            {group.pages.map((page, index) => (
+              <StyleImage
+                key={index}
+                alt={page.preview}
+                src={sourceImageURL(page.preview)}
+                onClick={() => setCurrentPage(page)}
+              />
+            ))}
+          </StylePagePreview>
+        </Collapse.Panel>
+      ))}
+    </Collapse>
   );
 };
 
-const StylePageSelector = styled.div`
-  width: 360px;
+const StyleImage = styled.img`
+  cursor: pointer;
+  width: 48%;
+  border-radius: 10px;
+`;
+
+const StylePagePreview = styled.div`
+  display: flex;
+  justify-content: space-around;
+  overflow: hidden;
 `;
 
 export default PageSelector;

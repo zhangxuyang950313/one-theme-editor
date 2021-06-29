@@ -1,40 +1,35 @@
 import React from "react";
 import styled from "styled-components";
-import { useSelector } from "react-redux";
 
-import { TypeBrandInfo } from "@/types/project";
+import { useBrandConfList, useCurrentBrandConf } from "@/hooks/sourceConfig";
 
 import { Menu } from "antd";
+import { useDispatch } from "react-redux";
+import { ActionSetSelectedBrand } from "@/store/modules/source-config/action";
 import TopInfo from "./TopInfo";
 
-type TypeProps = {
-  brandInfoList: TypeBrandInfo[];
-  defaultSelected: TypeBrandInfo;
-  onSelect: (data: TypeBrandInfo) => void;
-};
 // 欢迎页侧边栏
-function Sidebar(props: TypeProps): JSX.Element {
-  const { brandInfoList, defaultSelected, onSelect } = props;
+const Sidebar: React.FC = props => {
+  const brandConfList = useBrandConfList();
+  const currentBrandConf = useCurrentBrandConf();
+  const dispatch = useDispatch();
 
   const renderMenu = () => {
-    if (brandInfoList) {
-      const menuItem = brandInfoList.map(item => (
-        <Menu.Item key={item.templateDir}>{item.name}主题</Menu.Item>
-      ));
-      return (
-        <Menu
-          className="menu"
-          selectedKeys={[defaultSelected.templateDir]}
-          onSelect={v => {
-            const brandInfo = brandInfoList.find(o => v.key === o.templateDir);
-            if (brandInfo) onSelect(brandInfo);
-          }}
-        >
-          {menuItem}
-        </Menu>
-      );
-    }
-    return null;
+    if (!brandConfList || !currentBrandConf) return null;
+    return (
+      <Menu
+        className="menu"
+        selectedKeys={[currentBrandConf.type]}
+        onSelect={v => {
+          const brandInfo = brandConfList.find(o => v.key === o.type);
+          if (brandInfo) dispatch(ActionSetSelectedBrand(brandInfo));
+        }}
+      >
+        {brandConfList.map(item => (
+          <Menu.Item key={item.type}>{item.name}</Menu.Item>
+        ))}
+      </Menu>
+    );
   };
 
   return (
@@ -45,7 +40,7 @@ function Sidebar(props: TypeProps): JSX.Element {
       <StyleMenu>{renderMenu()}</StyleMenu>
     </StyleSidebar>
   );
-}
+};
 
 const StyleSidebar = styled.div`
   flex-shrink: 0;

@@ -1,0 +1,354 @@
+<!-- <?xml version="1.0" encoding="utf-8"?> -->
+<config version="1.0.0" description="桌面壁纸和第二屏图标" screenWidth="1080"/>
+
+<category tag="source"      description="图片"      type="image"/>
+<category tag="color"       description="颜色值"   type="xml"/>
+<category tag="bool"        description="布尔值"   type="xml"/>
+<category tag="dimen"       description="尺寸值"   type="xml"/>
+<category tag="integer"     description="整型值"   type="xml"/>
+
+<preview src="./default_lock_wallpaper.jpg"/>
+
+<!-- 图片资源 -->
+<source description="桌面壁纸">
+    <layout x="540" y="0" w="1080" h="2340" align="center"/>
+    <from src="./default_wallpaper.jpg"/>
+    <to src="wallpaper/default_wallpaper.jpg"/>
+</source>
+
+<!-- 第一排图标 
+<source description="计算器">
+    <layout x="168" y="200" w="186" h="186" align="center" alignV="center">
+        ../icons/res/com.android.calculator2.png
+    </layout>
+</source>
+<color description="图标文字">
+    <layout x="168" y="350" size="36" align="center" alignV="center">
+        计算器
+    </layout>
+    <default>#ffffffff</default>
+</color>
+<source description="联系人">
+    <layout x="415" y="200" w="186" h="186" align="center" alignV="center">
+        ../icons/res/com.android.contacts.png
+    </layout>
+    <to>icons/res/com.android.contacts.png</to>
+    <to>icons/res/com.android.providers.contacts</to>
+</source>
+<color description="图标文字">
+    <layout x="415" y="350" size="36" align="center" alignV="center">
+        联系人
+    </layout>
+    <default>#ffffffff</default>
+</color>
+<source description="时钟">
+    <layout x="670" y="200" w="186" h="186" align="center" alignV="center">
+        ../icons/res/com.android.deskclock.png
+    </layout>
+</source>
+<color description="图标文字">
+    <layout x="670" y="350" size="36" align="center" alignV="center">
+        时钟
+    </layout>
+    <default>#ffffffff</default>
+</color>
+<source description="邮件">
+    <layout x="925" y="200" w="186" h="186" align="center" alignV="center">
+        ../icons/res/com.android.email.png
+    </layout>
+</source>
+<color description="图标文字">
+    <layout x="925" y="350" size="36" align="center" alignV="center">
+        邮件
+    </layout>
+    <default>#ffffffff</default>
+</color>
+-->
+
+<!-- 第二排图标 
+<source description="下载">
+    <layout x="168" y="500" w="186" h="186" align="center" alignV="center">
+        ../icons/res/com.android.providers.downloads.png
+    </layout>
+    <to>icons/res/com.android.providers.downloads.png</to>
+    <to>icons/res/com.android.providers.downloads.ui.png</to>
+</source>
+<color description="图标文字">
+    <layout x="168" y="650" size="36" align="center" alignV="center">
+        下载
+    </layout>
+    <default>#ffffffff</default>
+</color>
+<source description="上传">
+    <layout x="415" y="500" w="186" h="186" align="center" alignV="center">
+        ../icons/res/com.android.updater.png
+    </layout>
+</source>
+<color description="图标文字">
+    <layout x="415" y="650" size="36" align="center" alignV="center">
+        上传
+    </layout>
+    <default>#ffffffff</default>
+</color>
+<source description="小爱同学">
+    <layout x="670" y="500" w="186" h="186" align="center" alignV="center">
+        ../icons/res/com.android.voicedialer.png
+    </layout>
+</source>
+<color description="图标文字">
+    <layout x="670" y="650" size="36" align="center" alignV="center">
+        小爱同学
+    </layout>
+    <default>#ffffffff</default>
+</color>
+<source description="万能遥控器">
+    <layout x="925" y="500" w="186" h="186" align="center" alignV="center">
+        ../icons/res/com.duokan.phone.remotecontroller.png
+    </layout>
+</source>
+<color description="图标文字">
+    <layout x="925" y="650" size="36" align="center" alignV="center">
+        万能遥控器
+    </layout>
+    <default>#ffffffff</default>
+</color>
+-->
+
+<!-- 第三排图标 
+<source description="多看阅读">
+    <layout x="168" y="800" w="186" h="186" align="center" alignV="center">
+        ../icons/res/com.duokan.reader.png
+    </layout>
+</source>
+<color description="图标文字">
+    <layout x="168" y="950" size="36" align="center" alignV="center">
+        多看阅读
+    </layout>
+    <default>#ffffffff</default>
+</color>
+<source description="小米健康">
+    <layout x="415" y="800" w="186" h="186" align="center" alignV="center">
+        ../icons/res/com.mi.misupport.png
+    </layout>
+</source>
+<color description="图标文字">
+    <layout x="415" y="950" size="36" align="center" alignV="center">
+        小米健康
+    </layout>
+    <default>#ffffffff</default>
+</color>
+<source description="小米钱包">
+    <layout x="670" y="800" w="186" h="186" align="center" alignV="center">
+        ../icons/res/com.mipay.wallet.png
+    </layout>
+</source>
+<color description="图标文字">
+    <layout x="670" y="950" size="36" align="center" alignV="center">
+        小米钱包
+    </layout>
+    <default>#ffffffff</default>
+</color>
+<source description="扫一扫">
+    <layout x="925" y="800" w="186" h="186" align="center" alignV="center">
+        ../icons/res/com.miui.barcodescanner.png
+    </layout>
+</source>
+<color description="图标文字">
+    <layout x="925" y="950" size="36" align="center" alignV="center">
+        扫一扫
+    </layout>
+    <default>#ffffffff</default>
+</color>
+-->
+
+<!-- 第四排图标 
+<source description="反馈">
+    <layout x="168" y="1100" w="186" h="186" align="center" alignV="center">
+        ../icons/res/com.miui.bugreport.png
+    </layout>
+</source>
+<color description="图标文字">
+    <layout x="168" y="1250" size="36" align="center" alignV="center">
+        反馈
+    </layout>
+    <default>#ffffffff</default>
+</color>
+<source description="指南针">
+    <layout x="415" y="1100" w="186" h="186" align="center" alignV="center">
+        ../icons/res/com.miui.compass.png
+    </layout>
+</source>
+<color description="图标文字">
+    <layout x="415" y="1250" size="36" align="center" alignV="center">
+        指南针
+    </layout>
+    <default>#ffffffff</default>
+</color>
+<source description="收音机">
+    <layout x="670" y="1100" w="186" h="186" align="center" alignV="center">
+        ../icons/res/com.miui.fm.png
+    </layout>
+</source>
+<color description="图标文字">
+    <layout x="670" y="1250" size="36" align="center" alignV="center">
+        收音机
+    </layout>
+    <default>#ffffffff</default>
+</color>
+<source description="便签">
+    <layout x="925" y="1100" w="186" h="186" align="center" alignV="center">
+        ../icons/res/com.miui.notes.png
+    </layout>
+</source>
+<color description="图标文字">
+    <layout x="925" y="1250" size="36" align="center" alignV="center">
+        便签
+    </layout>
+    <default>#ffffffff</default>
+</color>
+-->
+
+
+<!-- 第五排图标 
+<source description="小米音乐">
+    <layout x="168" y="1400" w="186" h="186" align="center" alignV="center">
+        ../icons/res/com.miui.player.png
+    </layout>
+</source>
+<color description="图标文字">
+    <layout x="168" y="1550" size="36" align="center" alignV="center">
+        小米音乐
+    </layout>
+    <default>#ffffffff</default>
+</color>
+<source description="录屏">
+    <layout x="415" y="1400" w="186" h="186" align="center" alignV="center">
+        ../icons/res/com.miui.screenrecorder.png
+    </layout>
+    <to>icons/res/com.miui.screenrecorder.png</to>
+</source>
+<color description="图标文字">
+    <layout x="415" y="1550" size="36" align="center" alignV="center">
+        录屏
+    </layout>
+    <default>#ffffffff</default>
+</color>
+<source description="小米论坛">
+    <layout x="670" y="1400" w="186" h="186" align="center" alignV="center">
+        ../icons/res/com.miui.miuibbs.png
+    </layout>
+</source>
+<color description="图标文字">
+    <layout x="670" y="1550" size="36" align="center" alignV="center">
+        小米论坛
+    </layout>
+    <default>#ffffffff</default>
+</color>
+<source description="一键换机">
+    <layout x="925" y="1400" w="186" h="186" align="center" alignV="center">
+        ../icons/res/com.miui.huanji.png
+    </layout>
+</source>
+<color description="图标文字">
+    <layout x="925" y="1550" size="36" align="center" alignV="center">
+        一键换机
+    </layout>
+    <default>#ffffffff</default>
+</color>
+-->
+
+
+<!-- 第六排图标 
+<source description="小米社区">
+    <layout x="168" y="1700" w="186" h="186" align="center" alignV="center">
+        ../icons/res/com.xiaomi.bbs.png
+    </layout>
+</source>
+<color description="图标文字">
+    <layout x="168" y="1850" size="36" align="center" alignV="center">
+        小米社区
+    </layout>
+    <default>#ffffffff</default>
+</color>
+<source description="小米手环">
+    <layout x="415" y="1700" w="186" h="186" align="center" alignV="center">
+        ../icons/res/com.xiaomi.hm.health.png
+    </layout>
+    <to>icons/res/com.xiaomi.hm.health.png</to>
+</source>
+<color description="图标文字">
+    <layout x="415" y="1850" size="36" align="center" alignV="center">
+        小米手环
+    </layout>
+    <default>#ffffffff</default>
+</color>
+<source description="小米直播">
+    <layout x="670" y="1700" w="186" h="186" align="center" alignV="center">
+        ../icons/res/com.wali.live.png
+    </layout>
+    <to>com.xiaomi.padshop</to>
+</source>
+<color description="图标文字">
+    <layout x="670" y="1850" size="36" align="center" alignV="center">
+        小米直播
+    </layout>
+    <default>#ffffffff</default>
+</color>
+<source description="录音机">
+    <layout x="925" y="1700" w="186" h="186" align="center" alignV="center">
+        ../icons/res/com.android.soundrecorder.png
+    </layout>
+</source>
+<color description="图标文字">
+    <layout x="925" y="1850" size="36" align="center" alignV="center">
+        录音机
+    </layout>
+    <default>#ffffffff</default>
+</color>
+-->
+
+<!-- 分页器 -->
+<source description="分页器（负一屏）">
+    <layout x="500" y="1950" w="40" h="40" align="center" alignV="center"/>
+    <from src="../com.miui.home/res/drawable-xxhdpi/workspace_assistantpoint.png"/>
+    <to src="com.miui.home/res/drawable-xxhdpi/workspace_assistantpoint.png"/>
+</source>
+<source description="分页器（选中态）">
+    <layout x="540" y="1950" w="40" h="40" align="center" alignV="center"/>
+    <from src="../com.miui.home/res/drawable-xxhdpi/workspace_seekpoint_highlight.png"/>
+    <to src="com.miui.home/res/drawable-xxhdpi/workspace_seekpoint_highlight.png"/>
+</source>
+<source description="分页器（未选中态）">
+    <layout x="580" y="1950" w="40" h="40" align="center" alignV="center"/>
+    <from src="../com.miui.home/res/drawable-xxhdpi/workspace_seekpoint_normal.png"/>
+    <to src="com.miui.home/res/drawable-xxhdpi/workspace_seekpoint_normal.png"/>
+</source>
+
+
+
+<!-- 底栏图标 
+<source description="拨号">
+    <layout x="160" y="2150" w="186" h="186" align="center" alignV="center">
+        ../icons/res/com.android.contacts.activities.TwelveKeyDialer.png
+    </layout>
+    <to>icons/res/com.android.contacts.activities.TwelveKeyDialer.png</to>
+</source>
+<source description="短信">
+    <layout x="415" y="2150" w="186" h="186" align="center" alignV="center">
+        ../icons/res/com.android.mms.png
+    </layout>
+    <to>icons/res/com.android.mms.png</to>
+</source>
+<source description="浏览器">
+    <layout x="670" y="2150" w="186" h="186" align="center" alignV="center">
+        ../icons/res/com.android.browser.png
+    </layout>
+    <to>icons/res/com.android.browser.png</to>
+</source>
+<source description="相机">
+    <layout x="925" y="2150" w="186" h="186" align="center" alignV="center">
+        ../icons/res/com.android.camera.png
+    </layout>
+    <to>icons/res/com.android.camera.png</to>
+</source>
+-->

@@ -4,6 +4,7 @@ dist
 build
 release
 release.*
+userData
 
 
 # local env files
@@ -26,3 +27,4 @@ pnpm-debug.log*
 *.sw?
 
 .eslintcache
+.npmg

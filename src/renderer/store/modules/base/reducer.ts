@@ -1,26 +1,28 @@
-import { SET_WINDOW_TITLE } from "@/store/actions";
+import ACTION_TYPES from "@/store/actions";
+import * as PATH_CONFIG from "server/core/path-config";
+import { updateState } from "@/store/utils";
+import { TypeActions } from "./action";
 
-type TypeUpdateWindowTitle = {
-  type: typeof SET_WINDOW_TITLE;
-  title: string;
+type TypeBaseState = {
+  port: number;
+  pathConfig: typeof PATH_CONFIG | null;
 };
 
-type TypeActions = TypeUpdateWindowTitle;
-
-const BaseState = {
-  windowTitle: document.title
+const BaseState: TypeBaseState = {
+  port: 30000,
+  pathConfig: null
 };
 
-export type TypeBaseState = typeof BaseState;
-
-export default function Base(
+export default function BaseReducer(
   state: TypeBaseState = BaseState,
   action: TypeActions
 ): TypeBaseState {
   switch (action.type) {
-    case SET_WINDOW_TITLE: {
-      document.title = action.title;
-      return { ...state, windowTitle: action.title };
+    case ACTION_TYPES.SET_SERVER_PORT: {
+      return updateState(state, { port: Number(action.payload) || 30000 });
+    }
+    case ACTION_TYPES.SET_PATH_CONFIG: {
+      return updateState(state, { pathConfig: action.payload });
     }
     default:
       return state;

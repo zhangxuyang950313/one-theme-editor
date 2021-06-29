@@ -14,8 +14,8 @@ const Router: React.FC = () => {
           {/* <TransitionGroup>
             <CSSTransition key={location.key} classNames="fade" timeout={300}> */}
           <Route exact path="/" component={Starter}></Route>
-          {/* pid 为 projectId，为 nedb 中的 _id */}
-          <Route exact path="/editor/:pid" component={Editor}></Route>
+          {/* uuid 为 project.uuid */}
+          <Route exact path="/editor/:uuid" component={Editor}></Route>
           {/* </CSSTransition>
           </TransitionGroup> */}
         </HashRouter>

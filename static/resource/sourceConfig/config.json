@@ -1,0 +1,12 @@
+[
+  {
+    "name": "小米主题",
+    "type": "xiaomi",
+    "sourceConfigs":["xiaomi/miui12"]
+  },
+  {
+    "name": "华为主题",
+    "type": "huawei",
+    "sourceConfigs":[]
+  }
+]

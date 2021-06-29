@@ -18,12 +18,12 @@ import IconButton from "@/components/IconButton";
 const icons = {
   apply: { name: "应用", icon: <MobileOutlined /> },
   save: { name: "保存", icon: <FolderOutlined /> },
-  new: { name: "新建", icon: <PlusOutlined /> },
   export: { name: "导出", icon: <ExportOutlined /> },
   upload: { name: "上传", icon: <CloudUploadOutlined /> },
   info: { name: "资料", icon: <InfoCircleOutlined /> },
   dark: { name: "深色", icon: <InfoCircleOutlined /> },
-  light: { name: "浅色", icon: <InfoCircleOutlined /> }
+  light: { name: "浅色", icon: <InfoCircleOutlined /> },
+  new: { name: "新建", icon: <PlusOutlined /> }
 };
 
 type TypeIconsType = keyof typeof icons;
