@@ -15,7 +15,7 @@ const windowNormalizeOptions: BrowserWindowConstructorOptions = {
     nodeIntegrationInWorker: true,
     enableRemoteModule: true,
     contextIsolation: false,
-    devTools: isDev
+    devTools: isDev || true
     // maximize: true
   },
   // frame: process.platform === "darwin",

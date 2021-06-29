@@ -1,4 +1,6 @@
 const API = {
+  // 图片服务
+  IMAGE: "/image",
   // 获取厂商信息列表
   GET_BRAND_LIST: "/brand/list",
   // 获取 sourceConfig 路径

@@ -159,7 +159,7 @@ const StyleImageBackground = styled.div<{ srcUrl?: string }>`
     width: 100%;
     height: 100%;
     background: center/contain no-repeat;
-    background-image: ${({ srcUrl }) => `url(${srcUrl})` || "unset"};
+    background-image: ${({ srcUrl }) => `url(${srcUrl || ""})` || "unset"};
     &[can-click="true"] {
       cursor: pointer;
       transform: scale(0.8);

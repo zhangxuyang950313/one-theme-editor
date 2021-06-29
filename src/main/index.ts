@@ -8,10 +8,10 @@ app.on("ready", () => {
   const win = mainWindow();
   win.loadFile(htmlFile);
 
-  // 生产环境不给打开调试工具
-  win.webContents.on("devtools-opened", () => {
-    win.webContents.closeDevTools();
-  });
+  // // 生产环境不给打开调试工具
+  // win.webContents.on("devtools-opened", () => {
+  //   win.webContents.closeDevTools();
+  // });
 });
 
 app.on("window-all-closed", () => {

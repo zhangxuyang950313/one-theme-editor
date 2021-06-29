@@ -1,6 +1,6 @@
 import React from "react";
 import fse from "fs-extra";
-import { useImageUrl } from "@/hooks/image";
+import { useImageUrl, useLoadImage } from "@/hooks/image";
 
 /**
  * 封装 img
@@ -8,13 +8,14 @@ import { useImageUrl } from "@/hooks/image";
  * @param props 和 img 标签具有相同的属性
  */
 const LocalImage: React.FC<JSX.IntrinsicElements["img"]> = props => {
-  const imgURL = useImageUrl(props.src);
+  const remoteUrl = useImageUrl(props.src);
+  const [url] = useLoadImage(remoteUrl);
   const show =
-    imgURL &&
+    url &&
     props.src &&
     fse.existsSync(props.src) &&
     fse.statSync(props.src).isFile();
-  return show ? <img {...props} src={imgURL} alt={props.src} /> : null;
+  return show ? <img {...props} src={url} alt={props.src} /> : null;
 };
 
 export default LocalImage;

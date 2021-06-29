@@ -30,6 +30,16 @@ export default class Page {
 
   // 处理当前页面资源的相对路径
   private relativePathname(file: string) {
+    console.log({
+      file,
+      rootDir: this.rootDir,
+      dirname: path.dirname(this.pageFile),
+      relative: path.relative(this.rootDir, path.dirname(this.pageFile)),
+      result: path.join(
+        path.relative(this.rootDir, path.dirname(this.pageFile)),
+        file
+      )
+    });
     return path.join(
       path.relative(this.rootDir, path.dirname(this.pageFile)),
       file
