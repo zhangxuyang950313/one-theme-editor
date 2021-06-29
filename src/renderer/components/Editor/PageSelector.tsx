@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { useCurrentPage, useCurrentPageGroupList } from "@/hooks/sourceConfig";
 
 import { Collapse } from "antd";
-import { useSourceImageUrl } from "@/hooks";
+import { useSourceImageUrl } from "hooks/image";
 
 // 页面选择器
 const PageSelector: React.FC = () => {

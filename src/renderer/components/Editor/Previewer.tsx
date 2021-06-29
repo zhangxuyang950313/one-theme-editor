@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 import { useCurrentPage } from "@/hooks/sourceConfig";
-import { useSourceImageUrl } from "@/hooks";
+import { useSourceImageUrl } from "hooks/image";
 
 const Preview: React.FC = () => {
   const [currentPage] = useCurrentPage();

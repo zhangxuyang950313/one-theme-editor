@@ -17,12 +17,12 @@ import {
 
 // script
 import { apiCopyFile, apiDeleteFile } from "@/api";
-import { useImagePrefix, useToListWatcher } from "@/hooks/index";
+import { useImagePrefix, useLoadImage } from "@/hooks/image";
+import { useToListWatcher } from "@/hooks/fileWatcher";
 import { useProjectRoot } from "@/hooks/project";
 import { useSourceConfigRoot } from "@/hooks/sourceConfig";
 import { TypeSCPageSourceConf } from "types/source-config";
 import ERR_CODE from "@/core/error-code";
-import { useLoadImage } from "@/hooks/image";
 
 // 图片素材展示
 type TypePropsOfShowImage = {

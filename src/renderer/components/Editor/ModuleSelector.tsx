@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { useCurrentModuleList, useCurrentModule } from "@/hooks/sourceConfig";
 
 import { Tooltip } from "antd";
-import { useSourceImageUrl } from "@/hooks";
+import { useSourceImageUrl } from "hooks/image";
 
 // 模块选择器
 const ModuleSelector: React.FC = () => {

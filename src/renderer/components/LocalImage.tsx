@@ -1,6 +1,6 @@
 import React from "react";
 import fse from "fs-extra";
-import { useImageUrl } from "@/hooks";
+import { useImageUrl } from "@/hooks/image";
 
 /**
  * 封装 img
