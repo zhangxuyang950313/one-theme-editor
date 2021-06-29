@@ -1,12 +1,12 @@
 import path from "path";
 import { useState, useEffect } from "react";
 
+import { useServerHost } from "hooks/index";
 import { useProjectRoot } from "hooks/project";
 import { useSourceConfigRoot } from "hooks/sourceConfig";
-import { useServerHost } from "hooks/index";
 
 /**
- * 预加载图片，防止闪烁
+ * 预加载图片，防止切换闪烁或者从上到下加载不好的体验
  * @param src
  * @returns 加载成功返回 url 失败返回空字符串
  */
@@ -16,10 +16,11 @@ export function useLoadImage(src = ""): [string, (x: string) => void] {
   const [img] = useState(new Image());
 
   useEffect(() => {
+    if (!preloadUrl) return;
     img.onload = () => setFinalURL(preloadUrl);
     img.onerror = () => setFinalURL("");
     img.src = preloadUrl;
-
+    // 卸载数据响应
     return () => {
       img.onload = () => Function.prototype;
       img.onerror = () => Function.prototype;
@@ -41,7 +42,9 @@ export function useImagePrefix(): string {
  */
 export function useImageUrl(filepath?: string): string {
   const prefix = useImagePrefix();
-  return filepath ? prefix + filepath : "";
+  // 预加载
+  const [url] = useLoadImage(filepath ? prefix + filepath : "");
+  return url;
 }
 
 /**

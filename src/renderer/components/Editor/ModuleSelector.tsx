@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import logSymbols from "log-symbols";
 
 import { useCurrentModuleList, useCurrentModule } from "@/hooks/sourceConfig";
 
@@ -13,12 +14,12 @@ const ModuleSelector: React.FC = () => {
   const getImageURL = useSourceImageUrl();
 
   if (!currentModule) {
-    console.log("currentModule 为空");
+    console.log(logSymbols.error, "currentModule 为空");
     return null;
   }
 
   if (tempModuleList.length === 0) {
-    console.log("modules 为空");
+    console.log(logSymbols.error, "modules 为空");
     return null;
   }
 
