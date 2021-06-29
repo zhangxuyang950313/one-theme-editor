@@ -1,5 +1,5 @@
 import React from "react";
-import fse from "fs-extra";
+// import fse from "fs-extra";
 import { useLoadImageByPath } from "@/hooks/image";
 
 /**
@@ -9,11 +9,11 @@ import { useLoadImageByPath } from "@/hooks/image";
  */
 const LocalImage: React.FC<JSX.IntrinsicElements["img"]> = props => {
   const [url] = useLoadImageByPath(props.src);
-  const show =
-    url &&
-    props.src &&
-    fse.existsSync(props.src) &&
-    fse.statSync(props.src).isFile();
+  const show = url && props.src;
+  // 判断交给服务进程去做
+  // &&
+  // fse.existsSync(props.src) &&
+  // fse.statSync(props.src).isFile();
   return show ? <img {...props} src={url} alt={props.src} /> : null;
 };
 

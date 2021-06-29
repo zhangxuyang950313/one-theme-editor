@@ -6,6 +6,7 @@ import { useCurrentModuleList, useCurrentModule } from "@/hooks/sourceConfig";
 
 import { Tooltip } from "antd";
 import { useGetSourceImageUrl } from "hooks/image";
+import SourceImage from "../Image/SourceImage";
 
 // 模块选择器
 const ModuleSelector: React.FC = () => {
@@ -33,7 +34,8 @@ const ModuleSelector: React.FC = () => {
             onClick={() => setCurrentModule(item)}
           >
             <Tooltip title={item.name} placement="right">
-              <img className="icon" alt="" src={getImageURL(item.icon)} />
+              {/* <img className="icon" alt="" src={getImageURL(item.icon)} /> */}
+              <SourceImage src={item.icon} />
             </Tooltip>
           </StyleIcon>
         );

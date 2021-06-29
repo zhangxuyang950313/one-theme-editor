@@ -1,8 +1,9 @@
-import { useLayoutEffect, useState, useCallback } from "react";
+import path from "path";
+import { useLayoutEffect, useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { apiGetProjectByUUID, apiGetProjectList } from "@/api/index";
 import { useAxiosCanceler } from "@/hooks/index";
-import { useCurrentBrandConf } from "@/hooks/sourceConfig";
+import { useCurrentBrandConf, useSourceConfigRoot } from "@/hooks/sourceConfig";
 import {
   ActionSetCurrentBrand,
   ActionSetCurrentPage,
@@ -121,6 +122,38 @@ export function useProjectData(): TypeProjectStateInStore | null {
 // 获取当前工程目录
 export function useProjectRoot(): string | null {
   return useSelector(getProjectRoot);
+}
+
+// 处理工程路径
+export function useResolveProjectPath(
+  relativePath = ""
+): [string, (x: string) => void] {
+  const projectRoot = useProjectRoot();
+  const [relativeVal, setRelativeVal] = useState(relativePath);
+  const [projectPath, setProjectPath] = useState("");
+
+  useEffect(() => {
+    if (!(projectRoot && relativePath)) return;
+    setProjectPath(path.join(projectRoot, relativePath));
+  }, [relativeVal]);
+
+  return [projectPath, setRelativeVal];
+}
+
+// 处理素材路径
+export function useResolveSourcePath(
+  relativePath: string
+): [string, (x: string) => void] {
+  const sourceRoot = useSourceConfigRoot();
+  const [relativeVal, setRelativeVal] = useState(relativePath);
+  const [sourcePath, setSourcePath] = useState("");
+
+  useEffect(() => {
+    if (!sourceRoot || !relativePath) return;
+    setSourcePath(path.join(sourceRoot, relativePath));
+  }, [relativeVal]);
+
+  return [sourcePath, setRelativeVal];
 }
 
 // // 添加图片资源映射
