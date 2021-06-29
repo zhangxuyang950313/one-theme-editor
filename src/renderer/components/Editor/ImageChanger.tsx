@@ -22,6 +22,7 @@ import { useProjectRoot } from "@/hooks/project";
 import { useSourceConfigRoot } from "@/hooks/sourceConfig";
 import { TypeSCPageSourceConf } from "types/source-config";
 import ERR_CODE from "@/core/error-code";
+import { useLoadImage } from "@/hooks/image";
 
 // 图片素材展示
 type TypePropsOfShowImage = {
@@ -36,10 +37,19 @@ function ImageShower(props: TypePropsOfShowImage) {
   const { filepath, showHandler, absoluteToList, onClick } = props;
   const imagePrefix = useImagePrefix();
   const [count, updateCount] = useState(0);
-  const url = filepath ? `${imagePrefix + filepath}&count=${count}` : "";
+
+  // 图片预加载
+  const [url, setUrl] = useLoadImage();
+
   useEffect(() => {
     updateCount(count + 1);
-  }, [filepath]);
+  }, [absoluteToList]);
+
+  // 图片重载
+  useEffect(() => {
+    setUrl(filepath ? `${imagePrefix + filepath}&count=${count}` : "");
+  }, [count]);
+
   const Content: React.FC = () => {
     return (
       <StyleImageBackground srcUrl={url}>

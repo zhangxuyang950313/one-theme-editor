@@ -171,55 +171,11 @@ export function useSourceImageUrl(
   };
 }
 
-// 监听文件，初始化或删除返回空字符串
 export enum FILE_STATUS {
   ADD = "add",
   CHANGE = "change",
   UNLINK = "unlink"
 }
-export function useWatchFile(file: string | string[]): {
-  event: FILE_STATUS;
-  file: string;
-} {
-  const [status, setStatus] = useState({
-    event: FILE_STATUS.ADD,
-    file: Array.isArray(file) ? file[0] : file
-  });
-  useEffect(() => {
-    if (!file) return;
-    console.log("watch", file);
-    const watcher = chokidar
-      .watch(file)
-      .on(FILE_STATUS.ADD, filepath => {
-        console.log(FILE_STATUS.ADD, filepath);
-        setStatus({
-          event: FILE_STATUS.ADD,
-          file: filepath
-        });
-      })
-      .on(FILE_STATUS.CHANGE, filepath => {
-        console.log(FILE_STATUS.CHANGE, filepath);
-        setStatus({
-          event: FILE_STATUS.CHANGE,
-          file: filepath
-        });
-      })
-      .on(FILE_STATUS.UNLINK, filepath => {
-        console.log(FILE_STATUS.UNLINK, filepath);
-        setStatus({
-          event: FILE_STATUS.UNLINK,
-          file: filepath
-        });
-      });
-    return () => {
-      console.log("unwatch", file);
-      watcher.unwatch(file);
-      watcher.close();
-    };
-  }, []);
-  return status;
-}
-
 // 返回一个 chokidar 监听实例，自动在组件卸载时释放监听
 export function useFSWatcherInstance(
   options?: chokidar.WatchOptions
@@ -286,7 +242,7 @@ export function useToListWatcher(toList: string[]): string[] {
     watchers.forEach((watcher, index) => {
       // 设定监听最大值
       // TODO：如果超过会是什么样
-      watcher.setMaxListeners(1);
+      watcher.setMaxListeners(10);
       watcher
         // 增加/重命名
         .on(FILE_STATUS.ADD, relative => {
@@ -320,20 +276,4 @@ export function useToListWatcher(toList: string[]): string[] {
   }, []);
 
   return list;
-}
-
-export function useWatchProjectFile(
-  relative: string | string[]
-): ReturnType<typeof useWatchFile> {
-  const projectRoot = useProjectRoot();
-  const files = Array.isArray(relative)
-    ? relative.flatMap(item =>
-        projectRoot ? [path.join(projectRoot, item)] : []
-      )
-    : [relative];
-  const status = useWatchFile(files);
-  return {
-    event: status.event,
-    file: projectRoot ? path.join(projectRoot, status.file) : ""
-  };
 }
