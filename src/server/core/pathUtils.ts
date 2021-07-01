@@ -21,6 +21,9 @@ export const IMAGE_DATA_DB = path.resolve(USER_DATA, "imageData");
 // 资源目录
 export const RESOURCE_DIR = path.resolve(STATIC_DIR, "resource");
 
+// 静态图片素材
+export const ASSETS_DIR = path.resolve(STATIC_DIR, "assets");
+
 // 二进制目录
 export const BINARY_DIR = path.resolve(RESOURCE_DIR, "binary");
 

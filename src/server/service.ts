@@ -1,3 +1,4 @@
+import path from "path";
 import fse from "fs-extra";
 import FileType from "file-type";
 import express, { Express } from "express";
@@ -84,20 +85,30 @@ export default function registerService(service: Express): void {
     never, // reqBody
     { filepath: string } // reqQuery
   >(`${API.IMAGE}`, async (req, res) => {
-    try {
-      const filepath = req.query.filepath;
-      if (!fse.existsSync(filepath)) {
+    async function getImgBuffAndFileType(file: string) {
+      if (!fse.existsSync(file)) {
         throw new Error(ERR_CODE[4003]);
       }
-      const buff = fse.readFileSync(filepath);
+      const buff = fse.readFileSync(file);
       const fileType = await FileType.fromBuffer(buff);
       if (!fileType) {
         throw new Error(ERR_CODE[4003]);
       }
+      return { buff, fileType };
+    }
+    try {
+      const filepath = req.query.filepath;
+      const { buff, fileType } = await getImgBuffAndFileType(filepath).catch(
+        async () => {
+          const errImg = path.join(PATHS.ASSETS_DIR, "img-err.png");
+          return getImgBuffAndFileType(errImg);
+        }
+      );
       res.set({ "Content-Type": fileType.mime });
       res.send(buff);
     } catch (err) {
-      res.send(err.message);
+      console.log("图片加载异常", err.message);
+      res.status(400);
     }
   });
 

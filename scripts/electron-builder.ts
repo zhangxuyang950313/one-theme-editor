@@ -8,7 +8,12 @@ const buildOptions: Configuration =  {
   asar: false,
   // extraResources: [{ from: "static", to: "app/static" }],
   extraMetadata: { main: "release.main/index.js" },
-  files: ["release.renderer/**/*", "release.main/**/*", "release.server/**/*", "static/**/*"],
+  files: [
+    "release.renderer/**/*", 
+    "release.main/**/*", 
+    "release.server/**/*", 
+    "static/**/*"
+  ],
   // mac: {
   //   target: "dmg",
   //   icon: "icons/icon.png"
