@@ -32,3 +32,7 @@ export const SOuRCE_CONFIG_FILE = path.resolve(
   SOURCE_CONFIG_DIR,
   "config.json"
 );
+
+export function getSCDescriptionByNamespace(namespace: string): string {
+  return path.join(SOURCE_CONFIG_DIR, namespace, "description.xml");
+}

@@ -99,32 +99,6 @@ export async function apiUpdateProject(
     .then(data => data.data.data);
 }
 
-// 增加图片映射
-export async function apiAddImageMapper(
-  uuid: string,
-  data: TypeImageMapper
-): Promise<TypeProjectDataDoc> {
-  return createHttp()
-    .post<TypeResponseFrame<TypeProjectDataDoc>>(
-      `${API.ADD_IMAGE_MAPPER}/${uuid}`,
-      data
-    )
-    .then(data => data.data.data);
-}
-
-// 删除图片映射
-export async function apiDelImageMapper(
-  uuid: string,
-  target: string
-): Promise<TypeProjectDataDoc> {
-  return createHttp()
-    .post<TypeResponseFrame<TypeProjectDataDoc>>(
-      `${API.DEL_IMAGE_MAPPER}/${uuid}`,
-      { target }
-    )
-    .then(data => data.data.data);
-}
-
 // // 写入文件
 // export async function apiWriteFile(
 //   fileData: TypeFileData,

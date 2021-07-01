@@ -22,11 +22,11 @@ export type TypeXMLUiVersionConf = TypeAttrsContent<
 export type TypeXMLModuleConf = TypeAttrsContent<
   Partial<{ name: string; icon: string }>
 > &
-  Partial<{ group: TypeOriginPageGroupConf[] }>;
-export type TypeOriginPageConf = TypeAttrsContent<Partial<{ src: string }>>;
-export type TypeOriginPageGroupConf = TypeAttrsContent<
+  Partial<{ group: TypeXMLPageGroupConf[] }>;
+export type TypeXMLPageNode = TypeAttrsContent<Partial<{ src: string }>>;
+export type TypeXMLPageGroupConf = TypeAttrsContent<
   Partial<{ name: string }>
-> & { page?: TypeOriginPageConf[] };
+> & { page?: TypeXMLPageNode[] };
 
 // // 厂商配置原始信息
 // export type TypeOriginBrandConf = Partial<{

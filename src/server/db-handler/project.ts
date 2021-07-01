@@ -3,7 +3,6 @@ import fse from "fs-extra";
 import { v4 as UUID } from "uuid";
 import Nedb from "nedb-promises";
 
-import { PROJECTS_DB } from "server/core/path-config";
 import {
   TypeCreateProjectPayload,
   TypeImageMapper,
@@ -11,6 +10,10 @@ import {
   TypeProjectDataDoc
 } from "types/project";
 
+import {
+  PROJECTS_DB,
+  getSCDescriptionByNamespace
+} from "server/core/path-config";
 import SourceConfig from "server/data/SourceConfig";
 import ERR_CODE from "renderer/core/error-code";
 
@@ -78,7 +81,8 @@ export async function createProject(
   data: TypeCreateProjectPayload
 ): Promise<TypeProjectDataDoc> {
   const { brandInfo, projectInfo, projectRoot, sourceNamespace } = data;
-  const sourceConfig = await new SourceConfig(sourceNamespace).getConfig();
+  const configFile = getSCDescriptionByNamespace(sourceNamespace);
+  const sourceConfig = await new SourceConfig(configFile).getConfig();
   const projectData: TypeProjectData = {
     uuid: UUID(),
     projectInfo,

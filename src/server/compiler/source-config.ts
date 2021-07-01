@@ -1,10 +1,12 @@
-import path from "path";
-import { asyncMap } from "common/utils";
 import fse from "fs-extra";
-import SourceConfig from "@/data/SourceConfig";
-import { SOURCE_CONFIG_DIR, SOuRCE_CONFIG_FILE } from "server/core/path-config";
+import {
+  getSCDescriptionByNamespace,
+  SOuRCE_CONFIG_FILE
+} from "server/core/path-config";
+import { asyncMap } from "common/utils";
 import { TypeBrandConf } from "types/project";
 import { TypeSourceDescription } from "types/source-config";
+import SourceConfig from "@/data/SourceConfig";
 
 import ERR_CODE from "renderer/core/error-code";
 
@@ -27,12 +29,11 @@ export async function compileSourceDescriptionList(
   const brandConfList = await readBrandConf();
   const brandConf = brandConfList.find(item => item.type === brandType);
   if (!brandConf?.sourceConfigs) return [];
-  const ensureConfigs = brandConf.sourceConfigs.filter(namespace =>
-    fse.existsSync(
-      path.join(SOURCE_CONFIG_DIR, namespace, SourceConfig.filename)
-    )
-  );
-  return asyncMap(ensureConfigs, namespace =>
-    new SourceConfig(namespace).getDescription()
+  const ensureConfigs = brandConf.sourceConfigs.flatMap(namespace => {
+    const absPath = getSCDescriptionByNamespace(namespace);
+    return fse.existsSync(absPath) ? [absPath] : [];
+  });
+  return asyncMap(ensureConfigs, configFile =>
+    new SourceConfig(configFile).getDescription()
   );
 }
