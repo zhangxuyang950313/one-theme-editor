@@ -9,7 +9,7 @@ import PageSelector from "@/components/Editor/PageSelector";
 import Previewer from "@/components/Editor/Previewer";
 import ResourceContent from "@/components/Editor/ResourceContent";
 
-import { useProjectData, useLoadProjectByUUID } from "@/hooks/project";
+import { useLoadProjectByUUID } from "@/hooks/project";
 import { StyleBorderRight } from "@/style";
 
 // 主编辑区域
@@ -36,8 +36,7 @@ const Editor: React.FC = () => {
   const history = useHistory();
   // 从路由参数中获得工程 uuid
   const { uuid } = useParams<{ uuid: string }>();
-  const [, isLoading] = useLoadProjectByUUID(uuid);
-  const projectData = useProjectData();
+  const [projectData, isLoading] = useLoadProjectByUUID(uuid);
 
   // 还未安装
   if (isLoading) {
@@ -121,13 +120,14 @@ const StylePageSelector = styled(StyleBorderRight)`
 const StylePreviewer = styled(StyleBorderRight)`
   width: 360px;
   padding: 20px;
+  flex-shrink: 0;
   overflow: auto;
 `;
 
 const StyleResourceContent = styled(StyleBorderRight)`
+  width: 100%;
   overflow: auto;
   box-sizing: border-box;
-  /* flex-shrink: 0; */
 `;
 
 export default Editor;

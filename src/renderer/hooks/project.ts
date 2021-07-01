@@ -17,6 +17,7 @@ import {
 import { TypeProjectDataDoc, TypeProjectStateInStore } from "types/project";
 
 import ERR_CODE from "renderer/core/error-code";
+import { notification } from "antd";
 import { useDocumentTitle } from "./index";
 
 // 获取项目列表
@@ -99,6 +100,8 @@ export function useLoadProjectByUUID(
       })
       .catch(err => {
         console.warn(`${ERR_CODE[2005]}: ${uuid}`, err);
+        notification.error({ message: ERR_CODE[2005], description: uuid });
+        updateProject(null);
       })
       .finally(() => {
         updateLoading(false);

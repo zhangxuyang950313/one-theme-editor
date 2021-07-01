@@ -169,7 +169,7 @@ export default function registerService(service: Express): void {
     (req, res) => {
       getProjectListOf(req.params.brandType)
         .then(project => res.send(result.success(project)))
-        .catch(err => res.status(400).send(result.fail(err)));
+        .catch(err => res.status(400).send(result.fail(err.message)));
     }
   );
 
@@ -177,7 +177,7 @@ export default function registerService(service: Express): void {
   service.get<{ uuid: string }>(`${API.GET_PROJECT}/:uuid`, (req, res) => {
     findProjectByUUID(req.params.uuid)
       .then(project => res.send(result.success(project)))
-      .catch(err => res.status(400).send(result.fail(err)));
+      .catch(err => res.status(400).send(result.fail(err.message)));
   });
 
   // 更新数据
@@ -188,7 +188,7 @@ export default function registerService(service: Express): void {
   >(`${API.UPDATE_PROJECT}/:uuid`, (req, res) => {
     updateProject(req.params.uuid, req.body)
       .then(project => res.send(result.success(project)))
-      .catch(err => res.status(400).send(result.fail(err)));
+      .catch(err => res.status(400).send(result.fail(err.message)));
   });
 
   // 更新工程描述信息
@@ -199,7 +199,7 @@ export default function registerService(service: Express): void {
   >(`${API.UPDATE_DESCRIPTION}/:uuid`, (req, res) => {
     updateProject(req.params.uuid, { description: req.body })
       .then(project => res.send(result.success(project)))
-      .catch(err => res.status(400).send(result.fail(err)));
+      .catch(err => res.status(400).send(result.fail(err.message)));
   });
 
   // 更新工程ui版本
@@ -208,7 +208,7 @@ export default function registerService(service: Express): void {
     (req, res) => {
       updateProject(req.params.uuid, { uiVersion: req.body })
         .then(project => res.send(result.success(project)))
-        .catch(err => res.status(400).send(result.fail(err)));
+        .catch(err => res.status(400).send(result.fail(err.message)));
     }
   );
 

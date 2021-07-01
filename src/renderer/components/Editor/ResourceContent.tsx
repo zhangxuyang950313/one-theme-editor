@@ -7,6 +7,7 @@ import ImageController from "@/components/ImageController/index";
 
 const ResourceContent: React.FC = () => {
   const [currentPage] = useCurrentPage();
+
   if (!currentPage) return null;
   return (
     <StyleResourceContent>
