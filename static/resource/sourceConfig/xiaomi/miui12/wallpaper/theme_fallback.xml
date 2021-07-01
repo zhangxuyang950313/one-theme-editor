@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='utf-8' standalone='yes' ?>
+<MIUI_Theme_Values>
+	
+	<!-- 大背景 -->
+	<drawable name="settings_window_bg_light.9.png">window_bg_light.9.png</drawable>
+	<!-- 顶栏 -->
+	<drawable name="action_bar_embeded_tabs_bg_light.9.png">action_bar_bg_light.9.png</drawable>
+	<drawable name="action_bar_title_stack_bg_light.9.png">action_bar_bg_light.9.png</drawable>
+	<!-- 底栏 -->
+	<drawable name="action_bar_split_bg_expanded_light.9.png">action_bar_split_bg_light.9.png</drawable>
+	<!-- 设置列表 有标题 -->
+	<drawable name="preference_category_background_light.9.png">preference_category_background.9.png</drawable>
+	<drawable name="preference_category_background_first_light.9.png">preference_category_background_first.9.png</drawable>
+	<!-- 头像 -->
+	<drawable name="ic_contact_list_picture2.png">ic_contact_list_picture.png</drawable>
+	<drawable name="ic_contact_list_picture3.png">ic_contact_list_picture.png</drawable>
+	<drawable name="ic_contact_list_picture4.png">ic_contact_list_picture.png</drawable>
+	<drawable name="ic_contact_sp_picture.png">ic_contact_list_picture.png</drawable>
+	<drawable name="ic_contact_unknown_picture.png">ic_contact_list_picture.png</drawable>
+	<drawable name="ic_contact_group_photo.png">ic_contact_list_picture.png</drawable>
+	<!-- 上弹窗 -->
+	<drawable name="pop_up_window_list_bg.9.png">dropdown_listview_bg_light.9.png</drawable>
+	<!-- 刷新 -->
+	<drawable name="progressbar_indeterminate_circle_small_light.png">progressbar_indeterminate_circle_light.png</drawable>
+
+	<!-- 近手弹窗 上下箭头 -->
+	<drawable name="miuix_compat_arrow_up_down.png">miuix_compat_arrow_up_down_integrated.png</drawable>
+	
+</MIUI_Theme_Values>
