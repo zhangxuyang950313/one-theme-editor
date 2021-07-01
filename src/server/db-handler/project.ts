@@ -20,11 +20,15 @@ import ERR_CODE from "renderer/core/error-code";
 // TODO: 创建数据库有个坑，如果 filename 文件内容不是 nedb 能接受的数据格式则会导致服务崩溃
 function createNedb(filename: string) {
   fse.ensureDirSync(path.dirname(filename));
-  return new Nedb({
+  const db = new Nedb({
     filename,
-    autoload: true,
+    autoload: false,
     timestampData: true
   });
+  db.load().catch(err => {
+    console.log("db 文件错误");
+  });
+  return db;
 }
 
 // 频繁修改工程数据，常驻内存
