@@ -24,22 +24,23 @@ import ERR_CODE from "renderer/core/error-code";
 // 解析 sourceConfig xml 配置文件
 export default class SourceConfig {
   private rootDir = SOURCE_CONFIG_DIR;
-  private descFile = "";
+  private sourceConfigFile = "";
   private namespace = "";
   // 模板解析数据
   private xmlData!: TypeXMLSourceConf;
-  static filename = "description.xml";
-  constructor(configFile: string) {
-    if (!fse.existsSync(configFile)) {
+  constructor(file: string) {
+    if (!fse.existsSync(file)) {
       throw new Error(ERR_CODE[3005]);
     }
-    this.descFile = configFile;
-    this.namespace = path.relative(this.rootDir, path.dirname(configFile));
+    this.sourceConfigFile = file;
+    this.namespace = path.relative(this.rootDir, path.dirname(file));
   }
 
   private async ensureXmlData(): Promise<TypeXMLSourceConf> {
     if (!this.xmlData) {
-      this.xmlData = await xml2jsonCompact<TypeXMLSourceConf>(this.descFile);
+      this.xmlData = await xml2jsonCompact<TypeXMLSourceConf>(
+        this.sourceConfigFile
+      );
     }
     return this.xmlData;
   }
@@ -58,7 +59,7 @@ export default class SourceConfig {
   }
 
   getDescFile(): string {
-    return this.descFile;
+    return this.sourceConfigFile;
   }
 
   // 模板名称
@@ -97,7 +98,7 @@ export default class SourceConfig {
     return asyncMap(data, item => {
       const pageNode = new XMLNode(item);
       const pageFile = this.resolvePath(pageNode.getAttribute("src"));
-      return new Page(pageFile, this.namespace).getData();
+      return new Page(pageFile).getData();
     });
   }
 

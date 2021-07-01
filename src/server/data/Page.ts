@@ -9,37 +9,30 @@ import {
 import { TypeXMLSourceLayout, TypeXMLPageConf } from "types/xml-result";
 import { getImageData } from "common/utils";
 import { xml2jsonCompact } from "@/compiler/xml";
-import { SOURCE_CONFIG_DIR } from "server/core/pathUtils";
 import XMLNode from "@/core/XMLNode";
 
 export default class Page {
-  private rootDir: string;
-  private pageFile: string;
+  private pageConfigFile: string;
   private xmlData!: TypeXMLPageConf;
-  constructor(pageFile: string, namespace: string) {
-    this.pageFile = pageFile;
-    console.log({ pageFile });
-    this.rootDir = path.join(SOURCE_CONFIG_DIR, namespace);
+  constructor(file: string) {
+    this.pageConfigFile = file;
   }
 
   private async ensureXmlData() {
     if (!this.xmlData) {
-      this.xmlData = await xml2jsonCompact(this.pageFile);
+      this.xmlData = await xml2jsonCompact(this.pageConfigFile);
     }
     return this.xmlData;
   }
 
   // 处理当前页面资源的相对路径
   private relativePathname(file: string) {
-    return path.join(
-      path.relative(this.rootDir, path.dirname(this.pageFile)),
-      file
-    );
+    return path.join(path.basename(path.dirname(this.pageConfigFile)), file);
   }
 
   // 处理当前页面资源的绝对路径
   private resolvePathname(file: string) {
-    return path.join(path.dirname(this.pageFile), file);
+    return path.join(path.dirname(this.pageConfigFile), file);
   }
 
   async getPreview(): Promise<string> {
