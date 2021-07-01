@@ -1,16 +1,15 @@
 import axios, { Canceler } from "axios";
-import { HOST, PORT } from "common/config";
-import API from "common/api";
 import {
   TypeBrandConf,
   TypeCreateProjectPayload,
-  TypeImageMapper,
   TypeProjectData,
   TypeProjectDataDoc
 } from "types/project";
 import { TypeSourceConfig, TypeSourceDescription } from "types/source-config";
 import { TypeResponseFrame } from "types/request";
-import * as paths from "server/core/path-config";
+import { HOST, PORT } from "common/config";
+import API from "common/api";
+import * as paths from "server/core/pathUtils";
 
 type TypeGetCanceler = (c: Canceler) => void;
 

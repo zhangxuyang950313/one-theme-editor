@@ -1,7 +1,7 @@
 import path from "path";
 import fse from "fs-extra";
 import Nedb from "nedb-promises";
-import { USER_DATA } from "server/core/path-config";
+import { USER_DATA } from "server/core/pathUtils";
 import { TypeImageData, TypeImageDataDoc } from "types/project";
 
 const imageDBFile = path.resolve(USER_DATA, "image");

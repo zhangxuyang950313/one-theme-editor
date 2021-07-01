@@ -6,7 +6,7 @@ const API = {
   // 获取厂商信息列表
   GET_BRAND_LIST: "/brand/list",
   // 获取 sourceConfig 路径
-  GET_PATH_CONFIG: "/path-config",
+  GET_PATH_CONFIG: "/pathUtils",
   // 获取配置简略信息列表
   GET_SOURCE_DESCRIPTION_LIST: "/source-description/list",
   // 获取配置列表

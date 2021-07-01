@@ -3,7 +3,7 @@ import FileType from "file-type";
 import express, { Express } from "express";
 import API from "common/api";
 import ERR_CODE from "renderer/core/error-code";
-import * as PATHS from "@/core/path-config";
+import * as PATHS from "@/core/pathUtils";
 import {
   TypeCreateProjectPayload,
   TypeProjectDataDoc,

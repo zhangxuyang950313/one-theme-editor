@@ -1,4 +1,4 @@
-import * as PATHS from "server/core/path-config";
+import * as PATHS from "server/core/pathUtils";
 import ACTION_TYPES from "@/store/actions";
 
 type TypeActionSetServerPort = {

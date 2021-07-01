@@ -2,7 +2,7 @@ import fse from "fs-extra";
 import {
   getSCDescriptionByNamespace,
   SOuRCE_CONFIG_FILE
-} from "server/core/path-config";
+} from "server/core/pathUtils";
 import { asyncMap } from "common/utils";
 import { TypeBrandConf } from "types/project";
 import { TypeSourceDescription } from "types/source-config";

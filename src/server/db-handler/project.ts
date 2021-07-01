@@ -13,7 +13,7 @@ import {
 import {
   PROJECTS_DB,
   getSCDescriptionByNamespace
-} from "server/core/path-config";
+} from "server/core/pathUtils";
 import SourceConfig from "server/data/SourceConfig";
 import ERR_CODE from "renderer/core/error-code";
 

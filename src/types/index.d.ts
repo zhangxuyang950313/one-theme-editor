@@ -9,4 +9,4 @@ export type TypeDatabase<T = { [x: string]: any }> = T & {
 export type TypeImagePathLike = string;
 
 // 路径配置
-export type TypePathConfig = typeof import("server/core/path-config");
+export type TypePathConfig = typeof import("server/core/pathUtils");

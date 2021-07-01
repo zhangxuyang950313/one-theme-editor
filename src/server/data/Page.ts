@@ -9,7 +9,7 @@ import {
 import { TypeXMLSourceLayout, TypeXMLPageConf } from "types/xml-result";
 import { getImageData } from "common/utils";
 import { xml2jsonCompact } from "@/compiler/xml";
-import { SOURCE_CONFIG_DIR } from "server/core/path-config";
+import { SOURCE_CONFIG_DIR } from "server/core/pathUtils";
 import XMLNode from "@/core/XMLNode";
 
 export default class Page {
