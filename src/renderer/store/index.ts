@@ -5,7 +5,7 @@ import rootReducers from "./reducers";
 
 export { rootReducers };
 
-const composeEnhancers = composeWithDevTools({ name: "GlobalStore" });
+const composeEnhancers = composeWithDevTools({ name: "Global" });
 
 const store = createStore(rootReducers, composeEnhancers());
 

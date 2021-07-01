@@ -1,5 +1,5 @@
 import path from "path";
-import React from "react";
+import React, { useMemo } from "react";
 import { remote } from "electron";
 
 import styled from "styled-components";
@@ -15,7 +15,7 @@ import ERR_CODE from "@/core/error-code";
 
 import { previewFile } from "./utils";
 
-import Context from "./Context";
+import PartialContext from "./Context";
 import ImageDisplay from "./ImageDisplay";
 import ProjectSource from "./ProjectSource";
 import SourceStatus from "./SourceStatus";
@@ -31,8 +31,22 @@ const ImageController: React.FC<TypeSCPageSourceConf> = sourceConf => {
   // 素材绝对路径
   const absoluteFrom = path.join(sourceConfigRoot, from.relativePath);
 
-  // 目标素材绝对路径列表
-  const absoluteToList = to.map(item => path.join(projectRoot, item));
+  // 左边使用 useMemo 进行渲染优化，防止重绘
+  const MemoLeftSource = () =>
+    useMemo(() => {
+      return (
+        <ImageDisplay
+          filepath={absoluteFrom}
+          onClick={() => {
+            if (process.platform !== "darwin") {
+              remote.shell.showItemInFolder(absoluteFrom);
+            } else {
+              previewFile(absoluteFrom, sourceConf.name);
+            }
+          }}
+        />
+      );
+    }, []);
 
   // 拷贝到模板素材
   const copyToWith = (file: string) => {
@@ -40,7 +54,8 @@ const ImageController: React.FC<TypeSCPageSourceConf> = sourceConf => {
       notification.warn({ message: `"${sourceConf.name}"${ERR_CODE[3006]}` });
       return;
     }
-    absoluteToList.forEach(target => {
+    to.forEach(item => {
+      const target = path.join(projectRoot, item);
       apiCopyFile(file, target);
     });
   };
@@ -50,7 +65,7 @@ const ImageController: React.FC<TypeSCPageSourceConf> = sourceConf => {
   };
   return (
     <StyleImageChanger>
-      <Context.Provider value={{ toList: to, dynamicToList }}>
+      <PartialContext.Provider value={{ toList: to, dynamicToList }}>
         {/* 图片描述 */}
         <div className="text description">
           {sourceConf.name}
@@ -63,25 +78,14 @@ const ImageController: React.FC<TypeSCPageSourceConf> = sourceConf => {
         </div>
         <SourceStatus />
         <div className="edit-wrapper">
-          <div className="left">
-            <ImageDisplay
-              filepath={absoluteFrom}
-              onClick={() => {
-                if (process.platform !== "darwin") {
-                  remote.shell.showItemInFolder(absoluteFrom);
-                } else {
-                  previewFile(absoluteFrom, sourceConf.name);
-                }
-              }}
-            />
-          </div>
+          <div className="left">{MemoLeftSource()}</div>
           {/* 一键拷贝默认素材 */}
           <RightCircleOutlined className="center" onClick={handleCopyDefault} />
           <div className="right">
             <ProjectSource />
           </div>
         </div>
-      </Context.Provider>
+      </PartialContext.Provider>
     </StyleImageChanger>
   );
 };
