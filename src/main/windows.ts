@@ -27,8 +27,8 @@ export function mainWindow(): BrowserWindow {
   const win = new BrowserWindow({
     ...windowNormalizeOptions,
     // titleBarStyle: "hidden",
-    width: 1000,
-    height: 680,
+    width: 1400,
+    height: 880,
     minWidth: 1000,
     minHeight: 680
   });

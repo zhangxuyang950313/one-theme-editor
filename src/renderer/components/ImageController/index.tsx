@@ -3,18 +3,16 @@ import React, { useMemo } from "react";
 import { remote } from "electron";
 
 import styled from "styled-components";
-import { notification } from "antd";
 import { RightCircleOutlined } from "@ant-design/icons";
 
-import { apiCopyFile } from "@/api";
 import { useProjectRoot } from "@/hooks/project";
 import { useSourceConfigRoot } from "@/hooks/sourceConfig";
 import { useToListWatcher } from "@/hooks/fileWatcher";
 import { TypeSCPageSourceConf } from "types/source-config";
-import ERR_CODE from "@/core/error-code";
 
 import { previewFile } from "./utils";
 
+import { useCopyToWith } from "./hooks";
 import PartialContext from "./Context";
 import ImageDisplay from "./ImageDisplay";
 import ProjectSource from "./ProjectSource";
@@ -25,6 +23,7 @@ const ImageController: React.FC<TypeSCPageSourceConf> = sourceConf => {
   const projectRoot = useProjectRoot();
   const sourceConfigRoot = useSourceConfigRoot();
   const dynamicToList = useToListWatcher(to);
+  const copyToWith = useCopyToWith(to, sourceConf.name);
 
   if (!sourceConf || !from || !sourceConfigRoot || !projectRoot) return null;
 
@@ -48,21 +47,6 @@ const ImageController: React.FC<TypeSCPageSourceConf> = sourceConf => {
       );
     }, []);
 
-  // 拷贝到模板素材
-  const copyToWith = (file: string) => {
-    if (!(Array.isArray(to) && to.length > 0)) {
-      notification.warn({ message: `"${sourceConf.name}"${ERR_CODE[3006]}` });
-      return;
-    }
-    to.forEach(item => {
-      const target = path.join(projectRoot, item);
-      apiCopyFile(file, target);
-    });
-  };
-  // 拷贝默认素材
-  const handleCopyDefault = () => {
-    copyToWith(absoluteFrom);
-  };
   return (
     <StyleImageChanger>
       <PartialContext.Provider value={{ toList: to, dynamicToList }}>
@@ -78,9 +62,15 @@ const ImageController: React.FC<TypeSCPageSourceConf> = sourceConf => {
         </div>
         <SourceStatus />
         <div className="edit-wrapper">
-          <div className="left">{MemoLeftSource()}</div>
+          <div className="left">
+            {/* 素材展示 memo 组件 */}
+            {MemoLeftSource()}
+          </div>
           {/* 一键拷贝默认素材 */}
-          <RightCircleOutlined className="center" onClick={handleCopyDefault} />
+          <RightCircleOutlined
+            className="center"
+            onClick={() => copyToWith(absoluteFrom)}
+          />
           <div className="right">
             <ProjectSource />
           </div>

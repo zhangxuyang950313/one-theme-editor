@@ -10,10 +10,12 @@ import { useProjectRoot } from "@/hooks/project";
 import Context from "./Context";
 import ImageDisplay from "./ImageDisplay";
 import ImageHandler from "./ImageHandler";
+import { useCopyToWith } from "./hooks";
 
-const RightSource: React.FC = () => {
+const ProjectSource: React.FC = () => {
   const { toList, dynamicToList } = useContext(Context);
   const projectRoot = useProjectRoot();
+  const copyToWith = useCopyToWith(toList, "");
 
   if (!projectRoot) return null;
   // 更新后的模板绝对路径列表
@@ -37,8 +39,7 @@ const RightSource: React.FC = () => {
       })
       .then(result => {
         if (result.canceled) return;
-        console.log(result);
-        // copyToWith(result.filePaths[0]);
+        copyToWith(result.filePaths[0]);
       });
   };
   // 删除素材
@@ -52,7 +53,7 @@ const RightSource: React.FC = () => {
   };
 
   return (
-    <StyleRightSource>
+    <StyleProjectSource>
       <ImageDisplay
         showHandler
         filepath={absoluteToForShow}
@@ -61,12 +62,12 @@ const RightSource: React.FC = () => {
       />
       {/* 图片操作 */}
       <ImageHandler onImport={handleImport} onDelete={handleDelete} />
-    </StyleRightSource>
+    </StyleProjectSource>
   );
 };
 
-const StyleRightSource = styled.div`
+const StyleProjectSource = styled.div`
   display: flex;
 `;
 
-export default RightSource;
+export default ProjectSource;
