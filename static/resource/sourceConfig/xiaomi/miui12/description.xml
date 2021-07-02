@@ -8,10 +8,17 @@
 <!-- 模板描述 -->
 <uiVersion name="MIUI 12" code="10"/>
 
+
+<category tag="color" 		description="颜色值"  	type="xml"/>
+<category tag="bool" 		description="布尔值" 	type="xml"/>
+<category tag="dimen" 		description="尺寸值" 	type="xml"/>
+<category tag="integer" 	description="整型值" 	type="xml"/>
+
 <!-- 壁纸 -->
 <module name="图标和壁纸" icon="icons/res/com.android.thememanager.png">
     <!-- 桌面壁纸 -->
     <group name="桌面壁纸和图标">
+        <page src="wallpaper/desktop.xml"/>
         <page src="wallpaper/desktop.xml"/>
         <!-- <page src="wallpaper/desktop1.xml"/> -->
     </group>

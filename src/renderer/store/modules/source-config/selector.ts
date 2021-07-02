@@ -37,7 +37,7 @@ export const getCurrentBrandConf = createSelector(
 // 获取模块列表
 export const getSCModuleList = createSelector(
   getSourceConfig,
-  state => state?.modules || []
+  state => state?.moduleList || []
 );
 
 // 获取当前模块
@@ -49,7 +49,7 @@ export const getCurrentModule = createSelector(
 // 获取页面组列表
 export const getCurrentPageGroupList = createSelector(
   getCurrentModule,
-  state => state?.groups || []
+  state => state?.groupList || []
 );
 
 // 获取当前页面

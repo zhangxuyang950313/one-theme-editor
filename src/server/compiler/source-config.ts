@@ -29,7 +29,6 @@ export async function compileSourceDescriptionList(
   const brandConfList = await readBrandConf();
   const brandConf = brandConfList.find(item => item.type === brandType);
   if (!brandConf?.sourceConfigs) return [];
-  console.log(brandConf.sourceConfigs.flatMap);
   const ensureConfigs = brandConf.sourceConfigs.flatMap(namespace => {
     const absPath = getSCDescriptionByNamespace(namespace);
     return fse.existsSync(absPath) ? [absPath] : [];

@@ -3,8 +3,6 @@ import path from "path";
 import { Element } from "xml-js";
 import {
   TypeSCPageConf,
-  TypeSCPageRootConf,
-  TypeSCFileCategoryConf,
   TypeSCPageTemplateConf,
   TypeSCPageCopyConf,
   TypeSCPageElementData,
@@ -13,7 +11,6 @@ import {
 } from "types/source-config";
 import { getImageData } from "common/utils";
 import { xml2jsonElements } from "server/compiler/xml";
-import XMLNode from "server/core/XMLNode";
 import XMLNodeElements from "server/core/XMLNodeElements";
 
 enum ELEMENT_TYPES {
@@ -85,14 +82,6 @@ export default class Page {
     );
   }
 
-  async getConfig(): Promise<TypeSCPageRootConf> {
-    return {
-      version: await this.getVersion(),
-      description: await this.getDescription(),
-      screenWidth: await this.getScreenWidth()
-    };
-  }
-
   async getTemplateConfList(): Promise<TypeSCPageTemplateConf[]> {
     const templates = await this.findRootMultiElements("template");
     return templates.map(item => {
@@ -138,9 +127,7 @@ export default class Page {
                 ...(await getImageData(
                   this.resolvePathname(currentNode.getAttribute("src"))
                 )),
-                relativePath: this.relativePathname(
-                  currentNode.getAttribute("src")
-                )
+                pathname: this.relativePathname(currentNode.getAttribute("src"))
               },
               layout: {
                 x: layoutNormalize.x,
@@ -150,7 +137,7 @@ export default class Page {
                 align: layoutNormalize.align,
                 alignV: layoutNormalize.alignV
               },
-              to: currentNode
+              toList: currentNode
                 .getChildrenOf("to")
                 .map(item => new XMLNodeElements(item).getTextChild())
             });
@@ -173,77 +160,14 @@ export default class Page {
     return Promise.all(queue);
   }
 
-  async getCategoryList(): Promise<TypeSCFileCategoryConf[]> {
-    const xmlData = await this.ensureXmlData();
-    const categoryNodes = new XMLNode(xmlData).getChildrenOf("category");
-    return categoryNodes.map(item => {
-      const categoryNode = new XMLNode(item);
-      return {
-        tag: categoryNode.getAttribute("tag"),
-        description: categoryNode.getAttribute("description"),
-        type: categoryNode.getAttribute("type")
-      };
-    });
-  }
-
-  // async getSourceList(): Promise<TypeSCPageSourceConf[]> {
-  //   const xmlData = await this.ensureXmlData();
-  //   const queue: Promise<TypeSCPageSourceConf>[] =
-  //     xmlData.source?.map(async item => {
-  //       const currentNode = new XMLNode(item);
-  //       const name =
-  //         currentNode.getAttribute("description") ||
-  //         currentNode.getAttribute("name");
-  //       const layout: TypeXMLSourceLayout = {};
-  //       if (item.layout) {
-  //         const layoutNode = currentNode.getFirstChildOf("layout");
-  //         layout.x = layoutNode.getAttribute("x");
-  //         layout.y = layoutNode.getAttribute("y");
-  //         layout.w = layoutNode.getAttribute("w");
-  //         layout.h = layoutNode.getAttribute("h");
-  //         layout.align = layoutNode.getAttribute("align", "left");
-  //         layout.alignV = layoutNode.getAttribute("alignV", "top");
-  //       }
-  //       const pathname = currentNode
-  //         .getFirstChildOf("from")
-  //         .getAttribute("src");
-  //       const imageData = await getImageData(this.resolvePathname(pathname));
-  //       const from: TypeSCPageSourceConf["from"] = {
-  //         relativePath: this.relativePathname(pathname),
-  //         ...imageData
-  //       };
-  //       const toNodes = currentNode.getChildrenOf("to");
-  //       const to = toNodes.map(item => new XMLNode(item).getAttribute("src"));
-  //       return { name, from, to, layout };
-  //     }) || [];
-
-  //   return Promise.all(queue);
-  // }
-
-  // async getColorList() {
-  //   const xmlData = await this.ensureXmlData();
-  // }
-
-  // async getIntegerList() {
-  //   const xmlData = await this.ensureXmlData();
-  // }
-
-  // async getBoolList() {
-  //   const xmlData = await this.ensureXmlData();
-  // }
-
-  // async getDimenList() {
-  //   const xmlData = await this.ensureXmlData();
-  // }
-
   async getData(): Promise<TypeSCPageConf> {
     return {
-      config: await this.getConfig(),
-      preview: await this.getPreviewList(),
-      category: await this.getCategoryList(),
-      elements: await this.getLayoutElementList(),
-      copyList: await this.getCopyConfList(),
-      xml: []
+      version: await this.getVersion(),
+      description: await this.getDescription(),
+      screenWidth: await this.getScreenWidth(),
+      previewList: await this.getPreviewList(),
+      elementList: await this.getLayoutElementList(),
+      copyList: await this.getCopyConfList()
     };
   }
 }

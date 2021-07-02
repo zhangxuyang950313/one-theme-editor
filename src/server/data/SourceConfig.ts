@@ -93,7 +93,7 @@ export default class SourceConfig {
   }
 
   // 页面数据
-  async getPages(data: TypeXMLPageNode[]): Promise<TypeSCPageConf[]> {
+  async getPageList(data: TypeXMLPageNode[]): Promise<TypeSCPageConf[]> {
     // 这里是在选择模板版本后得到的目标模块目录
     return asyncMap(data, item => {
       const pageNode = new XMLNode(item);
@@ -103,20 +103,21 @@ export default class SourceConfig {
   }
 
   // 页面分组数据
-  async getPageGroup(
+  async getPageGroupList(
     data: TypeXMLPageGroupConf[]
   ): Promise<TypeSCPageGroupConf[]> {
     return asyncMap(data, async item => {
       const groupNode = new XMLNode(item);
-      return {
+      const group: TypeSCPageGroupConf = {
         name: groupNode.getAttribute("name"),
-        pages: item.page ? await this.getPages(item.page) : []
+        pageList: item.page ? await this.getPageList(item.page) : []
       };
+      return group;
     });
   }
 
   // 模块数据
-  async getModules(): Promise<TypeSCModuleConf[]> {
+  async getModuleList(): Promise<TypeSCModuleConf[]> {
     const sourceData = await this.ensureXmlData();
     if (!Array.isArray(sourceData.module)) return [];
     return asyncMap(sourceData.module, async (item, index) => {
@@ -125,7 +126,7 @@ export default class SourceConfig {
         index,
         name: moduleNode.getAttribute("name"),
         icon: moduleNode.getAttribute("icon"),
-        groups: item.group ? await this.getPageGroup(item.group) : []
+        groupList: item.group ? await this.getPageGroupList(item.group) : []
       };
       return result;
     });
@@ -152,7 +153,7 @@ export default class SourceConfig {
   async getConfig(): Promise<TypeSourceConfig> {
     return {
       ...(await this.getDescription()),
-      modules: await this.getModules()
+      moduleList: await this.getModuleList()
     };
   }
 }

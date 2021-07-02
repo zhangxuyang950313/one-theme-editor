@@ -60,8 +60,8 @@ export function useLoadProject(project: TypeProjectDataDoc | null): void {
     dispatch(ActionSetProjectData(project));
     dispatch(ActionSetSourceConfig(project.sourceConfig));
     // 默认选择第一个模块和第一个页面
-    const firstModule = project?.sourceConfig?.modules[0];
-    const firstPage = firstModule?.groups[0].pages[0];
+    const firstModule = project?.sourceConfig?.moduleList[0];
+    const firstPage = firstModule?.groupList[0].pageList[0];
     if (firstModule) dispatch(ActionSetCurrentBrand(firstModule));
     if (firstPage) dispatch(ActionSetCurrentPage(firstPage));
   }, [dispatch, project]);

@@ -9,7 +9,7 @@ const ResourceContent: React.FC = () => {
   const [currentPage] = useCurrentPage();
 
   if (!currentPage) return null;
-  const imageElements = currentPage.elements.flatMap(item =>
+  const imageElements = currentPage.elementList.flatMap(item =>
     item.type === "image" ? [item] : []
   );
   return (

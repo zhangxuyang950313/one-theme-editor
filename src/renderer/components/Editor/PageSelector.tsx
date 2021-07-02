@@ -5,6 +5,7 @@ import { useCurrentPage, useCurrentPageGroupList } from "@/hooks/sourceConfig";
 
 import { Collapse } from "antd";
 import { useGetSourceImageUrl } from "hooks/image";
+import PreloadImage from "@/components/Image/PreloadImage";
 
 // 页面选择器
 const PageSelector: React.FC = () => {
@@ -20,11 +21,11 @@ const PageSelector: React.FC = () => {
       {pageGroupList.map((group, key) => (
         <Collapse.Panel header={group.name} key={key}>
           <StylePagePreview>
-            {group.pages.map((page, index) => (
-              <StyleImage
+            {group.pageList.map((page, index) => (
+              <PreloadImage
+                className="preview-image"
                 key={index}
-                alt={page.preview[0]}
-                src={sourceImageURL(page.preview[0])}
+                src={sourceImageURL(page.previewList[0])}
                 onClick={() => setCurrentPage(page)}
               />
             ))}
@@ -35,16 +36,18 @@ const PageSelector: React.FC = () => {
   );
 };
 
-const StyleImage = styled.img`
-  cursor: pointer;
-  width: 48%;
-  border-radius: 10px;
-`;
-
 const StylePagePreview = styled.div`
   display: flex;
-  justify-content: space-around;
+  /* justify-content: space-around; */
   overflow: hidden;
+  width: 100%;
+  .preview-image {
+    cursor: pointer;
+    text-align: center;
+    margin: 1%;
+    width: 48%;
+    border-radius: 10px;
+  }
 `;
 
 export default PageSelector;

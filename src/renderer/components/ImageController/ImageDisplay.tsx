@@ -69,6 +69,7 @@ const StyleImageBackground = styled.div`
     top: 0;
     width: 100%;
     height: 100%;
+    object-fit: contain;
     /* background: center/contain no-repeat; */
     &[can-click="true"] {
       cursor: pointer;

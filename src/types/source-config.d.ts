@@ -14,7 +14,7 @@ export type TypeSourceDescription = {
 
 // 资源配置
 export type TypeSourceConfig = Omit<TypeSourceDescription, "key"> & {
-  modules: TypeSCModuleConf[];
+  moduleList: TypeSCModuleConf[];
 };
 
 // 预览模块
@@ -22,13 +22,13 @@ export type TypeSCModuleConf = {
   index: number;
   name: string;
   icon: string;
-  groups: TypeSCPageGroupConf[];
+  groupList: TypeSCPageGroupConf[];
 };
 
 // 预览页面组
 export type TypeSCPageGroupConf = {
   name: string;
-  pages: TypeSCPageConf[];
+  pageList: TypeSCPageConf[];
 };
 
 // 预览页面信息
@@ -57,7 +57,7 @@ export type TypeElementAlignV = "top" | "center" | "bottom";
 export type TypeSCPageImageElData = {
   type: "image";
   name: string;
-  src: (TypeImageData & { relativePath: TypeImagePathLike }) | null;
+  src: (TypeImageData & { pathname: string }) | null;
   layout: {
     x: string;
     y: string;
@@ -66,7 +66,7 @@ export type TypeSCPageImageElData = {
     align: TypeElementAlign;
     alignV: TypeElementAlignV;
   };
-  to: string[];
+  toList: string[];
 };
 
 export type TypeSCPageTextElData = {
@@ -103,10 +103,10 @@ export type TypeSCPageSourceConf = {
 
 // 预览单个页面配置
 export type TypeSCPageConf = {
-  config: TypeSCPageRootConf;
-  preview: string[];
-  category: TypeSCFileCategoryConf[];
-  elements: TypeSCPageElementData[];
+  version: string;
+  description: string;
+  screenWidth: string;
+  previewList: string[];
+  elementList: TypeSCPageElementData[];
   copyList: TypeSCPageCopyConf[];
-  xml: any[];
 };

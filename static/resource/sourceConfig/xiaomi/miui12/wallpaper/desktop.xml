@@ -3,7 +3,7 @@
 <page version="1.0.0" description="桌面壁纸和首屏图标" screenWidth="1080">
 
     <!-- 静态预览图 -->
-    <preview src="default_wallpaper.jpg"/>
+    <preview src="../preview/preview.jpg"/>
     <!-- xml 模板文件 -->
     <template 
         src="theme_values.xml"
@@ -17,6 +17,15 @@
 
     <!-- 动态预览配置 -->
     <layout>
+        <!-- 图片资源 -->
+        <image
+            name="桌面壁纸"
+            x="540" y="0" w="1080" h="2340" align="center"
+            src="./default_wallpaper.jpg"
+        >
+            <to>wallpaper/default_wallpaper.jpg</to>
+        </image>
+
         <!-- 底栏图标 -->
         <image 
             name="拨号" 

@@ -24,7 +24,7 @@ const API = {
   // 获取工程列表
   GET_PROJECT_LIST: "/project/list",
   // 通过 id 获取工程信息
-  GET_PROJECT: "/project/get",
+  GET_PROJECT: "/project",
 
   // 复制文件
   COPY_FILE: "/file/copy",

@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import styled from "styled-components";
 import { useLoadImage } from "@/hooks/image";
 
 /**
@@ -16,21 +15,7 @@ const PreloadImage: React.FC<JSX.IntrinsicElements["img"]> = props => {
   }, [props.src]);
 
   if (!url || !props.src) return null;
-  return (
-    <StylePreloadImage>
-      <img {...props} src={url} alt="" />
-    </StylePreloadImage>
-  );
+  return <img {...props} src={url} alt="" />;
 };
-
-const StylePreloadImage = styled.div`
-  width: 100%;
-  height: 100%;
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }
-`;
 
 export default PreloadImage;
