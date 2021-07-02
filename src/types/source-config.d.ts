@@ -32,11 +32,59 @@ export type TypeSCPageGroupConf = {
 };
 
 // 预览页面信息
-export type TypeSCPageInfoConf = {
+export type TypeSCPageRootConf = {
   version: string;
   description: string;
   screenWidth: string;
 };
+
+// 配置模板数据
+export type TypeSCPageTemplateConf = {
+  template: any;
+  values: any;
+  to: string;
+};
+
+export type TypeSCPageCopyConf = {
+  from: string;
+  to: string;
+};
+
+// 元素配置数据
+export type TypeElementAlign = "left" | "center" | "right";
+export type TypeElementAlignV = "top" | "center" | "bottom";
+
+export type TypeSCPageImageElData = {
+  type: "image";
+  name: string;
+  src: (TypeImageData & { relativePath: TypeImagePathLike }) | null;
+  layout: {
+    x: string;
+    y: string;
+    w: string;
+    h: string;
+    align: TypeElementAlign;
+    alignV: TypeElementAlignV;
+  };
+  to: string[];
+};
+
+export type TypeSCPageTextElData = {
+  type: "text";
+  text: string;
+  layout: {
+    x: string;
+    y: string;
+    align: TypeElementAlign;
+    alignV: TypeElementAlignV;
+  };
+  colorClass: string;
+  color: string;
+};
+
+export type TypeSCPageElementData =
+  | TypeSCPageImageElData
+  | TypeSCPageTextElData;
 
 // 资源文件类型
 export type TypeSCFileCategoryConf = {
@@ -55,9 +103,10 @@ export type TypeSCPageSourceConf = {
 
 // 预览单个页面配置
 export type TypeSCPageConf = {
-  config: TypeSCPageInfoConf;
-  preview: TypeImagePathLike;
+  config: TypeSCPageRootConf;
+  preview: string[];
   category: TypeSCFileCategoryConf[];
-  source: TypeSCPageSourceConf[];
+  elements: TypeSCPageElementData[];
+  copyList: TypeSCPageCopyConf[];
   xml: any[];
 };

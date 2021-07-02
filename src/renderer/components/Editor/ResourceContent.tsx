@@ -9,9 +9,12 @@ const ResourceContent: React.FC = () => {
   const [currentPage] = useCurrentPage();
 
   if (!currentPage) return null;
+  const imageElements = currentPage.elements.flatMap(item =>
+    item.type === "image" ? [item] : []
+  );
   return (
     <StyleResourceContent>
-      {currentPage.source.map((sourceConf, key) => (
+      {imageElements.map((sourceConf, key) => (
         <ImageController key={key} {...sourceConf} />
       ))}
     </StyleResourceContent>

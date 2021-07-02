@@ -5,7 +5,6 @@ import chokidar from "chokidar";
 import FileType from "file-type";
 import imageSizeOf from "image-size";
 import dirTree from "directory-tree";
-import { insertImageData } from "src/server/db-handler/image";
 import { TypeImageData, TypeImageMapper } from "types/project";
 import ERR_CODE from "renderer/core/error-code";
 
@@ -71,9 +70,10 @@ export function checkPathExists(file: string): string {
 }
 
 // 本地图片转 base64 同步方法
-export function localImageToBase64Sync(
-  file: string
-): { ext: string; base64: string } {
+export function localImageToBase64Sync(file: string): {
+  ext: string;
+  base64: string;
+} {
   const result = { ext: "", base64: "" };
   if (!file) return result;
   const extname = path.extname(file).replace(/^\./, "");
@@ -133,9 +133,10 @@ export async function getFileMD5(file: string): Promise<string> {
 }
 
 // 获取图片尺寸
-export function getImageSizeOf(
-  file: string
-): { width: number; height: number } {
+export function getImageSizeOf(file: string): {
+  width: number;
+  height: number;
+} {
   const dimensions = imageSizeOf(file);
   return { width: dimensions.width || 0, height: dimensions.height || 0 };
 }
@@ -167,7 +168,7 @@ export async function getImageData(file: string): Promise<TypeImageData> {
     ninePatch: isNinePatchPath(file)
   };
   // 同步存储到图片数据库
-  await insertImageData(imageData);
+  // await insertImageData(imageData);
   return imageData;
 }
 

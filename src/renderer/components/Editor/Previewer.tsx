@@ -7,10 +7,11 @@ import { useGetSourceImageUrl } from "hooks/image";
 const Preview: React.FC = () => {
   const [currentPage] = useCurrentPage();
   const getImageURL = useGetSourceImageUrl();
+
   if (!currentPage) return null;
   return (
     <StylePreviewer>
-      <StyleImage src={getImageURL(currentPage.preview)} alt="" />
+      <StyleImage src={getImageURL(currentPage.preview[0])} alt="" />
     </StylePreviewer>
   );
 };

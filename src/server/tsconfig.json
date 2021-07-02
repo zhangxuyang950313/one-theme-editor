@@ -32,7 +32,6 @@
     "types": ["node"],
     "baseUrl": "./",
     "paths": {
-      "@/*": ["./*"],
       "src/*": ["../*"],
       "common/*": ["../common/*"],
       "server/*": ["../server/*"],

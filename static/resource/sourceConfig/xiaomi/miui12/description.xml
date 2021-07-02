@@ -12,8 +12,8 @@
 <module name="图标和壁纸" icon="icons/res/com.android.thememanager.png">
     <!-- 桌面壁纸 -->
     <group name="桌面壁纸和图标">
-        <page src="wallpaper/desktop0.xml"/>
-        <page src="wallpaper/desktop1.xml"/>
+        <page src="wallpaper/desktop.xml"/>
+        <!-- <page src="wallpaper/desktop1.xml"/> -->
     </group>
     <!-- 锁屏壁纸 -->
     <group name="锁屏壁纸">

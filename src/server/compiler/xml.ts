@@ -4,7 +4,8 @@ import ERR_CODE from "renderer/core/error-code";
 
 const config: Options.XML2JS = {
   trim: true,
-  addParent: true,
+  // sanitize: true,
+  addParent: false,
   alwaysArray: true, // 仅适用于紧凑输出，单个元素使用对象形式
   nativeType: true, // 尝试将数字或布尔值字符串转换成对应类型
   // nativeTypeAttributes: false, // 尝试将数字或布尔值字符串属性转换成对应类型
@@ -52,6 +53,8 @@ export async function xml2jsonNormalized(
   return xml2js(data, { ...config, ...options });
 }
 
+// 对象用于无需顺序的节点，数组相反，对顺序有要求
+
 // 解析 xml 返回对象形式的紧凑数据
 export async function xml2jsonCompact<T = ElementCompact>(
   file: string
@@ -60,8 +63,10 @@ export async function xml2jsonCompact<T = ElementCompact>(
   return xml2jsonNormalized(file, { compact: true });
 }
 
-// // 解析 xml 返回完整的数组形式数据
-// async function xml2jsonElements<T = Element>(file: string): Promise<T | []> {
-//   if (!fse.existsSync(file)) return Promise.resolve([]);
-//   return xml2jsonNormalized<T>(file, { compact: false });
-// }
+// 解析 xml 返回完整的数组形式数据
+export async function xml2jsonElements<T = Element>(
+  file: string
+): Promise<T | Record<string, unknown>> {
+  if (!fse.existsSync(file)) return Promise.resolve({});
+  return xml2jsonNormalized<T>(file, { compact: false });
+}

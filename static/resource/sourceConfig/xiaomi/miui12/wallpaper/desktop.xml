@@ -1,33 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<config version="1.0.0" description="桌面壁纸和首屏图标" screenWidth="1080"/>
+<page version="1.0.0" description="桌面壁纸和首屏图标" screenWidth="1080">
 
-<preview src="default_wallpaper.jpg"/>
+    <!-- 静态预览图 -->
+    <preview src="default_wallpaper.jpg"/>
+    <!-- xml 模板文件 -->
+    <template 
+        src="theme_values.xml"
+        values="source_config.xml" 
+        to="wallpaper/theme_values.xml"
+    />
 
-<!-- 模板文件 -->
-<template src="theme_values.xml" to="wallpaper/theme_values.xml"/>
+    <!-- 默认移动的文件 -->
+    <copy from="theme_fallback.xml" to="wallpaper/theme_fallback.xml"/>
 
-<!-- 值定义文件 -->
-<values src="source_config.xml"/>
 
-<!-- 默认移动的文件 -->
-<copy>
-    <file from="./theme_fallback.xml">
-        <to src="wallpaper/theme_fallback.xml"/>
-    </file>
-</copy>
+    <!-- 动态预览配置 -->
+    <layout>
+        <!-- 底栏图标 -->
+        <image 
+            name="拨号" 
+            x="160" y="2150" w="186" h="186" align="center" alignV="center" 
+            src="../icons/res/com.android.contacts.activities.TwelveKeyDialer.png"
+        >
+            <to>icons/res/com.android.contacts.activities.TwelveKeyDialer.png</to>
+        </image>
 
-<!-- 底栏图标 -->
-<image name="拨号" 
-    x="160" y="2150" w="186" h="186" align="center" alignV="center" 
-    src="../icons/res/com.android.contacts.activities.TwelveKeyDialer.png"
->
-    <to src="icons/res/com.android.contacts.activities.TwelveKeyDialer.png"/>
-</image>
-
-<!-- 文字 -->
-<text name="图标文字" text="相册" 
-    x="415" y="1250" size="36" align="center" alignV="center" 
-    colorClass="action_bar_title_text_color_light"
-    color="#ffffff"
-/>
+        <!-- 文字 -->
+        <text 
+            name="图标文字" 
+            text="相册"
+            x="415" y="1250" size="36" align="center" alignV="center" 
+            colorClass="action_bar_title_text_color_light"
+            color="#ffffff"
+        />
+    </layout>
+    
+</page>

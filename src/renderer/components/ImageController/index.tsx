@@ -8,7 +8,7 @@ import { RightCircleOutlined } from "@ant-design/icons";
 import { useProjectRoot } from "@/hooks/project";
 import { useSourceConfigRoot } from "@/hooks/sourceConfig";
 import { useToListWatcher } from "@/hooks/fileWatcher";
-import { TypeSCPageSourceConf } from "types/source-config";
+import { TypeSCPageImageElData } from "types/source-config";
 
 import { previewFile } from "./utils";
 
@@ -18,8 +18,8 @@ import ImageDisplay from "./ImageDisplay";
 import ProjectSource from "./ProjectSource";
 import SourceStatus from "./SourceStatus";
 
-const ImageController: React.FC<TypeSCPageSourceConf> = sourceConf => {
-  const { from, to } = sourceConf;
+const ImageController: React.FC<TypeSCPageImageElData> = sourceConf => {
+  const { src: from, to } = sourceConf;
   const projectRoot = useProjectRoot();
   const sourceConfigRoot = useSourceConfigRoot();
   const dynamicToList = useToListWatcher(to);

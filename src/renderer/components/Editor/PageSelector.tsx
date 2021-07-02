@@ -23,8 +23,8 @@ const PageSelector: React.FC = () => {
             {group.pages.map((page, index) => (
               <StyleImage
                 key={index}
-                alt={page.preview}
-                src={sourceImageURL(page.preview)}
+                alt={page.preview[0]}
+                src={sourceImageURL(page.preview[0])}
                 onClick={() => setCurrentPage(page)}
               />
             ))}
