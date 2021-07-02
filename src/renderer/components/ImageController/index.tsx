@@ -19,16 +19,16 @@ import ProjectSource from "./ProjectSource";
 import SourceStatus from "./SourceStatus";
 
 const ImageController: React.FC<TypeSCPageImageElData> = sourceConf => {
-  const { src: from, toList: to } = sourceConf;
+  const { source, toList: to } = sourceConf;
   const projectRoot = useProjectRoot();
   const sourceConfigRoot = useSourceConfigRoot();
   const dynamicToList = useToListWatcher(to);
   const copyToWith = useCopyToWith(to, sourceConf.name);
 
-  if (!sourceConf || !from || !sourceConfigRoot || !projectRoot) return null;
+  if (!sourceConf || !source || !sourceConfigRoot || !projectRoot) return null;
 
   // 素材绝对路径
-  const absoluteFrom = path.join(sourceConfigRoot, from.pathname);
+  const absoluteFrom = path.join(sourceConfigRoot, source.pathname);
 
   // 左边使用 useMemo 进行渲染优化，防止重绘
   const MemoLeftSource = () =>
@@ -53,10 +53,13 @@ const ImageController: React.FC<TypeSCPageImageElData> = sourceConf => {
         {/* 图片描述 */}
         <div className="text description">
           {sourceConf.name}
-          {from.width && from.height ? (
+          {source.width && source.height ? (
             <span className="image-size">
-              ({`${from.width}×${from.height}`}
-              {from.size && <span> | {(from.size / 1024).toFixed(1)}kb</span>})
+              ({`${source.width}×${source.height}`}
+              {source.size && (
+                <span> | {(source.size / 1024).toFixed(1)}kb</span>
+              )}
+              )
             </span>
           ) : null}
         </div>

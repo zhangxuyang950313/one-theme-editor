@@ -15,10 +15,10 @@ import {
 } from "types/xml-result";
 import { TypeUiVersion } from "types/project";
 import { asyncMap } from "common/utils";
-import { xml2jsonCompact } from "@/compiler/xml";
-import { SOURCE_CONFIG_DIR } from "@/core/pathUtils";
-import Page from "@/data/Page";
-import XMLNode from "@/core/XMLNode";
+import { xml2jsonCompact } from "server/compiler/xml";
+import { SOURCE_CONFIG_DIR } from "server/core/pathUtils";
+import Page from "server/data/Page";
+import XMLNode from "server/core/XMLNode";
 import ERR_CODE from "renderer/core/error-code";
 
 // 解析 sourceConfig xml 配置文件

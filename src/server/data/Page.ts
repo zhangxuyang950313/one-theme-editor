@@ -9,9 +9,10 @@ import {
   TypeElementAlign,
   TypeElementAlignV
 } from "types/source-config";
-import { getImageData } from "common/utils";
+import { getImageData, asyncMap } from "common/utils";
 import { xml2jsonElements } from "server/compiler/xml";
-import XMLNodeElements from "server/core/XMLNodeElements";
+import XMLNodeElement from "server/core/XMLNodeElements";
+import TempKeyValMapper from "server/data/TempKeyValMapper";
 
 enum ELEMENT_TYPES {
   IMAGE = "image",
@@ -50,7 +51,7 @@ export default class Page {
     attribute: "version" | "description" | "screenWidth"
   ): Promise<string> {
     const rootNode = await this.getRootNode();
-    return new XMLNodeElements(rootNode).getAttribute(attribute, "");
+    return new XMLNodeElement(rootNode).getAttribute(attribute, "");
   }
 
   private async getRootElements(): Promise<Element[]> {
@@ -78,17 +79,20 @@ export default class Page {
   async getPreviewList(): Promise<string[]> {
     const previewNode = await this.findRootMultiElements("preview");
     return previewNode.map(item =>
-      this.relativePathname(new XMLNodeElements(item).getAttribute("src"))
+      this.relativePathname(new XMLNodeElement(item).getAttribute("src"))
     );
   }
 
   async getTemplateConfList(): Promise<TypeSCPageTemplateConf[]> {
     const templates = await this.findRootMultiElements("template");
-    return templates.map(item => {
-      const node = new XMLNodeElements(item);
+    return await asyncMap(templates, async item => {
+      const node = new XMLNodeElement(item);
+      const valueList = await new TempKeyValMapper(
+        this.resolvePathname(node.getAttribute("values"))
+      ).getDataList();
       return {
         template: this.relativePathname(node.getAttribute("src")),
-        values: this.relativePathname(node.getAttribute("values")),
+        valueList: valueList,
         to: node.getAttribute("to")
       };
     });
@@ -96,7 +100,7 @@ export default class Page {
 
   async getCopyConfList(): Promise<TypeSCPageCopyConf[]> {
     return (await this.findRootMultiElements("copy")).map(item => {
-      const copyNode = new XMLNodeElements(item);
+      const copyNode = new XMLNodeElement(item);
       return {
         from: this.relativePathname(copyNode.getAttribute("from")),
         to: copyNode.getAttribute("to")
@@ -106,11 +110,12 @@ export default class Page {
 
   async getLayoutElementList(): Promise<TypeSCPageElementData[]> {
     const rootNode = await this.getRootNode();
-    const layoutNode = new XMLNodeElements(rootNode).getChildOf("layout");
-    const elementList = new XMLNodeElements(layoutNode).getChildren();
+    const elementList = new XMLNodeElement(rootNode)
+      .getChildOf("layout")
+      .getChildren();
     const queue: Promise<TypeSCPageElementData>[] = [];
     elementList.forEach(async item => {
-      const currentNode = new XMLNodeElements(item);
+      const currentNode = new XMLNodeElement(item);
       const layoutNormalize = {
         x: currentNode.getAttribute("x"),
         y: currentNode.getAttribute("y"),
@@ -123,7 +128,7 @@ export default class Page {
             resolve({
               type: ELEMENT_TYPES.IMAGE,
               name: currentNode.getAttribute("name"),
-              src: {
+              source: {
                 ...(await getImageData(
                   this.resolvePathname(currentNode.getAttribute("src"))
                 )),
@@ -139,7 +144,7 @@ export default class Page {
               },
               toList: currentNode
                 .getChildrenOf("to")
-                .map(item => new XMLNodeElements(item).getTextChild())
+                .map(item => new XMLNodeElement(item).getChildText())
             });
             break;
           }
@@ -167,6 +172,7 @@ export default class Page {
       screenWidth: await this.getScreenWidth(),
       previewList: await this.getPreviewList(),
       elementList: await this.getLayoutElementList(),
+      templateList: await this.getTemplateConfList(),
       copyList: await this.getCopyConfList()
     };
   }

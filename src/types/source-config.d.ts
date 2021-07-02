@@ -41,10 +41,11 @@ export type TypeSCPageRootConf = {
 // 配置模板数据
 export type TypeSCPageTemplateConf = {
   template: any;
-  values: any;
+  valueList: TypeKeyValMapperConf[];
   to: string;
 };
 
+// 拷贝数据
 export type TypeSCPageCopyConf = {
   from: string;
   to: string;
@@ -57,7 +58,7 @@ export type TypeElementAlignV = "top" | "center" | "bottom";
 export type TypeSCPageImageElData = {
   type: "image";
   name: string;
-  src: (TypeImageData & { pathname: string }) | null;
+  source: (TypeImageData & { pathname: string }) | null;
   layout: {
     x: string;
     y: string;
@@ -82,16 +83,10 @@ export type TypeSCPageTextElData = {
   color: string;
 };
 
+// 预览元素数据
 export type TypeSCPageElementData =
   | TypeSCPageImageElData
   | TypeSCPageTextElData;
-
-// 资源文件类型
-export type TypeSCFileCategoryConf = {
-  tag: string;
-  description: string;
-  type: "image" | "xml" | "" | string;
-};
 
 // 预览页面资源素材配置
 export type TypeSCPageSourceConf = {
@@ -108,5 +103,13 @@ export type TypeSCPageConf = {
   screenWidth: string;
   previewList: string[];
   elementList: TypeSCPageElementData[];
+  templateList: TypeSCPageTemplateConf[];
   copyList: TypeSCPageCopyConf[];
+};
+
+// 键值对映射配置
+export type TypeKeyValMapperConf = {
+  key: string;
+  value: string;
+  description: string;
 };

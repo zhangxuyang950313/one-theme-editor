@@ -1,7 +1,7 @@
 import { Element } from "xml-js";
 
 // 节点处理
-export default class XMLNodeElements {
+export default class XMLNodeElement {
   private node: Element;
   constructor(node: Element) {
     this.node = node;
@@ -42,7 +42,7 @@ export default class XMLNodeElements {
       .map(item => String(item.text));
   }
 
-  getTextChild(): string {
+  getChildText(): string {
     return this.getTextChildren()[0] || "";
   }
 
@@ -50,8 +50,10 @@ export default class XMLNodeElements {
    * 获取子节点列表第一个指定 tagname 子节点
    * @param tagname 指定节点 tagname
    */
-  getChildOf(tagname: string): Element {
-    return this.getChildren().find(item => item.name === tagname) || {};
+  getChildOf(tagname: string): XMLNodeElement {
+    const childElement =
+      this.getChildren().find(item => item.name === tagname) || {};
+    return new XMLNodeElement(childElement);
   }
 
   /**
@@ -63,14 +65,22 @@ export default class XMLNodeElements {
   }
 
   /**
+   * 获得第一个子节点
+   * @returns
+   */
+  getFirstChild(): XMLNodeElement {
+    return new XMLNodeElement(this.getChildren()[0] || {});
+  }
+
+  /**
    * 获取指定节点的第一个子节点
    * @param tagname 指定节点
    */
-  getFirstChildOf(tagname: string): XMLNodeElements {
-    const firstChild = this.getChildOf(tagname)?.elements?.[0];
+  getFirstChildOf(tagname: string): XMLNodeElement {
+    const firstChild = this.getChildOf(tagname).getChildren()[0];
     if (!firstChild) {
       throw new Error(`节点${tagname}没有子节点`);
     }
-    return new XMLNodeElements(firstChild);
+    return new XMLNodeElement(firstChild);
   }
 }
