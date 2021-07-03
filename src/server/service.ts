@@ -4,7 +4,6 @@ import FileType from "file-type";
 import express, { Express } from "express";
 import API from "common/api";
 import ERR_CODE from "renderer/core/error-code";
-import * as PATHS from "@/core/pathUtils";
 import {
   TypeCreateProjectPayload,
   TypeProjectDataDoc,
@@ -12,10 +11,11 @@ import {
   TypeProjectInfo,
   TypeUiVersion
 } from "types/project";
+import * as PATHS from "./core/pathUtils";
 import {
   compileSourceDescriptionList,
   readBrandConf
-} from "./compiler/source-config";
+} from "./core/source-config";
 import {
   findProjectByUUID,
   getProjectListOf,

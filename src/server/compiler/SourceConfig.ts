@@ -13,13 +13,17 @@ import {
   TypeXMLPageNode,
   TypeXMLSourceConf
 } from "types/xml-result";
-import { TypeUiVersion } from "types/project";
+import { TypeBrandConf, TypeUiVersion } from "types/project";
 import { asyncMap } from "common/utils";
-import { xml2jsonCompact } from "server/compiler/xml";
-import { SOURCE_CONFIG_DIR } from "server/core/pathUtils";
-import Page from "server/data/Page";
-import XMLNode from "server/core/XMLNode";
 import ERR_CODE from "renderer/core/error-code";
+import { xml2jsonCompact } from "../core/xml";
+import {
+  getSCDescriptionByNamespace,
+  SOURCE_CONFIG_DIR,
+  SOuRCE_CONFIG_FILE
+} from "../core/pathUtils";
+import Page from "./Page";
+import XMLNodeCompact from "./XMLNodeCompact";
 
 // 解析 sourceConfig xml 配置文件
 export default class SourceConfig {
@@ -34,6 +38,34 @@ export default class SourceConfig {
     }
     this.sourceConfigFile = file;
     this.namespace = path.relative(this.rootDir, path.dirname(file));
+  }
+
+  // 读取厂商配置
+  static async readBrandConf(): Promise<TypeBrandConf[]> {
+    if (!fse.existsSync(SOuRCE_CONFIG_FILE)) {
+      throw new Error(ERR_CODE[4003]);
+    }
+    return fse.readJsonSync(SOuRCE_CONFIG_FILE);
+  }
+
+  /**
+   * 解析当前厂商下所有预览配置
+   * @param brandType 厂商 type
+   * @returns
+   */
+  static async compileSourceDescriptionList(
+    brandType: string
+  ): Promise<TypeSourceDescription[]> {
+    const brandConfList = await this.readBrandConf();
+    const brandConf = brandConfList.find(item => item.type === brandType);
+    if (!brandConf?.sourceConfigs) return [];
+    const ensureConfigs = brandConf.sourceConfigs.flatMap(namespace => {
+      const absPath = getSCDescriptionByNamespace(namespace);
+      return fse.existsSync(absPath) ? [absPath] : [];
+    });
+    return asyncMap(ensureConfigs, configFile =>
+      new SourceConfig(configFile).getDescription()
+    );
   }
 
   private async ensureXmlData(): Promise<TypeXMLSourceConf> {
@@ -65,7 +97,7 @@ export default class SourceConfig {
   // 模板名称
   async getName(): Promise<string> {
     const xmlData = await this.ensureXmlData();
-    return new XMLNode(xmlData)
+    return new XMLNodeCompact(xmlData)
       .getFirstChildOf("description")
       .getAttribute("name");
   }
@@ -73,7 +105,7 @@ export default class SourceConfig {
   // 模板版本
   async getVersion(): Promise<string> {
     const xmlData = await this.ensureXmlData();
-    return new XMLNode(xmlData)
+    return new XMLNodeCompact(xmlData)
       .getFirstChildOf("description")
       .getAttribute("version");
   }
@@ -82,7 +114,9 @@ export default class SourceConfig {
   async getPreview(): Promise<string> {
     const xmlData = await this.ensureXmlData();
     // TODO: 默认预览图
-    return new XMLNode(xmlData).getFirstChildOf("preview").getAttribute("src");
+    return new XMLNodeCompact(xmlData)
+      .getFirstChildOf("preview")
+      .getAttribute("src");
   }
 
   // 模板信息
@@ -96,7 +130,7 @@ export default class SourceConfig {
   async getPageList(data: TypeXMLPageNode[]): Promise<TypeSCPageConf[]> {
     // 这里是在选择模板版本后得到的目标模块目录
     return asyncMap(data, item => {
-      const pageNode = new XMLNode(item);
+      const pageNode = new XMLNodeCompact(item);
       const pageFile = this.resolvePath(pageNode.getAttribute("src"));
       return new Page(pageFile).getData();
     });
@@ -107,7 +141,7 @@ export default class SourceConfig {
     data: TypeXMLPageGroupConf[]
   ): Promise<TypeSCPageGroupConf[]> {
     return asyncMap(data, async item => {
-      const groupNode = new XMLNode(item);
+      const groupNode = new XMLNodeCompact(item);
       const group: TypeSCPageGroupConf = {
         name: groupNode.getAttribute("name"),
         pageList: item.page ? await this.getPageList(item.page) : []
@@ -121,7 +155,7 @@ export default class SourceConfig {
     const sourceData = await this.ensureXmlData();
     if (!Array.isArray(sourceData.module)) return [];
     return asyncMap(sourceData.module, async (item, index) => {
-      const moduleNode = new XMLNode(item);
+      const moduleNode = new XMLNodeCompact(item);
       const result: TypeSCModuleConf = {
         index,
         name: moduleNode.getAttribute("name"),

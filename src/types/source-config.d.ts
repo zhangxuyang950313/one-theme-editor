@@ -1,3 +1,4 @@
+import { Attributes } from "xml-js";
 import { TypeImageData, TypeUiVersion } from "./project";
 import { TypeXMLSourceLayout } from "./xml-result";
 import { TypeImagePathLike } from "./index";
@@ -112,4 +113,11 @@ export type TypeKeyValMapperConf = {
   key: string;
   value: string;
   description: string;
+};
+
+// xml 模板数据
+export type TypeXmlTempData = {
+  name: string;
+  attribute: Attributes;
+  child: string;
 };

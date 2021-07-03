@@ -64,7 +64,7 @@ export async function xml2jsonCompact<T = ElementCompact>(
 }
 
 // 解析 xml 返回完整的数组形式数据
-export async function xml2jsonElements<T = Element>(file: string): Promise<T> {
+export async function xml2jsonElement<T = Element>(file: string): Promise<T> {
   if (!fse.existsSync(file)) {
     throw new Error(file + ERR_CODE[3000]);
   }

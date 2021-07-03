@@ -14,7 +14,7 @@ import {
   PROJECTS_DB,
   getSCDescriptionByNamespace
 } from "server/core/pathUtils";
-import SourceConfig from "server/data/SourceConfig";
+import SourceConfig from "server/compiler/SourceConfig";
 import ERR_CODE from "renderer/core/error-code";
 
 // TODO: 创建数据库有个坑，如果 filename 文件内容不是 nedb 能接受的数据格式则会导致服务崩溃

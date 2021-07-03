@@ -1,9 +1,9 @@
 import { ElementCompact } from "xml-js";
 
 // 节点处理
-export default class XMLNode {
-  private node?: ElementCompact;
-  constructor(node?: ElementCompact) {
+export default class XMLNodeCompact {
+  private node: ElementCompact;
+  constructor(node: ElementCompact) {
     this.node = node;
   }
 
@@ -44,8 +44,8 @@ export default class XMLNode {
    * 获取指定子节点的第一个节点
    * @param tagname 指定节点
    */
-  getFirstChildOf(tagname: string): XMLNode {
+  getFirstChildOf(tagname: string): XMLNodeCompact {
     const firstChild = this.getChildrenOf(tagname)[0];
-    return new XMLNode(firstChild);
+    return new XMLNodeCompact(firstChild);
   }
 }

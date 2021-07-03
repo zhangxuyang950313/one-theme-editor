@@ -10,9 +10,9 @@ import {
   TypeElementAlignV
 } from "types/source-config";
 import { getImageData, asyncMap } from "common/utils";
-import { xml2jsonElements } from "server/compiler/xml";
-import XMLNodeElement from "server/core/XMLNodeElements";
-import TempKeyValMapper from "server/data/TempKeyValMapper";
+import { xml2jsonElement } from "../core/xml";
+import XMLNodeElement from "./XMLNodeElement";
+import TempKeyValMapper from "./TempKeyValMapper";
 
 enum ELEMENT_TYPES {
   IMAGE = "image",
@@ -27,7 +27,7 @@ export default class Page {
 
   private async ensureXmlData(): Promise<Element> {
     if (!this.xmlJson) {
-      this.xmlJson = await xml2jsonElements(this.pageConfigFile);
+      this.xmlJson = await xml2jsonElement(this.pageConfigFile);
     }
     return this.xmlJson;
   }
@@ -51,7 +51,7 @@ export default class Page {
     attribute: "version" | "description" | "screenWidth"
   ): Promise<string> {
     const rootNode = await this.getRootNode();
-    return new XMLNodeElement(rootNode).getAttribute(attribute, "");
+    return new XMLNodeElement(rootNode).getAttributeOf(attribute, "");
   }
 
   private async getRootElements(): Promise<Element[]> {
@@ -79,7 +79,7 @@ export default class Page {
   async getPreviewList(): Promise<string[]> {
     const previewNode = await this.findRootMultiElements("preview");
     return previewNode.map(item =>
-      this.relativePathname(new XMLNodeElement(item).getAttribute("src"))
+      this.relativePathname(new XMLNodeElement(item).getAttributeOf("src"))
     );
   }
 
@@ -88,12 +88,12 @@ export default class Page {
     return await asyncMap(templates, async item => {
       const node = new XMLNodeElement(item);
       const valueList = await new TempKeyValMapper(
-        this.resolvePathname(node.getAttribute("values"))
+        this.resolvePathname(node.getAttributeOf("values"))
       ).getDataList();
       return {
-        template: this.relativePathname(node.getAttribute("src")),
+        template: this.relativePathname(node.getAttributeOf("src")),
         valueList: valueList,
-        to: node.getAttribute("to")
+        to: node.getAttributeOf("to")
       };
     });
   }
@@ -102,8 +102,8 @@ export default class Page {
     return (await this.findRootMultiElements("copy")).map(item => {
       const copyNode = new XMLNodeElement(item);
       return {
-        from: this.relativePathname(copyNode.getAttribute("from")),
-        to: copyNode.getAttribute("to")
+        from: this.relativePathname(copyNode.getAttributeOf("from")),
+        to: copyNode.getAttributeOf("to")
       };
     });
   }
@@ -117,28 +117,33 @@ export default class Page {
     elementList.forEach(async item => {
       const currentNode = new XMLNodeElement(item);
       const layoutNormalize = {
-        x: currentNode.getAttribute("x"),
-        y: currentNode.getAttribute("y"),
-        align: currentNode.getAttribute("align", "left") as TypeElementAlign,
-        alignV: currentNode.getAttribute("alignV", "right") as TypeElementAlignV
+        x: currentNode.getAttributeOf("x"),
+        y: currentNode.getAttributeOf("y"),
+        align: currentNode.getAttributeOf("align", "left") as TypeElementAlign,
+        alignV: currentNode.getAttributeOf(
+          "alignV",
+          "right"
+        ) as TypeElementAlignV
       };
       const solveElement = new Promise<TypeSCPageElementData>(async resolve => {
         switch (item.name) {
           case ELEMENT_TYPES.IMAGE: {
             resolve({
               type: ELEMENT_TYPES.IMAGE,
-              name: currentNode.getAttribute("name"),
+              name: currentNode.getAttributeOf("name"),
               source: {
                 ...(await getImageData(
-                  this.resolvePathname(currentNode.getAttribute("src"))
+                  this.resolvePathname(currentNode.getAttributeOf("src"))
                 )),
-                pathname: this.relativePathname(currentNode.getAttribute("src"))
+                pathname: this.relativePathname(
+                  currentNode.getAttributeOf("src")
+                )
               },
               layout: {
                 x: layoutNormalize.x,
                 y: layoutNormalize.y,
-                w: currentNode.getAttribute("w"),
-                h: currentNode.getAttribute("h"),
+                w: currentNode.getAttributeOf("w"),
+                h: currentNode.getAttributeOf("h"),
                 align: layoutNormalize.align,
                 alignV: layoutNormalize.alignV
               },
@@ -151,10 +156,10 @@ export default class Page {
           case ELEMENT_TYPES.TEXT: {
             resolve({
               type: ELEMENT_TYPES.TEXT,
-              text: currentNode.getAttribute("text"),
+              text: currentNode.getAttributeOf("text"),
               layout: layoutNormalize,
-              colorClass: currentNode.getAttribute("colorClass"),
-              color: currentNode.getAttribute("color")
+              colorClass: currentNode.getAttributeOf("colorClass"),
+              color: currentNode.getAttributeOf("color")
             });
             break;
           }

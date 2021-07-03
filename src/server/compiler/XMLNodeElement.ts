@@ -1,4 +1,4 @@
-import { Element } from "xml-js";
+import { Element, Attributes } from "xml-js";
 
 // 节点处理
 export default class XMLNodeElement {
@@ -12,12 +12,17 @@ export default class XMLNodeElement {
     return Object.keys(this.node.attributes || {});
   }
 
-  // // 获取属性所有值
-  // getAttributeValues(): string[] {
-  //   return this.node._attributes
-  //     ? Object.values(String(this.node._attributes))
-  //     : [];
-  // }
+  // 获取属性所有值
+  getAttributeValues(): string[] {
+    return this.node.attributes
+      ? Object.values(String(this.node.attributes))
+      : [];
+  }
+
+  // 获取所有键值映射
+  getAttributes(): Attributes {
+    return this.node.attributes || {};
+  }
 
   /**
    * 获取节点指定键值
@@ -25,7 +30,7 @@ export default class XMLNodeElement {
    * @param def 指定默认值
    * @returns
    */
-  getAttribute(attr: string, def = ""): string {
+  getAttributeOf(attr: string, def = ""): string {
     return String((this.node.attributes || {})[attr]) || def;
   }
 
