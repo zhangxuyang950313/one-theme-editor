@@ -16,6 +16,7 @@ import {
 } from "server/core/pathUtils";
 import SourceConfig from "server/compiler/SourceConfig";
 import ERR_CODE from "renderer/core/error-code";
+import { SOURCE_CONFIG_DIR } from "./../core/pathUtils";
 
 // TODO: 创建数据库有个坑，如果 filename 文件内容不是 nedb 能接受的数据格式则会导致服务崩溃
 function createNedb(filename: string) {
@@ -86,7 +87,10 @@ export async function createProject(
 ): Promise<TypeProjectDataDoc> {
   const { brandInfo, projectInfo, projectRoot, sourceNamespace } = data;
   const configFile = getSCDescriptionByNamespace(sourceNamespace);
-  const sourceConfig = await new SourceConfig(configFile).getConfig();
+  const sourceConfig = await new SourceConfig(
+    configFile,
+    SOURCE_CONFIG_DIR
+  ).getConfig();
   const projectData: TypeProjectData = {
     uuid: UUID(),
     projectInfo,

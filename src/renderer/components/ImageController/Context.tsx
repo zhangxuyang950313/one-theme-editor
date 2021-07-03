@@ -1,11 +1,11 @@
 import React from "react";
 
 type TypeContext = {
-  toList: string[];
+  releaseList: string[];
   dynamicToList: string[];
 };
 
 export default React.createContext<TypeContext>({
-  toList: [],
+  releaseList: [],
   dynamicToList: []
 });

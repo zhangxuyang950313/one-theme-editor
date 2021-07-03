@@ -11,11 +11,8 @@ import {
   TypeProjectInfo,
   TypeUiVersion
 } from "types/project";
+import SourceConfig from "./compiler/SourceConfig";
 import * as PATHS from "./core/pathUtils";
-import {
-  compileSourceDescriptionList,
-  readBrandConf
-} from "./core/source-config";
 import {
   findProjectByUUID,
   getProjectListOf,
@@ -124,7 +121,7 @@ export default function registerService(service: Express): void {
   // 获取厂商配置列表
   service.get(API.GET_BRAND_LIST, async (req, res) => {
     try {
-      const brandConfList = await readBrandConf();
+      const brandConfList = await SourceConfig.readBrandConf();
       res.send(result.success(brandConfList));
     } catch (err) {
       res.status(400).send(result.fail(err.message));
@@ -137,7 +134,9 @@ export default function registerService(service: Express): void {
     async (req, res) => {
       try {
         const { brandType } = req.params;
-        const sourceDescription = await compileSourceDescriptionList(brandType);
+        const sourceDescription = await SourceConfig.getDescriptionList(
+          brandType
+        );
         res.send(result.success(sourceDescription));
       } catch (err) {
         res.status(400).send(result.fail(err.message));

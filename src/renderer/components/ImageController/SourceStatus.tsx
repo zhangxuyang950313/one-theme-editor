@@ -9,13 +9,13 @@ import Context from "./Context";
 
 const SourceStatus: React.FC = props => {
   const projectRoot = useProjectRoot();
-  const { toList, dynamicToList } = useContext(Context);
+  const { releaseList, dynamicToList } = useContext(Context);
 
   if (!projectRoot) return null;
 
   return (
     <div>
-      {toList.map(relativePath => {
+      {releaseList.map(relativePath => {
         const basename = path.basename(relativePath);
         // const hasIt = fse.existsSync(path.join(projectRoot, relativePath));
         const hasIt = new Set(dynamicToList).has(relativePath);

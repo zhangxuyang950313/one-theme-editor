@@ -31,7 +31,7 @@ export const BINARY_DIR = path.resolve(RESOURCE_DIR, "binary");
 export const SOURCE_CONFIG_DIR = path.resolve(RESOURCE_DIR, "sourceConfig");
 
 // 模板总配置文件
-export const SOuRCE_CONFIG_FILE = path.resolve(
+export const SOURCE_CONFIG_FILE = path.resolve(
   SOURCE_CONFIG_DIR,
   "config.json"
 );

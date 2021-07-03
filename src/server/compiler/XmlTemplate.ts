@@ -1,12 +1,9 @@
 import { TypeXmlTempData } from "types/source-config";
-import XMLNodeElement from "./XMLNodeElement";
-import JsonElementCompiler from "./JsonElementCompiler";
+import BaseCompiler from "./BaseCompiler";
 
-export default class XmlTemplate extends JsonElementCompiler {
+export default class XmlTemplate extends BaseCompiler {
   async getData(): Promise<TypeXmlTempData[]> {
-    const rootElements = await super.getRootChildren();
-    return rootElements.map(item => {
-      const node = new XMLNodeElement(item);
+    return (await super.getRootChildren()).map(node => {
       return {
         name: node.getAttributeOf("name"),
         attribute: node.getAttributes(),

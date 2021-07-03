@@ -1,4 +1,5 @@
 import { Attributes } from "xml-js";
+import { ALIGN_VALUES, ALIGN_V_VALUES, ELEMENT_TYPES } from "src/enum";
 import { TypeImageData, TypeUiVersion } from "./project";
 import { TypeXMLSourceLayout } from "./xml-result";
 import { TypeImagePathLike } from "./index";
@@ -53,11 +54,11 @@ export type TypeSCPageCopyConf = {
 };
 
 // 元素配置数据
-export type TypeElementAlign = "left" | "center" | "right";
-export type TypeElementAlignV = "top" | "center" | "bottom";
+export type TypeElementAlign = ALIGN_VALUES;
+export type TypeElementAlignV = ALIGN_V_VALUES;
 
 export type TypeSCPageImageElData = {
-  type: "image";
+  type: ELEMENT_TYPES.IMAGE;
   name: string;
   source: (TypeImageData & { pathname: string }) | null;
   layout: {
@@ -68,11 +69,11 @@ export type TypeSCPageImageElData = {
     align: TypeElementAlign;
     alignV: TypeElementAlignV;
   };
-  toList: string[];
+  releaseList: string[];
 };
 
 export type TypeSCPageTextElData = {
-  type: "text";
+  type: ELEMENT_TYPES.TEXT;
   text: string;
   layout: {
     x: string;

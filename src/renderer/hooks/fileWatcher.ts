@@ -51,17 +51,17 @@ export function useFSWatcherMultiInstance(
 
 /**
  * 监听模板列表文件
- * @param toList
+ * @param releaseList
  * @returns
  */
-export function useToListWatcher(toList: string[]): string[] {
+export function useToListWatcher(releaseList: string[]): string[] {
   const projectRoot = useProjectRoot();
   /**
    * TODO：在 electron 环境中 watcher 监听多个文件会导致事件丢失，（node环境正常，也可能是 webpack 的打包问题）
    * 原因不明，所以创建多个 watcher 实例只监听一个文件
    * https://github.com/paulmillr/chokidar/issues/1122
    */
-  const watchers = useFSWatcherMultiInstance(toList.length, {
+  const watchers = useFSWatcherMultiInstance(releaseList.length, {
     cwd: projectRoot || undefined,
     ignoreInitial: false
   });
@@ -100,13 +100,13 @@ export function useToListWatcher(toList: string[]): string[] {
           set.delete(relative);
           updateList();
         })
-        .add(toList[index]);
-      console.log(logSymbols.info, `添加文件监听：${toList[index]}`);
+        .add(releaseList[index]);
+      console.log(logSymbols.info, `添加文件监听：${releaseList[index]}`);
     });
     return () => {
       watchers.forEach((watcher, index) => {
-        watcher.unwatch(toList[index]);
-        console.log(logSymbols.info, "移除文件监听：", toList[index]);
+        watcher.unwatch(releaseList[index]);
+        console.log(logSymbols.info, "移除文件监听：", releaseList[index]);
       });
     };
   }, []);

@@ -1,6 +1,6 @@
 import path from "path";
-
-import { Element } from "xml-js";
+import { getImageData, asyncMap } from "common/utils";
+import { ELEMENT_TYPES } from "src/enum/index";
 import {
   TypeSCPageConf,
   TypeSCPageTemplateConf,
@@ -9,59 +9,24 @@ import {
   TypeElementAlign,
   TypeElementAlignV
 } from "types/source-config";
-import { getImageData, asyncMap } from "common/utils";
-import { xml2jsonElement } from "../core/xml";
-import XMLNodeElement from "./XMLNodeElement";
 import TempKeyValMapper from "./TempKeyValMapper";
+import BaseCompiler from "./BaseCompiler";
 
-enum ELEMENT_TYPES {
-  IMAGE = "image",
-  TEXT = "text"
-}
-export default class Page {
-  private pageConfigFile: string;
-  private xmlJson!: Element;
-  constructor(file: string) {
-    this.pageConfigFile = file;
-  }
-
-  private async ensureXmlData(): Promise<Element> {
-    if (!this.xmlJson) {
-      this.xmlJson = await xml2jsonElement(this.pageConfigFile);
-    }
-    return this.xmlJson;
-  }
-
+export default class Page extends BaseCompiler {
   // 处理当前页面资源的相对路径
   private relativePathname(file: string): string {
-    return path.join(path.basename(path.dirname(this.pageConfigFile)), file);
+    return path.join(path.basename(path.dirname(this.getFile())), file);
   }
 
   // 处理当前页面资源的绝对路径
   private resolvePathname(file: string): string {
-    return path.join(path.dirname(this.pageConfigFile), file);
-  }
-
-  private async getRootNode(): Promise<Element> {
-    const xmlJson = await this.ensureXmlData();
-    return xmlJson.elements?.[0] || {};
+    return path.join(path.dirname(this.getFile()), file);
   }
 
   private async getRootAttribute(
     attribute: "version" | "description" | "screenWidth"
   ): Promise<string> {
-    const rootNode = await this.getRootNode();
-    return new XMLNodeElement(rootNode).getAttributeOf(attribute, "");
-  }
-
-  private async getRootElements(): Promise<Element[]> {
-    const rootNode = await this.getRootNode();
-    return rootNode.elements || [];
-  }
-
-  private async findRootMultiElements(tagname: string): Promise<Element[]> {
-    const rootElements = await this.getRootElements();
-    return rootElements.filter(item => item.name === tagname) || [];
+    return (await this.getRootNode()).getAttributeOf(attribute);
   }
 
   async getVersion(): Promise<string> {
@@ -77,16 +42,15 @@ export default class Page {
   }
 
   async getPreviewList(): Promise<string[]> {
-    const previewNode = await this.findRootMultiElements("preview");
+    const previewNode = await super.getRootChildrenOf("preview");
     return previewNode.map(item =>
-      this.relativePathname(new XMLNodeElement(item).getAttributeOf("src"))
+      this.relativePathname(item.getAttributeOf("src"))
     );
   }
 
   async getTemplateConfList(): Promise<TypeSCPageTemplateConf[]> {
-    const templates = await this.findRootMultiElements("template");
-    return await asyncMap(templates, async item => {
-      const node = new XMLNodeElement(item);
+    const templates = await super.getRootChildrenOf("template");
+    return await asyncMap(templates, async node => {
       const valueList = await new TempKeyValMapper(
         this.resolvePathname(node.getAttributeOf("values"))
       ).getDataList();
@@ -99,67 +63,58 @@ export default class Page {
   }
 
   async getCopyConfList(): Promise<TypeSCPageCopyConf[]> {
-    return (await this.findRootMultiElements("copy")).map(item => {
-      const copyNode = new XMLNodeElement(item);
+    return (await super.getRootChildrenOf("copy")).map(node => {
       return {
-        from: this.relativePathname(copyNode.getAttributeOf("from")),
-        to: copyNode.getAttributeOf("to")
+        from: this.relativePathname(node.getAttributeOf("from")),
+        to: node.getAttributeOf("to")
       };
     });
   }
 
   async getLayoutElementList(): Promise<TypeSCPageElementData[]> {
     const rootNode = await this.getRootNode();
-    const elementList = new XMLNodeElement(rootNode)
-      .getChildOf("layout")
-      .getChildren();
+    const elementList = rootNode.getFirstChildOf("layout").getChildren();
     const queue: Promise<TypeSCPageElementData>[] = [];
-    elementList.forEach(async item => {
-      const currentNode = new XMLNodeElement(item);
+    elementList.forEach(async node => {
       const layoutNormalize = {
-        x: currentNode.getAttributeOf("x"),
-        y: currentNode.getAttributeOf("y"),
-        align: currentNode.getAttributeOf("align", "left") as TypeElementAlign,
-        alignV: currentNode.getAttributeOf(
-          "alignV",
-          "right"
-        ) as TypeElementAlignV
+        x: node.getAttributeOf("x"),
+        y: node.getAttributeOf("y"),
+        align: node.getAttributeOf("align", "left") as TypeElementAlign,
+        alignV: node.getAttributeOf("alignV", "right") as TypeElementAlignV
       };
       const solveElement = new Promise<TypeSCPageElementData>(async resolve => {
-        switch (item.name) {
+        switch (node.getTagname()) {
           case ELEMENT_TYPES.IMAGE: {
             resolve({
               type: ELEMENT_TYPES.IMAGE,
-              name: currentNode.getAttributeOf("name"),
+              name: node.getAttributeOf("name"),
               source: {
                 ...(await getImageData(
-                  this.resolvePathname(currentNode.getAttributeOf("src"))
+                  this.resolvePathname(node.getAttributeOf("src"))
                 )),
-                pathname: this.relativePathname(
-                  currentNode.getAttributeOf("src")
-                )
+                pathname: this.relativePathname(node.getAttributeOf("src"))
               },
               layout: {
                 x: layoutNormalize.x,
                 y: layoutNormalize.y,
-                w: currentNode.getAttributeOf("w"),
-                h: currentNode.getAttributeOf("h"),
+                w: node.getAttributeOf("w"),
+                h: node.getAttributeOf("h"),
                 align: layoutNormalize.align,
                 alignV: layoutNormalize.alignV
               },
-              toList: currentNode
+              releaseList: node
                 .getChildrenOf("to")
-                .map(item => new XMLNodeElement(item).getChildText())
+                .map(item => item.getChildText())
             });
             break;
           }
           case ELEMENT_TYPES.TEXT: {
             resolve({
               type: ELEMENT_TYPES.TEXT,
-              text: currentNode.getAttributeOf("text"),
+              text: node.getAttributeOf("text"),
               layout: layoutNormalize,
-              colorClass: currentNode.getAttributeOf("colorClass"),
-              color: currentNode.getAttributeOf("color")
+              colorClass: node.getAttributeOf("colorClass"),
+              color: node.getAttributeOf("color")
             });
             break;
           }

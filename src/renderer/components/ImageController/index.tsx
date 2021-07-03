@@ -19,11 +19,11 @@ import ProjectSource from "./ProjectSource";
 import SourceStatus from "./SourceStatus";
 
 const ImageController: React.FC<TypeSCPageImageElData> = sourceConf => {
-  const { source, toList: to } = sourceConf;
+  const { source, releaseList } = sourceConf;
   const projectRoot = useProjectRoot();
   const sourceConfigRoot = useSourceConfigRoot();
-  const dynamicToList = useToListWatcher(to);
-  const copyToWith = useCopyToWith(to, sourceConf.name);
+  const dynamicToList = useToListWatcher(releaseList);
+  const copyToWith = useCopyToWith(releaseList, sourceConf.name);
 
   if (!sourceConf || !source || !sourceConfigRoot || !projectRoot) return null;
 
@@ -49,7 +49,9 @@ const ImageController: React.FC<TypeSCPageImageElData> = sourceConf => {
 
   return (
     <StyleImageChanger>
-      <PartialContext.Provider value={{ toList: to, dynamicToList }}>
+      <PartialContext.Provider
+        value={{ releaseList: releaseList, dynamicToList }}
+      >
         {/* 图片描述 */}
         <div className="text description">
           {sourceConf.name}

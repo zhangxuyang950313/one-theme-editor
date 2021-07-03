@@ -8,44 +8,33 @@ import {
   TypeSCPageConf,
   TypeSourceDescription
 } from "types/source-config";
-import {
-  TypeXMLPageGroupConf,
-  TypeXMLPageNode,
-  TypeXMLSourceConf
-} from "types/xml-result";
 import { TypeBrandConf, TypeUiVersion } from "types/project";
 import { asyncMap } from "common/utils";
 import ERR_CODE from "renderer/core/error-code";
-import { xml2jsonCompact } from "../core/xml";
 import {
   getSCDescriptionByNamespace,
-  SOURCE_CONFIG_DIR,
-  SOuRCE_CONFIG_FILE
+  SOURCE_CONFIG_FILE
 } from "../core/pathUtils";
 import Page from "./Page";
-import XMLNodeCompact from "./XMLNodeCompact";
+import XMLNodeElement from "./XMLNodeElement";
+import BaseCompiler from "./BaseCompiler";
 
 // 解析 sourceConfig xml 配置文件
-export default class SourceConfig {
-  private rootDir = SOURCE_CONFIG_DIR;
+export default class SourceConfig extends BaseCompiler {
+  private rootDir = "";
   private sourceConfigFile = "";
   private namespace = "";
-  // 模板解析数据
-  private xmlData!: TypeXMLSourceConf;
   constructor(file: string) {
-    if (!fse.existsSync(file)) {
-      throw new Error(ERR_CODE[3005]);
-    }
-    this.sourceConfigFile = file;
-    this.namespace = path.relative(this.rootDir, path.dirname(file));
+    super(file);
+    this.rootDir = path.dirname(file);
   }
 
   // 读取厂商配置
   static async readBrandConf(): Promise<TypeBrandConf[]> {
-    if (!fse.existsSync(SOuRCE_CONFIG_FILE)) {
+    if (!fse.existsSync(SOURCE_CONFIG_FILE)) {
       throw new Error(ERR_CODE[4003]);
     }
-    return fse.readJsonSync(SOuRCE_CONFIG_FILE);
+    return fse.readJsonSync(SOURCE_CONFIG_FILE);
   }
 
   /**
@@ -53,7 +42,7 @@ export default class SourceConfig {
    * @param brandType 厂商 type
    * @returns
    */
-  static async compileSourceDescriptionList(
+  static async getDescriptionList(
     brandType: string
   ): Promise<TypeSourceDescription[]> {
     const brandConfList = await this.readBrandConf();
@@ -66,15 +55,6 @@ export default class SourceConfig {
     return asyncMap(ensureConfigs, configFile =>
       new SourceConfig(configFile).getDescription()
     );
-  }
-
-  private async ensureXmlData(): Promise<TypeXMLSourceConf> {
-    if (!this.xmlData) {
-      this.xmlData = await xml2jsonCompact<TypeXMLSourceConf>(
-        this.sourceConfigFile
-      );
-    }
-    return this.xmlData;
   }
 
   // 处理成模板根目录
@@ -96,55 +76,48 @@ export default class SourceConfig {
 
   // 模板名称
   async getName(): Promise<string> {
-    const xmlData = await this.ensureXmlData();
-    return new XMLNodeCompact(xmlData)
-      .getFirstChildOf("description")
-      .getAttribute("name");
+    const rootNode = await super.getRootNode();
+    return rootNode.getAttributeOf("name");
   }
 
   // 模板版本
   async getVersion(): Promise<string> {
-    const xmlData = await this.ensureXmlData();
-    return new XMLNodeCompact(xmlData)
-      .getFirstChildOf("description")
-      .getAttribute("version");
+    const rootNode = await super.getRootNode();
+    return rootNode.getAttributeOf("version");
   }
 
   // 模板预览图
   async getPreview(): Promise<string> {
-    const xmlData = await this.ensureXmlData();
     // TODO: 默认预览图
-    return new XMLNodeCompact(xmlData)
-      .getFirstChildOf("preview")
-      .getAttribute("src");
+    return (await super.getRootFirstChildOf("preview")).getAttributeOf("src");
   }
 
   // 模板信息
   async getUiVersion(): Promise<TypeUiVersion> {
-    const xmlData = await this.ensureXmlData();
-    const { name = "", code = "" } = xmlData?.uiVersion?.[0]._attributes || {};
-    return { name, code };
+    const uiVersionNode = await super.getRootFirstChildOf("uiVersion");
+    return {
+      name: uiVersionNode.getAttributeOf("name"),
+      code: uiVersionNode.getAttributeOf("code")
+    };
   }
 
   // 页面数据
-  async getPageList(data: TypeXMLPageNode[]): Promise<TypeSCPageConf[]> {
+  async getPageList(pageNodeList: XMLNodeElement[]): Promise<TypeSCPageConf[]> {
     // 这里是在选择模板版本后得到的目标模块目录
-    return asyncMap(data, item => {
-      const pageNode = new XMLNodeCompact(item);
-      const pageFile = this.resolvePath(pageNode.getAttribute("src"));
+    return asyncMap(pageNodeList, node => {
+      const pageFile = this.resolvePath(node.getAttributeOf("src"));
       return new Page(pageFile).getData();
     });
   }
 
   // 页面分组数据
   async getPageGroupList(
-    data: TypeXMLPageGroupConf[]
+    groupNodeList: XMLNodeElement[]
   ): Promise<TypeSCPageGroupConf[]> {
-    return asyncMap(data, async item => {
-      const groupNode = new XMLNodeCompact(item);
+    return asyncMap(groupNodeList, async groupNode => {
       const group: TypeSCPageGroupConf = {
-        name: groupNode.getAttribute("name"),
-        pageList: item.page ? await this.getPageList(item.page) : []
+        name: groupNode.getAttributeOf("name"),
+        pageList: await this.getPageList(groupNode.getChildrenOf("page"))
       };
       return group;
     });
@@ -152,15 +125,15 @@ export default class SourceConfig {
 
   // 模块数据
   async getModuleList(): Promise<TypeSCModuleConf[]> {
-    const sourceData = await this.ensureXmlData();
-    if (!Array.isArray(sourceData.module)) return [];
-    return asyncMap(sourceData.module, async (item, index) => {
-      const moduleNode = new XMLNodeCompact(item);
+    const moduleNodeList = await super.getRootChildrenOf("module");
+    return asyncMap(moduleNodeList, async (moduleNode, index) => {
       const result: TypeSCModuleConf = {
         index,
-        name: moduleNode.getAttribute("name"),
-        icon: moduleNode.getAttribute("icon"),
-        groupList: item.group ? await this.getPageGroupList(item.group) : []
+        name: moduleNode.getAttributeOf("name"),
+        icon: moduleNode.getAttributeOf("icon"),
+        groupList: await this.getPageGroupList(
+          moduleNode.getChildrenOf("group")
+        )
       };
       return result;
     });

@@ -13,9 +13,9 @@ import ImageHandler from "./ImageHandler";
 import { useCopyToWith } from "./hooks";
 
 const ProjectSource: React.FC = () => {
-  const { toList, dynamicToList } = useContext(Context);
+  const { releaseList, dynamicToList } = useContext(Context);
   const projectRoot = useProjectRoot();
-  const copyToWith = useCopyToWith(toList, "");
+  const copyToWith = useCopyToWith(releaseList, "");
 
   if (!projectRoot) return null;
   // 更新后的模板绝对路径列表
@@ -24,7 +24,7 @@ const ProjectSource: React.FC = () => {
   );
 
   // 目标素材绝对路径列表
-  const absoluteToList = toList.map(item => path.join(projectRoot, item));
+  const absoluteToList = releaseList.map(item => path.join(projectRoot, item));
 
   // 筛选一个有效的用于展示
   const absoluteToForShow = newAbsoluteToList[0] || "";
