@@ -2,7 +2,7 @@ import { createStore, combineReducers } from "redux";
 
 // 模块切片
 import base from "./modules/base/reducer";
-import sourceConfig from "./modules/source-config/reducer";
+import sourceConfig from "./modules/sourceConfig/reducer";
 import project from "./modules/project/reducer";
 
 // 合并导出

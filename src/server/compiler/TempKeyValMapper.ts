@@ -21,8 +21,15 @@ export default class TempKeyValMapper extends BaseCompiler {
   async getDataObj(): Promise<TypeSCPageKeyValConf> {
     return (await super.getRootChildren()).reduce((total, item) => {
       const key = item.getAttributeOf("name");
-      return key ? Object.assign(total, { [key]: item.getElement() }) : total;
-    }, {} as TypeSCPageKeyValConf);
+      if (!key) return total;
+      const data: TypeSCPageKeyValConf = {
+        [key]: {
+          value: item.getFirstTextChildValue(),
+          description: item.getAttributeOf("description")
+        }
+      };
+      return Object.assign(total, data);
+    }, {});
   }
 
   async getDataMap(): Promise<TypeSCPageXmlKeyValMapperMap> {

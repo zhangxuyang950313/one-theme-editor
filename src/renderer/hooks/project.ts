@@ -8,7 +8,7 @@ import {
   ActionSetCurrentBrand,
   ActionSetCurrentPage,
   ActionSetSourceConfig
-} from "@/store/modules/source-config/action";
+} from "@/store/modules/sourceConfig/action";
 import { ActionSetProjectData } from "@/store/modules/project/action";
 import {
   getProjectData,

@@ -2,20 +2,21 @@ import React from "react";
 import { useHistory, useParams } from "react-router";
 
 import styled from "styled-components";
+import { useLoadProjectByUUID } from "@/hooks/project";
+import { StyleBorderRight } from "@/style";
+
 import { Button, Empty, Spin } from "antd";
 import ModuleSelector from "@/components/Editor/ModuleSelector";
 import EditorToolsBar from "@/components/Editor/ToolsBar";
 import PageSelector from "@/components/Editor/PageSelector";
 import Previewer from "@/components/Editor/Previewer";
-import ResourceContent from "@/components/Editor/ResourceContent";
-
-import { useLoadProjectByUUID } from "@/hooks/project";
-import { StyleBorderRight } from "@/style";
+import ImageSourceList from "@/components/Editor/ImageSourceList";
+import XmlSourceList from "@/components/Editor/XmlSourceList";
 
 // 主编辑区域
-const EditorMain: React.FC = () => {
+const EditorContainer: React.FC = () => {
   return (
-    <StyleEditorMain>
+    <StyleEditorContainer>
       {/* 页面选择器 */}
       <StylePageSelector>
         <PageSelector />
@@ -25,12 +26,54 @@ const EditorMain: React.FC = () => {
         <Previewer />
       </StylePreviewer>
       {/* 素材编辑区 */}
-      <StyleResourceContent>
-        <ResourceContent />
-      </StyleResourceContent>
-    </StyleEditorMain>
+      {/* <StyleSourceController>
+        <SourceController />
+      </StyleSourceController> */}
+
+      <StyleImageSourceList>
+        <ImageSourceList />
+      </StyleImageSourceList>
+      <StyleXmlSourceList>
+        <XmlSourceList />
+      </StyleXmlSourceList>
+    </StyleEditorContainer>
   );
 };
+
+const StyleEditorContainer = styled.div`
+  display: flex;
+  overflow: hidden;
+  height: 100%;
+  flex-grow: 1;
+  box-sizing: border-box;
+`;
+
+const StylePageSelector = styled(StyleBorderRight)`
+  width: 250px;
+  flex-shrink: 0;
+  overflow: auto;
+`;
+
+const StylePreviewer = styled(StyleBorderRight)`
+  width: 350px;
+  padding: 20px;
+  flex-shrink: 0;
+  overflow: auto;
+`;
+
+const StyleImageSourceList = styled(StyleBorderRight)`
+  width: 320px;
+  padding: 20px;
+  flex-shrink: 0;
+  overflow: auto;
+`;
+
+const StyleXmlSourceList = styled.div`
+  /* width: 100%; */
+  padding: 0 20px;
+  flex-shrink: 0;
+  overflow: auto;
+`;
 
 const Editor: React.FC = () => {
   const history = useHistory();
@@ -76,7 +119,7 @@ const Editor: React.FC = () => {
         {/* 工具栏 */}
         <EditorToolsBar />
         {/* 主编辑区域 */}
-        <EditorMain />
+        <EditorContainer />
       </StyleEditorContent>
     </StyleEditor>
   );
@@ -101,33 +144,6 @@ const StyleEditorContent = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-`;
-
-const StyleEditorMain = styled.div`
-  display: flex;
-  overflow: hidden;
-  height: 100%;
-  flex-grow: 1;
-  box-sizing: border-box;
-`;
-
-const StylePageSelector = styled(StyleBorderRight)`
-  width: 260px;
-  flex-shrink: 0;
-  overflow: auto;
-`;
-
-const StylePreviewer = styled(StyleBorderRight)`
-  width: 360px;
-  padding: 20px;
-  flex-shrink: 0;
-  overflow: auto;
-`;
-
-const StyleResourceContent = styled(StyleBorderRight)`
-  width: 100%;
-  overflow: auto;
-  box-sizing: border-box;
 `;
 
 export default Editor;

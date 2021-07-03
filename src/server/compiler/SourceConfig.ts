@@ -14,6 +14,7 @@ import { asyncMap } from "common/utils";
 import ERR_CODE from "renderer/core/error-code";
 import {
   getSCDescriptionByNamespace,
+  SOURCE_CONFIG_DIR,
   SOURCE_CONFIG_FILE
 } from "../core/pathUtils";
 import Page from "./Page";
@@ -23,11 +24,11 @@ import BaseCompiler from "./BaseCompiler";
 // 解析 sourceConfig xml 配置文件
 export default class SourceConfig extends BaseCompiler {
   private rootDir = "";
-  private sourceConfigFile = "";
   private namespace = "";
   constructor(file: string) {
     super(file);
     this.rootDir = path.dirname(file);
+    this.namespace = path.relative(SOURCE_CONFIG_DIR, this.rootDir);
   }
 
   // 读取厂商配置
@@ -60,7 +61,7 @@ export default class SourceConfig extends BaseCompiler {
 
   // 处理成模板根目录
   private resolvePath(relativePath: string): string {
-    return path.join(this.rootDir, this.namespace, relativePath);
+    return path.join(this.rootDir, relativePath);
   }
 
   getRootDir(): string {
@@ -72,7 +73,7 @@ export default class SourceConfig extends BaseCompiler {
   }
 
   getDescFile(): string {
-    return this.sourceConfigFile;
+    return this.getFile();
   }
 
   // 模板名称

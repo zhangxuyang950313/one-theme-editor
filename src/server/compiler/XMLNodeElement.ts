@@ -70,7 +70,7 @@ export default class XMLNodeElement {
    * @returns
    */
   getAttributeOf<T = string>(attr: string, def?: T): T {
-    return (this.getAttributes()[attr] || def) as T;
+    return (this.getAttributes()[attr] || def || "") as T;
   }
 
   /**

@@ -7,27 +7,29 @@ import styled from "styled-components";
 import { apiDeleteFile } from "@/api";
 import { useProjectRoot } from "@/hooks/project";
 
+import { notification } from "antd";
+import ERR_CODE from "@/core/error-code";
 import Context from "./Context";
 import ImageDisplay from "./ImageDisplay";
 import ImageHandler from "./ImageHandler";
-import { useCopyToWith } from "./hooks";
+import { useCopyReleaseWith } from "./hooks";
 
 const ProjectSource: React.FC = () => {
-  const { releaseList, dynamicToList } = useContext(Context);
+  const { releaseList, dynamicReleaseList } = useContext(Context);
   const projectRoot = useProjectRoot();
-  const copyToWith = useCopyToWith(releaseList, "");
+  const copyReleaseWith = useCopyReleaseWith(releaseList, "");
 
   if (!projectRoot) return null;
   // 更新后的模板绝对路径列表
-  const newAbsoluteToList = dynamicToList.map(item =>
+  const dynamicAbsReleaseList = dynamicReleaseList.map(item =>
     path.join(projectRoot, item)
   );
 
   // 目标素材绝对路径列表
-  const absoluteToList = releaseList.map(item => path.join(projectRoot, item));
+  const absReleaseList = releaseList.map(item => path.join(projectRoot, item));
 
   // 筛选一个有效的用于展示
-  const absoluteToForShow = newAbsoluteToList[0] || "";
+  const absReleaseForShow = dynamicAbsReleaseList[0] || "";
 
   // 手动选取素材
   const handleImport = () => {
@@ -39,15 +41,22 @@ const ProjectSource: React.FC = () => {
       })
       .then(result => {
         if (result.canceled) return;
-        copyToWith(result.filePaths[0]);
+        copyReleaseWith(result.filePaths[0]);
       });
   };
   // 删除素材
   const handleDelete = () => {
-    if (!Array.isArray(absoluteToList)) return;
-    absoluteToList.forEach((item, index) => {
+    if (!Array.isArray(absReleaseList)) return;
+    absReleaseList.forEach((item, index) => {
       setTimeout(() => {
-        apiDeleteFile(item);
+        apiDeleteFile(item).catch(err => {
+          notification.warn({
+            message: `${ERR_CODE[4007]}${
+              err.message ? `（${err.message}）` : ""
+            }`,
+            description: item
+          });
+        });
       }, index * 100);
     });
   };
@@ -56,12 +65,16 @@ const ProjectSource: React.FC = () => {
     <StyleProjectSource>
       <ImageDisplay
         showHandler
-        filepath={absoluteToForShow}
-        absoluteToList={newAbsoluteToList}
-        onClick={() => remote.shell.showItemInFolder(absoluteToForShow)}
+        filepath={absReleaseForShow}
+        absoluteToList={dynamicAbsReleaseList}
+        onClick={() => remote.shell.showItemInFolder(absReleaseForShow)}
       />
       {/* 图片操作 */}
-      <ImageHandler onImport={handleImport} onDelete={handleDelete} />
+      <ImageHandler
+        hiddenDelete={!absReleaseForShow}
+        onImport={handleImport}
+        onDelete={handleDelete}
+      />
     </StyleProjectSource>
   );
 };

@@ -10,21 +10,34 @@ import {
 
 // 图片操作区
 const ImageHandler: React.FC<{
+  hiddenImport?: boolean;
+  hiddenEdit?: boolean;
+  hiddenDelete?: boolean;
   onImport?: () => void;
   onEdit?: () => void;
   onDelete?: () => void;
 }> = props => {
-  const { onImport, onEdit, onDelete } = props;
+  const {
+    //
+    hiddenImport,
+    hiddenEdit,
+    hiddenDelete,
+    onImport,
+    onEdit,
+    onDelete
+  } = props;
   return (
     // 导入按钮
     <StyleHandler>
-      {onImport && (
+      {!hiddenImport && onImport && (
         <ImportOutlined className="press import" onClick={onImport} />
       )}
       {/* .9编辑按钮 */}
-      {onEdit && <FormOutlined className="press edit" onClick={onEdit} />}
+      {!hiddenEdit && onEdit && (
+        <FormOutlined className="press edit" onClick={onEdit} />
+      )}
       {/* 删除按钮 */}
-      {onDelete && (
+      {!hiddenDelete && onDelete && (
         <DeleteOutlined className="press delete" onClick={onDelete} />
       )}
     </StyleHandler>

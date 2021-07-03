@@ -54,7 +54,7 @@ export function useFSWatcherMultiInstance(
  * @param releaseList
  * @returns
  */
-export function useToListWatcher(releaseList: string[]): string[] {
+export function useReleaseListWatcher(releaseList: string[]): string[] {
   const projectRoot = useProjectRoot();
   /**
    * TODO：在 electron 环境中 watcher 监听多个文件会导致事件丢失，（node环境正常，也可能是 webpack 的打包问题）

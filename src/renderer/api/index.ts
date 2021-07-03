@@ -14,10 +14,16 @@ import * as paths from "server/core/pathUtils";
 type TypeGetCanceler = (c: Canceler) => void;
 
 const createHttp = (getCanceler?: TypeGetCanceler) => {
-  return axios.create({
+  const http = axios.create({
     baseURL: `http://${HOST}:${PORT}`,
-    cancelToken: getCanceler && new axios.CancelToken(getCanceler)
+    cancelToken: getCanceler && new axios.CancelToken(getCanceler),
+    validateStatus: status => [200, 400].includes(status)
   });
+  http.interceptors.response.use(data => {
+    if (data.status === 200) return data;
+    throw new Error(data.data.data);
+  });
+  return http;
 };
 
 // 获取路径信息
@@ -63,6 +69,9 @@ export async function apiCreateProject(
   return createHttp()
     .post<TypeResponseFrame<TypeProjectData>>(API.CREATE_PROJECT, data)
     .then(data => data.data.data);
+  // .catch(err => {
+  //   throw new Error(err.message);
+  // });
 }
 // 获取工程列表
 export async function apiGetProjectList(

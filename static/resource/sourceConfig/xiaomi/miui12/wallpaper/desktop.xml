@@ -36,14 +36,49 @@
             <to>icons/res/com.android.contacts.activities.TwelveKeyDialer.png</to>
         </image>
 
-        <!-- 文字 -->
         <text 
-            name="图标文字" 
-            text="相册"
+            text="拨号"
             x="415" y="1250" size="36" align="center" alignV="center" 
-            colorClass="action_bar_title_text_color_light"
-            color="#ffffff"
+            color="${action_bar_title_text_color_light}"
+        />
+
+        <image
+            name="短信"
+            x="415" y="2150" w="186" h="186" align="center" alignV="center"
+            src="../icons/res/com.android.mms.png"
+        >
+            <to>icons/res/com.android.mms.png</to>
+        </image>
+
+        <image
+            name="浏览器"
+            x="670" y="2150" w="186" h="186" align="center" alignV="center"
+            src="../icons/res/com.android.browser.png"
+        >
+            <to>icons/res/com.android.browser.png</to>
+        </image>
+
+        <image
+            name="相机"
+             x="925" y="2150" w="186" h="186" align="center" alignV="center"
+             src="../icons/res/com.android.camera.png"
+        >
+            <to>icons/res/com.android.camera.png</to>
+        </image>
+
+        <!-- 第一排图标 -->
+        <image 
+            name="天气"
+            x="168" y="1100" w="186" h="186" align="center" alignV="center"
+            src="../icons/res/com.miui.weather2.png"
+        >
+            <to>icons/res/com.miui.weather2.png</to>
+        </image>
+
+        <text
+            text="天气"
+            x="168" y="1250" size="36" align="center" alignV="center"
+            color="${action_bar_title_text_color_light}"
         />
     </layout>
-    
 </page>

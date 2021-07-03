@@ -15,7 +15,7 @@ import {
   ActionSetCurrentBrand,
   ActionSetCurrentPage,
   ActionSetSourceDescriptionList
-} from "@/store/modules/source-config/action";
+} from "@/store/modules/sourceConfig/action";
 import {
   getCurrentBrandConf,
   getCurrentModule,
@@ -23,19 +23,28 @@ import {
   getSCModuleList,
   getCurrentPageGroupList,
   getSourceConfigRoot,
-  getSourceConfig
-} from "@/store/modules/source-config/selector";
+  getSourceConfig,
+  getCurrentSourceTypeList,
+  getCurrentSourceList,
+  getCurrentXmlTemplateList
+} from "@/store/modules/sourceConfig/selector";
 
 import {
   TypeSourceConfig,
   TypeSourceDescription,
   TypeSCPageGroupConf,
   TypeSCModuleConf,
-  TypeSCPageConf
+  TypeSCPageConf,
+  TypeSCPageSourceTypeConf,
+  TypeSCPageSourceElement,
+  TypeSCPageImageElement,
+  TypeSCPageTextElement,
+  TypeSCPageTemplateConf
 } from "types/source-config";
 import { TypeBrandConf } from "types/project";
 
 import ERR_CODE from "@/core/error-code";
+import { ELEMENT_TYPES } from "@/../enum";
 import { useAsyncUpdater } from "./index";
 
 // 获取当前资源配置数据
@@ -164,4 +173,30 @@ export function useCurrentPage(): [
     useSelector(getCurrentPage),
     data => dispatch(ActionSetCurrentPage(data))
   ];
+}
+
+export function useSourceList(): TypeSCPageSourceElement[] {
+  return useSelector(getCurrentSourceList);
+}
+
+export function useSourceTypeList(): TypeSCPageSourceTypeConf[] {
+  return useSelector(getCurrentSourceTypeList);
+}
+
+export function useImageSourceList(): TypeSCPageImageElement[] {
+  const sourceList = useSourceList();
+  return sourceList.flatMap(item =>
+    item.type === ELEMENT_TYPES.IMAGE ? [item] : []
+  );
+}
+
+export function useXmlSourceList(): TypeSCPageTextElement[] {
+  const sourceList = useSourceList();
+  return sourceList.flatMap(item =>
+    item.type === ELEMENT_TYPES.TEXT ? [item] : []
+  );
+}
+
+export function useXmlTemplateList(): TypeSCPageTemplateConf[] {
+  return useSelector(getCurrentXmlTemplateList);
 }

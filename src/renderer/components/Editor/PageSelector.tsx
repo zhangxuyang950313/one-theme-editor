@@ -46,7 +46,7 @@ const StylePagePreview = styled.div`
     text-align: center;
     margin: 1%;
     width: 48%;
-    border-radius: 10px;
+    border-radius: 6px;
   }
 `;
 

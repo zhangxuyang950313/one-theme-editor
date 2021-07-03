@@ -26,20 +26,18 @@ const ModuleSelector: React.FC = () => {
 
   return (
     <StyleModuleSelector>
-      {tempModuleList.map((item, key) => {
-        return (
-          <StyleIcon
-            key={key}
-            isActive={currentModule.index === item.index}
-            onClick={() => setCurrentModule(item)}
-          >
-            <Tooltip title={item.name} placement="right">
-              <img className="icon" alt="" src={getImageURL(item.icon)} />
-              {/* <SourceImage className="icon" src={item.icon} /> */}
-            </Tooltip>
-          </StyleIcon>
-        );
-      })}
+      {tempModuleList.map((item, key) => (
+        <StyleIcon
+          key={key}
+          isActive={currentModule.index === item.index}
+          onClick={() => setCurrentModule(item)}
+        >
+          <Tooltip title={item.name} placement="right">
+            <img className="icon" alt="" src={getImageURL(item.icon)} />
+            {/* <SourceImage className="icon" src={item.icon} /> */}
+          </Tooltip>
+        </StyleIcon>
+      ))}
     </StyleModuleSelector>
   );
 };

@@ -62,7 +62,9 @@ const StyleImageBackground = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
 
+const StyleShowImage = styled(StyleImageBackground)`
   .preview {
     position: relative;
     left: 0;
@@ -82,7 +84,5 @@ const StyleImageBackground = styled.div`
     }
   }
 `;
-
-const StyleShowImage = styled(StyleImageBackground)``;
 
 export default ImageDisplay;

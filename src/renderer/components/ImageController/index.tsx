@@ -7,23 +7,23 @@ import { RightCircleOutlined } from "@ant-design/icons";
 
 import { useProjectRoot } from "@/hooks/project";
 import { useSourceConfigRoot } from "@/hooks/sourceConfig";
-import { useToListWatcher } from "@/hooks/fileWatcher";
-import { TypeSCPageImageElData } from "types/source-config";
+import { useReleaseListWatcher } from "@/hooks/fileWatcher";
+import { TypeSCPageImageElement } from "types/source-config";
 
 import { previewFile } from "./utils";
 
-import { useCopyToWith } from "./hooks";
+import { useCopyReleaseWith } from "./hooks";
 import PartialContext from "./Context";
 import ImageDisplay from "./ImageDisplay";
 import ProjectSource from "./ProjectSource";
 import SourceStatus from "./SourceStatus";
 
-const ImageController: React.FC<TypeSCPageImageElData> = sourceConf => {
+const ImageController: React.FC<TypeSCPageImageElement> = sourceConf => {
   const { source, releaseList } = sourceConf;
   const projectRoot = useProjectRoot();
   const sourceConfigRoot = useSourceConfigRoot();
-  const dynamicToList = useToListWatcher(releaseList);
-  const copyToWith = useCopyToWith(releaseList, sourceConf.name);
+  const dynamicReleaseList = useReleaseListWatcher(releaseList);
+  const copyReleaseWith = useCopyReleaseWith(releaseList, sourceConf.name);
 
   if (!sourceConf || !source || !sourceConfigRoot || !projectRoot) return null;
 
@@ -50,7 +50,10 @@ const ImageController: React.FC<TypeSCPageImageElData> = sourceConf => {
   return (
     <StyleImageChanger>
       <PartialContext.Provider
-        value={{ releaseList: releaseList, dynamicToList }}
+        value={{
+          releaseList: releaseList,
+          dynamicReleaseList: dynamicReleaseList
+        }}
       >
         {/* 图片描述 */}
         <div className="text description">
@@ -74,7 +77,7 @@ const ImageController: React.FC<TypeSCPageImageElData> = sourceConf => {
           {/* 一键拷贝默认素材 */}
           <RightCircleOutlined
             className="center"
-            onClick={() => copyToWith(absoluteFrom)}
+            onClick={() => copyReleaseWith(absoluteFrom)}
           />
           <div className="right">
             <ProjectSource />

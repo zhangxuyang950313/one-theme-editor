@@ -50,7 +50,11 @@ export async function xml2jsonNormalized(
     throw new Error(`文件${file}不存在`);
   }
   const data = await fse.readFile(file, { encoding: "utf-8" });
-  return xml2js(data, { ...config, ...options });
+  try {
+    return xml2js(data, { ...config, ...options });
+  } catch (err) {
+    throw new Error(`${ERR_CODE[3009]} ${err.message}（${file}）`);
+  }
 }
 
 // 对象用于无需顺序的节点，数组相反，对顺序有要求

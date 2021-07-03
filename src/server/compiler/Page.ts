@@ -1,15 +1,11 @@
 import path from "path";
 import { getImageData, asyncMap } from "common/utils";
-import { ELEMENT_TYPES } from "src/enum/index";
+import { ELEMENT_TYPES, ALIGN_VALUES, ALIGN_V_VALUES } from "src/enum/index";
 import {
   TypeSCPageConf,
   TypeSCPageTemplateConf,
   TypeSCPageCopyConf,
-  TypeSCPageElementData,
-  TypeElementAlign,
-  TypeElementAlignV,
-  TypeSCPageKeyValConf,
-  TypeSCPageSourceTypeConf
+  TypeSCPageSourceElement
 } from "types/source-config";
 import TempKeyValMapper from "./TempKeyValMapper";
 import BaseCompiler from "./BaseCompiler";
@@ -78,55 +74,56 @@ export default class Page extends BaseCompiler {
     });
   }
 
-  async getLayoutElementList(): Promise<TypeSCPageElementData[]> {
+  async getLayoutElementList(): Promise<TypeSCPageSourceElement[]> {
     const rootNode = await this.getRootNode();
     const elementList = rootNode.getFirstChildOf("layout").getChildren();
-    const queue: Promise<TypeSCPageElementData>[] = [];
+    const queue: Promise<TypeSCPageSourceElement>[] = [];
     elementList.forEach(async node => {
       const layoutNormalize = {
         x: node.getAttributeOf("x"),
         y: node.getAttributeOf("y"),
-        align: node.getAttributeOf("align", "left") as TypeElementAlign,
-        alignV: node.getAttributeOf("alignV", "right") as TypeElementAlignV
+        align: node.getAttributeOf("align", ALIGN_VALUES.LEFT),
+        alignV: node.getAttributeOf("alignV", ALIGN_V_VALUES.TOP)
       };
-      const solveElement = new Promise<TypeSCPageElementData>(async resolve => {
-        switch (node.getTagname()) {
-          case ELEMENT_TYPES.IMAGE: {
-            resolve({
-              type: ELEMENT_TYPES.IMAGE,
-              name: node.getAttributeOf("name"),
-              source: {
-                ...(await getImageData(
-                  this.resolvePathname(node.getAttributeOf("src"))
-                )),
-                pathname: this.relativePathname(node.getAttributeOf("src"))
-              },
-              layout: {
-                x: layoutNormalize.x,
-                y: layoutNormalize.y,
-                w: node.getAttributeOf("w"),
-                h: node.getAttributeOf("h"),
-                align: layoutNormalize.align,
-                alignV: layoutNormalize.alignV
-              },
-              releaseList: node
-                .getChildrenOf("to")
-                .map(item => item.getFirstTextChildValue())
-            });
-            break;
-          }
-          case ELEMENT_TYPES.TEXT: {
-            resolve({
-              type: ELEMENT_TYPES.TEXT,
-              text: node.getAttributeOf("text"),
-              layout: layoutNormalize,
-              colorClass: node.getAttributeOf("colorClass"),
-              color: node.getAttributeOf("color")
-            });
-            break;
+      const solveElement = new Promise<TypeSCPageSourceElement>(
+        async resolve => {
+          switch (node.getTagname()) {
+            case ELEMENT_TYPES.IMAGE: {
+              resolve({
+                type: ELEMENT_TYPES.IMAGE,
+                name: node.getAttributeOf("name"),
+                source: {
+                  ...(await getImageData(
+                    this.resolvePathname(node.getAttributeOf("src"))
+                  )),
+                  pathname: this.relativePathname(node.getAttributeOf("src"))
+                },
+                layout: {
+                  x: layoutNormalize.x,
+                  y: layoutNormalize.y,
+                  w: node.getAttributeOf("w"),
+                  h: node.getAttributeOf("h"),
+                  align: layoutNormalize.align,
+                  alignV: layoutNormalize.alignV
+                },
+                releaseList: node
+                  .getChildrenOf("to")
+                  .map(item => item.getFirstTextChildValue())
+              });
+              break;
+            }
+            case ELEMENT_TYPES.TEXT: {
+              resolve({
+                type: ELEMENT_TYPES.TEXT,
+                text: node.getAttributeOf("text"),
+                layout: layoutNormalize,
+                color: node.getAttributeOf("color")
+              });
+              break;
+            }
           }
         }
-      });
+      );
       queue.push(solveElement);
     });
     return Promise.all(queue);

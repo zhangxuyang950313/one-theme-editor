@@ -1,6 +1,7 @@
 import path from "path";
 import { createSelector } from "reselect";
 import { TypeStoreState } from "@/store/index";
+import { ELEMENT_TYPES } from "@/../enum";
 
 // 数据
 const getSourceConfigState = (state: TypeStoreState) => state.sourceConfig;
@@ -56,4 +57,19 @@ export const getCurrentPageGroupList = createSelector(
 export const getCurrentPage = createSelector(
   getSourceConfigState,
   state => state.currentPage
+);
+
+export const getCurrentSourceList = createSelector(
+  getSourceConfigState,
+  state => state.currentPage?.elementList || []
+);
+
+export const getCurrentSourceTypeList = createSelector(
+  getSourceConfigState,
+  state => state.currentConfig?.sourceTypeList || []
+);
+
+export const getCurrentXmlTemplateList = createSelector(
+  getSourceConfigState,
+  state => state.currentPage?.templateList || []
 );

@@ -18,6 +18,7 @@ import { Modal, Button, Form, Input, message } from "antd";
 import { FileAddOutlined } from "@ant-design/icons";
 import Steps from "@/components/Steps";
 import ProjectInfoForm from "@/components/ProjectInfoForm";
+import ERR_CODE from "@/core/error-code";
 import SourceConfigManager from "./SourceConfigManager";
 
 // 创建主题按钮
@@ -250,16 +251,19 @@ const CreateProject: React.FC<TypeProps> = props => {
               type: brandConf.type
             },
             projectInfo
-          }).then(data => {
-            console.log("创建工程：", data);
-            if (!projectInfo) {
-              throw new Error("工程信息为空");
-            }
-            props.onProjectCreated(projectInfo);
-            closeModal();
-            updateCreating(false);
-            setTimeout(init, 300);
-          });
+          })
+            .then(data => {
+              console.log("创建工程：", data);
+              if (!projectInfo) {
+                throw new Error("工程信息为空");
+              }
+              props.onProjectCreated(projectInfo);
+            })
+            .finally(() => {
+              closeModal();
+              updateCreating(false);
+              setTimeout(init, 300);
+            });
         }
       }
     }

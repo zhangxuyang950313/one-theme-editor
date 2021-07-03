@@ -5,7 +5,7 @@ import { useBrandConfList, useCurrentBrandConf } from "@/hooks/sourceConfig";
 
 import { Menu } from "antd";
 import { useDispatch } from "react-redux";
-import { ActionSetSelectedBrand } from "@/store/modules/source-config/action";
+import { ActionSetSelectedBrand } from "@/store/modules/sourceConfig/action";
 import TopInfo from "./TopInfo";
 
 // 欢迎页侧边栏
