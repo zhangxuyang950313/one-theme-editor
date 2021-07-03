@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <root>
-	<category tag="color"   name="颜色值"  	type="text"/>
-	<category tag="bool"    name="布尔值" 	type="text"/>
-	<category tag="dimen"   name="尺寸值" 	type="text"/>
-	<category tag="integer" name="整型值" 	type="text"/>
 
 
 

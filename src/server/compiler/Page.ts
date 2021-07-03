@@ -7,10 +7,13 @@ import {
   TypeSCPageCopyConf,
   TypeSCPageElementData,
   TypeElementAlign,
-  TypeElementAlignV
+  TypeElementAlignV,
+  TypeSCPageKeyValConf,
+  TypeSCPageSourceTypeConf
 } from "types/source-config";
 import TempKeyValMapper from "./TempKeyValMapper";
 import BaseCompiler from "./BaseCompiler";
+import XmlTemplate from "./XmlTemplate";
 
 export default class Page extends BaseCompiler {
   // 处理当前页面资源的相对路径
@@ -42,8 +45,8 @@ export default class Page extends BaseCompiler {
   }
 
   async getPreviewList(): Promise<string[]> {
-    const previewNode = await super.getRootChildrenOf("preview");
-    return previewNode.map(item =>
+    const previewNodeList = await super.getRootChildrenOf("preview");
+    return previewNodeList.map(item =>
       this.relativePathname(item.getAttributeOf("src"))
     );
   }
@@ -51,14 +54,18 @@ export default class Page extends BaseCompiler {
   async getTemplateConfList(): Promise<TypeSCPageTemplateConf[]> {
     const templates = await super.getRootChildrenOf("template");
     return await asyncMap(templates, async node => {
-      const valueList = await new TempKeyValMapper(
+      const templateData = await new XmlTemplate(
+        this.resolvePathname(node.getAttributeOf("src"))
+      ).getElementList();
+      const valueMapData = await new TempKeyValMapper(
         this.resolvePathname(node.getAttributeOf("values"))
-      ).getDataList();
-      return {
-        template: this.relativePathname(node.getAttributeOf("src")),
-        valueList: valueList,
+      ).getDataObj();
+      const data: TypeSCPageTemplateConf = {
+        template: templateData,
+        valueMap: valueMapData,
         to: node.getAttributeOf("to")
       };
+      return data;
     });
   }
 
@@ -104,7 +111,7 @@ export default class Page extends BaseCompiler {
               },
               releaseList: node
                 .getChildrenOf("to")
-                .map(item => item.getChildText())
+                .map(item => item.getFirstTextChildValue())
             });
             break;
           }

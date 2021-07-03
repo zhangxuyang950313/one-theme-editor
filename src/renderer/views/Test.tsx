@@ -28,12 +28,16 @@ const Test: React.FC = () => {
     page.getData().then(console.log);
 
     const xmlTemplate = new XmlTemplate(xmlTempFile);
-    xmlTemplate.getData().then(console.log);
+    xmlTemplate.getElementList().then(data => {
+      const set = new Set(data);
+      const has = set.has({ type: "element" });
+      console.log({ has });
+    });
 
-    // const xmlTemplateValue = new TempKeyValMapper(xmlTempValFile);
+    const xmlTemplateValue = new TempKeyValMapper(xmlTempValFile);
     // xmlTemplateValue.getTemplateValueData();
     // xmlTemplateValue.getDataList().then(console.log);
-    // xmlTemplateValue.getDataMap().then(console.log);
+    xmlTemplateValue.getDataMap().then(console.log);
 
     new SourceConfig(configFile).getConfig().then(console.log);
   }, []);

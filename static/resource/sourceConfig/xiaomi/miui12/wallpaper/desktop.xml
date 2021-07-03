@@ -4,6 +4,7 @@
 
     <!-- 静态预览图 -->
     <preview src="../preview/preview.jpg"/>
+    
     <!-- xml 模板文件 -->
     <template 
         src="theme_values.xml"

@@ -18,6 +18,15 @@ export default class XMLNodeElement {
     return new XMLNodeElement({});
   }
 
+  // 获取当前节点元素
+  getElement(): Element {
+    return this.node;
+  }
+
+  getElements(): Element[] {
+    return this.node.elements || [];
+  }
+
   // 节点类型
   // TODO：枚举所有类型
   getType(): ELEMENT_TYPES | string {
@@ -29,8 +38,8 @@ export default class XMLNodeElement {
     return this.node.name || "";
   }
 
-  // 获取子节点
-  getElements(): Element[] {
+  // 获取子节点元素列表
+  getChildrenElement(): Element[] {
     return this.node.elements || [];
   }
 
@@ -39,21 +48,19 @@ export default class XMLNodeElement {
     return this.node.text || "";
   }
 
+  // 获取所有键值映射
+  getAttributes(): Attributes {
+    return this.node.attributes || {};
+  }
+
   // 获取属性所有键
   getAttributeKeys(): string[] {
-    return Object.keys(this.node.attributes || {});
+    return Object.keys(this.getAttributes());
   }
 
   // 获取属性所有值
   getAttributeValues(): string[] {
-    return this.node.attributes
-      ? Object.values(String(this.node.attributes))
-      : [];
-  }
-
-  // 获取所有键值映射
-  getAttributes(): Attributes {
-    return this.node.attributes || {};
+    return Object.values(String(this.getAttributes()));
   }
 
   /**
@@ -62,25 +69,34 @@ export default class XMLNodeElement {
    * @param def 指定默认值
    * @returns
    */
-  getAttributeOf(attr: string, def = ""): string {
-    return String((this.node.attributes || {})[attr] || def);
-  }
-
-  getChildren(): XMLNodeElement[] {
-    return (this.node.elements || []).map(XMLNodeElement.createInstance);
+  getAttributeOf<T = string>(attr: string, def?: T): T {
+    return (this.getAttributes()[attr] || def) as T;
   }
 
   /**
-   * 获取子节点的文本节点
+   * 获取所有子节点
+   * @returns
    */
-  getTextChildren(): string[] {
-    return this.getChildren()
-      .filter(item => item.getType() === ELEMENT_TYPES.TEXT)
-      .map(item => String(item.getText()));
+  getChildren(): XMLNodeElement[] {
+    return this.getElements().map(XMLNodeElement.createInstance);
   }
 
-  getChildText(): string {
-    return this.getTextChildren()[0] || "";
+  /**
+   * 获取所有文本子节点
+   * @returns
+   */
+  getTextChildren(): XMLNodeElement[] {
+    return this.getChildren().filter(
+      item => item.getType() === ELEMENT_TYPES.TEXT
+    );
+  }
+
+  /**
+   * 获得第一个子节点
+   * @returns
+   */
+  getFirstChild(): XMLNodeElement {
+    return this.getChildren()[0] || XMLNodeElement.createEmptyNode();
   }
 
   /**
@@ -103,10 +119,25 @@ export default class XMLNodeElement {
   }
 
   /**
-   * 获得第一个子节点
+   * 获取第一个文本节点
    * @returns
    */
-  getFirstChild(): XMLNodeElement {
-    return this.getChildren()[0] || XMLNodeElement.createEmptyNode();
+  getFirstTextChild(): XMLNodeElement {
+    return this.getTextChildren()[0] || XMLNodeElement.createEmptyNode();
+  }
+
+  /**
+   * 获取子节点的文本节点文本值
+   */
+  getTextChildrenValues(): string[] {
+    return this.getTextChildren().map(item => String(item.getText()));
+  }
+
+  /**
+   * 获取所有文本子节点的第第一个节点文本值
+   * @returns
+   */
+  getFirstTextChildValue(): string {
+    return this.getTextChildrenValues()[0] || "";
   }
 }

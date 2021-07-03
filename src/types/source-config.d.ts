@@ -1,5 +1,6 @@
-import { Attributes } from "xml-js";
+import { Attributes, Element } from "xml-js";
 import { ALIGN_VALUES, ALIGN_V_VALUES, ELEMENT_TYPES } from "src/enum";
+import XMLNodeElement from "server/compiler/XMLNodeElement";
 import { TypeImageData, TypeUiVersion } from "./project";
 import { TypeXMLSourceLayout } from "./xml-result";
 import { TypeImagePathLike } from "./index";
@@ -16,6 +17,7 @@ export type TypeSourceDescription = {
 
 // 资源配置
 export type TypeSourceConfig = Omit<TypeSourceDescription, "key"> & {
+  sourceTypeList: TypeSCPageSourceTypeConf[];
   moduleList: TypeSCModuleConf[];
 };
 
@@ -40,10 +42,15 @@ export type TypeSCPageRootConf = {
   screenWidth: string;
 };
 
+// 键值对配置数据
+export type TypeSCPageKeyValConf = {
+  [k: string]: Element;
+};
+
 // 配置模板数据
 export type TypeSCPageTemplateConf = {
-  template: any;
-  valueList: TypeKeyValMapperConf[];
+  template: Element[];
+  valueMap: TypeSCPageKeyValConf;
   to: string;
 };
 
@@ -110,15 +117,25 @@ export type TypeSCPageConf = {
 };
 
 // 键值对映射配置
-export type TypeKeyValMapperConf = {
+export type TypeSCPageXmlKeyValMapperConf = {
   key: string;
   value: string;
   description: string;
 };
 
+// 键值对映射 map
+export type TypeSCPageXmlKeyValMapperMap = Map<string, XMLNodeElement>;
+
 // xml 模板数据
-export type TypeXmlTempData = {
+export type TypeSCPageXmlTempData = {
   name: string;
   attribute: Attributes;
   child: string;
+};
+
+// 素材类型定义数据
+export type TypeSCPageSourceTypeConf = {
+  tag: string;
+  name: string;
+  type: "image" | "xml";
 };

@@ -6,7 +6,8 @@ import {
   TypeSCModuleConf,
   TypeSCPageGroupConf,
   TypeSCPageConf,
-  TypeSourceDescription
+  TypeSourceDescription,
+  TypeSCPageSourceTypeConf
 } from "types/source-config";
 import { TypeBrandConf, TypeUiVersion } from "types/project";
 import { asyncMap } from "common/utils";
@@ -101,6 +102,18 @@ export default class SourceConfig extends BaseCompiler {
     };
   }
 
+  // 素材类型定义列表
+  async getSourceTypeList(): Promise<TypeSCPageSourceTypeConf[]> {
+    const sourceNodeList = await super.getRootChildrenOf("source");
+    return sourceNodeList.map(item => {
+      return {
+        tag: item.getAttributeOf("tag"),
+        name: item.getAttributeOf("name"),
+        type: item.getAttributeOf("type")
+      };
+    });
+  }
+
   // 页面数据
   async getPageList(pageNodeList: XMLNodeElement[]): Promise<TypeSCPageConf[]> {
     // 这里是在选择模板版本后得到的目标模块目录
@@ -160,6 +173,7 @@ export default class SourceConfig extends BaseCompiler {
   async getConfig(): Promise<TypeSourceConfig> {
     return {
       ...(await this.getDescription()),
+      sourceTypeList: await this.getSourceTypeList(),
       moduleList: await this.getModuleList()
     };
   }
