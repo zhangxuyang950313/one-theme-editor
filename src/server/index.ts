@@ -2,7 +2,7 @@ import http from "http";
 import logSymbols from "log-symbols";
 import express from "express";
 import { PORT, HOST } from "common/config";
-import registerService from "./service";
+import registerService from "./controller";
 import registerSocket from "./socket";
 
 const service = express();

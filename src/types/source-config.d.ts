@@ -8,7 +8,7 @@ import { TypeImagePathLike } from "./index";
 // 资源预览配置
 export type TypeSourceDescription = {
   key: string;
-  namespace: string;
+  file: string;
   name: string;
   preview: TypeImagePathLike;
   version: string;
@@ -109,6 +109,11 @@ export type TypeSCPageSourceConf = {
 
 // 预览单个页面配置
 export type TypeSCPageConf = {
+  name: string;
+  preview: string;
+  src: string;
+};
+export type TypeSCPageData = {
   version: string;
   description: string;
   screenWidth: string;

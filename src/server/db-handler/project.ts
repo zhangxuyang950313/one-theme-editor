@@ -2,20 +2,15 @@ import path from "path";
 import fse from "fs-extra";
 import { v4 as UUID } from "uuid";
 import Nedb from "nedb-promises";
+import PATHS, { resolveSourcePath } from "server/core/pathUtils";
+import SourceConfig from "server/compiler/SourceConfig";
+import ERR_CODE from "renderer/core/error-code";
 
 import {
   TypeCreateProjectPayload,
-  TypeImageMapper,
   TypeProjectData,
   TypeProjectDataDoc
 } from "types/project";
-
-import {
-  PROJECTS_DB,
-  getSCDescriptionByNamespace
-} from "server/core/pathUtils";
-import SourceConfig from "server/compiler/SourceConfig";
-import ERR_CODE from "renderer/core/error-code";
 
 // TODO: 创建数据库有个坑，如果 filename 文件内容不是 nedb 能接受的数据格式则会导致服务崩溃
 function createNedb(filename: string) {
@@ -32,7 +27,7 @@ function createNedb(filename: string) {
 }
 
 // 频繁修改工程数据，常驻内存
-const projectDB = createNedb(PROJECTS_DB);
+const projectDB = createNedb(PATHS.PROJECTS_DB);
 
 // // 把 imageMapper 内容同步到本地
 // export async function imageMapperSyncToLocal(
@@ -84,15 +79,16 @@ const projectDB = createNedb(PROJECTS_DB);
 export async function createProject(
   data: TypeCreateProjectPayload
 ): Promise<TypeProjectDataDoc> {
-  const { brandInfo, projectInfo, projectRoot, sourceNamespace } = data;
-  const configFile = getSCDescriptionByNamespace(sourceNamespace);
-  const sourceConfig = await new SourceConfig(configFile).getConfig();
+  const { brandInfo, projectInfo, projectRoot, sourceConfigFile } = data;
+  const uiVersion = await new SourceConfig(
+    resolveSourcePath(sourceConfigFile)
+  ).getUiVersion();
   const projectData: TypeProjectData = {
     uuid: UUID(),
     projectInfo,
     brandInfo,
-    uiVersion: sourceConfig.uiVersion,
-    sourceConfig,
+    uiVersion,
+    sourceConfigFile,
     projectRoot
   };
   return projectDB.insert(projectData);

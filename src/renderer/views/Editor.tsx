@@ -26,9 +26,6 @@ const EditorContainer: React.FC = () => {
         <Previewer />
       </StylePreviewer>
       {/* 素材编辑区 */}
-      {/* <StyleSourceController>
-        <SourceController />
-      </StyleSourceController> */}
 
       <StyleImageSourceList>
         <ImageSourceList />

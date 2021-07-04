@@ -3,16 +3,14 @@ import { TypeSCPageXmlTempData } from "types/source-config";
 import BaseCompiler from "./BaseCompiler";
 
 export default class XmlTemplate extends BaseCompiler {
-  async getData(): Promise<TypeSCPageXmlTempData[]> {
-    return (await super.getRootChildren()).map(node => {
-      return {
-        name: node.getAttributeOf("name"),
-        attribute: node.getAttributes(),
-        child: node.getFirstTextChildValue()
-      };
-    });
+  getData(): TypeSCPageXmlTempData[] {
+    return super.getRootChildren().map(node => ({
+      name: node.getAttributeOf("name"),
+      attribute: node.getAttributes(),
+      child: node.getFirstTextChildValue()
+    }));
   }
-  public async getElementList(): Promise<Element[]> {
-    return (await super.getRootChildren()).map(item => item.getElement());
+  public getElementList(): Element[] {
+    return super.getRootChildren().map(item => item.getElement());
   }
 }

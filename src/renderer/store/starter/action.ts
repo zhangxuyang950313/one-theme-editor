@@ -10,7 +10,7 @@ type TypeSetBrandInfoList = {
 
 // 配置描述列表
 type TypeActionSetSourceDescriptionList = {
-  type: typeof ACTION_TYPES.SET_SOURCE_DESCRIPTION_LIST;
+  type: typeof ACTION_TYPES.SET_SOURCE_DESC_LIST;
   payload: TypeSourceDescription[];
 };
 
@@ -37,7 +37,7 @@ export function ActionSetBrandInfoList(
 export function ActionSetSourceDescriptionList(
   payload: TypeSourceDescription[]
 ): TypeActionSetSourceDescriptionList {
-  return { type: ACTION_TYPES.SET_SOURCE_DESCRIPTION_LIST, payload };
+  return { type: ACTION_TYPES.SET_SOURCE_DESC_LIST, payload };
 }
 
 // 设置选择的厂商信息

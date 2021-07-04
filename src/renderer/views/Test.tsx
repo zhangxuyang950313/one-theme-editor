@@ -25,21 +25,20 @@ const Test: React.FC = () => {
   useLayoutEffect(() => {
     // xml2jsonElement(pageFile).then(data => console.log(JSON.stringify(data)));
     const page = new Page(pageFile);
-    page.getData().then(console.log);
+    console.log(page.getData());
 
     const xmlTemplate = new XmlTemplate(xmlTempFile);
-    xmlTemplate.getElementList().then(data => {
-      const set = new Set(data);
-      const has = set.has({ type: "element" });
-      console.log({ has });
-    });
+    const data = xmlTemplate.getElementList();
+    const set = new Set(data);
+    const has = set.has({ type: "element" });
+    console.log({ has });
 
     const xmlTemplateValue = new TempKeyValMapper(xmlTempValFile);
     // xmlTemplateValue.getTemplateValueData();
     // xmlTemplateValue.getDataList().then(console.log);
-    xmlTemplateValue.getDataMap().then(console.log);
+    console.log(xmlTemplateValue.getDataMap());
 
-    new SourceConfig(configFile).getConfig().then(console.log);
+    console.log(new SourceConfig(configFile).getConfig());
   }, []);
   return (
     <div>

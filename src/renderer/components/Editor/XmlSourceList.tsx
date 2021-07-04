@@ -6,7 +6,7 @@ import {
   useXmlSourceList,
   useSourceTypeList,
   useXmlTemplateList
-} from "@/hooks/sourceConfig";
+} from "@/hooks/source";
 import XmlController from "@/components/XmlController/index";
 
 const XmlSourceList: React.FC = () => {

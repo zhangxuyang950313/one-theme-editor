@@ -20,7 +20,7 @@
         <!-- 桌面壁纸 -->
         <group name="桌面壁纸和图标">
             <!-- 页面定义 -->
-            <page src="wallpaper/desktop.xml"/>
+            <page name="桌面1" src="wallpaper/desktop.xml"/>
             <!-- <page src="wallpaper/desktop.xml"/> -->
             <!-- <page src="wallpaper/desktop1.xml"/> -->
         </group>

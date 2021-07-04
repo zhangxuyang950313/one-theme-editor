@@ -9,21 +9,33 @@ const getState = (state: TypeEditorState) => state;
 // 获取当前资源配置信息
 export const getSourceConfig = createSelector(
   getState,
-  state => state.currentConfig
+  state => state.sourceConfig
 );
 
-// 获取当前资源配置根目录
-export const getSourceConfigRoot = createSelector(getState, state => {
-  const dir = GlobalStore.store.getState().base.pathConfig?.SOURCE_CONFIG_DIR;
-  const ns = state.currentConfig?.namespace;
-  if (!dir || !ns) return "";
-  return path.join(dir, ns);
+export const getSourceConfigFile = createSelector(
+  getState,
+  state => state.sourceConfigFile
+);
+
+// 获取当前 sourceConfig namespace
+export const getSourceConfigNamespace = createSelector(getState, state => {
+  return state.sourceConfigFile ? path.dirname(state.sourceConfigFile) : "";
 });
 
+// 获取当前资源配置根目录
+export const getSourceConfigRoot = createSelector(
+  getSourceConfigNamespace,
+  namespace => {
+    const dir = GlobalStore.store.getState().base.pathConfig?.SOURCE_CONFIG_DIR;
+    if (!dir || !namespace) return "";
+    return path.join(dir, namespace);
+  }
+);
+
 // 获取模块列表
-export const getSCModuleList = createSelector(
-  getSourceConfig,
-  state => state?.moduleList || []
+export const getModuleList = createSelector(
+  getState,
+  state => state.sourceModuleList
 );
 
 // 获取当前模块
@@ -33,9 +45,9 @@ export const getCurrentModule = createSelector(
 );
 
 // 获取页面组列表
-export const getCurrentPageGroupList = createSelector(
-  getCurrentModule,
-  state => state?.groupList || []
+export const getPageGroupList = createSelector(
+  getState,
+  state => state.currentPageGroupList
 );
 
 // 获取当前页面
@@ -44,20 +56,17 @@ export const getCurrentPage = createSelector(
   state => state.currentPage
 );
 
-export const getCurrentSourceList = createSelector(
+export const getSourceElementList = createSelector(
   getState,
-  state => state.currentPage?.elementList || []
+  state => state.sourceElementList
 );
 
-export const getCurrentSourceTypeList = createSelector(
+export const getSourceTypeList = createSelector(
   getState,
-  state => state.currentConfig?.sourceTypeList || []
+  state => state.sourceTypeList
 );
 
-export const getCurrentXmlTemplateList = createSelector(
-  getState,
-  state => state.currentPage?.templateList || []
-);
+export const getXmlTemplateList = createSelector(getState, state => []);
 
 export const getProjectState = createSelector(
   getState,
@@ -75,7 +84,7 @@ export const getProjectData = createSelector(getProjectState, state => state);
 
 // 获取工程 uuid
 export const getProjectUUID = createSelector(
-  getProjectState,
+  getState,
   state => state?.uuid || null
 );
 

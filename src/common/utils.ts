@@ -153,11 +153,11 @@ export function getFileSizeOf(file: string): number {
 }
 
 // 获取图片信息
-export async function getImageData(file: string): Promise<TypeImageData> {
+export function getImageData(file: string): TypeImageData {
   if (!file) throw new Error(ERR_CODE[4000]);
   if (!fse.existsSync(file)) throw new Error(`${ERR_CODE[4003]}: ${file}`);
   // TODO: 可以去图片数据库先查一下是否有，没有的话再进行接下来的步骤
-  const buff = await fse.readFile(file);
+  const buff = fse.readFileSync(file);
   const { width, height } = getImageSizeOf(file);
   const imageData: TypeImageData = {
     md5: md5(buff),

@@ -32,7 +32,7 @@ export type TypePageConf = {
 // 创建工程载荷
 export type TypeCreateProjectPayload = {
   projectRoot: string;
-  sourceNamespace: string;
+  sourceConfigFile: string;
   brandInfo: TypeBrandInfo;
   projectInfo: TypeProjectInfo;
 };
@@ -64,7 +64,8 @@ export type TypeProjectData = {
   projectRoot: string;
   projectInfo: TypeProjectInfo;
   uiVersion: TypeUiVersion;
-  sourceConfig: TypeSourceConfig;
+  // sourceConfig: TypeSourceConfig;
+  sourceConfigFile: string;
 };
 
 // // 在数据空的图片映射

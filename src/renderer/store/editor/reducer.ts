@@ -1,26 +1,48 @@
 import {
+  TypeSCPageSourceTypeConf,
+  TypeSCPageSourceElement,
   TypeSourceConfig,
   TypeSCModuleConf,
-  TypeSCPageConf
+  TypeSCPageGroupConf,
+  TypeSCPageConf,
+  TypeSCPageData
 } from "types/source-config";
-import { TypeProjectDataDoc } from "types/project";
+import { TypeProjectDataDoc, TypeProjectInfo } from "types/project";
 import ACTION_TYPES from "@/store/actions";
 import { updateState } from "@/store/utils";
 import { TypeEditorActions } from "./action";
 
 // main states
 export type TypeEditorState = {
-  currentConfig: TypeSourceConfig | null;
-  currentModule: TypeSCModuleConf | null;
-  currentPage: TypeSCPageConf | null;
   projectData: TypeProjectDataDoc | null;
+  projectInfo: TypeProjectInfo | null;
+  uuid: string | null;
+  projectRoot: string | null;
+  sourceConfigFile: string | null;
+  sourceConfig: TypeSourceConfig | null;
+  sourceTypeList: TypeSCPageSourceTypeConf[];
+  sourceModuleList: TypeSCModuleConf[];
+  sourceElementList: TypeSCPageSourceElement[];
+  currentModule: TypeSCModuleConf | null;
+  currentPageGroupList: TypeSCPageGroupConf[];
+  currentPage: TypeSCPageConf | null;
+  currentPageData: TypeSCPageData | null;
 };
 
 const editorState: TypeEditorState = {
-  currentConfig: null,
+  projectData: null,
+  projectInfo: null,
+  uuid: null,
+  projectRoot: null,
+  sourceConfigFile: null,
+  sourceConfig: null,
+  sourceTypeList: [],
+  sourceModuleList: [],
+  sourceElementList: [],
   currentModule: null,
+  currentPageGroupList: [],
   currentPage: null,
-  projectData: null
+  currentPageData: null
 };
 
 export default function EditorReducer(
@@ -29,16 +51,34 @@ export default function EditorReducer(
 ): TypeEditorState {
   switch (action.type) {
     case ACTION_TYPES.SET_SOURCE_CONFIG: {
-      return updateState(state, { currentConfig: action.payload });
+      const moduleList = action.payload.moduleList;
+      return updateState(state, {
+        sourceConfig: action.payload,
+        sourceTypeList: action.payload.sourceTypeList,
+        sourceModuleList: moduleList,
+        currentModule: moduleList[0] || null,
+        currentPageGroupList: moduleList[0]?.groupList || [],
+        currentPage: moduleList[0]?.groupList?.[0].pageList?.[0] || null
+      });
     }
-    case ACTION_TYPES.SET_SOURCE_CONFIG_MODULE: {
-      return updateState(state, { currentModule: action.payload });
+    case ACTION_TYPES.SET_CURRENT_MODULE: {
+      return updateState(state, {
+        currentModule: action.payload
+      });
     }
-    case ACTION_TYPES.SET_SOURCE_CONFIG_PAGE: {
-      return updateState(state, { currentPage: action.payload });
+    case ACTION_TYPES.SET_CURRENT_PAGE: {
+      return updateState(state, {
+        currentPage: action.payload
+      });
     }
     case ACTION_TYPES.SET_PROJECT_DATA: {
-      return updateState(state, { projectData: action.payload });
+      return updateState(state, {
+        uuid: action.payload.uuid,
+        projectRoot: action.payload.projectRoot,
+        sourceConfigFile: action.payload.sourceConfigFile,
+        projectInfo: action.payload.projectInfo,
+        projectData: action.payload
+      });
     }
     default:
       return state;

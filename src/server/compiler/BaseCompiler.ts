@@ -9,9 +9,9 @@ export default class BaseCompiler {
     this.file = file;
   }
 
-  protected async getXmlData(): Promise<Element> {
+  protected getXmlData(): Element {
     if (!this.xmlJson) {
-      this.xmlJson = await xml2jsonElement<Element>(this.file);
+      this.xmlJson = xml2jsonElement<Element>(this.file);
     }
     return this.xmlJson;
   }
@@ -24,8 +24,8 @@ export default class BaseCompiler {
    * 以第一个节点作为根节点
    * @returns 返回这个节点的 node 实例
    */
-  protected async getRootNode(): Promise<XMLNodeElement> {
-    const xmlJson = await this.getXmlData();
+  protected getRootNode(): XMLNodeElement {
+    const xmlJson = this.getXmlData();
     return new XMLNodeElement(xmlJson).getFirstChild();
   }
 
@@ -33,8 +33,8 @@ export default class BaseCompiler {
    * 获取根节点的子节点实例列表
    * @returns
    */
-  protected async getRootChildren(): Promise<XMLNodeElement[]> {
-    return (await this.getRootNode()).getChildren();
+  protected getRootChildren(): XMLNodeElement[] {
+    return this.getRootNode().getChildren();
   }
 
   /**
@@ -42,10 +42,8 @@ export default class BaseCompiler {
    * @param tagname
    * @returns
    */
-  protected async getRootFirstChildOf(
-    tagname: string
-  ): Promise<XMLNodeElement> {
-    return (await this.getRootNode()).getFirstChildOf(tagname);
+  protected getRootFirstChildOf(tagname: string): XMLNodeElement {
+    return this.getRootNode().getFirstChildOf(tagname);
   }
 
   /**
@@ -53,9 +51,7 @@ export default class BaseCompiler {
    * @param tagname
    * @returns
    */
-  protected async getRootChildrenOf(
-    tagname: string
-  ): Promise<XMLNodeElement[]> {
-    return (await this.getRootNode()).getChildrenOf(tagname);
+  protected getRootChildrenOf(tagname: string): XMLNodeElement[] {
+    return this.getRootNode().getChildrenOf(tagname);
   }
 }

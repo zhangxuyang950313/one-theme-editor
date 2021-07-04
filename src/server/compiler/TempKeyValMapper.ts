@@ -8,18 +8,16 @@ import BaseCompiler from "./BaseCompiler";
 export default class TempKeyValMapper extends BaseCompiler {
   private keyValMapData?: TypeSCPageXmlKeyValMapperMap;
 
-  async getDataList(): Promise<TypeSCPageXmlKeyValMapperConf[]> {
-    return (await super.getRootChildren()).map(item => {
-      return {
-        key: item.getAttributeOf("name"),
-        value: item.getFirstTextChildValue(),
-        description: item.getAttributeOf("description")
-      };
-    });
+  getDataList(): TypeSCPageXmlKeyValMapperConf[] {
+    return super.getRootChildren().map(item => ({
+      key: item.getAttributeOf("name"),
+      value: item.getFirstTextChildValue(),
+      description: item.getAttributeOf("description")
+    }));
   }
 
-  async getDataObj(): Promise<TypeSCPageKeyValConf> {
-    return (await super.getRootChildren()).reduce((total, item) => {
+  getDataObj(): TypeSCPageKeyValConf {
+    return super.getRootChildren().reduce((total, item) => {
       const key = item.getAttributeOf("name");
       if (!key) return total;
       const data: TypeSCPageKeyValConf = {
@@ -32,9 +30,9 @@ export default class TempKeyValMapper extends BaseCompiler {
     }, {});
   }
 
-  async getDataMap(): Promise<TypeSCPageXmlKeyValMapperMap> {
+  getDataMap(): TypeSCPageXmlKeyValMapperMap {
     if (this.keyValMapData) return this.keyValMapData;
-    const rootNodes = await super.getRootChildren();
+    const rootNodes = super.getRootChildren();
     const map: TypeSCPageXmlKeyValMapperMap = new Map();
     rootNodes.forEach(item => {
       map.set(item.getAttributeOf("name"), item);
@@ -46,8 +44,8 @@ export default class TempKeyValMapper extends BaseCompiler {
    * eg: <color name="class_color_top_title" description="顶栏标题文字颜色">{value}</color>
    * 通过 name 获取 value
    */
-  async getValueByName(name: string): Promise<string> {
-    const dataMap = await this.getDataMap();
+  getValueByName(name: string): string {
+    const dataMap = this.getDataMap();
     return dataMap.get(name)?.getFirstTextChildValue() || "";
   }
 
@@ -55,8 +53,8 @@ export default class TempKeyValMapper extends BaseCompiler {
    * eg: <color name="class_color_top_title" description="顶栏标题文字颜色">{value}</color>
    * 通过 name 获取 value
    */
-  async getDescriptionByName(name: string): Promise<string> {
-    const dataMap = await this.getDataMap();
+  getDescriptionByName(name: string): string {
+    const dataMap = this.getDataMap();
     return dataMap.get(name)?.getAttributeOf("description") || "";
   }
 }

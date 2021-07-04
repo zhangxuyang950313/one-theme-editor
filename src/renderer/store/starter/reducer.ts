@@ -28,7 +28,7 @@ export default function TemplateReducer(
     case ACTION_TYPES.SET_BRAND_LIST: {
       return updateState(state, { brandConfList: action.brandConfList });
     }
-    case ACTION_TYPES.SET_SOURCE_DESCRIPTION_LIST: {
+    case ACTION_TYPES.SET_SOURCE_DESC_LIST: {
       return updateState(state, { descriptionList: action.payload });
     }
     case ACTION_TYPES.SET_CURRENT_BRAND: {

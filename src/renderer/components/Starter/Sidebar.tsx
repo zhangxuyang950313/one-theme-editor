@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import { Menu } from "antd";
 
-import { useBrandConfList, useCurrentBrandConf } from "@/hooks/sourceConfig";
+import { useBrandConfList, useCurrentBrandConf } from "@/hooks/source";
 import TopInfo from "./TopInfo";
 
 // 欢迎页侧边栏

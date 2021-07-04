@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import { useCurrentPage } from "@/hooks/sourceConfig";
+import { useCurrentPage } from "@/hooks/source";
 import { useGetSourceImageUrl } from "@/hooks/image";
 import PreloadImage from "../Image/PreloadImage";
 
@@ -12,10 +12,7 @@ const Preview: React.FC = () => {
   if (!currentPage) return null;
   return (
     <StylePreviewer>
-      <PreloadImage
-        className="img"
-        src={getImageURL(currentPage.previewList[0])}
-      />
+      <PreloadImage className="img" src={getImageURL(currentPage.preview)} />
     </StylePreviewer>
   );
 };

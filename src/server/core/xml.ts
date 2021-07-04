@@ -33,23 +33,23 @@ const config: Options.XML2JS = {
 
 // xml 解析 json 数据
 // 返回紧凑数据结构，适用于对象形式调用
-export async function xml2jsonNormalized<T = Element>(
+export function xml2jsonNormalized<T = Element>(
   file: string,
   options?: Options.XML2JS & { compact: false }
-): Promise<T>;
+): T;
 // 返回完整递归数据结构，便于遍历查找
-export async function xml2jsonNormalized<T = ElementCompact>(
+export function xml2jsonNormalized<T = ElementCompact>(
   file: string,
   options?: Options.XML2JS & { compact: true }
-): Promise<T>;
-export async function xml2jsonNormalized(
+): T;
+export function xml2jsonNormalized(
   file: string,
   options?: Options.XML2JS
-): Promise<Element | ElementCompact> {
+): Element | ElementCompact {
   if (!fse.existsSync(file)) {
     throw new Error(`文件${file}不存在`);
   }
-  const data = await fse.readFile(file, { encoding: "utf-8" });
+  const data = fse.readFileSync(file, { encoding: "utf-8" });
   try {
     return xml2js(data, { ...config, ...options });
   } catch (err) {
@@ -60,17 +60,17 @@ export async function xml2jsonNormalized(
 // 对象用于无需顺序的节点，数组相反，对顺序有要求
 
 // 解析 xml 返回对象形式的紧凑数据
-export async function xml2jsonCompact<T = ElementCompact>(
+export function xml2jsonCompact<T = ElementCompact>(
   file: string
-): Promise<T | Partial<T>> {
+): T | Partial<T> {
   if (!fse.existsSync(file)) throw new Error(ERR_CODE[4005]);
   return xml2jsonNormalized(file, { compact: true });
 }
 
 // 解析 xml 返回完整的数组形式数据
-export async function xml2jsonElement<T = Element>(file: string): Promise<T> {
+export function xml2jsonElement<T = Element>(file: string): T {
   if (!fse.existsSync(file)) {
-    throw new Error(file + ERR_CODE[3000]);
+    throw new Error(`${ERR_CODE[3000]}：${file}`);
   }
   return xml2jsonNormalized<T>(file, { compact: false });
 }

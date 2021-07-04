@@ -20,7 +20,6 @@ const SourceConfigCard: React.FC<TypeProps> = props => {
   const pathConfig = usePathConfig();
   const imageFilepath = path.join(
     pathConfig?.SOURCE_CONFIG_DIR || "",
-    sourceDescription.namespace,
     sourceDescription.preview
   );
   const [imgUrl] = useImageUrl(imageFilepath);

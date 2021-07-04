@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import logSymbols from "log-symbols";
 
-import { useCurrentModuleList, useCurrentModule } from "@/hooks/sourceConfig";
+import { useModuleList, useCurrentModule } from "@/hooks/source";
 
 import { Tooltip } from "antd";
 import { useGetSourceImageUrl } from "@/hooks/image";
@@ -10,7 +10,7 @@ import { useGetSourceImageUrl } from "@/hooks/image";
 
 // 模块选择器
 const ModuleSelector: React.FC = () => {
-  const tempModuleList = useCurrentModuleList();
+  const moduleList = useModuleList();
   const [currentModule, setCurrentModule] = useCurrentModule();
   const getImageURL = useGetSourceImageUrl();
 
@@ -19,14 +19,14 @@ const ModuleSelector: React.FC = () => {
     return null;
   }
 
-  if (tempModuleList.length === 0) {
+  if (moduleList.length === 0) {
     console.log(logSymbols.error, "modules 为空");
     return null;
   }
 
   return (
     <StyleModuleSelector>
-      {tempModuleList.map((item, key) => (
+      {moduleList.map((item, key) => (
         <StyleIcon
           key={key}
           isActive={currentModule.index === item.index}

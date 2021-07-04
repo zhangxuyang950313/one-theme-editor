@@ -2,13 +2,12 @@ import path from "path";
 import { useLayoutEffect, useEffect, useState, useCallback } from "react";
 import { apiGetProjectByUUID, apiGetProjectList } from "@/api/index";
 import { useAxiosCanceler } from "@/hooks/index";
-import { useCurrentBrandConf, useSourceConfigRoot } from "@/hooks/sourceConfig";
 import {
-  ActionSetCurrentModule,
-  ActionSetCurrentPage,
-  ActionSetSourceConfig,
-  ActionSetProjectData
-} from "@/store/editor/action";
+  useCurrentBrandConf,
+  useLoadSourceConfig,
+  useSourceConfigRoot
+} from "@/hooks/source";
+import { ActionSetProjectData } from "@/store/editor/action";
 import { getProjectData, getProjectRoot } from "@/store/editor/selector";
 import { useEditorDispatch, useEditorSelector } from "@/store/index";
 import { TypeProjectDataDoc, TypeProjectStateInStore } from "types/project";
@@ -48,24 +47,8 @@ export function useProjectList(): TypeReturnData {
   return [value, refresh, loading];
 }
 
-// 载入工程，将 projectData 载入 redux
-export function useLoadProject(project: TypeProjectDataDoc | null): void {
-  const dispatch = useEditorDispatch();
-  useLayoutEffect(() => {
-    if (!project) return;
-    console.log("载入工程：", project);
-    dispatch(ActionSetProjectData(project));
-    dispatch(ActionSetSourceConfig(project.sourceConfig));
-    // 默认选择第一个模块和第一个页面
-    const firstModule = project?.sourceConfig?.moduleList[0];
-    const firstPage = firstModule?.groupList[0].pageList[0];
-    if (firstModule) dispatch(ActionSetCurrentModule(firstModule));
-    if (firstPage) dispatch(ActionSetCurrentPage(firstPage));
-  }, [dispatch, project]);
-}
-
 /**
- * 安装工程，传入 uuid，从数据库中查找后调用 useLoadProject 载入
+ * 加载工程
  * @param uuid
  * @returns
  */
@@ -74,7 +57,7 @@ export function useLoadProjectByUUID(
 ): [TypeProjectDataDoc | null, boolean] {
   const [project, updateProject] = useState<TypeProjectDataDoc | null>(null);
   const [loading, updateLoading] = useState(true);
-  // const dispatch = useDispatch();
+  const dispatch = useEditorDispatch();
   // const registerCancelToken = useAxiosCanceler();
 
   useLayoutEffect(() => {
@@ -92,8 +75,10 @@ export function useLoadProjectByUUID(
     // });
     apiGetProjectByUUID(uuid)
       .then(project => {
-        console.log(`获取工程: ${uuid}`, project);
+        if (!project) return;
+        console.log(`载入工程：: ${uuid}`, project);
         updateProject(project);
+        dispatch(ActionSetProjectData(project));
       })
       .catch(err => {
         console.warn(`${ERR_CODE[2005]}: ${uuid}`, err);
@@ -105,7 +90,7 @@ export function useLoadProjectByUUID(
       });
     // return cancel;
   }, [uuid]);
-  useLoadProject(project);
+  useLoadSourceConfig();
   return [project, loading];
 }
 

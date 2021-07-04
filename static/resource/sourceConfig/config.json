@@ -2,7 +2,7 @@
   {
     "name": "小米主题",
     "type": "xiaomi",
-    "sourceConfigs":["xiaomi/miui12"]
+    "sourceConfigs":["xiaomi/miui12/description.xml"]
   },
   {
     "name": "华为主题",

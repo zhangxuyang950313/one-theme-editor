@@ -5,10 +5,7 @@ import { remote } from "electron";
 
 import { isDev } from "@/core/constant";
 import { apiCreateProject } from "@/api";
-import {
-  useCurrentBrandConf,
-  useSourceDescriptionList
-} from "@/hooks/sourceConfig";
+import { useCurrentBrandConf, useSourceDescriptionList } from "@/hooks/source";
 import { TypeProjectInfo } from "types/project";
 import { TypeSourceDescription } from "types/source-config";
 
@@ -81,36 +78,10 @@ const CreateProject: React.FC<TypeProps> = props => {
 
   // 每一步配置
   const steps = [
-    // {
-    //   name: "选择版本",
-    //   // 内容
-    //   Component() {
-    //     return (
-    //       <SourceConfigManager
-    //         isLoading={isLoading}
-    //         sourceConfigList={sourceDescList}
-    //         selectedSourceConfig={selectedSourceDesc}
-    //         onSelected={setSourceDescription}
-    //       />
-    //     );
-    //   },
-    //   // 下一步
-    //   next: {
-    //     disabled: isCreating || !selectedSourceDesc,
-    //     async handleNext() {
-    //       if (selectedSourceDesc) nextStep();
-    //       else message.warn({ content: "请选择版本" });
-    //     }
-    //   }
-    // },
     {
       name: "主题信息",
       Component() {
         useEffect(() => {
-          // if (!selectedSourceDesc) {
-          //   message.info({ content: ERR_CODE[3002] });
-          //   init();
-          // }
           // onChange(path.join(remote.app.getPath("desktop"), "test"));
           onChange("/Users/zhangxuyang/mine/theme-test");
         }, []);
@@ -131,14 +102,8 @@ const CreateProject: React.FC<TypeProps> = props => {
               onChange(result.filePaths[0]);
             });
         };
-        // 模板版本
-        // if (!selectedSourceDesc) return null;
         return (
           <StyleFillInfo>
-            {/* 模板预览 */}
-            {/* <div className="template-card">
-              <SourceConfigCard config={selectedSourceDesc} />
-            </div> */}
             {/* 填写信息 */}
             <div className="project-info">
               <StyleSetLocalPath>
@@ -243,7 +208,7 @@ const CreateProject: React.FC<TypeProps> = props => {
           updateCreating(true);
           return apiCreateProject({
             projectRoot: projectRootRef.current || "",
-            sourceNamespace: selectedSourceDesc.namespace,
+            sourceConfigFile: selectedSourceDesc.file,
             brandInfo: {
               name: brandConf.name,
               type: brandConf.type
@@ -265,124 +230,6 @@ const CreateProject: React.FC<TypeProps> = props => {
         }
       }
     }
-    // {
-    //   name: "选择目录",
-    //   Component() {
-    //     useEffect(() => {
-    //       onChange(path.join(remote.app.getPath("desktop"), "test"));
-    //       if (!description) {
-    //         message.info({ content: ERR_CODE[3001] });
-    //       }
-    //     }, []);
-    //     const [projectRoot, setLocalPath] = useState<string>();
-    //     const onChange = (val: string) => {
-    //       localPathRef.current = val;
-    //       setLocalPath(val);
-    //     };
-    //     if (!description) {
-    //       return null;
-    //     }
-    //     const selectDir = () => {
-    //       remote.dialog
-    //         .showOpenDialog({
-    //           // https://www.electronjs.org/docs/api/dialog#dialogshowopendialogsyncbrowserwindow-options
-    //           title: "选择工程文件",
-    //           properties: ["openDirectory", "createDirectory", "promptToCreate"]
-    //         })
-    //         .then(result => {
-    //           if (result.canceled) return;
-    //           onChange(result.filePaths[0]);
-    //         });
-    //     };
-    //     return (
-    //       <StyleConfirmInfo>
-    //         <StyleSetLocalPath>
-    //           <p>选择本地目录</p>
-    //           <div className="input-area">
-    //             <Input
-    //               placeholder="输入或选择目录"
-    //               allowClear
-    //               value={projectRoot}
-    //               onChange={e => onChange(e.target.value)}
-    //             />
-    //             <Button
-    //               type="primary"
-    //               icon={<FileAddOutlined />}
-    //               onClick={selectDir}
-    //             >
-    //               选择
-    //             </Button>
-    //           </div>
-    //         </StyleSetLocalPath>
-    //         <br />
-    //         <p>主题信息</p>
-    //         <StyleFillInfo>
-    //           <div className="template-card">
-    //             <ProjectCard description={description} />
-    //           </div>
-    //           <div className="project-info">
-    //             <ProjectInfo description={description} />
-    //           </div>
-    //         </StyleFillInfo>
-    //       </StyleConfirmInfo>
-    //     );
-    //   },
-    //   prev: {
-    //     disabled: isCreating,
-    //     handlePrev: prevStep
-    //   },
-    //   // 开始
-    //   start: {
-    //     disabled: isCreating,
-    //     async handleStart() {
-    //       const local = localPathRef.current;
-    //       if (!local) throw new Error("请选择正确的本地路径");
-    //       if (!fse.existsSync(local)) {
-    //         await new Promise<void>(resolve => {
-    //           Modal.confirm({
-    //             title: "提示",
-    //             content: `目录"${local}"不存在，是否创建？`,
-    //             onOk: () => {
-    //               fse.ensureDirSync(local);
-    //               resolve();
-    //             }
-    //           });
-    //         });
-    //       } else if (fse.readdirSync(local).length > 0) {
-    //         await new Promise<void>(resolve => {
-    //           Modal.confirm({
-    //             title: "提示",
-    //             content: `目录"${local}"为非空目录，可能不是主题目录，是否仍然继续使用此目录？`,
-    //             onOk: () => {
-    //               resolve();
-    //             }
-    //           });
-    //         });
-    //       }
-    //       if (!selectedSourceDesc) {
-    //         throw new Error("创建失败");
-    //       }
-    //       updateCreating(true);
-    //       // TODO 使用选择的模板路径生成 tempConf
-    //       return apiCreateProject({
-    //         description,
-    //         brandConf,
-    //         uiVersion: selectedSourceDesc.uiVersion,
-    //         sourceDescription: selectedSourceDesc,
-    //         projectRoot: localPathRef.current || ""
-    //       }).then(data => {
-    //         console.log("创建工程：", data);
-    //         if (!description) {
-    //           throw new Error("工程信息为空");
-    //         }
-    //         props.onProjectCreated(description);
-    //         closeModal();
-    //         updateCreating(false);
-    //         setTimeout(init, 300);
-    //       });
-    //     }
-    //   }
-    // }
   ];
 
   // 创建主题步骤容器

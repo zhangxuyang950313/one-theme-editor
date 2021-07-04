@@ -8,7 +8,7 @@ import {
 } from "@/store/global/modules/base/selector";
 import { ActionSetPathConfig } from "@/store/global/modules/base/action";
 import { useGlobalSelector, useGlobalDispatch } from "@/store/index";
-import { TypePathConfig } from "types/index";
+import { TypePathConfig } from "server/core/pathUtils";
 
 // 设置页面标题
 export enum presetTitle {

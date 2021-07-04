@@ -1,10 +1,12 @@
-import { useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { message } from "antd";
 import {
   apiGetSourceConfigList,
   apiGetBrandConfList,
-  apiGetSourceDescriptionList
+  apiGetSourceDescriptionList,
+  apiGetSourceConfig
 } from "@/api/index";
+import { getSourceConfigRoot } from "@/store/global/modules/base/selector";
 import {
   ActionSetBrandInfoList,
   ActionSetSourceDescriptionList,
@@ -13,18 +15,19 @@ import {
 import { getCurrentBrandConf } from "@/store/starter/selector";
 import {
   ActionSetCurrentModule,
-  ActionSetCurrentPage
+  ActionSetCurrentPage,
+  ActionSetSourceConfig
 } from "@/store/editor/action";
 import {
   getCurrentModule,
   getCurrentPage,
-  getSCModuleList,
-  getCurrentPageGroupList,
-  getSourceConfigRoot,
+  getModuleList,
+  getPageGroupList,
   getSourceConfig,
-  getCurrentSourceTypeList,
-  getCurrentSourceList,
-  getCurrentXmlTemplateList
+  getSourceTypeList,
+  getSourceElementList,
+  getXmlTemplateList,
+  getSourceConfigFile
 } from "@/store/editor/selector";
 import {
   TypeSourceConfig,
@@ -46,7 +49,8 @@ import {
   useGlobalDispatch,
   useEditorDispatch,
   useStarterSelector,
-  useEditorSelector
+  useEditorSelector,
+  useGlobalSelector
 } from "@/store/index";
 import { useAsyncUpdater } from "./index";
 
@@ -57,14 +61,14 @@ export function useSourceConfig(): TypeSourceConfig | null {
 
 // 获取当前资源配置目录
 export function useSourceConfigRoot(): string | null {
-  return useEditorSelector(getSourceConfigRoot);
+  return useGlobalSelector(getSourceConfigRoot);
 }
 
-// 获取当前资源配置命名空间
-export function useNamespace(): string | null {
-  const sourceConfig = useSourceConfig();
-  return sourceConfig?.namespace || null;
-}
+// // 获取当前资源配置命名空间
+// export function useNamespace(): string | null {
+//   const sourceConfig = useSourceConfig();
+//   return sourceConfig?.namespace || null;
+// }
 
 // 当前选择的厂商信息
 export function useCurrentBrandConf(): [
@@ -152,8 +156,8 @@ export function useSourceConfigList(): [TypeSourceConfig[], boolean] {
 }
 
 // 当前配置模块列表
-export function useCurrentModuleList(): TypeSCModuleConf[] {
-  return useEditorSelector(getSCModuleList);
+export function useModuleList(): TypeSCModuleConf[] {
+  return useEditorSelector(getModuleList);
 }
 
 // 获取当前选择的模块
@@ -170,7 +174,7 @@ export function useCurrentModule(): [
 
 // 当前选择的模块页面组列表
 export function useCurrentPageGroupList(): TypeSCPageGroupConf[] {
-  return useEditorSelector(getCurrentPageGroupList);
+  return useEditorSelector(getPageGroupList);
 }
 
 // 获取当前选择的页面
@@ -185,28 +189,47 @@ export function useCurrentPage(): [
   ];
 }
 
-export function useSourceList(): TypeSCPageSourceElement[] {
-  return useEditorSelector(getCurrentSourceList);
+export function useSourceElementList(): TypeSCPageSourceElement[] {
+  return useEditorSelector(getSourceElementList);
 }
 
 export function useSourceTypeList(): TypeSCPageSourceTypeConf[] {
-  return useEditorSelector(getCurrentSourceTypeList);
+  return useEditorSelector(getSourceTypeList);
 }
 
 export function useImageSourceList(): TypeSCPageImageElement[] {
-  const sourceList = useSourceList();
+  const sourceList = useSourceElementList();
   return sourceList.flatMap(item =>
     item.type === ELEMENT_TYPES.IMAGE ? [item] : []
   );
 }
 
 export function useXmlSourceList(): TypeSCPageTextElement[] {
-  const sourceList = useSourceList();
+  const sourceList = useSourceElementList();
   return sourceList.flatMap(item =>
     item.type === ELEMENT_TYPES.TEXT ? [item] : []
   );
 }
 
 export function useXmlTemplateList(): TypeSCPageTemplateConf[] {
-  return useEditorSelector(getCurrentXmlTemplateList);
+  return useEditorSelector(getXmlTemplateList);
+}
+
+export function useSourceConfigFile(): string | null {
+  return useEditorSelector(getSourceConfigFile);
+}
+
+// 加载资源配置
+export function useLoadSourceConfig(): TypeSourceConfig | null {
+  const [value, updateValue] = useState<TypeSourceConfig | null>(null);
+  const sourceConfigFile = useSourceConfigFile();
+  const dispatch = useEditorDispatch();
+  useEffect(() => {
+    if (!sourceConfigFile) return;
+    apiGetSourceConfig(sourceConfigFile).then(data => {
+      updateValue(data);
+      dispatch(ActionSetSourceConfig(data));
+    });
+  }, [sourceConfigFile]);
+  return value;
 }

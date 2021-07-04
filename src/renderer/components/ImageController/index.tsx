@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { RightCircleOutlined } from "@ant-design/icons";
 
 import { useProjectRoot } from "@/hooks/project";
-import { useSourceConfigRoot } from "@/hooks/sourceConfig";
+import { useSourceConfigRoot } from "@/hooks/source";
 import { useReleaseListWatcher } from "@/hooks/fileWatcher";
 import { TypeSCPageImageElement } from "types/source-config";
 
@@ -49,12 +49,7 @@ const ImageController: React.FC<TypeSCPageImageElement> = sourceConf => {
 
   return (
     <StyleImageChanger>
-      <PartialContext.Provider
-        value={{
-          releaseList: releaseList,
-          dynamicReleaseList: dynamicReleaseList
-        }}
-      >
+      <PartialContext.Provider value={{ releaseList, dynamicReleaseList }}>
         {/* 图片描述 */}
         <div className="text description">
           {sourceConf.name}
@@ -100,7 +95,7 @@ const StyleImageChanger = styled.div`
     white-space: pre-wrap;
   }
   .description {
-    font-size: 14px;
+    font-size: 16px;
     .image-size {
       margin-left: 4px;
       font-size: 10px;

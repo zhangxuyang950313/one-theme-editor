@@ -3,7 +3,8 @@ import { TypeProjectDataDoc, TypeProjectInfo } from "types/project";
 import {
   TypeSourceConfig,
   TypeSCModuleConf,
-  TypeSCPageConf
+  TypeSCPageConf,
+  TypeSCPageGroupConf
 } from "types/source-config";
 
 type TypeActionSetSourceConfig = {
@@ -11,15 +12,20 @@ type TypeActionSetSourceConfig = {
   payload: TypeSourceConfig;
 };
 
+type TypeActionSetPageGroupList = {
+  type: typeof ACTION_TYPES.SET_PAGE_GROUP_LIST;
+  payload: TypeSCPageGroupConf[];
+};
+
 // 设置模块
 type TypeActionSetCurrentModule = {
-  type: typeof ACTION_TYPES.SET_SOURCE_CONFIG_MODULE;
+  type: typeof ACTION_TYPES.SET_CURRENT_MODULE;
   payload: TypeSCModuleConf;
 };
 
 // 设置页面
 type TypeActionSetCurrentPage = {
-  type: typeof ACTION_TYPES.SET_SOURCE_CONFIG_PAGE;
+  type: typeof ACTION_TYPES.SET_CURRENT_PAGE;
   payload: TypeSCPageConf;
 };
 
@@ -38,9 +44,11 @@ type TypeActionSetProjectInfo = {
 // main actions
 export type TypeEditorActions =
   | TypeActionSetSourceConfig
+  | TypeActionSetPageGroupList
   | TypeActionSetCurrentModule
   | TypeActionSetCurrentPage
-  | TypeActionSetProjectData;
+  | TypeActionSetProjectData
+  | TypeActionSetProjectInfo;
 
 // 设置当前资源配置
 export function ActionSetSourceConfig(
@@ -53,14 +61,20 @@ export function ActionSetSourceConfig(
 export function ActionSetCurrentModule(
   payload: TypeSCModuleConf
 ): TypeActionSetCurrentModule {
-  return { type: ACTION_TYPES.SET_SOURCE_CONFIG_MODULE, payload };
+  return { type: ACTION_TYPES.SET_CURRENT_MODULE, payload };
+}
+
+export function ActionSetPageGroupList(
+  payload: TypeSCPageGroupConf[]
+): TypeActionSetPageGroupList {
+  return { type: ACTION_TYPES.SET_PAGE_GROUP_LIST, payload };
 }
 
 // 设置当前页面配置
 export function ActionSetCurrentPage(
   payload: TypeSCPageConf
 ): TypeActionSetCurrentPage {
-  return { type: ACTION_TYPES.SET_SOURCE_CONFIG_PAGE, payload };
+  return { type: ACTION_TYPES.SET_CURRENT_PAGE, payload };
 }
 
 // 设置工程数据
