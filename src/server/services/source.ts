@@ -1,4 +1,3 @@
-import { message } from "antd";
 import API from "common/api";
 import { Express } from "express";
 import { TypeResult } from "types/request";
@@ -30,7 +29,7 @@ export default function source(service: Express): void {
     (request, response) => {
       try {
         const { brandType } = request.params;
-        const list = SourceConfig.getDescriptionList(brandType);
+        const list = SourceConfig.getSourceConfigBriefList(brandType);
         response.send(result.success(list));
       } catch (err) {
         response.status(400).send(result.fail(err.message));

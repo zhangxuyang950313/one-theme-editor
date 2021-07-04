@@ -2,7 +2,7 @@ import path from "path";
 import React from "react";
 import styled from "styled-components";
 
-import { TypeSourceDescription } from "types/source-config";
+import { TypeSourceConfigBrief } from "types/source-config";
 
 // components
 import { Card } from "antd";
@@ -11,7 +11,7 @@ import { useImageUrl } from "@/hooks/image";
 
 type TypeProps = {
   hoverable?: boolean;
-  sourceDescription: TypeSourceDescription;
+  sourceDescription: TypeSourceConfigBrief;
 };
 
 // 配置卡片

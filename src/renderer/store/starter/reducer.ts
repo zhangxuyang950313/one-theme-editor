@@ -1,13 +1,13 @@
 import { updateState } from "@/store/utils";
 import { TypeBrandConf } from "types/project";
-import { TypeSourceDescription } from "types/source-config";
+import { TypeSourceConfigBrief } from "types/source-config";
 import ACTION_TYPES from "@/store/actions";
 import { TypeStarterActions } from "./action";
 
 // main states
 export type TypeStarterState = {
   brandConfList: TypeBrandConf[];
-  descriptionList: TypeSourceDescription[];
+  descriptionList: TypeSourceConfigBrief[];
   currentBrandConf: TypeBrandConf | null;
 };
 

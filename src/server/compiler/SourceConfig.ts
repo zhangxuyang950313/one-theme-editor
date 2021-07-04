@@ -6,7 +6,7 @@ import {
   TypeSCModuleConf,
   TypeSCPageGroupConf,
   TypeSCPageConf,
-  TypeSourceDescription,
+  TypeSourceConfigBrief,
   TypeSCPageSourceTypeConf
 } from "types/source-config";
 import { TypeBrandConf, TypeUiVersion } from "types/project";
@@ -33,11 +33,11 @@ export default class SourceConfig extends BaseCompiler {
   }
 
   /**
-   * 解析当前厂商下所有预览配置
+   * 解析当前厂商下所有配置简略信息
    * @param brandType 厂商 type
    * @returns
    */
-  static getDescriptionList(brandType: string): TypeSourceDescription[] {
+  static getSourceConfigBriefList(brandType: string): TypeSourceConfigBrief[] {
     const brandConfList = this.readBrandConf();
     const brandConf = brandConfList.find(item => item.type === brandType);
     if (!brandConf?.sourceConfigs) return [];
@@ -155,7 +155,7 @@ export default class SourceConfig extends BaseCompiler {
    * 解析配置配置的简短信息
    * 只解析 description.xml 不需要全部解析
    */
-  getDescription(): TypeSourceDescription {
+  getDescription(): TypeSourceConfigBrief {
     return {
       key: UUID(),
       file: path.relative(PATHS.SOURCE_CONFIG_DIR, this.getDescFile()),

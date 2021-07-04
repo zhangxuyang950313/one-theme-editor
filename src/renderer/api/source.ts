@@ -1,6 +1,6 @@
 import API from "common/api";
 import { TypeBrandConf } from "types/project";
-import { TypeSourceConfig, TypeSourceDescription } from "types/source-config";
+import { TypeSourceConfig, TypeSourceConfigBrief } from "types/source-config";
 import { TypeResponseFrame } from "types/request";
 import { createHttp } from "./utils";
 
@@ -14,9 +14,9 @@ export async function apiGetBrandConfList(): Promise<TypeBrandConf[]> {
 // 获取厂商配置描述列表
 export async function apiGetSourceDescriptionList(
   brandType: TypeBrandConf["type"]
-): Promise<TypeSourceDescription[]> {
+): Promise<TypeSourceConfigBrief[]> {
   return createHttp()
-    .get<TypeResponseFrame<TypeSourceDescription[]>>(
+    .get<TypeResponseFrame<TypeSourceConfigBrief[]>>(
       `${API.GET_SOURCE_DESC_LIST}/${brandType}`
     )
     .then(data => data.data.data);

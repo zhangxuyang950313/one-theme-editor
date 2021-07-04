@@ -5,8 +5,8 @@ import { TypeImageData, TypeUiVersion } from "./project";
 import { TypeXMLSourceLayout } from "./xml-result";
 import { TypeImagePathLike } from "./index";
 
-// 资源预览配置
-export type TypeSourceDescription = {
+// 资源配置简略信息
+export type TypeSourceConfigBrief = {
   key: string;
   file: string;
   name: string;
@@ -16,7 +16,7 @@ export type TypeSourceDescription = {
 };
 
 // 资源配置
-export type TypeSourceConfig = Omit<TypeSourceDescription, "key"> & {
+export type TypeSourceConfig = Omit<TypeSourceConfigBrief, "key"> & {
   sourceTypeList: TypeSCPageSourceTypeConf[];
   moduleList: TypeSCModuleConf[];
 };

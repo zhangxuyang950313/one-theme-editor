@@ -31,7 +31,7 @@ import {
 } from "@/store/editor/selector";
 import {
   TypeSourceConfig,
-  TypeSourceDescription,
+  TypeSourceConfigBrief,
   TypeSCPageGroupConf,
   TypeSCModuleConf,
   TypeSCPageConf,
@@ -105,8 +105,8 @@ export function useBrandConfList(): TypeBrandConf[] {
 }
 
 // 获取配置预览列表
-export function useSourceDescriptionList(): [TypeSourceDescription[], boolean] {
-  const [value, updateValue] = useState<TypeSourceDescription[]>([]);
+export function useSourceDescriptionList(): [TypeSourceConfigBrief[], boolean] {
+  const [value, updateValue] = useState<TypeSourceConfigBrief[]>([]);
   const [loading, updateLoading] = useState(true);
   const [brandConf] = useCurrentBrandConf();
   const dispatchStarter = useStarterDispatch();

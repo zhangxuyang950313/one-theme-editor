@@ -7,7 +7,7 @@ import { isDev } from "@/core/constant";
 import { apiCreateProject } from "@/api";
 import { useCurrentBrandConf, useSourceDescriptionList } from "@/hooks/source";
 import { TypeProjectInfo } from "types/project";
-import { TypeSourceDescription } from "types/source-config";
+import { TypeSourceConfigBrief } from "types/source-config";
 
 import styled from "styled-components";
 import { Modal, Button, Form, Input, message } from "antd";
@@ -28,7 +28,7 @@ const CreateProject: React.FC<TypeProps> = props => {
   // 模板列表
   const [sourceDescList, isLoading] = useSourceDescriptionList();
   // 选择的模板
-  const [selectedSourceDesc, setSourceDesc] = useState<TypeSourceDescription>();
+  const [selectedSourceDesc, setSourceDesc] = useState<TypeSourceConfigBrief>();
   // 当前步骤
   const [curStep, setCurStep] = useState(0);
   // 填写工程描述
