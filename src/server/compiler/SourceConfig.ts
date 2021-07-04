@@ -7,12 +7,11 @@ import {
   TypeSCPageGroupConf,
   TypeSCPageConf,
   TypeSourceDescription,
-  TypeSCPageSourceTypeConf,
-  TypeSCPageData
+  TypeSCPageSourceTypeConf
 } from "types/source-config";
 import { TypeBrandConf, TypeUiVersion } from "types/project";
 import ERR_CODE from "renderer/core/error-code";
-import PATHS from "../core/pathUtils";
+import PATHS from "server/core/pathUtils";
 import Page from "./Page";
 import XMLNodeElement from "./XMLNodeElement";
 import BaseCompiler from "./BaseCompiler";
@@ -42,7 +41,9 @@ export default class SourceConfig extends BaseCompiler {
     const brandConfList = this.readBrandConf();
     const brandConf = brandConfList.find(item => item.type === brandType);
     if (!brandConf?.sourceConfigs) return [];
-    const ensureConfigs = brandConf.sourceConfigs.filter(fse.existsSync);
+    const ensureConfigs = brandConf.sourceConfigs
+      .map(item => path.join(PATHS.SOURCE_CONFIG_DIR, item))
+      .filter(fse.existsSync);
     return ensureConfigs.map(configFile =>
       new SourceConfig(configFile).getDescription()
     );
