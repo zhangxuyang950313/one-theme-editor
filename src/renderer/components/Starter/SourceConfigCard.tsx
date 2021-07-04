@@ -6,8 +6,8 @@ import { TypeSourceDescription } from "types/source-config";
 
 // components
 import { Card } from "antd";
-import { usePathConfig } from "hooks/index";
-import { useImageUrl } from "hooks/image";
+import { usePathConfig } from "@/hooks/index";
+import { useImageUrl } from "@/hooks/image";
 
 type TypeProps = {
   hoverable?: boolean;

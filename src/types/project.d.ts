@@ -65,8 +65,6 @@ export type TypeProjectData = {
   projectInfo: TypeProjectInfo;
   uiVersion: TypeUiVersion;
   sourceConfig: TypeSourceConfig;
-  imageMapperList: TypeImageMapper[];
-  xmlMapperList: TypeXmlMapper[];
 };
 
 // // 在数据空的图片映射

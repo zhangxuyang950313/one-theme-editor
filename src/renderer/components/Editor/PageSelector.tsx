@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { useCurrentPage, useCurrentPageGroupList } from "@/hooks/sourceConfig";
 
 import { Collapse } from "antd";
-import { useGetSourceImageUrl } from "hooks/image";
+import { useGetSourceImageUrl } from "@/hooks/image";
 import PreloadImage from "@/components/Image/PreloadImage";
 
 // 页面选择器

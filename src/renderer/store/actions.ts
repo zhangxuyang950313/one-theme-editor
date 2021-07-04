@@ -7,7 +7,7 @@ enum ACTION_TYPES {
   // 设置厂商品牌列表
   SET_BRAND_LIST = "SET_BRAND_LIST",
   // 设置当前选择的厂商
-  SET_SELECTED_BRAND = "SET_SELECTED_BRAND",
+  SET_CURRENT_BRAND = "SET_CURRENT_BRAND",
   // 设置资源配置数据
   SET_SOURCE_CONFIG = "SET_SOURCE_CONFIG",
   // 设置资源预览列表
@@ -22,10 +22,7 @@ enum ACTION_TYPES {
   // 设置工程新数据
   SET_PROJECT_DATA = "SET_PROJECT_DATA",
   // 设置工程描述数据
-  SET_PROJECT_INFO = "SET_PROJECT_INFO",
-
-  // 设置 store.project.imageMapperList
-  SET_IMAGE_MAPPER_LIST = "SET_IMAGE_MAPPER_LIST"
+  SET_PROJECT_INFO = "SET_PROJECT_INFO"
 }
 
 export default ACTION_TYPES;

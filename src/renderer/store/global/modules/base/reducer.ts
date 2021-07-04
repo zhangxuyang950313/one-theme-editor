@@ -1,6 +1,6 @@
-import ACTION_TYPES from "@/store/actions";
 import * as PATH_CONFIG from "server/core/pathUtils";
 import { updateState } from "@/store/utils";
+import ACTION_TYPES from "@/store/actions";
 import { TypeActions } from "./action";
 
 type TypeBaseState = {
@@ -8,13 +8,13 @@ type TypeBaseState = {
   pathConfig: typeof PATH_CONFIG | null;
 };
 
-const BaseState: TypeBaseState = {
+const baseState: TypeBaseState = {
   port: 30000,
   pathConfig: null
 };
 
 export default function BaseReducer(
-  state = BaseState,
+  state = baseState,
   action: TypeActions
 ): TypeBaseState {
   switch (action.type) {

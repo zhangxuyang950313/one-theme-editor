@@ -1,9 +1,9 @@
 import path from "path";
 import { useState, useEffect } from "react";
 
-import { useServerHost } from "hooks/index";
-import { useProjectRoot } from "hooks/project";
-import { useSourceConfigRoot } from "hooks/sourceConfig";
+import { useServerHost } from "@/hooks/index";
+import { useProjectRoot } from "@/hooks/project";
+import { useSourceConfigRoot } from "@/hooks/sourceConfig";
 
 // 返回图片前缀
 export function useImagePrefix(): string {

@@ -4,21 +4,19 @@ import { v4 as UUID } from "uuid";
 import { remote } from "electron";
 
 import { isDev } from "@/core/constant";
+import { apiCreateProject } from "@/api";
 import {
   useCurrentBrandConf,
   useSourceDescriptionList
 } from "@/hooks/sourceConfig";
 import { TypeProjectInfo } from "types/project";
 import { TypeSourceDescription } from "types/source-config";
-import { apiCreateProject } from "@/api";
 
-// components
 import styled from "styled-components";
 import { Modal, Button, Form, Input, message } from "antd";
 import { FileAddOutlined } from "@ant-design/icons";
 import Steps from "@/components/Steps";
 import ProjectInfoForm from "@/components/ProjectInfoForm";
-import ERR_CODE from "@/core/error-code";
 import SourceConfigManager from "./SourceConfigManager";
 
 // 创建主题按钮
@@ -27,7 +25,7 @@ type TypeProps = {
 };
 const CreateProject: React.FC<TypeProps> = props => {
   // 机型配置
-  const brandConf = useCurrentBrandConf();
+  const [brandConf] = useCurrentBrandConf();
   // 弹框控制
   const [modalVisible, setModalVisible] = useState(false);
   // 模板列表

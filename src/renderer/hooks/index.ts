@@ -1,10 +1,13 @@
 import { Canceler } from "axios";
 import { useLayoutEffect, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { InputProps, message } from "antd";
 import { apiGetPathConfig } from "@/api";
-import { getPathConfig, getServerPort } from "@/store/modules/base/selector";
-import { ActionSetPathConfig } from "@/store/modules/base/action";
+import {
+  getPathConfig,
+  getServerPort
+} from "@/store/global/modules/base/selector";
+import { ActionSetPathConfig } from "@/store/global/modules/base/action";
+import { useGlobalSelector, useGlobalDispatch } from "@/store/index";
 import { TypePathConfig } from "types/index";
 
 // 设置页面标题
@@ -59,19 +62,19 @@ export function useAsyncUpdater(): (updater: () => void) => void {
 
 // 获取编辑器路径配置
 export function usePathConfig(): TypePathConfig | null {
-  return useSelector(getPathConfig);
+  return useGlobalSelector(getPathConfig);
 }
 
 // 生成当前服务域名
 export function useServerHost(): string {
-  const serverPort = useSelector(getServerPort);
+  const serverPort = useGlobalSelector(getServerPort);
   return `http://localhost:${serverPort}`;
 }
 
 // 初始化编辑器
 export function useInitEditor(): boolean {
   const [loading, updateLoading] = useState(true);
-  const dispatch = useDispatch();
+  const dispatch = useGlobalDispatch();
   useLayoutEffect(() => {
     apiGetPathConfig()
       .then(async data => {

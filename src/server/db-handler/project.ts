@@ -16,7 +16,6 @@ import {
 } from "server/core/pathUtils";
 import SourceConfig from "server/compiler/SourceConfig";
 import ERR_CODE from "renderer/core/error-code";
-import { SOURCE_CONFIG_DIR } from "./../core/pathUtils";
 
 // TODO: 创建数据库有个坑，如果 filename 文件内容不是 nedb 能接受的数据格式则会导致服务崩溃
 function createNedb(filename: string) {
@@ -94,9 +93,7 @@ export async function createProject(
     brandInfo,
     uiVersion: sourceConfig.uiVersion,
     sourceConfig,
-    projectRoot,
-    imageMapperList: [],
-    xmlMapperList: []
+    projectRoot
   };
   return projectDB.insert(projectData);
 }
@@ -141,39 +138,4 @@ export async function updateProject<
   });
   if (updated[0]) return updated[0];
   else throw new Error(ERR_CODE[2004]);
-}
-
-// export async function addDatabasePropList<T>(data: T, prop: keyof T) {}
-
-// 增加 imageMapperList
-export async function addProjectImageMapper(
-  uuid: string,
-  imageMapper: TypeImageMapper
-): Promise<TypeImageMapper[]> {
-  const project = await updateProject(uuid, {
-    $addToSet: { imageMapperList: imageMapper }
-  });
-  return project.imageMapperList;
-}
-
-// 删除 imageMapperList
-export async function delProjectImageMapper(
-  uuid: string,
-  imageMapper: Partial<TypeImageMapper>
-): Promise<TypeImageMapper[]> {
-  const project = await updateProject(uuid, {
-    $pull: { imageMapperList: imageMapper }
-  });
-  return project.imageMapperList;
-}
-
-// 更新 imageMapperList
-export async function updateProjectImageMapper(
-  uuid: string,
-  imageMapper: TypeImageMapper
-): Promise<TypeImageMapper[]> {
-  await delProjectImageMapper(uuid, {
-    target: imageMapper.target
-  });
-  return addProjectImageMapper(uuid, imageMapper);
 }

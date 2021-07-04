@@ -1,23 +1,21 @@
 import { useLayoutEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-
 import { message } from "antd";
-
 import {
   apiGetSourceConfigList,
   apiGetBrandConfList,
   apiGetSourceDescriptionList
 } from "@/api/index";
-
 import {
   ActionSetBrandInfoList,
-  ActionSetSelectedBrand,
-  ActionSetCurrentBrand,
-  ActionSetCurrentPage,
-  ActionSetSourceDescriptionList
-} from "@/store/modules/sourceConfig/action";
+  ActionSetSourceDescriptionList,
+  ActionSetCurrentBrand
+} from "@/store/starter/action";
+import { getCurrentBrandConf } from "@/store/starter/selector";
 import {
-  getCurrentBrandConf,
+  ActionSetCurrentModule,
+  ActionSetCurrentPage
+} from "@/store/editor/action";
+import {
   getCurrentModule,
   getCurrentPage,
   getSCModuleList,
@@ -27,8 +25,7 @@ import {
   getCurrentSourceTypeList,
   getCurrentSourceList,
   getCurrentXmlTemplateList
-} from "@/store/modules/sourceConfig/selector";
-
+} from "@/store/editor/selector";
 import {
   TypeSourceConfig,
   TypeSourceDescription,
@@ -42,19 +39,25 @@ import {
   TypeSCPageTemplateConf
 } from "types/source-config";
 import { TypeBrandConf } from "types/project";
-
 import ERR_CODE from "@/core/error-code";
-import { ELEMENT_TYPES } from "@/../enum";
+import { ELEMENT_TYPES } from "src/enum";
+import {
+  useStarterDispatch,
+  useGlobalDispatch,
+  useEditorDispatch,
+  useStarterSelector,
+  useEditorSelector
+} from "@/store/index";
 import { useAsyncUpdater } from "./index";
 
 // 获取当前资源配置数据
 export function useSourceConfig(): TypeSourceConfig | null {
-  return useSelector(getSourceConfig);
+  return useEditorSelector(getSourceConfig);
 }
 
 // 获取当前资源配置目录
 export function useSourceConfigRoot(): string | null {
-  return useSelector(getSourceConfigRoot);
+  return useEditorSelector(getSourceConfigRoot);
 }
 
 // 获取当前资源配置命名空间
@@ -64,14 +67,21 @@ export function useNamespace(): string | null {
 }
 
 // 当前选择的厂商信息
-export function useCurrentBrandConf(): TypeBrandConf | null {
-  return useSelector(getCurrentBrandConf);
+export function useCurrentBrandConf(): [
+  TypeBrandConf | null,
+  (brandConf: TypeBrandConf) => void
+] {
+  const dispatch = useStarterDispatch();
+  return [
+    useStarterSelector(getCurrentBrandConf),
+    brandConf => dispatch(ActionSetCurrentBrand(brandConf))
+  ];
 }
 
 // 获取配置的厂商列表
 export function useBrandConfList(): TypeBrandConf[] {
   const [value, updateValue] = useState<TypeBrandConf[]>([]);
-  const dispatch = useDispatch();
+  const dispatchStarter = useStarterDispatch();
   const registerUpdater = useAsyncUpdater();
   useLayoutEffect(() => {
     apiGetBrandConfList().then(conf => {
@@ -81,12 +91,12 @@ export function useBrandConfList(): TypeBrandConf[] {
         return t;
       }, []);
       registerUpdater(() => {
-        dispatch(ActionSetBrandInfoList(list));
-        dispatch(ActionSetSelectedBrand(list[0]));
+        dispatchStarter(ActionSetBrandInfoList(list));
+        dispatchStarter(ActionSetCurrentBrand(list[0]));
         updateValue(list);
       });
     });
-  }, [dispatch]);
+  }, []);
   return value;
 }
 
@@ -94,15 +104,15 @@ export function useBrandConfList(): TypeBrandConf[] {
 export function useSourceDescriptionList(): [TypeSourceDescription[], boolean] {
   const [value, updateValue] = useState<TypeSourceDescription[]>([]);
   const [loading, updateLoading] = useState(true);
-  const brandConf = useCurrentBrandConf();
-  const dispatch = useDispatch();
+  const [brandConf] = useCurrentBrandConf();
+  const dispatchStarter = useStarterDispatch();
   useLayoutEffect(() => {
     if (!brandConf) return;
     apiGetSourceDescriptionList(brandConf.type)
       .then(data => {
         console.log("配置预览列表：", data);
         updateValue(data);
-        dispatch(ActionSetSourceDescriptionList(data));
+        dispatchStarter(ActionSetSourceDescriptionList(data));
       })
       .catch(err => {
         const content = ERR_CODE[3002];
@@ -112,7 +122,7 @@ export function useSourceDescriptionList(): [TypeSourceDescription[], boolean] {
       .finally(() => {
         updateLoading(false);
       });
-  }, [brandConf, dispatch]);
+  }, [brandConf, dispatchStarter]);
   return [value, loading];
 }
 
@@ -120,8 +130,8 @@ export function useSourceDescriptionList(): [TypeSourceDescription[], boolean] {
 export function useSourceConfigList(): [TypeSourceConfig[], boolean] {
   const [value, updateValue] = useState<TypeSourceConfig[]>([]);
   const [loading, updateLoading] = useState(true);
-  const brandConf = useCurrentBrandConf();
-  const dispatch = useDispatch();
+  const [brandConf] = useCurrentBrandConf();
+  const dispatch = useGlobalDispatch();
   useLayoutEffect(() => {
     if (!brandConf) return;
     apiGetSourceConfigList(brandConf.type)
@@ -143,7 +153,7 @@ export function useSourceConfigList(): [TypeSourceConfig[], boolean] {
 
 // 当前配置模块列表
 export function useCurrentModuleList(): TypeSCModuleConf[] {
-  return useSelector(getSCModuleList);
+  return useEditorSelector(getSCModuleList);
 }
 
 // 获取当前选择的模块
@@ -151,16 +161,16 @@ export function useCurrentModule(): [
   TypeSCModuleConf | null,
   (data: TypeSCModuleConf) => void
 ] {
-  const dispatch = useDispatch();
+  const dispatch = useEditorDispatch();
   return [
-    useSelector(getCurrentModule),
-    data => dispatch(ActionSetCurrentBrand(data))
+    useEditorSelector(getCurrentModule),
+    data => dispatch(ActionSetCurrentModule(data))
   ];
 }
 
 // 当前选择的模块页面组列表
 export function useCurrentPageGroupList(): TypeSCPageGroupConf[] {
-  return useSelector(getCurrentPageGroupList);
+  return useEditorSelector(getCurrentPageGroupList);
 }
 
 // 获取当前选择的页面
@@ -168,19 +178,19 @@ export function useCurrentPage(): [
   TypeSCPageConf | null,
   (data: TypeSCPageConf) => void
 ] {
-  const dispatch = useDispatch();
+  const dispatch = useEditorDispatch();
   return [
-    useSelector(getCurrentPage),
+    useEditorSelector(getCurrentPage),
     data => dispatch(ActionSetCurrentPage(data))
   ];
 }
 
 export function useSourceList(): TypeSCPageSourceElement[] {
-  return useSelector(getCurrentSourceList);
+  return useEditorSelector(getCurrentSourceList);
 }
 
 export function useSourceTypeList(): TypeSCPageSourceTypeConf[] {
-  return useSelector(getCurrentSourceTypeList);
+  return useEditorSelector(getCurrentSourceTypeList);
 }
 
 export function useImageSourceList(): TypeSCPageImageElement[] {
@@ -198,5 +208,5 @@ export function useXmlSourceList(): TypeSCPageTextElement[] {
 }
 
 export function useXmlTemplateList(): TypeSCPageTemplateConf[] {
-  return useSelector(getCurrentXmlTemplateList);
+  return useEditorSelector(getCurrentXmlTemplateList);
 }

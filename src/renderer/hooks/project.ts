@@ -1,22 +1,19 @@
 import path from "path";
 import { useLayoutEffect, useEffect, useState, useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { apiGetProjectByUUID, apiGetProjectList } from "@/api/index";
 import { useAxiosCanceler } from "@/hooks/index";
 import { useCurrentBrandConf, useSourceConfigRoot } from "@/hooks/sourceConfig";
 import {
-  ActionSetCurrentBrand,
+  ActionSetCurrentModule,
   ActionSetCurrentPage,
-  ActionSetSourceConfig
-} from "@/store/modules/sourceConfig/action";
-import { ActionSetProjectData } from "@/store/modules/project/action";
-import {
-  getProjectData,
-  getProjectRoot
-} from "@/store/modules/project/selector";
+  ActionSetSourceConfig,
+  ActionSetProjectData
+} from "@/store/editor/action";
+import { getProjectData, getProjectRoot } from "@/store/editor/selector";
+import { useEditorDispatch, useEditorSelector } from "@/store/index";
 import { TypeProjectDataDoc, TypeProjectStateInStore } from "types/project";
 
-import ERR_CODE from "renderer/core/error-code";
+import ERR_CODE from "@/core/error-code";
 import { notification } from "antd";
 import { useDocumentTitle } from "./index";
 
@@ -26,15 +23,15 @@ type TypeRefreshFunc = () => Promise<void>;
 type TypeReturnData = [TypeProjectDataDoc[], TypeRefreshFunc, TypeIsLoading];
 export function useProjectList(): TypeReturnData {
   // 使用机型进行隔离查询
-  const selectedBrand = useCurrentBrandConf();
+  const [currentBrand] = useCurrentBrandConf();
   const [value, updateValue] = useState<TypeProjectDataDoc[]>([]);
   const [loading, updateLoading] = useState<boolean>(true);
   const registerCancelToken = useAxiosCanceler();
 
   const refresh = useCallback(async () => {
     updateLoading(true);
-    if (!selectedBrand) return;
-    return apiGetProjectList(selectedBrand, registerCancelToken)
+    if (!currentBrand) return;
+    return apiGetProjectList(currentBrand, registerCancelToken)
       .then(projects => {
         console.log("获取工程列表：", projects);
         updateValue(projects);
@@ -43,17 +40,17 @@ export function useProjectList(): TypeReturnData {
       .finally(() => {
         updateLoading(false);
       });
-  }, [selectedBrand]);
+  }, [currentBrand]);
 
   useLayoutEffect(() => {
-    if (selectedBrand) refresh();
-  }, [selectedBrand, refresh]);
+    if (currentBrand) refresh();
+  }, [currentBrand, refresh]);
   return [value, refresh, loading];
 }
 
 // 载入工程，将 projectData 载入 redux
 export function useLoadProject(project: TypeProjectDataDoc | null): void {
-  const dispatch = useDispatch();
+  const dispatch = useEditorDispatch();
   useLayoutEffect(() => {
     if (!project) return;
     console.log("载入工程：", project);
@@ -62,7 +59,7 @@ export function useLoadProject(project: TypeProjectDataDoc | null): void {
     // 默认选择第一个模块和第一个页面
     const firstModule = project?.sourceConfig?.moduleList[0];
     const firstPage = firstModule?.groupList[0].pageList[0];
-    if (firstModule) dispatch(ActionSetCurrentBrand(firstModule));
+    if (firstModule) dispatch(ActionSetCurrentModule(firstModule));
     if (firstPage) dispatch(ActionSetCurrentPage(firstPage));
   }, [dispatch, project]);
 }
@@ -115,7 +112,7 @@ export function useLoadProjectByUUID(
 // 获取当前工程数据
 export function useProjectData(): TypeProjectStateInStore | null {
   const [, updateTitle] = useDocumentTitle();
-  const projectData = useSelector(getProjectData);
+  const projectData = useEditorSelector(getProjectData);
   if (projectData?.projectInfo?.name) {
     updateTitle(projectData.projectInfo.name);
   }
@@ -124,7 +121,7 @@ export function useProjectData(): TypeProjectStateInStore | null {
 
 // 获取当前工程目录
 export function useProjectRoot(): string | null {
-  return useSelector(getProjectRoot);
+  return useEditorSelector(getProjectRoot);
 }
 
 // 处理工程路径

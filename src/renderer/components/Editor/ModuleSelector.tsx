@@ -5,7 +5,7 @@ import logSymbols from "log-symbols";
 import { useCurrentModuleList, useCurrentModule } from "@/hooks/sourceConfig";
 
 import { Tooltip } from "antd";
-import { useGetSourceImageUrl } from "hooks/image";
+import { useGetSourceImageUrl } from "@/hooks/image";
 // import SourceImage from "../Image/SourceImage";
 
 // 模块选择器

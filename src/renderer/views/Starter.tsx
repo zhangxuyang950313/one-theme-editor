@@ -1,10 +1,9 @@
 import React from "react";
 import styled from "styled-components";
+import { presetTitle, useDocumentTitle } from "@/hooks/index";
 
-// components
 import Sidebar from "@/components/Starter/Sidebar";
 import ProjectManager from "@/components/Starter/ProjectManager";
-import { presetTitle, useDocumentTitle } from "@/hooks/index";
 
 // 开始页面
 const Starter: React.FC = () => {

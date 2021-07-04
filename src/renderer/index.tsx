@@ -7,10 +7,10 @@ import "antd/dist/antd.css"; // antd 样式
 import zhCN from "antd/lib/locale/zh_CN"; // antd 中文
 
 import { ConfigProvider, Spin } from "antd";
-import Router from "./router";
-import store from "./store";
-import LightTheme from "./theme/light";
 import { useInitEditor } from "./hooks";
+import { GlobalStore } from "./store";
+import Router from "./router";
+import LightTheme from "./theme/light";
 
 function Index(): JSX.Element {
   const loading = useInitEditor();
@@ -23,7 +23,7 @@ function Index(): JSX.Element {
 
 function Root(): JSX.Element {
   return (
-    <Provider store={store}>
+    <Provider store={GlobalStore.store}>
       <StyleGlobal />
       <ThemeProvider theme={LightTheme}>
         <ConfigProvider locale={zhCN}>

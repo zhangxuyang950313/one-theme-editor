@@ -10,7 +10,7 @@ import ProjectCard from "./ProjectCard";
 import CreateProject from "./CreateProject";
 
 const ProjectManager: React.FC = () => {
-  const brandInfo = useCurrentBrandConf();
+  const [brandInfo] = useCurrentBrandConf();
   const [projects, refreshList, isLoading] = useProjectList();
   const history = useHistory();
 

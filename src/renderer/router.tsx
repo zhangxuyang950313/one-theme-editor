@@ -4,7 +4,7 @@ import { BrowserRouter, HashRouter, Route, Switch } from "react-router-dom";
 // import { TransitionGroup, CSSTransition } from "react-transition-group";
 import Starter from "./views/Starter";
 import Editor from "./views/Editor";
-import Test from "./views/test";
+import Test from "./views/Test";
 
 const Router: React.FC = () => {
   // const location = useLocation();

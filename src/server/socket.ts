@@ -1,8 +1,7 @@
 import http from "http";
 import { Server, Socket } from "socket.io";
 import SOCKET_EVENT from "common/socket-event";
-import { findProjectByUUID } from "./db-handler/project";
-import { syncImageMapperList, watchFiles } from "./core/socketSync";
+import { watchFiles } from "./core/socketSync";
 
 // 快速将 socket event 建立通讯通道
 class SocketConnecter {
