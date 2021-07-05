@@ -1,36 +1,42 @@
 import path from "path";
+import { useParams } from "react-router";
 import { useLayoutEffect, useEffect, useState, useCallback } from "react";
 import { apiGetProjectByUUID, apiGetProjectList } from "@/api/index";
 import { useAxiosCanceler } from "@/hooks/index";
 import {
   useBrandConf,
-  useLoadSourceConfig,
+  useFetchPageConfData,
+  useFetchSourceConfig,
   useSourceConfigRoot
 } from "@/hooks/source";
 import { ActionSetProjectData } from "@/store/editor/action";
-import { getProjectData, getProjectPathname } from "@/store/editor/selector";
+import {
+  getProjectData,
+  getProjectInfo,
+  getProjectPathname
+} from "@/store/editor/selector";
 import { useEditorDispatch, useEditorSelector } from "@/store/index";
-import { TypeProjectDataDoc, TypeProjectStateInStore } from "types/project";
+import { TypeProjectDataDoc, TypeProjectInfo } from "types/project";
 
 import ERR_CODE from "@/core/error-code";
 import { notification } from "antd";
-import { useDocumentTitle } from "./index";
 
 // 获取项目列表
-type TypeIsLoading = boolean;
-type TypeRefreshFunc = () => Promise<void>;
-type TypeReturnData = [TypeProjectDataDoc[], TypeRefreshFunc, TypeIsLoading];
-export function useProjectList(): TypeReturnData {
+export function useProjectList(): [
+  TypeProjectDataDoc[],
+  boolean,
+  () => Promise<void>
+] {
   // 使用机型进行隔离查询
-  const [currentBrand] = useBrandConf();
+  const [brandConf] = useBrandConf();
   const [value, updateValue] = useState<TypeProjectDataDoc[]>([]);
   const [loading, updateLoading] = useState<boolean>(true);
   const registerCancelToken = useAxiosCanceler();
 
   const refresh = useCallback(async () => {
     updateLoading(true);
-    if (!currentBrand) return;
-    return apiGetProjectList(currentBrand, registerCancelToken)
+    if (!brandConf) return;
+    return apiGetProjectList(brandConf, registerCancelToken)
       .then(projects => {
         console.log("获取工程列表：", projects);
         updateValue(projects);
@@ -39,12 +45,12 @@ export function useProjectList(): TypeReturnData {
       .finally(() => {
         updateLoading(false);
       });
-  }, [currentBrand]);
+  }, [brandConf]);
 
   useLayoutEffect(() => {
-    if (currentBrand) refresh();
-  }, [currentBrand, refresh]);
-  return [value, refresh, loading];
+    if (brandConf) refresh();
+  }, [brandConf, refresh]);
+  return [value, loading, refresh];
 }
 
 /**
@@ -52,59 +58,55 @@ export function useProjectList(): TypeReturnData {
  * @param uuid
  * @returns
  */
-export function useLoadProjectByUUID(
-  uuid: string
-): [TypeProjectDataDoc | null, boolean] {
-  const [project, updateProject] = useState<TypeProjectDataDoc | null>(null);
-  const [loading, updateLoading] = useState(true);
+export function useFetchProjectData(): [
+  TypeProjectDataDoc | null,
+  boolean,
+  () => Promise<void>
+] {
+  // 从路由参数中获得工程 uuid
+  const { uuid } = useParams<{ uuid: string }>();
   const dispatch = useEditorDispatch();
-  // const registerCancelToken = useAxiosCanceler();
-
-  useLayoutEffect(() => {
-    // let cancel;
-    console.log(`准备获取工程: ${uuid}`);
-
-    // // 注册 socket
-    // socketProject(uuid, project => {
-    //   console.log(`更新工程数据 ${uuid}`, project);
-    //   updateProject(project);
-    //   if (loading) updateLoading(false);
-    // });
-    // socketResource(uuid, project => {
-    //   updateProject(project);
-    // });
-    apiGetProjectByUUID(uuid)
-      .then(project => {
-        if (!project) return;
-        console.log(`载入工程：: ${uuid}`, project);
-        updateProject(project);
-        dispatch(ActionSetProjectData(project));
-      })
-      .catch(err => {
-        console.warn(`${ERR_CODE[2005]}: ${uuid}`, err);
-        notification.error({ message: ERR_CODE[2005], description: uuid });
-        updateProject(null);
-      })
-      .finally(() => {
-        updateLoading(false);
-      });
-    // return cancel;
+  const projectData = useProjectData();
+  const [loading, updateLoading] = useState(true);
+  const handleFetch = async () => {
+    updateLoading(true);
+    const project = await apiGetProjectByUUID(uuid);
+    if (!project) throw new Error(ERR_CODE[2005]);
+    console.log(`载入工程：: ${uuid}`);
+    dispatch(ActionSetProjectData(project));
+    updateLoading(false);
+  };
+  useEffect(() => {
+    handleFetch().catch(err => {
+      notification.error({ message: err.message });
+    });
   }, [uuid]);
-  useLoadSourceConfig();
-  return [project, loading];
+  return [projectData, loading, handleFetch];
 }
 
-// 获取当前工程数据
-export function useProjectData(): TypeProjectStateInStore | null {
-  const [, updateTitle] = useDocumentTitle();
-  const projectData = useEditorSelector(getProjectData);
-  if (projectData?.projectInfo?.name) {
-    updateTitle(projectData.projectInfo.name);
-  }
-  return projectData;
+/**
+ * 加载工程总线，需要增加流程在这里添加即可
+ * 注意如果非懒加载要在 hooks 返回 loading 状态
+ * @returns
+ */
+export function useLoadProject(): boolean {
+  const step1Loading = useFetchProjectData()[1];
+  const step2Loading = useFetchSourceConfig()[1];
+  const step3Loading = useFetchPageConfData()[1];
+  return step1Loading && step2Loading && step3Loading;
 }
 
-// 获取当前工程目录
+// 获取工程数据
+export function useProjectData(): TypeProjectDataDoc | null {
+  return useEditorSelector(getProjectData);
+}
+
+// 获取 工程描述信息
+export function useProjectInfo(): TypeProjectInfo | null {
+  return useEditorSelector(getProjectInfo);
+}
+
+// 获取工程目录
 export function useProjectPathname(): string | null {
   return useEditorSelector(getProjectPathname);
 }

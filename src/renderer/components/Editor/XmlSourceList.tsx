@@ -3,14 +3,14 @@ import styled from "styled-components";
 import { Tabs } from "antd";
 import { ELEMENT_TYPES } from "src/enum";
 import {
-  useXmlSourceList,
+  useTextSourceList,
   useSourceTypeList,
   useXmlTemplateList
 } from "@/hooks/source";
 import XmlController from "@/components/XmlController/index";
 
 const XmlSourceList: React.FC = () => {
-  const xmlSourceList = useXmlSourceList();
+  const xmlSourceList = useTextSourceList();
   const sourceTypeList = useSourceTypeList();
   const templateList = useXmlTemplateList();
   return (

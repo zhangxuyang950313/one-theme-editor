@@ -11,7 +11,7 @@ import CreateProject from "./CreateProject";
 
 const ProjectManager: React.FC = () => {
   const [brandInfo] = useBrandConf();
-  const [projects, refreshList, isLoading] = useProjectList();
+  const [projects, isLoading, refreshList] = useProjectList();
   const history = useHistory();
 
   // 列表加载中、空、正常状态

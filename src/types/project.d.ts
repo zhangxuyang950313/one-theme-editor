@@ -39,7 +39,7 @@ export type TypeCreateProjectPayload = {
 
 // 图片数据
 export type TypeImageData = {
-  md5: string;
+  // md5: string;
   width: number;
   height: number;
   size: number;
@@ -75,6 +75,3 @@ export type TypeImageDataDoc = TypeDatabase<TypeImageData>;
 
 // 在数据库中的工程信息
 export type TypeProjectDataDoc = TypeDatabase<TypeProjectData>;
-
-// 在 redux 缓存中的工程信息， 可能为空值
-export type TypeProjectStateInStore = Partial<TypeProjectDataDoc>;

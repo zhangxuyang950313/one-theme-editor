@@ -1,6 +1,6 @@
 import path from "path";
 import fse from "fs-extra";
-import chokidar from "chokidar";
+import { WatchOptions, FSWatcher } from "chokidar";
 import logSymbols from "log-symbols";
 import { useLayoutEffect, useEffect, useState } from "react";
 import { useProjectPathname } from "@/hooks/project";
@@ -11,10 +11,8 @@ export enum FILE_STATUS {
   UNLINK = "unlink"
 }
 // 返回一个 chokidar 监听实例，自动在组件卸载时释放监听
-export function useFSWatcherInstance(
-  options?: chokidar.WatchOptions
-): chokidar.FSWatcher {
-  const [watcher] = useState(new chokidar.FSWatcher(options));
+export function useFSWatcherInstance(options?: WatchOptions): FSWatcher {
+  const [watcher] = useState(new FSWatcher(options));
   useEffect(() => {
     watcher.setMaxListeners(9999);
     return () => {
@@ -32,12 +30,12 @@ export function useFSWatcherInstance(
  */
 export function useFSWatcherMultiInstance(
   count: number,
-  options?: chokidar.WatchOptions
-): chokidar.FSWatcher[] {
+  options?: WatchOptions
+): FSWatcher[] {
   const mapWatchers = () => {
-    return new Array(count).fill(0).map(() => new chokidar.FSWatcher(options));
+    return new Array(count).fill(0).map(() => new FSWatcher(options));
   };
-  const [watchers, setWatchers] = useState<chokidar.FSWatcher[]>(mapWatchers());
+  const [watchers, setWatchers] = useState<FSWatcher[]>(mapWatchers());
   useEffect(() => {
     console.log("创建watcher");
     setWatchers(mapWatchers());

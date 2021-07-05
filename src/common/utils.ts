@@ -157,10 +157,10 @@ export function getImageData(file: string): TypeImageData {
   if (!file) throw new Error(ERR_CODE[4000]);
   if (!fse.existsSync(file)) throw new Error(`${ERR_CODE[4003]}: ${file}`);
   // TODO: 可以去图片数据库先查一下是否有，没有的话再进行接下来的步骤
-  const buff = fse.readFileSync(file);
+  // const buff = fse.readFileSync(file);
   const { width, height } = getImageSizeOf(file);
   const imageData: TypeImageData = {
-    md5: md5(buff),
+    // md5: md5(buff),
     width,
     height,
     size: getFileSizeOf(file),
@@ -173,14 +173,11 @@ export function getImageData(file: string): TypeImageData {
 }
 
 // 获取图片映射信息
-export async function getImageMapper(
-  file: string,
-  root: string
-): Promise<TypeImageMapper> {
-  const imageData = await getImageData(file);
+export function getImageMapper(file: string, root: string): TypeImageMapper {
+  const imageData = getImageData(file);
   // TODO: 大集合解构小集合不报错？ 先这么写
   return {
-    md5: imageData.md5,
+    // md5: imageData.md5,
     width: imageData.width,
     height: imageData.height,
     size: imageData.size,

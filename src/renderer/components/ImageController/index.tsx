@@ -69,7 +69,7 @@ const ImageController: React.FC<TypeSourceImageElement> = sourceConf => {
         <div className="edit-wrapper">
           <div className="left">
             {/* 素材展示 memo 组件 */}
-            {MemoLeftSource()}
+            <MemoLeftSource />
           </div>
           {/* 一键拷贝默认素材 */}
           <RightCircleOutlined

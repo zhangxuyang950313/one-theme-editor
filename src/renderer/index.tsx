@@ -15,7 +15,7 @@ import LightTheme from "./theme/light";
 function Index(): JSX.Element {
   const loading = useInitEditor();
   return loading ? (
-    <Spin className="auto-margin" tip="初始化..." spinning={loading} />
+    <Spin className="auto-margin" tip="初始化" spinning={loading} />
   ) : (
     <Router />
   );

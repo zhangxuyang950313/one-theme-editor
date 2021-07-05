@@ -26,6 +26,7 @@ export default function project(service: Express): void {
         const project = await createProject(req.body);
         res.send(result.success(project));
       } catch (err) {
+        console.log(err);
         res.status(400).send(result.fail(err.message));
       }
     }

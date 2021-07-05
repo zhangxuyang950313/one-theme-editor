@@ -1,11 +1,9 @@
 import React from "react";
-import { useHistory, useParams } from "react-router";
-
 import styled from "styled-components";
-import { useLoadProjectByUUID } from "@/hooks/project";
-import { StyleBorderRight } from "@/style";
-
+import { useHistory } from "react-router";
 import { Button, Empty, Spin } from "antd";
+import { StyleBorderRight } from "@/style";
+import { useLoadProject, useProjectData } from "@/hooks/project";
 import ModuleSelector from "@/components/Editor/ModuleSelector";
 import EditorToolsBar from "@/components/Editor/ToolsBar";
 import PageSelector from "@/components/Editor/PageSelector";
@@ -74,9 +72,8 @@ const StyleXmlSourceList = styled.div`
 
 const Editor: React.FC = () => {
   const history = useHistory();
-  // 从路由参数中获得工程 uuid
-  const { uuid } = useParams<{ uuid: string }>();
-  const [projectData, isLoading] = useLoadProjectByUUID(uuid);
+  const isLoading = useLoadProject();
+  const projectData = useProjectData();
 
   // 还未安装
   if (isLoading) {

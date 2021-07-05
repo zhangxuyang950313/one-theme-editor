@@ -22,9 +22,7 @@ export function useLoadImage(src = ""): [string, (x: string) => void] {
 
   const doReload = (preloadUrl: string) => {
     // 空值直接返回
-    if (!preloadUrl) {
-      return;
-    }
+    if (!preloadUrl) return;
     img.onload = () => setFinalURL(preloadUrl);
     img.onerror = () => setFinalURL("");
     img.src = preloadUrl;
@@ -32,7 +30,6 @@ export function useLoadImage(src = ""): [string, (x: string) => void] {
 
   useEffect(() => {
     if (src) doReload(src);
-
     // 卸载数据响应
     return () => {
       img.onload = () => Function.prototype;

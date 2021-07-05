@@ -3,7 +3,6 @@ import { TypeBrandConf } from "types/project";
 import {
   TypeSourceConfig,
   TypeSourceConfigBrief,
-  TypeSourcePageConf,
   TypeSourcePageData
 } from "types/source-config";
 import { TypeResponseFrame } from "types/request";
@@ -39,7 +38,7 @@ export async function apiGetSourceConfig(
 }
 
 // 获取页面配置数据
-export async function apiGetSourcePageData(
+export async function apiGetSourcePageConfData(
   pageFile: string
 ): Promise<TypeSourcePageData> {
   return createHttp()

@@ -1,6 +1,5 @@
 import {
   TypeSourceTypeConf,
-  TypeSourceElement,
   TypeSourceConfig,
   TypeSourceModuleConf,
   TypeSourcePageConf,
@@ -50,6 +49,7 @@ export default function EditorReducer(
   switch (action.type) {
     // 工程数据
     case ACTION_TYPES.SET_PROJECT_DATA: {
+      document.title = action.payload.projectInfo.name || document.title;
       return updateState(state, {
         uuid: action.payload.uuid,
         projectPathname: action.payload.projectPathname,

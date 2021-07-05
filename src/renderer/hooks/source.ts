@@ -1,10 +1,10 @@
-import { useEffect, useLayoutEffect, useState } from "react";
-import { message } from "antd";
+import { useEffect, useLayoutEffect, useState, useCallback } from "react";
+import { message, notification } from "antd";
 import {
   apiGetBrandConfList,
   apiGetSourceDescriptionList,
   apiGetSourceConfig,
-  apiGetSourcePageData
+  apiGetSourcePageConfData
 } from "@/api/index";
 import { getSourceConfigRoot } from "@/store/global/modules/base/selector";
 import {
@@ -20,15 +20,17 @@ import {
   ActionUpdatePageDataMap
 } from "@/store/editor/action";
 import {
-  getSourceModule,
-  getSourcePageConf,
-  getModuleList,
-  getPageGroupList,
-  getSourceConfig,
-  getSourceTypeList,
-  getXmlTemplateList,
   getSourceConfigUrl,
-  getSourcePageDataMap
+  getSourceConfig,
+  getModuleList,
+  getModuleConf,
+  getPageGroupList,
+  getPageConf,
+  getSourceTypeList,
+  getSourceElementList,
+  getSourceImageList,
+  getSourceTextList,
+  getXmlTemplateList
 } from "@/store/editor/selector";
 import {
   TypeSourceConfig,
@@ -44,7 +46,6 @@ import {
   TypeSourcePageData
 } from "types/source-config";
 import { TypeBrandConf } from "types/project";
-import { ELEMENT_TYPES } from "src/enum";
 import {
   useStarterDispatch,
   useEditorDispatch,
@@ -118,14 +119,14 @@ export function useSourceDescriptionList(): [TypeSourceConfigBrief[], boolean] {
   const [value, updateValue] = useState<TypeSourceConfigBrief[]>([]);
   const [loading, updateLoading] = useState(true);
   const [brandConf] = useBrandConf();
-  const dispatchStarter = useStarterDispatch();
+  const dispatch = useStarterDispatch();
   useLayoutEffect(() => {
     if (!brandConf) return;
     apiGetSourceDescriptionList(brandConf.type)
       .then(data => {
         console.log("配置预览列表：", data);
         updateValue(data);
-        dispatchStarter(ActionSetSourceDescriptionList(data));
+        dispatch(ActionSetSourceDescriptionList(data));
       })
       .catch(err => {
         const content = ERR_CODE[3002];
@@ -135,7 +136,7 @@ export function useSourceDescriptionList(): [TypeSourceConfigBrief[], boolean] {
       .finally(() => {
         updateLoading(false);
       });
-  }, [brandConf, dispatchStarter]);
+  }, [brandConf, dispatch]);
   return [value, loading];
 }
 
@@ -143,18 +144,33 @@ export function useSourceDescriptionList(): [TypeSourceConfigBrief[], boolean] {
  * 获取资源配置
  * @returns
  */
-export function useLoadSourceConfig(): TypeSourceConfig | null {
-  const [value, updateValue] = useState<TypeSourceConfig | null>(null);
-  const sourceConfigUrl = useSourceConfigUrl();
+export function useFetchSourceConfig(): [
+  TypeSourceConfig | null,
+  boolean,
+  () => Promise<void>
+] {
+  const [loading, updateLoading] = useState(true);
   const dispatch = useEditorDispatch();
+  const sourceConfigUrl = useSourceConfigUrl();
+  const sourceConfig = useSourceConfig();
+  const doFetchData = useCallback(async () => {
+    if (!sourceConfigUrl) {
+      console.log("sourceConfigUrl 为空");
+      return;
+    }
+    updateLoading(true);
+    const data = await apiGetSourceConfig(sourceConfigUrl);
+    if (!data) throw new Error(ERR_CODE[3002]);
+    console.log(`加载资源配置: ${sourceConfigUrl}`, data);
+    dispatch(ActionSetSourceConfig(data));
+    updateLoading(false);
+  }, [sourceConfigUrl]);
   useEffect(() => {
-    if (!sourceConfigUrl) return;
-    apiGetSourceConfig(sourceConfigUrl).then(data => {
-      updateValue(data);
-      dispatch(ActionSetSourceConfig(data));
+    doFetchData().catch(err => {
+      notification.error({ message: err.message });
     });
   }, [sourceConfigUrl]);
-  return value;
+  return [sourceConfig, loading, doFetchData];
 }
 
 /**
@@ -183,7 +199,7 @@ export function useModuleConf(): [
 ] {
   const dispatch = useEditorDispatch();
   return [
-    useEditorSelector(getSourceModule),
+    useEditorSelector(getModuleConf),
     data => dispatch(ActionSetCurrentModule(data))
   ];
 }
@@ -205,7 +221,7 @@ export function usePageConf(): [
 ] {
   const dispatch = useEditorDispatch();
   return [
-    useEditorSelector(getSourcePageConf),
+    useEditorSelector(getPageConf),
     data => dispatch(ActionSetCurrentPage(data))
   ];
 }
@@ -214,38 +230,30 @@ export function usePageConf(): [
  * 获取页面数据
  * @returns
  */
-export function usePageConfData(): TypeSourcePageData | null {
+export function useFetchPageConfData(): [
+  TypeSourcePageData | null,
+  boolean,
+  () => Promise<void>
+] {
+  const [loading, updateLoading] = useState(true);
   const [value, updateValue] = useState<TypeSourcePageData | null>(null);
-  const sourcePageDataMap = useEditorSelector(getSourcePageDataMap);
   const dispatch = useEditorDispatch();
   const pageConf = usePageConf()[0];
-  useEffect(() => {
+  const fetchData = async () => {
     if (!pageConf?.src) return;
-    const pageData = sourcePageDataMap[pageConf.src];
-    if (pageData) {
-      updateValue(pageData);
-      return;
-    }
-    apiGetSourcePageData(pageConf.src).then(data => {
-      updateValue(data);
-      dispatch(ActionUpdatePageDataMap(data));
+    updateLoading(true);
+    const data = await apiGetSourcePageConfData(pageConf.src);
+    updateValue(data);
+    dispatch(ActionUpdatePageDataMap(data));
+    updateLoading(false);
+  };
+  useEffect(() => {
+    fetchData().catch(err => {
+      updateValue(null);
+      notification.error({ message: err.message });
     });
   }, [pageConf?.src]);
-  return value;
-}
-
-/**
- * 获取当前所有元素列表
- * @returns
- */
-export function useSourceElementList(): TypeSourceElement[] {
-  const [value, updateValue] = useState<TypeSourceElement[]>([]);
-  const pageConfig = usePageConfData();
-  useEffect(() => {
-    if (!pageConfig?.elementList) return;
-    updateValue(pageConfig.elementList);
-  }, [pageConfig?.elementList]);
-  return value;
+  return [value, loading, fetchData];
 }
 
 /**
@@ -257,25 +265,27 @@ export function useSourceTypeList(): TypeSourceTypeConf[] {
 }
 
 /**
+ * 获取当前所有元素列表
+ * @returns
+ */
+export function useSourceElementList(): TypeSourceElement[] {
+  return useEditorSelector(getSourceElementList);
+}
+
+/**
  * 获取图片类型元素列表
  * @returns
  */
 export function useImageSourceList(): TypeSourceImageElement[] {
-  const sourceList = useSourceElementList();
-  return sourceList.flatMap(item =>
-    item.type === ELEMENT_TYPES.IMAGE ? [item] : []
-  );
+  return useEditorSelector(getSourceImageList);
 }
 
 /**
  * 获取 xml 类型元素列表
  * @returns
  */
-export function useXmlSourceList(): TypeSourceTextElement[] {
-  const sourceList = useSourceElementList();
-  return sourceList.flatMap(item =>
-    item.type === ELEMENT_TYPES.TEXT ? [item] : []
-  );
+export function useTextSourceList(): TypeSourceTextElement[] {
+  return useEditorSelector(getSourceTextList);
 }
 
 /**

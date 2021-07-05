@@ -1,24 +1,28 @@
 import path from "path";
 import { createSelector } from "reselect";
 import { GlobalStore } from "@/store/index";
+import { ELEMENT_TYPES } from "src/enum";
 import { TypeEditorState } from "./reducer";
 
 // 数据
 const getState = (state: TypeEditorState) => state;
 
-export const getProjectState = createSelector(
+// 获取工程数据
+export const getProjectData = createSelector(
   getState,
   state => state.projectData || null
 );
 
 // 获取厂商信息
 export const getProjectBrandInfo = createSelector(
-  getProjectState,
+  getProjectData,
   state => state?.brandInfo || null
 );
 
-// 获取工程数据
-export const getProjectData = createSelector(getProjectState, state => state);
+export const getProjectInfo = createSelector(
+  getProjectData,
+  state => state?.projectInfo || null
+);
 
 // 获取工程 uuid
 export const getProjectUUID = createSelector(
@@ -28,7 +32,7 @@ export const getProjectUUID = createSelector(
 
 // 获取工程本地路径
 export const getProjectPathname = createSelector(
-  getProjectState,
+  getProjectData,
   state => state?.projectPathname || null
 );
 
@@ -65,7 +69,7 @@ export const getModuleList = createSelector(
 );
 
 // 获取当前模块
-export const getSourceModule = createSelector(
+export const getModuleConf = createSelector(
   getState,
   state => state.sourceModuleConf
 );
@@ -77,7 +81,7 @@ export const getPageGroupList = createSelector(
 );
 
 // 获取当前页面
-export const getSourcePageConf = createSelector(
+export const getPageConf = createSelector(
   getState,
   state => state.sourcePageConf
 );
@@ -85,6 +89,31 @@ export const getSourcePageConf = createSelector(
 export const getSourceTypeList = createSelector(
   getState,
   state => state.sourceTypeList
+);
+
+// 获取所有元素列表
+export const getSourceElementList = createSelector(getState, state => {
+  const pageConfSrc = state.sourcePageConf?.src;
+  if (!pageConfSrc) return [];
+  return state.sourcePageDataMap[pageConfSrc]?.elementList || [];
+});
+
+// 获取图片元素列表
+export const getSourceImageList = createSelector(
+  getSourceElementList,
+  elementList =>
+    elementList.flatMap(item =>
+      item.type === ELEMENT_TYPES.IMAGE ? [item] : []
+    )
+);
+
+// 获取文字元素列表
+export const getSourceTextList = createSelector(
+  getSourceElementList,
+  elementList =>
+    elementList.flatMap(item =>
+      item.type === ELEMENT_TYPES.TEXT ? [item] : []
+    )
 );
 
 export const getXmlTemplateList = createSelector(getState, state => []);

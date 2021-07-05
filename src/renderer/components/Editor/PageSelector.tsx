@@ -10,7 +10,8 @@ import PreloadImage from "@/components/Image/PreloadImage";
 const PageSelector: React.FC = () => {
   const sourceImageURL = useGetSourceImageUrl();
   const pageGroupList = usePageGroupList();
-  const [, setCurrentPage] = usePageConf();
+  const [, setPageConf] = usePageConf();
+
   if (pageGroupList.length === 0) {
     console.log("页面分组为空");
     return null;
@@ -25,7 +26,7 @@ const PageSelector: React.FC = () => {
                 className="preview-image"
                 key={index}
                 src={sourceImageURL(page.preview)}
-                onClick={() => setCurrentPage(page)}
+                onClick={() => setPageConf(page)}
               />
             ))}
           </StylePagePreview>
