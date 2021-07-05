@@ -1,14 +1,14 @@
 import {
-  TypeSCPageXmlKeyValMapperConf,
-  TypeSCPageXmlKeyValMapperMap,
-  TypeSCPageKeyValConf
+  TypeSourceXmlKeyValMapperConf,
+  TypeSourceXmlKeyValMapperMap,
+  TypeSourcePageKeyValConf
 } from "types/source-config";
 import BaseCompiler from "./BaseCompiler";
 
 export default class TempKeyValMapper extends BaseCompiler {
-  private keyValMapData?: TypeSCPageXmlKeyValMapperMap;
+  private keyValMapData?: TypeSourceXmlKeyValMapperMap;
 
-  getDataList(): TypeSCPageXmlKeyValMapperConf[] {
+  getDataList(): TypeSourceXmlKeyValMapperConf[] {
     return super.getRootChildren().map(item => ({
       key: item.getAttributeOf("name"),
       value: item.getFirstTextChildValue(),
@@ -16,11 +16,11 @@ export default class TempKeyValMapper extends BaseCompiler {
     }));
   }
 
-  getDataObj(): TypeSCPageKeyValConf {
+  getDataObj(): TypeSourcePageKeyValConf {
     return super.getRootChildren().reduce((total, item) => {
       const key = item.getAttributeOf("name");
       if (!key) return total;
-      const data: TypeSCPageKeyValConf = {
+      const data: TypeSourcePageKeyValConf = {
         [key]: {
           value: item.getFirstTextChildValue(),
           description: item.getAttributeOf("description")
@@ -30,10 +30,10 @@ export default class TempKeyValMapper extends BaseCompiler {
     }, {});
   }
 
-  getDataMap(): TypeSCPageXmlKeyValMapperMap {
+  getDataMap(): TypeSourceXmlKeyValMapperMap {
     if (this.keyValMapData) return this.keyValMapData;
     const rootNodes = super.getRootChildren();
-    const map: TypeSCPageXmlKeyValMapperMap = new Map();
+    const map: TypeSourceXmlKeyValMapperMap = new Map();
     rootNodes.forEach(item => {
       map.set(item.getAttributeOf("name"), item);
     });

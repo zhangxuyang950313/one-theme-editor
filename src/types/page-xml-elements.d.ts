@@ -83,30 +83,3 @@ export type TypeXMLPageConf = TypeExtendsElementCompact<
     >[];
   }
 >;
-//  Partial<{
-//   config?: [
-//     TypeAttrsContent<
-//       Partial<{
-//         version: string;
-//         description: string;
-//         screenWidth: string;
-//       }>
-//     >
-//   ];
-//   preview?: TypeAttrsContent<Partial<{ src: string }>>[];
-//   category?: TypeAttrsContent<
-//     Partial<{
-//       tag: string;
-//       description: string;
-//       type: "image" | "xml";
-//     }>
-//   >[];
-//   source?: Array<
-//     TypeAttrsContent<Partial<{ description: string }>> &
-//       Partial<{
-//         layout: [TypeAttrsContent<TypeTempLayout>];
-//         from: [TypeAttrsContent<TypeTempFrom>];
-//         to: TypeAttrsContent<TypeTempTo>[];
-//       }>
-//   >;
-// }>;

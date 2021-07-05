@@ -1,11 +1,11 @@
 import {
-  TypeSCPageSourceTypeConf,
-  TypeSCPageSourceElement,
+  TypeSourceTypeConf,
+  TypeSourceElement,
   TypeSourceConfig,
-  TypeSCModuleConf,
-  TypeSCPageGroupConf,
-  TypeSCPageConf,
-  TypeSCPageData
+  TypeSourceModuleConf,
+  TypeSourcePageGroupConf,
+  TypeSourcePageConf,
+  TypeSourcePageData
 } from "types/source-config";
 import { TypeProjectDataDoc, TypeProjectInfo } from "types/project";
 import ACTION_TYPES from "@/store/actions";
@@ -20,13 +20,13 @@ export type TypeEditorState = {
   projectRoot: string | null;
   sourceConfigFile: string | null;
   sourceConfig: TypeSourceConfig | null;
-  sourceTypeList: TypeSCPageSourceTypeConf[];
-  sourceModuleList: TypeSCModuleConf[];
-  sourceElementList: TypeSCPageSourceElement[];
-  currentModule: TypeSCModuleConf | null;
-  currentPageGroupList: TypeSCPageGroupConf[];
-  currentPage: TypeSCPageConf | null;
-  currentPageData: TypeSCPageData | null;
+  sourceTypeList: TypeSourceTypeConf[];
+  sourceModuleList: TypeSourceModuleConf[];
+  sourceElementList: TypeSourceElement[];
+  currentModule: TypeSourceModuleConf | null;
+  currentPageGroupList: TypeSourcePageGroupConf[];
+  currentPage: TypeSourcePageConf | null;
+  currentPageData: TypeSourcePageData | null;
 };
 
 const editorState: TypeEditorState = {

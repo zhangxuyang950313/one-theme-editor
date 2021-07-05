@@ -32,14 +32,14 @@ import {
 import {
   TypeSourceConfig,
   TypeSourceConfigBrief,
-  TypeSCPageGroupConf,
-  TypeSCModuleConf,
-  TypeSCPageConf,
-  TypeSCPageSourceTypeConf,
-  TypeSCPageSourceElement,
-  TypeSCPageImageElement,
-  TypeSCPageTextElement,
-  TypeSCPageTemplateConf
+  TypeSourcePageGroupConf,
+  TypeSourceModuleConf,
+  TypeSourcePageConf,
+  TypeSourceTypeConf,
+  TypeSourceElement,
+  TypeSourceImageElement,
+  TypeSourceTextElement,
+  TypeSourceXmlTempConf
 } from "types/source-config";
 import { TypeBrandConf } from "types/project";
 import ERR_CODE from "@/core/error-code";
@@ -156,14 +156,14 @@ export function useSourceConfigList(): [TypeSourceConfig[], boolean] {
 }
 
 // 当前配置模块列表
-export function useModuleList(): TypeSCModuleConf[] {
+export function useModuleList(): TypeSourceModuleConf[] {
   return useEditorSelector(getModuleList);
 }
 
 // 获取当前选择的模块
 export function useCurrentModule(): [
-  TypeSCModuleConf | null,
-  (data: TypeSCModuleConf) => void
+  TypeSourceModuleConf | null,
+  (data: TypeSourceModuleConf) => void
 ] {
   const dispatch = useEditorDispatch();
   return [
@@ -173,14 +173,14 @@ export function useCurrentModule(): [
 }
 
 // 当前选择的模块页面组列表
-export function useCurrentPageGroupList(): TypeSCPageGroupConf[] {
+export function useCurrentPageGroupList(): TypeSourcePageGroupConf[] {
   return useEditorSelector(getPageGroupList);
 }
 
 // 获取当前选择的页面
 export function useCurrentPage(): [
-  TypeSCPageConf | null,
-  (data: TypeSCPageConf) => void
+  TypeSourcePageConf | null,
+  (data: TypeSourcePageConf) => void
 ] {
   const dispatch = useEditorDispatch();
   return [
@@ -189,29 +189,29 @@ export function useCurrentPage(): [
   ];
 }
 
-export function useSourceElementList(): TypeSCPageSourceElement[] {
+export function useSourceElementList(): TypeSourceElement[] {
   return useEditorSelector(getSourceElementList);
 }
 
-export function useSourceTypeList(): TypeSCPageSourceTypeConf[] {
+export function useSourceTypeList(): TypeSourceTypeConf[] {
   return useEditorSelector(getSourceTypeList);
 }
 
-export function useImageSourceList(): TypeSCPageImageElement[] {
+export function useImageSourceList(): TypeSourceImageElement[] {
   const sourceList = useSourceElementList();
   return sourceList.flatMap(item =>
     item.type === ELEMENT_TYPES.IMAGE ? [item] : []
   );
 }
 
-export function useXmlSourceList(): TypeSCPageTextElement[] {
+export function useXmlSourceList(): TypeSourceTextElement[] {
   const sourceList = useSourceElementList();
   return sourceList.flatMap(item =>
     item.type === ELEMENT_TYPES.TEXT ? [item] : []
   );
 }
 
-export function useXmlTemplateList(): TypeSCPageTemplateConf[] {
+export function useXmlTemplateList(): TypeSourceXmlTempConf[] {
   return useEditorSelector(getXmlTemplateList);
 }
 
@@ -231,5 +231,11 @@ export function useLoadSourceConfig(): TypeSourceConfig | null {
       dispatch(ActionSetSourceConfig(data));
     });
   }, [sourceConfigFile]);
+  return value;
+}
+
+// 加载页面配置
+export function useLoadPageConfig(): TypeSourcePageConf | null {
+  const [value, updateValue] = useState<TypeSourcePageConf | null>(null);
   return value;
 }

@@ -2,8 +2,7 @@
 
 import React, { useLayoutEffect } from "react";
 import { Button } from "antd";
-import { xml2jsonElement } from "server/core/xml";
-import Page from "server/compiler/Page";
+import PageConfig from "server/compiler/PageConfig";
 import XmlTemplate from "server/compiler/XmlTemplate";
 import TempKeyValMapper from "server/compiler/TempKeyValMapper";
 import SourceConfig from "server/compiler/SourceConfig";
@@ -24,7 +23,7 @@ const sourceConfigDir =
 const Test: React.FC = () => {
   useLayoutEffect(() => {
     // xml2jsonElement(pageFile).then(data => console.log(JSON.stringify(data)));
-    const page = new Page(pageFile);
+    const page = new PageConfig(pageFile);
     console.log(page.getData());
 
     const xmlTemplate = new XmlTemplate(xmlTempFile);

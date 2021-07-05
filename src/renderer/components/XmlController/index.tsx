@@ -1,7 +1,7 @@
 import React from "react";
-import { TypeSCPageTextElement } from "types/source-config";
+import { TypeSourceTextElement } from "types/source-config";
 
-const XmlController: React.FC<TypeSCPageTextElement> = sourceConf => {
+const XmlController: React.FC<TypeSourceTextElement> = sourceConf => {
   return null;
 };
 

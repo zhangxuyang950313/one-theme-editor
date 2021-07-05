@@ -1,5 +1,5 @@
 import { projectInfoConfig } from "renderer/config/editor";
-import { TypeSourceConfig } from "./source-config";
+// import { TypeSourceConfig } from "./source-config";
 import { TypeDatabase } from "./index";
 
 export type TypeBrandInfo = {
@@ -22,12 +22,12 @@ export type TypeProjectInfo = {
   [k in keyof typeof projectInfoConfig]: string | null;
 };
 
-// 预览页面配置储存数据
-export type TypePageConf = {
-  key: string;
-  md5?: string;
-  conf: TypeTempPageConf | null;
-};
+// // 预览页面配置储存数据
+// export type TypePageConf = {
+//   key: string;
+//   md5?: string;
+//   conf: TypeTempPageConf | null;
+// };
 
 // 创建工程载荷
 export type TypeCreateProjectPayload = {

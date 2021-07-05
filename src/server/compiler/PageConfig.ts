@@ -3,16 +3,19 @@ import PATHS from "server/core/pathUtils";
 import { getImageData } from "common/utils";
 import { ELEMENT_TYPES, ALIGN_VALUES, ALIGN_V_VALUES } from "src/enum/index";
 import {
-  TypeSCPageTemplateConf,
-  TypeSCPageCopyConf,
-  TypeSCPageSourceElement,
-  TypeSCPageData
+  TypeSourceXmlTempConf,
+  TypeSourceCopyConf,
+  TypeSourceElement,
+  TypeSourcePageData,
+  TypeSourceImageElement,
+  TypeSourceTextElement
 } from "types/source-config";
+import XMLNodeElement from "server/compiler/XMLNodeElement";
 import TempKeyValMapper from "./TempKeyValMapper";
 import BaseCompiler from "./BaseCompiler";
 import XmlTemplate from "./XmlTemplate";
 
-export default class Page extends BaseCompiler {
+export default class PageConfig extends BaseCompiler {
   // 处理当前页面资源的相对路径
   private relativePath(file: string): string {
     const namespace = path.relative(
@@ -52,7 +55,7 @@ export default class Page extends BaseCompiler {
     );
   }
 
-  getTemplateConfList(): TypeSCPageTemplateConf[] {
+  getXmlTempConfList(): TypeSourceXmlTempConf[] {
     const templates = super.getRootChildrenOf("template");
     return templates.map(node => {
       const templateData = new XmlTemplate(
@@ -61,7 +64,7 @@ export default class Page extends BaseCompiler {
       const valueMapData = new TempKeyValMapper(
         this.resolvePath(node.getAttributeOf("values"))
       ).getDataObj();
-      const data: TypeSCPageTemplateConf = {
+      const data: TypeSourceXmlTempConf = {
         template: templateData,
         valueMap: valueMapData,
         to: node.getAttributeOf("to")
@@ -70,69 +73,82 @@ export default class Page extends BaseCompiler {
     });
   }
 
-  getCopyConfList(): TypeSCPageCopyConf[] {
+  getCopyConfList(): TypeSourceCopyConf[] {
     return super.getRootChildrenOf("copy").map(node => ({
       from: this.relativePath(node.getAttributeOf("from")),
       to: node.getAttributeOf("to")
     }));
   }
 
-  getLayoutElementList(): TypeSCPageSourceElement[] {
+  private layoutConf(node: XMLNodeElement) {
+    return {
+      x: node.getAttributeOf("x"),
+      y: node.getAttributeOf("y"),
+      w: node.getAttributeOf("w"),
+      h: node.getAttributeOf("h"),
+      align: node.getAttributeOf("align", ALIGN_VALUES.LEFT),
+      alignV: node.getAttributeOf("alignV", ALIGN_V_VALUES.TOP)
+    };
+  }
+
+  private imageElement(node: XMLNodeElement): TypeSourceImageElement {
+    const src = node.getAttributeOf("src");
+    return {
+      type: ELEMENT_TYPES.IMAGE,
+      name: node.getAttributeOf("name"),
+      source: {
+        ...getImageData(this.resolvePath(src)),
+        pathname: this.relativePath(src)
+      },
+      layout: this.layoutConf(node),
+      releaseList: node
+        .getChildrenOf("to")
+        .map(item => item.getFirstTextChildValue())
+    };
+  }
+
+  private textElement(node: XMLNodeElement): TypeSourceTextElement {
+    const layout = this.layoutConf(node);
+    return {
+      type: ELEMENT_TYPES.TEXT,
+      text: node.getAttributeOf("text"),
+      layout: {
+        x: layout.x,
+        y: layout.y,
+        align: layout.align,
+        alignV: layout.alignV
+      },
+      color: node.getAttributeOf("color")
+    };
+  }
+
+  getLayoutElementList(): TypeSourceElement[] {
     const rootNode = this.getRootNode();
     const elementList = rootNode.getFirstChildOf("layout").getChildren();
-    const result: TypeSCPageSourceElement[] = [];
+    const result: TypeSourceElement[] = [];
     elementList.forEach(node => {
-      const layoutNormalize = {
-        x: node.getAttributeOf("x"),
-        y: node.getAttributeOf("y"),
-        align: node.getAttributeOf("align", ALIGN_VALUES.LEFT),
-        alignV: node.getAttributeOf("alignV", ALIGN_V_VALUES.TOP)
-      };
       switch (node.getTagname()) {
         case ELEMENT_TYPES.IMAGE: {
-          const src = node.getAttributeOf("src");
-          result.push({
-            type: ELEMENT_TYPES.IMAGE,
-            name: node.getAttributeOf("name"),
-            source: {
-              ...getImageData(this.resolvePath(src)),
-              pathname: this.relativePath(src)
-            },
-            layout: {
-              x: layoutNormalize.x,
-              y: layoutNormalize.y,
-              w: node.getAttributeOf("w"),
-              h: node.getAttributeOf("h"),
-              align: layoutNormalize.align,
-              alignV: layoutNormalize.alignV
-            },
-            releaseList: node
-              .getChildrenOf("to")
-              .map(item => item.getFirstTextChildValue())
-          });
+          result.push(this.imageElement(node));
           break;
         }
         case ELEMENT_TYPES.TEXT: {
-          result.push({
-            type: ELEMENT_TYPES.TEXT,
-            text: node.getAttributeOf("text"),
-            layout: layoutNormalize,
-            color: node.getAttributeOf("color")
-          });
+          result.push(this.textElement(node));
+          break;
         }
       }
     });
     return result;
   }
 
-  getData(): TypeSCPageData {
+  getData(): TypeSourcePageData {
     return {
       version: this.getVersion(),
       description: this.getDescription(),
       screenWidth: this.getScreenWidth(),
       previewList: this.getPreviewList(),
       elementList: this.getLayoutElementList(),
-      templateList: this.getTemplateConfList(),
+      templateList: this.getXmlTempConfList(),
       copyList: this.getCopyConfList()
     };
   }

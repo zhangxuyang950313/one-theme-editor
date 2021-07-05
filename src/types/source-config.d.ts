@@ -1,13 +1,11 @@
-import { Attributes, Element } from "xml-js";
+import { Element } from "xml-js";
 import { ALIGN_VALUES, ALIGN_V_VALUES, ELEMENT_TYPES } from "src/enum";
 import XMLNodeElement from "server/compiler/XMLNodeElement";
 import { TypeImageData, TypeUiVersion } from "./project";
-import { TypeXMLSourceLayout } from "./xml-result";
 import { TypeImagePathLike } from "./index";
 
 // 资源配置简略信息
 export type TypeSourceConfigBrief = {
-  key: string;
   file: string;
   name: string;
   preview: TypeImagePathLike;
@@ -17,33 +15,26 @@ export type TypeSourceConfigBrief = {
 
 // 资源配置
 export type TypeSourceConfig = Omit<TypeSourceConfigBrief, "key"> & {
-  sourceTypeList: TypeSCPageSourceTypeConf[];
-  moduleList: TypeSCModuleConf[];
+  sourceTypeList: TypeSourceTypeConf[];
+  moduleList: TypeSourceModuleConf[];
 };
 
 // 预览模块
-export type TypeSCModuleConf = {
+export type TypeSourceModuleConf = {
   index: number;
   name: string;
   icon: string;
-  groupList: TypeSCPageGroupConf[];
+  groupList: TypeSourcePageGroupConf[];
 };
 
 // 预览页面组
-export type TypeSCPageGroupConf = {
+export type TypeSourcePageGroupConf = {
   name: string;
-  pageList: TypeSCPageConf[];
-};
-
-// 预览页面信息
-export type TypeSCPageRootConf = {
-  version: string;
-  description: string;
-  screenWidth: string;
+  pageList: TypeSourcePageConf[];
 };
 
 // 键值对配置数据
-export type TypeSCPageKeyValConf = {
+export type TypeSourcePageKeyValConf = {
   [k: string]: {
     value: string;
     description: string;
@@ -51,23 +42,24 @@ export type TypeSCPageKeyValConf = {
 };
 
 // 配置模板数据
-export type TypeSCPageTemplateConf = {
+export type TypeSourceXmlTempConf = {
   template: Element[];
-  valueMap: TypeSCPageKeyValConf;
+  valueMap: TypeSourcePageKeyValConf;
   to: string;
 };
 
-// 拷贝数据
-export type TypeSCPageCopyConf = {
+// 拷贝配置数据
+export type TypeSourceCopyConf = {
   from: string;
   to: string;
 };
 
 // 元素配置数据
-export type TypeElementAlign = ALIGN_VALUES;
-export type TypeElementAlignV = ALIGN_V_VALUES;
+export type TypeSourceElementAlign = ALIGN_VALUES;
+export type TypeSourceElementAlignV = ALIGN_V_VALUES;
 
-export type TypeSCPageImageElement = {
+// 图片元素数据
+export type TypeSourceImageElement = {
   type: ELEMENT_TYPES.IMAGE;
   name: string;
   source: (TypeImageData & { pathname: string }) | null;
@@ -76,72 +68,56 @@ export type TypeSCPageImageElement = {
     y: string;
     w: string;
     h: string;
-    align: TypeElementAlign;
-    alignV: TypeElementAlignV;
+    align: TypeSourceElementAlign;
+    alignV: TypeSourceElementAlignV;
   };
   releaseList: string[];
 };
 
-export type TypeSCPageTextElement = {
+// 文字元素数据
+export type TypeSourceTextElement = {
   type: ELEMENT_TYPES.TEXT;
   text: string;
   layout: {
     x: string;
     y: string;
-    align: TypeElementAlign;
-    alignV: TypeElementAlignV;
+    align: TypeSourceElementAlign;
+    alignV: TypeSourceElementAlignV;
   };
   color: string;
 };
 
 // 预览元素数据
-export type TypeSCPageSourceElement =
-  | TypeSCPageImageElement
-  | TypeSCPageTextElement;
-
-// 预览页面资源素材配置
-export type TypeSCPageSourceConf = {
-  name: string;
-  layout: TypeXMLSourceLayout; // 预览布局信息
-  from: (TypeImageData & { relativePath: TypeImagePathLike }) | null;
-  to: string[];
-};
+export type TypeSourceElement = TypeSourceImageElement | TypeSourceTextElement;
 
 // 预览单个页面配置
-export type TypeSCPageConf = {
+export type TypeSourcePageConf = {
   name: string;
   preview: string;
   src: string;
 };
-export type TypeSCPageData = {
+export type TypeSourcePageData = {
   version: string;
   description: string;
   screenWidth: string;
   previewList: string[];
-  elementList: TypeSCPageSourceElement[];
-  templateList: TypeSCPageTemplateConf[];
-  copyList: TypeSCPageCopyConf[];
+  elementList: TypeSourceElement[];
+  templateList: TypeSourceXmlTempConf[];
+  copyList: TypeSourceCopyConf[];
 };
 
 // 键值对映射配置
-export type TypeSCPageXmlKeyValMapperConf = {
+export type TypeSourceXmlKeyValMapperConf = {
   key: string;
   value: string;
   description: string;
 };
 
 // 键值对映射 map
-export type TypeSCPageXmlKeyValMapperMap = Map<string, XMLNodeElement>;
-
-// xml 模板数据
-export type TypeSCPageXmlTempData = {
-  name: string;
-  attribute: Attributes;
-  child: string;
-};
+export type TypeSourceXmlKeyValMapperMap = Map<string, XMLNodeElement>;
 
 // 素材类型定义数据
-export type TypeSCPageSourceTypeConf = {
+export type TypeSourceTypeConf = {
   tag: string;
   name: string;
   type: "image" | "xml";

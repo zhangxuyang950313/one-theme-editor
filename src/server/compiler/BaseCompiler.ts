@@ -2,18 +2,11 @@ import { Element } from "xml-js";
 import { xml2jsonElement } from "server/core/xml";
 import XMLNodeElement from "./XMLNodeElement";
 
-export default class BaseCompiler {
+export default class BaseCompiler extends XMLNodeElement {
   private file: string;
-  private xmlJson?: Element;
   constructor(file: string) {
+    super(xml2jsonElement<Element>(file));
     this.file = file;
-  }
-
-  protected getXmlData(): Element {
-    if (!this.xmlJson) {
-      this.xmlJson = xml2jsonElement<Element>(this.file);
-    }
-    return this.xmlJson;
   }
 
   protected getFile(): string {
@@ -25,8 +18,7 @@ export default class BaseCompiler {
    * @returns 返回这个节点的 node 实例
    */
   protected getRootNode(): XMLNodeElement {
-    const xmlJson = this.getXmlData();
-    return new XMLNodeElement(xmlJson).getFirstChild();
+    return super.getFirstChild();
   }
 
   /**

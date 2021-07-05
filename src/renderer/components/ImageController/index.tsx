@@ -8,7 +8,7 @@ import { RightCircleOutlined } from "@ant-design/icons";
 import { useProjectRoot } from "@/hooks/project";
 import { useSourceConfigRoot } from "@/hooks/source";
 import { useReleaseListWatcher } from "@/hooks/fileWatcher";
-import { TypeSCPageImageElement } from "types/source-config";
+import { TypeSourceImageElement } from "types/source-config";
 
 import { previewFile } from "./utils";
 
@@ -18,7 +18,7 @@ import ImageDisplay from "./ImageDisplay";
 import ProjectSource from "./ProjectSource";
 import SourceStatus from "./SourceStatus";
 
-const ImageController: React.FC<TypeSCPageImageElement> = sourceConf => {
+const ImageController: React.FC<TypeSourceImageElement> = sourceConf => {
   const { source, releaseList } = sourceConf;
   const projectRoot = useProjectRoot();
   const sourceConfigRoot = useSourceConfigRoot();

@@ -2,14 +2,14 @@ import API from "common/api";
 import { Express } from "express";
 import { TypeResult } from "types/request";
 import {
-  TypeSCModuleConf,
-  TypeSCPageData,
+  TypeSourceModuleConf,
+  TypeSourcePageData,
   TypeSourceConfig
 } from "types/source-config";
 import { result } from "server/core/utils";
 import { resolveSourcePath } from "server/core/pathUtils";
 
-import Page from "server/compiler/Page";
+import PageConfig from "server/compiler/PageConfig";
 import SourceConfig from "server/compiler/SourceConfig";
 
 export default function source(service: Express): void {
@@ -40,7 +40,7 @@ export default function source(service: Express): void {
   // 获取模块列表
   service.get<
     never, // reqParams
-    TypeResult<TypeSCModuleConf[]>, // resBody
+    TypeResult<TypeSourceModuleConf[]>, // resBody
     never, // reqBody
     { descriptionFile: string } // reqQuery
   >(API.GET_SOURCE_MODULE_LIST, (request, response) => {
@@ -58,7 +58,7 @@ export default function source(service: Express): void {
   // 获取页面信息
   service.get<
     never, // reqParams
-    TypeResult<TypeSCPageData>, // resBody
+    TypeResult<TypeSourcePageData>, // resBody
     never, // reqBody
     { pageFile: string } // reqQuery
   >(API.GET_SOURCE_PAGE_CONFIG, async (request, response) => {
@@ -66,7 +66,7 @@ export default function source(service: Express): void {
       const { pageFile } = request.query;
       if (!pageFile) throw new Error("缺少 pageFile 参数");
       const absFile = resolveSourcePath(pageFile);
-      const data = new Page(absFile).getData();
+      const data = new PageConfig(absFile).getData();
       response.send(result.success(data));
     } catch (err) {
       response.status(400).send(result.fail(err.message));

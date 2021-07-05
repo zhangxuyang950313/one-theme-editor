@@ -1,18 +1,17 @@
 import path from "path";
 import fse from "fs-extra";
-import { v4 as UUID } from "uuid";
 import {
   TypeSourceConfig,
-  TypeSCModuleConf,
-  TypeSCPageGroupConf,
-  TypeSCPageConf,
+  TypeSourceModuleConf,
+  TypeSourcePageGroupConf,
+  TypeSourcePageConf,
   TypeSourceConfigBrief,
-  TypeSCPageSourceTypeConf
+  TypeSourceTypeConf
 } from "types/source-config";
 import { TypeBrandConf, TypeUiVersion } from "types/project";
 import ERR_CODE from "renderer/core/error-code";
 import PATHS from "server/core/pathUtils";
-import Page from "./Page";
+import PageConfig from "./PageConfig";
 import XMLNodeElement from "./XMLNodeElement";
 import BaseCompiler from "./BaseCompiler";
 
@@ -45,7 +44,7 @@ export default class SourceConfig extends BaseCompiler {
       .map(item => path.join(PATHS.SOURCE_CONFIG_DIR, item))
       .filter(fse.existsSync);
     return ensureConfigs.map(configFile =>
-      new SourceConfig(configFile).getDescription()
+      new SourceConfig(configFile).getBrief()
     );
   }
 
@@ -97,7 +96,7 @@ export default class SourceConfig extends BaseCompiler {
   }
 
   // 素材类型定义列表
-  getSourceTypeList(): TypeSCPageSourceTypeConf[] {
+  getSourceTypeList(): TypeSourceTypeConf[] {
     const sourceNodeList = super.getRootChildrenOf("source");
     return sourceNodeList.map(item => ({
       tag: item.getAttributeOf("tag"),
@@ -107,11 +106,13 @@ export default class SourceConfig extends BaseCompiler {
   }
 
   // 页面配置列表
-  getPageConfList(pageNodeList: XMLNodeElement[]): TypeSCPageConf[] {
+  getPageList(pageNodeList: XMLNodeElement[]): TypeSourcePageConf[] {
     // 这里是在选择模板版本后得到的目标模块目录
     return pageNodeList.map(node => {
       const src = node.getAttributeOf("src");
-      const previewList = new Page(this.resolvePath(src)).getPreviewList();
+      const previewList = new PageConfig(
+        this.resolvePath(src)
+      ).getPreviewList();
       return {
         name: node.getAttributeOf("name"),
         preview: previewList[0],
@@ -120,28 +121,19 @@ export default class SourceConfig extends BaseCompiler {
     });
   }
 
-  // // 页面数据列表
-  // getPageList(pageNodeList: XMLNodeElement[]): TypeSCPageData[] {
-  //   // 这里是在选择模板版本后得到的目标模块目录
-  //   return pageNodeList.map(node => {
-  //     const pageFile = this.resolvePath(node.getAttributeOf("src"));
-  //     return new Page(pageFile).getData();
-  //   });
-  // }
-
   // 页面分组数据
-  getPageGroupList(groupNodeList: XMLNodeElement[]): TypeSCPageGroupConf[] {
+  getPageGroupList(groupNodeList: XMLNodeElement[]): TypeSourcePageGroupConf[] {
     return groupNodeList.map(groupNode => {
-      const group: TypeSCPageGroupConf = {
+      const group: TypeSourcePageGroupConf = {
         name: groupNode.getAttributeOf("name"),
-        pageList: this.getPageConfList(groupNode.getChildrenOf("page"))
+        pageList: this.getPageList(groupNode.getChildrenOf("page"))
       };
       return group;
     });
   }
 
   // 模块配置数据
-  getModuleList(): TypeSCModuleConf[] {
+  getModuleList(): TypeSourceModuleConf[] {
     const moduleNodeList = super.getRootChildrenOf("module");
     return moduleNodeList.map((moduleNode, index) => ({
       index,
@@ -153,11 +145,10 @@ export default class SourceConfig extends BaseCompiler {
 
   /**
    * 解析配置配置的简短信息
-   * 只解析 description.xml 不需要全部解析
+   * 只解析 description.xml 不需要进一步解析页面
    */
-  getDescription(): TypeSourceConfigBrief {
+  getBrief(): TypeSourceConfigBrief {
     return {
-      key: UUID(),
       file: path.relative(PATHS.SOURCE_CONFIG_DIR, this.getDescFile()),
       name: this.getName(),
       version: this.getVersion(),
@@ -171,7 +162,7 @@ export default class SourceConfig extends BaseCompiler {
    */
   getConfig(): TypeSourceConfig {
     return {
-      ...this.getDescription(),
+      ...this.getBrief(),
       sourceTypeList: this.getSourceTypeList(),
       moduleList: this.getModuleList()
     };
