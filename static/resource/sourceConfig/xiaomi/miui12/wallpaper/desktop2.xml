@@ -32,7 +32,7 @@
             x="670" y="1100" w="186" h="186" align="center" alignV="center"
             src="../icons/res/com.miui.video.png"
         >
-            <to>icons/res/com.miui.gallery.png</to>
+            <to>icons/res/com.miui.video.png</to>
         </image>
 
 
