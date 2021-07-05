@@ -31,8 +31,8 @@ export type TypeProjectInfo = {
 
 // 创建工程载荷
 export type TypeCreateProjectPayload = {
-  projectRoot: string;
-  sourceConfigFile: string;
+  projectPathname: string;
+  sourceConfigUrl: string;
   brandInfo: TypeBrandInfo;
   projectInfo: TypeProjectInfo;
 };
@@ -61,11 +61,10 @@ export type TypeXmlMapper = {
 export type TypeProjectData = {
   uuid: string;
   brandInfo: TypeBrandInfo;
-  projectRoot: string;
+  projectPathname: string;
   projectInfo: TypeProjectInfo;
   uiVersion: TypeUiVersion;
-  // sourceConfig: TypeSourceConfig;
-  sourceConfigFile: string;
+  sourceConfigUrl: string;
 };
 
 // // 在数据空的图片映射

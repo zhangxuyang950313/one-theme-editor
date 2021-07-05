@@ -11,6 +11,6 @@ export const getBrandInfoList = createSelector(
 );
 
 // 获取前选择的厂商信息
-export const getCurrentBrandConf = createSelector(getStarterState, state => {
-  return state.currentBrandConf;
+export const getBrandConf = createSelector(getStarterState, state => {
+  return state.brandConf;
 });

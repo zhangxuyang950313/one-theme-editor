@@ -67,26 +67,26 @@ export default class SourceConfig extends BaseCompiler {
     return this.getFile();
   }
 
-  // 模板名称
+  // 名称
   getName(): string {
     const rootNode = super.getRootNode();
     return rootNode.getAttributeOf("name");
   }
 
-  // 模板版本
+  // 版本
   getVersion(): string {
     const rootNode = super.getRootNode();
     return rootNode.getAttributeOf("version");
   }
 
-  // 模板预览图
+  // 预览图
   getPreview(): string {
     // TODO: 默认预览图
     const src = super.getRootFirstChildOf("preview").getAttributeOf("src");
     return this.relativePath(src);
   }
 
-  // 模板信息
+  // UI信息
   getUiVersion(): TypeUiVersion {
     const uiVersionNode = super.getRootFirstChildOf("uiVersion");
     return {
@@ -149,7 +149,7 @@ export default class SourceConfig extends BaseCompiler {
    */
   getBrief(): TypeSourceConfigBrief {
     return {
-      file: path.relative(PATHS.SOURCE_CONFIG_DIR, this.getDescFile()),
+      url: path.relative(PATHS.SOURCE_CONFIG_DIR, this.getDescFile()),
       name: this.getName(),
       version: this.getVersion(),
       preview: this.getPreview(),

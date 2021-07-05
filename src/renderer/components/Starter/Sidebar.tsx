@@ -3,15 +3,13 @@ import styled from "styled-components";
 
 import { Menu } from "antd";
 
-import { useBrandConfList, useCurrentBrandConf } from "@/hooks/source";
+import { useBrandConfList, useBrandConf } from "@/hooks/source";
 import TopInfo from "./TopInfo";
 
 // 欢迎页侧边栏
 const Sidebar: React.FC = () => {
   const brandConfList = useBrandConfList();
-  const [currentBrandConf, setCurrentBrandConf] = useCurrentBrandConf();
-
-  console.log({ brandConfList, currentBrandConf });
+  const [currentBrandConf, setCurrentBrandConf] = useBrandConf();
 
   const renderMenu = () => {
     if (!brandConfList || !currentBrandConf) return null;

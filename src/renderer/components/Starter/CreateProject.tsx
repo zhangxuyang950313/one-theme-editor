@@ -5,7 +5,7 @@ import { remote } from "electron";
 
 import { isDev } from "@/core/constant";
 import { apiCreateProject } from "@/api";
-import { useCurrentBrandConf, useSourceDescriptionList } from "@/hooks/source";
+import { useBrandConf, useSourceDescriptionList } from "@/hooks/source";
 import { TypeProjectInfo } from "types/project";
 import { TypeSourceConfigBrief } from "types/source-config";
 
@@ -22,7 +22,7 @@ type TypeProps = {
 };
 const CreateProject: React.FC<TypeProps> = props => {
   // 机型配置
-  const [brandConf] = useCurrentBrandConf();
+  const [brandConf] = useBrandConf();
   // 弹框控制
   const [modalVisible, setModalVisible] = useState(false);
   // 模板列表
@@ -34,7 +34,7 @@ const CreateProject: React.FC<TypeProps> = props => {
   // 填写工程描述
   const [projectInfo, setProjectInfo] = useState<TypeProjectInfo>();
   // 填写本地目录
-  const projectRootRef = useRef<string>();
+  const projectPathnameRef = useRef<string>();
   // 创建状态
   const [isCreating, updateCreating] = useState(false);
   // 表单实例
@@ -85,9 +85,9 @@ const CreateProject: React.FC<TypeProps> = props => {
           // onChange(path.join(remote.app.getPath("desktop"), "test"));
           onChange("/Users/zhangxuyang/mine/theme-test");
         }, []);
-        const [projectRoot, setLocalPath] = useState<string>();
+        const [projectPathname, setLocalPath] = useState<string>();
         const onChange = (val: string) => {
-          projectRootRef.current = val;
+          projectPathnameRef.current = val;
           setLocalPath(val);
         };
         const selectDir = () => {
@@ -112,7 +112,7 @@ const CreateProject: React.FC<TypeProps> = props => {
                   <Input
                     placeholder="输入或选择目录"
                     allowClear
-                    value={projectRoot}
+                    value={projectPathname}
                     onChange={e => onChange(e.target.value)}
                   />
                   <Button
@@ -175,7 +175,7 @@ const CreateProject: React.FC<TypeProps> = props => {
       start: {
         disabled: isCreating,
         async handleStart() {
-          const local = projectRootRef.current;
+          const local = projectPathnameRef.current;
           if (!local) throw new Error("请选择正确的本地路径");
           if (!fse.existsSync(local)) {
             await new Promise<void>(resolve => {
@@ -207,8 +207,8 @@ const CreateProject: React.FC<TypeProps> = props => {
           }
           updateCreating(true);
           return apiCreateProject({
-            projectRoot: projectRootRef.current || "",
-            sourceConfigFile: selectedSourceDesc.file,
+            projectPathname: projectPathnameRef.current || "",
+            sourceConfigUrl: selectedSourceDesc.url,
             brandInfo: {
               name: brandConf.name,
               type: brandConf.type

@@ -1,5 +1,5 @@
 import PATHS from "server/core/pathUtils";
-import ACTION_TYPES from "@/store/actions";
+import ACTION_TYPES from "@/store/global/actionType";
 
 type TypeActionSetServerPort = {
   type: typeof ACTION_TYPES.SET_SERVER_PORT;

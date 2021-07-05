@@ -98,7 +98,7 @@ export default class PageConfig extends BaseCompiler {
       name: node.getAttributeOf("name"),
       source: {
         ...getImageData(this.resolvePath(src)),
-        pathname: this.relativePath(src)
+        url: this.relativePath(src)
       },
       layout: this.layoutConf(node),
       releaseList: node
@@ -143,6 +143,7 @@ export default class PageConfig extends BaseCompiler {
 
   getData(): TypeSourcePageData {
     return {
+      url: this.relativePath(path.basename(this.getFile())),
       version: this.getVersion(),
       description: this.getDescription(),
       screenWidth: this.getScreenWidth(),

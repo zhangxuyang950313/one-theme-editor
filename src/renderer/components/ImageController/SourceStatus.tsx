@@ -2,24 +2,24 @@ import path from "path";
 import { remote } from "electron";
 import React, { useContext } from "react";
 
-import { useProjectRoot } from "@/hooks/project";
+import { useProjectPathname } from "@/hooks/project";
 
 import { CheckCircleTwoTone, CloseCircleTwoTone } from "@ant-design/icons";
 import Context from "./Context";
 
 const SourceStatus: React.FC = props => {
-  const projectRoot = useProjectRoot();
+  const projectPathname = useProjectPathname();
   const { releaseList, dynamicReleaseList } = useContext(Context);
 
-  if (!projectRoot) return null;
+  if (!projectPathname) return null;
 
   return (
     <div>
       {releaseList.map(relativePath => {
         const basename = path.basename(relativePath);
-        // const hasIt = fse.existsSync(path.join(projectRoot, relativePath));
+        // const hasIt = fse.existsSync(path.join(projectPathname, relativePath));
         const hasIt = new Set(dynamicReleaseList).has(relativePath);
-        const absPath = path.join(projectRoot, relativePath);
+        const absPath = path.join(projectPathname, relativePath);
         return (
           <p
             key={basename}

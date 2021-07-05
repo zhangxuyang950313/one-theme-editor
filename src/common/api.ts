@@ -10,8 +10,6 @@ enum API {
   GET_BRAND_LIST = "/brand/list",
   // 获取配置简略信息列表
   GET_SOURCE_DESC_LIST = "/source/description/list",
-  // 获取配置列表
-  GET_SOURCE_CONF_LIST = "/source/config/list",
   // 获取模板配置
   GET_SOURCE_CONF_DATA = "/source/config/data",
 

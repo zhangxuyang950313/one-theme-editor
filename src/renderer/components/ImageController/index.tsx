@@ -5,7 +5,7 @@ import { remote } from "electron";
 import styled from "styled-components";
 import { RightCircleOutlined } from "@ant-design/icons";
 
-import { useProjectRoot } from "@/hooks/project";
+import { useProjectPathname } from "@/hooks/project";
 import { useSourceConfigRoot } from "@/hooks/source";
 import { useReleaseListWatcher } from "@/hooks/fileWatcher";
 import { TypeSourceImageElement } from "types/source-config";
@@ -20,15 +20,17 @@ import SourceStatus from "./SourceStatus";
 
 const ImageController: React.FC<TypeSourceImageElement> = sourceConf => {
   const { source, releaseList } = sourceConf;
-  const projectRoot = useProjectRoot();
+  const projectPathname = useProjectPathname();
   const sourceConfigRoot = useSourceConfigRoot();
   const dynamicReleaseList = useReleaseListWatcher(releaseList);
   const copyReleaseWith = useCopyReleaseWith(releaseList, sourceConf.name);
 
-  if (!sourceConf || !source || !sourceConfigRoot || !projectRoot) return null;
+  if (!sourceConf || !source || !sourceConfigRoot || !projectPathname) {
+    return null;
+  }
 
   // 素材绝对路径
-  const absoluteFrom = path.join(sourceConfigRoot, source.pathname);
+  const absoluteFrom = path.join(sourceConfigRoot, source.url);
 
   // 左边使用 useMemo 进行渲染优化，防止重绘
   const MemoLeftSource = () =>

@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import logSymbols from "log-symbols";
 
-import { useModuleList, useCurrentModule } from "@/hooks/source";
+import { useModuleList, useModuleConf } from "@/hooks/source";
 
 import { Tooltip } from "antd";
 import { useGetSourceImageUrl } from "@/hooks/image";
@@ -11,7 +11,7 @@ import { useGetSourceImageUrl } from "@/hooks/image";
 // 模块选择器
 const ModuleSelector: React.FC = () => {
   const moduleList = useModuleList();
-  const [currentModule, setCurrentModule] = useCurrentModule();
+  const [currentModule, setCurrentModule] = useModuleConf();
   const getImageURL = useGetSourceImageUrl();
 
   if (!currentModule) {

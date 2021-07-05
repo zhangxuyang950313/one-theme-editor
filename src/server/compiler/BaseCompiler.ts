@@ -2,6 +2,11 @@ import { Element } from "xml-js";
 import { xml2jsonElement } from "server/core/xml";
 import XMLNodeElement from "./XMLNodeElement";
 
+/**
+ * 基础解析器，继承于 XMLNodeElement，不同的是，传入的是 xml 文件路径
+ * BaseCompiler 实现业务级基础的方法
+ * XMLNodeElement 实现纯粹的节点解析方法
+ */
 export default class BaseCompiler extends XMLNodeElement {
   private file: string;
   constructor(file: string) {

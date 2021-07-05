@@ -1,17 +1,16 @@
 import React from "react";
 import styled from "styled-components";
-
-import { useCurrentPage, useCurrentPageGroupList } from "@/hooks/source";
-
 import { Collapse } from "antd";
+
 import { useGetSourceImageUrl } from "@/hooks/image";
+import { usePageConf, usePageGroupList } from "@/hooks/source";
 import PreloadImage from "@/components/Image/PreloadImage";
 
 // 页面选择器
 const PageSelector: React.FC = () => {
   const sourceImageURL = useGetSourceImageUrl();
-  const pageGroupList = useCurrentPageGroupList();
-  const [, setCurrentPage] = useCurrentPage();
+  const pageGroupList = usePageGroupList();
+  const [, setCurrentPage] = usePageConf();
   if (pageGroupList.length === 0) {
     console.log("页面分组为空");
     return null;

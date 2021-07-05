@@ -36,10 +36,10 @@ const projectDB = createNedb(PATHS.PROJECTS_DB);
 //   return projectDB
 //     .findOne<TypeProjectDataDoc>({ uuid })
 //     .then(project => {
-//       const { imageMapperList, projectRoot } = project;
-//       if (!projectRoot) return Promise.all([]);
+//       const { imageMapperList, projectPathname } = project;
+//       if (!projectPathname) return Promise.all([]);
 //       return imageMapperList.map(async item => {
-//         const filename = path.resolve(projectRoot, item.target);
+//         const filename = path.resolve(projectPathname, item.target);
 //         // TODO: 失败的都默认通过，后面应把失败的返回出去以供提示
 //         if (!item.md5) return Promise.resolve();
 //         const imageData = await findImageData(item.md5);
@@ -79,19 +79,18 @@ const projectDB = createNedb(PATHS.PROJECTS_DB);
 export async function createProject(
   data: TypeCreateProjectPayload
 ): Promise<TypeProjectDataDoc> {
-  const { brandInfo, projectInfo, projectRoot, sourceConfigFile } = data;
-  const uiVersion = await new SourceConfig(
-    resolveSourcePath(sourceConfigFile)
+  const { brandInfo, projectInfo, projectPathname, sourceConfigUrl } = data;
+  const uiVersion = new SourceConfig(
+    resolveSourcePath(sourceConfigUrl)
   ).getUiVersion();
-  const projectData: TypeProjectData = {
+  return projectDB.insert<TypeProjectData>({
     uuid: UUID(),
     projectInfo,
     brandInfo,
     uiVersion,
-    sourceConfigFile,
-    projectRoot
-  };
-  return projectDB.insert(projectData);
+    sourceConfigUrl,
+    projectPathname
+  });
 }
 
 // brandType 筛选所有工程

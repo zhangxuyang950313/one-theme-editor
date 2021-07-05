@@ -16,7 +16,7 @@ export async function watchFiles(
 ): Promise<void> {
   const project = await findProjectByUUID(uuid);
   const watcher = new chokidar.FSWatcher({
-    cwd: project.projectRoot
+    cwd: project.projectPathname
   });
   // 设定监听最大值
   // TODO：如果超过会是什么样

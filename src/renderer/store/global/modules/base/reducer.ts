@@ -1,5 +1,5 @@
 import PATHS_CONFIG from "server/core/pathUtils";
-import ACTION_TYPES from "@/store/actions";
+import ACTION_TYPES from "@/store/global/actionType";
 import { updateState } from "@/store/utils";
 import { TypeActions } from "./action";
 

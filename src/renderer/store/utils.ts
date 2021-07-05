@@ -12,6 +12,24 @@ export type TypeSelectorResult<T, R = void> = [T, (data: T) => R];
 
 // 更新 state
 export function updateState<T>(oldState: T, newState: Partial<T>): T {
+  // undefined 是不被允许的赋值操作，空传 null
+  // undefined 是不被允许的赋值操作，空传 null
+  // undefined 是不被允许的赋值操作，空传 null
+  for (const key in newState) {
+    if (newState[key] === undefined) {
+      delete newState[key];
+    }
+    const typeOld = Object.prototype.toString.call(oldState[key]);
+    const typeNew = Object.prototype.toString.call(newState[key]);
+    // 赋值类型不同警告，但不会拦截
+    if (oldState[key] !== null && typeNew !== typeOld) {
+      console.warn(
+        `[store] ${key}类型不符
+         [old]: ${typeOld}
+         [new]: ${typeNew}`
+      );
+    }
+  }
   return Object.assign({}, oldState, newState);
 }
 // 创建 redux store

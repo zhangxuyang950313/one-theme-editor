@@ -2,7 +2,7 @@ import path from "path";
 import { useState, useEffect } from "react";
 
 import { useServerHost } from "@/hooks/index";
-import { useProjectRoot } from "@/hooks/project";
+import { useProjectPathname } from "@/hooks/project";
 import { useSourceConfigRoot } from "@/hooks/source";
 
 // 返回图片前缀
@@ -110,15 +110,17 @@ export function useGetProjectImageUrl(
   relativePath?: string | null
 ): string | ((relativePath?: string) => string) {
   const prefix = useImagePrefix();
-  const projectRoot = useProjectRoot();
+  const projectPathname = useProjectPathname();
 
   if (relativePath) {
-    return projectRoot ? prefix + path.join(projectRoot, relativePath) : "";
+    return projectPathname
+      ? prefix + path.join(projectPathname, relativePath)
+      : "";
   }
 
   return relative => {
-    if (!projectRoot || !relative) return "";
-    return prefix + path.join(projectRoot, relative);
+    if (!projectPathname || !relative) return "";
+    return prefix + path.join(projectPathname, relative);
   };
 }
 

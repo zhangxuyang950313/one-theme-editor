@@ -5,7 +5,7 @@ import { remote } from "electron";
 import styled from "styled-components";
 
 import { apiDeleteFile } from "@/api";
-import { useProjectRoot } from "@/hooks/project";
+import { useProjectPathname } from "@/hooks/project";
 
 import { notification } from "antd";
 import ERR_CODE from "@/core/error-code";
@@ -16,17 +16,19 @@ import { useCopyReleaseWith } from "./hooks";
 
 const ProjectSource: React.FC = () => {
   const { releaseList, dynamicReleaseList } = useContext(Context);
-  const projectRoot = useProjectRoot();
+  const projectPathname = useProjectPathname();
   const copyReleaseWith = useCopyReleaseWith(releaseList, "");
 
-  if (!projectRoot) return null;
+  if (!projectPathname) return null;
   // 更新后的模板绝对路径列表
   const dynamicAbsReleaseList = dynamicReleaseList.map(item =>
-    path.join(projectRoot, item)
+    path.join(projectPathname, item)
   );
 
   // 目标素材绝对路径列表
-  const absReleaseList = releaseList.map(item => path.join(projectRoot, item));
+  const absReleaseList = releaseList.map(item =>
+    path.join(projectPathname, item)
+  );
 
   // 筛选一个有效的用于展示
   const absReleaseForShow = dynamicAbsReleaseList[0] || "";

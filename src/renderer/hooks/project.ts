@@ -3,12 +3,12 @@ import { useLayoutEffect, useEffect, useState, useCallback } from "react";
 import { apiGetProjectByUUID, apiGetProjectList } from "@/api/index";
 import { useAxiosCanceler } from "@/hooks/index";
 import {
-  useCurrentBrandConf,
+  useBrandConf,
   useLoadSourceConfig,
   useSourceConfigRoot
 } from "@/hooks/source";
 import { ActionSetProjectData } from "@/store/editor/action";
-import { getProjectData, getProjectRoot } from "@/store/editor/selector";
+import { getProjectData, getProjectPathname } from "@/store/editor/selector";
 import { useEditorDispatch, useEditorSelector } from "@/store/index";
 import { TypeProjectDataDoc, TypeProjectStateInStore } from "types/project";
 
@@ -22,7 +22,7 @@ type TypeRefreshFunc = () => Promise<void>;
 type TypeReturnData = [TypeProjectDataDoc[], TypeRefreshFunc, TypeIsLoading];
 export function useProjectList(): TypeReturnData {
   // 使用机型进行隔离查询
-  const [currentBrand] = useCurrentBrandConf();
+  const [currentBrand] = useBrandConf();
   const [value, updateValue] = useState<TypeProjectDataDoc[]>([]);
   const [loading, updateLoading] = useState<boolean>(true);
   const registerCancelToken = useAxiosCanceler();
@@ -105,21 +105,21 @@ export function useProjectData(): TypeProjectStateInStore | null {
 }
 
 // 获取当前工程目录
-export function useProjectRoot(): string | null {
-  return useEditorSelector(getProjectRoot);
+export function useProjectPathname(): string | null {
+  return useEditorSelector(getProjectPathname);
 }
 
 // 处理工程路径
 export function useResolveProjectPath(
   relativePath = ""
 ): [string, (x: string) => void] {
-  const projectRoot = useProjectRoot();
+  const projectPathname = useProjectPathname();
   const [relativeVal, setRelativeVal] = useState(relativePath);
   const [projectPath, setProjectPath] = useState("");
 
   useEffect(() => {
-    if (!(projectRoot && relativePath)) return;
-    setProjectPath(path.join(projectRoot, relativePath));
+    if (!(projectPathname && relativePath)) return;
+    setProjectPath(path.join(projectPathname, relativePath));
   }, [relativeVal]);
 
   return [projectPath, setRelativeVal];

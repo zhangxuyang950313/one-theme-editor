@@ -3,7 +3,7 @@ import fse from "fs-extra";
 import chokidar from "chokidar";
 import logSymbols from "log-symbols";
 import { useLayoutEffect, useEffect, useState } from "react";
-import { useProjectRoot } from "@/hooks/project";
+import { useProjectPathname } from "@/hooks/project";
 
 export enum FILE_STATUS {
   ADD = "add",
@@ -55,24 +55,24 @@ export function useFSWatcherMultiInstance(
  * @returns
  */
 export function useReleaseListWatcher(releaseList: string[]): string[] {
-  const projectRoot = useProjectRoot();
+  const projectPathname = useProjectPathname();
   /**
    * TODO：在 electron 环境中 watcher 监听多个文件会导致事件丢失，（node环境正常，也可能是 webpack 的打包问题）
    * 原因不明，所以创建多个 watcher 实例只监听一个文件
    * https://github.com/paulmillr/chokidar/issues/1122
    */
   const watchers = useFSWatcherMultiInstance(releaseList.length, {
-    cwd: projectRoot || undefined,
+    cwd: projectPathname || undefined,
     ignoreInitial: false
   });
   const [list, setList] = useState<string[]>([]);
   useLayoutEffect(() => {
-    if (!projectRoot) return;
+    if (!projectPathname) return;
     const set = new Set<string>();
     // 更新数据
     const updateList = () => {
       const existsList = Array.from(set).filter(
-        item => item && fse.existsSync(path.join(projectRoot, item))
+        item => item && fse.existsSync(path.join(projectPathname, item))
       );
       setList(existsList);
     };

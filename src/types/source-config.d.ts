@@ -6,7 +6,7 @@ import { TypeImagePathLike } from "./index";
 
 // 资源配置简略信息
 export type TypeSourceConfigBrief = {
-  file: string;
+  url: string;
   name: string;
   preview: TypeImagePathLike;
   version: string;
@@ -62,7 +62,7 @@ export type TypeSourceElementAlignV = ALIGN_V_VALUES;
 export type TypeSourceImageElement = {
   type: ELEMENT_TYPES.IMAGE;
   name: string;
-  source: (TypeImageData & { pathname: string }) | null;
+  source: (TypeImageData & { url: string }) | null;
   layout: {
     x: string;
     y: string;
@@ -97,6 +97,7 @@ export type TypeSourcePageConf = {
   src: string;
 };
 export type TypeSourcePageData = {
+  url: string;
   version: string;
   description: string;
   screenWidth: string;

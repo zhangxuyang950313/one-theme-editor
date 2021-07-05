@@ -3,14 +3,14 @@ import styled from "styled-components";
 import { useHistory } from "react-router";
 
 import { useProjectList } from "@/hooks/project";
-import { useCurrentBrandConf } from "@/hooks/source";
+import { useBrandConf } from "@/hooks/source";
 
 import { Empty, Spin } from "antd";
 import ProjectCard from "./ProjectCard";
 import CreateProject from "./CreateProject";
 
 const ProjectManager: React.FC = () => {
-  const [brandInfo] = useCurrentBrandConf();
+  const [brandInfo] = useBrandConf();
   const [projects, refreshList, isLoading] = useProjectList();
   const history = useHistory();
 
