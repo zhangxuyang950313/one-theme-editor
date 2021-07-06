@@ -1,5 +1,6 @@
 import path from "path";
 import fse from "fs-extra";
+import { v4 as UUID } from "uuid";
 import {
   TypeSourceConfig,
   TypeSourceModuleConf,
@@ -149,6 +150,7 @@ export default class SourceConfig extends BaseCompiler {
    */
   getBrief(): TypeSourceConfigBrief {
     return {
+      key: UUID(),
       url: path.relative(PATHS.SOURCE_CONFIG_DIR, this.getDescFile()),
       name: this.getName(),
       version: this.getVersion(),
@@ -161,10 +163,5 @@ export default class SourceConfig extends BaseCompiler {
    * 解析全部模块数据
    */
   getConfig(): TypeSourceConfig {
-    return {
-      ...this.getBrief(),
-      sourceTypeList: this.getSourceTypeList(),
-      moduleList: this.getModuleList()
-    };
   }
 }

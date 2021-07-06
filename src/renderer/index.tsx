@@ -12,6 +12,9 @@ import { GlobalStore } from "./store";
 import Router from "./router";
 import LightTheme from "./theme/light";
 
+// const log = console.log;
+// console.log = (...args) => log(new Date(), ...args);
+
 function Index(): JSX.Element {
   const loading = useInitEditor();
   return loading ? (

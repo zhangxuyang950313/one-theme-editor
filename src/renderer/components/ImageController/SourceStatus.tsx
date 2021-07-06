@@ -2,6 +2,7 @@ import path from "path";
 import React from "react";
 import styled from "styled-components";
 import { remote } from "electron";
+import { Tooltip } from "antd";
 import { CheckCircleTwoTone, CloseCircleTwoTone } from "@ant-design/icons";
 import { useProjectPathname } from "@/hooks/project";
 
@@ -16,25 +17,31 @@ const SourceStatus: React.FC<{
 
   return (
     <>
-      {releaseList.map((relativePath, index) => {
-        const basename = path.basename(relativePath);
+      {releaseList.map((pathname, index) => {
+        const basename = path.basename(pathname);
         // const hasIt = fse.existsSync(path.join(projectPathname, relativePath));
-        const hasIt = new Set(dynamicReleaseList).has(relativePath);
-        const absPath = path.join(projectPathname, relativePath);
+        const hasIt = new Set(dynamicReleaseList).has(pathname);
+        const absPath = path.join(projectPathname, pathname);
         return (
-          <StyleSourceStatusLine
+          <Tooltip
             key={`${basename}-${index}`}
-            data-exists={String(hasIt)}
-            onClick={() => hasIt && remote.shell.showItemInFolder(absPath)}
+            title={pathname}
+            placement="top"
           >
-            {hasIt ? (
-              <CheckCircleTwoTone twoToneColor="#52c41a" />
-            ) : (
-              <CloseCircleTwoTone twoToneColor="#ff0000" />
-            )}
-            &ensp;
-            {basename}
-          </StyleSourceStatusLine>
+            <StyleSourceStatusLine
+              title={pathname}
+              data-exists={String(hasIt)}
+              onClick={() => hasIt && remote.shell.showItemInFolder(absPath)}
+            >
+              {hasIt ? (
+                <CheckCircleTwoTone twoToneColor="#52c41a" />
+              ) : (
+                <CloseCircleTwoTone twoToneColor="#ff0000" />
+              )}
+              &ensp;
+              {basename}
+            </StyleSourceStatusLine>
+          </Tooltip>
         );
       })}
     </>
@@ -42,7 +49,6 @@ const SourceStatus: React.FC<{
 };
 
 const StyleSourceStatusLine = styled.p`
-  cursor: pointer;
   margin-bottom: 6px;
   max-width: 100%;
   word-wrap: break-word;
@@ -51,15 +57,15 @@ const StyleSourceStatusLine = styled.p`
   font-size: 10px;
   color: ${({ theme }) => theme["@text-color-secondary"]};
   user-select: text;
-  /* overflow-x: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap; */
   &[data-exists="true"] {
     cursor: pointer;
   }
   &[data-exists="false"] {
     opacity: 0.5;
   }
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;
 
 export default SourceStatus;

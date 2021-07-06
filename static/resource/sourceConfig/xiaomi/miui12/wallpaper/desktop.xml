@@ -27,7 +27,7 @@
             <to>wallpaper/default_wallpaper.jpg</to>
         </image>
 
-        <!-- 底栏图标 
+        <!-- 底栏图标 -->
         <image 
             name="拨号" 
             x="160" y="2150" w="186" h="186" align="center" alignV="center" 
@@ -64,9 +64,9 @@
              src="../icons/res/com.android.camera.png"
         >
             <to>icons/res/com.android.camera.png</to>
-        </image>-->
+        </image>
 
-        <!-- 第一排图标 
+        <!-- 第一排图标 -->
         <image 
             name="天气"
             x="168" y="1100" w="186" h="186" align="center" alignV="center"
@@ -79,7 +79,7 @@
             text="天气"
             x="168" y="1250" size="36" align="center" alignV="center"
             color="${action_bar_title_text_color_light}"
-        />-->
+        />
 
         <image 
             name="小米商城"

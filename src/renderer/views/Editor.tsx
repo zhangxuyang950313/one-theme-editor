@@ -107,7 +107,9 @@ const Editor: React.FC = () => {
   return (
     <StyleEditor>
       {/* 模块选择器 */}
-      <ModuleSelector />
+      <StyleModuleSelector>
+        <ModuleSelector />
+      </StyleModuleSelector>
       {/* 编辑区域 */}
       <StyleEditorContent>
         {/* 工具栏 */}
@@ -132,6 +134,15 @@ const StyleEditor = styled.div`
   width: 100vw;
   height: 100vh;
   display: flex;
+`;
+
+const StyleModuleSelector = styled(StyleBorderRight)`
+  width: 80px;
+  height: 100vh;
+  padding: 80px 0;
+  flex-shrink: 0;
+  overflow-y: auto;
+  transition: all 1s ease;
 `;
 
 const StyleEditorContent = styled.div`

@@ -16,17 +16,16 @@ import { useCopyReleaseWith } from "./hooks";
 
 // 图片操作区
 const ImageHandler: React.FC<{
+  sourceName: string;
   releaseList: string[];
   dynamicReleaseList: string[];
 }> = props => {
-  const { releaseList } = props;
-  const copyReleaseWith = useCopyReleaseWith(releaseList, "");
+  const { sourceName, releaseList, dynamicReleaseList } = props;
+  const copyReleaseWith = useCopyReleaseWith(releaseList, sourceName);
   const projectPathname = useProjectPathname();
 
-  // 目标素材绝对路径列表
-  const absReleaseList = projectPathname
-    ? releaseList.map(item => path.join(projectPathname, item))
-    : [];
+  const mapToAbsolute = (list: string[]) =>
+    projectPathname ? list.map(item => path.join(projectPathname, item)) : [];
 
   // 手动选取素材
   const handleImport = () => {
@@ -44,12 +43,13 @@ const ImageHandler: React.FC<{
 
   // 删除素材
   const handleDelete = () => {
-    asyncQueue(absReleaseList.map(item => () => apiDeleteFile(item))).catch(
-      err => {
-        console.log(err);
-        notification.warn({ message: ERR_CODE[4007] });
-      }
+    const delAsyncList = mapToAbsolute(dynamicReleaseList).map(
+      item => () => apiDeleteFile(item)
     );
+    asyncQueue(delAsyncList).catch(err => {
+      console.log(err);
+      notification.warn({ message: ERR_CODE[4007] });
+    });
   };
   return (
     <StyleHandler>
@@ -58,7 +58,7 @@ const ImageHandler: React.FC<{
       {/* .9编辑按钮 */}
       {/* <FormOutlined className="press edit" onClick={() => {}} /> */}
       {/* 删除按钮 */}
-      {absReleaseList.length && (
+      {dynamicReleaseList.length > 0 && (
         <DeleteOutlined className="press delete" onClick={handleDelete} />
       )}
     </StyleHandler>

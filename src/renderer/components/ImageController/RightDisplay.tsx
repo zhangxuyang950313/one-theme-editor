@@ -5,16 +5,16 @@ import styled from "styled-components";
 import { remote } from "electron";
 import { useImageUrl } from "@/hooks/image";
 import { useProjectPathname } from "@/hooks/project";
-import { useForceUpdateImage } from "./hooks";
+import { useForceUpdateImageUrl } from "./hooks";
 import ImageDisplay from "./ImageDisplay";
-import ImageHandler from "./ImageHandler";
+import ProjectImageHandler from "./ImageHandler";
 
 /**
  * 封装图片模板列表图片更新
  * @param props
  * @returns
  */
-const ProjectImage: React.FC<{
+const ProjectImageDisplay: React.FC<{
   dynamicReleaseList: string[];
 }> = props => {
   const { dynamicReleaseList } = props;
@@ -24,7 +24,7 @@ const ProjectImage: React.FC<{
     : [];
   const absPath = dynamicAbsReleaseList[0] || "";
   const imageUrl = useImageUrl(absPath);
-  const [url, forceUpdate] = useForceUpdateImage(imageUrl);
+  const [url, forceUpdate] = useForceUpdateImageUrl(imageUrl);
 
   useEffect(() => {
     forceUpdate();
@@ -43,16 +43,18 @@ const ProjectImage: React.FC<{
  * @returns
  */
 const RightDisplay: React.FC<{
+  sourceName: string;
   releaseList: string[];
   dynamicReleaseList: string[];
 }> = props => {
-  const { releaseList, dynamicReleaseList } = props;
+  const { sourceName, releaseList, dynamicReleaseList } = props;
 
   return (
     <StyleProjectImage>
-      <ProjectImage dynamicReleaseList={dynamicReleaseList} />
+      <ProjectImageDisplay dynamicReleaseList={dynamicReleaseList} />
       {/* 图片操作 */}
-      <ImageHandler
+      <ProjectImageHandler
+        sourceName={sourceName}
         releaseList={releaseList}
         dynamicReleaseList={dynamicReleaseList}
       />

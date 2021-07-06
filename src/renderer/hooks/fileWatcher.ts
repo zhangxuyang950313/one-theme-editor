@@ -61,7 +61,7 @@ export function useReleaseListWatcher(releaseList: string[]): string[] {
   const projectPathname = useProjectPathname();
   const [list, setList] = useState<string[]>([]);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (!projectPathname) return;
     const watchers = mapWatchers(releaseList.length, {
       cwd: projectPathname || undefined,
@@ -75,7 +75,7 @@ export function useReleaseListWatcher(releaseList: string[]): string[] {
       );
       setList(existsList);
     };
-    // updateList();
+    setList([]);
     watchers.forEach((watcher, index) => {
       // 设定监听最大值
       // TODO：如果超过会是什么样

@@ -1,7 +1,7 @@
 import React from "react";
 
 import styled from "styled-components";
-import PreloadImage from "@/components/Image/PreloadImage";
+import { LazyImage } from "@/components/ImageCollection";
 
 /**
  * 图片素材展示, 底部有个背景
@@ -16,7 +16,7 @@ const ImageDisplay: React.FC<TypePropsOfShowImage> = props => {
 
   return (
     <StyleShowImage>
-      <PreloadImage
+      <LazyImage
         className="preview"
         alt={imageUrl}
         src={imageUrl}
@@ -28,6 +28,7 @@ const ImageDisplay: React.FC<TypePropsOfShowImage> = props => {
 };
 
 const StyleImageBackground = styled.div`
+  flex-shrink: 0;
   position: relative;
   width: 84px;
   height: 84px;

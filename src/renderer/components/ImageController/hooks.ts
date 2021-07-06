@@ -33,7 +33,7 @@ export function useCopyReleaseWith(
  * @param imageUrl
  * @returns
  */
-export function useForceUpdateImage(imageUrl: string): [string, () => void] {
+export function useForceUpdateImageUrl(imageUrl: string): [string, () => void] {
   const [url, updateUrl] = useState(imageUrl);
   const [count, updateCount] = useState(0);
 

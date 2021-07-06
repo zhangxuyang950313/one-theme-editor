@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import { usePageConf } from "@/hooks/source";
 import { useSourceImageUrl } from "@/hooks/image";
-import PreloadImage from "../Image/PreloadImage";
+import { PreloadImage } from "../ImageCollection";
 
 const Preview: React.FC = () => {
   const [currentPage] = usePageConf();

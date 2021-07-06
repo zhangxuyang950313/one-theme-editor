@@ -20,6 +20,7 @@ import { TypeProjectDataDoc, TypeProjectInfo } from "types/project";
 
 import ERR_CODE from "@/core/error-code";
 import { notification } from "antd";
+import { sleep } from "@/../common/utils";
 
 // 获取项目列表
 export function useProjectList(): [
@@ -74,6 +75,7 @@ export function useFetchProjectData(): [
     if (!project) throw new Error(ERR_CODE[2005]);
     console.log(`载入工程：: ${uuid}`);
     dispatch(ActionSetProjectData(project));
+    await sleep(300);
     updateLoading(false);
   };
   useEffect(() => {
@@ -92,8 +94,8 @@ export function useFetchProjectData(): [
 export function useLoadProject(): boolean {
   const [projectData, step1Loading] = useFetchProjectData();
   const step2Loading = useFetchSourceConfig()[1];
-  const step3Loading = useFetchPageConfData()[1];
-  return !projectData && step1Loading && step2Loading && step3Loading;
+  useFetchPageConfData();
+  return !projectData || step1Loading || step2Loading;
 }
 
 // 获取工程数据

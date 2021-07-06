@@ -155,10 +155,7 @@ export function useFetchSourceConfig(): [
   const sourceConfigUrl = useSourceConfigUrl();
   const sourceConfig = useSourceConfig();
   const doFetchData = useCallback(async () => {
-    if (!sourceConfigUrl) {
-      console.log("sourceConfigUrl 为空");
-      return;
-    }
+    if (!sourceConfigUrl) return;
     updateLoading(true);
     const data = await apiGetSourceConfig(sourceConfigUrl);
     if (!data) throw new Error(ERR_CODE[3002]);

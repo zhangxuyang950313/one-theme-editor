@@ -31,7 +31,7 @@ const MiddleCopyButton: React.FC<{
         <RightCircleOutlined onClick={() => copyReleaseFn(absoluteFrom)} />
       </StyleCopyButton>
     );
-  }, []);
+  }, [sourceUrl]);
 };
 
 const StyleCopyButton = styled.div`
@@ -54,7 +54,7 @@ const ImageController: React.FC<TypeSourceImageElement> = imageSource => {
   if (!imageSource || !source) return null;
 
   return (
-    <StyleImageChanger>
+    <StyleImageController>
       {/* 图片描述 */}
       <div className="description">
         {imageSource.name}
@@ -81,15 +81,16 @@ const ImageController: React.FC<TypeSourceImageElement> = imageSource => {
         />
         {/* 工程素材展示 */}
         <RightDisplay
+          sourceName={name}
           releaseList={releaseList}
           dynamicReleaseList={dynamicReleaseList}
         />
       </div>
-    </StyleImageChanger>
+    </StyleImageController>
   );
 };
 
-const StyleImageChanger = styled.div`
+const StyleImageController = styled.div`
   /* display: inline; */
   /* padding: 10px; */
   margin-bottom: 20px;

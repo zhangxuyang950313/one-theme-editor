@@ -9,6 +9,7 @@ import {
 import { ActionSetPathConfig } from "@/store/global/modules/base/action";
 import { useGlobalSelector, useGlobalDispatch } from "@/store/index";
 import { TypePathConfig } from "server/core/pathUtils";
+import { sleep } from "@/../common/utils";
 
 // 设置页面标题
 export enum presetTitle {
@@ -79,8 +80,7 @@ export function useInitEditor(): boolean {
     apiGetPathConfig()
       .then(async data => {
         dispatch(ActionSetPathConfig(data));
-        console.log(data);
-        await new Promise(resolve => setTimeout(resolve, 300));
+        await sleep(300);
         updateLoading(false);
       })
       .catch(err => {

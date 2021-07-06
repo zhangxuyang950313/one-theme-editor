@@ -16,14 +16,13 @@ export function useImagePrefix(): string {
  * @param src
  * @returns 加载成功返回 url 失败返回空字符串
  */
-export function useLoadImage(src = ""): string {
-  const [url, setFinalURL] = useState("");
+export function useLoadImage(src: string): string {
+  const [url, setUrl] = useState("");
   const [img] = useState(new Image());
 
   useEffect(() => {
-    if (!src) return;
-    img.onload = () => setFinalURL(src);
-    img.onerror = () => setFinalURL("");
+    img.onload = () => setUrl(src);
+    img.onerror = () => setUrl("");
     img.src = src;
 
     // 卸载数据响应
@@ -42,22 +41,11 @@ export function useLoadImage(src = ""): string {
  * @returns url ImageRef
  */
 export function useLoadImageLazy(
-  src?: string
-): [string, React.RefObject<HTMLImageElement>] {
+  src: string
+): React.RefObject<HTMLImageElement> {
   const imageRef = useRef<HTMLImageElement>(null);
-  const image = useState(new Image())[0];
-  const [url, setUrl] = useState("");
-
-  const doLoad = (imgUrl = "") => {
-    image.onload = () => setUrl(imgUrl);
-    image.onerror = () => setUrl("");
-    image.src = imgUrl;
-  };
-
-  const onDestroy = () => {
-    image.onload = () => Function.prototype;
-    image.onerror = () => Function.prototype;
-  };
+  const [imageUrl, setImageUrl] = useState("");
+  const url = useLoadImage(imageUrl);
 
   useEffect(() => {
     if (!imageRef.current) return;
@@ -65,15 +53,23 @@ export function useLoadImageLazy(
     // 监听进入视窗
     const io = new IntersectionObserver(entries => {
       if (entries[0].intersectionRatio <= 0) return;
-      doLoad(src);
+      if (!imageRef.current) return;
+      setImageUrl(src);
       io.disconnect();
     });
     io.observe(imageRef.current);
 
-    return onDestroy;
+    return () => {
+      io.disconnect();
+    };
   }, [src, imageRef.current]);
 
-  return [url, imageRef];
+  useEffect(() => {
+    if (!imageRef.current) return;
+    imageRef.current.src = url;
+  }, [url]);
+
+  return imageRef;
 }
 
 /**
@@ -81,10 +77,9 @@ export function useLoadImageLazy(
  * @param filepath
  * @returns
  */
-export function useLoadImageByPath(filepath = ""): string {
+export function useLoadImageByPath(filepath: string): string {
   const imageUrl = useImageUrl(filepath)[0];
-  const url = useLoadImage(imageUrl);
-  return url;
+  return useLoadImage(imageUrl);
 }
 
 // /**

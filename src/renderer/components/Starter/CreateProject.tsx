@@ -28,7 +28,7 @@ const CreateProject: React.FC<TypeProps> = props => {
   // 模板列表
   const [sourceDescList, isLoading] = useSourceDescriptionList();
   // 选择的模板
-  const [selectedSourceDesc, setSourceDesc] = useState<TypeSourceConfigBrief>();
+  const [sourceConfig, setSourceConfig] = useState<TypeSourceConfigBrief>();
   // 当前步骤
   const [curStep, setCurStep] = useState(0);
   // 填写工程描述
@@ -40,9 +40,7 @@ const CreateProject: React.FC<TypeProps> = props => {
   // 表单实例
   const [form] = Form.useForm<TypeProjectInfo>();
 
-  if (!brandConf) {
-    return null;
-  }
+  if (!brandConf) return null;
 
   // 表单默认值
   const initialValues = {
@@ -65,7 +63,7 @@ const CreateProject: React.FC<TypeProps> = props => {
   // 复位
   const init = () => {
     jumpStep(0);
-    setSourceDesc(undefined);
+    setSourceConfig(undefined);
     setProjectInfo(undefined);
     form.resetFields();
   };
@@ -127,8 +125,8 @@ const CreateProject: React.FC<TypeProps> = props => {
               <SourceConfigManager
                 isLoading={isLoading}
                 sourceConfigList={sourceDescList}
-                selectedSourceConfig={selectedSourceDesc}
-                onSelected={setSourceDesc}
+                selectedConfig={sourceConfig}
+                onSelected={setSourceConfig}
               />
               <ProjectInfoForm form={form} initialValues={initialValues} />
             </div>
@@ -199,7 +197,7 @@ const CreateProject: React.FC<TypeProps> = props => {
               });
             });
           }
-          if (!selectedSourceDesc) {
+          if (!sourceConfig) {
             throw new Error("未选择版本");
           }
           if (!projectInfo) {
@@ -208,7 +206,7 @@ const CreateProject: React.FC<TypeProps> = props => {
           updateCreating(true);
           return apiCreateProject({
             projectPathname: projectPathnameRef.current || "",
-            sourceConfigUrl: selectedSourceDesc.url,
+            sourceConfigUrl: sourceConfig.url,
             brandInfo: {
               name: brandConf.name,
               type: brandConf.type

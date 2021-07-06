@@ -3,17 +3,14 @@ import styled from "styled-components";
 import logSymbols from "log-symbols";
 import { Tooltip } from "antd";
 import { useModuleList, useModuleConf } from "@/hooks/source";
-import SourceImage from "../Image/SourceImage";
+import { SourceImage } from "../ImageCollection";
 
 // 模块选择器
 const ModuleSelector: React.FC = () => {
   const moduleList = useModuleList();
   const [currentModule, setCurrentModule] = useModuleConf();
 
-  if (!currentModule) {
-    console.log(logSymbols.error, "currentModule 为空");
-    return null;
-  }
+  if (!currentModule) return null;
 
   if (moduleList.length === 0) {
     console.log(logSymbols.error, "modules 为空");
@@ -21,7 +18,7 @@ const ModuleSelector: React.FC = () => {
   }
 
   return (
-    <StyleModuleSelector>
+    <>
       {moduleList.map((item, key) => (
         <Tooltip key={key} title={item.name} placement="right">
           <StyleIcon onClick={() => setCurrentModule(item)}>
@@ -39,18 +36,10 @@ const ModuleSelector: React.FC = () => {
           </StyleIcon>
         </Tooltip>
       ))}
-    </StyleModuleSelector>
+    </>
   );
 };
 
-const StyleModuleSelector = styled.div`
-  flex-shrink: 0;
-  width: 80px;
-  height: 100vh;
-  overflow-y: auto;
-  border-right: ${({ theme }) => theme["@border-color-base"]} 1px solid;
-  padding: 80px 0;
-`;
 const StyleIcon = styled.div`
   width: 100%;
   height: 65px;
@@ -66,9 +55,6 @@ const StyleIcon = styled.div`
       width: 55px;
       opacity: 1;
     }
-    /* &:hover {
-      width: 50px;
-    } */
   }
   .name {
     font-size: 12px;

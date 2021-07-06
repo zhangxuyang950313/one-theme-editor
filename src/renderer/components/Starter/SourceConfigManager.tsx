@@ -11,14 +11,18 @@ import SourceConfigCard from "./SourceConfigCard";
 type TypeProps = {
   isLoading: boolean;
   sourceConfigList: TypeSourceConfigBrief[];
-  selectedSourceConfig: TypeSourceConfigBrief | undefined;
+  selectedConfig: TypeSourceConfigBrief | undefined;
   onSelected: (config?: TypeSourceConfigBrief) => void;
 };
 
 // 配置管理
 const SourceConfigManager: React.FC<TypeProps> = props => {
-  const { sourceConfigList, selectedSourceConfig, isLoading, onSelected } =
-    props;
+  const {
+    sourceConfigList,
+    selectedConfig: selectedSourceConfig,
+    isLoading,
+    onSelected
+  } = props;
 
   if (isLoading) {
     return (

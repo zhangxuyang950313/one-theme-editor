@@ -275,3 +275,12 @@ export async function asyncQueue<T>(
   if (fail.length) throw new Error(String(fail));
   return result;
 }
+
+/**
+ * 睡眠定时器
+ * @param delay
+ * @returns
+ */
+export async function sleep(delay: number): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, delay));
+}

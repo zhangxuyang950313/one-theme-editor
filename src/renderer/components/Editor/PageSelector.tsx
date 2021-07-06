@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Collapse } from "antd";
 import { useSourceImageUrl } from "@/hooks/image";
 import { usePageConf, usePageGroupList } from "@/hooks/source";
-import PreloadImage from "@/components/Image/PreloadImage";
+import { PreloadImage } from "@/components/ImageCollection";
 import { TypeSourcePageConf } from "types/source-config";
 
 const PagePreview: React.FC<{ pageData: TypeSourcePageConf }> = props => {
@@ -23,10 +23,7 @@ const PagePreview: React.FC<{ pageData: TypeSourcePageConf }> = props => {
 const PageSelector: React.FC = () => {
   const pageGroupList = usePageGroupList();
 
-  if (pageGroupList.length === 0) {
-    console.log("页面分组为空");
-    return null;
-  }
+  if (pageGroupList.length === 0) return null;
 
   return (
     <Collapse bordered={false} defaultActiveKey={Object.keys(pageGroupList)}>
