@@ -2,7 +2,7 @@ import path from "path";
 import fse from "fs-extra";
 import logSymbols from "log-symbols";
 import { WatchOptions, FSWatcher } from "chokidar";
-import { useLayoutEffect, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useProjectPathname } from "@/hooks/project";
 
 export enum FILE_STATUS {

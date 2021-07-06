@@ -19,9 +19,11 @@ const Preview: React.FC = () => {
 const StylePreviewer = styled.div`
   width: 100%;
   border-radius: 12px;
+  border: 1px solid;
+  border-color: ${({ theme }) => theme["@border-color-base"]};
+  overflow: hidden;
   .img {
     width: 100%;
-    border-radius: 12px;
   }
 `;
 

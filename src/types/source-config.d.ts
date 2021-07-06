@@ -93,6 +93,7 @@ export type TypeSourceElement = TypeSourceImageElement | TypeSourceTextElement;
 
 // 预览单个页面配置
 export type TypeSourcePageConf = {
+  key: string;
   name: string;
   preview: string;
   src: string;

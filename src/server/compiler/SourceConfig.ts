@@ -115,6 +115,7 @@ export default class SourceConfig extends BaseCompiler {
         this.resolvePath(src)
       ).getPreviewList();
       return {
+        key: UUID(),
         name: node.getAttributeOf("name"),
         preview: previewList[0],
         src: this.relativePath(src)
@@ -163,5 +164,10 @@ export default class SourceConfig extends BaseCompiler {
    * 解析全部模块数据
    */
   getConfig(): TypeSourceConfig {
+    return {
+      ...this.getBrief(),
+      sourceTypeList: this.getSourceTypeList(),
+      moduleList: this.getModuleList()
+    };
   }
 }

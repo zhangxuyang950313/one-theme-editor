@@ -7,17 +7,43 @@ import { PreloadImage } from "@/components/ImageCollection";
 import { TypeSourcePageConf } from "types/source-config";
 
 const PagePreview: React.FC<{ pageData: TypeSourcePageConf }> = props => {
-  const sourceImageURL = useSourceImageUrl(props.pageData.preview);
-  const [, setPageConf] = usePageConf();
+  const { pageData } = props;
+  const sourceImageURL = useSourceImageUrl(pageData.preview);
+  const [pageConf, setPageConf] = usePageConf();
 
   return (
-    <PreloadImage
-      className="preview-image"
-      src={sourceImageURL}
-      onClick={() => setPageConf(props.pageData)}
-    />
+    <StylePreviewImage data-active={String(pageConf?.key === pageData.key)}>
+      <PreloadImage
+        className="preview-image"
+        src={sourceImageURL}
+        onClick={() => setPageConf(pageData)}
+      />
+    </StylePreviewImage>
   );
 };
+
+const StylePreviewImage = styled.span`
+  cursor: pointer;
+  width: 48%;
+  margin: 1%;
+  border: 1px solid;
+  border-color: ${({ theme }) => theme["@border-color-base"]};
+  border-radius: 6px;
+  overflow: hidden;
+  opacity: 0.4;
+  transition: 0.4s all;
+  &[data-active="true"] {
+    border: 1px solid;
+    border-color: ${({ theme }) => theme["@primary-color"]};
+    opacity: 1;
+  }
+  .preview-image {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    object-fit: cover;
+  }
+`;
 
 // 页面选择器
 const PageSelector: React.FC = () => {
@@ -49,13 +75,6 @@ const StylePagePreview = styled.div`
   width: 100%;
   overflow: hidden;
   flex-wrap: wrap;
-  .preview-image {
-    cursor: pointer;
-    text-align: center;
-    margin: 1%;
-    width: 48%;
-    border-radius: 6px;
-  }
 `;
 
 export default PageSelector;

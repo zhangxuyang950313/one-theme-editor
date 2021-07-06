@@ -3,7 +3,7 @@
 <page version="1.0.0" description="桌面壁纸和首屏图标" screenWidth="1080">
 
     <!-- 静态预览图 -->
-    <preview src="../preview/preview.jpg"/>
+    <preview src="../com.android.contacts/pages/page_dial_1.jpg"/>
     
     <!-- xml 模板文件 -->
     <template 

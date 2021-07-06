@@ -142,7 +142,6 @@ const StyleModuleSelector = styled(StyleBorderRight)`
   padding: 80px 0;
   flex-shrink: 0;
   overflow-y: auto;
-  transition: all 1s ease;
 `;
 
 const StyleEditorContent = styled.div`

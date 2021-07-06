@@ -22,6 +22,7 @@
             <!-- 页面定义 -->
             <page name="桌面1" src="wallpaper/desktop.xml"/>
             <page name="桌面2" src="wallpaper/desktop2.xml"/>
+            <page name="桌面2" src="wallpaper/desktop2.xml"/>
         </group>
         <!-- 锁屏壁纸 -->
         <group name="锁屏壁纸">
