@@ -265,9 +265,13 @@ export async function asyncQueue<T>(
   delay = 0
 ): Promise<T[]> {
   const result: T[] = [];
+  const fail: string[] = [];
   for (const item of list.filter(item => item instanceof Function)) {
-    await item()?.then(result.push.bind(result));
+    await item()
+      ?.then(result.push.bind(result))
+      .catch(err => fail.push(err));
     if (delay) await new Promise(resolve => setTimeout(resolve, delay));
   }
+  if (fail.length) throw new Error(String(fail));
   return result;
 }

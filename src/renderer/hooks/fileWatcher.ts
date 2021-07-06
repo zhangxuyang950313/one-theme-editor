@@ -73,7 +73,6 @@ export function useReleaseListWatcher(releaseList: string[]): string[] {
       const existsList = Array.from(set).filter(
         item => item && fse.existsSync(path.join(projectPathname, item))
       );
-      console.log({ existsList });
       setList(existsList);
     };
     // updateList();

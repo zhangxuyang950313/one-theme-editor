@@ -1,5 +1,5 @@
 import path from "path";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { notification } from "antd";
 import { apiCopyFile } from "@/api";
 import { useProjectPathname } from "@/hooks/project";
@@ -33,17 +33,18 @@ export function useCopyReleaseWith(
  * @param imageUrl
  * @returns
  */
-export function useForceUpdateImage(
-  imageUrl = ""
-): [string, (url?: string) => void] {
+export function useForceUpdateImage(imageUrl: string): [string, () => void] {
   const [url, updateUrl] = useState(imageUrl);
   const [count, updateCount] = useState(0);
 
-  const forceUpdate = (url?: string) => {
-    if (!url && !imageUrl) return;
-    updateUrl(`${url || imageUrl}&count=${count}`);
+  const forceUpdate = () => {
+    updateUrl(imageUrl ? `${imageUrl}&count=${count}` : "");
     updateCount(count + 1);
   };
+
+  useEffect(() => {
+    forceUpdate();
+  }, [imageUrl]);
 
   return [url, forceUpdate];
 }

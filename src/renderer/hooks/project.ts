@@ -90,10 +90,10 @@ export function useFetchProjectData(): [
  * @returns
  */
 export function useLoadProject(): boolean {
-  const step1Loading = useFetchProjectData()[1];
+  const [projectData, step1Loading] = useFetchProjectData();
   const step2Loading = useFetchSourceConfig()[1];
   const step3Loading = useFetchPageConfData()[1];
-  return step1Loading && step2Loading && step3Loading;
+  return !projectData && step1Loading && step2Loading && step3Loading;
 }
 
 // 获取工程数据

@@ -42,13 +42,13 @@ export function useLoadImage(src = ""): string {
  * @returns url ImageRef
  */
 export function useLoadImageLazy(
-  src?: string | null
+  src?: string
 ): [string, React.RefObject<HTMLImageElement>] {
   const imageRef = useRef<HTMLImageElement>(null);
   const image = useState(new Image())[0];
   const [url, setUrl] = useState("");
 
-  const doLoad = (imgUrl: string) => {
+  const doLoad = (imgUrl = "") => {
     image.onload = () => setUrl(imgUrl);
     image.onerror = () => setUrl("");
     image.src = imgUrl;
@@ -61,7 +61,6 @@ export function useLoadImageLazy(
 
   useEffect(() => {
     if (!imageRef.current) return;
-    if (!src) return;
 
     // 监听进入视窗
     const io = new IntersectionObserver(entries => {
@@ -113,9 +112,9 @@ export function useLoadImageByPath(filepath = ""): string {
  * @param filepathVal
  * @returns
  */
-export function useImageUrl(filepathVal = ""): string {
+export function useImageUrl(filepath = ""): string {
   const prefix = useImagePrefix();
-  return filepathVal ? prefix + filepathVal : "";
+  return filepath ? prefix + filepath : "";
 }
 
 /**

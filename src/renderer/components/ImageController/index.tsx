@@ -66,25 +66,24 @@ const ImageController: React.FC<TypeSourceImageElement> = imageSource => {
           </span>
         ) : null}
       </div>
+      {/* 工程素材状态 */}
       <SourceStatus
         releaseList={releaseList}
         dynamicReleaseList={dynamicReleaseList}
       />
       <div className="edit-wrapper">
-        <div className="left">
-          <LeftDisplay src={source.url} name={name} />
-        </div>
+        {/* 默认素材展示 */}
+        <LeftDisplay src={source.url} name={name} />
         {/* 一键拷贝默认素材 */}
         <MiddleCopyButton
           sourceUrl={source.url}
           copyReleaseFn={copyReleaseWith}
         />
-        <div className="right">
-          <RightDisplay
-            releaseList={releaseList}
-            dynamicReleaseList={dynamicReleaseList}
-          />
-        </div>
+        {/* 工程素材展示 */}
+        <RightDisplay
+          releaseList={releaseList}
+          dynamicReleaseList={dynamicReleaseList}
+        />
       </div>
     </StyleImageChanger>
   );
@@ -111,10 +110,6 @@ const StyleImageChanger = styled.div`
     display: flex;
     flex-direction: wrap;
     align-items: center;
-    .left,
-    .right {
-      /* margin: 10px; */
-    }
   }
 `;
 export default ImageController;
