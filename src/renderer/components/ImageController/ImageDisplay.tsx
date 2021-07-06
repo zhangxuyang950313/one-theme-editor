@@ -3,7 +3,9 @@ import React from "react";
 import styled from "styled-components";
 import PreloadImage from "@/components/Image/PreloadImage";
 
-// 图片素材展示
+/**
+ * 图片素材展示, 底部有个背景
+ */
 type TypePropsOfShowImage = {
   imageUrl?: string;
   onClick?: () => void;

@@ -5,7 +5,6 @@ import ImageController from "@/components/ImageController/index";
 
 const ImageSourceList: React.FC = () => {
   const imageSourceList = useImageSourceList();
-  console.log({ imageSourceList });
   return (
     <>
       {imageSourceList.map((sourceConf, key) => (

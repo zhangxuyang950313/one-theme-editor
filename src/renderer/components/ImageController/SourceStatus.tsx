@@ -1,14 +1,16 @@
 import path from "path";
-import React, { useContext } from "react";
+import React from "react";
 import styled from "styled-components";
 import { remote } from "electron";
 import { CheckCircleTwoTone, CloseCircleTwoTone } from "@ant-design/icons";
 import { useProjectPathname } from "@/hooks/project";
-import Context from "./Context";
 
-const SourceStatus: React.FC = () => {
+const SourceStatus: React.FC<{
+  releaseList: string[];
+  dynamicReleaseList: string[];
+}> = props => {
+  const { releaseList, dynamicReleaseList } = props;
   const projectPathname = useProjectPathname();
-  const { releaseList, dynamicReleaseList } = useContext(Context);
 
   if (!projectPathname) return null;
 

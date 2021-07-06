@@ -1,6 +1,6 @@
 // 图片替换单元组件
 import path from "path";
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import ERR_CODE from "@/core/error-code";
 
@@ -11,7 +11,6 @@ import { useProjectPathname } from "@/hooks/project";
 import { notification } from "antd";
 import { useImageUrl } from "@/hooks/image";
 import { useCopyReleaseWith, useForceUpdateImage } from "./hooks";
-import Context from "./Context";
 import ImageDisplay from "./ImageDisplay";
 import ImageHandler from "./ImageHandler";
 
@@ -29,8 +28,7 @@ const ProjectImage: React.FC<{
   const imageUrl = useImageUrl(absReleaseForShow);
   const [url, forceUpdate] = useForceUpdateImage();
   useEffect(() => {
-    if (!imageUrl) return;
-    forceUpdate(imageUrl);
+    imageUrl && forceUpdate(imageUrl);
   }, [dynamicAbsReleaseList]);
   return (
     <ImageDisplay
@@ -44,8 +42,11 @@ const ProjectImage: React.FC<{
  * 工程目录素材显示和操作封装
  * @returns
  */
-const ProjectDisplay: React.FC = () => {
-  const { releaseList, dynamicReleaseList } = useContext(Context);
+const RightDisplay: React.FC<{
+  releaseList: string[];
+  dynamicReleaseList: string[];
+}> = props => {
+  const { releaseList, dynamicReleaseList } = props;
   const projectPathname = useProjectPathname();
   const copyReleaseWith = useCopyReleaseWith(releaseList, "");
 
@@ -107,4 +108,4 @@ const StyleProjectImage = styled.div`
   display: flex;
 `;
 
-export default ProjectDisplay;
+export default RightDisplay;

@@ -1,89 +1,91 @@
 import path from "path";
 import React, { useMemo } from "react";
-import { remote } from "electron";
-
 import styled from "styled-components";
 import { RightCircleOutlined } from "@ant-design/icons";
 
-import { useProjectPathname } from "@/hooks/project";
 import { useSourceConfigRoot } from "@/hooks/source";
 import { useReleaseListWatcher } from "@/hooks/fileWatcher";
 import { TypeSourceImageElement } from "types/source-config";
 
-import { useImageUrl } from "@/hooks/image";
-import { previewFile } from "./utils";
-
 import { useCopyReleaseWith } from "./hooks";
-import PartialContext from "./Context";
-import ImageDisplay from "./ImageDisplay";
-import ProjectDisplay from "./ProjectDisplay";
+import LeftDisplay from "./LeftDisplay";
 import SourceStatus from "./SourceStatus";
+import RightDisplay from "./RightDisplay";
 
-const ImageController: React.FC<TypeSourceImageElement> = sourceConf => {
-  const { source, releaseList } = sourceConf;
-  const projectPathname = useProjectPathname();
+/**
+ * 拷贝素材按钮
+ * @param props
+ * @returns
+ */
+const MiddleCopyButton: React.FC<{
+  sourceUrl: string;
+  copyReleaseFn: (copyFrom: string) => void;
+}> = props => {
+  const { sourceUrl, copyReleaseFn } = props;
   const sourceConfigRoot = useSourceConfigRoot();
-  const dynamicReleaseList = useReleaseListWatcher(releaseList);
-  const copyReleaseWith = useCopyReleaseWith(releaseList, sourceConf.name);
+  return useMemo(() => {
+    if (!sourceConfigRoot || !sourceUrl) return null;
+    const absoluteFrom = path.join(sourceConfigRoot, sourceUrl);
+    return (
+      <StyleCopyButton>
+        <RightCircleOutlined onClick={() => copyReleaseFn(absoluteFrom)} />
+      </StyleCopyButton>
+    );
+  }, []);
+};
 
-  if (!sourceConf || !source || !sourceConfigRoot || !projectPathname) {
-    return null;
+const StyleCopyButton = styled.div`
+  cursor: pointer;
+  font-size: 30px;
+  color: ${({ theme }) => theme["@text-color"]};
+  margin: 20px;
+  transition: all 0.5s ease;
+  &:hover {
+    opacity: 0.5;
+    transition: all 0.1s ease;
   }
+`;
 
-  // 素材绝对路径
-  const absoluteFrom = path.join(sourceConfigRoot, source.url);
+const ImageController: React.FC<TypeSourceImageElement> = imageSource => {
+  const { source, releaseList, name } = imageSource;
+  const dynamicReleaseList = useReleaseListWatcher(releaseList);
+  const copyReleaseWith = useCopyReleaseWith(releaseList, imageSource.name);
 
-  // 左边使用 useMemo 进行渲染优化，防止重绘
-  const MemoLeftSource = () => {
-    const imageUrl = useImageUrl(absoluteFrom);
-    return useMemo(() => {
-      return (
-        <ImageDisplay
-          imageUrl={imageUrl}
-          onClick={() => {
-            if (process.platform !== "darwin") {
-              remote.shell.showItemInFolder(absoluteFrom);
-            } else {
-              previewFile(absoluteFrom, sourceConf.name);
-            }
-          }}
-        />
-      );
-    }, []);
-  };
+  if (!imageSource || !source) return null;
 
   return (
     <StyleImageChanger>
-      <PartialContext.Provider value={{ releaseList, dynamicReleaseList }}>
-        {/* 图片描述 */}
-        <div className="description">
-          {sourceConf.name}
-          {source.width && source.height ? (
-            <span className="image-size">
-              ({`${source.width}×${source.height}`}
-              {source.size && (
-                <span> | {(source.size / 1024).toFixed(1)}kb</span>
-              )}
-              )
-            </span>
-          ) : null}
+      {/* 图片描述 */}
+      <div className="description">
+        {imageSource.name}
+        {source.width && source.height ? (
+          <span className="image-size">
+            ({`${source.width}×${source.height}`}
+            {source.size && <span> | {(source.size / 1024).toFixed(1)}kb</span>}
+            )
+          </span>
+        ) : null}
+      </div>
+      <SourceStatus
+        releaseList={releaseList}
+        dynamicReleaseList={dynamicReleaseList}
+      />
+      <div className="edit-wrapper">
+        <div className="left">
+          <LeftDisplay src={source.url} name={name} />
         </div>
-        <SourceStatus />
-        <div className="edit-wrapper">
-          <div className="left">
-            {/* 素材展示 memo 组件 */}
-            <MemoLeftSource />
-          </div>
-          {/* 一键拷贝默认素材 */}
-          <RightCircleOutlined
-            className="center"
-            onClick={() => copyReleaseWith(absoluteFrom)}
+        {/* 一键拷贝默认素材 */}
+        <MiddleCopyButton
+          sourceUrl={source.url}
+          copyReleaseFn={copyReleaseWith}
+        />
+        <div className="right">
+          <RightDisplay
+            releaseList={releaseList}
+            dynamicReleaseList={dynamicReleaseList}
           />
-          <div className="right">
-            <ProjectDisplay />
-          </div>
         </div>
-      </PartialContext.Provider>
+      </div>
     </StyleImageChanger>
   );
 };
@@ -112,17 +114,6 @@ const StyleImageChanger = styled.div`
     .left,
     .right {
       /* margin: 10px; */
-    }
-    .center {
-      cursor: pointer;
-      font-size: 30px;
-      color: ${({ theme }) => theme["@text-color"]};
-      margin: 20px;
-      transition: all 0.5s ease;
-      &:hover {
-        opacity: 0.5;
-        transition: all 0.1s ease;
-      }
     }
   }
 `;

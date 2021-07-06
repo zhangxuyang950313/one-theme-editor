@@ -1,5 +1,5 @@
 import path from "path";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { notification } from "antd";
 import { apiCopyFile } from "@/api";
 import { useProjectPathname } from "@/hooks/project";
