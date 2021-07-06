@@ -10,12 +10,13 @@ import { useSourceConfigRoot } from "@/hooks/source";
 import { useReleaseListWatcher } from "@/hooks/fileWatcher";
 import { TypeSourceImageElement } from "types/source-config";
 
+import { useImageUrl } from "@/hooks/image";
 import { previewFile } from "./utils";
 
 import { useCopyReleaseWith } from "./hooks";
 import PartialContext from "./Context";
 import ImageDisplay from "./ImageDisplay";
-import ProjectImage from "./ProjectImage";
+import ProjectDisplay from "./ProjectDisplay";
 import SourceStatus from "./SourceStatus";
 
 const ImageController: React.FC<TypeSourceImageElement> = sourceConf => {
@@ -33,11 +34,12 @@ const ImageController: React.FC<TypeSourceImageElement> = sourceConf => {
   const absoluteFrom = path.join(sourceConfigRoot, source.url);
 
   // 左边使用 useMemo 进行渲染优化，防止重绘
-  const MemoLeftSource = () =>
-    useMemo(() => {
+  const MemoLeftSource = () => {
+    const imageUrl = useImageUrl(absoluteFrom);
+    return useMemo(() => {
       return (
         <ImageDisplay
-          filepath={absoluteFrom}
+          imageUrl={imageUrl}
           onClick={() => {
             if (process.platform !== "darwin") {
               remote.shell.showItemInFolder(absoluteFrom);
@@ -48,12 +50,13 @@ const ImageController: React.FC<TypeSourceImageElement> = sourceConf => {
         />
       );
     }, []);
+  };
 
   return (
     <StyleImageChanger>
       <PartialContext.Provider value={{ releaseList, dynamicReleaseList }}>
         {/* 图片描述 */}
-        <div className="text description">
+        <div className="description">
           {sourceConf.name}
           {source.width && source.height ? (
             <span className="image-size">
@@ -77,7 +80,7 @@ const ImageController: React.FC<TypeSourceImageElement> = sourceConf => {
             onClick={() => copyReleaseWith(absoluteFrom)}
           />
           <div className="right">
-            <ProjectImage />
+            <ProjectDisplay />
           </div>
         </div>
       </PartialContext.Provider>
@@ -89,34 +92,17 @@ const StyleImageChanger = styled.div`
   /* display: inline; */
   /* padding: 10px; */
   margin-bottom: 20px;
-  .text {
-    margin-bottom: 6px;
+  .description {
     width: 100%;
+    margin-bottom: 6px;
+    font-size: 16px;
     word-wrap: break-word;
     word-break: break-all;
     white-space: pre-wrap;
-  }
-  .description {
-    font-size: 16px;
     .image-size {
       margin-left: 4px;
       font-size: 10px;
       color: ${({ theme }) => theme["@text-color"]};
-    }
-  }
-  .to-basename {
-    font-size: 10px;
-    color: ${({ theme }) => theme["@text-color-secondary"]};
-    user-select: text;
-    max-width: 100%;
-    /* overflow-x: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap; */
-    &[data-exists="true"] {
-      cursor: pointer;
-    }
-    &[data-exists="false"] {
-      opacity: 0.5;
     }
   }
   .edit-wrapper {

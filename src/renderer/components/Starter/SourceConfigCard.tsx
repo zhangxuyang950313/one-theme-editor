@@ -22,7 +22,7 @@ const SourceConfigCard: React.FC<TypeProps> = props => {
     pathConfig?.SOURCE_CONFIG_DIR || "",
     sourceDescription.preview
   );
-  const [imgUrl] = useImageUrl(imageFilepath);
+  const imgUrl = useImageUrl(imageFilepath);
   return (
     <StyleSourceConfigCard data-hoverable={props.hoverable}>
       <Card

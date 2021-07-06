@@ -1,37 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 import styled from "styled-components";
 import PreloadImage from "@/components/Image/PreloadImage";
 
-import { useImageUrl } from "@/hooks/image";
-
 // 图片素材展示
 type TypePropsOfShowImage = {
-  filepath?: string;
+  imageUrl?: string;
   onClick?: () => void;
-  // showHandler 时就要强制传入 to 列表
-} & (
-  | { showHandler: true; absoluteToList: string[] }
-  | { showHandler?: false; absoluteToList?: string[] }
-);
+};
 
 const ImageDisplay: React.FC<TypePropsOfShowImage> = props => {
-  const { filepath, absoluteToList, onClick } = props;
-
-  // 图片参数改变，用于重载
-  const [count, updateCount] = useState(0);
-
-  const [imageUrl, handleChange] = useImageUrl();
-
-  // 图片重载
-  useEffect(() => {
-    if (!filepath) {
-      handleChange("");
-      return;
-    }
-    handleChange(`${filepath}&count=${count}`);
-    updateCount(count + 1);
-  }, [absoluteToList]);
+  const { imageUrl, onClick } = props;
 
   return (
     <StyleShowImage>

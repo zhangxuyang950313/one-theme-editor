@@ -1,4 +1,5 @@
 import path from "path";
+import { useState, useEffect } from "react";
 import { notification } from "antd";
 import { apiCopyFile } from "@/api";
 import { useProjectPathname } from "@/hooks/project";
@@ -25,4 +26,24 @@ export function useCopyReleaseWith(
       apiCopyFile(file, target);
     });
   };
+}
+
+/**
+ * 图片参数改变实现强制重载
+ * @param imageUrl
+ * @returns
+ */
+export function useForceUpdateImage(
+  imageUrl = ""
+): [string, (url?: string) => void] {
+  const [url, updateUrl] = useState(imageUrl);
+  const [count, updateCount] = useState(0);
+
+  const forceUpdate = (url?: string) => {
+    if (!url && !imageUrl) return;
+    updateUrl(`${url || imageUrl}&count=${count}`);
+    updateCount(count + 1);
+  };
+
+  return [url, forceUpdate];
 }

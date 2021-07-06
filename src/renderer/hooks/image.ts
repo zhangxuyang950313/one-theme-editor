@@ -113,10 +113,9 @@ export function useLoadImageByPath(filepath = ""): string {
  * @param filepathVal
  * @returns
  */
-export function useImageUrl(filepathVal = ""): [string, (x: string) => void] {
+export function useImageUrl(filepathVal = ""): string {
   const prefix = useImagePrefix();
-  const [filepath, setFilePath] = useState(filepathVal);
-  return [filepath ? prefix + filepath : "", setFilePath];
+  return filepathVal ? prefix + filepathVal : "";
 }
 
 /**
