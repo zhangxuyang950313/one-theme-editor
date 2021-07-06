@@ -8,7 +8,7 @@ import { useLoadImageByPath } from "@/hooks/image";
  * @param props 和 img 标签具有相同的属性
  */
 const LocalImage: React.FC<JSX.IntrinsicElements["img"]> = props => {
-  const [url] = useLoadImageByPath(props.src);
+  const url = useLoadImageByPath(props.src);
   const show = url && props.src;
   // 判断交给服务进程去做
   // &&

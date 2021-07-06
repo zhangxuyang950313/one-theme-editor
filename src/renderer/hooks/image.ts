@@ -1,5 +1,5 @@
 import path from "path";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import { useServerHost } from "@/hooks/index";
 import { useProjectPathname } from "@/hooks/project";
@@ -16,28 +16,65 @@ export function useImagePrefix(): string {
  * @param src
  * @returns 加载成功返回 url 失败返回空字符串
  */
-export function useLoadImage(src = ""): [string, (x: string) => void] {
+export function useLoadImage(src = ""): string {
   const [url, setFinalURL] = useState("");
   const [img] = useState(new Image());
 
-  const doReload = (preloadUrl: string) => {
-    // 空值直接返回
-    if (!preloadUrl) return;
-    img.onload = () => setFinalURL(preloadUrl);
-    img.onerror = () => setFinalURL("");
-    img.src = preloadUrl;
-  };
-
   useEffect(() => {
-    if (src) doReload(src);
+    if (!src) return;
+    img.onload = () => setFinalURL(src);
+    img.onerror = () => setFinalURL("");
+    img.src = src;
+
     // 卸载数据响应
     return () => {
       img.onload = () => Function.prototype;
       img.onerror = () => Function.prototype;
     };
-  }, []);
+  }, [src]);
 
-  return [url, doReload];
+  return url;
+}
+
+/**
+ * 懒加载图片
+ * @param src : ;
+ * @returns url ImageRef
+ */
+export function useLoadImageLazy(
+  src?: string | null
+): [string, React.RefObject<HTMLImageElement>] {
+  const imageRef = useRef<HTMLImageElement>(null);
+  const image = useState(new Image())[0];
+  const [url, setUrl] = useState("");
+
+  const doLoad = (imgUrl: string) => {
+    image.onload = () => setUrl(imgUrl);
+    image.onerror = () => setUrl("");
+    image.src = imgUrl;
+  };
+
+  const onDestroy = () => {
+    image.onload = () => Function.prototype;
+    image.onerror = () => Function.prototype;
+  };
+
+  useEffect(() => {
+    if (!imageRef.current) return;
+    if (!src) return;
+
+    // 监听进入视窗
+    const io = new IntersectionObserver(entries => {
+      if (entries[0].intersectionRatio <= 0) return;
+      doLoad(src);
+      io.disconnect();
+    });
+    io.observe(imageRef.current);
+
+    return onDestroy;
+  }, [src, imageRef.current]);
+
+  return [url, imageRef];
 }
 
 /**
@@ -45,17 +82,10 @@ export function useLoadImage(src = ""): [string, (x: string) => void] {
  * @param filepath
  * @returns
  */
-export function useLoadImageByPath(
-  filepath = ""
-): [string, (x: string) => void] {
-  const [imageUrl, updateUrl] = useImageUrl(filepath);
-  const [url, handlePreload] = useLoadImage(imageUrl);
-
-  useEffect(() => {
-    handlePreload(imageUrl);
-  }, [imageUrl]);
-
-  return [url, updateUrl];
+export function useLoadImageByPath(filepath = ""): string {
+  const imageUrl = useImageUrl(filepath)[0];
+  const url = useLoadImage(imageUrl);
+  return url;
 }
 
 // /**
@@ -154,19 +184,16 @@ export function useGetSourceImageUrl(
 }
 
 /**
- * 动态 SourceImageUrl，导出一个 state 数据和重新获取的方法
+ * 生成资源图片 url
  * @param relativePath
  * @returns
  */
-export function useSourceImageUrl(
-  relativePath = ""
-): [string, (x: string) => void] {
-  const [relative, setRelative] = useState(relativePath);
+export function useSourceImageUrl(relative?: string): string {
   const [sourceUrl, setSourceUrl] = useState("");
   const getSourceImageUrl = useGetSourceImageUrl();
 
   useEffect(() => {
     setSourceUrl(getSourceImageUrl(relative));
   }, [relative]);
-  return [sourceUrl, setRelative];
+  return sourceUrl;
 }

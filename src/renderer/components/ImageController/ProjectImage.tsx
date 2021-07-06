@@ -1,20 +1,20 @@
 // 图片替换单元组件
 import path from "path";
 import React, { useContext } from "react";
-import { remote } from "electron";
 import styled from "styled-components";
+import ERR_CODE from "@/core/error-code";
 
+import { remote } from "electron";
 import { apiDeleteFile } from "@/api";
 import { useProjectPathname } from "@/hooks/project";
 
 import { notification } from "antd";
-import ERR_CODE from "@/core/error-code";
+import { useCopyReleaseWith } from "./hooks";
 import Context from "./Context";
 import ImageDisplay from "./ImageDisplay";
 import ImageHandler from "./ImageHandler";
-import { useCopyReleaseWith } from "./hooks";
 
-const ProjectSource: React.FC = () => {
+const ProjectImage: React.FC = () => {
   const { releaseList, dynamicReleaseList } = useContext(Context);
   const projectPathname = useProjectPathname();
   const copyReleaseWith = useCopyReleaseWith(releaseList, "");
@@ -64,7 +64,7 @@ const ProjectSource: React.FC = () => {
   };
 
   return (
-    <StyleProjectSource>
+    <StyleProjectImage>
       <ImageDisplay
         showHandler
         filepath={absReleaseForShow}
@@ -77,12 +77,12 @@ const ProjectSource: React.FC = () => {
         onImport={handleImport}
         onDelete={handleDelete}
       />
-    </StyleProjectSource>
+    </StyleProjectImage>
   );
 };
 
-const StyleProjectSource = styled.div`
+const StyleProjectImage = styled.div`
   display: flex;
 `;
 
-export default ProjectSource;
+export default ProjectImage;

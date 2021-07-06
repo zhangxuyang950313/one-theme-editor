@@ -15,7 +15,7 @@ import { previewFile } from "./utils";
 import { useCopyReleaseWith } from "./hooks";
 import PartialContext from "./Context";
 import ImageDisplay from "./ImageDisplay";
-import ProjectSource from "./ProjectSource";
+import ProjectImage from "./ProjectImage";
 import SourceStatus from "./SourceStatus";
 
 const ImageController: React.FC<TypeSourceImageElement> = sourceConf => {
@@ -77,7 +77,7 @@ const ImageController: React.FC<TypeSourceImageElement> = sourceConf => {
             onClick={() => copyReleaseWith(absoluteFrom)}
           />
           <div className="right">
-            <ProjectSource />
+            <ProjectImage />
           </div>
         </div>
       </PartialContext.Provider>

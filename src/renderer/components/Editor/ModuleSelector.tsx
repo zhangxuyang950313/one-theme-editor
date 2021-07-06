@@ -37,7 +37,7 @@ const ModuleSelector: React.FC = () => {
             /> */}
             <SourceImage
               className="icon"
-              data-isActive={String(currentModule.index === item.index)}
+              data-active={String(currentModule.index === item.index)}
               src={item.icon}
             />
           </StyleIcon>
@@ -66,7 +66,7 @@ const StyleIcon = styled.div`
     width: 45px;
     opacity: 0.4;
     transition: 0.4s all ease;
-    &[data-isActive="true"] {
+    &[data-active="true"] {
       width: 55px;
       opacity: 1;
     }
