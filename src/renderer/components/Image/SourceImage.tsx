@@ -7,8 +7,8 @@ import PreloadImage from "./PreloadImage";
  * @param props 和 img 标签具有相同的属性
  */
 const SourceImage: React.FC<JSX.IntrinsicElements["img"]> = props => {
-  const sourceUrl = useSourceImageUrl(props.src);
-  const url = useLoadImage(sourceUrl);
+  const imageUrl = useSourceImageUrl(props.src);
+  const url = useLoadImage(imageUrl);
 
   return <PreloadImage {...props} src={url} alt={url} />;
 };

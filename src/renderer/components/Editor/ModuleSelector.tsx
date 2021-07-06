@@ -1,18 +1,14 @@
 import React from "react";
 import styled from "styled-components";
 import logSymbols from "log-symbols";
-
-import { useModuleList, useModuleConf } from "@/hooks/source";
-
 import { Tooltip } from "antd";
-// import { useGetSourceImageUrl } from "@/hooks/image";
+import { useModuleList, useModuleConf } from "@/hooks/source";
 import SourceImage from "../Image/SourceImage";
 
 // 模块选择器
 const ModuleSelector: React.FC = () => {
   const moduleList = useModuleList();
   const [currentModule, setCurrentModule] = useModuleConf();
-  // const getImageURL = useGetSourceImageUrl();
 
   if (!currentModule) {
     console.log(logSymbols.error, "currentModule 为空");

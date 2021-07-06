@@ -1,6 +1,6 @@
 // 图片替换单元组件
 import path from "path";
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { remote } from "electron";
 import { useImageUrl } from "@/hooks/image";

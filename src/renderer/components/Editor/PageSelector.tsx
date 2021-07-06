@@ -1,16 +1,27 @@
 import React from "react";
 import styled from "styled-components";
 import { Collapse } from "antd";
-
-import { useGetSourceImageUrl } from "@/hooks/image";
+import { useSourceImageUrl } from "@/hooks/image";
 import { usePageConf, usePageGroupList } from "@/hooks/source";
 import PreloadImage from "@/components/Image/PreloadImage";
+import { TypeSourcePageConf } from "types/source-config";
+
+const PagePreview: React.FC<{ pageData: TypeSourcePageConf }> = props => {
+  const sourceImageURL = useSourceImageUrl(props.pageData.preview);
+  const [, setPageConf] = usePageConf();
+
+  return (
+    <PreloadImage
+      className="preview-image"
+      src={sourceImageURL}
+      onClick={() => setPageConf(props.pageData)}
+    />
+  );
+};
 
 // 页面选择器
 const PageSelector: React.FC = () => {
-  const sourceImageURL = useGetSourceImageUrl();
   const pageGroupList = usePageGroupList();
-  const [, setPageConf] = usePageConf();
 
   if (pageGroupList.length === 0) {
     console.log("页面分组为空");
@@ -25,12 +36,7 @@ const PageSelector: React.FC = () => {
             <Collapse.Panel header={group.name} key={key}>
               <StylePagePreview>
                 {group.pageList.map((page, index) => (
-                  <PreloadImage
-                    className="preview-image"
-                    key={index}
-                    src={sourceImageURL(page.preview)}
-                    onClick={() => setPageConf(page)}
-                  />
+                  <PagePreview key={index} pageData={page} />
                 ))}
               </StylePagePreview>
             </Collapse.Panel>
