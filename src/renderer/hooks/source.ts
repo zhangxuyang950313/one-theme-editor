@@ -54,6 +54,7 @@ import {
   useGlobalSelector
 } from "@/store/index";
 import ERR_CODE from "@/core/error-code";
+import { asyncQueue } from "@/../common/utils";
 import { useAsyncUpdater } from "./index";
 
 /**
@@ -230,7 +231,7 @@ export function usePageConf(): [
  * 获取页面数据
  * @returns
  */
-export function useFetchPageConfData(): [
+export function useFetchPageConfData1(): [
   TypeSourcePageData | null,
   boolean,
   () => Promise<void>
@@ -254,6 +255,33 @@ export function useFetchPageConfData(): [
     });
   }, [pageConf?.src]);
   return [value, loading, fetchData];
+}
+
+/**
+ * 获取页面数据
+ * @returns
+ */
+export function useFetchPageConfData(): [TypeSourcePageData[], boolean] {
+  const [loading, updateLoading] = useState(true);
+  const [value, updateValue] = useState<TypeSourcePageData[]>([]);
+  const dispatch = useEditorDispatch();
+  const pageGroupList = usePageGroupList();
+
+  useEffect(() => {
+    const pageConfDataQueue = pageGroupList
+      .flatMap(item => item.pageList)
+      .map(item => async () => {
+        const data = await apiGetSourcePageConfData(item.src);
+        dispatch(ActionUpdatePageDataMap(data));
+        return data;
+      });
+    updateLoading(true);
+    asyncQueue(pageConfDataQueue)
+      .then(data => updateValue(data))
+      .catch(err => notification.error({ message: err.message }))
+      .finally(() => updateLoading(false));
+  }, [pageGroupList]);
+  return [value, loading];
 }
 
 /**

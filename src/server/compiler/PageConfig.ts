@@ -93,17 +93,19 @@ export default class PageConfig extends BaseCompiler {
 
   private imageElement(node: XMLNodeElement): TypeSourceImageElement {
     const src = node.getAttributeOf("src");
+    const source = {
+      ...getImageData(this.resolvePath(src)),
+      url: this.relativePath(src)
+    };
+    const releaseList = node
+      .getChildrenOf("to")
+      .map(item => item.getFirstTextChildValue() || item.getAttributeOf("src"));
     return {
       type: ELEMENT_TYPES.IMAGE,
       name: node.getAttributeOf("name"),
-      source: {
-        ...getImageData(this.resolvePath(src)),
-        url: this.relativePath(src)
-      },
+      source,
       layout: this.layoutConf(node),
-      releaseList: node
-        .getChildrenOf("to")
-        .map(item => item.getFirstTextChildValue())
+      releaseList
     };
   }
 

@@ -5,8 +5,8 @@ import chokidar from "chokidar";
 import FileType from "file-type";
 import imageSizeOf from "image-size";
 import dirTree from "directory-tree";
-import { TypeImageData, TypeImageMapper } from "types/project";
-import ERR_CODE from "renderer/core/error-code";
+import ERR_CODE from "../renderer/core/error-code";
+import { TypeImageData, TypeImageMapper } from "../types/project";
 
 export const base64Regex = /^data:image\/\w+;base64,/;
 
@@ -254,4 +254,20 @@ export function watchProjectDir(
       }
     }
   });
+}
+
+/**
+ * 异步队列
+ * @param list
+ */
+export async function asyncQueue<T>(
+  list: Array<() => Promise<T>>,
+  delay = 0
+): Promise<T[]> {
+  const result: T[] = [];
+  for (const item of list.filter(item => item instanceof Function)) {
+    await item()?.then(result.push.bind(result));
+    if (delay) await new Promise(resolve => setTimeout(resolve, delay));
+  }
+  return result;
 }

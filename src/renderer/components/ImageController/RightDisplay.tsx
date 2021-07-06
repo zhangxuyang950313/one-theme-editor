@@ -29,7 +29,8 @@ const ProjectImage: React.FC<{
   const [url, forceUpdate] = useForceUpdateImage();
   useEffect(() => {
     imageUrl && forceUpdate(imageUrl);
-  }, [dynamicAbsReleaseList]);
+    // 一定要监听 dynamicAbsReleaseList 不然不会更新
+  }, [imageUrl, dynamicAbsReleaseList]);
   return (
     <ImageDisplay
       imageUrl={url}

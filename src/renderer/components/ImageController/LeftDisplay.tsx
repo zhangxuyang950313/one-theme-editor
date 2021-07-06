@@ -25,7 +25,7 @@ const LeftDisplay: React.FC<{ src: string; name: string }> = props => {
   return useMemo(() => {
     if (!imageUrl) return null;
     return <ImageDisplay imageUrl={imageUrl} onClick={previewSource} />;
-  }, []);
+  }, [imageUrl]);
 };
 
 export default LeftDisplay;

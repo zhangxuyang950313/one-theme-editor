@@ -16,22 +16,26 @@ const PageSelector: React.FC = () => {
     console.log("页面分组为空");
     return null;
   }
+
   return (
     <Collapse bordered={false} defaultActiveKey={Object.keys(pageGroupList)}>
-      {pageGroupList.map((group, key) => (
-        <Collapse.Panel header={group.name} key={key}>
-          <StylePagePreview>
-            {group.pageList.map((page, index) => (
-              <PreloadImage
-                className="preview-image"
-                key={index}
-                src={sourceImageURL(page.preview)}
-                onClick={() => setPageConf(page)}
-              />
-            ))}
-          </StylePagePreview>
-        </Collapse.Panel>
-      ))}
+      {pageGroupList.map(
+        (group, key) =>
+          group.pageList.length && (
+            <Collapse.Panel header={group.name} key={key}>
+              <StylePagePreview>
+                {group.pageList.map((page, index) => (
+                  <PreloadImage
+                    className="preview-image"
+                    key={index}
+                    src={sourceImageURL(page.preview)}
+                    onClick={() => setPageConf(page)}
+                  />
+                ))}
+              </StylePagePreview>
+            </Collapse.Panel>
+          )
+      )}
     </Collapse>
   );
 };
@@ -39,8 +43,9 @@ const PageSelector: React.FC = () => {
 const StylePagePreview = styled.div`
   display: flex;
   /* justify-content: space-around; */
-  overflow: hidden;
   width: 100%;
+  overflow: hidden;
+  flex-wrap: wrap;
   .preview-image {
     cursor: pointer;
     text-align: center;

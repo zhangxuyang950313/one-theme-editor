@@ -16,14 +16,14 @@ const SourceStatus: React.FC<{
 
   return (
     <>
-      {releaseList.map(relativePath => {
+      {releaseList.map((relativePath, index) => {
         const basename = path.basename(relativePath);
         // const hasIt = fse.existsSync(path.join(projectPathname, relativePath));
         const hasIt = new Set(dynamicReleaseList).has(relativePath);
         const absPath = path.join(projectPathname, relativePath);
         return (
-          <StyleSourceStatus
-            key={basename}
+          <StyleSourceStatusLine
+            key={`${basename}-${index}`}
             data-exists={String(hasIt)}
             onClick={() => hasIt && remote.shell.showItemInFolder(absPath)}
           >
@@ -34,15 +34,15 @@ const SourceStatus: React.FC<{
             )}
             &ensp;
             {basename}
-          </StyleSourceStatus>
+          </StyleSourceStatusLine>
         );
       })}
     </>
   );
 };
 
-const StyleSourceStatus = styled.span`
-  display: inline-block;
+const StyleSourceStatusLine = styled.p`
+  cursor: pointer;
   margin-bottom: 6px;
   max-width: 100%;
   word-wrap: break-word;

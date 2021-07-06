@@ -1,7 +1,7 @@
 import path from "path";
 import fse from "fs-extra";
-import { WatchOptions, FSWatcher } from "chokidar";
 import logSymbols from "log-symbols";
+import { WatchOptions, FSWatcher } from "chokidar";
 import { useLayoutEffect, useEffect, useState } from "react";
 import { useProjectPathname } from "@/hooks/project";
 
@@ -10,6 +10,9 @@ export enum FILE_STATUS {
   CHANGE = "change",
   UNLINK = "unlink"
 }
+const mapWatchers = (count: number, options?: WatchOptions) => {
+  return new Array(count).fill(0).map(() => new FSWatcher(options));
+};
 // 返回一个 chokidar 监听实例，自动在组件卸载时释放监听
 export function useFSWatcherInstance(options?: WatchOptions): FSWatcher {
   const [watcher] = useState(new FSWatcher(options));
@@ -23,7 +26,11 @@ export function useFSWatcherInstance(options?: WatchOptions): FSWatcher {
 }
 
 /**
- * 创建多个 watchers
+ * 一次组件生命周期中创建多个 watchers，不支持 count 改变重建
+ *
+ * TODO：在 electron 环境中 watcher 监听多个文件会导致事件丢失，（node环境正常，也可能是 webpack 的打包问题）
+ * 原因不明，所以创建多个 watcher 实例只监听一个文件
+ * https://github.com/paulmillr/chokidar/issues/1122
  * @param count 实例个数
  * @param options
  * @returns
@@ -32,46 +39,41 @@ export function useFSWatcherMultiInstance(
   count: number,
   options?: WatchOptions
 ): FSWatcher[] {
-  const mapWatchers = () => {
-    return new Array(count).fill(0).map(() => new FSWatcher(options));
-  };
-  const [watchers, setWatchers] = useState<FSWatcher[]>(mapWatchers());
+  const [watchers, setWatchers] = useState<FSWatcher[]>([]);
   useEffect(() => {
-    console.log("创建watcher");
-    setWatchers(mapWatchers());
+    console.log(`创建watcher ${count} 个`);
+    setWatchers(mapWatchers(count, options));
     return () => {
-      console.log("关闭watcher");
-      watchers.forEach(item => item.close());
+      Promise.all(watchers.map(item => item.close())).then(() => {
+        console.log(`关闭watcher ${watchers.length} 个`);
+      });
     };
   }, []);
   return watchers;
 }
 
 /**
- * 监听模板列表文件
+ * 监听 releaseList，列表改变会自动销毁 watcher 并重建
  * @param releaseList
  * @returns
  */
 export function useReleaseListWatcher(releaseList: string[]): string[] {
   const projectPathname = useProjectPathname();
-  /**
-   * TODO：在 electron 环境中 watcher 监听多个文件会导致事件丢失，（node环境正常，也可能是 webpack 的打包问题）
-   * 原因不明，所以创建多个 watcher 实例只监听一个文件
-   * https://github.com/paulmillr/chokidar/issues/1122
-   */
-  const watchers = useFSWatcherMultiInstance(releaseList.length, {
-    cwd: projectPathname || undefined,
-    ignoreInitial: false
-  });
   const [list, setList] = useState<string[]>([]);
+
   useLayoutEffect(() => {
     if (!projectPathname) return;
+    const watchers = mapWatchers(releaseList.length, {
+      cwd: projectPathname || undefined,
+      ignoreInitial: false
+    });
     const set = new Set<string>();
     // 更新数据
     const updateList = () => {
       const existsList = Array.from(set).filter(
         item => item && fse.existsSync(path.join(projectPathname, item))
       );
+      console.log({ existsList });
       setList(existsList);
     };
     // updateList();
@@ -99,15 +101,26 @@ export function useReleaseListWatcher(releaseList: string[]): string[] {
           updateList();
         })
         .add(releaseList[index]);
-      console.log(logSymbols.info, `添加文件监听：${releaseList[index]}`);
     });
+    console.log(logSymbols.info, `添加文件监听：`, releaseList);
     return () => {
       watchers.forEach((watcher, index) => {
         watcher.unwatch(releaseList[index]);
-        console.log(logSymbols.info, "移除文件监听：", releaseList[index]);
       });
+      console.log(logSymbols.info, "移除文件监听：", releaseList);
+      Promise.all(watchers.map(watcher => watcher.close()))
+        .then(() => {
+          console.log(
+            logSymbols.info,
+            `关闭watcher ${watchers.length} 个`,
+            releaseList
+          );
+        })
+        .catch(err => {
+          console.log(logSymbols.warning, "关闭 watcher 失败", err);
+        });
     };
-  }, []);
+  }, [releaseList]);
 
   return list;
 }

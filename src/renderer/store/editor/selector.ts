@@ -116,9 +116,9 @@ export const getSourceTextList = createSelector(
     )
 );
 
-export const getXmlTemplateList = createSelector(getState, state => []);
-
 export const getSourcePageDataMap = createSelector(
   getState,
   state => state.sourcePageDataMap
 );
+
+export const getXmlTemplateList = createSelector(getState, state => []);
