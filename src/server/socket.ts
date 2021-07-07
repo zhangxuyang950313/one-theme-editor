@@ -1,7 +1,6 @@
 import http from "http";
 import { Server, Socket } from "socket.io";
 import SOCKET_EVENT from "common/socket-event";
-import { watchFiles } from "./core/socketSync";
 
 // 快速将 socket event 建立通讯通道
 class SocketConnecter {
@@ -50,10 +49,10 @@ export default function registerSocket(server: http.Server): void {
 
     // 监听文件
     // connecter.connect(SOCKET_EVENT.IMAGE_MAPPER_LIST, syncImageMapperList);
-    socket.on(SOCKET_EVENT.WATCH_FILE, ({ uuid, list }) => {
-      watchFiles(uuid, list, data => {
-        socket.emit(SOCKET_EVENT.WATCH_FILE, data);
-      });
-    });
+    // socket.on(SOCKET_EVENT.WATCH_FILE, ({ uuid, list }) => {
+    //   watchFiles(uuid, list, data => {
+    //     socket.emit(SOCKET_EVENT.WATCH_FILE, data);
+    //   });
+    // });
   });
 }
