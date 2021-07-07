@@ -1,5 +1,5 @@
 import path from "path";
-import PATHS from "server/core/pathUtils";
+import PATHS from "server/utils/pathUtils";
 import { getImageData } from "common/utils";
 import { ELEMENT_TYPES, ALIGN_VALUES, ALIGN_V_VALUES } from "src/enum/index";
 import {

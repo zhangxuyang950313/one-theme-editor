@@ -1,6 +1,6 @@
 import path from "path";
 import fse from "fs-extra";
-import PATHS from "server/core/pathUtils";
+import PATHS from "server/utils/pathUtils";
 import XmlTemplate from "server/compiler/XmlTemplate";
 import { TypeReleaseXmlTempPayload } from "types/request";
 

@@ -8,7 +8,7 @@ import {
   TypeUiVersion
 } from "types/project";
 import { TypeResult } from "types/request";
-import { result } from "server/core/utils";
+import { result } from "server/utils/utils";
 import {
   findProjectByUUID,
   getProjectListOf,

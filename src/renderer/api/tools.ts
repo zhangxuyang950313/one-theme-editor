@@ -1,5 +1,5 @@
 import API from "common/api";
-import { TypePathConfig } from "server/core/pathUtils";
+import { TypePathConfig } from "server/utils/pathUtils";
 import { TypeResponseFrame } from "types/request";
 import { createHttp } from "./utils";
 

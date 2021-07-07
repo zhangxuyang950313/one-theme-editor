@@ -3,7 +3,7 @@ import fse from "fs-extra";
 import FileType from "file-type";
 import { Express } from "express";
 import API from "common/api";
-import PATHS from "server/core/pathUtils";
+import PATHS from "server/utils/pathUtils";
 import ERR_CODE from "src/renderer/core/error-code";
 
 export default function image(service: Express): void {

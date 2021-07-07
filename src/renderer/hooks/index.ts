@@ -8,7 +8,7 @@ import {
 } from "@/store/global/modules/base/selector";
 import { ActionSetPathConfig } from "@/store/global/modules/base/action";
 import { useGlobalSelector, useGlobalDispatch } from "@/store/index";
-import { TypePathConfig } from "server/core/pathUtils";
+import { TypePathConfig } from "server/utils/pathUtils";
 import { sleep } from "@/../common/utils";
 
 // 设置页面标题

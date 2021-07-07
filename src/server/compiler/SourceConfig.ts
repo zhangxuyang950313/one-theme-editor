@@ -11,7 +11,7 @@ import {
 } from "types/source-config";
 import { TypeBrandConf, TypeUiVersion } from "types/project";
 import ERR_CODE from "renderer/core/error-code";
-import PATHS from "server/core/pathUtils";
+import PATHS from "server/utils/pathUtils";
 import PageConfig from "./PageConfig";
 import XMLNodeElement from "./XMLNodeElement";
 import BaseCompiler from "./BaseCompiler";

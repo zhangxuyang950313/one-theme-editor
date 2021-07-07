@@ -1,10 +1,10 @@
 import path from "path";
 import fse from "fs-extra";
 import Nedb from "nedb-promises";
-import { USER_DATA } from "server/core/pathUtils";
+import PATHS from "server/utils/pathUtils";
 import { TypeImageData, TypeImageDataDoc } from "types/project";
 
-const imageDBFile = path.resolve(USER_DATA, "image");
+const imageDBFile = path.resolve(PATHS.USER_DATA, "image");
 fse.ensureFileSync(imageDBFile);
 const imageDB = new Nedb({
   filename: imageDBFile,
@@ -20,12 +20,12 @@ const imageDB = new Nedb({
 export async function insertImageData(
   data: TypeImageData
 ): Promise<TypeImageDataDoc> {
-  const count = await imageDB.count({ md5: data.md5 });
-  if (count > 0) {
-    return imageDB.update<TypeImageData>({ md5: data.md5 }, data, {
-      returnUpdatedDocs: true
-    });
-  }
+  // const count = await imageDB.count({ md5: data.md5 });
+  // if (count > 0) {
+  //   return imageDB.update<TypeImageData>({ md5: data.md5 }, data, {
+  //     returnUpdatedDocs: true
+  //   });
+  // }
   return imageDB.insert<TypeImageData>(data);
 }
 

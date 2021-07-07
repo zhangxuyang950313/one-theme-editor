@@ -13,7 +13,6 @@
   "scripts": {
     "build:webpack": "tsc --project webpack/tsconfig.json",
     "build:builder": "tsc --project scripts/tsconfig.json",
-    
     "webpack:main:dev": "webpack --mode=development --config release.webpack/config.main.js",
     "webpack:main:pro": "webpack --mode=production  --config release.webpack/config.main.js",
     "webpack:render:pro": "webpack --mode=production --config release.webpack/config.renderer.js",
@@ -21,32 +20,25 @@
     "webpack:render:dev": "webpack-dev-server --mode=development --config release.webpack/config.renderer.js",
     "webpack:server:dev": "webpack --mode=development --watch --config release.webpack/config.server.js",
     "webpack:server:pro": "webpack --mode=production  --config release.webpack/config.server.js",
-    
     "build:main:dev": "npm run build:webpack && npm run webpack:main:dev",
     "build:main:pro": "npm run build:webpack && npm run webpack:main:pro",
-
     "build:render:dev": "npm run build:webpack && npm run webpack:render:dev",
     "build:render:pro": "npm run build:webpack && npm run webpack:render:pro",
-
     "build:server:dev": "npm run build:webpack && npm run webpack:server:dev",
     "build:server:pro": "npm run build:webpack && npm run webpack:server:pro",
-
     "build:electron:win32": "npm run build:builder && electron-builder --win --ia32 -c release.scripts/electron-builder.js",
     "build:electron:win64": "npm run build:builder && electron-builder --win --x64 -c release.scripts/electron-builder.js",
     "build:electron:linux": "npm run build:builder && electron-builder --linux -c release.scripts/electron-builder.js",
     "build:electron:mac": "npm run build:builder && electron-builder --mac -c release.scripts/electron-builder.js",
     "build:electron": "npm run build:builder && electron-builder -c release.scripts/electron-builder.js",
-    
     "build:win32": "npm run build:render:pro && npm run build:main:pro && npm run build:electron:win32",
     "build:win64": "npm run build:render:pro && npm run build:main:pro && npm run build:electron:win64",
     "build:linux": "npm run build:render:pro && npm run build:main:pro && npm run build:electron:linux",
     "build:mac": "npm run build:render:pro && npm run build:main:pro && npm run build:electron:mac",
     "build": "npm run build:render:pro && npm run build:main:pro && npm run build:electron",
-    
     "start:server": "node release.server/index.js",
     "start:electron": "electron ./release.main/index.js",
     "start": "npm run build:webpack && concurrently \"npm run build:server:dev\" \"npm run build:render:dev\" \"npm run build:main:dev\" \"wait-on http://localhost:3000 && npm run start:electron\"",
-    
     "render:analyzer": "npm run build:webpack && npm run webpack:render:pro:analyze",
     "lint:eslint": "eslint --config .eslintrc.js --fix --ext .js,.jsx,.ts,.tsx,.less",
     "lint:style": "stylelint --config .stylelintrc.js **/*"
@@ -76,6 +68,7 @@
     "@types/react-dom": "^17.0.8",
     "@types/react-redux": "^7.1.16",
     "@types/react-router-dom": "^5.1.7",
+    "@types/shelljs": "^0.8.9",
     "@types/styled-components": "^5.1.10",
     "@types/uuid": "^8.3.0",
     "@types/webpack-bundle-analyzer": "^3.9.3",
@@ -150,6 +143,7 @@
     "sass": "^1.35.1",
     "sass-loader": "^9.0.3",
     "scoped-css-loader": "^1.0.0",
+    "shelljs": "^0.8.4",
     "socket.io": "^4.1.2",
     "socket.io-client": "^4.1.2",
     "style-loader": "^2.0.0",
@@ -170,7 +164,8 @@
     "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.11.2",
     "webpackbar": "^5.0.0-3",
-    "xml-js": "^1.6.11"
+    "xml-js": "^1.6.11",
+    "zx": "^2.0.0"
   },
   "husky": {
     "hooks": {

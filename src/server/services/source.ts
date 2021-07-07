@@ -6,8 +6,8 @@ import {
   TypeSourceConfig
 } from "types/source-config";
 import { TypeReleaseXmlTempPayload, TypeResult } from "types/request";
-import { result } from "server/core/utils";
-import { resolveSourcePath } from "server/core/pathUtils";
+import { result } from "server/utils/utils";
+import { resolveSourcePath } from "server/utils/pathUtils";
 import { releaseXmlTemplate } from "server/file-handler/xml-template";
 import PageConfig from "server/compiler/PageConfig";
 import SourceConfig from "server/compiler/SourceConfig";

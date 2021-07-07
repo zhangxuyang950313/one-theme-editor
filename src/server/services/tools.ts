@@ -2,10 +2,11 @@ import fse from "fs-extra";
 import { Express } from "express";
 
 import API from "common/api";
-import PATHS from "server/core/pathUtils";
-import { result } from "server/core/utils";
-import { TypeResult } from "types/request";
+import PATHS from "server/utils/pathUtils";
 import ERR_CODE from "renderer/core/error-code";
+import { result } from "server/utils/utils";
+import { TypeResult } from "types/request";
+import { compactNinePatch } from "server/core/pack";
 
 export default function tools(service: Express): void {
   // 获取路径配置
@@ -83,4 +84,10 @@ export default function tools(service: Express): void {
   //     }
   //   }
   // );
+
+  service.get(API.PACK_PROJECT, async (request, response) => {
+    const data = compactNinePatch();
+    console.log(data);
+    response.send(result.success(data));
+  });
 }
