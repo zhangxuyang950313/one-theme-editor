@@ -8,8 +8,6 @@ import {
 import { TypeResponseFrame, TypeGetCanceler } from "types/request";
 import { createHttp } from "./utils";
 
-// 获取厂商
-
 // 创建工程
 export async function apiCreateProject(
   data: TypeCreateProjectPayload

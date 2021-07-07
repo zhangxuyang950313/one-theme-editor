@@ -1,3 +1,4 @@
+import path from "path";
 import fse from "fs-extra";
 import ERR_CODE from "renderer/core/error-code";
 import { xml2js, Element, ElementCompact, Options } from "xml-js";
@@ -49,6 +50,10 @@ export default class BaseCompiler extends XMLNodeElement {
     return this.file;
   }
 
+  protected getFileName(): string {
+    return path.basename(this.file);
+  }
+
   /**
    * 类静态解析 xml 方法
    * @param file
@@ -67,8 +72,8 @@ export default class BaseCompiler extends XMLNodeElement {
     options?: Options.XML2JS
   ): Element | ElementCompact {
     if (!fse.existsSync(file)) throw new Error(`${ERR_CODE[3000]}：${file}`);
-    const data = fse.readFileSync(file, { encoding: "utf-8" });
     try {
+      const data = fse.readFileSync(file, { encoding: "utf-8" });
       return xml2js(data, { ...xml2jsConfig, ...options });
     } catch (err) {
       throw new Error(`${ERR_CODE[3009]} ${err.message}（${file}）`);

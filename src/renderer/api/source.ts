@@ -21,7 +21,7 @@ export async function apiGetSourceDescriptionList(
 ): Promise<TypeSourceConfigBrief[]> {
   return createHttp()
     .get<TypeResponseFrame<TypeSourceConfigBrief[]>>(
-      `${API.GET_SOURCE_DESC_LIST}/${brandType}`
+      `${API.GET_SOURCE_CONF_LIST}/${brandType}`
     )
     .then(data => data.data.data);
 }
@@ -42,7 +42,7 @@ export async function apiGetSourcePageConfData(
   pageFile: string
 ): Promise<TypeSourcePageData> {
   return createHttp()
-    .get<TypeResponseFrame<TypeSourcePageData>>(API.GET_SOURCE_PAGE_CONFIG, {
+    .get<TypeResponseFrame<TypeSourcePageData>>(API.GET_SOURCE_CONF_PAGE_DATA, {
       params: { pageFile }
     })
     .then(data => data.data.data);

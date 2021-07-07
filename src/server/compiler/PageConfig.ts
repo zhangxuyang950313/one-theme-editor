@@ -56,26 +56,31 @@ export default class PageConfig extends BaseCompiler {
   }
 
   getXmlTempConfList(): TypeSourceXmlTempConf[] {
-    const templates = super.getRootChildrenOf("template");
-    return templates.map<TypeSourceXmlTempConf>(node => {
-      // const templateData = new XmlTemplate(
-      //   this.resolvePath(node.getAttributeOf("src"))
-      // ).getElementList();
-      const valueMapData = new TempKeyValMapper(
-        this.resolvePath(node.getAttributeOf("value"))
-      ).getDataObj();
-      return {
-        template: this.relativePath(node.getAttributeOf("src")),
-        release: node.getAttributeOf("to"),
-        valueMap: valueMapData
-      };
-    });
+    return super
+      .getRootChildrenOf("template")
+      .map<TypeSourceXmlTempConf>(node => {
+        const value = node.getAttributeOf("value");
+        const src = node.getAttributeOf("src");
+        const release =
+          node.getAttributeOf("to") || node.getAttributeOf("release");
+        const prefix = `template 缺少`;
+        const suffix = `(${super.getFileName()})`;
+        if (!value) throw new Error(`${prefix} value 属性 ${suffix}`);
+        if (!src) throw new Error(`${prefix} src 属性 ${suffix}`);
+        if (!release) throw new Error(`${prefix} to/release 属性 ${suffix}`);
+
+        const valueMap = new TempKeyValMapper(
+          this.resolvePath(value)
+        ).getDataObj();
+        const template = this.relativePath(src);
+        return { template, release, valueMap };
+      });
   }
 
   getCopyConfList(): TypeSourceCopyConf[] {
     return super.getRootChildrenOf("copy").map<TypeSourceCopyConf>(node => ({
       from: this.relativePath(node.getAttributeOf("from")),
-      release: node.getAttributeOf("to")
+      release: node.getAttributeOf("to", node.getAttributeOf("release"))
     }));
   }
 

@@ -8,8 +8,8 @@
     <!-- xml 模板文件 -->
     <template 
         src="theme_values.xml"
-        values="value_mapper.xml" 
-        to="wallpaper/theme_values.xml"
+        value="value_mapper.xml" 
+        release="wallpaper/theme_values.xml"
     />
 
     <!-- 默认移动的文件 -->
