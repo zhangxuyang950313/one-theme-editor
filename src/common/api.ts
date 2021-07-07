@@ -8,15 +8,17 @@ enum API {
 
   // 获取厂商信息列表
   GET_BRAND_LIST = "/brand/list",
-  // 获取配置简略信息列表
-  GET_SOURCE_DESC_LIST = "/source/description/list",
-  // 获取模板配置
+  // 获取配置信息列表
+  GET_SOURCE_CONF_LIST = "/source/config/list",
+  // 获取模板配置数据
   GET_SOURCE_CONF_DATA = "/source/config/data",
+  // 获取配置模块列表
+  GET_SOURCE_CONF_MODULE_LIST = "/source/config/module/list",
+  // 获取配置页面数据
+  GET_SOURCE_CONF_PAGE_DATA = "/source/config/page/data",
 
-  // 获取资源配置结构数据
-  GET_SOURCE_MODULE_LIST = "/source/description/module/list",
-
-  GET_SOURCE_PAGE_CONFIG = "/source/config/page/data",
+  // 输出 xml 模板
+  OUTPUT_SOURCE_XML_TEMPLATE = "/source/xml/template/output",
 
   // 创建工程
   CREATE_PROJECT = "/project/create",

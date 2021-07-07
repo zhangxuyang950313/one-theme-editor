@@ -44,20 +44,16 @@ export type TypeSourcePageKeyValConf = {
 
 // 配置模板数据
 export type TypeSourceXmlTempConf = {
-  template: Element[];
+  template: string;
+  release: string;
   valueMap: TypeSourcePageKeyValConf;
-  to: string;
 };
 
 // 拷贝配置数据
 export type TypeSourceCopyConf = {
   from: string;
-  to: string;
+  release: string;
 };
-
-// 元素配置数据
-export type TypeSourceElementAlign = ALIGN_VALUES;
-export type TypeSourceElementAlignV = ALIGN_V_VALUES;
 
 // 图片元素数据
 export type TypeSourceImageElement = {
@@ -69,8 +65,8 @@ export type TypeSourceImageElement = {
     y: string;
     w: string;
     h: string;
-    align: TypeSourceElementAlign;
-    alignV: TypeSourceElementAlignV;
+    align: ALIGN_VALUES;
+    alignV: ALIGN_V_VALUES;
   };
   releaseList: string[];
 };
@@ -82,8 +78,8 @@ export type TypeSourceTextElement = {
   layout: {
     x: string;
     y: string;
-    align: TypeSourceElementAlign;
-    alignV: TypeSourceElementAlignV;
+    align: ALIGN_VALUES;
+    alignV: ALIGN_V_VALUES;
   };
   color: string;
 };

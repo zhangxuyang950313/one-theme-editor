@@ -26,3 +26,11 @@ export type TypeResult<T = null> =
   | TypeResultFail<string>;
 
 export type TypeGetCanceler = (c: Canceler) => void;
+
+// 释放 xml 模板请求载荷
+export type TypeReleaseXmlTempPayload = {
+  key: string;
+  value: string;
+  template: string;
+  release: string;
+};

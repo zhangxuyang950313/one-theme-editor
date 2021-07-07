@@ -1,14 +1,14 @@
-import API from "common/api";
 import { Express } from "express";
-import { TypeResult } from "types/request";
+import API from "common/api";
 import {
   TypeSourceModuleConf,
   TypeSourcePageData,
   TypeSourceConfig
 } from "types/source-config";
+import { TypeReleaseXmlTempPayload, TypeResult } from "types/request";
 import { result } from "server/core/utils";
 import { resolveSourcePath } from "server/core/pathUtils";
-
+import { releaseXmlTemplate } from "server/file-handler/xml-template";
 import PageConfig from "server/compiler/PageConfig";
 import SourceConfig from "server/compiler/SourceConfig";
 
@@ -25,7 +25,7 @@ export default function source(service: Express): void {
 
   // 获取配置预览列表
   service.get<{ brandType: string }>(
-    `${API.GET_SOURCE_DESC_LIST}/:brandType`,
+    `${API.GET_SOURCE_CONF_LIST}/:brandType`,
     (request, response) => {
       try {
         const { brandType } = request.params;
@@ -43,7 +43,7 @@ export default function source(service: Express): void {
     TypeResult<TypeSourceModuleConf[]>, // resBody
     never, // reqBody
     { descriptionFile: string } // reqQuery
-  >(API.GET_SOURCE_MODULE_LIST, (request, response) => {
+  >(API.GET_SOURCE_CONF_MODULE_LIST, (request, response) => {
     try {
       const { descriptionFile } = request.query;
       if (!descriptionFile) throw new Error("缺少 descriptionFile 参数");
@@ -61,7 +61,7 @@ export default function source(service: Express): void {
     TypeResult<TypeSourcePageData>, // resBody
     never, // reqBody
     { pageFile: string } // reqQuery
-  >(API.GET_SOURCE_PAGE_CONFIG, async (request, response) => {
+  >(API.GET_SOURCE_CONF_PAGE_DATA, async (request, response) => {
     try {
       const { pageFile } = request.query;
       if (!pageFile) throw new Error("缺少 pageFile 参数");
@@ -88,6 +88,19 @@ export default function source(service: Express): void {
       response.send(result.success(data));
     } catch (err) {
       response.status(400).send(result.fail(err.message));
+    }
+  });
+
+  service.post<
+    never, // reqParams
+    TypeResult<TypeReleaseXmlTempPayload>, // resBody
+    TypeReleaseXmlTempPayload // reqBody
+  >(API.OUTPUT_SOURCE_XML_TEMPLATE, async (request, response) => {
+    try {
+      releaseXmlTemplate(request.body);
+      response.send(result.success(request.body));
+    } catch (err) {
+      response.send(result.fail(err.message));
     }
   });
 }

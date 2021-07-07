@@ -128,7 +128,7 @@ export default class SourceConfig extends BaseCompiler {
     return groupNodeList.map(groupNode => {
       const group: TypeSourcePageGroupConf = {
         name: groupNode.getAttributeOf("name"),
-        pageList: this.getPageList(groupNode.getChildrenOf("page"))
+        pageList: this.getPageList(groupNode.getChildrenNodesByTagname("page"))
       };
       return group;
     });
@@ -141,7 +141,9 @@ export default class SourceConfig extends BaseCompiler {
       index,
       name: moduleNode.getAttributeOf("name"),
       icon: this.relativePath(moduleNode.getAttributeOf("icon")),
-      groupList: this.getPageGroupList(moduleNode.getChildrenOf("group"))
+      groupList: this.getPageGroupList(
+        moduleNode.getChildrenNodesByTagname("group")
+      )
     }));
   }
 

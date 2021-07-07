@@ -12,15 +12,18 @@ import {
   TypeProjectDataDoc
 } from "types/project";
 
-// TODO: 创建数据库有个坑，如果 filename 文件内容不是 nedb 能接受的数据格式则会导致服务崩溃
 function createNedb(filename: string) {
+  console.log({ filename });
   fse.ensureDirSync(path.dirname(filename));
+  fse.ensureFileSync(filename);
   const db = new Nedb({
     filename,
     autoload: false,
     timestampData: true
   });
+  // 创建数据库有，如果 filename 文件内容不是 nedb 能接受的数据格式则会导致服务崩溃
   db.load().catch(err => {
+    // TODO 当数据库错误的处理办法
     console.log("db 文件错误");
   });
   return db;

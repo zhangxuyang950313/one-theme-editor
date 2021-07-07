@@ -2,7 +2,7 @@ import fse from "fs-extra";
 import { xml2js, Options, Element, ElementCompact } from "xml-js";
 import ERR_CODE from "renderer/core/error-code";
 
-const config: Options.XML2JS = {
+const xml2jsConfig: Options.XML2JS = {
   trim: true,
   // sanitize: true,
   addParent: false,
@@ -22,7 +22,7 @@ const config: Options.XML2JS = {
    */
   instructionHasAttributes: false, // 将指令解析为属性
   alwaysChildren: true, // 是否总是生成 elements 元素，即使为空
-  ignoreDeclaration: true, // 忽略顶部声明属性
+  ignoreDeclaration: false, // 忽略顶部声明属性
   ignoreComment: true, // 忽略注释
   ignoreInstruction: false, // 忽略处理指令
   ignoreAttributes: false, // 忽略属性
@@ -46,12 +46,10 @@ export function xml2jsonNormalized(
   file: string,
   options?: Options.XML2JS
 ): Element | ElementCompact {
-  if (!fse.existsSync(file)) {
-    throw new Error(`文件${file}不存在`);
-  }
+  if (!fse.existsSync(file)) throw new Error(`文件${file}不存在`);
   const data = fse.readFileSync(file, { encoding: "utf-8" });
   try {
-    return xml2js(data, { ...config, ...options });
+    return xml2js(data, { ...xml2jsConfig, ...options });
   } catch (err) {
     throw new Error(`${ERR_CODE[3009]} ${err.message}（${file}）`);
   }

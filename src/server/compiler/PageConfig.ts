@@ -57,26 +57,25 @@ export default class PageConfig extends BaseCompiler {
 
   getXmlTempConfList(): TypeSourceXmlTempConf[] {
     const templates = super.getRootChildrenOf("template");
-    return templates.map(node => {
-      const templateData = new XmlTemplate(
-        this.resolvePath(node.getAttributeOf("src"))
-      ).getElementList();
+    return templates.map<TypeSourceXmlTempConf>(node => {
+      // const templateData = new XmlTemplate(
+      //   this.resolvePath(node.getAttributeOf("src"))
+      // ).getElementList();
       const valueMapData = new TempKeyValMapper(
-        this.resolvePath(node.getAttributeOf("values"))
+        this.resolvePath(node.getAttributeOf("value"))
       ).getDataObj();
-      const data: TypeSourceXmlTempConf = {
-        template: templateData,
-        valueMap: valueMapData,
-        to: node.getAttributeOf("to")
+      return {
+        template: this.relativePath(node.getAttributeOf("src")),
+        release: node.getAttributeOf("to"),
+        valueMap: valueMapData
       };
-      return data;
     });
   }
 
   getCopyConfList(): TypeSourceCopyConf[] {
-    return super.getRootChildrenOf("copy").map(node => ({
+    return super.getRootChildrenOf("copy").map<TypeSourceCopyConf>(node => ({
       from: this.relativePath(node.getAttributeOf("from")),
-      to: node.getAttributeOf("to")
+      release: node.getAttributeOf("to")
     }));
   }
 
@@ -98,7 +97,7 @@ export default class PageConfig extends BaseCompiler {
       url: this.relativePath(src)
     };
     const releaseList = node
-      .getChildrenOf("to")
+      .getChildrenNodesByTagname("to")
       .map(item => item.getFirstTextChildValue() || item.getAttributeOf("src"));
     return {
       type: ELEMENT_TYPES.IMAGE,
@@ -126,7 +125,9 @@ export default class PageConfig extends BaseCompiler {
 
   getLayoutElementList(): TypeSourceElement[] {
     const rootNode = this.getRootNode();
-    const elementList = rootNode.getFirstChildOf("layout").getChildren();
+    const elementList = rootNode
+      .getFirstChildNodeByTagname("layout")
+      .getChildrenNodes();
     const result: TypeSourceElement[] = [];
     elementList.forEach(node => {
       switch (node.getTagname()) {

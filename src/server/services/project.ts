@@ -51,9 +51,9 @@ export default function project(service: Express): void {
 
   // 更新数据
   service.post<
-    { uuid: string },
-    TypeResult<TypeProjectDataDoc>,
-    Partial<TypeProjectData>
+    { uuid: string }, // reqParams
+    TypeResult<TypeProjectDataDoc>, // resBody
+    Partial<TypeProjectData> // reqBody
   >(`${API.UPDATE_PROJECT}/:uuid`, (req, res) => {
     updateProject(req.params.uuid, req.body)
       .then(project => res.send(result.success(project)))

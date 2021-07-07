@@ -5,10 +5,10 @@
     <!-- 静态预览图 -->
     <preview src="../preview/preview.jpg"/>
     
-    <!-- xml 模板文件 -->
+    <!-- xml 模板数据定义，用于 ${key} 设定值 -->
     <template 
         src="theme_values.xml"
-        values="value_mapper.xml" 
+        value="value_mapper.xml" 
         to="wallpaper/theme_values.xml"
     />
 
