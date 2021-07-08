@@ -13,7 +13,7 @@ import { TypeBrandConf, TypeUiVersion } from "types/project";
 import ERR_CODE from "renderer/core/error-code";
 import PATHS from "server/utils/pathUtils";
 import PageConfig from "./PageConfig";
-import XMLNodeElement from "./XMLNodeElement";
+import XMLNodeBase from "./XMLNodeElement";
 import BaseCompiler from "./BaseCompiler";
 
 // 解析 sourceConfig xml 配置文件
@@ -83,13 +83,13 @@ export default class SourceConfig extends BaseCompiler {
   // 预览图
   getPreview(): string {
     // TODO: 默认预览图
-    const src = super.getRootFirstChildOf("preview").getAttributeOf("src");
+    const src = super.getRootFirstChildNodeOf("preview").getAttributeOf("src");
     return this.relativePath(src);
   }
 
   // UI信息
   getUiVersion(): TypeUiVersion {
-    const uiVersionNode = super.getRootFirstChildOf("uiVersion");
+    const uiVersionNode = super.getRootFirstChildNodeOf("uiVersion");
     return {
       name: uiVersionNode.getAttributeOf("name"),
       code: uiVersionNode.getAttributeOf("code")
@@ -98,7 +98,7 @@ export default class SourceConfig extends BaseCompiler {
 
   // 素材类型定义列表
   getSourceTypeList(): TypeSourceTypeConf[] {
-    const sourceNodeList = super.getRootChildrenOf("source");
+    const sourceNodeList = super.getRootChildrenNodesOf("source");
     return sourceNodeList.map(item => ({
       tag: item.getAttributeOf("tag"),
       name: item.getAttributeOf("name"),
@@ -107,7 +107,7 @@ export default class SourceConfig extends BaseCompiler {
   }
 
   // 页面配置列表
-  getPageList(pageNodeList: XMLNodeElement[]): TypeSourcePageConf[] {
+  getPageList(pageNodeList: XMLNodeBase[]): TypeSourcePageConf[] {
     // 这里是在选择模板版本后得到的目标模块目录
     return pageNodeList.map(node => {
       const src = node.getAttributeOf("src");
@@ -124,7 +124,7 @@ export default class SourceConfig extends BaseCompiler {
   }
 
   // 页面分组数据
-  getPageGroupList(groupNodeList: XMLNodeElement[]): TypeSourcePageGroupConf[] {
+  getPageGroupList(groupNodeList: XMLNodeBase[]): TypeSourcePageGroupConf[] {
     return groupNodeList.map(groupNode => {
       const group: TypeSourcePageGroupConf = {
         name: groupNode.getAttributeOf("name"),
@@ -136,8 +136,7 @@ export default class SourceConfig extends BaseCompiler {
 
   // 模块配置数据
   getModuleList(): TypeSourceModuleConf[] {
-    const moduleNodeList = super.getRootChildrenOf("module");
-    return moduleNodeList.map((moduleNode, index) => ({
+    return super.getRootChildrenNodesOf("module").map((moduleNode, index) => ({
       index,
       name: moduleNode.getAttributeOf("name"),
       icon: this.relativePath(moduleNode.getAttributeOf("icon")),

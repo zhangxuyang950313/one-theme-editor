@@ -26,7 +26,7 @@ function getInputForm(formItemProps: FormItemProps, inputProps: InputProps) {
       shouldUpdate={(prevValues, currentValues) => prevValues !== currentValues}
     >
       <Input
-        placeholder={`请填写${formItemProps.label}`}
+        placeholder={`请填写${formItemProps.label || ""}`}
         allowClear
         {...inputProps}
       />
@@ -104,4 +104,9 @@ export const ProjectLocalDir: React.FC<InputProps> = props => {
   const label = "本地目录";
   const name = "local";
   return getInputForm({ label, name }, props);
+};
+
+// 输入颜色
+export const ColorInput: React.FC<InputProps> = props => {
+  return getInputForm({}, { ...props, placeholder: "输入颜色值" });
 };

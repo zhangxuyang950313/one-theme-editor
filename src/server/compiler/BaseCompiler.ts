@@ -42,8 +42,16 @@ const xml2jsConfig: Options.XML2JS = {
 export default class BaseCompiler extends XMLNodeElement {
   private file: string;
   constructor(file: string) {
-    super(BaseCompiler.compile(file));
-    this.file = file;
+    if (typeof file === "string" && !fse.existsSync(file)) {
+      throw new Error(`${ERR_CODE[3000]}：${file}`);
+    }
+    try {
+      const data = fse.readFileSync(file, { encoding: "utf-8" });
+      super(BaseCompiler.compile(data));
+      this.file = file;
+    } catch (err) {
+      throw new Error(`${err.message}（${file}）`);
+    }
   }
 
   protected getFile(): string {
@@ -56,37 +64,35 @@ export default class BaseCompiler extends XMLNodeElement {
 
   /**
    * 类静态解析 xml 方法
-   * @param file
+   * @param xmlStr xml 字符串
    * @param options
    */
   static compile<T extends Element>(
-    file: string,
+    xmlStr: string,
     options?: Options.XML2JS & { compact: false }
   ): T;
   static compile<T extends ElementCompact>(
-    file: string,
+    data: string,
     options?: Options.XML2JS & { compact: true }
   ): T;
   static compile(
-    file: string,
+    data: string,
     options?: Options.XML2JS
   ): Element | ElementCompact {
-    if (!fse.existsSync(file)) throw new Error(`${ERR_CODE[3000]}：${file}`);
     try {
-      const data = fse.readFileSync(file, { encoding: "utf-8" });
       return xml2js(data, { ...xml2jsConfig, ...options });
     } catch (err) {
-      throw new Error(`${ERR_CODE[3009]} ${err.message}（${file}）`);
+      throw new Error(`${ERR_CODE[3009]} ${err.message}`);
     }
   }
 
-  /**
-   * 实例上的解析方法
-   * @returns
-   */
-  public compile(): Element {
-    return BaseCompiler.compile(this.getFile());
-  }
+  // /**
+  //  * 实例上的解析方法
+  //  * @returns
+  //  */
+  // public compile(xmlStr: string): Element {
+  //   return BaseCompiler.compile(xmlStr);
+  // }
 
   /**
    * 以第一个节点作为根节点
@@ -100,7 +106,7 @@ export default class BaseCompiler extends XMLNodeElement {
    * 获取根节点的子节点实例列表
    * @returns
    */
-  protected getRootChildren(): XMLNodeElement[] {
+  protected getRootChildrenNodes(): XMLNodeElement[] {
     return this.getRootNode().getChildrenNodes();
   }
 
@@ -109,7 +115,7 @@ export default class BaseCompiler extends XMLNodeElement {
    * @param tagname
    * @returns
    */
-  protected getRootFirstChildOf(tagname: string): XMLNodeElement {
+  protected getRootFirstChildNodeOf(tagname: string): XMLNodeElement {
     return this.getRootNode().getFirstChildNodeByTagname(tagname);
   }
 
@@ -118,7 +124,7 @@ export default class BaseCompiler extends XMLNodeElement {
    * @param tagname
    * @returns
    */
-  protected getRootChildrenOf(tagname: string): XMLNodeElement[] {
+  protected getRootChildrenNodesOf(tagname: string): XMLNodeElement[] {
     return this.getRootNode().getChildrenNodesByTagname(tagname);
   }
 }

@@ -1,6 +1,5 @@
-import { Element } from "xml-js";
 import { ALIGN_VALUES, ALIGN_V_VALUES, ELEMENT_TYPES } from "src/enum";
-import XMLNodeElement from "server/compiler/XMLNodeElement";
+import XMLNodeBase from "server/compiler/XMLNodeElement";
 import { TypeImageData, TypeUiVersion } from "./project";
 import { TypeImagePathLike } from "./index";
 
@@ -35,18 +34,30 @@ export type TypeSourcePageGroupConf = {
 };
 
 // 键值对配置数据
-export type TypeSourcePageKeyValConf = {
-  [k: string]: {
-    value: string;
-    description: string;
-  };
+export type TypeSourcePageKeyValMapConf = Record<
+  string,
+  { value: string; description: string }
+>;
+
+// 键值对映射配置
+export type TypeSourceXmlKeyValConf = {
+  name: string;
+  value: string;
+  description: string;
+};
+
+// 配置模板原始配置
+export type TypeSourceXmlTempConf = {
+  template: string;
+  value: string;
+  release: string;
 };
 
 // 配置模板数据
-export type TypeSourceXmlTempConf = {
+export type TypeSourceXmlTempData = {
   template: string;
   release: string;
-  valueMap: TypeSourcePageKeyValConf;
+  valueList: TypeSourceXmlKeyValConf[];
 };
 
 // 拷贝配置数据
@@ -74,6 +85,7 @@ export type TypeSourceImageElement = {
 // 文字元素数据
 export type TypeSourceTextElement = {
   type: ELEMENT_TYPES.TEXT;
+  name: string;
   text: string;
   layout: {
     x: string;
@@ -81,7 +93,8 @@ export type TypeSourceTextElement = {
     align: ALIGN_VALUES;
     alignV: ALIGN_V_VALUES;
   };
-  color: string;
+  colorName: string;
+  defaultColor: string;
 };
 
 // 预览元素数据
@@ -101,19 +114,12 @@ export type TypeSourcePageData = {
   screenWidth: string;
   previewList: string[];
   elementList: TypeSourceElement[];
-  templateList: TypeSourceXmlTempConf[];
+  templateList: TypeSourceXmlTempData[];
   copyList: TypeSourceCopyConf[];
 };
 
-// 键值对映射配置
-export type TypeSourceXmlKeyValMapperConf = {
-  key: string;
-  value: string;
-  description: string;
-};
-
 // 键值对映射 map
-export type TypeSourceXmlKeyValMapperMap = Map<string, XMLNodeElement>;
+export type TypeSourceXmlKeyValMapperMap = Map<string, XMLNodeBase>;
 
 // 素材类型定义数据
 export type TypeSourceTypeConf = {

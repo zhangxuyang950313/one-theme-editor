@@ -12,41 +12,22 @@ const js2xmlOptions: Options.JS2XML = {
   noQuotesForNativeAttributes: false
 };
 
-// 节点处理
-export default class XMLNodeElement {
+/**
+ * xml 节点基础解析类
+ */
+class XMLNodeBase {
   private node: Element;
   constructor(node: Element) {
     this.node = node;
   }
 
-  /**
-   * 构建生成 xml 字符串
-   * @param data
-   * @param options
-   * @returns string
-   */
-  public buildXml(options?: Options.JS2XML): string {
-    return js2xml(this.node, { ...js2xmlOptions, ...options });
-  }
-
-  // 静态创建节点实例
-  public static createInstance(node: Element): XMLNodeElement {
-    return new XMLNodeElement(node);
-  }
-
-  // 静态创建一个空的节点实例
-  public static createEmptyNode(): XMLNodeElement {
-    return new XMLNodeElement({});
+  public isEmpty(): boolean {
+    return Object.keys(this.node).length === 0;
   }
 
   // 获取当前节点元素
   public getElement(): Element {
     return this.node;
-  }
-
-  // 获取子节点元素列表
-  public getChildrenElements(): Element[] {
-    return this.node.elements || [];
   }
 
   // 节点类型
@@ -101,6 +82,34 @@ export default class XMLNodeElement {
   }
 
   /**
+   * 修改/添加属性值
+   * @param attr
+   * @param val
+   */
+  public setAttributeOf(attr: string, val: string | number | boolean): void {
+    const attributes = this.getAttributes();
+    if (!attributes) return;
+    attributes[attr] = String(val);
+  }
+
+  /**
+   * 设置 text 节点的值
+   * @param value
+   */
+  public setTextNodeValue(value: string): void {
+    if (this.getType() !== ELEMENT_TYPES.TEXT) return;
+    this.node.text = value;
+  }
+}
+/**
+ * XML 子节点解析类
+ */
+class XMLNodeChildren extends XMLNodeBase {
+  // 获取子节点元素列表
+  public getChildrenElements(): Element[] {
+    return this.getElement().elements || [];
+  }
+  /**
    * 获取所有子节点
    * @returns
    */
@@ -119,11 +128,11 @@ export default class XMLNodeElement {
   }
 
   /**
-   * 获得第一个子节点
+   * 获取第一个子节点
    * @returns
    */
   public getFirstChildNode(): XMLNodeElement {
-    return this.getChildrenNodes()[0] || XMLNodeElement.createEmptyNode();
+    return XMLNodeElement.createInstance(this.getChildrenElements()[0] || {});
   }
 
   /**
@@ -160,49 +169,97 @@ export default class XMLNodeElement {
   }
 
   /**
+   * 和 getChildrenNodesByTagname 不同，这个方法可同时获取多个 tagname 元素，用于保持顺序
+   * @param tagnameList
+   */
+  public getChildrenNodeByMultiTagname(
+    tagnameList: string[]
+  ): XMLNodeElement[] {
+    const tagnameSet = new Set(tagnameList);
+    return this.getChildrenNodes().filter(item =>
+      tagnameSet.has(item.getTagname())
+    );
+  }
+
+  /**
    * 获取第一个文本节点
    * @returns
    */
   public getFirstTextChildNode(): XMLNodeElement {
     const childNode = this.getChildrenNodes().find(
-      item => item.getTagname() === ELEMENT_TYPES.TEXT
+      item => item.getType() === ELEMENT_TYPES.TEXT
     );
     return childNode || XMLNodeElement.createEmptyNode();
   }
 
   /**
-   * 获取子节点的文本节点文本值
-   */
-  public getTextChildrenValues(): string[] {
-    return this.getTextChildrenNodes().map(item => String(item.getText()));
-  }
-
-  /**
-   * 获取所有文本子节点的第第一个节点文本值
+   * 获取所有文本子节点的第一个节点文本值
    * @returns
    */
   public getFirstTextChildValue(): string {
-    return this.getTextChildrenValues()[0] || "";
+    return String(this.getFirstTextChildNode().getText() || "");
   }
 
   /**
-   * 修改/添加属性值
+   * 获取属性和值匹配的节点列表
    * @param attr
    * @param val
    */
-  public setAttributeOf(attr: string, val: string | number | boolean): void {
-    const attributes = this.getAttributes();
-    if (!attributes) return;
-    attributes[attr] = String(val);
+  public getChildrenNodeByAttrValue(
+    attr: string,
+    val: string
+  ): XMLNodeElement[] {
+    return this.getChildrenNodes().filter(
+      item => item.getAttributeOf(attr) === val
+    );
   }
 
   /**
-   * 设置 text 节点的值
-   * @param value
+   * 获取第一个属性和值匹配的节点
+   * @param attr
+   * @param val
+   * @returns
    */
-  public setTextNodeValue(value: string): void {
-    if (this.getType() !== ELEMENT_TYPES.TEXT) return;
-    this.node.text = value;
-    console.log(this.node.text);
+  public getFirstChildNodeByAttrValue(
+    attr: string,
+    val: string
+  ): XMLNodeElement {
+    return (
+      this.getChildrenNodes().find(item => item.getAttributeOf(attr) === val) ||
+      XMLNodeElement.createEmptyNode()
+    );
+  }
+}
+
+/**
+ * 继承合并导出，增加类即可
+ */
+export default class XMLNodeElement extends XMLNodeChildren {
+  /**
+   * 构建生成 xml 字符串
+   * @param data
+   * @param options
+   * @returns string
+   */
+  public buildXml(options?: Options.JS2XML): string {
+    return js2xml(this.getElement(), { ...js2xmlOptions, ...options });
+  }
+
+  // 静态创建节点实例
+  public static createInstance(node: Element): XMLNodeElement {
+    return new XMLNodeElement(node);
+  }
+
+  // 静态创建一个空的节点实例
+  public static createEmptyNode(): XMLNodeElement {
+    return new XMLNodeElement({});
+  }
+
+  public createInstance(node: Element): XMLNodeElement {
+    return XMLNodeElement.createInstance(node);
+  }
+
+  public createEmptyNode(): XMLNodeElement {
+    return XMLNodeElement.createEmptyNode();
   }
 }

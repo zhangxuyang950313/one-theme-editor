@@ -1,27 +1,11 @@
 import { Element } from "xml-js";
+import { getPlaceholderVal } from "common/utils";
+import { TypeKeyValue } from "src/types";
 import XMLNodeElement from "./XMLNodeElement";
 import BaseCompiler from "./BaseCompiler";
+import TempKeyValMapper from "./TempKeyValMapper";
 
-export default class XmlTemplate extends XMLNodeElement {
-  private file: string;
-  constructor(file: string) {
-    super(BaseCompiler.compile<Element>(file));
-    this.file = file;
-  }
-
-  /**
-   * 获取占位模板字符串值
-   * ```
-   * ${class_integer_checkbox_stroke_d} -> class_integer_checkbox_stroke_d
-   * ```
-   * @param val
-   * @returns string | null
-   */
-  private getPlaceholderVal(val: string): string | null {
-    const match = /^\${(.+)}/.exec(val);
-    return match && match[1] ? match[1] : null;
-  }
-
+export default class XmlTemplate extends BaseCompiler {
   getData(): string[] {
     return [];
     // return super.getRootChildren().map(node => ({
@@ -37,9 +21,47 @@ export default class XmlTemplate extends XMLNodeElement {
    */
   public getElementList(): Element[] {
     return super
-      .getFirstChildNode()
+      .getRootNode()
       .getChildrenNodes()
       .map(item => item.getElement());
+  }
+
+  /**
+   * 获取 name 属性值匹配的节点子节点文字
+   * ```xml
+   * <!-- 这个方法获取到 ${class_bool_default_theme} -->
+   * <bool name="default_theme">${class_bool_default_theme}</bool>
+   * ```
+   * @param name
+   * @returns
+   */
+  public getValueByName(name: string): string {
+    return super
+      .getRootNode()
+      .getFirstChildNodeByAttrValue("name", name)
+      .getFirstTextChildValue();
+  }
+
+  /**
+   * 获取替换占位符后的 XMLNodeElement 实例
+   * @param name
+   * @param mapperFile
+   * @returns
+   */
+  public getPlaceholderReplacedNode(kvList: TypeKeyValue[]): XMLNodeElement {
+    return super.createInstance(BaseCompiler.compile(this.generateXml(kvList)));
+  }
+
+  /**
+   * 获取匹配 name 属性节点的 text 值
+   * @param name
+   * @param mapperFile
+   * @returns
+   */
+  public getTextByAttrName(name: string, kvList: TypeKeyValue[]): string {
+    return this.getPlaceholderReplacedNode(kvList)
+      .getFirstChildNodeByAttrValue("name", name)
+      .getFirstTextChildValue();
   }
 
   /**
@@ -54,19 +76,26 @@ export default class XmlTemplate extends XMLNodeElement {
    * @param value
    * @returns xmlString
    */
-  public generateXml(key: string, value: string): string {
+  public generateXml(kvList: TypeKeyValue[]): string {
+    const kvMap = kvList.reduce((t, o) => {
+      t.set(o.key, o.value);
+      return t;
+    }, new Map<string, string>());
     return super.buildXml({
       attributeNameFn: attrName => {
-        const placeholder = this.getPlaceholderVal(attrName);
-        return placeholder === key ? value : attrName;
+        const placeholder = getPlaceholderVal(attrName);
+        if (!placeholder) return attrName;
+        return kvMap.get(placeholder) || attrName;
       },
       attributeValueFn: attrVal => {
-        const placeholder = this.getPlaceholderVal(attrVal);
-        return placeholder === key ? value : attrVal;
+        const placeholder = getPlaceholderVal(attrVal);
+        if (!placeholder) return attrVal;
+        return kvMap.get(placeholder) || attrVal;
       },
       textFn: textVal => {
-        const placeholder = this.getPlaceholderVal(textVal);
-        return placeholder === key ? value : textVal;
+        const placeholder = getPlaceholderVal(textVal);
+        if (!placeholder) return textVal;
+        return kvMap.get(placeholder) || textVal;
       }
     });
   }

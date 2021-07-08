@@ -3,17 +3,27 @@ import API from "common/api";
 import {
   TypeSourceModuleConf,
   TypeSourcePageData,
-  TypeSourceConfig
+  TypeSourceConfig,
+  TypeSourceConfigBrief
 } from "types/source-config";
-import { TypeReleaseXmlTempPayload, TypeResult } from "types/request";
+import {
+  TypeGetValueByKeyPayload,
+  TypeReleaseXmlTempPayload,
+  TypeResult
+} from "types/request";
 import { result } from "server/utils/utils";
 import { resolveSourcePath } from "server/utils/pathUtils";
-import { releaseXmlTemplate } from "server/file-handler/xml-template";
+import {
+  getXmlTempValueByNameAttrVal,
+  releaseXmlTemplate
+} from "server/file-handler/xml-template";
 import PageConfig from "server/compiler/PageConfig";
 import SourceConfig from "server/compiler/SourceConfig";
 
 export default function source(service: Express): void {
-  // 获取厂商配置列表
+  /**
+   * 获取厂商配置列表
+   */
   service.get(API.GET_BRAND_LIST, (request, response) => {
     try {
       const brandConfList = SourceConfig.readBrandConf();
@@ -23,12 +33,15 @@ export default function source(service: Express): void {
     }
   });
 
-  // 获取配置预览列表
-  service.get<{ brandType: string }>(
+  /**
+   * 获取配置预览列表
+   */
+  service.get<{ brandType: string }, TypeResult<TypeSourceConfigBrief[]>>(
     `${API.GET_SOURCE_CONF_LIST}/:brandType`,
     (request, response) => {
       try {
         const { brandType } = request.params;
+        if (!brandType) throw new Error("缺少 brandType 参数");
         const list = SourceConfig.getSourceConfigBriefList(brandType);
         response.send(result.success(list));
       } catch (err) {
@@ -37,7 +50,9 @@ export default function source(service: Express): void {
     }
   );
 
-  // 获取模块列表
+  /**
+   * 获取模块列表
+   */
   service.get<
     never, // reqParams
     TypeResult<TypeSourceModuleConf[]>, // resBody
@@ -55,7 +70,10 @@ export default function source(service: Express): void {
     }
   });
 
-  // 获取页面信息
+  /**
+   * 获取页面信息
+   * 传入 pageFile（相对素材的根路径）
+   */
   service.get<
     never, // reqParams
     TypeResult<TypeSourcePageData>, // resBody
@@ -73,7 +91,10 @@ export default function source(service: Express): void {
     }
   });
 
-  // 获取配置信息
+  /**
+   * 获取配置信息
+   * 传入 descriptionFile（相对素材的根路径）
+   */
   service.get<
     never, // reqParams
     TypeResult<TypeSourceConfig>, // resBody
@@ -91,6 +112,9 @@ export default function source(service: Express): void {
     }
   });
 
+  /**
+   * 将 key 的 value 写入 xml ${placeholder}
+   */
   service.post<
     never, // reqParams
     TypeResult<TypeReleaseXmlTempPayload>, // resBody
@@ -99,6 +123,26 @@ export default function source(service: Express): void {
     try {
       releaseXmlTemplate(request.body);
       response.send(result.success(request.body));
+    } catch (err) {
+      response.send(result.fail(err.message));
+    }
+  });
+
+  /**
+   * 获取 xml 模板中 name 的值
+   */
+  service.get<
+    never,
+    TypeResult<{ value: string }>,
+    never,
+    TypeGetValueByKeyPayload
+  >(API.GET_SOURCE_VALUE_BY_KEY, async (request, response) => {
+    try {
+      const { query } = request;
+      if (!query.name) throw new Error("缺少 name 参数");
+      if (!query.template) throw new Error("缺少 template 参数");
+      const value = getXmlTempValueByNameAttrVal(request.query);
+      response.send(result.success({ value }));
     } catch (err) {
       response.send(result.fail(err.message));
     }

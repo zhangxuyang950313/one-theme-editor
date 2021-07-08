@@ -54,7 +54,7 @@ const StyleSourceStatusLine = styled.p`
   word-wrap: break-word;
   word-break: break-all;
   white-space: pre-wrap;
-  font-size: 10px;
+  font-size: ${({ theme }) => theme["@text-size-secondary"]};
   color: ${({ theme }) => theme["@text-color-secondary"]};
   user-select: text;
   &[data-exists="true"] {

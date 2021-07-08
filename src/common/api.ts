@@ -6,6 +6,9 @@ enum API {
   // 获取图片数据
   IMAGE_DATA = "/image/data",
 
+  /**
+   * 获取资源配置数据
+   */
   // 获取厂商信息列表
   GET_BRAND_LIST = "/brand/list",
   // 获取配置信息列表
@@ -17,8 +20,15 @@ enum API {
   // 获取配置页面数据
   GET_SOURCE_CONF_PAGE_DATA = "/source/config/page/data",
 
+  /**
+   * 操作输出资源数据
+   */
   // 输出 xml 模板
   OUTPUT_SOURCE_XML_TEMPLATE = "/source/xml/template/output",
+  // 通过 key 查找定义的 value
+  GET_SOURCE_VALUE_BY_KEY = "/source/xml/value",
+  // 通过 key 查找工程的 value
+  GET_PROJECT_VALUE_BY_KEY = "/project/xml/value",
 
   // 创建工程
   CREATE_PROJECT = "/project/create",

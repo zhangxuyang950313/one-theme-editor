@@ -1,21 +1,35 @@
 import path from "path";
 import PATHS from "server/utils/pathUtils";
-import { getImageData } from "common/utils";
+import { getImageData, getPlaceholderVal } from "common/utils";
 import { ELEMENT_TYPES, ALIGN_VALUES, ALIGN_V_VALUES } from "src/enum/index";
 import {
-  TypeSourceXmlTempConf,
+  TypeSourceXmlTempData,
   TypeSourceCopyConf,
   TypeSourceElement,
   TypeSourcePageData,
   TypeSourceImageElement,
-  TypeSourceTextElement
+  TypeSourceTextElement,
+  TypeSourceXmlKeyValConf,
+  TypeSourceXmlTempConf
 } from "types/source-config";
-import XMLNodeElement from "server/compiler/XMLNodeElement";
+import XMLNodeBase from "server/compiler/XMLNodeElement";
 import TempKeyValMapper from "./TempKeyValMapper";
 import BaseCompiler from "./BaseCompiler";
 import XmlTemplate from "./XmlTemplate";
+import XMLNodeElement from "./XMLNodeElement";
 
+type TypeCache = {
+  xmlTempConfList: TypeSourceXmlTempConf[] | null;
+  xmlTemplateList: TypeSourceXmlTempData[] | null;
+  xmlTempReplacedPlaceholderList: XMLNodeElement[] | null;
+};
 export default class PageConfig extends BaseCompiler {
+  // 被多次使用的数据添加缓存
+  private cache: TypeCache = {
+    xmlTempConfList: null,
+    xmlTemplateList: null,
+    xmlTempReplacedPlaceholderList: null
+  };
   // 处理当前页面资源的相对路径
   private relativePath(file: string): string {
     const namespace = path.relative(
@@ -49,60 +63,119 @@ export default class PageConfig extends BaseCompiler {
   }
 
   getPreviewList(): string[] {
-    const previewNodeList = super.getRootChildrenOf("preview");
-    return previewNodeList.map(item =>
-      this.relativePath(item.getAttributeOf("src"))
-    );
-  }
-
-  getXmlTempConfList(): TypeSourceXmlTempConf[] {
     return super
-      .getRootChildrenOf("template")
-      .map<TypeSourceXmlTempConf>(node => {
-        const value = node.getAttributeOf("value");
-        const src = node.getAttributeOf("src");
-        const release =
-          node.getAttributeOf("to") || node.getAttributeOf("release");
-        const prefix = `template 缺少`;
-        const suffix = `(${super.getFileName()})`;
-        if (!value) throw new Error(`${prefix} value 属性 ${suffix}`);
-        if (!src) throw new Error(`${prefix} src 属性 ${suffix}`);
-        if (!release) throw new Error(`${prefix} to/release 属性 ${suffix}`);
-
-        const valueMap = new TempKeyValMapper(
-          this.resolvePath(value)
-        ).getDataObj();
-        const template = this.relativePath(src);
-        return { template, release, valueMap };
-      });
+      .getRootChildrenNodesOf("preview")
+      .map(item => this.relativePath(item.getAttributeOf("src")));
   }
 
+  /**
+   * template 配置原始数据
+   * @returns
+   */
+  getXmlTempConfList(): TypeSourceXmlTempConf[] {
+    if (!this.cache.xmlTempConfList) {
+      this.cache.xmlTempConfList = super
+        .getRootChildrenNodesOf("template")
+        .map<TypeSourceXmlTempConf>(item => ({
+          template: item.getAttributeOf("src"),
+          value: item.getAttributeOf("value"),
+          release: item.getAttributeOf("release") || item.getAttributeOf("to")
+        }));
+    }
+    return this.cache.xmlTempConfList;
+  }
+
+  /**
+   * 获取模板被替换占位符后的节点数据实例
+   * @returns
+   */
+  getXmlTempReplacedPlaceholderList(): XMLNodeElement[] {
+    if (!this.cache.xmlTempReplacedPlaceholderList) {
+      this.cache.xmlTempReplacedPlaceholderList =
+        this.getXmlTempConfList().map<XMLNodeElement>(item => {
+          const kvList = new TempKeyValMapper(
+            this.resolvePath(item.value)
+          ).getKeyValList();
+          return new XmlTemplate(
+            this.resolvePath(item.template)
+          ).getPlaceholderReplacedNode(kvList);
+        });
+    }
+    return this.cache.xmlTempReplacedPlaceholderList;
+  }
+
+  /**
+   * xml 模板列表，用于前端展示
+   * @returns
+   */
+  getXmlTempListForUI(): TypeSourceXmlTempData[] {
+    if (!this.cache.xmlTemplateList) {
+      this.cache.xmlTemplateList = super
+        .getRootChildrenNodesOf("template")
+        .map<TypeSourceXmlTempData>(node => {
+          const value = node.getAttributeOf("value");
+          const src = node.getAttributeOf("src");
+          const release =
+            node.getAttributeOf("to") || node.getAttributeOf("release");
+          const prefix = `template 缺少`;
+          const suffix = `(${super.getFileName()})`;
+          if (!value) throw new Error(`${prefix} value 属性 ${suffix}`);
+          if (!src) throw new Error(`${prefix} src 属性 ${suffix}`);
+          if (!release) throw new Error(`${prefix} to/release 属性 ${suffix}`);
+
+          const valueList = new TempKeyValMapper(
+            this.resolvePath(value)
+          ).getDataList();
+          const template = this.relativePath(src);
+          return { template, release, valueList };
+        });
+    }
+    return this.cache.xmlTemplateList;
+  }
+
+  /**
+   * 拷贝文件的列表
+   * ```xml
+   * <copy from="theme_fallback.xml" to="wallpaper/theme_fallback.xml"/>
+   * <copy from="theme_fallback.xml" release="wallpaper/theme_fallback1.xml"/>
+   * ```
+   * @returns
+   */
   getCopyConfList(): TypeSourceCopyConf[] {
-    return super.getRootChildrenOf("copy").map<TypeSourceCopyConf>(node => ({
-      from: this.relativePath(node.getAttributeOf("from")),
-      release: node.getAttributeOf("to", node.getAttributeOf("release"))
-    }));
+    return super
+      .getRootChildrenNodesOf("copy")
+      .map<TypeSourceCopyConf>(node => ({
+        from: this.relativePath(node.getAttributeOf("from")),
+        release: node.getAttributeOf("to") || node.getAttributeOf("release")
+      }));
   }
 
-  private layoutConf(node: XMLNodeElement) {
-    return {
-      x: node.getAttributeOf("x"),
-      y: node.getAttributeOf("y"),
-      w: node.getAttributeOf("w"),
-      h: node.getAttributeOf("h"),
-      align: node.getAttributeOf("align", ALIGN_VALUES.LEFT),
-      alignV: node.getAttributeOf("alignV", ALIGN_V_VALUES.TOP)
-    };
-  }
-
-  private imageElement(node: XMLNodeElement): TypeSourceImageElement {
+  /**
+   * 解析图片节点
+   * ```xml
+   * <image
+   *  name="天气图标"
+   *  x="0" y="0" w="100" h="100" align="center" alignV="center"
+   *  src="../icons/weather.png"
+   * >
+   * <!-- to/release 可以写多行复制多个文件，有两种写法 -->
+   *  <to>icon/res/weather1.png</to>
+   *  <release>icon/res/weather2.png</release>
+   *  <to src="icon/res/weather3/>
+   *  <release src="icon/res/weather3/>
+   * </image>
+   * ```
+   * @param node
+   * @returns
+   */
+  private imageElement(node: XMLNodeBase): TypeSourceImageElement {
     const src = node.getAttributeOf("src");
     const source = {
       ...getImageData(this.resolvePath(src)),
       url: this.relativePath(src)
     };
     const releaseList = node
-      .getChildrenNodesByTagname("to")
+      .getChildrenNodeByMultiTagname(["to", "release"])
       .map(item => item.getFirstTextChildValue() || item.getAttributeOf("src"));
     return {
       type: ELEMENT_TYPES.IMAGE,
@@ -113,21 +186,75 @@ export default class PageConfig extends BaseCompiler {
     };
   }
 
-  private textElement(node: XMLNodeElement): TypeSourceTextElement {
+  /**
+   * 解析文字节点
+   * ```xml
+   * <!-- color 引用 template 定义的 src 中的值 -->
+   * <text
+   *  name="图标字体"
+   *  text="拨号"
+   *  x="415" y="1250" size="36" align="center" alignV="center"
+   *  color="${action_bar_title_text_color_light}"
+   * />
+   * ```
+   * @param node
+   * @returns
+   */
+  private textElement(node: XMLNodeBase): TypeSourceTextElement {
     const layout = this.layoutConf(node);
+    const text = node.getAttributeOf("text");
+    // 若没有 name 则使用 text
+    const name = node.getAttributeOf("name", text);
+    const colorVal = node.getAttributeOf("color");
+    const colorName = getPlaceholderVal(colorVal) || colorVal;
+    const replacedList = this.getXmlTempReplacedPlaceholderList();
+    let defaultColor = "#ff000000";
+    for (let i = 0; i < replacedList.length; i++) {
+      const item = replacedList[i];
+      const val = item
+        .getFirstChildNode()
+        .getFirstChildNodeByAttrValue("name", colorName)
+        .getFirstTextChildValue();
+      if (val) {
+        defaultColor = val;
+        break;
+      }
+    }
     return {
       type: ELEMENT_TYPES.TEXT,
-      text: node.getAttributeOf("text"),
+      name,
+      text,
       layout: {
         x: layout.x,
         y: layout.y,
         align: layout.align,
         alignV: layout.alignV
       },
-      color: node.getAttributeOf("color")
+      defaultColor,
+      colorName
     };
   }
 
+  /**
+   * 节点布局信息
+   * @param node
+   * @returns
+   */
+  private layoutConf(node: XMLNodeBase) {
+    return {
+      x: node.getAttributeOf("x"),
+      y: node.getAttributeOf("y"),
+      w: node.getAttributeOf("w"),
+      h: node.getAttributeOf("h"),
+      align: node.getAttributeOf("align", ALIGN_VALUES.LEFT),
+      alignV: node.getAttributeOf("alignV", ALIGN_V_VALUES.TOP)
+    };
+  }
+
+  /**
+   * 获取布局元素对应的解析数据列表
+   * @returns
+   */
   getLayoutElementList(): TypeSourceElement[] {
     const rootNode = this.getRootNode();
     const elementList = rootNode
@@ -157,7 +284,7 @@ export default class PageConfig extends BaseCompiler {
       screenWidth: this.getScreenWidth(),
       previewList: this.getPreviewList(),
       elementList: this.getLayoutElementList(),
-      templateList: this.getXmlTempConfList(),
+      templateList: this.getXmlTempListForUI(),
       copyList: this.getCopyConfList()
     };
   }

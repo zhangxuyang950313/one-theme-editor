@@ -2,6 +2,7 @@ import React from "react";
 
 import styled from "styled-components";
 import { LazyImage } from "@/components/ImageCollection";
+import { StyleGirdBackground } from "@/style";
 
 /**
  * 图片素材展示, 底部有个背景
@@ -27,23 +28,16 @@ const ImageDisplay: React.FC<TypePropsOfShowImage> = props => {
   );
 };
 
-const StyleImageBackground = styled.div`
+const StyleImageBackground = styled(StyleGirdBackground)`
   flex-shrink: 0;
   position: relative;
   width: 84px;
   height: 84px;
   box-sizing: border-box;
-  background-color: #c2c2c2;
-  background-image: linear-gradient(45deg, #6d6d6d 25%, transparent 0),
-    linear-gradient(45deg, transparent 75%, #6d6d6d 0),
-    linear-gradient(45deg, #6d6d6d 25%, transparent 0),
-    linear-gradient(45deg, transparent 75%, #6d6d6d 0);
-  background-size: 14px 14px;
-  background-position: 0 0, 7px 7px, 7px 7px, 0 0;
-
   display: flex;
   justify-content: center;
   align-items: center;
+  border-radius: 6px;
 `;
 
 const StyleShowImage = styled(StyleImageBackground)`

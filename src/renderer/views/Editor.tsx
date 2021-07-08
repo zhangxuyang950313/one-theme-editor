@@ -44,13 +44,13 @@ const StyleEditorContainer = styled.div`
 `;
 
 const StylePageSelector = styled(StyleBorderRight)`
-  width: 250px;
+  width: 230px;
   flex-shrink: 0;
   overflow: auto;
 `;
 
 const StylePreviewer = styled(StyleBorderRight)`
-  width: 350px;
+  width: 330px;
   padding: 20px;
   flex-shrink: 0;
   overflow: auto;
@@ -64,7 +64,7 @@ const StyleImageSourceList = styled(StyleBorderRight)`
 `;
 
 const StyleXmlSourceList = styled.div`
-  /* width: 100%; */
+  flex: 1;
   padding: 0 20px;
   flex-shrink: 0;
   overflow: auto;

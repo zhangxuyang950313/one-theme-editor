@@ -71,6 +71,7 @@ npm run build:linux
     - index.ts     生产环境启动
   - renderer - 渲染进程（react）
   - server - 本地服务进程
+  - script - 一些python/c++处理脚本
 - webpack
   - config.main.ts - 主进程 webpack 配置
   - config.renderer.ts - 渲染进程 webpack 配置

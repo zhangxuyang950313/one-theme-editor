@@ -37,7 +37,7 @@ const MiddleCopyButton: React.FC<{
 const StyleCopyButton = styled.div`
   cursor: pointer;
   font-size: 30px;
-  color: ${({ theme }) => theme["@text-color"]};
+  color: ${({ theme }) => theme["@text-color-secondary"]};
   margin: 20px;
   transition: all 0.5s ease;
   &:hover {
@@ -55,8 +55,8 @@ const ImageController: React.FC<TypeSourceImageElement> = imageSource => {
 
   return (
     <StyleImageController>
-      {/* 图片描述 */}
-      <div className="description">
+      {/* 图片名称 */}
+      <div className="name">
         {imageSource.name}
         {source.width && source.height ? (
           <span className="image-size">
@@ -94,17 +94,18 @@ const StyleImageController = styled.div`
   /* display: inline; */
   /* padding: 10px; */
   margin-bottom: 20px;
-  .description {
+  .name {
     width: 100%;
     margin-bottom: 6px;
-    font-size: 16px;
     word-wrap: break-word;
     word-break: break-all;
     white-space: pre-wrap;
+    font-size: ${({ theme }) => theme["@text-size-big"]};
+    color: ${({ theme }) => theme["@text-color"]};
     .image-size {
       margin-left: 4px;
-      font-size: 10px;
-      color: ${({ theme }) => theme["@text-color"]};
+      font-size: ${({ theme }) => theme["@text-size-secondary"]};
+      color: ${({ theme }) => theme["@text-color-secondary"]};
     }
   }
   .edit-wrapper {

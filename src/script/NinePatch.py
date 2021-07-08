@@ -34,7 +34,7 @@ class NinePatch(str):
 
     # 裁剪 .9 区域
     def clip_nine_patch_area(self) -> Image:
-        cropped = self.image.crop((1, 1, self.image.size[0] - 1, self.image.size[1] - 1))  # (left, upper, right, lower)
+        cropped = self.image.crop((1, 1, self.width - 1, self.height - 1))  # (left, upper, right, lower)
         return cropped
 
     # 写入 .9 信息

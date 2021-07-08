@@ -42,7 +42,7 @@ import {
   TypeSourceElement,
   TypeSourceImageElement,
   TypeSourceTextElement,
-  TypeSourceXmlTempConf,
+  TypeSourceXmlTempData,
   TypeSourcePageData
 } from "types/source-config";
 import { TypeBrandConf } from "types/project";
@@ -317,6 +317,6 @@ export function useTextSourceList(): TypeSourceTextElement[] {
  * 获取 xml 模板列表
  * @returns
  */
-export function useXmlTemplateList(): TypeSourceXmlTempConf[] {
+export function useXmlTemplateList(): TypeSourceXmlTempData[] {
   return useEditorSelector(getXmlTemplateList);
 }

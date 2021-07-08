@@ -5,14 +5,18 @@
     <!-- 静态预览图 -->
     <preview src="../preview/preview.jpg"/>
     
-    <!-- xml 模板数据定义，用于 ${key} 设定值 -->
+    <!-- 
+        src: 定义 xml 数据模板
+        value：定义变量
+        to/release: 释放到工程目录位置
+    -->
     <template 
         src="theme_values.xml"
         value="value_mapper.xml" 
         to="wallpaper/theme_values.xml"
     />
 
-    <!-- 默认移动的文件 -->
+    <!-- 直接复制的文件 -->
     <copy from="theme_fallback.xml" to="wallpaper/theme_fallback.xml"/>
 
 
@@ -37,6 +41,7 @@
         </image>
 
         <text 
+            name="图标字体"
             text="拨号"
             x="415" y="1250" size="36" align="center" alignV="center" 
             color="${action_bar_title_text_color_light}"
@@ -76,6 +81,7 @@
         </image>
 
         <text
+            name="图标字体"
             text="天气"
             x="168" y="1250" size="36" align="center" alignV="center"
             color="${action_bar_title_text_color_light}"

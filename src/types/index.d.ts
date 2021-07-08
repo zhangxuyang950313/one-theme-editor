@@ -7,3 +7,5 @@ export type TypeDatabase<T = { [x: string]: any }> = T & {
 
 // 图片路径
 export type TypeImagePathLike = string;
+
+export type TypeKeyValue = { key: string; value: string };

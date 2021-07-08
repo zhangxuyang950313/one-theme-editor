@@ -1,5 +1,4 @@
 import React from "react";
-import styled from "styled-components";
 import { Tabs } from "antd";
 import { ELEMENT_TYPES } from "src/enum";
 import {
@@ -24,15 +23,13 @@ const XmlSourceList: React.FC = () => {
             </Tabs.TabPane>
           ))}
       </Tabs>
-      <SourceXmlSourceList>
+      <>
         {xmlSourceList.map((sourceConf, key) => (
           <XmlController key={key} {...sourceConf} />
         ))}
-      </SourceXmlSourceList>
+      </>
     </>
   );
 };
-
-const SourceXmlSourceList = styled.div``;
 
 export default XmlSourceList;

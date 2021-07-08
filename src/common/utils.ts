@@ -284,3 +284,16 @@ export async function asyncQueue<T>(
 export async function sleep(delay: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, delay));
 }
+
+/**
+ * 获取占位模板字符串值
+ * ```
+ * ${class_integer_checkbox_stroke_d} -> class_integer_checkbox_stroke_d
+ * ```
+ * @param val
+ * @returns string | null
+ */
+export function getPlaceholderVal(val: string): string | null {
+  const match = /^\${(.+)}/.exec(val);
+  return match && match[1] ? match[1] : null;
+}
