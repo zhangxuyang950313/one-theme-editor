@@ -9,26 +9,24 @@ import {
   TypeSourcePageData,
   TypeSourceImageElement,
   TypeSourceTextElement,
-  TypeSourceXmlKeyValConf,
   TypeSourceXmlTempConf
 } from "types/source-config";
 import XMLNodeBase from "server/compiler/XMLNodeElement";
 import TempKeyValMapper from "./TempKeyValMapper";
 import BaseCompiler from "./BaseCompiler";
 import XmlTemplate from "./XmlTemplate";
-import XMLNodeElement from "./XMLNodeElement";
 
 type TypeCache = {
   xmlTempConfList: TypeSourceXmlTempConf[] | null;
   xmlTemplateList: TypeSourceXmlTempData[] | null;
-  xmlTempReplacedPlaceholderList: XMLNodeElement[] | null;
+  xmlTempKeyValMap: Map<string, string> | null;
 };
 export default class PageConfig extends BaseCompiler {
   // 被多次使用的数据添加缓存
   private cache: TypeCache = {
     xmlTempConfList: null,
     xmlTemplateList: null,
-    xmlTempReplacedPlaceholderList: null
+    xmlTempKeyValMap: null
   };
   // 处理当前页面资源的相对路径
   private relativePath(file: string): string {
@@ -89,19 +87,25 @@ export default class PageConfig extends BaseCompiler {
    * 获取模板被替换占位符后的节点数据实例
    * @returns
    */
-  getXmlTempReplacedPlaceholderList(): XMLNodeElement[] {
-    if (!this.cache.xmlTempReplacedPlaceholderList) {
-      this.cache.xmlTempReplacedPlaceholderList =
-        this.getXmlTempConfList().map<XMLNodeElement>(item => {
+  getXmlTempKeyValMap(): Map<string, string> {
+    if (!this.cache.xmlTempKeyValMap) {
+      const kvObj = this.getXmlTempConfList().reduce<Record<string, string>>(
+        (obj, item) => {
           const kvList = new TempKeyValMapper(
             this.resolvePath(item.value)
           ).getKeyValList();
-          return new XmlTemplate(
-            this.resolvePath(item.template)
-          ).getPlaceholderReplacedNode(kvList);
-        });
+          return {
+            ...obj,
+            ...new XmlTemplate(
+              this.resolvePath(item.template)
+            ).getNameValueMapObj(kvList)
+          };
+        },
+        {}
+      );
+      this.cache.xmlTempKeyValMap = new Map(Object.entries(kvObj));
     }
-    return this.cache.xmlTempReplacedPlaceholderList;
+    return this.cache.xmlTempKeyValMap;
   }
 
   /**
@@ -207,19 +211,7 @@ export default class PageConfig extends BaseCompiler {
     const name = node.getAttributeOf("name", text);
     const colorVal = node.getAttributeOf("color");
     const colorName = getPlaceholderVal(colorVal) || colorVal;
-    const replacedList = this.getXmlTempReplacedPlaceholderList();
-    let defaultColor = "#ff000000";
-    for (let i = 0; i < replacedList.length; i++) {
-      const item = replacedList[i];
-      const val = item
-        .getFirstChildNode()
-        .getFirstChildNodeByAttrValue("name", colorName)
-        .getFirstTextChildValue();
-      if (val) {
-        defaultColor = val;
-        break;
-      }
-    }
+    const defaultColor = this.getXmlTempKeyValMap().get(colorName) || "";
     return {
       type: ELEMENT_TYPES.TEXT,
       name,

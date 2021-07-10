@@ -27,4 +27,4 @@ pnpm-debug.log*
 *.sw?
 
 .eslintcache
-.npmg
+.npmc

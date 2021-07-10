@@ -3,7 +3,6 @@ import { getPlaceholderVal } from "common/utils";
 import { TypeKeyValue } from "src/types";
 import XMLNodeElement from "./XMLNodeElement";
 import BaseCompiler from "./BaseCompiler";
-import TempKeyValMapper from "./TempKeyValMapper";
 
 export default class XmlTemplate extends BaseCompiler {
   getData(): string[] {
@@ -50,6 +49,36 @@ export default class XmlTemplate extends BaseCompiler {
    */
   public getPlaceholderReplacedNode(kvList: TypeKeyValue[]): XMLNodeElement {
     return super.createInstance(BaseCompiler.compile(this.generateXml(kvList)));
+  }
+
+  /**
+   * 获取模板 name 和 textVal 的映射对象
+   * 解析忽略节点 tag
+   * ```xml
+   * <color name="a">b</color>
+   * <color name="b">c</color>
+   * ```
+   * ->
+   * ```json
+   *  {
+   *    "a": "b",
+   *    "b": "c"
+   *  }
+   * ```
+   * @param kvList
+   * @returns
+   */
+  public getNameValueMapObj(kvList: TypeKeyValue[]): Record<string, string> {
+    return super
+      .createInstance(BaseCompiler.compile(this.generateXml(kvList)))
+      .getFirstChildNode()
+      .getChildrenNodes()
+      .reduce<Record<string, string>>((obj, item) => {
+        const nameVal = item.getAttributeOf("name");
+        if (!nameVal) return obj;
+        obj[nameVal] = item.getFirstTextChildValue();
+        return obj;
+      }, {});
   }
 
   /**

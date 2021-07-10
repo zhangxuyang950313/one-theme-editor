@@ -14,11 +14,7 @@ const XmlController: React.FC<TypeSourceTextElement> = sourceConf => {
         <span className="color-name">{sourceConf.colorName}</span>
       </div>
       <div className="color-wrapper">
-        <StyleColorBox
-          color="#ff0000ff"
-          // color={props.defaultColor}
-          // onClick={() => setPickerVisible(!pickerVisible)}
-        />
+        <StyleColorBox color={sourceConf.defaultColor} />
         <RightCircleOutlined className="middle-button" />
         <Tooltip
           overlayInnerStyle={{ color: "black" }}
