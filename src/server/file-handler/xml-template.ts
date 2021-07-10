@@ -4,7 +4,7 @@ import PATHS from "server/utils/pathUtils";
 import XmlTemplate from "server/compiler/XmlTemplate";
 import {
   TypeReleaseXmlTempPayload,
-  TypeGetValueByKeyPayload
+  TypeGetValueByNamePayload
 } from "types/request";
 
 /**
@@ -26,7 +26,7 @@ export function releaseXmlTemplate(data: TypeReleaseXmlTempPayload): void {
  * @returns
  */
 export function getXmlTempValueByNameAttrVal(
-  data: TypeGetValueByKeyPayload
+  data: TypeGetValueByNamePayload
 ): string {
   const absPath = path.join(PATHS.SOURCE_CONFIG_DIR, data.template);
   return new XmlTemplate(absPath).getValueByName(data.name);

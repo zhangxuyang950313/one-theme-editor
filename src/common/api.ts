@@ -25,10 +25,8 @@ enum API {
    */
   // 输出 xml 模板
   OUTPUT_SOURCE_XML_TEMPLATE = "/source/xml/template/output",
-  // 通过 key 查找定义的 value
-  GET_SOURCE_VALUE_BY_KEY = "/source/xml/value",
-  // 通过 key 查找工程的 value
-  GET_PROJECT_VALUE_BY_KEY = "/project/xml/value",
+  // 通过 name 查找工程的 value
+  GET_PROJECT_XML_TEMP_VALUE = "/project/xml/value",
 
   // 创建工程
   CREATE_PROJECT = "/project/create",

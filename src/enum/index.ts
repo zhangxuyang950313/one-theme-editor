@@ -3,6 +3,11 @@ export enum ELEMENT_TYPES {
   TEXT = "text"
 }
 
+export enum ELEMENT_TAGS {
+  IMAGE = "image",
+  COLOR = "color"
+}
+
 export enum ALIGN_VALUES {
   LEFT = "left",
   CENTER = "center",

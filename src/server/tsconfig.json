@@ -30,6 +30,7 @@
     "importHelpers": true,
     // 忽略所有的声明文件（ *.d.ts）的类型检查。
     "skipLibCheck": true,
+    "downlevelIteration": true,
     "types": ["node"],
     "baseUrl": "./",
     "paths": {

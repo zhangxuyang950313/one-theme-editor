@@ -47,3 +47,7 @@ export async function apiGetSourcePageConfData(
     })
     .then(data => data.data.data);
 }
+
+export async function apiGetTempValueByName() {
+  return createHttp().get(API.GET_PROJECT_XML_TEMP_VALUE, {});
+}

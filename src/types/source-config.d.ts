@@ -34,7 +34,7 @@ export type TypeSourcePageGroupConf = {
 };
 
 // 键值对配置数据
-export type TypeSourcePageKeyValMapConf = Record<
+export type TypeXmlTempKeyValMap = Map<
   string,
   { value: string; description: string }
 >;
@@ -49,7 +49,7 @@ export type TypeSourceXmlKeyValConf = {
 // 配置模板原始配置
 export type TypeSourceXmlTempConf = {
   template: string;
-  value: string;
+  values: string;
   release: string;
 };
 
@@ -82,8 +82,8 @@ export type TypeSourceImageElement = {
   releaseList: string[];
 };
 
-// 文字元素数据
-export type TypeSourceTextElement = {
+// 值元素数据
+export type TypeSourceValueElement = {
   type: ELEMENT_TYPES.TEXT;
   name: string;
   text: string;
@@ -93,12 +93,13 @@ export type TypeSourceTextElement = {
     align: ALIGN_VALUES;
     alignV: ALIGN_V_VALUES;
   };
-  colorName: string;
-  defaultColor: string;
+  defaultValue: string;
+  valueName: string;
+  valueChannel: string;
 };
 
 // 预览元素数据
-export type TypeSourceElement = TypeSourceImageElement | TypeSourceTextElement;
+export type TypeSourceElement = TypeSourceImageElement | TypeSourceValueElement;
 
 // 预览单个页面配置
 export type TypeSourcePageConf = {

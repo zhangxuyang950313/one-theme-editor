@@ -297,3 +297,9 @@ export function getPlaceholderVal(val: string): string | null {
   const match = /^\${(.+)}/.exec(val);
   return match && match[1] ? match[1] : null;
 }
+
+export function isURL(str: string): boolean {
+  return /(https?|ftp|file):\/\/[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]/.test(
+    str
+  );
+}

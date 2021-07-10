@@ -36,7 +36,7 @@ export type TypeReleaseXmlTempPayload = {
 };
 
 // 获取模板中 name 的值
-export type TypeGetValueByKeyPayload = {
+export type TypeGetValueByNamePayload = {
   name: string;
   template: string;
 };

@@ -7,7 +7,7 @@ import {
   TypeSourceConfigBrief
 } from "types/source-config";
 import {
-  TypeGetValueByKeyPayload,
+  TypeGetValueByNamePayload,
   TypeReleaseXmlTempPayload,
   TypeResult
 } from "types/request";
@@ -129,14 +129,14 @@ export default function source(service: Express): void {
   });
 
   /**
-   * 获取 xml 模板中 name 的值
+   * 获取项目中 xml 模板 name 对应的值
    */
   service.get<
     never,
     TypeResult<{ value: string }>,
     never,
-    TypeGetValueByKeyPayload
-  >(API.GET_SOURCE_VALUE_BY_KEY, async (request, response) => {
+    TypeGetValueByNamePayload
+  >(API.GET_PROJECT_XML_TEMP_VALUE, async (request, response) => {
     try {
       const { query } = request;
       if (!query.name) throw new Error("缺少 name 参数");

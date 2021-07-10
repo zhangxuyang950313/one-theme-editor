@@ -1,8 +1,10 @@
 import { Element } from "xml-js";
 import { getPlaceholderVal } from "common/utils";
 import { TypeKeyValue } from "src/types";
+import { TypeXmlTempKeyValMap } from "src/types/source-config";
 import XMLNodeElement from "./XMLNodeElement";
 import BaseCompiler from "./BaseCompiler";
+import TempKeyValMapper from "./TempKeyValMapper";
 
 export default class XmlTemplate extends BaseCompiler {
   getData(): string[] {
@@ -43,11 +45,11 @@ export default class XmlTemplate extends BaseCompiler {
 
   /**
    * 获取替换占位符后的 XMLNodeElement 实例
-   * @param name
-   * @param mapperFile
+   * @param valuesFile 定义 key value 的文件
    * @returns
    */
-  public getPlaceholderReplacedNode(kvList: TypeKeyValue[]): XMLNodeElement {
+  public replacePlaceholderByValFile(valuesFile: string): XMLNodeElement {
+    const kvList = new TempKeyValMapper(valuesFile).getKeyValList();
     return super.createInstance(BaseCompiler.compile(this.generateXml(kvList)));
   }
 
@@ -68,27 +70,30 @@ export default class XmlTemplate extends BaseCompiler {
    * @param kvList
    * @returns
    */
-  public getNameValueMapObj(kvList: TypeKeyValue[]): Record<string, string> {
+  public getNameValueMapObj(kvList: TypeKeyValue[]): TypeXmlTempKeyValMap {
     return super
       .createInstance(BaseCompiler.compile(this.generateXml(kvList)))
       .getFirstChildNode()
       .getChildrenNodes()
-      .reduce<Record<string, string>>((obj, item) => {
+      .reduce<TypeXmlTempKeyValMap>((obj, item) => {
         const nameVal = item.getAttributeOf("name");
         if (!nameVal) return obj;
-        obj[nameVal] = item.getFirstTextChildValue();
+        obj.set(nameVal, {
+          value: item.getFirstTextChildValue(),
+          description: item.getAttributeOf("description")
+        });
         return obj;
-      }, {});
+      }, new Map());
   }
 
   /**
    * 获取匹配 name 属性节点的 text 值
    * @param name
-   * @param mapperFile
+   * @param valuesFile
    * @returns
    */
-  public getTextByAttrName(name: string, kvList: TypeKeyValue[]): string {
-    return this.getPlaceholderReplacedNode(kvList)
+  public getTextByAttrName(name: string, valuesFile: string): string {
+    return this.replacePlaceholderByValFile(valuesFile)
       .getFirstChildNodeByAttrValue("name", name)
       .getFirstTextChildValue();
   }

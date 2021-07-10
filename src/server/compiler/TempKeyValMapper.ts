@@ -2,7 +2,7 @@ import { TypeKeyValue } from "types/index";
 import {
   TypeSourceXmlKeyValConf,
   TypeSourceXmlKeyValMapperMap,
-  TypeSourcePageKeyValMapConf
+  TypeXmlTempKeyValMap
 } from "types/source-config";
 import BaseCompiler from "./BaseCompiler";
 
@@ -36,18 +36,18 @@ export default class TempKeyValMapper extends BaseCompiler {
    * 获取以 name 为 key 的对象
    * @returns
    */
-  getDataObj(): TypeSourcePageKeyValMapConf {
-    return super.getRootChildrenNodes().reduce((total, item) => {
-      const key = item.getAttributeOf("name");
-      if (!key) return total;
-      const data: TypeSourcePageKeyValMapConf = {
-        [key]: {
+  getDataObj(): TypeXmlTempKeyValMap {
+    return super
+      .getRootChildrenNodes()
+      .reduce<TypeXmlTempKeyValMap>((total, item) => {
+        const key = item.getAttributeOf("name");
+        if (!key) return total;
+        total.set(key, {
           value: item.getAttributeOf("value") || item.getFirstTextChildValue(),
           description: item.getAttributeOf("description")
-        }
-      };
-      return Object.assign(total, data);
-    }, {});
+        });
+        return total;
+      }, new Map());
   }
 
   /**

@@ -1,27 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <page version="1.0.0" description="桌面壁纸和首屏图标" screenWidth="1080">
+    <!-- 
+        引入映射值文件
+        对应的属性名可指定文件
+        <value attr="color,src" src="values.xml"/>
+    -->
+    <!-- <values>
+        <value attr="color" src="theme_values.xml"/>
+        <value attr="color" src="theme_values.xml"/>
+    </values> -->
+
+    <templates>
+        <!-- 
+            src: 定义 xml 数据模板
+            to/release: 释放到工程目录位置
+            values?：定义变量映射
+        -->
+        <template src="theme_values.xml" to="wallpaper/theme_values.xml" values="values.xml"/>
+        <!-- 如果没有 value 属性，则直接复制 -->
+        <template src="theme_fallback.xml" to="wallpaper/theme_fallback.xml"/>
+    </templates>
 
     <!-- 静态预览图 -->
-    <preview src="../preview/preview.jpg"/>
-    
-    <!-- 
-        src: 定义 xml 数据模板
-        value：定义变量
-        to/release: 释放到工程目录位置
-    -->
-    <template 
-        src="theme_values.xml"
-        value="value_mapper.xml" 
-        to="wallpaper/theme_values.xml"
-    />
-
-    <!-- 直接复制的文件 -->
-    <copy from="theme_fallback.xml" to="wallpaper/theme_fallback.xml"/>
+    <previews>
+        <preview src="../preview/preview.jpg"/>
+    </previews>
 
 
     <!-- 动态预览配置 -->
-    <layout>
+    <layout values="theme_values.xml">
         <!-- 图片资源 -->
         <image
             name="桌面壁纸"
@@ -40,13 +48,17 @@
             <to>icons/res/com.android.contacts.activities.TwelveKeyDialer.png</to>
         </image>
 
-        <text 
+
+        <!-- color="file://./theme_values.xml?name=action_bar_title_text_color_light" -->   
+        <!-- color="file=./theme_values.xml&amp;name=action_bar_title_text_color_light" -->
+        <color 
             name="图标字体"
             text="拨号"
-            x="415" y="1250" size="36" align="center" alignV="center" 
-            color="${action_bar_title_text_color_light}"
-        />
-
+            x="415" y="1250" size="36" align="center" alignV="center"
+            default="file=theme_values.xml&amp;name=action_bar_title_text_color_light"
+        >
+            <to>file=${project}/wallpaper/theme_values.xml&amp;name=action_bar_title_text_color_light</to>
+        </color>
         <image
             name="短信"
             x="415" y="2150" w="186" h="186" align="center" alignV="center"
@@ -80,12 +92,15 @@
             <to>icons/res/com.miui.weather2.png</to>
         </image>
 
-        <text
+        <!-- color="./theme_values.xml?name=action_bar_title_text_color_light" -->
+        <color
             name="图标字体"
             text="天气"
             x="168" y="1250" size="36" align="center" alignV="center"
-            color="${action_bar_title_text_color_light}"
-        />
+            default="file=theme_values.xml&amp;name=action_bar_title_text_color_light"
+        >
+            <to>file=${project}/wallpaper/theme_values.xml&amp;name=action_bar_title_text_color_light</to>
+        </color>
 
         <image 
             name="小米商城"

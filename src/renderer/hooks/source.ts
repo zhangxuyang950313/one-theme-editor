@@ -41,7 +41,7 @@ import {
   TypeSourceTypeConf,
   TypeSourceElement,
   TypeSourceImageElement,
-  TypeSourceTextElement,
+  TypeSourceValueElement,
   TypeSourceXmlTempData,
   TypeSourcePageData
 } from "types/source-config";
@@ -309,7 +309,7 @@ export function useImageSourceList(): TypeSourceImageElement[] {
  * 获取 xml 类型元素列表
  * @returns
  */
-export function useTextSourceList(): TypeSourceTextElement[] {
+export function useTextSourceList(): TypeSourceValueElement[] {
   return useEditorSelector(getSourceTextList);
 }
 

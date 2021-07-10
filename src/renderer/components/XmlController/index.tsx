@@ -3,18 +3,18 @@ import styled from "styled-components";
 import { Tooltip, Input } from "antd";
 import { RightCircleOutlined } from "@ant-design/icons";
 import { SketchPicker } from "react-color";
-import { TypeSourceTextElement } from "types/source-config";
+import { TypeSourceValueElement } from "types/source-config";
 import { StyleGirdBackground } from "@/style";
 
-const XmlController: React.FC<TypeSourceTextElement> = sourceConf => {
+const XmlController: React.FC<TypeSourceValueElement> = sourceConf => {
   return (
     <StyleXmlController>
       <div className="text-wrapper">
         <span className="name">{sourceConf.name}</span>
-        <span className="color-name">{sourceConf.colorName}</span>
+        <span className="color-name">{sourceConf.valueName}</span>
       </div>
       <div className="color-wrapper">
-        <StyleColorBox color={sourceConf.defaultColor} />
+        <StyleColorBox color={sourceConf.defaultValue} />
         <RightCircleOutlined className="middle-button" />
         <Tooltip
           overlayInnerStyle={{ color: "black" }}

@@ -8,7 +8,7 @@
     <!-- xml 模板文件 -->
     <template 
         src="theme_values.xml"
-        value="value_mapper.xml" 
+        values="values.xml" 
         release="wallpaper/theme_values.xml"
     />
 
