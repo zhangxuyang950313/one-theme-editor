@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { RgbaObject } from "hex-rgb";
 
 import { Input, message, Tooltip } from "antd";
 import { RGBColor, SketchPicker } from "react-color";
-import { isHex } from "common/utils";
-import ColorUtil, { EnumHexFormat } from "common/ColorUtil";
+import ColorUtil, { HEX_TYPES } from "common/ColorUtil";
 import ColorBox from "./ColorBox";
 
 const rgba2sketch = (rgba: RgbaObject): RGBColor => {
@@ -23,25 +22,32 @@ type TypeColorChangerProps = {
 };
 function ColorPicker(props: TypeColorChangerProps): JSX.Element {
   const [inputColor, setInputColor] = useState(props.defaultColor);
+  const [cssColor, setCssColor] = useState("#00000000");
   const [rgbColor, setRgbColor] = useState<RgbaObject>(
-    ColorUtil.createBlackRgba()
+    ColorUtil.createTransparent()
   );
+  const RefInputPrev = useRef(inputColor);
 
   useEffect(() => {
     try {
       // TODO: 根据项目配置颜色格式转换
-      setRgbColor(ColorUtil.compileArgbHex(props.defaultColor));
+      const colorUtil = new ColorUtil(props.defaultColor, HEX_TYPES.ARGB);
+      setRgbColor(colorUtil.getRgbaData());
     } catch (err) {
       console.log(err);
     }
   }, []);
 
   useEffect(() => {
+    RefInputPrev.current = props.defaultColor;
     setInputColor(props.defaultColor);
   }, [props.defaultColor]);
 
   useEffect(() => {
-    setRgbColor(ColorUtil.compileArgbHex(inputColor));
+    if (!ColorUtil.isUnit8Hex(inputColor)) return;
+    const colorUtil = new ColorUtil(inputColor, HEX_TYPES.ARGB);
+    setRgbColor(colorUtil.getRgbaData());
+    setCssColor(colorUtil.format(HEX_TYPES.RGBA));
   }, [inputColor]);
 
   return (
@@ -62,33 +68,35 @@ function ColorPicker(props: TypeColorChangerProps): JSX.Element {
             // presetColors={getLocalStorage.presetColors}
             color={rgba2sketch(rgbColor)}
             onChange={color => {
-              console.log(sketch2rgba(color.rgb));
               const rgba = sketch2rgba(color.rgb);
-              setRgbColor(rgba);
-              setInputColor(ColorUtil.rgbaFormat(rgba, EnumHexFormat.ARGB));
+              setInputColor(ColorUtil.rgbaFormat(rgba, HEX_TYPES.ARGB));
             }}
           />
         }
       >
-        <ColorBox color={inputColor} />
+        <ColorBox color={cssColor} />
       </Tooltip>
       <Input
         value={inputColor}
+        defaultValue={inputColor}
         placeholder="输入颜色（格式: #ffffff）"
         className="color-input"
         onChange={e => {
-          const c = e.target.value;
-          if (!isHex(c)) return;
-          setInputColor(c);
-        }}
-        onBlur={e => {
-          const c = e.target.value;
-          if (!isHex(c)) {
-            message.warn(`${c} 不是正确的颜色格式`);
-            setInputColor(props.defaultColor);
+          const color = e.target.value;
+          if (color.length > 9) {
+            message.warn(`${color} 不是正确的颜色格式`);
             return;
           }
-          setInputColor(c);
+          setInputColor(color);
+        }}
+        onBlur={e => {
+          const color = e.target.value;
+          if (ColorUtil.isUnit8Hex(color)) {
+            RefInputPrev.current = color;
+            return;
+          }
+          message.warn(`${color} 不是正确的颜色格式`);
+          setInputColor(RefInputPrev.current);
         }}
       />
     </StyleColorPicker>

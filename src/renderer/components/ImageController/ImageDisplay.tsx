@@ -31,8 +31,8 @@ const ImageDisplay: React.FC<TypePropsOfShowImage> = props => {
 const StyleImageBackground = styled(StyleGirdBackground)`
   flex-shrink: 0;
   position: relative;
-  width: 84px;
-  height: 84px;
+  width: 80px;
+  height: 80px;
   box-sizing: border-box;
   display: flex;
   justify-content: center;

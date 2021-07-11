@@ -307,13 +307,3 @@ export function getPlaceholderVal(val: string): string | null {
 export function isURL(str: string): boolean {
   return urlRegexp.test(str);
 }
-
-/**
- * hex 颜色值
- * #fffffff
- * @param c
- * @returns
- */
-export function isHex(c: string): boolean {
-  return hexRegexp.test(c);
-}

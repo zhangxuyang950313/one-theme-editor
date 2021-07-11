@@ -1,15 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <page version="1.0.0" description="桌面壁纸和首屏图标" screenWidth="1080">
-    <!-- 
-        引入映射值文件
-        对应的属性名可指定文件
-        <value attr="color,src" src="values.xml"/>
-    -->
-    <!-- <values>
-        <value attr="color" src="theme_values.xml"/>
-        <value attr="color" src="theme_values.xml"/>
-    </values> -->
 
     <templates>
         <!-- 

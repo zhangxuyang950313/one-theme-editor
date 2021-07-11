@@ -8,7 +8,7 @@ const ColorBox: React.FC<{ color: string; onClick?: () => void }> = props => {
   return (
     <Tooltip title={color}>
       <StyleColorBox
-        girdSize={6}
+        girdSize={10}
         color={color}
         onClick={() => onClick && onClick()}
       />

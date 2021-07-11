@@ -12,14 +12,25 @@ export const StyleBorderRight = styled.div`
 
 export const StyleGirdBackground = styled.span<{ girdSize?: number }>`
   background-color: #c2c2c2;
-  background-image: linear-gradient(45deg, #6d6d6d 25%, transparent 0),
-    linear-gradient(45deg, transparent 75%, #6d6d6d 0),
-    linear-gradient(45deg, #6d6d6d 25%, transparent 0),
-    linear-gradient(45deg, transparent 75%, #6d6d6d 0);
+  background-image: linear-gradient(
+      45deg,
+      rgba(0, 0, 0, 0.25) 25%,
+      transparent 0,
+      transparent 75%,
+      rgba(0, 0, 0, 0.25) 0
+    ),
+    linear-gradient(
+      45deg,
+      rgba(0, 0, 0, 0.25) 25%,
+      transparent 0,
+      transparent 75%,
+      rgba(0, 0, 0, 0.25) 0
+    );
+  background-color: #eee;
   background-size: ${({ girdSize }) =>
-    `${girdSize || 12}px ${girdSize || 12}px`};
+    `${girdSize || 16}px ${girdSize || 16}px`};
   background-position: ${({ girdSize }) => {
-    const s = (girdSize || 12) / 2;
-    return `0 0, ${s}px ${s}px, ${s}px ${s}px, 0 0`;
+    const s = (girdSize || 16) / 2;
+    return ` 0 0, ${s}px ${s}px`;
   }};
 `;

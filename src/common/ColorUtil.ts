@@ -2,16 +2,26 @@ import rgb2hex from "rgb-hex";
 import hex2rgb, { RgbaObject } from "hex-rgb";
 import { hexRegexp, hex6Regexp, hex8Regexp } from "./regexp";
 
-export enum EnumHexFormat {
+export enum HEX_TYPES {
   RGBA = "rgba",
   ARGB = "argb",
   RGB = "rgb"
 }
 
 class ColorUtil {
-  private rgba: RgbaObject;
-  constructor(rgba: RgbaObject) {
-    this.rgba = rgba;
+  private hex: string;
+  private hexType: HEX_TYPES;
+  /**
+   * 要明确指定传入 hex 的格式
+   * @param hex
+   * @param type
+   */
+  constructor(hex: string, type: HEX_TYPES) {
+    if (!ColorUtil.isHex(hex)) {
+      throw new Error(`${hex} 不是合法颜色值`);
+    }
+    this.hex = hex;
+    this.hexType = type;
   }
 
   static isUnit6Hex(str: string): boolean {
@@ -27,11 +37,35 @@ class ColorUtil {
   }
 
   /**
-   * rgba 数据格式化字符串颜色
+   * 创建一个纯白色 rgba 数据
+   */
+  static createWhiteRgba(): RgbaObject {
+    return hex2rgb("#ffffff", { format: "object" });
+  }
+
+  /**
+   * 创建一个纯黑色 rgb 数据
+   * @returns
+   */
+  static createBlackRgba(): RgbaObject {
+    return hex2rgb("#000000", { format: "object" });
+  }
+
+  /**
+   * 创建一个黑色全透明的 rgb 数据
+   * @returns
+   */
+  static createTransparent(): RgbaObject {
+    return { alpha: 0, red: 0, green: 0, blue: 0 };
+  }
+
+  /**
+   * 格式化 rgba 数据 为 hex 颜色字符串
+   * @param rgba
    * @param format
    * @returns
    */
-  static rgbaFormat(rgba: RgbaObject, format: EnumHexFormat): string {
+  static rgbaFormat(rgba: RgbaObject, format: HEX_TYPES): string {
     const keyList = ["red", "green", "blue", "alpha"];
     const keySet = new Set(Object.keys(rgba));
     if (!keyList.every(keySet.has.bind(keySet))) {
@@ -52,64 +86,19 @@ class ColorUtil {
   }
 
   /**
-   * hex 格式互转
-   * @param hex
-   * @param format
-   */
-  static hexFormat(
-    hex: string,
-    format: EnumHexFormat.ARGB | EnumHexFormat.RGBA
-  ): string {
-    // rgb 情况
-    if (ColorUtil.isUnit6Hex(hex)) {
-      return ColorUtil.rgbaFormat(hex2rgb(hex, { format: "object" }), format);
-    }
-    /**
-     * rgba 或 argb 情况，取决于和目标相反的格式
-     * 这要求调用方要清楚知道传入的格式
-     */
-    if (ColorUtil.isUnit8Hex(hex)) {
-      // hex 为 rgba 情况
-      if (format === EnumHexFormat.ARGB) {
-        return ColorUtil.rgbaFormat(ColorUtil.compileRgbaHex(hex), format);
-      }
-      // hex 为 argb 情况
-      if (format === EnumHexFormat.RGBA) {
-        return ColorUtil.rgbaFormat(ColorUtil.compileArgbHex(hex), format);
-      }
-      throw new Error("format 只能为 rgba | argb");
-    }
-    throw new Error(`非法 hex 颜色格式：${hex}。请使用"#ffffff" | "#ffffffff"`);
-  }
-
-  // rgba hex 转换 rgbaObject
-  static compileRgbaHex(hex: string): RgbaObject {
-    if (!ColorUtil.isUnit8Hex(hex)) {
-      throw new Error("非 8 位颜色值");
-    }
-    const [red, green, blue, alpha] = hex2rgb(hex, { format: "array" });
-    return { red, green, blue, alpha };
-  }
-
-  // argb hex 转换 rgbaObject
-  static compileArgbHex(hex: string): RgbaObject {
-    const { red, green, blue, alpha } = ColorUtil.compileRgbaHex(hex);
-    return { red: alpha, green: red, blue: green, alpha: blue };
-  }
-
-  /**
-   * 创建一个纯白色 rgba 数据
-   */
-  static createWhiteRgba(): RgbaObject {
-    return hex2rgb("#ffffff", { format: "object" });
-  }
-
-  /**
-   * 创建一个纯黑色 rgb 数据
+   * 获取 rgba 数据
    * @returns
    */
-  static createBlackRgba(): RgbaObject {
-    return hex2rgb("#000000", { format: "object" });
+  getRgbaData(): RgbaObject {
+    /**
+     * hex2rgb 解析为 rgba 格式
+     * argb 需要将 alpha 挪到前面
+     */
+    if (this.hexType === HEX_TYPES.ARGB) {
+      const [alpha, red, green, blue] = hex2rgb(this.hex, { format: "array" });
+      return { alpha: alpha / 255, red, green, blue: blue * 255 };
+    }
+    return hex2rgb(this.hex, { format: "object" });
   }
 
   /**
@@ -117,8 +106,8 @@ class ColorUtil {
    * @param format
    * @returns
    */
-  format(format: EnumHexFormat): string {
-    return ColorUtil.rgbaFormat(this.rgba, format);
+  format(format: HEX_TYPES): string {
+    return ColorUtil.rgbaFormat(this.getRgbaData(), format);
   }
 }
 
