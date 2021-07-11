@@ -6,17 +6,10 @@ import {
   TypeSourceConfig,
   TypeSourceConfigBrief
 } from "types/source-config";
-import {
-  TypeGetValueByNamePayload,
-  TypeReleaseXmlTempPayload,
-  TypeResult
-} from "types/request";
+import { TypeReleaseXmlTempPayload, TypeResult } from "types/request";
 import { result } from "server/utils/utils";
 import { resolveSourcePath } from "server/utils/pathUtils";
-import {
-  getXmlTempValueByNameAttrVal,
-  releaseXmlTemplate
-} from "server/file-handler/xml-template";
+import { releaseXmlTemplate } from "server/file-handler/xml-template";
 import PageConfig from "server/compiler/PageConfig";
 import SourceConfig from "server/compiler/SourceConfig";
 
@@ -123,26 +116,6 @@ export default function source(service: Express): void {
     try {
       releaseXmlTemplate(request.body);
       response.send(result.success(request.body));
-    } catch (err) {
-      response.send(result.fail(err.message));
-    }
-  });
-
-  /**
-   * 获取项目中 xml 模板 name 对应的值
-   */
-  service.get<
-    never,
-    TypeResult<{ value: string }>,
-    never,
-    TypeGetValueByNamePayload
-  >(API.GET_PROJECT_XML_TEMP_VALUE, async (request, response) => {
-    try {
-      const { query } = request;
-      if (!query.name) throw new Error("缺少 name 参数");
-      if (!query.template) throw new Error("缺少 template 参数");
-      const value = getXmlTempValueByNameAttrVal(request.query);
-      response.send(result.success({ value }));
     } catch (err) {
       response.send(result.fail(err.message));
     }

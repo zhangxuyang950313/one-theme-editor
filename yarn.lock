@@ -6164,6 +6164,11 @@ he@^1.2.0:
   resolved "https://registry.nlark.com/he/download/he-1.2.0.tgz#84ae65fa7eafb165fddb61566ae14baf05664f0f"
   integrity sha1-hK5l+n6vsWX922FWauFLrwVmTw8=
 
+hex-rgb@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.nlark.com/hex-rgb/download/hex-rgb-5.0.0.tgz#e2c9eb6a37498d66c5a350a221ed4c2c7d1a92d6"
+  integrity sha1-4snrajdJjWbFo1CiIe1MLH0aktY=
+
 history@^4.9.0:
   version "4.10.1"
   resolved "https://registry.nlark.com/history/download/history-4.10.1.tgz#33371a65e3a83b267434e2b3f3b1b4c58aad4cf3"
@@ -10635,6 +10640,11 @@ reusify@^1.0.4:
   version "1.0.4"
   resolved "https://registry.npm.taobao.org/reusify/download/reusify-1.0.4.tgz#90da382b1e126efc02146e90845a88db12925d76"
   integrity sha1-kNo4Kx4SbvwCFG6QhFqI2xKSXXY=
+
+rgb-hex@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.nlark.com/rgb-hex/download/rgb-hex-4.0.0.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.nlark.com%2Frgb-hex%2Fdownload%2Frgb-hex-4.0.0.tgz#02fb1e215e3fe5d070501579a3d2e4fa3c0acec8"
+  integrity sha1-AvseIV4/5dBwUBV5o9Lk+jwKzsg=
 
 rimraf@^2.5.4, rimraf@^2.6.3:
   version "2.7.1"

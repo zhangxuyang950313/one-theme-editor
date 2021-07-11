@@ -7,6 +7,7 @@ import imageSizeOf from "image-size";
 import dirTree from "directory-tree";
 import ERR_CODE from "../renderer/core/error-code";
 import { TypeImageData, TypeImageMapper } from "../types/project";
+import { hexRegexp, placeholderRegexp, urlRegexp } from "./regexp";
 
 export const base64Regex = /^data:image\/\w+;base64,/;
 
@@ -294,12 +295,25 @@ export async function sleep(delay: number): Promise<void> {
  * @returns string | null
  */
 export function getPlaceholderVal(val: string): string | null {
-  const match = /^\${(.+)}/.exec(val);
+  const match = placeholderRegexp.exec(val);
   return match && match[1] ? match[1] : null;
 }
 
+/**
+ * 检测 URL 字符串
+ * @param str
+ * @returns
+ */
 export function isURL(str: string): boolean {
-  return /(https?|ftp|file):\/\/[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]/.test(
-    str
-  );
+  return urlRegexp.test(str);
+}
+
+/**
+ * hex 颜色值
+ * #fffffff
+ * @param c
+ * @returns
+ */
+export function isHex(c: string): boolean {
+  return hexRegexp.test(c);
 }

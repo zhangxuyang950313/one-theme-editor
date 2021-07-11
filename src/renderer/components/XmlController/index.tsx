@@ -1,45 +1,45 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { Tooltip, Input } from "antd";
 import { RightCircleOutlined } from "@ant-design/icons";
-import { SketchPicker } from "react-color";
 import { TypeSourceValueElement } from "types/source-config";
-import { StyleGirdBackground } from "@/style";
+import { projectPrefixRegexp } from "common/regexp";
+import { useProjectFileWatcher } from "@/hooks/fileWatcher";
+import { apiGetTempValueByName } from "@/api";
+import ColorPicker from "./ColorPicker";
+import ColorBox from "./ColorBox";
 
 const XmlController: React.FC<TypeSourceValueElement> = sourceConf => {
+  const { name, defaultValue, valueName, valueChannel } = sourceConf;
+  const [value, setValue] = useState(sourceConf.defaultValue);
+  useEffect(() => {
+    console.log(sourceConf);
+  }, []);
+  useProjectFileWatcher(
+    valueChannel.replace(projectPrefixRegexp, ""),
+    template => {
+      apiGetTempValueByName({
+        name: valueName,
+        template
+      }).then(value => {
+        setValue(value);
+      });
+    }
+  );
   return (
     <StyleXmlController>
       <div className="text-wrapper">
-        <span className="name">{sourceConf.name}</span>
-        <span className="color-name">{sourceConf.valueName}</span>
+        <span className="name">{name}</span>
+        <span className="color-name">{valueName}</span>
       </div>
       <div className="color-wrapper">
-        <Tooltip title={sourceConf.defaultValue}>
-          <StyleColorBox color={sourceConf.defaultValue} />
-        </Tooltip>
+        <ColorBox color={defaultValue} />
         <RightCircleOutlined className="middle-button" />
-        <Tooltip
-          overlayInnerStyle={{ color: "black" }}
-          trigger="click"
-          color="transparent"
-          arrowPointAtCenter={true}
-          // placement="left"
-          overlay={
-            <SketchPicker
-              presetColors={[]}
-              color={"#ffffffff"}
-              disableAlpha={true}
-              // onChange={color => updateColor(color)}
-            />
-          }
-        >
-          <StyleColorBox
-            color="#ff000066"
-            // color={props.defaultColor}
-            // onClick={() => setPickerVisible(!pickerVisible)}
-          />
-        </Tooltip>
-        <Input className="color-input" placeholder="请填写颜色值" allowClear />
+        <ColorPicker
+          defaultColor={value || defaultValue}
+          onChange={() => {
+            //
+          }}
+        />
       </div>
     </StyleXmlController>
   );
@@ -76,31 +76,6 @@ const StyleXmlController = styled.div`
     &:hover {
       opacity: 0.5;
     }
-  }
-  .color-input {
-    height: 100%;
-    margin: 0 10px;
-  }
-`;
-
-const StyleColorBox = styled(StyleGirdBackground)<{ color: string }>`
-  cursor: pointer;
-  flex-shrink: 0;
-  position: relative;
-  display: inline-block;
-  width: 40px;
-  height: 40px;
-  border-radius: 6px;
-  border: 3px solid;
-  border-color: ${({ theme }) => theme["@border-color-base"]};
-  box-sizing: border-box;
-  &::after {
-    content: "";
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: 4px;
-    background-color: ${({ color }) => color};
   }
 `;
 

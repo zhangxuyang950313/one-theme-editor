@@ -28,6 +28,5 @@ export function releaseXmlTemplate(data: TypeReleaseXmlTempPayload): void {
 export function getXmlTempValueByNameAttrVal(
   data: TypeGetValueByNamePayload
 ): string {
-  const absPath = path.join(PATHS.SOURCE_CONFIG_DIR, data.template);
-  return new XmlTemplate(absPath).getValueByName(data.name);
+  return new XmlTemplate(data.template).getValueByName(data.name);
 }

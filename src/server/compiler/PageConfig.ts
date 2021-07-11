@@ -340,7 +340,7 @@ export default class PageConfig extends BaseCompiler {
         alignV: layout.alignV
       },
       defaultValue: defaultData.value,
-      valueName: defaultData.name,
+      valueName: releaseData.name,
       valueChannel: releaseData.channel
     };
   }

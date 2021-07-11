@@ -10,7 +10,7 @@
 
     <!-- 素材类型定义 -->
     <source tag="image"     name="图片素材"      type="image"/>
-    <source tag="color"     name="颜色值"       type="xml"/>
+    <source tag="color"     name="颜色值"       type="xml" format="#-aa-rr-gg-bb"/>
     <source tag="bool"      name="布尔值"       type="xml"/>
     <source tag="dimen"     name="尺寸值"       type="xml"/>
     <source tag="integer"   name="整型值"       type="xml"/>

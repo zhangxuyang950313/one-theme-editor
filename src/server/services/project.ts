@@ -7,7 +7,7 @@ import {
   TypeProjectInfo,
   TypeUiVersion
 } from "types/project";
-import { TypeResult } from "types/request";
+import { TypeGetValueByNamePayload, TypeResult } from "types/request";
 import { result } from "server/utils/utils";
 import {
   findProjectByUUID,
@@ -15,6 +15,7 @@ import {
   createProject,
   updateProject
 } from "server/db-handler/project";
+import { getXmlTempValueByNameAttrVal } from "server/file-handler/xml-template";
 
 export default function project(service: Express): void {
   // ---------------工程信息--------------- //
@@ -104,4 +105,24 @@ export default function project(service: Express): void {
   //       res.send(send.fail(err));
   //     });
   // });
+
+  /**
+   * 获取项目中 xml 模板 name 对应的值
+   */
+  service.get<
+    never,
+    TypeResult<{ value: string }>,
+    never,
+    TypeGetValueByNamePayload
+  >(API.GET_PROJECT_XML_TEMP_VALUE, async (request, response) => {
+    try {
+      const { query } = request;
+      if (!query.name) throw new Error("缺少 name 参数");
+      if (!query.template) throw new Error("缺少 template 参数");
+      const value = getXmlTempValueByNameAttrVal(request.query);
+      response.send(result.success({ value }));
+    } catch (err) {
+      response.send(result.fail(err.message));
+    }
+  });
 }

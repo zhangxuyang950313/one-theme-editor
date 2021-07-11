@@ -44,7 +44,10 @@ body,
 html {
     margin: 0;
     user-select: none;
-  }
+}
+body {
+  overflow: hidden;
+}
 `;
 
 // 布局容器

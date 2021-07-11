@@ -29,7 +29,7 @@
 
 
     <!-- 动态预览配置 -->
-    <layout values="theme_values.xml">
+    <layout>
         <!-- 图片资源 -->
         <image
             name="桌面壁纸"
@@ -57,7 +57,7 @@
             x="415" y="1250" size="36" align="center" alignV="center"
             default="file=theme_values.xml&amp;name=action_bar_title_text_color_light"
         >
-            <to>file=${project}/wallpaper/theme_values.xml&amp;name=action_bar_title_text_color_light</to>
+            <to>file=${project}/com.miui.home/theme_values.xml&amp;name=icon_title_text</to>
         </color>
         <image
             name="短信"
@@ -99,7 +99,7 @@
             x="168" y="1250" size="36" align="center" alignV="center"
             default="file=theme_values.xml&amp;name=action_bar_title_text_color_light"
         >
-            <to>file=${project}/wallpaper/theme_values.xml&amp;name=action_bar_title_text_color_light</to>
+            <to>file=${project}/wallpaper/theme_values.xml&amp;name=icon_title_text</to>
         </color>
 
         <image 

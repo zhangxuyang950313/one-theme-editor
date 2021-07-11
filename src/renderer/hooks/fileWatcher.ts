@@ -13,7 +13,12 @@ export enum FILE_STATUS {
 const mapWatchers = (count: number, options?: WatchOptions) => {
   return new Array(count).fill(0).map(() => new FSWatcher(options));
 };
-// 返回一个 chokidar 监听实例，自动在组件卸载时释放监听
+
+/**
+ * 返回一个 chokidar 监听实例，自动在组件卸载时释放监听
+ * @param options WatchOptions
+ * @returns
+ */
 export function useFSWatcherInstance(options?: WatchOptions): FSWatcher {
   const [watcher] = useState(new FSWatcher(options));
   useEffect(() => {
@@ -50,6 +55,32 @@ export function useFSWatcherMultiInstance(
     };
   }, []);
   return watchers;
+}
+
+/**
+ * 监听一个文件
+ * @param pathname
+ * @param listener
+ */
+export function useProjectFileWatcher(
+  pathname: string,
+  listener: (path: string, stats?: fse.Stats | undefined) => void
+): void {
+  const projectPathname = useProjectPathname();
+  const watcher = useFSWatcherInstance();
+  useEffect(() => {
+    if (!projectPathname || !pathname) return;
+    const file = path.join(projectPathname, pathname);
+    watcher.unwatch(file);
+    watcher
+      .on(FILE_STATUS.ADD, listener)
+      .on(FILE_STATUS.CHANGE, listener)
+      .on(FILE_STATUS.UNLINK, listener)
+      .add(file);
+    return () => {
+      watcher.unwatch(file);
+    };
+  }, [pathname]);
 }
 
 /**
