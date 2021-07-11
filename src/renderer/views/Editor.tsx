@@ -1,9 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useHistory } from "react-router";
 import { Button, Empty, Spin } from "antd";
 import { StyleBorderRight } from "@/style";
-import { useLoadProject, useProjectData } from "@/hooks/project";
+import {
+  useLoadProject,
+  useProjectData,
+  useProjectPathname
+} from "@/hooks/project";
+import FSWatcherEvent from "common/FileWatcherEvent";
 import ModuleSelector from "@/components/Editor/ModuleSelector";
 import EditorToolsBar from "@/components/Editor/ToolsBar";
 import PageSelector from "@/components/Editor/PageSelector";
@@ -11,27 +16,46 @@ import Previewer from "@/components/Editor/Previewer";
 import ImageSourceList from "@/components/Editor/ImageSourceList";
 import XmlSourceList from "@/components/Editor/XmlSourceList";
 
+// 初始化目录监听器
+const projectWatcher = new FSWatcherEvent();
+export const EditorContext = React.createContext({
+  projectWatcher
+});
+
 // 主编辑区域
 const EditorContainer: React.FC = () => {
-  return (
-    <StyleEditorContainer>
-      {/* 页面选择器 */}
-      <StylePageSelector>
-        <PageSelector />
-      </StylePageSelector>
-      {/* 预览 */}
-      <StylePreviewer>
-        <Previewer />
-      </StylePreviewer>
-      {/* 素材编辑区 */}
+  const projectRoot = useProjectPathname();
 
-      <StyleImageSourceList>
-        <ImageSourceList />
-      </StyleImageSourceList>
-      <StyleXmlSourceList>
-        <XmlSourceList />
-      </StyleXmlSourceList>
-    </StyleEditorContainer>
+  // 添加工程目录监听
+  useEffect(() => {
+    if (!projectRoot) return;
+    projectWatcher.watch(projectRoot, { cwd: projectRoot || undefined });
+    return () => {
+      projectWatcher.unwatch();
+      projectWatcher.close();
+    };
+  }, [projectRoot]);
+
+  return (
+    <EditorContext.Provider value={{ projectWatcher }}>
+      <StyleEditorContainer>
+        {/* 页面选择器 */}
+        <StylePageSelector>
+          <PageSelector />
+        </StylePageSelector>
+        {/* 预览 */}
+        <StylePreviewer>
+          <Previewer />
+        </StylePreviewer>
+        {/* 素材编辑区 */}
+        <StyleImageSourceList>
+          <ImageSourceList />
+        </StyleImageSourceList>
+        <StyleXmlSourceList>
+          <XmlSourceList />
+        </StyleXmlSourceList>
+      </StyleEditorContainer>
+    </EditorContext.Provider>
   );
 };
 

@@ -100,6 +100,7 @@ export type TypeSourceValueElement = {
     align: ALIGN_VALUES;
     alignV: ALIGN_V_VALUES;
   };
+  template: string;
   defaultValue: string;
   valueName: string;
   valueChannel: string;

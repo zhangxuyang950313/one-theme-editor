@@ -1,30 +1,35 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { RightCircleOutlined } from "@ant-design/icons";
+import { apiGetTempValueByName, apiOutputXmlTemplate } from "@/api";
+import {
+  useResolveProjectPath,
+  useProjectWatcher,
+  useResolveSourcePath
+} from "@/hooks/project";
 import { TypeSourceValueElement } from "types/source-config";
-import { projectPrefixRegexp } from "common/regexp";
-import { useProjectFileWatcher } from "@/hooks/fileWatcher";
-import { apiGetTempValueByName } from "@/api";
+import ColorUtil, { HEX_TYPES } from "common/ColorUtil";
 import ColorPicker from "./ColorPicker";
 import ColorBox from "./ColorBox";
 
 const XmlController: React.FC<TypeSourceValueElement> = sourceConf => {
-  const { name, defaultValue, valueName, valueChannel } = sourceConf;
+  const { name, template, defaultValue, valueName, valueChannel } = sourceConf;
   const [value, setValue] = useState(sourceConf.defaultValue);
+  const [releaseFile] = useResolveProjectPath(valueChannel);
+  const [templateFile] = useResolveSourcePath(template);
+
   useEffect(() => {
     console.log(sourceConf);
   }, []);
-  useProjectFileWatcher(
-    valueChannel.replace(projectPrefixRegexp, ""),
-    template => {
-      apiGetTempValueByName({
-        name: valueName,
-        template
-      }).then(value => {
-        setValue(value);
-      });
-    }
-  );
+
+  useProjectWatcher(valueChannel, () => {
+    apiGetTempValueByName({
+      name: valueName,
+      template: releaseFile
+    }).then(value => {
+      setValue(value);
+    });
+  });
   return (
     <StyleXmlController>
       <div className="text-wrapper">
@@ -32,12 +37,25 @@ const XmlController: React.FC<TypeSourceValueElement> = sourceConf => {
         <span className="color-name">{valueName}</span>
       </div>
       <div className="color-wrapper">
-        <ColorBox color={defaultValue} />
+        <ColorBox
+          color={
+            defaultValue
+              ? new ColorUtil(defaultValue, HEX_TYPES.ARGB).format(
+                  HEX_TYPES.RGBA
+                )
+              : "#ffffff"
+          }
+        />
         <RightCircleOutlined className="middle-button" />
         <ColorPicker
           defaultColor={value || defaultValue}
-          onChange={() => {
-            //
+          onChange={color => {
+            apiOutputXmlTemplate({
+              key: valueName,
+              value: color,
+              template,
+              release: releaseFile
+            });
           }}
         />
       </div>

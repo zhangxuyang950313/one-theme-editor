@@ -54,7 +54,7 @@ import {
   useGlobalSelector
 } from "@/store/index";
 import ERR_CODE from "@/core/error-code";
-import { asyncQueue } from "@/../common/utils";
+import { asyncQueue } from "common/utils";
 import { useAsyncUpdater } from "./index";
 
 /**

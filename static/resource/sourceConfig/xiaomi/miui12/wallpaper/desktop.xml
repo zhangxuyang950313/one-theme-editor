@@ -46,9 +46,9 @@
             name="图标字体"
             text="拨号"
             x="415" y="1250" size="36" align="center" alignV="center"
-            default="file=theme_values.xml&amp;name=action_bar_title_text_color_light"
+            default="file=../com.miui.home/theme_values.xml&amp;name=icon_title_text"
         >
-            <to>file=${project}/com.miui.home/theme_values.xml&amp;name=icon_title_text</to>
+            <to>file=com.miui.home/theme_values.xml&amp;name=icon_title_text</to>
         </color>
         <image
             name="短信"

@@ -71,6 +71,10 @@ function ColorPicker(props: TypeColorChangerProps): JSX.Element {
               const rgba = sketch2rgba(color.rgb);
               setInputColor(ColorUtil.rgbaFormat(rgba, HEX_TYPES.ARGB));
             }}
+            onChangeComplete={color => {
+              const rgba = sketch2rgba(color.rgb);
+              props.onChange(ColorUtil.rgbaFormat(rgba, HEX_TYPES.ARGB));
+            }}
           />
         }
       >

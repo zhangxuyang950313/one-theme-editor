@@ -5,7 +5,11 @@ import {
   TypeSourceConfigBrief,
   TypeSourcePageData
 } from "types/source-config";
-import { TypeGetValueByNamePayload, TypeResponseFrame } from "types/request";
+import {
+  TypeGetValueByNamePayload,
+  TypeReleaseXmlTempPayload,
+  TypeResponseFrame
+} from "types/request";
 import { createHttp } from "./utils";
 
 // 获取厂商列表
@@ -56,4 +60,12 @@ export async function apiGetTempValueByName(
       params: data
     })
     .then(data => data.data.data.value);
+}
+
+export async function apiOutputXmlTemplate(
+  data: TypeReleaseXmlTempPayload
+): Promise<void | null> {
+  return createHttp()
+    .post<TypeResponseFrame>(API.OUTPUT_SOURCE_XML_TEMPLATE, data)
+    .then(data => data.data.data);
 }

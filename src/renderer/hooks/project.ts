@@ -1,6 +1,13 @@
 import path from "path";
+import { Stats } from "fs";
 import { useParams } from "react-router";
-import { useLayoutEffect, useEffect, useState, useCallback } from "react";
+import {
+  useLayoutEffect,
+  useEffect,
+  useState,
+  useCallback,
+  useContext
+} from "react";
 import { apiGetProjectByUUID, apiGetProjectList } from "@/api/index";
 import { useAxiosCanceler } from "@/hooks/index";
 import {
@@ -19,8 +26,10 @@ import { useEditorDispatch, useEditorSelector } from "@/store/index";
 import { TypeProjectDataDoc, TypeProjectInfo } from "types/project";
 
 import ERR_CODE from "@/core/error-code";
+import { sleep } from "common/utils";
 import { notification } from "antd";
-import { sleep } from "@/../common/utils";
+import { EditorContext } from "@/views/Editor";
+import FSWatcherEvent from "common/FileWatcherEvent";
 
 // 获取项目列表
 export function useProjectList(): [
@@ -143,6 +152,27 @@ export function useResolveSourcePath(
   }, [relativeVal]);
 
   return [sourcePath, setRelativeVal];
+}
+
+// project Context hook
+export function useProjectContext(): { projectWatcher: FSWatcherEvent } {
+  return useContext(EditorContext);
+}
+
+// 监听器
+export function useProjectWatcher(
+  filepath: string,
+  callback: (path: string, stats?: Stats) => void
+): FSWatcherEvent {
+  const { projectWatcher } = useContext(EditorContext);
+  projectWatcher.on(filepath, callback);
+  useEffect(() => {
+    return () => {
+      projectWatcher.unwatch();
+      projectWatcher.close();
+    };
+  }, []);
+  return projectWatcher;
 }
 
 // // 添加图片资源映射

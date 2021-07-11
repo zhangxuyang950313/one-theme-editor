@@ -15,7 +15,7 @@ import {
   createProject,
   updateProject
 } from "server/db-handler/project";
-import { getXmlTempValueByNameAttrVal } from "server/file-handler/xml-template";
+import XmlTemplate from "server/compiler/XmlTemplate";
 
 export default function project(service: Express): void {
   // ---------------工程信息--------------- //
@@ -119,7 +119,7 @@ export default function project(service: Express): void {
       const { query } = request;
       if (!query.name) throw new Error("缺少 name 参数");
       if (!query.template) throw new Error("缺少 template 参数");
-      const value = getXmlTempValueByNameAttrVal(request.query);
+      const value = new XmlTemplate(query.template).getValueByName(query.name);
       response.send(result.success({ value }));
     } catch (err) {
       response.send(result.fail(err.message));

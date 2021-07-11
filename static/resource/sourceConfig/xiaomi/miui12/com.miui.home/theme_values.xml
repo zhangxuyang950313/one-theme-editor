@@ -2,7 +2,7 @@
 <ThemeConfig>
 	
 	<!-- 桌面图标文字颜色 -->
-	<color name="icon_title_text">class_color_icon_title_text_light</color>
+	<color name="icon_title_text">${class_color_icon_title_text_light}</color>
 	<color name="icon_title_text_dark">class_color_icon_title_text_dark</color>
 	<color name="icon_title_text_shadow_light">#0d000000</color>
 	<color name="icon_title_text_shadow">#0d000000</color>

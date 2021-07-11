@@ -273,7 +273,10 @@ export default class PageConfig extends BaseCompiler {
   // private getValueByQueryStr(query: string): { name: string; value: string };
   // private getValueByQueryStr(query: string): { name: string; value?: string };
   // private getValueByQueryStr(query: string): { name?: string; value: string };
-  private getValueByQueryStr(query: string): {
+  private getValueByQueryStr(
+    query: string,
+    isProject: boolean
+  ): {
     name: string;
     value: string;
     channel: string;
@@ -288,9 +291,9 @@ export default class PageConfig extends BaseCompiler {
     // 如果有多个参数取第一个
     if (Array.isArray(file)) file = file[0];
     if (Array.isArray(name)) name = name[0];
-    // 以 ${project} 开头的表示该路径为相对于项目的路径
-    const isProjectPath = /^\$\{project\}\/.+/.test(query);
-    if (isProjectPath) {
+    // // 以 ${project} 开头的表示该路径为相对于项目的路径
+    // const isProjectPath = /^\$\{project\}\/.+/.test(query);
+    if (isProject) {
       return { name, value: "", channel: file };
     }
     const value =
@@ -321,12 +324,15 @@ export default class PageConfig extends BaseCompiler {
     const text = node.getAttributeOf("text");
     // 若没有 name 则使用 text
     const name = node.getAttributeOf("name", text);
-    const defaultData = this.getValueByQueryStr(node.getAttributeOf("default"));
+    const defaultData = this.getValueByQueryStr(
+      node.getAttributeOf("default"),
+      false
+    );
     const release = (
       node.getFirstChildNodeByTagname("to") ||
       node.getFirstChildNodeByTagname("release")
     ).getFirstTextChildValue();
-    const releaseData = this.getValueByQueryStr(release);
+    const releaseData = this.getValueByQueryStr(release, true);
 
     return {
       elementType: ELEMENT_TYPES.TEXT,
@@ -339,6 +345,7 @@ export default class PageConfig extends BaseCompiler {
         align: layout.align,
         alignV: layout.alignV
       },
+      template: this.relativePath(defaultData.channel),
       defaultValue: defaultData.value,
       valueName: releaseData.name,
       valueChannel: releaseData.channel
