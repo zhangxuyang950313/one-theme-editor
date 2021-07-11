@@ -123,35 +123,29 @@ export function useProjectPathname(): string | null {
 }
 
 // 处理工程路径
-export function useResolveProjectPath(
-  relativePath = ""
-): [string, (x: string) => void] {
+export function useResolveProjectPath(relativePath = ""): string {
   const projectPathname = useProjectPathname();
-  const [relativeVal, setRelativeVal] = useState(relativePath);
   const [projectPath, setProjectPath] = useState("");
 
   useEffect(() => {
     if (!(projectPathname && relativePath)) return;
     setProjectPath(path.join(projectPathname, relativePath));
-  }, [relativeVal]);
+  }, [relativePath]);
 
-  return [projectPath, setRelativeVal];
+  return projectPath;
 }
 
 // 处理素材路径
-export function useResolveSourcePath(
-  relativePath: string
-): [string, (x: string) => void] {
+export function useResolveSourcePath(relativePath: string): string {
   const sourceRoot = useSourceConfigRoot();
-  const [relativeVal, setRelativeVal] = useState(relativePath);
   const [sourcePath, setSourcePath] = useState("");
 
   useEffect(() => {
     if (!sourceRoot || !relativePath) return;
     setSourcePath(path.join(sourceRoot, relativePath));
-  }, [relativeVal]);
+  }, [relativePath]);
 
-  return [sourcePath, setRelativeVal];
+  return sourcePath;
 }
 
 // project Context hook
@@ -165,9 +159,10 @@ export function useProjectWatcher(
   callback: (path: string, stats?: Stats) => void
 ): FSWatcherEvent {
   const { projectWatcher } = useContext(EditorContext);
-  projectWatcher.on(filepath, callback);
   useEffect(() => {
+    projectWatcher.on(filepath, callback);
     return () => {
+      projectWatcher.unListener(filepath);
       projectWatcher.unwatch();
       projectWatcher.close();
     };

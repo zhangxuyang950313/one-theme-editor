@@ -13,16 +13,13 @@ import ColorPicker from "./ColorPicker";
 import ColorBox from "./ColorBox";
 
 const XmlController: React.FC<TypeSourceValueElement> = sourceConf => {
-  const { name, template, defaultValue, valueName, valueChannel } = sourceConf;
+  const { name, template, defaultValue, valueName, release } = sourceConf;
   const [value, setValue] = useState(sourceConf.defaultValue);
-  const [releaseFile] = useResolveProjectPath(valueChannel);
-  const [templateFile] = useResolveSourcePath(template);
+  const releaseFile = useResolveProjectPath(release);
+  const templateFile = useResolveSourcePath(template);
 
-  useEffect(() => {
-    console.log(sourceConf);
-  }, []);
-
-  useProjectWatcher(valueChannel, () => {
+  useProjectWatcher(release, () => {
+    console.log(11, releaseFile);
     apiGetTempValueByName({
       name: valueName,
       template: releaseFile

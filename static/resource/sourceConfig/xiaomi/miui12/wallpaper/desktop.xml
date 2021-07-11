@@ -90,7 +90,7 @@
             x="168" y="1250" size="36" align="center" alignV="center"
             default="file=theme_values.xml&amp;name=action_bar_title_text_color_light"
         >
-            <to>file=${project}/wallpaper/theme_values.xml&amp;name=icon_title_text</to>
+            <to>file=wallpaper/theme_values.xml&amp;name=icon_title_text</to>
         </color>
 
         <image 

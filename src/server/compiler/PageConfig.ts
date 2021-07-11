@@ -270,39 +270,40 @@ export default class PageConfig extends BaseCompiler {
    * @param query file=${project}/wallpaper/theme_values.xml&amp;name=action_bar_title_text_color_light
    * @returns
    */
-  // private getValueByQueryStr(query: string): { name: string; value: string };
-  // private getValueByQueryStr(query: string): { name: string; value?: string };
-  // private getValueByQueryStr(query: string): { name?: string; value: string };
   private getValueByQueryStr(
     query: string,
     isProject: boolean
   ): {
     name: string;
     value: string;
-    channel: string;
+    file: string;
   } {
     // # 开头为颜色，直接返回
-    if (query.startsWith("#")) return { name: "", value: query, channel: "" };
+    if (query.startsWith("#")) return { name: "", value: query, file: "" };
     let { file, name } = querystring.parse(query);
     if (!file || !name) {
       console.log("query错误", query);
-      return { name: "", value: "", channel: "" };
+      return { name: "", value: "", file: "" };
     }
     // 如果有多个参数取第一个
     if (Array.isArray(file)) file = file[0];
     if (Array.isArray(name)) name = name[0];
     // // 以 ${project} 开头的表示该路径为相对于项目的路径
     // const isProjectPath = /^\$\{project\}\/.+/.test(query);
-    if (isProject) {
-      return { name, value: "", channel: file };
+    if (isProject) return { name, value: "", file: file };
+
+    const tempFile = this.relativePath(file);
+    let tempData: XMLNodeElement | undefined =
+      this.getXmlTempDataMap().get(tempFile);
+    if (!tempData) {
+      tempData = new XmlTemplate(this.resolvePath(file));
+      this.getXmlTempDataMap().set(tempFile, tempData);
     }
-    const value =
-      this.cache.xmlTempReplacedMap
-        ?.get(this.relativePath(file))
-        ?.getFirstChildNode()
-        .getFirstChildNodeByAttrValue("name", name)
-        .getFirstTextChildValue() || "";
-    return { name, value, channel: file };
+    const value = tempData
+      .getFirstChildNode()
+      .getFirstChildNodeByAttrValue("name", name)
+      .getFirstTextChildValue();
+    return { name, value, file };
   }
   /**
    * 解析文字节点
@@ -324,14 +325,12 @@ export default class PageConfig extends BaseCompiler {
     const text = node.getAttributeOf("text");
     // 若没有 name 则使用 text
     const name = node.getAttributeOf("name", text);
-    const defaultData = this.getValueByQueryStr(
-      node.getAttributeOf("default"),
-      false
-    );
+    const defaultVal = node.getAttributeOf("default");
     const release = (
       node.getFirstChildNodeByTagname("to") ||
       node.getFirstChildNodeByTagname("release")
     ).getFirstTextChildValue();
+    const defaultData = this.getValueByQueryStr(defaultVal, false);
     const releaseData = this.getValueByQueryStr(release, true);
 
     return {
@@ -345,10 +344,10 @@ export default class PageConfig extends BaseCompiler {
         align: layout.align,
         alignV: layout.alignV
       },
-      template: this.relativePath(defaultData.channel),
-      defaultValue: defaultData.value,
       valueName: releaseData.name,
-      valueChannel: releaseData.channel
+      defaultValue: defaultData.value,
+      template: this.relativePath(defaultData.file),
+      release: releaseData.file
     };
   }
 
