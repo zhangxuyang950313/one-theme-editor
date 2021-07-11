@@ -37,8 +37,8 @@ class XMLNodeBase {
   }
 
   // 标签名
-  public getTagname(): string {
-    return this.node.name || "";
+  public getTagname<T extends string>(): T {
+    return (this.node.name || "") as T;
   }
 
   // 如果 getType 是 text，这里会获得节点的文本信息

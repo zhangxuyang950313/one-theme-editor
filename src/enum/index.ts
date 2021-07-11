@@ -3,8 +3,8 @@ export enum ELEMENT_TYPES {
   TEXT = "text"
 }
 
-export enum ELEMENT_TAGS {
-  IMAGE = "image",
+export enum VALUE_TYPES {
+  SOURCE = "source",
   COLOR = "color"
 }
 

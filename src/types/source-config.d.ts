@@ -1,4 +1,9 @@
-import { ALIGN_VALUES, ALIGN_V_VALUES, ELEMENT_TYPES } from "src/enum";
+import {
+  ALIGN_VALUES,
+  ALIGN_V_VALUES,
+  ELEMENT_TYPES,
+  VALUE_TYPES
+} from "src/enum";
 import XMLNodeBase from "server/compiler/XMLNodeElement";
 import { TypeImageData, TypeUiVersion } from "./project";
 import { TypeImagePathLike } from "./index";
@@ -68,7 +73,8 @@ export type TypeSourceCopyConf = {
 
 // 图片元素数据
 export type TypeSourceImageElement = {
-  type: ELEMENT_TYPES.IMAGE;
+  elementType: ELEMENT_TYPES.IMAGE;
+  valueType: VALUE_TYPES.IMAGE;
   name: string;
   source: (TypeImageData & { url: string }) | null;
   layout: {
@@ -84,7 +90,8 @@ export type TypeSourceImageElement = {
 
 // 值元素数据
 export type TypeSourceValueElement = {
-  type: ELEMENT_TYPES.TEXT;
+  elementType: ELEMENT_TYPES.TEXT;
+  valueType: VALUE_TYPES;
   name: string;
   text: string;
   layout: {

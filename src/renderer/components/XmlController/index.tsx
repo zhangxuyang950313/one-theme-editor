@@ -14,7 +14,9 @@ const XmlController: React.FC<TypeSourceValueElement> = sourceConf => {
         <span className="color-name">{sourceConf.valueName}</span>
       </div>
       <div className="color-wrapper">
-        <StyleColorBox color={sourceConf.defaultValue} />
+        <Tooltip title={sourceConf.defaultValue}>
+          <StyleColorBox color={sourceConf.defaultValue} />
+        </Tooltip>
         <RightCircleOutlined className="middle-button" />
         <Tooltip
           overlayInnerStyle={{ color: "black" }}

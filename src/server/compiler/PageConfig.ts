@@ -6,7 +6,7 @@ import {
   ELEMENT_TYPES,
   ALIGN_VALUES,
   ALIGN_V_VALUES,
-  ELEMENT_TAGS
+  VALUE_TYPES
 } from "src/enum/index";
 import {
   TypeSourceXmlTempData,
@@ -252,7 +252,8 @@ export default class PageConfig extends BaseCompiler {
       .getChildrenNodeByMultiTagname(["to", "release"])
       .map(item => item.getFirstTextChildValue() || item.getAttributeOf("src"));
     return {
-      type: ELEMENT_TYPES.IMAGE,
+      elementType: ELEMENT_TYPES.IMAGE,
+      valueType: VALUE_TYPES.SOURCE,
       name: node.getAttributeOf("name"),
       source,
       layout: this.layoutConf(node),
@@ -315,21 +316,21 @@ export default class PageConfig extends BaseCompiler {
    * @returns
    */
   private valueElement(node: XMLNodeElement): TypeSourceValueElement {
+    const valueType = node.getTagname<VALUE_TYPES>();
     const layout = this.layoutConf(node);
     const text = node.getAttributeOf("text");
     // 若没有 name 则使用 text
     const name = node.getAttributeOf("name", text);
     const defaultData = this.getValueByQueryStr(node.getAttributeOf("default"));
-    console.log(node.getFirstChildNodeByTagname("to").getFirstTextChildValue());
     const release = (
       node.getFirstChildNodeByTagname("to") ||
       node.getFirstChildNodeByTagname("release")
     ).getFirstTextChildValue();
-    console.log({ release });
     const releaseData = this.getValueByQueryStr(release);
 
     return {
-      type: ELEMENT_TYPES.TEXT,
+      elementType: ELEMENT_TYPES.TEXT,
+      valueType,
       name,
       text,
       layout: {
@@ -378,7 +379,7 @@ export default class PageConfig extends BaseCompiler {
           result.push(this.imageElement(node));
           break;
         }
-        case ELEMENT_TAGS.COLOR: {
+        case VALUE_TYPES.COLOR: {
           result.push(this.valueElement(node));
           break;
         }

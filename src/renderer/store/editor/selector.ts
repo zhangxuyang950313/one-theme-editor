@@ -103,7 +103,7 @@ export const getSourceImageList = createSelector(
   getSourceElementList,
   elementList =>
     elementList.flatMap(item =>
-      item.type === ELEMENT_TYPES.IMAGE ? [item] : []
+      item.elementType === ELEMENT_TYPES.IMAGE ? [item] : []
     )
 );
 
@@ -112,7 +112,7 @@ export const getSourceTextList = createSelector(
   getSourceElementList,
   elementList =>
     elementList.flatMap(item =>
-      item.type === ELEMENT_TYPES.TEXT ? [item] : []
+      item.elementType === ELEMENT_TYPES.TEXT ? [item] : []
     )
 );
 
