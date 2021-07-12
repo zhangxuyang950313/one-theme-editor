@@ -5,7 +5,7 @@ import {
   apiGetSourceDescriptionList,
   apiGetSourceConfig,
   apiGetSourcePageConfData
-} from "@/api/index";
+} from "server/api/index";
 import { getSourceConfigRoot } from "@/store/global/modules/base/selector";
 import {
   ActionSetBrandInfoList,
@@ -33,8 +33,8 @@ import {
   getXmlTemplateList
 } from "@/store/editor/selector";
 import {
-  TypeSourceConfig,
-  TypeSourceConfigBrief,
+  TypeSourceConfigData,
+  TypeSourceConfigInfo,
   TypeSourcePageGroupConf,
   TypeSourceModuleConf,
   TypeSourcePageConf,
@@ -61,7 +61,7 @@ import { useAsyncUpdater } from "./index";
  * 获取当前资源配置数据
  * @returns
  */
-export function useSourceConfig(): TypeSourceConfig | null {
+export function useSourceConfig(): TypeSourceConfigData | null {
   return useEditorSelector(getSourceConfig);
 }
 
@@ -116,8 +116,8 @@ export function useBrandConfList(): TypeBrandConf[] {
  * 获取配置预览列表
  * @returns
  */
-export function useSourceDescriptionList(): [TypeSourceConfigBrief[], boolean] {
-  const [value, updateValue] = useState<TypeSourceConfigBrief[]>([]);
+export function useSourceDescriptionList(): [TypeSourceConfigInfo[], boolean] {
+  const [value, updateValue] = useState<TypeSourceConfigInfo[]>([]);
   const [loading, updateLoading] = useState(true);
   const [brandConf] = useBrandConf();
   const dispatch = useStarterDispatch();
@@ -146,7 +146,7 @@ export function useSourceDescriptionList(): [TypeSourceConfigBrief[], boolean] {
  * @returns
  */
 export function useFetchSourceConfig(): [
-  TypeSourceConfig | null,
+  TypeSourceConfigData | null,
   boolean,
   () => Promise<void>
 ] {

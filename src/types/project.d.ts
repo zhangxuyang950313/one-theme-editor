@@ -1,5 +1,5 @@
 import { projectInfoConfig } from "renderer/config/editor";
-// import { TypeSourceConfig } from "./source-config";
+// import { TypeSourceConfigData } from "./source-config";
 import { TypeDatabase } from "./index";
 
 export type TypeBrandInfo = {

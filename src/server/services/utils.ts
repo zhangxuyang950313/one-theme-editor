@@ -5,54 +5,61 @@ import API from "common/api";
 import PATHS from "server/utils/pathUtils";
 import ERR_CODE from "renderer/core/error-code";
 import { result } from "server/utils/utils";
-import { TypeResult } from "types/request";
+import { TypeInitPayload, TypeResponseFrame } from "types/request";
 import { compactNinePatch } from "server/core/pack";
 
-export default function tools(service: Express): void {
-  // 获取路径配置
-  service.get(API.GET_PATH_CONFIG, async (req, res) => {
-    try {
-      res.send(result.success(PATHS));
-    } catch (err) {
-      res.status(400).send(result.fail(err.message));
+export default function utils(service: Express): void {
+  /**
+   * 初始化接口，用于前后端数据交换
+   * 客户端传来高频参数数据写入 cookies，下次客户端自动带上后端自由选取
+   */
+  service.post<
+    never,
+    TypeResponseFrame<TypeInitPayload, string>,
+    TypeInitPayload
+  >(API.INIT, async (request, response) => {
+    for (const key in request.body) {
+      response.cookie(key, request.body[key]);
     }
+    response.cookie("sourcePathname", PATHS.SOURCE_CONFIG_DIR);
+    response.send(result.success(request.body));
   });
+
+  // 获取路径配置
+  service.get<never, TypeResponseFrame<typeof PATHS>, typeof PATHS>(
+    API.GET_PATH_CONFIG,
+    async (request, response) => {
+      console.group(request.cookies);
+      response.send(result.success(PATHS));
+    }
+  );
 
   // 复制本地文件
   service.post<
     never, // reqParams
-    TypeResult<null>, // resBody
+    TypeResponseFrame<null, string>, // resBody
     { from: string; to: string } // reqBody
-  >(API.COPY_FILE, (req, res) => {
-    try {
-      const { from, to } = req.body;
-      if (!fse.existsSync(from)) {
+  >(API.COPY_FILE, (request, response) => {
+    const { from, to } = request.body;
+    if (!fse.existsSync(from)) {
+      response.status(400).send(result.fail(ERR_CODE[4003]));
+      return;
+    }
+    fse.copySync(from, to);
+    // fse.createReadStream(from).pipe(fse.createWriteStream(to)).destroy();
+    response.send(result.success(null));
+  });
+  // 删除本地文件
+  service.post<never, TypeResponseFrame<null, string>, { file: string }>(
+    API.DELETE_FILE,
+    (req, res) => {
+      const { file } = req.body;
+      if (!fse.existsSync(file)) {
         res.status(400).send(result.fail(ERR_CODE[4003]));
         return;
       }
-      fse.copySync(from, to);
-      // fse.createReadStream(from).pipe(fse.createWriteStream(to)).destroy();
+      fse.unlinkSync(file);
       res.send(result.success(null));
-    } catch (err) {
-      console.log(err);
-      res.status(400).send(result.fail(err.message));
-    }
-  });
-  // 删除本地文件
-  service.post<never, TypeResult<null>, { file: string }>(
-    API.DELETE_FILE,
-    (req, res) => {
-      try {
-        const { file } = req.body;
-        if (!fse.existsSync(file)) {
-          res.status(400).send(result.fail(ERR_CODE[4003]));
-          return;
-        }
-        fse.unlinkSync(file);
-        res.send(result.success(null));
-      } catch (err) {
-        res.status(400).send(result.fail(err.message));
-      }
     }
   );
 
@@ -87,7 +94,6 @@ export default function tools(service: Express): void {
 
   service.get(API.PACK_PROJECT, async (request, response) => {
     const data = compactNinePatch();
-    console.log(data);
     response.send(result.success(data));
   });
 }

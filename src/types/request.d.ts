@@ -1,5 +1,8 @@
 import { Canceler } from "axios";
 
+// 初始化传给后端的信息
+export type TypeInitPayload = Record<string, string>;
+
 // 文件的各种信息，用于可选传入，按执行效率优先级自行选取一个
 export type TypeFileData = {
   url?: string;
@@ -7,23 +10,24 @@ export type TypeFileData = {
   base64?: string;
 };
 
-// response 模板
-export type TypeResponseFrame<T = null> = {
-  msg: "success" | "fail";
+// requestResult
+export type TypeRequestResult<T> = {
+  msg: "success";
   data: T;
 };
 
+// response 模板
 export type TypeResultSuccess<T> = {
   msg: "success";
-  data: T | null;
+  data: T;
 };
-export type TypeResultFail<T = null> = {
+export type TypeResultFail<T> = {
   msg: "error";
-  data: T | null;
+  data: T;
 };
-export type TypeResult<T = null> =
-  | TypeResultSuccess<T>
-  | TypeResultFail<string>;
+export type TypeResponseFrame<S, F = string> =
+  | TypeResultSuccess<S>
+  | TypeResultFail<F>;
 
 export type TypeGetCanceler = (c: Canceler) => void;
 

@@ -8,8 +8,8 @@ import XMLNodeBase from "server/compiler/XMLNodeElement";
 import { TypeImageData, TypeUiVersion } from "./project";
 import { TypeImagePathLike } from "./index";
 
-// 资源配置简略信息
-export type TypeSourceConfigBrief = {
+// 资源配置信息
+export type TypeSourceConfigInfo = {
   key: string;
   url: string;
   name: string;
@@ -18,8 +18,8 @@ export type TypeSourceConfigBrief = {
   uiVersion: TypeUiVersion;
 };
 
-// 资源配置
-export type TypeSourceConfig = Omit<TypeSourceConfigBrief, "key"> & {
+// 资源配置数据
+export type TypeSourceConfigData = Omit<TypeSourceConfigInfo, "key"> & {
   sourceTypeList: TypeSourceTypeConf[];
   moduleList: TypeSourceModuleConf[];
 };

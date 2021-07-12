@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import { TypeSourceConfigBrief } from "types/source-config";
+import { TypeSourceConfigInfo } from "types/source-config";
 
 // components
 import { CheckCircleTwoTone } from "@ant-design/icons";
@@ -10,9 +10,9 @@ import SourceConfigCard from "./SourceConfigCard";
 
 type TypeProps = {
   isLoading: boolean;
-  sourceConfigList: TypeSourceConfigBrief[];
-  selectedConfig: TypeSourceConfigBrief | undefined;
-  onSelected: (config?: TypeSourceConfigBrief) => void;
+  sourceConfigList: TypeSourceConfigInfo[];
+  selectedConfig: TypeSourceConfigInfo | undefined;
+  onSelected: (config?: TypeSourceConfigInfo) => void;
 };
 
 // 配置管理

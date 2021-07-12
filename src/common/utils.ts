@@ -1,13 +1,12 @@
 import path from "path";
 import md5 from "md5";
 import fse from "fs-extra";
-import chokidar from "chokidar";
 import FileType from "file-type";
 import imageSizeOf from "image-size";
 import dirTree from "directory-tree";
-import ERR_CODE from "../renderer/core/error-code";
+import ERR_CODE from "renderer/core/error-code";
 import { TypeImageData, TypeImageMapper } from "../types/project";
-import { hexRegexp, placeholderRegexp, urlRegexp } from "./regexp";
+import { placeholderRegexp, urlRegexp } from "./regexp";
 
 export const base64Regex = /^data:image\/\w+;base64,/;
 
@@ -232,29 +231,6 @@ export function getDirAllFiles(dir: string): dirTree.DirectoryTree[] {
 // 两个数组的并集
 export function union(arr1: string[], arr2: string[]): string[] {
   return Array.from(new Set([...arr1, ...arr2]));
-}
-
-/**
- * 监听目录文件变动，包含 新增 改变 删除
- * @param pathname
- */
-export function watchProjectDir(
-  pathname: string | string[],
-  callback: (event: "add" | "change" | "unlink", path: string) => void
-): void {
-  chokidar.watch(pathname).on("all", (event, file) => {
-    switch (event) {
-      case "add":
-      case "change":
-      case "unlink": {
-        callback(event, file);
-        break;
-      }
-      default: {
-        break;
-      }
-    }
-  });
 }
 
 /**

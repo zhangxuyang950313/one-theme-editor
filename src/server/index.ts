@@ -5,6 +5,8 @@ import { PORT, HOST } from "common/config";
 import registerService from "./controller";
 import registerSocket from "./socket";
 
+require("express-async-errors");
+
 const service = express();
 
 const server = http.createServer(service);

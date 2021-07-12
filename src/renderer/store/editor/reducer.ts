@@ -1,6 +1,6 @@
 import {
   TypeSourceTypeConf,
-  TypeSourceConfig,
+  TypeSourceConfigData,
   TypeSourceModuleConf,
   TypeSourcePageConf,
   TypeSourcePageData
@@ -16,7 +16,7 @@ export type TypeEditorState = {
   uuid: string | null;
   projectPathname: string | null;
   sourceConfigUrl: string | null;
-  sourceConfig: TypeSourceConfig | null;
+  sourceConfig: TypeSourceConfigData | null;
   sourceTypeList: TypeSourceTypeConf[];
   sourceModuleList: TypeSourceModuleConf[];
   // sourceElementList: TypeSourceElement[];

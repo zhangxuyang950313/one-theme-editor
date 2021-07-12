@@ -9,7 +9,7 @@ import {
   // FormOutlined,
   ImportOutlined
 } from "@ant-design/icons";
-import { apiDeleteFile } from "@/api";
+import { apiDeleteFile } from "server/api";
 import { asyncQueue } from "common/utils";
 import { useProjectPathname } from "@/hooks/project";
 import { useCopyReleaseWith } from "./hooks";

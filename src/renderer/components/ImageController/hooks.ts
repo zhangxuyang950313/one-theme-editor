@@ -1,7 +1,7 @@
 import path from "path";
 import { useState, useEffect } from "react";
 import { notification } from "antd";
-import { apiCopyFile } from "@/api";
+import { apiCopyFile } from "server/api";
 import { useProjectPathname } from "@/hooks/project";
 import ERR_CODE from "@/core/error-code";
 

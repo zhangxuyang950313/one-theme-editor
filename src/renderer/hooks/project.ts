@@ -8,7 +8,7 @@ import {
   useCallback,
   useContext
 } from "react";
-import { apiGetProjectByUUID, apiGetProjectList } from "@/api/index";
+import { apiGetProjectByUUID, apiGetProjectList } from "server/api/index";
 import { useAxiosCanceler } from "@/hooks/index";
 import {
   useBrandConf,

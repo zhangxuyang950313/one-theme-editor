@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { RightCircleOutlined } from "@ant-design/icons";
-import { apiGetTempValueByName, apiOutputXmlTemplate } from "@/api";
+import { apiGetTempValueByName, apiOutputXmlTemplate } from "server/api";
 import {
   useResolveProjectPath,
   useProjectWatcher,

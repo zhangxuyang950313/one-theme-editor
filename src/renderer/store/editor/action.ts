@@ -1,6 +1,6 @@
 import { TypeProjectDataDoc, TypeProjectInfo } from "types/project";
 import {
-  TypeSourceConfig,
+  TypeSourceConfigData,
   TypeSourceModuleConf,
   TypeSourcePageConf,
   TypeSourcePageData
@@ -24,7 +24,7 @@ export enum ACTION_TYPES {
 
 type TypeActionSetSourceConfig = {
   type: typeof ACTION_TYPES.SET_SOURCE_CONFIG;
-  payload: TypeSourceConfig;
+  payload: TypeSourceConfigData;
 };
 
 // 设置模块
@@ -68,7 +68,7 @@ export type TypeEditorActions =
 
 // 设置当前资源配置
 export function ActionSetSourceConfig(
-  payload: TypeSourceConfig
+  payload: TypeSourceConfigData
 ): TypeActionSetSourceConfig {
   return { type: ACTION_TYPES.SET_SOURCE_CONFIG, payload };
 }

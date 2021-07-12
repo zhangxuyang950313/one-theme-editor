@@ -1,5 +1,5 @@
 import { TypeBrandConf } from "types/project";
-import { TypeSourceConfigBrief } from "types/source-config";
+import { TypeSourceConfigInfo } from "types/source-config";
 
 export enum ACTION_TYPES {
   // 设置厂商品牌列表
@@ -19,7 +19,7 @@ type TypeSetBrandInfoList = {
 // 配置描述列表
 type TypeActionSetSourceDescriptionList = {
   type: typeof ACTION_TYPES.SET_SOURCE_BRIEF_LIST;
-  payload: TypeSourceConfigBrief[];
+  payload: TypeSourceConfigInfo[];
 };
 
 // 设置品牌信息
@@ -43,7 +43,7 @@ export function ActionSetBrandInfoList(
 
 // 设置当前资源配置预览列表
 export function ActionSetSourceDescriptionList(
-  payload: TypeSourceConfigBrief[]
+  payload: TypeSourceConfigInfo[]
 ): TypeActionSetSourceDescriptionList {
   return { type: ACTION_TYPES.SET_SOURCE_BRIEF_LIST, payload };
 }

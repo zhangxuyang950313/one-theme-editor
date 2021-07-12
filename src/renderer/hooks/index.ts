@@ -1,7 +1,7 @@
 import { Canceler } from "axios";
 import { useLayoutEffect, useEffect, useState } from "react";
 import { InputProps, message } from "antd";
-import { apiGetPathConfig } from "@/api";
+import { apiGetPathConfig } from "server/api";
 import {
   getPathConfig,
   getServerPort

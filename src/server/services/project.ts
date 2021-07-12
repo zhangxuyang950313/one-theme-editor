@@ -1,3 +1,4 @@
+import path from "path";
 import { Express } from "express";
 import API from "common/api";
 import {
@@ -7,7 +8,11 @@ import {
   TypeProjectInfo,
   TypeUiVersion
 } from "types/project";
-import { TypeGetValueByNamePayload, TypeResult } from "types/request";
+import {
+  TypeGetValueByNamePayload,
+  TypeReleaseXmlTempPayload,
+  TypeResponseFrame
+} from "types/request";
 import { result } from "server/utils/utils";
 import {
   findProjectByUUID,
@@ -15,72 +20,72 @@ import {
   createProject,
   updateProject
 } from "server/db-handler/project";
+import { releaseXmlTemplate } from "server/file-handler/xml-template";
 import XmlTemplate from "server/compiler/XmlTemplate";
 
 export default function project(service: Express): void {
-  // ---------------工程信息--------------- //
   // 添加工程
-  service.post<never, TypeResult<TypeProjectDataDoc>, TypeCreateProjectPayload>(
-    API.CREATE_PROJECT,
-    async (req, res) => {
-      try {
-        const project = await createProject(req.body);
-        res.send(result.success(project));
-      } catch (err) {
-        console.log(err);
-        res.status(400).send(result.fail(err.message));
-      }
-    }
-  );
+  service.post<
+    never,
+    TypeResponseFrame<TypeProjectDataDoc, string>,
+    TypeCreateProjectPayload
+  >(API.CREATE_PROJECT, async (request, response) => {
+    const project = await createProject(request.body);
+    response.send(result.success(project));
+  });
 
   // 获取工程列表
-  service.get<{ brandType: string }, any, TypeResult<TypeProjectDataDoc>>(
-    `${API.GET_PROJECT_LIST}/:brandType`,
-    (req, res) => {
-      getProjectListOf(req.params.brandType)
-        .then(project => res.send(result.success(project)))
-        .catch(err => res.status(400).send(result.fail(err.message)));
-    }
-  );
+  service.get<
+    { brandType: string },
+    TypeResponseFrame<TypeProjectDataDoc[], string>
+  >(`${API.GET_PROJECT_LIST}/:brandType`, (request, response) => {
+    getProjectListOf(request.params.brandType).then(project =>
+      response.send(result.success(project))
+    );
+  });
 
   // 通过参数获取工程
-  service.get<{ uuid: string }>(`${API.GET_PROJECT}/:uuid`, (req, res) => {
-    findProjectByUUID(req.params.uuid)
-      .then(project => res.send(result.success(project)))
-      .catch(err => res.status(400).send(result.fail(err.message)));
-  });
+  service.get<{ uuid: string }>(
+    `${API.GET_PROJECT}/:uuid`,
+    async (request, response) => {
+      const project = await findProjectByUUID(request.params.uuid);
+      response.send(result.success(project));
+    }
+  );
 
   // 更新数据
   service.post<
     { uuid: string }, // reqParams
-    TypeResult<TypeProjectDataDoc>, // resBody
+    TypeResponseFrame<TypeProjectDataDoc, string>, // resBody
     Partial<TypeProjectData> // reqBody
-  >(`${API.UPDATE_PROJECT}/:uuid`, (req, res) => {
-    updateProject(req.params.uuid, req.body)
-      .then(project => res.send(result.success(project)))
-      .catch(err => res.status(400).send(result.fail(err.message)));
+  >(`${API.UPDATE_PROJECT}/:uuid`, async (request, response) => {
+    const project = await updateProject(request.params.uuid, request.body);
+    response.send(result.success(project));
   });
 
   // 更新工程描述信息
   service.post<
     { uuid: string },
-    TypeResult<TypeProjectDataDoc>,
+    TypeResponseFrame<TypeProjectDataDoc, string>,
     TypeProjectInfo
-  >(`${API.UPDATE_DESCRIPTION}/:uuid`, (req, res) => {
-    updateProject(req.params.uuid, { description: req.body })
-      .then(project => res.send(result.success(project)))
-      .catch(err => res.status(400).send(result.fail(err.message)));
+  >(`${API.UPDATE_DESCRIPTION}/:uuid`, async (request, response) => {
+    const { uuid } = request.params;
+    const description = request.body;
+    const project = await updateProject(uuid, { description });
+    response.send(result.success(project));
   });
 
   // 更新工程ui版本
-  service.post<{ uuid: string }, TypeResult<TypeProjectDataDoc>, TypeUiVersion>(
-    `${API.UPDATE_UI_VERSION}/:uuid`,
-    (req, res) => {
-      updateProject(req.params.uuid, { uiVersion: req.body })
-        .then(project => res.send(result.success(project)))
-        .catch(err => res.status(400).send(result.fail(err.message)));
-    }
-  );
+  service.post<
+    { uuid: string },
+    TypeResponseFrame<TypeProjectDataDoc, string>,
+    TypeUiVersion
+  >(`${API.UPDATE_UI_VERSION}/:uuid`, async (request, response) => {
+    const { uuid } = request.params;
+    const uiVersion = request.body;
+    const project = await updateProject(uuid, { uiVersion });
+    response.send(result.success(project));
+  });
 
   // // 删除一个工程
   // app.delete("/project", (req, res) => {
@@ -111,18 +116,28 @@ export default function project(service: Express): void {
    */
   service.get<
     never,
-    TypeResult<{ value: string }>,
+    TypeResponseFrame<{ value: string }, string>,
     never,
     TypeGetValueByNamePayload
-  >(API.GET_PROJECT_XML_TEMP_VALUE, async (request, response) => {
-    try {
-      const { query } = request;
-      if (!query.name) throw new Error("缺少 name 参数");
-      if (!query.template) throw new Error("缺少 template 参数");
-      const value = new XmlTemplate(query.template).getValueByName(query.name);
-      response.send(result.success({ value }));
-    } catch (err) {
-      response.send(result.fail(err.message));
-    }
+  >(API.GET_XML_TEMP_VALUE, async (request, response) => {
+    const { name, template } = request.query;
+    if (!name) throw new Error("缺少 name 参数");
+    if (!template) throw new Error("缺少 template 参数");
+    const { projectPathname } = request.cookies;
+    const tempFile = path.join(projectPathname, template);
+    const value = new XmlTemplate(tempFile).getValueByName(name);
+    response.send(result.success({ value }));
+  });
+
+  /**
+   * 将 key 的 value 写入 xml ${placeholder}
+   */
+  service.post<
+    never, // reqParams
+    TypeResponseFrame<TypeReleaseXmlTempPayload, string>, // resBody
+    TypeReleaseXmlTempPayload // reqBody
+  >(API.XML_TEMPLATE_RELEASE, async (request, response) => {
+    releaseXmlTemplate(request.body);
+    response.send(result.success(request.body));
   });
 }

@@ -1,5 +1,6 @@
 import path from "path";
 import fse from "fs-extra";
+import logSymbols from "log-symbols";
 import { v4 as UUID } from "uuid";
 import Nedb from "nedb-promises";
 import PATHS, { resolveSourcePath } from "server/utils/pathUtils";
@@ -13,7 +14,6 @@ import {
 } from "types/project";
 
 function createNedb(filename: string) {
-  console.log({ filename });
   fse.ensureDirSync(path.dirname(filename));
   fse.ensureFileSync(filename);
   const db = new Nedb({
@@ -30,53 +30,8 @@ function createNedb(filename: string) {
 }
 
 // 频繁修改工程数据，常驻内存
+console.debug(logSymbols.info, "工程数据库文件：", PATHS.PROJECTS_DB);
 const projectDB = createNedb(PATHS.PROJECTS_DB);
-
-// // 把 imageMapper 内容同步到本地
-// export async function imageMapperSyncToLocal(
-//   uuid: string
-// ): Promise<Promise<(() => void) | void>[]> {
-//   return projectDB
-//     .findOne<TypeProjectDataDoc>({ uuid })
-//     .then(project => {
-//       const { imageMapperList, projectPathname } = project;
-//       if (!projectPathname) return Promise.all([]);
-//       return imageMapperList.map(async item => {
-//         const filename = path.resolve(projectPathname, item.target);
-//         // TODO: 失败的都默认通过，后面应把失败的返回出去以供提示
-//         if (!item.md5) return Promise.resolve();
-//         const imageData = await findImageData(item.md5);
-//         if (!imageData.base64) return Promise.resolve();
-//         return base64ToLocalFile(filename, imageData.base64).then(rewrite => {
-//           rewrite && rewrite();
-//         });
-//       });
-//     });
-// }
-
-// rebuildIndex();
-
-// // 重建索引
-// async function rebuildIndex() {
-//   fse.ensureDirSync(PROJECTS_DB);
-//   const projectFiles = fse
-//     .readdirSync(PROJECTS_DB)
-//     .filter(o => o !== "index") // 排除 index
-//     .map(o => path.resolve(PROJECTS_DB, o)) // 补全路径
-//     .filter(o => fse.existsSync(o)); // 排除不在的路径
-//   projectFiles.forEach(async file => {
-//     const project = await createNedb(file).findOne<TypeProjectData>({});
-//     if (!project) return;
-//     const count = await projectDB.count({ uuid: project.uuid });
-//     if (count === 0 && project.uuid && project.brand?.type) {
-//       projectDB.insert<TypeIndex>({
-//         uuid: project.uuid,
-//         brandType: project.brand?.type
-//       });
-//       console.log(`$重建索引: "${project.uuid}"]`);
-//     }
-//   });
-// }
 
 // 创建工程
 export async function createProject(

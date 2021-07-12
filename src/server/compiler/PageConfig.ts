@@ -188,7 +188,7 @@ export default class PageConfig extends BaseCompiler {
         .getRootFirstChildNodeOf("templates")
         .getChildrenNodesByTagname("template")
         .map<TypeSourceXmlTempData>(node => {
-          const values = node.getAttributeOf("values");
+          // const values = node.getAttributeOf("values");
           const src = node.getAttributeOf("src");
           const release =
             node.getAttributeOf("to") || node.getAttributeOf("release");
@@ -197,11 +197,11 @@ export default class PageConfig extends BaseCompiler {
           if (!src) throw new Error(`${prefix} src 属性 ${suffix}`);
           if (!release) throw new Error(`${prefix} to/release 属性 ${suffix}`);
 
-          const valueList = values
-            ? new TempKeyValMapper(this.resolvePath(values)).getDataList()
-            : [];
+          // const valueList = values
+          //   ? new TempKeyValMapper(this.resolvePath(values)).getDataList()
+          //   : [];
           const template = this.relativePath(src);
-          return { template, release, valueList };
+          return { template, release, valueList: [] };
         });
     }
     return this.cache.xmlTemplateList;

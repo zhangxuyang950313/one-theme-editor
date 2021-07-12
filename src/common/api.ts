@@ -1,6 +1,8 @@
 enum API {
+  // 初始化，后端设置 cookies
+  INIT = "/init",
   // 获取 sourceConfig 路径
-  GET_PATH_CONFIG = "/path",
+  GET_PATH_CONFIG = "/path/config",
   // 图片服务
   IMAGE = "/image",
   // 获取图片数据
@@ -20,13 +22,10 @@ enum API {
   // 获取配置页面数据
   GET_SOURCE_CONF_PAGE_DATA = "/source/config/page/data",
 
-  /**
-   * 操作输出资源数据
-   */
   // 输出 xml 模板
-  OUTPUT_SOURCE_XML_TEMPLATE = "/source/xml/template/output",
+  XML_TEMPLATE_RELEASE = "/xml/template/release",
   // 通过 name 查找工程的 value
-  GET_PROJECT_XML_TEMP_VALUE = "/project/xml/value",
+  GET_XML_TEMP_VALUE = "/xml/value",
 
   // 创建工程
   CREATE_PROJECT = "/project/create",
@@ -49,10 +48,10 @@ enum API {
   DELETE_FILE = "/file/delete",
 
   // 工程打包
-  PACK_PROJECT = "/project/pack",
+  PACK_PROJECT = "/tools/project/pack",
   // 工程解包
-  UNPACK_PROJECT = "/project/unpack",
+  UNPACK_PROJECT = "/tools/project/unpack",
   // 应用到手机
-  APPLY_PROJECT = "/project/apply"
+  APPLY_PROJECT = "/tools/project/apply"
 }
 export default API;

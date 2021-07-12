@@ -2,11 +2,11 @@ import path from "path";
 import fse from "fs-extra";
 import { v4 as UUID } from "uuid";
 import {
-  TypeSourceConfig,
+  TypeSourceConfigData,
   TypeSourceModuleConf,
   TypeSourcePageGroupConf,
   TypeSourcePageConf,
-  TypeSourceConfigBrief,
+  TypeSourceConfigInfo,
   TypeSourceTypeConf
 } from "types/source-config";
 import { TypeBrandConf, TypeUiVersion } from "types/project";
@@ -37,7 +37,7 @@ export default class SourceConfig extends BaseCompiler {
    * @param brandType 厂商 type
    * @returns
    */
-  static getSourceConfigBriefList(brandType: string): TypeSourceConfigBrief[] {
+  static getSourceConfigBriefList(brandType: string): TypeSourceConfigInfo[] {
     const brandConfList = this.readBrandConf();
     const brandConf = brandConfList.find(item => item.type === brandType);
     if (!brandConf?.sourceConfigs) return [];
@@ -150,7 +150,7 @@ export default class SourceConfig extends BaseCompiler {
    * 解析配置配置的简短信息
    * 只解析 description.xml 不需要进一步解析页面
    */
-  getBrief(): TypeSourceConfigBrief {
+  getBrief(): TypeSourceConfigInfo {
     return {
       key: UUID(),
       url: path.relative(PATHS.SOURCE_CONFIG_DIR, this.getDescFile()),
@@ -164,7 +164,7 @@ export default class SourceConfig extends BaseCompiler {
   /**
    * 解析全部模块数据
    */
-  getConfig(): TypeSourceConfig {
+  getConfig(): TypeSourceConfigData {
     return {
       ...this.getBrief(),
       sourceTypeList: this.getSourceTypeList(),
