@@ -3,11 +3,7 @@ import { message } from "antd";
 import styled from "styled-components";
 import { RightCircleOutlined } from "@ant-design/icons";
 import { apiGetTempValueByName, apiOutputXmlTemplate } from "server/api";
-import {
-  useResolveProjectPath,
-  useProjectWatcher,
-  useResolveSourcePath
-} from "@/hooks/project";
+import { useProjectWatcher } from "@/hooks/project";
 import { TypeSourceValueElement } from "types/source-config";
 import ColorUtil, { HEX_TYPES } from "common/ColorUtil";
 import ColorPicker from "./ColorPicker";
@@ -16,19 +12,28 @@ import ColorBox from "./ColorBox";
 const XmlController: React.FC<TypeSourceValueElement> = sourceConf => {
   const { name, defaultXml, defaultValue, releaseName, releaseXml } =
     sourceConf;
-  const [value, setValue] = useState(sourceConf.defaultValue);
-  const releaseFile = useResolveProjectPath(releaseXml);
-  const templateFile = useResolveSourcePath(defaultXml);
+  const [defaultColor, setDefaultColor] = useState("");
+  const [releaseColor, setReleaseColor] = useState("");
 
   useProjectWatcher(releaseXml, () => {
-    console.log(11, releaseFile);
     apiGetTempValueByName({
       name: releaseName,
-      template: releaseFile
+      releaseXml: releaseXml
     })
-      .then(value => setValue(value))
+      .then(value => setReleaseColor(value))
       .catch(err => message.error(err.message));
   });
+
+  useEffect(() => {
+    try {
+      setDefaultColor(
+        new ColorUtil(defaultValue, HEX_TYPES.ARGB).format(HEX_TYPES.RGBA)
+      );
+    } catch (err) {
+      message.warn(err);
+    }
+  }, [defaultValue]);
+
   return (
     <StyleXmlController>
       <div className="text-wrapper">
@@ -36,24 +41,17 @@ const XmlController: React.FC<TypeSourceValueElement> = sourceConf => {
         <span className="color-name">{releaseName}</span>
       </div>
       <div className="color-wrapper">
-        <ColorBox
-          color={
-            defaultValue
-              ? new ColorUtil(defaultValue, HEX_TYPES.ARGB).format(
-                  HEX_TYPES.RGBA
-                )
-              : ""
-          }
-        />
+        <ColorBox color={defaultColor} />
         <RightCircleOutlined className="middle-button" />
         <ColorPicker
-          defaultColor={value}
+          defaultColor={releaseColor}
+          placeholder={defaultColor}
           onChange={color => {
             apiOutputXmlTemplate({
               key: releaseName,
               value: color,
               template: defaultXml,
-              release: releaseFile
+              release: releaseXml
             });
           }}
         />

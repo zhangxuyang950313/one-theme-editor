@@ -28,5 +28,5 @@ export function releaseXmlTemplate(data: TypeReleaseXmlTempPayload): void {
 export function getXmlTempValueByNameAttrVal(
   data: TypeGetValueByNamePayload
 ): string {
-  return new XmlTemplate(data.template).getValueByName(data.name);
+  return new XmlTemplate(data.releaseXml).getValueByName(data.name);
 }

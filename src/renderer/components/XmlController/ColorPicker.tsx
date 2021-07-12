@@ -18,20 +18,21 @@ const sketch2rgba = (sketch: RGBColor): RgbaObject => {
 
 type TypeColorChangerProps = {
   defaultColor: string;
+  placeholder: string;
   onChange: (color: string) => void;
 };
 function ColorPicker(props: TypeColorChangerProps): JSX.Element {
-  const [inputColor, setInputColor] = useState(props.defaultColor);
+  const { defaultColor, placeholder, onChange } = props;
+  const [inputColor, setInputColor] = useState(defaultColor);
   const [cssColor, setCssColor] = useState("#00000000");
-  const [rgbColor, setRgbColor] = useState<RgbaObject>(
-    ColorUtil.createTransparent()
-  );
+  const [rgbColor, setRgbColor] = useState<RgbaObject>();
   const RefInputPrev = useRef(inputColor);
 
   useEffect(() => {
     try {
       // TODO: 根据项目配置颜色格式转换
-      const colorUtil = new ColorUtil(props.defaultColor, HEX_TYPES.ARGB);
+      if (!defaultColor) return;
+      const colorUtil = new ColorUtil(defaultColor, HEX_TYPES.ARGB);
       setRgbColor(colorUtil.getRgbaData());
     } catch (err) {
       console.log(err);
@@ -39,9 +40,9 @@ function ColorPicker(props: TypeColorChangerProps): JSX.Element {
   }, []);
 
   useEffect(() => {
-    RefInputPrev.current = props.defaultColor;
-    setInputColor(props.defaultColor);
-  }, [props.defaultColor]);
+    RefInputPrev.current = defaultColor;
+    setInputColor(defaultColor);
+  }, [defaultColor]);
 
   useEffect(() => {
     if (!ColorUtil.isUnit8Hex(inputColor)) return;
@@ -52,38 +53,40 @@ function ColorPicker(props: TypeColorChangerProps): JSX.Element {
 
   return (
     <StyleColorPicker>
-      <Tooltip
-        overlayInnerStyle={{
-          color: "black",
-          width: "320px",
-          boxSizing: "border-box"
-        }}
-        trigger="click"
-        color="transparent"
-        arrowPointAtCenter={true}
-        // placement="left"
-        overlay={
-          <SketchPicker
-            width="auto"
-            // presetColors={getLocalStorage.presetColors}
-            color={rgba2sketch(rgbColor)}
-            onChange={color => {
-              const rgba = sketch2rgba(color.rgb);
-              setInputColor(ColorUtil.rgbaFormat(rgba, HEX_TYPES.ARGB));
-            }}
-            onChangeComplete={color => {
-              const rgba = sketch2rgba(color.rgb);
-              props.onChange(ColorUtil.rgbaFormat(rgba, HEX_TYPES.ARGB));
-            }}
-          />
-        }
-      >
-        <ColorBox color={cssColor} />
-      </Tooltip>
+      {rgbColor && (
+        <Tooltip
+          overlayInnerStyle={{
+            color: "black",
+            width: "320px",
+            boxSizing: "border-box"
+          }}
+          trigger="click"
+          color="transparent"
+          arrowPointAtCenter={true}
+          // placement="left"
+          overlay={
+            <SketchPicker
+              width="auto"
+              // presetColors={getLocalStorage.presetColors}
+              color={rgba2sketch(rgbColor)}
+              onChange={color => {
+                const rgba = sketch2rgba(color.rgb);
+                setInputColor(ColorUtil.rgbaFormat(rgba, HEX_TYPES.ARGB));
+              }}
+              onChangeComplete={color => {
+                const rgba = sketch2rgba(color.rgb);
+                onChange(ColorUtil.rgbaFormat(rgba, HEX_TYPES.ARGB));
+              }}
+            />
+          }
+        >
+          <ColorBox color={cssColor} />
+        </Tooltip>
+      )}
       <Input
         value={inputColor}
         defaultValue={inputColor}
-        placeholder="输入颜色（格式: #ffffff）"
+        placeholder={placeholder}
         className="color-input"
         onChange={e => {
           const color = e.target.value;
@@ -112,7 +115,7 @@ const StyleColorPicker = styled.div`
   align-items: center;
   position: inline-block;
   .color-input {
-    width: 100px;
+    width: 120px;
     height: 36px;
     margin: 0 10px;
     border-radius: 6px;

@@ -18,7 +18,7 @@ class ColorUtil {
    */
   constructor(hex: string, type: HEX_TYPES) {
     if (!ColorUtil.isHex(hex)) {
-      throw new Error(`${hex} 不是合法颜色值`);
+      throw new Error(`"${hex}" 不是合法颜色值`);
     }
     this.hex = hex;
     this.hexType = type;

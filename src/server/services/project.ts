@@ -112,7 +112,7 @@ export default function project(service: Express): void {
   // });
 
   /**
-   * 获取项目中 xml 模板 name 对应的值
+   * 查询 xml 模板 name 对应的值
    */
   service.get<
     never,
@@ -120,7 +120,7 @@ export default function project(service: Express): void {
     never,
     TypeGetValueByNamePayload
   >(API.GET_XML_TEMP_VALUE, async (request, response) => {
-    const { name, template } = request.query;
+    const { name, releaseXml: template } = request.query;
     if (!name) throw new Error("缺少 name 参数");
     if (!template) throw new Error("缺少 template 参数");
     const { projectPathname } = request.cookies;

@@ -108,5 +108,5 @@ export const ProjectLocalDir: React.FC<InputProps> = props => {
 
 // 输入颜色
 export const ColorInput: React.FC<InputProps> = props => {
-  return getInputForm({}, { ...props, placeholder: "输入颜色值" });
+  return getInputForm({}, { ...props, placeholder: "输入颜色" });
 };
