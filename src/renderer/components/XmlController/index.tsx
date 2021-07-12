@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { message } from "antd";
 import styled from "styled-components";
 import { RightCircleOutlined } from "@ant-design/icons";
 import { apiGetTempValueByName, apiOutputXmlTemplate } from "server/api";
@@ -13,25 +14,26 @@ import ColorPicker from "./ColorPicker";
 import ColorBox from "./ColorBox";
 
 const XmlController: React.FC<TypeSourceValueElement> = sourceConf => {
-  const { name, template, defaultValue, valueName, release } = sourceConf;
+  const { name, defaultXml, defaultValue, releaseName, releaseXml } =
+    sourceConf;
   const [value, setValue] = useState(sourceConf.defaultValue);
-  const releaseFile = useResolveProjectPath(release);
-  const templateFile = useResolveSourcePath(template);
+  const releaseFile = useResolveProjectPath(releaseXml);
+  const templateFile = useResolveSourcePath(defaultXml);
 
-  useProjectWatcher(release, () => {
+  useProjectWatcher(releaseXml, () => {
     console.log(11, releaseFile);
     apiGetTempValueByName({
-      name: valueName,
+      name: releaseName,
       template: releaseFile
-    }).then(value => {
-      setValue(value);
-    });
+    })
+      .then(value => setValue(value))
+      .catch(err => message.error(err.message));
   });
   return (
     <StyleXmlController>
       <div className="text-wrapper">
         <span className="name">{name}</span>
-        <span className="color-name">{valueName}</span>
+        <span className="color-name">{releaseName}</span>
       </div>
       <div className="color-wrapper">
         <ColorBox
@@ -40,17 +42,17 @@ const XmlController: React.FC<TypeSourceValueElement> = sourceConf => {
               ? new ColorUtil(defaultValue, HEX_TYPES.ARGB).format(
                   HEX_TYPES.RGBA
                 )
-              : "#ffffff"
+              : ""
           }
         />
         <RightCircleOutlined className="middle-button" />
         <ColorPicker
-          defaultColor={value || defaultValue}
+          defaultColor={value}
           onChange={color => {
             apiOutputXmlTemplate({
-              key: valueName,
+              key: releaseName,
               value: color,
-              template,
+              template: defaultXml,
               release: releaseFile
             });
           }}

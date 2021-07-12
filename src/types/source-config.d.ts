@@ -100,10 +100,11 @@ export type TypeSourceValueElement = {
     align: ALIGN_VALUES;
     alignV: ALIGN_V_VALUES;
   };
-  valueName: string;
+  defaultName: string;
   defaultValue: string;
-  template: string;
-  release: string;
+  releaseName: string;
+  defaultXml: string;
+  releaseXml: string;
 };
 
 // 预览元素数据

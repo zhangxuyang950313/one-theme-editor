@@ -89,11 +89,11 @@ export default class XmlTemplate extends BaseCompiler {
   /**
    * 获取匹配 name 属性节点的 text 值
    * @param name
-   * @param valuesFile
    * @returns
    */
-  public getTextByAttrName(name: string, valuesFile: string): string {
-    return this.replacePlaceholderByValFile(valuesFile)
+  public getTextByAttrName(name: string): string {
+    return super
+      .getFirstChildNode()
       .getFirstChildNodeByAttrValue("name", name)
       .getFirstTextChildValue();
   }

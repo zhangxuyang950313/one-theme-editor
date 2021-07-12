@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ThemeConfig>
-	<color name="icon_title_text">#66000000</color>
+	<color name="action_bar_title_text_color_light">#66000000</color>
 </ThemeConfig>

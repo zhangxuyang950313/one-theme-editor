@@ -270,40 +270,34 @@ export default class PageConfig extends BaseCompiler {
    * @param query file=${project}/wallpaper/theme_values.xml&amp;name=action_bar_title_text_color_light
    * @returns
    */
-  private getValueByQueryStr(
-    query: string,
-    isProject: boolean
-  ): {
+  private getValueByQueryStr(query: string): {
     name: string;
-    value: string;
     file: string;
   } {
-    // # 开头为颜色，直接返回
-    if (query.startsWith("#")) return { name: "", value: query, file: "" };
     let { file, name } = querystring.parse(query);
     if (!file || !name) {
-      console.log("query错误", query);
-      return { name: "", value: "", file: "" };
+      console.debug("query错误", query);
+      return { name: "", file: "" };
     }
     // 如果有多个参数取第一个
     if (Array.isArray(file)) file = file[0];
     if (Array.isArray(name)) name = name[0];
     // // 以 ${project} 开头的表示该路径为相对于项目的路径
     // const isProjectPath = /^\$\{project\}\/.+/.test(query);
-    if (isProject) return { name, value: "", file: file };
+    // if (isProject) return { name, value: "", file: file };
 
-    const tempFile = this.relativePath(file);
-    let tempData: XMLNodeElement | undefined =
-      this.getXmlTempDataMap().get(tempFile);
-    if (!tempData) {
-      tempData = new XmlTemplate(this.resolvePath(file));
-      this.getXmlTempDataMap().set(tempFile, tempData);
-    }
-    const value = tempData
-      .getFirstChildNode()
-      .getFirstChildNodeByAttrValue("name", name)
-      .getFirstTextChildValue();
-    return { name, value, file };
+    // const tempFile = this.relativePath(file);
+    // let tempData: XMLNodeElement | undefined =
+    //   this.getXmlTempDataMap().get(tempFile);
+    // if (!tempData) {
+    //   tempData = new XmlTemplate(this.resolvePath(file));
+    //   this.getXmlTempDataMap().set(tempFile, tempData);
+    // }
+    // const value = tempData
+    //   .getFirstChildNode()
+    //   .getFirstChildNodeByAttrValue("name", name)
+    //   .getFirstTextChildValue();
+    return { name, file };
   }
   /**
    * 解析文字节点
@@ -326,28 +320,37 @@ export default class PageConfig extends BaseCompiler {
     // 若没有 name 则使用 text
     const name = node.getAttributeOf("name", text);
     const defaultVal = node.getAttributeOf("default");
-    const release = (
+    const releaseVal = (
       node.getFirstChildNodeByTagname("to") ||
       node.getFirstChildNodeByTagname("release")
     ).getFirstTextChildValue();
-    const defaultData = this.getValueByQueryStr(defaultVal, false);
-    const releaseData = this.getValueByQueryStr(release, true);
+    // # 开头为颜色
+    const defaultIsColor = defaultVal.startsWith("#");
+    const defaultData = this.getValueByQueryStr(defaultVal);
+    const releaseData = this.getValueByQueryStr(releaseVal);
+    if (releaseVal.startsWith("#")) {
+    }
+
+    const defaultValue = new XmlTemplate(
+      this.resolvePath(defaultData.file)
+    ).getTextByAttrName(defaultData.name);
 
     return {
       elementType: ELEMENT_TYPES.TEXT,
       valueType,
       name,
       text,
+      defaultValue: defaultIsColor ? defaultVal : defaultValue,
+      defaultName: defaultData.name,
+      defaultXml: this.relativePath(defaultData.file),
+      releaseName: releaseData.name,
+      releaseXml: releaseData.file,
       layout: {
         x: layout.x,
         y: layout.y,
         align: layout.align,
         alignV: layout.alignV
-      },
-      valueName: releaseData.name,
-      defaultValue: defaultData.value,
-      template: this.relativePath(defaultData.file),
-      release: releaseData.file
+      }
     };
   }
 

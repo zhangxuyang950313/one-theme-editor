@@ -29,7 +29,6 @@ export default function utils(service: Express): void {
   service.get<never, TypeResponseFrame<typeof PATHS>, typeof PATHS>(
     API.GET_PATH_CONFIG,
     async (request, response) => {
-      console.group(request.cookies);
       response.send(result.success(PATHS));
     }
   );
@@ -92,6 +91,9 @@ export default function utils(service: Express): void {
   //   }
   // );
 
+  /**
+   * 打包工程
+   */
   service.get(API.PACK_PROJECT, async (request, response) => {
     const data = compactNinePatch();
     response.send(result.success(data));
