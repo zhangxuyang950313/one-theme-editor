@@ -1,10 +1,10 @@
 import { result } from "server/utils/utils";
 import express, { ErrorRequestHandler, Express, RequestHandler } from "express";
 import cookieParser from "cookie-parser";
-import imageService from "./services/image";
-import sourceService from "./services/source";
-import projectService from "./services/project";
-import utilsService from "./services/utils";
+import imageService from "./controller/image";
+import sourceService from "./controller/source";
+import projectService from "./controller/project";
+import utilsService from "./controller/utils";
 
 const HeaderHandler: RequestHandler = (req, res, next) => {
   //判断路径
