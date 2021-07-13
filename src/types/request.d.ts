@@ -33,7 +33,7 @@ export type TypeReleaseXmlTempPayload = {
   key: string;
   value: string;
   template: string;
-  release: string;
+  releaseXml: string;
 };
 
 // // 获取模板中 name 的值
@@ -42,7 +42,7 @@ export type TypeReleaseXmlTempPayload = {
 //   releaseXml: string;
 // };
 
-// 将一个数组 value 作为成对象的 key
-export type UnionArrayValueToObjectKey<T extends Array, V = string> = {
+// 将一个元祖联合成对象的 key
+export type UnionTupleToObjectKey<T extends Array, V = string> = {
   [k in T[number]]: V;
 };

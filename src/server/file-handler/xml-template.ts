@@ -4,7 +4,7 @@ import PATHS from "server/utils/pathUtils";
 import XmlTemplate from "server/compiler/XmlTemplate";
 import {
   TypeReleaseXmlTempPayload,
-  UnionArrayValueToObjectKey
+  UnionTupleToObjectKey
 } from "types/request";
 import API from "src/common/api";
 
@@ -17,8 +17,8 @@ export function releaseXmlTemplate(data: TypeReleaseXmlTempPayload): void {
   const xmlStr = new XmlTemplate(absPath).generateXml([
     { key: data.key, value: data.value }
   ]);
-  fse.ensureDirSync(path.dirname(data.release));
-  fse.writeFileSync(data.release, xmlStr);
+  fse.ensureDirSync(path.dirname(data.releaseXml));
+  fse.writeFileSync(data.releaseXml, xmlStr);
 }
 
 /**
@@ -27,7 +27,7 @@ export function releaseXmlTemplate(data: TypeReleaseXmlTempPayload): void {
  * @returns
  */
 export function getXmlTempValueByNameAttrVal(
-  data: UnionArrayValueToObjectKey<typeof API.GET_XML_TEMP_VALUE.query>
+  data: UnionTupleToObjectKey<typeof API.GET_XML_TEMP_VALUE.query>
 ): string {
   return new XmlTemplate(data.releaseXml).getValueByName(data.name);
 }

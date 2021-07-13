@@ -49,17 +49,6 @@ const API = {
     query: ["config"]
   },
 
-  // 输出 xml 模板
-  XML_TEMPLATE_RELEASE: {
-    url: "/xml/template/release",
-    requestBody: {} as TypeReleaseXmlTempPayload
-  },
-  // 通过 name 查找工程的 value
-  GET_XML_TEMP_VALUE: {
-    url: "/xml/value",
-    query: ["name", "releaseXml"]
-  },
-
   // 创建工程
   CREATE_PROJECT: {
     url: "/project/create",
@@ -89,21 +78,36 @@ const API = {
   },
   // 通过 id 获取工程信息
   GET_PROJECT: {
-    url: "/project/uuid",
+    url: "/project/get",
     params: ["uuid"]
+  },
+
+  // 输出 xml 模板
+  XML_TEMPLATE_RELEASE: {
+    url: "/project/xml/template/release",
+    query: ["uuid"],
+    bodyKeys: ["key", "value", "template", "releaseXml"] as Array<
+      keyof TypeReleaseXmlTempPayload
+    >,
+    body: {} as TypeReleaseXmlTempPayload
+  },
+  // 通过 name 查找工程的 value
+  GET_XML_TEMP_VALUE: {
+    url: "/project/xml/value",
+    query: ["uuid", "name", "releaseXml"]
   },
 
   // 复制文件
   COPY_FILE: {
     url: "/file/copy",
-    body: ["from", "to"]
+    bodyKeys: ["from", "to"]
   },
   // 写入本地文件
   WRITE_FILE: "/file/write",
   // 删除本地文件
   DELETE_FILE: {
     url: "/file/delete",
-    body: ["file"]
+    bodyKeys: ["file"]
   },
 
   // 工程打包

@@ -8,7 +8,7 @@ import {
 import {
   TypeRequestResult,
   TypeGetCanceler,
-  UnionArrayValueToObjectKey
+  UnionTupleToObjectKey
 } from "types/request";
 import { createHttp } from "./axios";
 
@@ -63,7 +63,7 @@ export async function apiUpdateProject(
  * @returns
  */
 export async function apiGetTempValueByName(
-  data: UnionArrayValueToObjectKey<typeof API.GET_XML_TEMP_VALUE.query>
+  data: UnionTupleToObjectKey<typeof API.GET_XML_TEMP_VALUE.query>
 ): Promise<string> {
   return createHttp()
     .get<TypeRequestResult<{ value: string }>>(API.GET_XML_TEMP_VALUE.url, {
@@ -78,7 +78,7 @@ export async function apiGetTempValueByName(
  * @returns
  */
 export async function apiOutputXmlTemplate(
-  data: UnionArrayValueToObjectKey<typeof API.XML_TEMPLATE_RELEASE.requestBody>
+  data: UnionTupleToObjectKey<typeof API.XML_TEMPLATE_RELEASE.body>
 ): Promise<void | null> {
   return createHttp()
     .post<TypeRequestResult<null>>(API.XML_TEMPLATE_RELEASE.url, data)

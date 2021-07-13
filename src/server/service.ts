@@ -1,3 +1,4 @@
+import logSymbols from "log-symbols";
 import { result } from "server/utils/utils";
 import express, { ErrorRequestHandler, Express, RequestHandler } from "express";
 import cookieParser from "cookie-parser";
@@ -24,6 +25,7 @@ const HeaderHandler: RequestHandler = (req, res, next) => {
 const ErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
   res.status(400).send(result.fail(err.message));
   // TODO：写日志
+  console.debug(logSymbols.error, "error: ↓↓↓↓↓↓\n", err);
 };
 
 // 注册服务
@@ -44,6 +46,6 @@ export default function registerService(service: Express): void {
   // 工具服务
   utilsService(service);
 
-  // 异步拦截器，一定要放在最后
+  // 包含异步拦截器，一定要放在最后
   service.use(ErrorHandler);
 }

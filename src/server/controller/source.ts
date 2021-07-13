@@ -7,7 +7,7 @@ import {
   TypeSourceConfigInfo
 } from "types/source-config";
 import { TypeBrandConf } from "src/types/project";
-import { TypeResponseFrame, UnionArrayValueToObjectKey } from "types/request";
+import { TypeResponseFrame, UnionTupleToObjectKey } from "types/request";
 import { checkParamsKey, result } from "server/utils/utils";
 import { resolveSourcePath } from "server/utils/pathUtils";
 import PageConfig from "server/compiler/PageConfig";
@@ -29,10 +29,9 @@ export default function source(service: Express): void {
    * 获取配置预览列表
    */
   service.get<
-    UnionArrayValueToObjectKey<typeof API.GET_SOURCE_CONF_LIST.params>,
+    UnionTupleToObjectKey<typeof API.GET_SOURCE_CONF_LIST.params>,
     TypeResponseFrame<TypeSourceConfigInfo[], string>
   >(`${API.GET_SOURCE_CONF_LIST.url}/:brandType`, (request, response) => {
-    checkParamsKey(request.params, API.GET_SOURCE_CONF_LIST.params);
     const { brandType } = request.params;
     const list = SourceConfig.getSourceConfigBriefList(brandType);
     response.send(result.success(list));
@@ -45,7 +44,7 @@ export default function source(service: Express): void {
     never, // reqParams
     TypeResponseFrame<TypeSourceModuleConf[], string>, // resBody
     never, // reqBody
-    UnionArrayValueToObjectKey<typeof API.GET_SOURCE_CONF_MODULE_LIST.query> // reqQuery
+    UnionTupleToObjectKey<typeof API.GET_SOURCE_CONF_MODULE_LIST.query> // reqQuery
   >(API.GET_SOURCE_CONF_MODULE_LIST.url, (request, response) => {
     checkParamsKey(request.query, API.GET_SOURCE_CONF_MODULE_LIST.query);
     const { config } = request.query;
@@ -62,7 +61,7 @@ export default function source(service: Express): void {
     never, // reqParams
     TypeResponseFrame<TypeSourcePageData, string>, // resBody
     never, // reqBody
-    UnionArrayValueToObjectKey<typeof API.GET_SOURCE_CONF_PAGE_DATA.query> // reqQuery
+    UnionTupleToObjectKey<typeof API.GET_SOURCE_CONF_PAGE_DATA.query> // reqQuery
   >(API.GET_SOURCE_CONF_PAGE_DATA.url, async (request, response) => {
     checkParamsKey(request.query, API.GET_SOURCE_CONF_PAGE_DATA.query);
     const { config } = request.query;
@@ -79,7 +78,7 @@ export default function source(service: Express): void {
     never, // reqParams
     TypeResponseFrame<TypeSourceConfigData, string>, // resBody
     never, // reqBody
-    UnionArrayValueToObjectKey<typeof API.GET_SOURCE_CONF_DATA.query> // reqQuery
+    UnionTupleToObjectKey<typeof API.GET_SOURCE_CONF_DATA.query> // reqQuery
   >(API.GET_SOURCE_CONF_DATA.url, async (request, response) => {
     checkParamsKey(request.query, API.GET_SOURCE_CONF_DATA.query);
     const { config } = request.query;

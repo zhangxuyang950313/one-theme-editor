@@ -5,7 +5,7 @@ import API from "common/api";
 import PATHS from "server/utils/pathUtils";
 import ERR_CODE from "renderer/core/error-code";
 import { checkParamsKey, result } from "server/utils/utils";
-import { TypeResponseFrame, UnionArrayValueToObjectKey } from "types/request";
+import { TypeResponseFrame, UnionTupleToObjectKey } from "types/request";
 import { compactNinePatch } from "server/core/pack";
 
 export default function utils(service: Express): void {
@@ -37,9 +37,9 @@ export default function utils(service: Express): void {
   service.post<
     never, // reqParams
     TypeResponseFrame<null, string>, // resBody
-    UnionArrayValueToObjectKey<typeof API.COPY_FILE.body> // reqBody
+    UnionTupleToObjectKey<typeof API.COPY_FILE.bodyKeys> // reqBody
   >(API.COPY_FILE.url, (request, response) => {
-    checkParamsKey(request.query, API.COPY_FILE.body);
+    checkParamsKey(request.query, API.COPY_FILE.bodyKeys);
     const { from, to } = request.body;
     if (!fse.existsSync(from)) {
       response.status(400).send(result.fail(ERR_CODE[4003]));
@@ -53,9 +53,9 @@ export default function utils(service: Express): void {
   service.post<
     never,
     TypeResponseFrame<null, string>,
-    UnionArrayValueToObjectKey<typeof API.DELETE_FILE.body>
+    UnionTupleToObjectKey<typeof API.DELETE_FILE.bodyKeys>
   >(API.DELETE_FILE.url, (request, response) => {
-    checkParamsKey(request.query, API.DELETE_FILE.body);
+    checkParamsKey(request.query, API.DELETE_FILE.bodyKeys);
     const { file } = request.body;
     if (!fse.existsSync(file)) {
       response.status(400).send(result.fail(ERR_CODE[4003]));

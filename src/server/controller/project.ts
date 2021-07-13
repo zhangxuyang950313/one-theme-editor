@@ -2,7 +2,7 @@ import path from "path";
 import { Express } from "express";
 import API from "common/api";
 import { TypeCreateProjectPayload, TypeProjectDataDoc } from "types/project";
-import { TypeResponseFrame, UnionArrayValueToObjectKey } from "types/request";
+import { TypeResponseFrame, UnionTupleToObjectKey } from "types/request";
 import { result } from "server/utils/utils";
 import {
   findProjectByUUID,
@@ -27,19 +27,17 @@ export default function project(service: Express): void {
 
   // 获取工程列表
   service.get<
-    UnionArrayValueToObjectKey<typeof API.GET_PROJECT_LIST.params>, // reqParams
+    UnionTupleToObjectKey<typeof API.GET_PROJECT_LIST.params>, // reqParams
     TypeResponseFrame<TypeProjectDataDoc[], string>
   >(`${API.GET_PROJECT_LIST.url}/:brandType`, async (request, response) => {
-    checkParamsKey(request.params, API.GET_PROJECT_LIST.params);
     const project = await getProjectListOf(request.params.brandType);
     response.send(result.success(project));
   });
 
   // 通过参数获取工程
-  service.get<UnionArrayValueToObjectKey<typeof API.GET_PROJECT.params>>(
+  service.get<UnionTupleToObjectKey<typeof API.GET_PROJECT.params>>(
     `${API.GET_PROJECT.url}/:uuid`,
     async (request, response) => {
-      checkParamsKey(request.params, API.GET_PROJECT.params);
       const project = await findProjectByUUID(request.params.uuid);
       response.send(result.success(project));
     }
@@ -57,10 +55,10 @@ export default function project(service: Express): void {
 
   // 更新工程描述信息
   service.post<
-    UnionArrayValueToObjectKey<typeof API.UPDATE_PROJECT_INFO.params>,
+    UnionTupleToObjectKey<typeof API.UPDATE_PROJECT_INFO.params>,
     TypeResponseFrame<TypeProjectDataDoc, string>,
     typeof API.UPDATE_PROJECT_INFO.body
-  >(`${API.UPDATE_PROJECT_INFO.url}/:uuid`, async (request, response) => {
+  >(API.UPDATE_PROJECT_INFO.url, async (request, response) => {
     const { uuid } = request.params;
     const description = request.body;
     const project = await updateProject(uuid, { description });
@@ -69,7 +67,7 @@ export default function project(service: Express): void {
 
   // 更新工程ui版本
   service.post<
-    UnionArrayValueToObjectKey<typeof API.UPDATE_UI_VERSION.params>,
+    UnionTupleToObjectKey<typeof API.UPDATE_UI_VERSION.params>,
     TypeResponseFrame<TypeProjectDataDoc, string>,
     typeof API.UPDATE_UI_VERSION.body
   >(`${API.UPDATE_UI_VERSION.url}/:uuid`, async (request, response) => {
@@ -110,12 +108,13 @@ export default function project(service: Express): void {
     never,
     TypeResponseFrame<{ value: string }, string>,
     never,
-    UnionArrayValueToObjectKey<typeof API.GET_XML_TEMP_VALUE.query>
+    UnionTupleToObjectKey<typeof API.GET_XML_TEMP_VALUE.query>
   >(API.GET_XML_TEMP_VALUE.url, async (request, response) => {
-    checkParamsKey(request.query, API.GET_XML_TEMP_VALUE.query);
-    const { name, releaseXml } = request.query;
-    const { projectPathname } = request.cookies;
-    const releaseFile = path.join(projectPathname, releaseXml);
+    const { query } = request;
+    checkParamsKey(query, API.GET_XML_TEMP_VALUE.query);
+    const { uuid, name, releaseXml } = query;
+    const project = await findProjectByUUID(uuid);
+    const releaseFile = path.join(project.projectPathname, releaseXml);
     const value = new XmlTemplate(releaseFile).getValueByName(name);
     response.send(result.success({ value }));
   });
@@ -125,10 +124,18 @@ export default function project(service: Express): void {
    */
   service.post<
     never, // reqParams
-    TypeResponseFrame<typeof API.XML_TEMPLATE_RELEASE.requestBody, string>, // resBody
-    typeof API.XML_TEMPLATE_RELEASE.requestBody // reqBody
+    TypeResponseFrame<typeof API.XML_TEMPLATE_RELEASE.body, string>, // resBody
+    typeof API.XML_TEMPLATE_RELEASE.body, // reqBody
+    UnionTupleToObjectKey<typeof API.XML_TEMPLATE_RELEASE.query> // reqQuery
   >(API.XML_TEMPLATE_RELEASE.url, async (request, response) => {
-    releaseXmlTemplate(request.body);
-    response.send(result.success(request.body));
+    const { body, query } = request;
+    checkParamsKey(query, API.XML_TEMPLATE_RELEASE.query);
+    checkParamsKey(body, API.XML_TEMPLATE_RELEASE.bodyKeys);
+    const project = await findProjectByUUID(query.uuid);
+    releaseXmlTemplate({
+      ...body,
+      releaseXml: path.join(project.projectPathname, body.releaseXml)
+    });
+    response.send(result.success(body));
   });
 }
