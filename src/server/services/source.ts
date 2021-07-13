@@ -8,7 +8,7 @@ import {
 } from "types/source-config";
 import { TypeBrandConf } from "src/types/project";
 import { TypeResponseFrame, UnionArrayValueToObjectKey } from "types/request";
-import { result } from "server/utils/utils";
+import { checkParamsKey, result } from "server/utils/utils";
 import { resolveSourcePath } from "server/utils/pathUtils";
 import PageConfig from "server/compiler/PageConfig";
 import SourceConfig from "server/compiler/SourceConfig";
@@ -32,8 +32,8 @@ export default function source(service: Express): void {
     UnionArrayValueToObjectKey<typeof API.GET_SOURCE_CONF_LIST.params>,
     TypeResponseFrame<TypeSourceConfigInfo[], string>
   >(`${API.GET_SOURCE_CONF_LIST.url}/:brandType`, (request, response) => {
+    checkParamsKey(request.params, API.GET_SOURCE_CONF_LIST.params);
     const { brandType } = request.params;
-    if (!brandType) throw new Error("缺少 brandType 参数");
     const list = SourceConfig.getSourceConfigBriefList(brandType);
     response.send(result.success(list));
   });
@@ -47,8 +47,8 @@ export default function source(service: Express): void {
     never, // reqBody
     UnionArrayValueToObjectKey<typeof API.GET_SOURCE_CONF_MODULE_LIST.query> // reqQuery
   >(API.GET_SOURCE_CONF_MODULE_LIST.url, (request, response) => {
+    checkParamsKey(request.query, API.GET_SOURCE_CONF_MODULE_LIST.query);
     const { config } = request.query;
-    if (!config) throw new Error("缺少 config 参数");
     const absFile = resolveSourcePath(config);
     const data = new SourceConfig(absFile).getModuleList();
     response.send(result.success(data));
@@ -64,8 +64,8 @@ export default function source(service: Express): void {
     never, // reqBody
     UnionArrayValueToObjectKey<typeof API.GET_SOURCE_CONF_PAGE_DATA.query> // reqQuery
   >(API.GET_SOURCE_CONF_PAGE_DATA.url, async (request, response) => {
+    checkParamsKey(request.query, API.GET_SOURCE_CONF_PAGE_DATA.query);
     const { config } = request.query;
-    if (!config) throw new Error("缺少 config 参数");
     const absFile = resolveSourcePath(config);
     const data = new PageConfig(absFile).getData();
     response.send(result.success(data));
@@ -81,8 +81,8 @@ export default function source(service: Express): void {
     never, // reqBody
     UnionArrayValueToObjectKey<typeof API.GET_SOURCE_CONF_DATA.query> // reqQuery
   >(API.GET_SOURCE_CONF_DATA.url, async (request, response) => {
+    checkParamsKey(request.query, API.GET_SOURCE_CONF_DATA.query);
     const { config } = request.query;
-    if (!config) throw new Error("缺少 config 参数");
     const absFile = resolveSourcePath(config);
     const data = new SourceConfig(absFile).getConfig();
     response.send(result.success(data));

@@ -7,3 +7,13 @@ export const result: {
   success: data => ({ msg: "success", data: data }),
   fail: err => ({ msg: "error", data: err })
 };
+
+// 检查参数的 key
+export const checkParamsKey = <T>(obj: T, keys: readonly string[]): void => {
+  const objKeySet = new Set(Object.keys(obj));
+  keys.forEach(key => {
+    if (!objKeySet.has(key)) {
+      throw new Error(`缺少参数"${key}"`);
+    }
+  });
+};

@@ -12,6 +12,7 @@ import {
 } from "server/db-handler/project";
 import { releaseXmlTemplate } from "server/file-handler/xml-template";
 import XmlTemplate from "server/compiler/XmlTemplate";
+import { checkParamsKey } from "./../utils/utils";
 
 export default function project(service: Express): void {
   // 添加工程
@@ -29,6 +30,7 @@ export default function project(service: Express): void {
     UnionArrayValueToObjectKey<typeof API.GET_PROJECT_LIST.params>, // reqParams
     TypeResponseFrame<TypeProjectDataDoc[], string>
   >(`${API.GET_PROJECT_LIST.url}/:brandType`, async (request, response) => {
+    checkParamsKey(request.params, API.GET_PROJECT_LIST.params);
     const project = await getProjectListOf(request.params.brandType);
     response.send(result.success(project));
   });
@@ -37,6 +39,7 @@ export default function project(service: Express): void {
   service.get<UnionArrayValueToObjectKey<typeof API.GET_PROJECT.params>>(
     `${API.GET_PROJECT.url}/:uuid`,
     async (request, response) => {
+      checkParamsKey(request.params, API.GET_PROJECT.params);
       const project = await findProjectByUUID(request.params.uuid);
       response.send(result.success(project));
     }
@@ -109,9 +112,8 @@ export default function project(service: Express): void {
     never,
     UnionArrayValueToObjectKey<typeof API.GET_XML_TEMP_VALUE.query>
   >(API.GET_XML_TEMP_VALUE.url, async (request, response) => {
+    checkParamsKey(request.query, API.GET_XML_TEMP_VALUE.query);
     const { name, releaseXml } = request.query;
-    if (!name) throw new Error("缺少 name 参数");
-    if (!releaseXml) throw new Error("缺少 template 参数");
     const { projectPathname } = request.cookies;
     const releaseFile = path.join(projectPathname, releaseXml);
     const value = new XmlTemplate(releaseFile).getValueByName(name);

@@ -4,7 +4,7 @@ import { Express } from "express";
 import API from "common/api";
 import PATHS from "server/utils/pathUtils";
 import ERR_CODE from "renderer/core/error-code";
-import { result } from "server/utils/utils";
+import { checkParamsKey, result } from "server/utils/utils";
 import { TypeResponseFrame, UnionArrayValueToObjectKey } from "types/request";
 import { compactNinePatch } from "server/core/pack";
 
@@ -39,6 +39,7 @@ export default function utils(service: Express): void {
     TypeResponseFrame<null, string>, // resBody
     UnionArrayValueToObjectKey<typeof API.COPY_FILE.body> // reqBody
   >(API.COPY_FILE.url, (request, response) => {
+    checkParamsKey(request.query, API.COPY_FILE.body);
     const { from, to } = request.body;
     if (!fse.existsSync(from)) {
       response.status(400).send(result.fail(ERR_CODE[4003]));
@@ -53,14 +54,15 @@ export default function utils(service: Express): void {
     never,
     TypeResponseFrame<null, string>,
     UnionArrayValueToObjectKey<typeof API.DELETE_FILE.body>
-  >(API.DELETE_FILE.url, (req, res) => {
-    const { file } = req.body;
+  >(API.DELETE_FILE.url, (request, response) => {
+    checkParamsKey(request.query, API.DELETE_FILE.body);
+    const { file } = request.body;
     if (!fse.existsSync(file)) {
-      res.status(400).send(result.fail(ERR_CODE[4003]));
+      response.status(400).send(result.fail(ERR_CODE[4003]));
       return;
     }
     fse.unlinkSync(file);
-    res.send(result.success(null));
+    response.send(result.success(null));
   });
 
   // // 写入本地文件

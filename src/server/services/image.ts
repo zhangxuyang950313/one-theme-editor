@@ -40,7 +40,7 @@ export default function image(service: Express): void {
       res.set({ "Content-Type": fileType.mime });
       res.send(buff);
     } catch (err) {
-      console.log("图片加载异常", err.message);
+      console.warn("图片加载异常", err.message);
       res.status(400);
     }
   });
