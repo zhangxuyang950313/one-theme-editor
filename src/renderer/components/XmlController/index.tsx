@@ -14,9 +14,9 @@ const XmlController: React.FC<TypeSourceValueElement> = sourceConf => {
     sourceConf;
   const [defaultColor, setDefaultColor] = useState("");
   const [releaseColor, setReleaseColor] = useState("");
-
-  useProjectWatcher(releaseXml, () => {
+  const uuid = useProjectWatcher(releaseXml, () => {
     apiGetTempValueByName({
+      // uuid: ,
       name: releaseName,
       releaseXml: releaseXml
     })

@@ -19,7 +19,8 @@ export type TypeProjectUiVersion = {
 
 // 工程描述信息
 export type TypeProjectInfo = {
-  [k in keyof typeof projectInfoConfig]: string | null;
+  // [k in keyof typeof projectInfoConfig]: string | null;
+  [k: string]: string;
 };
 
 // // 预览页面配置储存数据

@@ -10,30 +10,27 @@ const getState = (state: TypeEditorState) => state;
 // 获取工程数据
 export const getProjectData = createSelector(
   getState,
-  state => state.projectData || null
+  state => state.projectData
 );
 
 // 获取厂商信息
 export const getProjectBrandInfo = createSelector(
   getProjectData,
-  state => state?.brandInfo || null
+  state => state.brandInfo
 );
 
 export const getProjectInfo = createSelector(
   getProjectData,
-  state => state?.projectInfo || null
+  state => state.projectInfo
 );
 
 // 获取工程 uuid
-export const getProjectUUID = createSelector(
-  getState,
-  state => state?.uuid || null
-);
+export const getProjectUUID = createSelector(getState, state => state.uuid);
 
 // 获取工程本地路径
 export const getProjectPathname = createSelector(
   getProjectData,
-  state => state?.projectPathname || null
+  state => state.projectPathname
 );
 
 // 获取当前资源配置信息
@@ -77,7 +74,7 @@ export const getModuleConf = createSelector(
 // 获取页面组列表
 export const getPageGroupList = createSelector(
   getState,
-  state => state.sourceModuleConf?.groupList || []
+  state => state.sourceModuleConf.groupList || []
 );
 
 // 获取当前页面
@@ -93,9 +90,9 @@ export const getSourceTypeList = createSelector(
 
 // 获取所有元素列表
 export const getSourceElementList = createSelector(getState, state => {
-  const pageConfSrc = state.sourcePageConf?.src;
+  const pageConfSrc = state.sourcePageConf.src;
   if (!pageConfSrc) return [];
-  return state.sourcePageDataMap[pageConfSrc]?.elementList || [];
+  return state.sourcePageDataMap[pageConfSrc].elementList || [];
 });
 
 // 获取图片元素列表
