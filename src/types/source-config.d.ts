@@ -5,7 +5,7 @@ import {
   VALUE_TYPES
 } from "src/enum";
 import XMLNodeBase from "server/compiler/XMLNodeElement";
-import { TypeImageData, TypeUiVersion } from "./project";
+import { TypeImageData, TypeProjectUiVersion } from "./project";
 import { TypeImagePathLike } from "./index";
 
 // 资源配置信息
@@ -15,7 +15,7 @@ export type TypeSourceConfigInfo = {
   name: string;
   preview: TypeImagePathLike;
   version: string;
-  uiVersion: TypeUiVersion;
+  uiVersion: TypeProjectUiVersion;
 };
 
 // 资源配置数据

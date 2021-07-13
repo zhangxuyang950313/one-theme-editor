@@ -5,7 +5,7 @@ import API from "common/api";
 import PATHS from "server/utils/pathUtils";
 import ERR_CODE from "renderer/core/error-code";
 import { result } from "server/utils/utils";
-import { TypeInitPayload, TypeResponseFrame } from "types/request";
+import { TypeResponseFrame, UnionArrayValueToObjectKey } from "types/request";
 import { compactNinePatch } from "server/core/pack";
 
 export default function utils(service: Express): void {
@@ -15,9 +15,9 @@ export default function utils(service: Express): void {
    */
   service.post<
     never,
-    TypeResponseFrame<TypeInitPayload, string>,
-    TypeInitPayload
-  >(API.INIT, async (request, response) => {
+    TypeResponseFrame<typeof API.INIT.body, string>,
+    typeof API.INIT.body
+  >(API.INIT.url, async (request, response) => {
     for (const key in request.body) {
       response.cookie(key, request.body[key]);
     }
@@ -37,8 +37,8 @@ export default function utils(service: Express): void {
   service.post<
     never, // reqParams
     TypeResponseFrame<null, string>, // resBody
-    { from: string; to: string } // reqBody
-  >(API.COPY_FILE, (request, response) => {
+    UnionArrayValueToObjectKey<typeof API.COPY_FILE.body> // reqBody
+  >(API.COPY_FILE.url, (request, response) => {
     const { from, to } = request.body;
     if (!fse.existsSync(from)) {
       response.status(400).send(result.fail(ERR_CODE[4003]));
@@ -49,18 +49,19 @@ export default function utils(service: Express): void {
     response.send(result.success(null));
   });
   // 删除本地文件
-  service.post<never, TypeResponseFrame<null, string>, { file: string }>(
-    API.DELETE_FILE,
-    (req, res) => {
-      const { file } = req.body;
-      if (!fse.existsSync(file)) {
-        res.status(400).send(result.fail(ERR_CODE[4003]));
-        return;
-      }
-      fse.unlinkSync(file);
-      res.send(result.success(null));
+  service.post<
+    never,
+    TypeResponseFrame<null, string>,
+    UnionArrayValueToObjectKey<typeof API.DELETE_FILE.body>
+  >(API.DELETE_FILE.url, (req, res) => {
+    const { file } = req.body;
+    if (!fse.existsSync(file)) {
+      res.status(400).send(result.fail(ERR_CODE[4003]));
+      return;
     }
-  );
+    fse.unlinkSync(file);
+    res.send(result.success(null));
+  });
 
   // // 写入本地文件
   // service.post<any, any, { fileData: TypeFileData; to: string }>(

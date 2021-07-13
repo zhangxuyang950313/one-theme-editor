@@ -8,8 +8,7 @@ import {
 import {
   TypeRequestResult,
   TypeGetCanceler,
-  TypeReleaseXmlTempPayload,
-  TypeGetValueByNamePayload
+  UnionArrayValueToObjectKey
 } from "types/request";
 import { createHttp } from "./axios";
 
@@ -18,7 +17,7 @@ export async function apiCreateProject(
   data: TypeCreateProjectPayload
 ): Promise<TypeProjectData> {
   return createHttp()
-    .post<TypeRequestResult<TypeProjectData>>(API.CREATE_PROJECT, data)
+    .post<TypeRequestResult<TypeProjectData>>(API.CREATE_PROJECT.url, data)
     .then(data => data.data.data);
 }
 
@@ -29,7 +28,7 @@ export async function apiGetProjectList(
 ): Promise<TypeProjectDataDoc[]> {
   return createHttp(canceler)
     .get<TypeRequestResult<TypeProjectDataDoc[]>>(
-      `${API.GET_PROJECT_LIST}/${brandInfo.type}`
+      `${API.GET_PROJECT_LIST.url}/${brandInfo.type}`
     )
     .then(data => data.data.data);
 }
@@ -40,7 +39,9 @@ export async function apiGetProjectByUUID(
   canceler?: TypeGetCanceler
 ): Promise<TypeProjectDataDoc> {
   return createHttp(canceler)
-    .get<TypeRequestResult<TypeProjectDataDoc>>(`${API.GET_PROJECT}/${uuid}`)
+    .get<TypeRequestResult<TypeProjectDataDoc>>(
+      `${API.GET_PROJECT.url}/${uuid}`
+    )
     .then(data => data.data.data);
 }
 
@@ -50,7 +51,7 @@ export async function apiUpdateProject(
 ): Promise<TypeProjectDataDoc> {
   return createHttp()
     .post<TypeRequestResult<TypeProjectDataDoc>>(
-      `${API.UPDATE_PROJECT}/${data.uuid}`,
+      `${API.UPDATE_PROJECT.url}/${data.uuid}`,
       data
     )
     .then(data => data.data.data);
@@ -62,10 +63,10 @@ export async function apiUpdateProject(
  * @returns
  */
 export async function apiGetTempValueByName(
-  data: TypeGetValueByNamePayload
+  data: UnionArrayValueToObjectKey<typeof API.GET_XML_TEMP_VALUE.query>
 ): Promise<string> {
   return createHttp()
-    .get<TypeRequestResult<{ value: string }>>(API.GET_XML_TEMP_VALUE, {
+    .get<TypeRequestResult<{ value: string }>>(API.GET_XML_TEMP_VALUE.url, {
       params: data
     })
     .then(data => data.data.data.value);
@@ -77,9 +78,9 @@ export async function apiGetTempValueByName(
  * @returns
  */
 export async function apiOutputXmlTemplate(
-  data: TypeReleaseXmlTempPayload
+  data: UnionArrayValueToObjectKey<typeof API.XML_TEMPLATE_RELEASE.requestBody>
 ): Promise<void | null> {
   return createHttp()
-    .post<TypeRequestResult<null>>(API.XML_TEMPLATE_RELEASE, data)
+    .post<TypeRequestResult<null>>(API.XML_TEMPLATE_RELEASE.url, data)
     .then(data => data.data.data);
 }

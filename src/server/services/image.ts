@@ -5,6 +5,7 @@ import { Express } from "express";
 import API from "common/api";
 import PATHS from "server/utils/pathUtils";
 import ERR_CODE from "src/renderer/core/error-code";
+import { UnionArrayValueToObjectKey } from "src/types/request";
 
 export default function image(service: Express): void {
   /**
@@ -13,10 +14,10 @@ export default function image(service: Express): void {
    */
   service.get<
     never, // reqParams
-    Buffer, // resBody
+    typeof API.IMAGE.body, // resBody
     never, // reqBody
-    { filepath: string } // reqQuery
-  >(`${API.IMAGE}`, async (req, res) => {
+    UnionArrayValueToObjectKey<typeof API.IMAGE.query> // reqQuery
+  >(API.IMAGE.url, async (req, res) => {
     async function getImgBuffAndFileType(file: string) {
       if (!fse.existsSync(file)) {
         throw new Error(ERR_CODE[4003]);

@@ -9,7 +9,7 @@ import {
   TypeSourceConfigInfo,
   TypeSourceTypeConf
 } from "types/source-config";
-import { TypeBrandConf, TypeUiVersion } from "types/project";
+import { TypeBrandConf, TypeProjectUiVersion } from "types/project";
 import ERR_CODE from "renderer/core/error-code";
 import PATHS from "server/utils/pathUtils";
 import PageConfig from "./PageConfig";
@@ -88,7 +88,7 @@ export default class SourceConfig extends BaseCompiler {
   }
 
   // UI信息
-  getUiVersion(): TypeUiVersion {
+  getUiVersion(): TypeProjectUiVersion {
     const uiVersionNode = super.getRootFirstChildNodeOf("uiVersion");
     return {
       name: uiVersionNode.getAttributeOf("name"),

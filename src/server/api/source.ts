@@ -21,29 +21,31 @@ export async function apiGetSourceDescriptionList(
 ): Promise<TypeSourceConfigInfo[]> {
   return createHttp()
     .get<TypeRequestResult<TypeSourceConfigInfo[]>>(
-      `${API.GET_SOURCE_CONF_LIST}/${brandType}`
+      `${API.GET_SOURCE_CONF_LIST.url}/${brandType}`
     )
     .then(data => data.data.data);
 }
 
 // 获取配置数据
 export async function apiGetSourceConfig(
-  descriptionFile: string
+  config: string
 ): Promise<TypeSourceConfigData> {
   return createHttp()
-    .get<TypeRequestResult<TypeSourceConfigData>>(API.GET_SOURCE_CONF_DATA, {
-      params: { descriptionFile }
-    })
+    .get<TypeRequestResult<TypeSourceConfigData>>(
+      API.GET_SOURCE_CONF_DATA.url,
+      { params: { config } }
+    )
     .then(data => data.data.data);
 }
 
 // 获取页面配置数据
 export async function apiGetSourcePageConfData(
-  pageFile: string
+  config: string
 ): Promise<TypeSourcePageData> {
   return createHttp()
-    .get<TypeRequestResult<TypeSourcePageData>>(API.GET_SOURCE_CONF_PAGE_DATA, {
-      params: { pageFile }
-    })
+    .get<TypeRequestResult<TypeSourcePageData>>(
+      API.GET_SOURCE_CONF_PAGE_DATA.url,
+      { params: { config } }
+    )
     .then(data => data.data.data);
 }

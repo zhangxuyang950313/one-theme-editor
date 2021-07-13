@@ -12,7 +12,7 @@ export type TypeBrandConf = TypeBrandInfo & {
 };
 
 // 版本信息
-export type TypeUiVersion = {
+export type TypeProjectUiVersion = {
   name: string;
   code: string;
 };
@@ -63,7 +63,7 @@ export type TypeProjectData = {
   brandInfo: TypeBrandInfo;
   projectPathname: string;
   projectInfo: TypeProjectInfo;
-  uiVersion: TypeUiVersion;
+  uiVersion: TypeProjectUiVersion;
   sourceConfigUrl: string;
 };
 

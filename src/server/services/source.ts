@@ -6,7 +6,8 @@ import {
   TypeSourceConfigData,
   TypeSourceConfigInfo
 } from "types/source-config";
-import { TypeResponseFrame } from "types/request";
+import { TypeBrandConf } from "src/types/project";
+import { TypeResponseFrame, UnionArrayValueToObjectKey } from "types/request";
 import { result } from "server/utils/utils";
 import { resolveSourcePath } from "server/utils/pathUtils";
 import PageConfig from "server/compiler/PageConfig";
@@ -16,18 +17,21 @@ export default function source(service: Express): void {
   /**
    * 获取厂商配置列表
    */
-  service.get(API.GET_BRAND_LIST, (request, response) => {
-    const brandConfList = SourceConfig.readBrandConf();
-    response.send(result.success(brandConfList));
-  });
+  service.get<never, TypeResponseFrame<TypeBrandConf[], string>>(
+    API.GET_BRAND_LIST,
+    (request, response) => {
+      const brandConfList = SourceConfig.readBrandConf();
+      response.send(result.success(brandConfList));
+    }
+  );
 
   /**
    * 获取配置预览列表
    */
   service.get<
-    { brandType: string },
+    UnionArrayValueToObjectKey<typeof API.GET_SOURCE_CONF_LIST.params>,
     TypeResponseFrame<TypeSourceConfigInfo[], string>
-  >(`${API.GET_SOURCE_CONF_LIST}/:brandType`, (request, response) => {
+  >(`${API.GET_SOURCE_CONF_LIST.url}/:brandType`, (request, response) => {
     const { brandType } = request.params;
     if (!brandType) throw new Error("缺少 brandType 参数");
     const list = SourceConfig.getSourceConfigBriefList(brandType);
@@ -41,45 +45,45 @@ export default function source(service: Express): void {
     never, // reqParams
     TypeResponseFrame<TypeSourceModuleConf[], string>, // resBody
     never, // reqBody
-    { descriptionFile: string } // reqQuery
-  >(API.GET_SOURCE_CONF_MODULE_LIST, (request, response) => {
-    const { descriptionFile } = request.query;
-    if (!descriptionFile) throw new Error("缺少 descriptionFile 参数");
-    const absFile = resolveSourcePath(descriptionFile);
+    UnionArrayValueToObjectKey<typeof API.GET_SOURCE_CONF_MODULE_LIST.query> // reqQuery
+  >(API.GET_SOURCE_CONF_MODULE_LIST.url, (request, response) => {
+    const { config } = request.query;
+    if (!config) throw new Error("缺少 config 参数");
+    const absFile = resolveSourcePath(config);
     const data = new SourceConfig(absFile).getModuleList();
     response.send(result.success(data));
   });
 
   /**
    * 获取页面信息
-   * 传入 pageFile（相对素材的根路径）
+   * 传入 config 文件（相对素材的根路径）
    */
   service.get<
     never, // reqParams
     TypeResponseFrame<TypeSourcePageData, string>, // resBody
     never, // reqBody
-    { pageFile: string } // reqQuery
-  >(API.GET_SOURCE_CONF_PAGE_DATA, async (request, response) => {
-    const { pageFile } = request.query;
-    if (!pageFile) throw new Error("缺少 pageFile 参数");
-    const absFile = resolveSourcePath(pageFile);
+    UnionArrayValueToObjectKey<typeof API.GET_SOURCE_CONF_PAGE_DATA.query> // reqQuery
+  >(API.GET_SOURCE_CONF_PAGE_DATA.url, async (request, response) => {
+    const { config } = request.query;
+    if (!config) throw new Error("缺少 config 参数");
+    const absFile = resolveSourcePath(config);
     const data = new PageConfig(absFile).getData();
     response.send(result.success(data));
   });
 
   /**
    * 获取配置信息
-   * 传入 descriptionFile（相对素材的根路径）
+   * 传入 config 文件（相对素材的根路径）
    */
   service.get<
     never, // reqParams
     TypeResponseFrame<TypeSourceConfigData, string>, // resBody
     never, // reqBody
-    { descriptionFile: string } // reqQuery
-  >(API.GET_SOURCE_CONF_DATA, async (request, response) => {
-    const { descriptionFile } = request.query;
-    if (!descriptionFile) throw new Error("缺少 descriptionFile 参数");
-    const absFile = resolveSourcePath(descriptionFile);
+    UnionArrayValueToObjectKey<typeof API.GET_SOURCE_CONF_DATA.query> // reqQuery
+  >(API.GET_SOURCE_CONF_DATA.url, async (request, response) => {
+    const { config } = request.query;
+    if (!config) throw new Error("缺少 config 参数");
+    const absFile = resolveSourcePath(config);
     const data = new SourceConfig(absFile).getConfig();
     response.send(result.success(data));
   });

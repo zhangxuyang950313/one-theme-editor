@@ -1,8 +1,5 @@
 import { Canceler } from "axios";
 
-// 初始化传给后端的信息
-export type TypeInitPayload = Record<string, string>;
-
 // 文件的各种信息，用于可选传入，按执行效率优先级自行选取一个
 export type TypeFileData = {
   url?: string;
@@ -39,8 +36,13 @@ export type TypeReleaseXmlTempPayload = {
   release: string;
 };
 
-// 获取模板中 name 的值
-export type TypeGetValueByNamePayload = {
-  name: string;
-  releaseXml: string;
+// // 获取模板中 name 的值
+// export type TypeGetValueByNamePayload = {
+//   name: string;
+//   releaseXml: string;
+// };
+
+// 将一个数组 value 作为成对象的 key
+export type UnionArrayValueToObjectKey<T extends Array, V = string> = {
+  [k in T[number]]: V;
 };

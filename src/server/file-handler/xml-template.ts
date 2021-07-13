@@ -4,8 +4,9 @@ import PATHS from "server/utils/pathUtils";
 import XmlTemplate from "server/compiler/XmlTemplate";
 import {
   TypeReleaseXmlTempPayload,
-  TypeGetValueByNamePayload
+  UnionArrayValueToObjectKey
 } from "types/request";
+import API from "src/common/api";
 
 /**
  * 输出被 key value 处理过模板字符串的 xml 模板
@@ -26,7 +27,7 @@ export function releaseXmlTemplate(data: TypeReleaseXmlTempPayload): void {
  * @returns
  */
 export function getXmlTempValueByNameAttrVal(
-  data: TypeGetValueByNamePayload
+  data: UnionArrayValueToObjectKey<typeof API.GET_XML_TEMP_VALUE.query>
 ): string {
   return new XmlTemplate(data.releaseXml).getValueByName(data.name);
 }
