@@ -1,4 +1,4 @@
-import { projectInfoConfig } from "renderer/config/editor";
+// import { projectInfoConfig } from "renderer/config/editor";
 // import { TypeSourceConfigData } from "./source-config";
 import { TypeDatabase } from "./index";
 

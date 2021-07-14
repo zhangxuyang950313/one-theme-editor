@@ -9,17 +9,17 @@ import TopInfo from "./TopInfo";
 // 欢迎页侧边栏
 const Sidebar: React.FC = () => {
   const brandConfList = useBrandConfList();
-  const [currentBrandConf, setCurrentBrandConf] = useBrandConf();
+  const [brandConf, setBrandConf] = useBrandConf();
 
   const renderMenu = () => {
-    if (!brandConfList || !currentBrandConf) return null;
+    if (!brandConfList || !brandConf) return null;
     return (
       <Menu
         className="menu"
-        selectedKeys={[currentBrandConf.type]}
+        selectedKeys={[brandConf.type]}
         onSelect={v => {
           const brandInfo = brandConfList.find(o => v.key === o.type);
-          if (brandInfo) setCurrentBrandConf(brandInfo);
+          if (brandInfo) setBrandConf(brandInfo);
         }}
       >
         {brandConfList.map(item => (

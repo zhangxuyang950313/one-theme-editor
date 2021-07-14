@@ -26,14 +26,14 @@ export default function source(service: Express): void {
   );
 
   /**
-   * 获取配置预览列表
+   * 获取配置信息列表
    */
   service.get<
     UnionTupleToObjectKey<typeof API.GET_SOURCE_CONF_LIST.params>,
     TypeResponseFrame<TypeSourceConfigInfo[], string>
   >(`${API.GET_SOURCE_CONF_LIST.url}/:brandType`, (request, response) => {
     const { brandType } = request.params;
-    const list = SourceConfig.getSourceConfigBriefList(brandType);
+    const list = SourceConfig.getSourceConfigInfoList(brandType);
     response.send(result.success(list));
   });
 

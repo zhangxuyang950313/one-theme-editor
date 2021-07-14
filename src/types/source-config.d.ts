@@ -3,8 +3,8 @@ import {
   ALIGN_V_VALUES,
   ELEMENT_TYPES,
   VALUE_TYPES
-} from "src/enum";
-import XMLNodeBase from "server/compiler/XMLNodeElement";
+} from "../enum";
+import XMLNodeBase from "../server/compiler/XMLNodeElement";
 import { TypeImageData, TypeProjectUiVersion } from "./project";
 import { TypeImagePathLike } from "./index";
 
@@ -19,7 +19,7 @@ export type TypeSourceConfigInfo = {
 };
 
 // 资源配置数据
-export type TypeSourceConfigData = Omit<TypeSourceConfigInfo, "key"> & {
+export type TypeSourceConfigData = TypeSourceConfigInfo & {
   sourceTypeList: TypeSourceTypeConf[];
   moduleList: TypeSourceModuleConf[];
 };
@@ -74,7 +74,7 @@ export type TypeSourceCopyConf = {
 // 图片元素数据
 export type TypeSourceImageElement = {
   elementType: ELEMENT_TYPES.IMAGE;
-  valueType: VALUE_TYPES.IMAGE;
+  valueType: VALUE_TYPES.SOURCE;
   name: string;
   source: (TypeImageData & { url: string }) | null;
   layout: {

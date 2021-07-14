@@ -1,22 +1,22 @@
 import { updateState } from "@/store/utils";
-import { TypeBrandConf } from "types/project";
 import { TypeSourceConfigInfo } from "types/source-config";
+import { DataBrandConf } from "src/data-model/DataBrandConfig";
 import { ACTION_TYPES, TypeStarterActions } from "./action";
 
 // main states
 export type TypeStarterState = {
-  sourceConfigBriefList: TypeSourceConfigInfo[];
-  brandConfList: TypeBrandConf[];
-  brandConf: TypeBrandConf | null;
+  sourceConfigInfoList: TypeSourceConfigInfo[];
+  brandConfList: DataBrandConf[];
+  brandConf: DataBrandConf;
 };
 
 // 通用的数据
 const starterState: TypeStarterState = {
   // 配置预览列表
-  sourceConfigBriefList: [],
+  sourceConfigInfoList: [],
   // 品牌列表
   brandConfList: [],
-  brandConf: null
+  brandConf: new DataBrandConf()
 };
 
 export default function TemplateReducer(
@@ -37,7 +37,7 @@ export default function TemplateReducer(
     }
     case ACTION_TYPES.SET_SOURCE_BRIEF_LIST: {
       return updateState(state, {
-        sourceConfigBriefList: action.payload
+        sourceConfigInfoList: action.payload
       });
     }
     default:

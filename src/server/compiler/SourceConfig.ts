@@ -33,11 +33,11 @@ export default class SourceConfig extends BaseCompiler {
   }
 
   /**
-   * 解析当前厂商下所有配置简略信息
+   * 解析当前厂商下所有配置信息
    * @param brandType 厂商 type
    * @returns
    */
-  static getSourceConfigBriefList(brandType: string): TypeSourceConfigInfo[] {
+  static getSourceConfigInfoList(brandType: string): TypeSourceConfigInfo[] {
     const brandConfList = this.readBrandConf();
     const brandConf = brandConfList.find(item => item.type === brandType);
     if (!brandConf?.sourceConfigs) return [];
@@ -45,7 +45,7 @@ export default class SourceConfig extends BaseCompiler {
       .map(item => path.join(PATHS.SOURCE_CONFIG_DIR, item))
       .filter(fse.existsSync);
     return ensureConfigs.map(configFile =>
-      new SourceConfig(configFile).getBrief()
+      new SourceConfig(configFile).getInfo()
     );
   }
 
@@ -147,10 +147,10 @@ export default class SourceConfig extends BaseCompiler {
   }
 
   /**
-   * 解析配置配置的简短信息
+   * 解析配置配置的简略信息
    * 只解析 description.xml 不需要进一步解析页面
    */
-  getBrief(): TypeSourceConfigInfo {
+  getInfo(): TypeSourceConfigInfo {
     return {
       key: UUID(),
       url: path.relative(PATHS.SOURCE_CONFIG_DIR, this.getDescFile()),
@@ -166,7 +166,7 @@ export default class SourceConfig extends BaseCompiler {
    */
   getConfig(): TypeSourceConfigData {
     return {
-      ...this.getBrief(),
+      ...this.getInfo(),
       sourceTypeList: this.getSourceTypeList(),
       moduleList: this.getModuleList()
     };
