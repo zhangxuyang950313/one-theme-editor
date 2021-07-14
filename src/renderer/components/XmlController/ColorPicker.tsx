@@ -4,7 +4,7 @@ import { RgbaObject } from "hex-rgb";
 
 import { Input, message, Tooltip } from "antd";
 import { RGBColor, SketchPicker } from "react-color";
-import ColorUtil, { HEX_TYPES } from "common/ColorUtil";
+import ColorUtil, { HEX_TYPES } from "src/core/ColorUtil";
 import ColorBox from "./ColorBox";
 
 const rgba2sketch = (rgba: RgbaObject): RGBColor => {
@@ -24,7 +24,7 @@ type TypeColorChangerProps = {
 function ColorPicker(props: TypeColorChangerProps): JSX.Element {
   const { defaultColor, placeholder, onChange } = props;
   const [inputColor, setInputColor] = useState(defaultColor);
-  const [cssColor, setCssColor] = useState("#00000000");
+  const [cssColor, setCssColor] = useState("");
   const [rgbColor, setRgbColor] = useState<RgbaObject>();
   const RefInputPrev = useRef(inputColor);
 
@@ -53,36 +53,34 @@ function ColorPicker(props: TypeColorChangerProps): JSX.Element {
 
   return (
     <StyleColorPicker>
-      {rgbColor && (
-        <Tooltip
-          overlayInnerStyle={{
-            color: "black",
-            width: "320px",
-            boxSizing: "border-box"
-          }}
-          trigger="click"
-          color="transparent"
-          arrowPointAtCenter={true}
-          // placement="left"
-          overlay={
-            <SketchPicker
-              width="auto"
-              // presetColors={getLocalStorage.presetColors}
-              color={rgba2sketch(rgbColor)}
-              onChange={color => {
-                const rgba = sketch2rgba(color.rgb);
-                setInputColor(ColorUtil.rgbaFormat(rgba, HEX_TYPES.ARGB));
-              }}
-              onChangeComplete={color => {
-                const rgba = sketch2rgba(color.rgb);
-                onChange(ColorUtil.rgbaFormat(rgba, HEX_TYPES.ARGB));
-              }}
-            />
-          }
-        >
-          <ColorBox color={cssColor} />
-        </Tooltip>
-      )}
+      <Tooltip
+        overlayInnerStyle={{
+          color: "black",
+          width: "320px",
+          boxSizing: "border-box"
+        }}
+        trigger="click"
+        color="transparent"
+        arrowPointAtCenter={true}
+        // placement="left"
+        overlay={
+          <SketchPicker
+            width="auto"
+            // presetColors={getLocalStorage.presetColors}
+            color={rgbColor ? rgba2sketch(rgbColor) : ""}
+            onChange={color => {
+              const rgba = sketch2rgba(color.rgb);
+              setInputColor(ColorUtil.rgbaFormat(rgba, HEX_TYPES.ARGB));
+            }}
+            onChangeComplete={color => {
+              const rgba = sketch2rgba(color.rgb);
+              onChange(ColorUtil.rgbaFormat(rgba, HEX_TYPES.ARGB));
+            }}
+          />
+        }
+      >
+        <ColorBox color={cssColor} />
+      </Tooltip>
       <Input
         value={inputColor}
         defaultValue={inputColor}

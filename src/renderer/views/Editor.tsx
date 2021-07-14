@@ -8,7 +8,7 @@ import {
   useProjectData,
   useProjectPathname
 } from "@/hooks/project";
-import FSWatcherEvent from "common/FileWatcherEvent";
+import FileWatcher from "src/core/FileWatcher";
 import ModuleSelector from "@/components/Editor/ModuleSelector";
 import EditorToolsBar from "@/components/Editor/ToolsBar";
 import PageSelector from "@/components/Editor/PageSelector";
@@ -17,7 +17,7 @@ import ImageSourceList from "@/components/Editor/ImageSourceList";
 import XmlSourceList from "@/components/Editor/XmlSourceList";
 
 // 初始化目录监听器
-const projectWatcher = new FSWatcherEvent();
+const projectWatcher = new FileWatcher();
 export const EditorContext = React.createContext({
   projectWatcher
 });

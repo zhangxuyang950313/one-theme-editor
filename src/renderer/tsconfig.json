@@ -22,6 +22,7 @@
       "@/*": ["./*"],
       "src/*": ["../*"],
       "enum/*": ["../enum/*"],
+      "core/*": ["../core/*"],
       "data/*": ["../data-model/*"],
       "types/*": ["../types/*"],
       "common/*": ["../common/*"],

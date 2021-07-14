@@ -3,9 +3,9 @@ import { message } from "antd";
 import styled from "styled-components";
 import { RightCircleOutlined } from "@ant-design/icons";
 import { apiGetTempValueByName, apiOutputXmlTemplate } from "@/request";
-import { useProjectUUID, useProjectWatcher } from "@/hooks/project";
+import { useProjectUUID, useFileWatcher } from "@/hooks/project";
 import { TypeSourceValueElement } from "types/source-config";
-import ColorUtil, { HEX_TYPES } from "common/ColorUtil";
+import ColorUtil, { HEX_TYPES } from "src/core/ColorUtil";
 import ColorPicker from "./ColorPicker";
 import ColorBox from "./ColorBox";
 
@@ -15,16 +15,19 @@ const XmlController: React.FC<TypeSourceValueElement> = sourceConf => {
   const [defaultColor, setDefaultColor] = useState("");
   const [releaseColor, setReleaseColor] = useState("");
   const uuid = useProjectUUID();
-  useProjectWatcher(releaseXml, () => {
-    apiGetTempValueByName({
-      uuid,
-      name: releaseName,
-      releaseXml
-    })
-      .then(value => setReleaseColor(value))
-      .catch(err => message.error(err.message));
-  });
 
+  useFileWatcher(watcher => {
+    if (!uuid) return;
+    watcher.on(releaseXml, () => {
+      apiGetTempValueByName({
+        uuid,
+        name: releaseName,
+        releaseXml
+      })
+        .then(value => setReleaseColor(value))
+        .catch(err => message.error(err.message));
+    });
+  });
   useEffect(() => {
     try {
       setDefaultColor(
@@ -48,7 +51,7 @@ const XmlController: React.FC<TypeSourceValueElement> = sourceConf => {
           defaultColor={releaseColor}
           placeholder={defaultColor}
           onChange={color => {
-            apiOutputXmlTemplate({
+            apiOutputXmlTemplate(uuid, {
               key: releaseName,
               value: color,
               template: defaultXml,

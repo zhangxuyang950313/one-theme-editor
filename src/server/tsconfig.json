@@ -38,6 +38,7 @@
       "enum/*": ["../enum/*"],
       "data/*": ["../data-model/*"],
       "types/*": ["../types/*"],
+      "core/*": ["../core/*"],
       "common/*": ["../common/*"],
       "server/*": ["../server/*"],
       "renderer/*": ["../renderer/*"],

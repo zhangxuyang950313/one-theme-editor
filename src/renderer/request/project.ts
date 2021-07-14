@@ -79,9 +79,12 @@ export async function apiGetTempValueByName(
  * @returns
  */
 export async function apiOutputXmlTemplate(
+  uuid: string,
   data: TypeReleaseXmlTempPayload
 ): Promise<void | null> {
   return createHttp()
-    .post<TypeRequestResult<null>>(API.XML_TEMPLATE_RELEASE.url, data)
+    .post<TypeRequestResult<null>>(API.XML_TEMPLATE_RELEASE.url, data, {
+      params: { uuid }
+    })
     .then(data => data.data.data);
 }

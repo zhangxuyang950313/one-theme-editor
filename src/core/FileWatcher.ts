@@ -4,7 +4,7 @@ import { WatchOptions, FSWatcher } from "chokidar";
 /**
  * 文件监听器
  */
-class FSWatcherEvent {
+class FileWatcher {
   private dir?: string;
   private watcher?: FSWatcher;
   private listenerList: Array<{
@@ -49,6 +49,10 @@ class FSWatcherEvent {
     );
   }
 
+  clearListeners(): void {
+    this.listenerList = [];
+  }
+
   /**
    * 停止监听
    */
@@ -65,6 +69,13 @@ class FSWatcherEvent {
     await this.watcher?.close();
     console.debug("关闭监听", this.dir);
   }
+
+  getListeners(): Array<{
+    filepath: string;
+    listener: (path: string, stats?: Stats) => void;
+  }> {
+    return this.listenerList;
+  }
 }
 
-export default FSWatcherEvent;
+export default FileWatcher;

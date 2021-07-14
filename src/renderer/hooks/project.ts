@@ -1,6 +1,5 @@
 import path from "path";
 import { Stats } from "fs";
-import { useParams } from "react-router";
 import {
   useLayoutEffect,
   useEffect,
@@ -8,6 +7,7 @@ import {
   useCallback,
   useContext
 } from "react";
+import { useParams } from "react-router";
 import { apiGetProjectByUUID, apiGetProjectList } from "@/request/index";
 import { useAxiosCanceler } from "@/hooks/index";
 import {
@@ -30,8 +30,7 @@ import ERR_CODE from "common/errorCode";
 import { sleep } from "common/utils";
 import { notification } from "antd";
 import { EditorContext } from "@/views/Editor";
-import FSWatcherEvent from "common/FileWatcherEvent";
-import { useSelector } from "react-redux";
+import FileWatcher from "src/core/FileWatcher";
 
 // 获取项目列表
 export function useProjectList(): [
@@ -126,7 +125,7 @@ export function useProjectPathname(): string {
 
 // 工程 uuid
 export function useProjectUUID(): string {
-  return useSelector(getProjectUUID);
+  return useEditorSelector(getProjectUUID);
 }
 
 // 处理工程路径
@@ -156,15 +155,15 @@ export function useResolveSourcePath(relativePath: string): string {
 }
 
 // project Context hook
-export function useProjectContext(): { projectWatcher: FSWatcherEvent } {
+export function useProjectContext(): { projectWatcher: FileWatcher } {
   return useContext(EditorContext);
 }
 
 // 监听器
-export function useProjectWatcher(
+export function useProjectWatcher1(
   filepath: string,
   callback: (path: string, stats?: Stats) => void
-): FSWatcherEvent {
+): FileWatcher {
   const { projectWatcher } = useContext(EditorContext);
   useEffect(() => {
     projectWatcher.on(filepath, callback);
@@ -173,6 +172,16 @@ export function useProjectWatcher(
       projectWatcher.unwatch();
       projectWatcher.close();
     };
+  }, []);
+  return projectWatcher;
+}
+
+export function useFileWatcher(
+  callback: (watcher: FileWatcher) => void
+): FileWatcher {
+  const { projectWatcher } = useContext(EditorContext);
+  useEffect(() => {
+    callback(projectWatcher);
   }, []);
   return projectWatcher;
 }
