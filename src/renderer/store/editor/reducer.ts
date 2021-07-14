@@ -7,37 +7,40 @@ import {
 } from "types/source-config";
 import { TypeProjectDataDoc, TypeProjectInfo } from "types/project";
 import { updateState } from "@/store/utils";
+import ProjectData from "src/data-model/ProjectData";
+import ProjectInfo from "src/data-model/ProjectInfo";
+import SourceConfig from "src/data-model/SourceConfig";
 import { ACTION_TYPES, TypeEditorActions } from "./action";
 
 // main states
 export type TypeEditorState = {
-  projectData: TypeProjectDataDoc | null;
-  projectInfo: TypeProjectInfo | null;
-  uuid: string | null;
-  projectPathname: string | null;
-  sourceConfigUrl: string | null;
-  sourceConfig: TypeSourceConfigData | null;
+  projectData: ProjectData;
+  projectInfo: ProjectInfo;
+  uuid: string;
+  projectPathname: string;
+  sourceConfigUrl: string;
+  sourceConfig: SourceConfig;
   sourceTypeList: TypeSourceTypeConf[];
   sourceModuleList: TypeSourceModuleConf[];
   // sourceElementList: TypeSourceElement[];
-  sourceModuleConf: TypeSourceModuleConf | null;
-  sourcePageConf: TypeSourcePageConf | null;
+  sourceModuleConf: TypeSourceModuleConf;
+  sourcePageConf: TypeSourcePageConf;
   // sourcePageData: TypeSourcePageData | null;
   sourcePageDataMap: Record<string, TypeSourcePageData>;
 };
 
 const editorState: TypeEditorState = {
-  projectData: null,
-  projectInfo: null,
-  uuid: null,
-  projectPathname: null,
-  sourceConfigUrl: null,
-  sourceConfig: null,
+  projectData: new ProjectData(),
+  projectInfo: new ProjectInfo(),
+  uuid: "",
+  projectPathname: "",
+  sourceConfigUrl: "",
+  sourceConfig: new SourceConfig(),
   sourceTypeList: [],
   sourceModuleList: [],
   // sourceElementList: [],
-  sourceModuleConf: null,
-  sourcePageConf: null,
+  sourceModuleConf: {},
+  sourcePageConf: {},
   // sourcePageData: null,
   sourcePageDataMap: {}
 };

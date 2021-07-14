@@ -5,12 +5,12 @@ import { TypeActions } from "./action";
 
 type TypeBaseState = {
   port: number;
-  pathConfig: typeof PATHS_CONFIG | null;
+  pathConfig: Partial<typeof PATHS_CONFIG>;
 };
 
-const baseState: TypeBaseState = {
+const baseState: Required<TypeBaseState> = {
   port: 30000,
-  pathConfig: null
+  pathConfig: {}
 };
 
 export default function BaseReducer(
