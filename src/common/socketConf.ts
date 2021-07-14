@@ -1,5 +1,5 @@
 // socket 事件枚举
-enum SOCKET_EVENT {
+export enum SOCKET_EVENT {
   // 工程事件
   PROJECT = "PROJECT",
   // 监听资源文件
@@ -7,5 +7,3 @@ enum SOCKET_EVENT {
   // 监听文件变化
   WATCH_FILE = "WATCH_FILE"
 }
-
-export default SOCKET_EVENT;

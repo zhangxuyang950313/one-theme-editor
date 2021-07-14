@@ -1,7 +1,7 @@
 import { Canceler } from "axios";
 import { useLayoutEffect, useEffect, useState } from "react";
 import { InputProps, message } from "antd";
-import { apiGetPathConfig } from "server/api";
+import { apiGetPathConfig } from "@/request";
 import {
   getPathConfig,
   getServerPort
@@ -62,7 +62,7 @@ export function useAsyncUpdater(): (updater: () => void) => void {
 }
 
 // 获取编辑器路径配置
-export function usePathConfig(): TypePathConfig | null {
+export function usePathConfig(): Partial<TypePathConfig> {
   return useGlobalSelector(getPathConfig);
 }
 

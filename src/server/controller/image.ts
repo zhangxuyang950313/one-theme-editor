@@ -4,7 +4,7 @@ import FileType from "file-type";
 import { Express } from "express";
 import API from "common/apiConf";
 import PATHS from "server/utils/pathUtils";
-import ERR_CODE from "src/renderer/core/error-code";
+import ERR_CODE from "src/common/errorCode";
 import { UnionTupleToObjectKey } from "src/types/request";
 
 export default function image(service: Express): void {

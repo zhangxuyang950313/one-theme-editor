@@ -1,12 +1,9 @@
 import rgb2hex from "rgb-hex";
 import hex2rgb, { RgbaObject } from "hex-rgb";
-import { hexRegexp, hex6Regexp, hex8Regexp } from "./regexp";
+import { HEX_TYPES } from "../enum";
+import { hexRegexp, hex6Regexp, hex8Regexp } from "../common/regexp";
 
-export enum HEX_TYPES {
-  RGBA = "rgba",
-  ARGB = "argb",
-  RGB = "rgb"
-}
+export { HEX_TYPES };
 
 class ColorUtil {
   private hex: string;

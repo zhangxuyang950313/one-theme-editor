@@ -18,8 +18,8 @@ import {
   SourceTypeConf,
   UiVersion
 } from "data/SourceConfig";
-import ERR_CODE from "renderer/core/error-code";
 import PATHS from "server/utils/pathUtils";
+import ERR_CODE from "common/errorCode";
 import PageConfig from "./PageConfig";
 import XMLNodeBase from "./XMLNodeElement";
 import BaseCompiler from "./BaseCompiler";

@@ -1,11 +1,11 @@
-import PATHS_CONFIG from "server/utils/pathUtils";
 import ACTION_TYPES from "@/store/global/actionType";
 import { updateState } from "@/store/utils";
+import { TypePathConfig } from "server/utils/pathUtils";
 import { TypeActions } from "./action";
 
 type TypeBaseState = {
   port: number;
-  pathConfig: Partial<typeof PATHS_CONFIG>;
+  pathConfig: Partial<TypePathConfig>;
 };
 
 const baseState: Required<TypeBaseState> = {

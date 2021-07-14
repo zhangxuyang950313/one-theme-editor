@@ -43,6 +43,6 @@ export type TypeReleaseXmlTempPayload = {
 // };
 
 // 将一个元祖联合成对象的 key
-export type UnionTupleToObjectKey<T extends [], V = string> = {
+export type UnionTupleToObjectKey<T extends string[], V = string> = {
   [k in T[number]]: V;
 };

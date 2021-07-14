@@ -2,14 +2,14 @@ import path from "path";
 import React from "react";
 import styled from "styled-components";
 import { remote } from "electron";
-import ERR_CODE from "@/core/error-code";
+import ERR_CODE from "common/errorCode";
 import { notification } from "antd";
 import {
   DeleteOutlined,
   // FormOutlined,
   ImportOutlined
 } from "@ant-design/icons";
-import { apiDeleteFile } from "server/api";
+import { apiDeleteFile } from "@/request";
 import { asyncQueue } from "common/utils";
 import { useProjectPathname } from "@/hooks/project";
 import { useCopyReleaseWith } from "./hooks";

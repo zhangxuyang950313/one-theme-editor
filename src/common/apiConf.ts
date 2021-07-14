@@ -1,16 +1,16 @@
+import { TypeReleaseXmlTempPayload } from "../types/request";
 import {
   TypeCreateProjectPayload,
   TypeProjectData,
   TypeProjectInfo,
   TypeProjectUiVersion
-} from "src/types/project";
-import { TypeReleaseXmlTempPayload } from "src/types/request";
+} from "../types/project";
 
 type TypeApiConf<T = unknown> = Readonly<{
   url: string;
   params: string[];
   query: string[];
-  bodyKeys: T extends Record<string, unknown> ? [...Array<keyof T>] : string[];
+  bodyKeys: T extends Record<string, unknown> ? Array<keyof T> : string[];
   body: T;
 }>;
 

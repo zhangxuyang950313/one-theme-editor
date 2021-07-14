@@ -9,8 +9,8 @@ import {
   TypeSourceTypeConf
 } from "../types/source-config";
 import { TypeProjectUiVersion } from "../types/project";
-import { AbstractDataModel } from "../types/data-model";
-import { ALIGN_VALUES, ALIGN_V_VALUES } from "./../enum/index";
+import { ALIGN_VALUES, ALIGN_V_VALUES } from "../enum/index";
+import { AbstractDataModel } from "./abstract";
 
 export class SourcePageConf extends AbstractDataModel<TypeSourcePageConf> {
   data = {

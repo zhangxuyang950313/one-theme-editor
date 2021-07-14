@@ -5,7 +5,7 @@ import {
   apiGetSourceInfoList,
   apiGetSourceConfig,
   apiGetSourcePageConfData
-} from "server/api/index";
+} from "@/request/index";
 import { getSourceConfigRoot } from "@/store/global/modules/base/selector";
 import {
   ActionSetBrandInfoList,
@@ -53,7 +53,7 @@ import {
   useEditorSelector,
   useGlobalSelector
 } from "@/store/index";
-import ERR_CODE from "@/core/error-code";
+import ERR_CODE from "common/errorCode";
 import { asyncQueue } from "common/utils";
 import { useAsyncUpdater } from "./index";
 

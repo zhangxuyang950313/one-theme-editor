@@ -4,7 +4,7 @@ import { v4 as UUID } from "uuid";
 import { remote } from "electron";
 
 import { isDev } from "@/core/constant";
-import { apiCreateProject } from "server/api";
+import { apiCreateProject } from "@/request";
 import { useBrandConf, useSourceDescriptionList } from "@/hooks/source";
 import { TypeProjectInfo } from "types/project";
 import { TypeSourceConfigInfo } from "types/source-config";

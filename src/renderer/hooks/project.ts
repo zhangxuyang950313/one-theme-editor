@@ -8,7 +8,7 @@ import {
   useCallback,
   useContext
 } from "react";
-import { apiGetProjectByUUID, apiGetProjectList } from "server/api/index";
+import { apiGetProjectByUUID, apiGetProjectList } from "@/request/index";
 import { useAxiosCanceler } from "@/hooks/index";
 import {
   useBrandConf,
@@ -20,16 +20,18 @@ import { ActionSetProjectData } from "@/store/editor/action";
 import {
   getProjectData,
   getProjectInfo,
-  getProjectPathname
+  getProjectPathname,
+  getProjectUUID
 } from "@/store/editor/selector";
 import { useEditorDispatch, useEditorSelector } from "@/store/index";
 import { TypeProjectDataDoc, TypeProjectInfo } from "types/project";
 
-import ERR_CODE from "@/core/error-code";
+import ERR_CODE from "common/errorCode";
 import { sleep } from "common/utils";
 import { notification } from "antd";
 import { EditorContext } from "@/views/Editor";
 import FSWatcherEvent from "common/FileWatcherEvent";
+import { useSelector } from "react-redux";
 
 // 获取项目列表
 export function useProjectList(): [
@@ -120,6 +122,11 @@ export function useProjectInfo(): TypeProjectInfo {
 // 获取工程目录
 export function useProjectPathname(): string {
   return useEditorSelector(getProjectPathname);
+}
+
+// 工程 uuid
+export function useProjectUUID(): string {
+  return useSelector(getProjectUUID);
 }
 
 // 处理工程路径

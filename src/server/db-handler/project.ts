@@ -5,7 +5,7 @@ import { v4 as UUID } from "uuid";
 import Nedb from "nedb-promises";
 import PATHS, { resolveSourcePath } from "server/utils/pathUtils";
 import SourceConfig from "server/compiler/SourceConfig";
-import ERR_CODE from "renderer/core/error-code";
+import ERR_CODE from "common/errorCode";
 
 import {
   TypeCreateProjectPayload,

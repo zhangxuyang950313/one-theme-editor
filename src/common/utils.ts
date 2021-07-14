@@ -4,9 +4,9 @@ import fse from "fs-extra";
 import FileType from "file-type";
 import imageSizeOf from "image-size";
 import dirTree from "directory-tree";
-import ERR_CODE from "renderer/core/error-code";
 import { TypeImageData, TypeImageMapper } from "../types/project";
 import { placeholderRegexp, urlRegexp } from "./regexp";
+import ERR_CODE from "./errorCode";
 
 export const base64Regex = /^data:image\/\w+;base64,/;
 

@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { message } from "antd";
 import styled from "styled-components";
 import { RightCircleOutlined } from "@ant-design/icons";
-import { apiGetTempValueByName, apiOutputXmlTemplate } from "server/api";
-import { useProjectWatcher } from "@/hooks/project";
+import { apiGetTempValueByName, apiOutputXmlTemplate } from "@/request";
+import { useProjectUUID, useProjectWatcher } from "@/hooks/project";
 import { TypeSourceValueElement } from "types/source-config";
 import ColorUtil, { HEX_TYPES } from "common/ColorUtil";
 import ColorPicker from "./ColorPicker";
@@ -14,11 +14,12 @@ const XmlController: React.FC<TypeSourceValueElement> = sourceConf => {
     sourceConf;
   const [defaultColor, setDefaultColor] = useState("");
   const [releaseColor, setReleaseColor] = useState("");
-  const uuid = useProjectWatcher(releaseXml, () => {
+  const uuid = useProjectUUID();
+  useProjectWatcher(releaseXml, () => {
     apiGetTempValueByName({
-      // uuid: ,
+      uuid,
       name: releaseName,
-      releaseXml: releaseXml
+      releaseXml
     })
       .then(value => setReleaseColor(value))
       .catch(err => message.error(err.message));
@@ -51,7 +52,7 @@ const XmlController: React.FC<TypeSourceValueElement> = sourceConf => {
               key: releaseName,
               value: color,
               template: defaultXml,
-              release: releaseXml
+              releaseXml
             });
           }}
         />

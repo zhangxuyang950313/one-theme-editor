@@ -19,3 +19,9 @@ export enum ALIGN_V_VALUES {
   CENTER = "center",
   BOTTOM = "bottom"
 }
+
+export enum HEX_TYPES {
+  RGBA = "rgba",
+  ARGB = "argb",
+  RGB = "rgb"
+}

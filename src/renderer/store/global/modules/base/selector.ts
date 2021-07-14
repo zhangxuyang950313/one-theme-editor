@@ -15,5 +15,5 @@ export const getPathConfig = createSelector(
 
 export const getSourceConfigRoot = createSelector(
   getPathConfig,
-  state => state?.SOURCE_CONFIG_DIR || ""
+  state => state.SOURCE_CONFIG_DIR || ""
 );

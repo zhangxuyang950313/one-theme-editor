@@ -1,6 +1,6 @@
 import io from "socket.io-client";
 import { HOST, PORT } from "common/config";
-import SOCKET_EVENT from "common/socket-event";
+import { SOCKET_EVENT } from "common/socketConf";
 import { TypeImageMapper, TypeProjectDataDoc } from "types/project";
 
 const socket = io(`ws://${HOST}:${PORT}`);

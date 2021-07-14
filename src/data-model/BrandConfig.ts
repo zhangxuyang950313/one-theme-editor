@@ -1,5 +1,5 @@
-import { AbstractDataModel } from "../types/data-model";
 import { TypeBrandConf, TypeBrandInfo } from "../types/project";
+import { AbstractDataModel } from "./abstract";
 
 export class BrandInfo extends AbstractDataModel<TypeBrandInfo> {
   data = {

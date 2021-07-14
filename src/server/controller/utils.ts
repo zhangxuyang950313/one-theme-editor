@@ -3,7 +3,7 @@ import { Express } from "express";
 
 import API from "common/apiConf";
 import PATHS from "server/utils/pathUtils";
-import ERR_CODE from "renderer/core/error-code";
+import ERR_CODE from "common/errorCode";
 import { checkParamsKey, result } from "server/utils/utils";
 import { TypeResponseFrame, UnionTupleToObjectKey } from "types/request";
 import { compactNinePatch } from "server/core/pack";

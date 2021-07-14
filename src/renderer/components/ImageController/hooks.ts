@@ -1,9 +1,9 @@
 import path from "path";
 import { useState, useEffect } from "react";
 import { notification } from "antd";
-import { apiCopyFile } from "server/api";
+import { apiCopyFile } from "@/request";
 import { useProjectPathname } from "@/hooks/project";
-import ERR_CODE from "@/core/error-code";
+import ERR_CODE from "common/errorCode";
 
 export function useCopyReleaseWith(
   releaseList: string[],
