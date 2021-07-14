@@ -71,6 +71,15 @@ export type TypeSourceCopyConf = {
   release: string;
 };
 
+export type TypeLayoutConf = {
+  x: string;
+  y: string;
+  w: string;
+  h: string;
+  align: ALIGN_VALUES;
+  alignV: ALIGN_V_VALUES;
+};
+
 // 图片元素数据
 export type TypeSourceImageElement = {
   elementType: ELEMENT_TYPES.IMAGE;
@@ -135,5 +144,5 @@ export type TypeSourceXmlKeyValMapperMap = Map<string, XMLNodeBase>;
 export type TypeSourceTypeConf = {
   tag: string;
   name: string;
-  type: "image" | "xml";
+  type: "image" | "xml" | string;
 };

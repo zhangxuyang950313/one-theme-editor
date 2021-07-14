@@ -19,7 +19,8 @@ import {
   TypeXmlTempKeyValMap
 } from "types/source-config";
 import XMLNodeElement from "server/compiler/XMLNodeElement";
-import TempKeyValMapper from "./TempKeyValMapper";
+import { ElementLayoutConf, SourcePageData } from "data/SourceConfig";
+// import TempKeyValMapper from "./TempKeyValMapper";
 import BaseCompiler from "./BaseCompiler";
 import XmlTemplate from "./XmlTemplate";
 
@@ -360,14 +361,14 @@ export default class PageConfig extends BaseCompiler {
    * @returns
    */
   private layoutConf(node: XMLNodeElement) {
-    return {
-      x: node.getAttributeOf("x"),
-      y: node.getAttributeOf("y"),
-      w: node.getAttributeOf("w"),
-      h: node.getAttributeOf("h"),
-      align: node.getAttributeOf("align", ALIGN_VALUES.LEFT),
-      alignV: node.getAttributeOf("alignV", ALIGN_V_VALUES.TOP)
-    };
+    return new ElementLayoutConf()
+      .set("x", node.getAttributeOf("x"))
+      .set("y", node.getAttributeOf("y"))
+      .set("w", node.getAttributeOf("w"))
+      .set("h", node.getAttributeOf("h"))
+      .set("align", node.getAttributeOf("align", ALIGN_VALUES.LEFT))
+      .set("alignV", node.getAttributeOf("alignV", ALIGN_V_VALUES.TOP))
+      .create();
   }
 
   /**
@@ -398,15 +399,15 @@ export default class PageConfig extends BaseCompiler {
   }
 
   getData(): TypeSourcePageData {
-    return {
-      url: this.relativePath(path.basename(this.getFile())),
-      version: this.getVersion(),
-      description: this.getDescription(),
-      screenWidth: this.getScreenWidth(),
-      previewList: this.getPreviewList(),
-      elementList: this.getLayoutElementList(),
-      templateList: this.getXmlTempListForUI(),
-      copyList: this.getCopyConfList()
-    };
+    return new SourcePageData()
+      .set("url", this.relativePath(path.basename(this.getFile())))
+      .set("version", this.getVersion())
+      .set("description", this.getDescription())
+      .set("screenWidth", this.getScreenWidth())
+      .set("previewList", this.getPreviewList())
+      .set("elementList", this.getLayoutElementList())
+      .set("templateList", this.getXmlTempListForUI())
+      .set("copyList", this.getCopyConfList())
+      .create();
   }
 }

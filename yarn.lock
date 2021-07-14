@@ -5309,11 +5309,6 @@ expand-tilde@^2.0.0, expand-tilde@^2.0.2:
   dependencies:
     homedir-polyfill "^1.0.1"
 
-express-async-await-errors@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.nlark.com/express-async-await-errors/download/express-async-await-errors-1.1.1.tgz#ad40fbdb7409e60a734ecbb3bd06cba15386f7af"
-  integrity sha1-rUD723QJ5gpzTsuzvQbLoVOG968=
-
 express-async-errors@^3.1.1:
   version "3.1.1"
   resolved "https://registry.npm.taobao.org/express-async-errors/download/express-async-errors-3.1.1.tgz#6053236d61d21ddef4892d6bd1d736889fc9da41"

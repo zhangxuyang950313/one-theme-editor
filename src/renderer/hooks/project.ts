@@ -37,7 +37,7 @@ export function useProjectList(): [
   boolean,
   () => Promise<void>
 ] {
-  // 使用机型进行隔离查询
+  // 使用机型隔离查询
   const [brandConf] = useBrandConf();
   const [value, updateValue] = useState<TypeProjectDataDoc[]>([]);
   const [loading, updateLoading] = useState<boolean>(true);
@@ -45,7 +45,7 @@ export function useProjectList(): [
 
   const refresh = useCallback(async () => {
     updateLoading(true);
-    if (!brandConf) return;
+    if (!brandConf.type) return;
     return apiGetProjectList(brandConf, registerCancelToken)
       .then(projects => {
         console.log("获取工程列表：", projects);
@@ -69,7 +69,7 @@ export function useProjectList(): [
  * @returns
  */
 export function useFetchProjectData(): [
-  TypeProjectDataDoc | null,
+  TypeProjectDataDoc,
   boolean,
   () => Promise<void>
 ] {
@@ -108,17 +108,17 @@ export function useLoadProject(): boolean {
 }
 
 // 获取工程数据
-export function useProjectData(): TypeProjectDataDoc | null {
+export function useProjectData(): TypeProjectDataDoc {
   return useEditorSelector(getProjectData);
 }
 
 // 获取 工程描述信息
-export function useProjectInfo(): TypeProjectInfo | null {
+export function useProjectInfo(): TypeProjectInfo {
   return useEditorSelector(getProjectInfo);
 }
 
 // 获取工程目录
-export function useProjectPathname(): string | null {
+export function useProjectPathname(): string {
   return useEditorSelector(getProjectPathname);
 }
 

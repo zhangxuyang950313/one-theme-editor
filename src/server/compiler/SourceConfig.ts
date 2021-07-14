@@ -10,6 +10,14 @@ import {
   TypeSourceTypeConf
 } from "types/source-config";
 import { TypeBrandConf, TypeProjectUiVersion } from "types/project";
+import {
+  SourceConfigInfo,
+  SourceModuleConf,
+  SourcePageConf,
+  SourcePageGroupConf,
+  SourceTypeConf,
+  UiVersion
+} from "data/SourceConfig";
 import ERR_CODE from "renderer/core/error-code";
 import PATHS from "server/utils/pathUtils";
 import PageConfig from "./PageConfig";
@@ -70,14 +78,12 @@ export default class SourceConfig extends BaseCompiler {
 
   // 名称
   getName(): string {
-    const rootNode = super.getRootNode();
-    return rootNode.getAttributeOf("name");
+    return super.getRootNode().getAttributeOf("name");
   }
 
   // 版本
   getVersion(): string {
-    const rootNode = super.getRootNode();
-    return rootNode.getAttributeOf("version");
+    return super.getRootNode().getAttributeOf("version");
   }
 
   // 预览图
@@ -90,20 +96,23 @@ export default class SourceConfig extends BaseCompiler {
   // UI信息
   getUiVersion(): TypeProjectUiVersion {
     const uiVersionNode = super.getRootFirstChildNodeOf("uiVersion");
-    return {
-      name: uiVersionNode.getAttributeOf("name"),
-      code: uiVersionNode.getAttributeOf("code")
-    };
+    return new UiVersion()
+      .set("name", uiVersionNode.getAttributeOf("name"))
+      .set("code", uiVersionNode.getAttributeOf("code"))
+      .create();
   }
 
   // 素材类型定义列表
   getSourceTypeList(): TypeSourceTypeConf[] {
-    const sourceNodeList = super.getRootChildrenNodesOf("source");
-    return sourceNodeList.map(item => ({
-      tag: item.getAttributeOf("tag"),
-      name: item.getAttributeOf("name"),
-      type: item.getAttributeOf("type")
-    }));
+    return super
+      .getRootChildrenNodesOf("source")
+      .map(item =>
+        new SourceTypeConf()
+          .set("tag", item.getAttributeOf("tag"))
+          .set("name", item.getAttributeOf("name"))
+          .set("type", item.getAttributeOf("type"))
+          .create()
+      );
   }
 
   // 页面配置列表
@@ -114,36 +123,41 @@ export default class SourceConfig extends BaseCompiler {
       const previewList = new PageConfig(
         this.resolvePath(src)
       ).getPreviewList();
-      return {
-        key: UUID(),
-        name: node.getAttributeOf("name"),
-        preview: previewList[0],
-        src: this.relativePath(src)
-      };
+      return new SourcePageConf()
+        .set("key", UUID())
+        .set("name", node.getAttributeOf("name"))
+        .set("preview", previewList[0])
+        .set("src", this.relativePath(src))
+        .create();
     });
   }
 
   // 页面分组数据
   getPageGroupList(groupNodeList: XMLNodeBase[]): TypeSourcePageGroupConf[] {
     return groupNodeList.map(groupNode => {
-      const group: TypeSourcePageGroupConf = {
-        name: groupNode.getAttributeOf("name"),
-        pageList: this.getPageList(groupNode.getChildrenNodesByTagname("page"))
-      };
-      return group;
+      const pageList = this.getPageList(
+        groupNode.getChildrenNodesByTagname("page")
+      );
+      return new SourcePageGroupConf()
+        .set("name", groupNode.getAttributeOf("name"))
+        .set("pageList", pageList)
+        .create();
     });
   }
 
   // 模块配置数据
   getModuleList(): TypeSourceModuleConf[] {
-    return super.getRootChildrenNodesOf("module").map((moduleNode, index) => ({
-      index,
-      name: moduleNode.getAttributeOf("name"),
-      icon: this.relativePath(moduleNode.getAttributeOf("icon")),
-      groupList: this.getPageGroupList(
+    return super.getRootChildrenNodesOf("module").map((moduleNode, index) => {
+      const groupList = this.getPageGroupList(
         moduleNode.getChildrenNodesByTagname("group")
-      )
-    }));
+      );
+      return new SourceModuleConf()
+        .set("index", index)
+        .set("name", moduleNode.getAttributeOf("name"))
+        .set("icon", this.relativePath(moduleNode.getAttributeOf("icon")))
+        .set("groupList", groupList)
+        .create();
+    });
   }
 
   /**
@@ -151,14 +165,14 @@ export default class SourceConfig extends BaseCompiler {
    * 只解析 description.xml 不需要进一步解析页面
    */
   getInfo(): TypeSourceConfigInfo {
-    return {
-      key: UUID(),
-      url: path.relative(PATHS.SOURCE_CONFIG_DIR, this.getDescFile()),
-      name: this.getName(),
-      version: this.getVersion(),
-      preview: this.getPreview(),
-      uiVersion: this.getUiVersion()
-    };
+    return new SourceConfigInfo()
+      .set("key", UUID())
+      .set("url", path.relative(PATHS.SOURCE_CONFIG_DIR, this.getDescFile()))
+      .set("name", this.getName())
+      .set("version", this.getVersion())
+      .set("preview", this.getPreview())
+      .set("uiVersion", this.getUiVersion())
+      .create();
   }
 
   /**

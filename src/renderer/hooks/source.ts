@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useState, useCallback } from "react";
 import { message, notification } from "antd";
 import {
   apiGetBrandConfList,
-  apiGetSourceDescriptionList,
+  apiGetSourceInfoList,
   apiGetSourceConfig,
   apiGetSourcePageConfData
 } from "server/api/index";
@@ -61,7 +61,7 @@ import { useAsyncUpdater } from "./index";
  * 获取当前资源配置数据
  * @returns
  */
-export function useSourceConfig(): TypeSourceConfigData | null {
+export function useSourceConfig(): TypeSourceConfigData {
   return useEditorSelector(getSourceConfig);
 }
 
@@ -69,7 +69,7 @@ export function useSourceConfig(): TypeSourceConfigData | null {
  * 获取当前资源配置目录
  * @returns
  */
-export function useSourceConfigRoot(): string | null {
+export function useSourceConfigRoot(): string {
   return useGlobalSelector(getSourceConfigRoot);
 }
 
@@ -78,7 +78,7 @@ export function useSourceConfigRoot(): string | null {
  * @returns
  */
 export function useBrandConf(): [
-  TypeBrandConf | null,
+  TypeBrandConf,
   (brandConf: TypeBrandConf) => void
 ] {
   const dispatch = useStarterDispatch();
@@ -122,8 +122,8 @@ export function useSourceDescriptionList(): [TypeSourceConfigInfo[], boolean] {
   const [brandConf] = useBrandConf();
   const dispatch = useStarterDispatch();
   useLayoutEffect(() => {
-    if (!brandConf) return;
-    apiGetSourceDescriptionList(brandConf.type)
+    if (!brandConf.type) return;
+    apiGetSourceInfoList(brandConf.type)
       .then(data => {
         console.log("配置预览列表：", data);
         updateValue(data);
@@ -146,7 +146,7 @@ export function useSourceDescriptionList(): [TypeSourceConfigInfo[], boolean] {
  * @returns
  */
 export function useFetchSourceConfig(): [
-  TypeSourceConfigData | null,
+  TypeSourceConfigData,
   boolean,
   () => Promise<void>
 ] {
@@ -175,7 +175,7 @@ export function useFetchSourceConfig(): [
  * 获取资源配置文件 url
  * @returns
  */
-export function useSourceConfigUrl(): string | null {
+export function useSourceConfigUrl(): string {
   return useEditorSelector(getSourceConfigUrl);
 }
 
@@ -192,7 +192,7 @@ export function useModuleList(): TypeSourceModuleConf[] {
  * @returns
  */
 export function useModuleConf(): [
-  TypeSourceModuleConf | null,
+  TypeSourceModuleConf,
   (data: TypeSourceModuleConf) => void
 ] {
   const dispatch = useEditorDispatch();
@@ -214,7 +214,7 @@ export function usePageGroupList(): TypeSourcePageGroupConf[] {
  * @returns
  */
 export function usePageConf(): [
-  TypeSourcePageConf | null,
+  TypeSourcePageConf,
   (data: TypeSourcePageConf) => void
 ] {
   const dispatch = useEditorDispatch();

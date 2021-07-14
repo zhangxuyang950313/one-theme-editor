@@ -10,7 +10,7 @@ import ImageDisplay from "./ImageDisplay";
 const LeftDisplay: React.FC<{ src: string; name: string }> = props => {
   const { src, name } = props;
   const sourceConfigRoot = useSourceConfigRoot();
-  const filepath = path.join(sourceConfigRoot || "", src || "");
+  const filepath = path.join(sourceConfigRoot, src);
   const imageUrl = useImageUrl(filepath);
 
   const previewSource = () => {

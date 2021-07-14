@@ -21,10 +21,12 @@
     "paths": {
       "@/*": ["./*"],
       "src/*": ["../*"],
+      "enum/*": ["../enum/*"],
+      "data/*": ["../data-model/*"],
+      "types/*": ["../types/*"],
       "common/*": ["../common/*"],
       "server/*": ["../server/*"],
       "renderer/*": ["../renderer/*"],
-      "types/*": ["../types/*"]
     },
     "types": ["webpack", "webpack-env", "node"]
   },

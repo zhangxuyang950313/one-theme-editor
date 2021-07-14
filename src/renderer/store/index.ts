@@ -22,6 +22,7 @@ export const useStarterContext = () => useContext(StarterStore.context);
 
 // 编辑器
 export const EditorStore = createStoreFactory("Editor", EditorReducers);
+export const EditorState = EditorStore.store.getState();
 export const useEditorStore = EditorStore.storeHook;
 export const useEditorDispatch = EditorStore.dispatchHook;
 export const useEditorSelector = EditorStore.selectorHook;

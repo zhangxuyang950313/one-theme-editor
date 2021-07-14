@@ -39,7 +39,7 @@ export default function utils(service: Express): void {
     TypeResponseFrame<null, string>, // resBody
     UnionTupleToObjectKey<typeof API.COPY_FILE.bodyKeys> // reqBody
   >(API.COPY_FILE.url, (request, response) => {
-    checkParamsKey(request.query, API.COPY_FILE.bodyKeys);
+    checkParamsKey(request.body, API.COPY_FILE.bodyKeys);
     const { from, to } = request.body;
     if (!fse.existsSync(from)) {
       response.status(400).send(result.fail(ERR_CODE[4003]));
@@ -55,7 +55,7 @@ export default function utils(service: Express): void {
     TypeResponseFrame<null, string>,
     UnionTupleToObjectKey<typeof API.DELETE_FILE.bodyKeys>
   >(API.DELETE_FILE.url, (request, response) => {
-    checkParamsKey(request.query, API.DELETE_FILE.bodyKeys);
+    checkParamsKey(request.body, API.DELETE_FILE.bodyKeys);
     const { file } = request.body;
     if (!fse.existsSync(file)) {
       response.status(400).send(result.fail(ERR_CODE[4003]));

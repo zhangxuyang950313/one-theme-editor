@@ -1,13 +1,14 @@
 import { updateState } from "@/store/utils";
+import { TypeBrandConf } from "types/project";
 import { TypeSourceConfigInfo } from "types/source-config";
-import { DataBrandConf } from "src/data-model/DataBrandConfig";
+import { BrandConf } from "data/BrandConfig";
 import { ACTION_TYPES, TypeStarterActions } from "./action";
 
 // main states
 export type TypeStarterState = {
   sourceConfigInfoList: TypeSourceConfigInfo[];
-  brandConfList: DataBrandConf[];
-  brandConf: DataBrandConf;
+  brandConfList: TypeBrandConf[];
+  brandConf: TypeBrandConf;
 };
 
 // 通用的数据
@@ -16,7 +17,7 @@ const starterState: TypeStarterState = {
   sourceConfigInfoList: [],
   // 品牌列表
   brandConfList: [],
-  brandConf: new DataBrandConf()
+  brandConf: BrandConf.default()
 };
 
 export default function TemplateReducer(

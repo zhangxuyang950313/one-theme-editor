@@ -10,15 +10,10 @@ export function useCopyReleaseWith(
   sourceName: string
 ): (copyFrom: string) => void {
   const projectPathname = useProjectPathname();
-
   // 拷贝到模板素材
   return (file: string) => {
-    if (!(Array.isArray(releaseList) && releaseList.length > 0)) {
+    if (Array.isArray(releaseList) && releaseList.length === 0) {
       notification.warn({ message: `"${sourceName}"${ERR_CODE[3006]}` });
-      return;
-    }
-    if (!projectPathname) {
-      notification.warn({ message: ERR_CODE[2001] });
       return;
     }
     releaseList.forEach(item => {

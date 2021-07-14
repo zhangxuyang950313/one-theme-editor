@@ -16,7 +16,7 @@ export async function apiGetBrandConfList(): Promise<TypeBrandConf[]> {
 }
 
 // 获取厂商配置描述列表
-export async function apiGetSourceDescriptionList(
+export async function apiGetSourceInfoList(
   brandType: TypeBrandConf["type"]
 ): Promise<TypeSourceConfigInfo[]> {
   return createHttp()

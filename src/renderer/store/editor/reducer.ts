@@ -1,29 +1,28 @@
+import { updateState } from "@/store/utils";
+import { TypeProjectDataDoc, TypeProjectInfo } from "types/project";
 import {
   TypeSourceTypeConf,
   TypeSourceModuleConf,
   TypeSourcePageConf,
-  TypeSourcePageData
+  TypeSourcePageData,
+  TypeSourceConfigData
 } from "types/source-config";
-import { updateState } from "@/store/utils";
 import {
-  DataProjectData,
-  DataProjectInfo
-} from "src/data-model/DataProjectData";
-import {
-  DataSourceConfig,
-  DataSourceModuleConf,
-  DataSourcePageConf
-} from "src/data-model/DataSourceConfig";
+  SourceConfigData,
+  SourceModuleConf,
+  SourcePageConf
+} from "data/SourceConfig";
+import { ProjectData, ProjectInfo } from "data/ProjectData";
 import { ACTION_TYPES, TypeEditorActions } from "./action";
 
 // main states
 export type TypeEditorState = {
-  projectData: DataProjectData;
-  projectInfo: DataProjectInfo;
+  projectData: TypeProjectDataDoc;
+  projectInfo: TypeProjectInfo;
   uuid: string;
   projectPathname: string;
   sourceConfigUrl: string;
-  sourceConfig: DataSourceConfig;
+  sourceConfig: TypeSourceConfigData;
   sourceTypeList: TypeSourceTypeConf[];
   sourceModuleList: TypeSourceModuleConf[];
   // sourceElementList: TypeSourceElement[];
@@ -34,17 +33,17 @@ export type TypeEditorState = {
 };
 
 const editorState: TypeEditorState = {
-  projectData: new DataProjectData(),
-  projectInfo: new DataProjectInfo(),
+  projectData: ProjectData.default(),
+  projectInfo: ProjectInfo.default(),
   uuid: "",
   projectPathname: "",
   sourceConfigUrl: "",
-  sourceConfig: new DataSourceConfig(),
+  sourceConfig: SourceConfigData.default(),
   sourceTypeList: [],
   sourceModuleList: [],
   // sourceElementList: [],
-  sourceModuleConf: new DataSourceModuleConf(),
-  sourcePageConf: new DataSourcePageConf(),
+  sourceModuleConf: SourceModuleConf.default(),
+  sourcePageConf: SourcePageConf.default(),
   // sourcePageData: null,
   sourcePageDataMap: {}
 };
