@@ -1,6 +1,6 @@
 import path from "path";
 import { Express } from "express";
-import API from "common/api";
+import API from "common/apiConf";
 import { TypeCreateProjectPayload, TypeProjectDataDoc } from "types/project";
 import { TypeResponseFrame, UnionTupleToObjectKey } from "types/request";
 import { result } from "server/utils/utils";

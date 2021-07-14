@@ -1,4 +1,4 @@
-import API from "common/api";
+import API from "common/apiConf";
 import { TypeBrandConf } from "types/project";
 import {
   TypeSourceConfigData,

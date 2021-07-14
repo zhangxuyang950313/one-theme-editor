@@ -1,5 +1,5 @@
 import { Express } from "express";
-import API from "common/api";
+import API from "common/apiConf";
 import {
   TypeSourceModuleConf,
   TypeSourcePageData,

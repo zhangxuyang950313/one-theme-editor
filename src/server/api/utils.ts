@@ -1,6 +1,6 @@
-import API from "common/api";
+import API from "common/apiConf";
 import { TypePathConfig } from "server/utils/pathUtils";
-import { TypeInitPayload, TypeRequestResult } from "types/request";
+import { TypeRequestResult } from "types/request";
 import { createHttp } from "./axios";
 
 /**
@@ -8,16 +8,18 @@ import { createHttp } from "./axios";
  * @param data
  * @returns
  */
-export async function apiInitCookies(data: TypeInitPayload): Promise<null> {
+export async function apiInitCookies(
+  data: Record<string, string>
+): Promise<null> {
   return createHttp()
-    .post<TypeRequestResult<null>>(API.INIT, data)
+    .post<TypeRequestResult<null>>(API.INIT.url, data)
     .then(data => data.data.data);
 }
 
 // 获取路径信息
 export async function apiGetPathConfig(): Promise<TypePathConfig> {
   return createHttp()
-    .get<TypeRequestResult<TypePathConfig>>(API.GET_PATH_CONFIG)
+    .get<TypeRequestResult<TypePathConfig>>(API.GET_PATH_CONFIG.url)
     .then(data => data.data.data);
 }
 
@@ -34,13 +36,13 @@ export async function apiGetPathConfig(): Promise<TypePathConfig> {
 // 复制文件
 export async function apiCopyFile(from: string, to: string): Promise<null> {
   return createHttp()
-    .post<TypeRequestResult<null>>(API.COPY_FILE, { from, to })
+    .post<TypeRequestResult<null>>(API.COPY_FILE.url, { from, to })
     .then(data => data.data.data);
 }
 
 // 删除文件
 export async function apiDeleteFile(file: string): Promise<null> {
   return createHttp()
-    .post<TypeRequestResult<null>>(API.DELETE_FILE, { file })
+    .post<TypeRequestResult<null>>(API.DELETE_FILE.url, { file })
     .then(data => data.data.data);
 }

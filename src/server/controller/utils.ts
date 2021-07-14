@@ -1,7 +1,7 @@
 import fse from "fs-extra";
 import { Express } from "express";
 
-import API from "common/api";
+import API from "common/apiConf";
 import PATHS from "server/utils/pathUtils";
 import ERR_CODE from "renderer/core/error-code";
 import { checkParamsKey, result } from "server/utils/utils";

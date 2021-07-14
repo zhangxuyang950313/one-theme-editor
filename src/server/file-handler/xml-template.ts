@@ -6,7 +6,7 @@ import {
   TypeReleaseXmlTempPayload,
   UnionTupleToObjectKey
 } from "types/request";
-import API from "src/common/api";
+import API from "src/common/apiConf";
 
 /**
  * 输出被 key value 处理过模板字符串的 xml 模板

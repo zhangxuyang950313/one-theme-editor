@@ -6,15 +6,13 @@ import {
 } from "src/types/project";
 import { TypeReleaseXmlTempPayload } from "src/types/request";
 
-type TypeApiConf<T = unknown> = {
-  readonly url: string;
-  readonly params: string[];
-  readonly query: string[];
-  readonly bodyKeys: T extends Record<string, unknown>
-    ? [...Array<keyof T>]
-    : never[] | string[];
-  readonly body: T;
-};
+type TypeApiConf<T = unknown> = Readonly<{
+  url: string;
+  params: string[];
+  query: string[];
+  bodyKeys: T extends Record<string, unknown> ? [...Array<keyof T>] : string[];
+  body: T;
+}>;
 
 function createApiConf<T>(
   obj: Partial<TypeApiConf<T>>
