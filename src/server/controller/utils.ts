@@ -27,7 +27,7 @@ export default function utils(service: Express): void {
 
   // 获取路径配置
   service.get<never, TypeResponseFrame<typeof PATHS>, typeof PATHS>(
-    API.GET_PATH_CONFIG,
+    API.GET_PATH_CONFIG.url,
     async (request, response) => {
       response.send(result.success(PATHS));
     }
@@ -97,7 +97,7 @@ export default function utils(service: Express): void {
   /**
    * 打包工程
    */
-  service.get(API.PACK_PROJECT, async (request, response) => {
+  service.get(API.PACK_PROJECT.url, async (request, response) => {
     const data = compactNinePatch();
     response.send(result.success(data));
   });

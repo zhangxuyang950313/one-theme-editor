@@ -11,7 +11,7 @@ import { createHttp } from "./axios";
 // 获取厂商列表
 export async function apiGetBrandConfList(): Promise<TypeBrandConf[]> {
   return createHttp()
-    .get<TypeRequestResult<TypeBrandConf[]>>(API.GET_BRAND_LIST)
+    .get<TypeRequestResult<TypeBrandConf[]>>(API.GET_BRAND_LIST.url)
     .then(data => data.data.data);
 }
 

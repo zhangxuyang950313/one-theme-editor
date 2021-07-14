@@ -18,7 +18,7 @@ export default function source(service: Express): void {
    * 获取厂商配置列表
    */
   service.get<never, TypeResponseFrame<TypeBrandConf[], string>>(
-    API.GET_BRAND_LIST,
+    API.GET_BRAND_LIST.url,
     (request, response) => {
       const brandConfList = SourceConfig.readBrandConf();
       response.send(result.success(brandConfList));
