@@ -17,12 +17,7 @@ type TypeProps = {
 
 // 配置管理
 const SourceConfigManager: React.FC<TypeProps> = props => {
-  const {
-    sourceConfigList,
-    selectedConfig: selectedSourceConfig,
-    isLoading,
-    onSelected
-  } = props;
+  const { sourceConfigList, selectedConfig, isLoading, onSelected } = props;
 
   if (isLoading) {
     return (
@@ -47,8 +42,8 @@ const SourceConfigManager: React.FC<TypeProps> = props => {
   return (
     <StyleSourceConfigCard>
       {sourceConfigList.map((item, key) => {
-        const isActive = selectedSourceConfig?.key === item.key;
-        const isInit = !selectedSourceConfig?.key;
+        const isActive = selectedConfig?.key === item.key;
+        const isInit = !selectedConfig?.key;
         return (
           <StyleCardContainer
             key={key}

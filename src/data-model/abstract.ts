@@ -3,7 +3,7 @@
  * ```typescript
  * class MyDataModel extends AbstractDataModel<{ a: number, b: number}> {
  *  // 默认值
- *  data = {  a: 0, b: 0  }
+ *  protected data = {  a: 0, b: 0  }
  * }
  * // how to use
  * new MyDataModel()

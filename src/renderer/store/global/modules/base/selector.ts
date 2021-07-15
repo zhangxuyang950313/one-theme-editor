@@ -13,7 +13,7 @@ export const getPathConfig = createSelector(
   state => state.pathConfig
 );
 
-export const getSourceConfigRoot = createSelector(
+export const getSourceConfigDir = createSelector(
   getPathConfig,
   state => state.SOURCE_CONFIG_DIR || ""
 );

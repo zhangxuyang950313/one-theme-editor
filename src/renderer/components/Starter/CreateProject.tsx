@@ -206,7 +206,7 @@ const CreateProject: React.FC<TypeProps> = props => {
           updateCreating(true);
           return apiCreateProject({
             projectPathname: projectPathnameRef.current || "",
-            sourceConfigUrl: sourceConfig.url,
+            sourceConfigUrl: sourceConfig.config,
             brandInfo: {
               name: brandConf.name,
               type: brandConf.type

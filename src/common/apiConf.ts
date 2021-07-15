@@ -6,17 +6,17 @@ import {
   TypeProjectUiVersion
 } from "../types/project";
 
-type TypeApiConf<T = unknown> = Readonly<{
+type TypeApiConf<T, Q extends string[]> = Readonly<{
   url: string;
   params: string[];
-  query: string[];
+  query: Q;
   bodyKeys: T extends Record<string, unknown> ? Array<keyof T> : string[];
   body: T;
 }>;
 
-function createApiConf<T>(
-  obj: Partial<TypeApiConf<T>>
-): Required<TypeApiConf<T>> {
+function createApiConf<T, Q extends string[], K extends Q[number]>(
+  obj: Partial<TypeApiConf<T, Array<K>>>
+): Required<TypeApiConf<T, Array<K>>> {
   return {
     url: "",
     params: [],
@@ -29,7 +29,7 @@ function createApiConf<T>(
 
 const API = {
   // 初始化，后端设置 cookies
-  INIT: createApiConf<Record<string, string>>({
+  INIT: createApiConf({
     url: "/init",
     body: {}
   }),
@@ -73,7 +73,7 @@ const API = {
   // 获取配置页面数据
   GET_SOURCE_CONF_PAGE_DATA: createApiConf({
     url: "/source/config/page/data",
-    query: ["config"]
+    query: ["namespace", "config"]
   }),
 
   // 创建工程
@@ -119,7 +119,7 @@ const API = {
   // 通过 name 查找工程的 value
   GET_XML_TEMP_VALUE: createApiConf({
     url: "/project/xml/value",
-    query: ["uuid", "name", "releaseXml"]
+    query: ["uuid", "name", "release"]
   }),
 
   // 复制文件

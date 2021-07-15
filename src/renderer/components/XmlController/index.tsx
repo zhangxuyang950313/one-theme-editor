@@ -10,19 +10,19 @@ import ColorPicker from "./ColorPicker";
 import ColorBox from "./ColorBox";
 
 const XmlController: React.FC<TypeSourceValueElement> = sourceConf => {
-  const { name, defaultXml, defaultValue, releaseName, releaseXml } =
-    sourceConf;
+  const { name, value } = sourceConf;
+  const { valueName, valueSrc, defaultValue } = value;
   const [defaultColor, setDefaultColor] = useState("");
   const [releaseColor, setReleaseColor] = useState("");
   const uuid = useProjectUUID();
 
   useFileWatcher(watcher => {
     if (!uuid) return;
-    watcher.on(releaseXml, () => {
+    watcher.on(valueSrc, () => {
       apiGetTempValueByName({
         uuid,
-        name: releaseName,
-        releaseXml
+        name: valueName,
+        release: valueSrc
       })
         .then(value => setReleaseColor(value))
         .catch(err => message.error(err.message));
@@ -42,7 +42,7 @@ const XmlController: React.FC<TypeSourceValueElement> = sourceConf => {
     <StyleXmlController>
       <div className="text-wrapper">
         <span className="name">{name}</span>
-        <span className="color-name">{releaseName}</span>
+        <span className="color-name">{valueName}</span>
       </div>
       <div className="color-wrapper">
         <ColorBox color={defaultColor} />
@@ -52,10 +52,10 @@ const XmlController: React.FC<TypeSourceValueElement> = sourceConf => {
           placeholder={defaultColor}
           onChange={color => {
             apiOutputXmlTemplate(uuid, {
-              key: releaseName,
+              key: valueName,
               value: color,
-              template: defaultXml,
-              releaseXml
+              template: "",
+              releaseXml: valueSrc
             });
           }}
         />

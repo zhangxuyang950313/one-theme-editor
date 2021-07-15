@@ -1,3 +1,4 @@
+import path from "path";
 import { useEffect, useLayoutEffect, useState, useCallback } from "react";
 import { message, notification } from "antd";
 import {
@@ -6,7 +7,7 @@ import {
   apiGetSourceConfig,
   apiGetSourcePageConfData
 } from "@/request/index";
-import { getSourceConfigRoot } from "@/store/global/modules/base/selector";
+import { getSourceConfigDir } from "@/store/global/modules/base/selector";
 import {
   ActionSetBrandInfoList,
   ActionSetSourceDescriptionList,
@@ -70,7 +71,9 @@ export function useSourceConfig(): TypeSourceConfigData {
  * @returns
  */
 export function useSourceConfigRoot(): string {
-  return useGlobalSelector(getSourceConfigRoot);
+  const sourceConfigUrl = useSourceConfigUrl();
+  const sourceConfigDir = useGlobalSelector(getSourceConfigDir);
+  return path.join(sourceConfigDir, path.dirname(sourceConfigUrl));
 }
 
 /**
@@ -237,10 +240,14 @@ export function useFetchPageConfData1(): [
   const [value, updateValue] = useState<TypeSourcePageData | null>(null);
   const dispatch = useEditorDispatch();
   const pageConf = usePageConf()[0];
+  const sourceConfigUrl = useSourceConfigUrl();
   const fetchData = async () => {
     if (!pageConf?.src) return;
     updateLoading(true);
-    const data = await apiGetSourcePageConfData(pageConf.src);
+    const data = await apiGetSourcePageConfData({
+      namespace: path.dirname(sourceConfigUrl),
+      config: pageConf.src
+    });
     updateValue(data);
     dispatch(ActionUpdatePageDataMap(data));
     updateLoading(false);
@@ -263,12 +270,16 @@ export function useFetchPageConfData(): [TypeSourcePageData[], boolean] {
   const [value, updateValue] = useState<TypeSourcePageData[]>([]);
   const dispatch = useEditorDispatch();
   const pageGroupList = usePageGroupList();
+  const sourceConfigUrl = useSourceConfigUrl();
 
   useEffect(() => {
     const pageConfDataQueue = pageGroupList
       .flatMap(item => item.pageList)
       .map(item => async () => {
-        const data = await apiGetSourcePageConfData(item.src);
+        const data = await apiGetSourcePageConfData({
+          namespace: path.dirname(sourceConfigUrl),
+          config: item.src
+        });
         dispatch(ActionUpdatePageDataMap(data));
         return data;
       });

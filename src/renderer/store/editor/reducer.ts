@@ -92,7 +92,7 @@ export default function EditorReducer(
       return updateState(state, {
         sourcePageDataMap: {
           ...state.sourcePageDataMap,
-          [action.payload.url]: action.payload
+          [action.payload.config]: action.payload
         }
       });
     }

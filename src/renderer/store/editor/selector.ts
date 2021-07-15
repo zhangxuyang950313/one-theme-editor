@@ -1,7 +1,7 @@
 import path from "path";
 import { createSelector } from "reselect";
 import { GlobalStore } from "@/store/index";
-import { ELEMENT_TYPES } from "src/enum";
+import { ELEMENT_TAG } from "src/enum";
 import { TypeEditorState } from "./reducer";
 
 // 数据
@@ -92,7 +92,7 @@ export const getSourceTypeList = createSelector(
 export const getSourceElementList = createSelector(getState, state => {
   const pageConfSrc = state.sourcePageConf.src;
   if (!pageConfSrc) return [];
-  return state.sourcePageDataMap[pageConfSrc].elementList || [];
+  return state.sourcePageDataMap[pageConfSrc]?.elementList || [];
 });
 
 // 获取图片元素列表
@@ -100,7 +100,7 @@ export const getSourceImageList = createSelector(
   getSourceElementList,
   elementList =>
     elementList.flatMap(item =>
-      item.elementType === ELEMENT_TYPES.IMAGE ? [item] : []
+      item.elementType === ELEMENT_TAG.IMAGE ? [item] : []
     )
 );
 
@@ -109,7 +109,7 @@ export const getSourceTextList = createSelector(
   getSourceElementList,
   elementList =>
     elementList.flatMap(item =>
-      item.elementType === ELEMENT_TYPES.TEXT ? [item] : []
+      item.elementType === ELEMENT_TAG.TEXT ? [item] : []
     )
 );
 

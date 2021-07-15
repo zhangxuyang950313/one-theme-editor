@@ -5,7 +5,7 @@ import {
   TypeSourceConfigInfo,
   TypeSourcePageData
 } from "types/source-config";
-import { TypeRequestResult } from "types/request";
+import { TypeRequestResult, UnionTupleToObjectKey } from "types/request";
 import { createHttp } from "./axios";
 
 // 获取厂商列表
@@ -40,12 +40,12 @@ export async function apiGetSourceConfig(
 
 // 获取页面配置数据
 export async function apiGetSourcePageConfData(
-  config: string
+  params: UnionTupleToObjectKey<typeof API.GET_SOURCE_CONF_PAGE_DATA.query>
 ): Promise<TypeSourcePageData> {
   return createHttp()
     .get<TypeRequestResult<TypeSourcePageData>>(
       API.GET_SOURCE_CONF_PAGE_DATA.url,
-      { params: { config } }
+      { params }
     )
     .then(data => data.data.data);
 }

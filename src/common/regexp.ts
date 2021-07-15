@@ -3,7 +3,7 @@ export const urlRegexp =
   /(https?|ftp|file):\/\/[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]/;
 
 // xml 模板占位符
-export const placeholderRegexp = /^\${(.+)}/;
+export const placeholderRegexp = /^\${(.+?)}/;
 
 // 占位符工程目录开头
 export const projectPrefixRegexp = /^\$\{project\}/;

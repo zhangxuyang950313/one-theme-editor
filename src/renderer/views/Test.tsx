@@ -22,8 +22,8 @@ const sourceConfigDir =
   "/Users/zhangxuyang/mine/one-theme-editor/static/resource/sourceConfig";
 const Test: React.FC = () => {
   useLayoutEffect(() => {
-    const page = new PageConfig(pageFile);
-    console.log(page.getData());
+    // const page = new PageConfig(pageFile);
+    // console.log(page.getData());
 
     const xmlTemplate = new XmlTemplate(xmlTempFile);
     const data = xmlTemplate.getElementList();

@@ -1,5 +1,5 @@
 import { js2xml, Element, Attributes, Options } from "xml-js";
-import { ELEMENT_TYPES } from "src/enum/index";
+import { ELEMENT_TAG } from "src/enum/index";
 
 const js2xmlOptions: Options.JS2XML = {
   spaces: 2,
@@ -32,7 +32,7 @@ class XMLNodeBase {
 
   // 节点类型
   // TODO：枚举所有类型
-  public getType(): ELEMENT_TYPES | string {
+  public getType(): ELEMENT_TAG | string {
     return this.node.type || "";
   }
 
@@ -97,7 +97,7 @@ class XMLNodeBase {
    * @param value
    */
   public setTextNodeValue(value: string): void {
-    if (this.getType() !== ELEMENT_TYPES.TEXT) return;
+    if (this.getType() !== ELEMENT_TAG.TEXT) return;
     this.node.text = value;
   }
 }
@@ -123,7 +123,7 @@ class XMLNodeChildren extends XMLNodeBase {
    */
   public getTextChildrenNodes(): XMLNodeElement[] {
     return this.getChildrenNodes().filter(
-      item => item.getType() === ELEMENT_TYPES.TEXT
+      item => item.getType() === ELEMENT_TAG.TEXT
     );
   }
 
@@ -151,7 +151,7 @@ class XMLNodeChildren extends XMLNodeBase {
    * @param type
    * @returns
    */
-  public getFirstChildNodeByType(type: ELEMENT_TYPES): XMLNodeElement {
+  public getFirstChildNodeByType(type: ELEMENT_TAG): XMLNodeElement {
     const childNode = this.getChildrenNodes().find(
       item => item.getType() === type
     );
@@ -187,7 +187,7 @@ class XMLNodeChildren extends XMLNodeBase {
    */
   public getFirstTextChildNode(): XMLNodeElement {
     const childNode = this.getChildrenNodes().find(
-      item => item.getType() === ELEMENT_TYPES.TEXT
+      item => item.getType() === ELEMENT_TAG.TEXT
     );
     return childNode || XMLNodeElement.createEmptyNode();
   }

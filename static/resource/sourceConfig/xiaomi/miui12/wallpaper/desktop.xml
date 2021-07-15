@@ -1,106 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<page version="1.0.0" description="桌面壁纸和首屏图标" screenWidth="1080">
-
-    <templates>
-        <!-- 
-            src: 定义 xml 数据模板
-            to/release: 释放到工程目录位置
-            values?：定义变量映射
-        -->
-        <template src="theme_values.xml" to="wallpaper/theme_values.xml" values="values.xml"/>
-        <!-- 如果没有 value 属性，则直接复制 -->
-        <template src="theme_fallback.xml" to="wallpaper/theme_fallback.xml"/>
-    </templates>
+<Page version="1.0.0" description="桌面壁纸和首屏图标" screenWidth="1080">
 
     <!-- 静态预览图 -->
-    <previews>
-        <preview src="../preview/preview.jpg"/>
-    </previews>
+    <Previews>
+        <Preview src="../preview/preview.jpg"/>
+        <Preview src="../preview/preview1.jpg"/>
+    </Previews>
 
 
     <!-- 动态预览配置 -->
-    <layout>
+    <Layout>
         <!-- 图片资源 -->
-        <image
+        <Image
             name="桌面壁纸"
             x="540" y="0" w="1080" h="2340" align="center"
-            src="./default_wallpaper.jpg"
-        >
-            <to>wallpaper/default_wallpaper.jpg</to>
-        </image>
-
+            src="${root}/wallpaper/default_wallpaper.jpg"
+        />
         <!-- 底栏图标 -->
-        <image 
+        <Image 
             name="拨号" 
             x="160" y="2150" w="186" h="186" align="center" alignV="center" 
-            src="../icons/res/com.android.contacts.activities.TwelveKeyDialer.png"
-        >
-            <to>icons/res/com.android.contacts.activities.TwelveKeyDialer.png</to>
-        </image>
-
-
-        <!-- color="file://./theme_values.xml?name=action_bar_title_text_color_light" -->   
-        <!-- color="file=./theme_values.xml&amp;name=action_bar_title_text_color_light" -->
-        <color 
+            src="${root}/icons/res/com.android.contacts.activities.TwelveKeyDialer.png"
+        />
+        <Text 
             name="图标字体"
             text="拨号"
             x="415" y="1250" size="36" align="center" alignV="center"
-            default="file=../com.miui.home/theme_values.xml&amp;name=icon_title_text"
-        >
-            <to>file=com.miui.home/theme_values.xml&amp;name=icon_title_text</to>
-        </color>
-        <image
+            value="src=${root}/com.miui.home/theme_values.xml&amp;name=icon_title_text"
+        />
+        <Image
             name="短信"
             x="415" y="2150" w="186" h="186" align="center" alignV="center"
-            src="../icons/res/com.android.mms.png"
-        >
-            <to>icons/res/com.android.mms.png</to>
-        </image>
+            src="${root}/icons/res/com.android.mms.png"
+        />
 
-        <image
+        <Image
             name="浏览器"
             x="670" y="2150" w="186" h="186" align="center" alignV="center"
-            src="../icons/res/com.android.browser.png"
-        >
-            <to>icons/res/com.android.browser.png</to>
-        </image>
+            src="${root}/icons/res/com.android.browser.png"
+        />
 
-        <image
+        <Image
             name="相机"
              x="925" y="2150" w="186" h="186" align="center" alignV="center"
-             src="../icons/res/com.android.camera.png"
-        >
-            <to>icons/res/com.android.camera.png</to>
-        </image>
-
+             src="${root}/icons/res/com.android.camera.png"
+        />
         <!-- 第一排图标 -->
-        <image 
+        <Image 
             name="天气"
             x="168" y="1100" w="186" h="186" align="center" alignV="center"
-            src="../icons/res/com.miui.weather2.png"
-        >
-            <to>icons/res/com.miui.weather2.png</to>
-        </image>
-
-        <!-- color="./theme_values.xml?name=action_bar_title_text_color_light" -->
-        <color
+            src="${root}/icons/res/com.miui.weather2.png"
+        />
+        <Text
             name="图标字体"
             text="天气"
             x="168" y="1250" size="36" align="center" alignV="center"
-            default="file=theme_values.xml&amp;name=action_bar_title_text_color_light"
-        >
-            <to>file=wallpaper/theme_values.xml&amp;name=icon_title_text</to>
-        </color>
-
-        <image 
+            value="src=${root}/wallpaper/theme_values.xml&amp;name=icon_title_text"
+        />
+        <Image 
             name="小米商城"
             x="670" y="1400" w="186" h="186" align="center" alignV="center"
-            src="../icons/res/com.xiaomi.shop.png"
-        >
-            <to src="icons/res/com.xiaomi.padshop.png"/>
-            <to src="icons/res/com.xiaomi.shop.png"/>
-            <to src="icons/res/com.xiaomi.shop.activity.MainTabActivity.shop.png"/>
-        </image>
-    </layout>
-</page>
+            src="${root}/icons/res/com.xiaomi.shop.png"
+        />
+        <Image 
+            name="小米商城"
+            x="670" y="1400" w="186" h="186" align="center" alignV="center"
+            src="${root}/icons/res/com.xiaomi.padshop.png"
+        />
+        <Image 
+            name="小米商城"
+            x="670" y="1400" w="186" h="186" align="center" alignV="center"
+            src="${root}/icons/res/com.xiaomi.shop.activity.MainTabActivity.shop.png"
+        />
+    </Layout>
+</Page>

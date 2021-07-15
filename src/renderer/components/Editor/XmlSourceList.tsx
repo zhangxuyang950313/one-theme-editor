@@ -1,6 +1,6 @@
 import React from "react";
 import { Tabs } from "antd";
-import { ELEMENT_TYPES } from "src/enum";
+import { ELEMENT_TAG } from "src/enum";
 import {
   useTextSourceList,
   useSourceTypeList,
@@ -16,7 +16,7 @@ const XmlSourceList: React.FC = () => {
     <>
       <Tabs>
         {sourceTypeList
-          .filter(item => item.type !== ELEMENT_TYPES.IMAGE)
+          .filter(item => item.type !== ELEMENT_TAG.IMAGE)
           .map((item, index) => (
             <Tabs.TabPane key={index} tab={item.name}>
               {/* {templateList.map(item=>item. === )} */}

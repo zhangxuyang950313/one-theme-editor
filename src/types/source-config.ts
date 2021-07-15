@@ -1,7 +1,7 @@
 import {
   ALIGN_VALUES,
   ALIGN_V_VALUES,
-  ELEMENT_TYPES,
+  ELEMENT_TAG,
   VALUE_TYPES
 } from "../enum";
 import XMLNodeBase from "../server/compiler/XMLNodeElement";
@@ -11,7 +11,8 @@ import { TypeImagePathLike } from "./index";
 // 资源配置信息
 export type TypeSourceConfigInfo = {
   key: string;
-  url: string;
+  root: string;
+  config: string;
   name: string;
   preview: TypeImagePathLike;
   version: string;
@@ -82,10 +83,10 @@ export type TypeLayoutConf = {
 
 // 图片元素数据
 export type TypeSourceImageElement = {
-  elementType: ELEMENT_TYPES.IMAGE;
+  elementType: ELEMENT_TAG.IMAGE;
   valueType: VALUE_TYPES.SOURCE;
   name: string;
-  source: (TypeImageData & { url: string }) | null;
+  source: (TypeImageData & { src: string; release: string }) | null;
   layout: {
     x: string;
     y: string;
@@ -94,26 +95,26 @@ export type TypeSourceImageElement = {
     align: ALIGN_VALUES;
     alignV: ALIGN_V_VALUES;
   };
-  releaseList: string[];
+  // releaseList: string[];
 };
 
 // 值元素数据
 export type TypeSourceValueElement = {
-  elementType: ELEMENT_TYPES.TEXT;
+  elementType: ELEMENT_TAG.TEXT;
   valueType: VALUE_TYPES;
   name: string;
   text: string;
+  value: {
+    valueName: string;
+    valueSrc: string;
+    defaultValue: string;
+  };
   layout: {
     x: string;
     y: string;
     align: ALIGN_VALUES;
     alignV: ALIGN_V_VALUES;
   };
-  defaultName: string;
-  defaultValue: string;
-  releaseName: string;
-  defaultXml: string;
-  releaseXml: string;
 };
 
 // 预览元素数据
@@ -127,7 +128,7 @@ export type TypeSourcePageConf = {
   src: string;
 };
 export type TypeSourcePageData = {
-  url: string;
+  config: string;
   version: string;
   description: string;
   screenWidth: string;

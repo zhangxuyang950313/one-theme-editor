@@ -9,7 +9,6 @@ import {
 import { TypeBrandConf } from "src/types/project";
 import { TypeResponseFrame, UnionTupleToObjectKey } from "types/request";
 import { checkParamsKey, result } from "server/utils/utils";
-import { resolveSourcePath } from "server/utils/pathUtils";
 import PageConfig from "server/compiler/PageConfig";
 import SourceConfig from "server/compiler/SourceConfig";
 
@@ -48,8 +47,7 @@ export default function source(service: Express): void {
   >(API.GET_SOURCE_CONF_MODULE_LIST.url, (request, response) => {
     checkParamsKey(request.query, API.GET_SOURCE_CONF_MODULE_LIST.query);
     const { config } = request.query;
-    const absFile = resolveSourcePath(config);
-    const data = new SourceConfig(absFile).getModuleList();
+    const data = new SourceConfig(config).getModuleList();
     response.send(result.success(data));
   });
 
@@ -64,9 +62,8 @@ export default function source(service: Express): void {
     UnionTupleToObjectKey<typeof API.GET_SOURCE_CONF_PAGE_DATA.query> // reqQuery
   >(API.GET_SOURCE_CONF_PAGE_DATA.url, async (request, response) => {
     checkParamsKey(request.query, API.GET_SOURCE_CONF_PAGE_DATA.query);
-    const { config } = request.query;
-    const absFile = resolveSourcePath(config);
-    const data = new PageConfig(absFile).getData();
+    const { namespace, config } = request.query;
+    const data = new PageConfig({ namespace, config }).getData();
     response.send(result.success(data));
   });
 
@@ -82,8 +79,7 @@ export default function source(service: Express): void {
   >(API.GET_SOURCE_CONF_DATA.url, async (request, response) => {
     checkParamsKey(request.query, API.GET_SOURCE_CONF_DATA.query);
     const { config } = request.query;
-    const absFile = resolveSourcePath(config);
-    const data = new SourceConfig(absFile).getConfig();
+    const data = new SourceConfig(config).getConfig();
     response.send(result.success(data));
   });
 }

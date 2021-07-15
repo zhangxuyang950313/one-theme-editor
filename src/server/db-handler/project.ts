@@ -3,7 +3,7 @@ import fse from "fs-extra";
 import logSymbols from "log-symbols";
 import { v4 as UUID } from "uuid";
 import Nedb from "nedb-promises";
-import PATHS, { resolveSourcePath } from "server/utils/pathUtils";
+import PATHS from "server/utils/pathUtils";
 import SourceConfig from "server/compiler/SourceConfig";
 import ERR_CODE from "common/errorCode";
 
@@ -38,9 +38,7 @@ export async function createProject(
   data: TypeCreateProjectPayload
 ): Promise<TypeProjectDataDoc> {
   const { brandInfo, projectInfo, projectPathname, sourceConfigUrl } = data;
-  const uiVersion = new SourceConfig(
-    resolveSourcePath(sourceConfigUrl)
-  ).getUiVersion();
+  const uiVersion = new SourceConfig(sourceConfigUrl).getUiVersion();
   return projectDB.insert<TypeProjectData>({
     uuid: UUID(),
     projectInfo,

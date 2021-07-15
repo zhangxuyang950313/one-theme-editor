@@ -2,6 +2,8 @@ import {
   TypeLayoutConf,
   TypeSourceConfigData,
   TypeSourceConfigInfo,
+  TypeSourceImageElement,
+  TypeSourceValueElement,
   TypeSourceModuleConf,
   TypeSourcePageConf,
   TypeSourcePageData,
@@ -9,11 +11,16 @@ import {
   TypeSourceTypeConf
 } from "../types/source-config";
 import { TypeProjectUiVersion } from "../types/project";
-import { ALIGN_VALUES, ALIGN_V_VALUES } from "../enum/index";
+import {
+  ALIGN_VALUES,
+  ALIGN_V_VALUES,
+  ELEMENT_TAG,
+  VALUE_TYPES
+} from "../enum/index";
 import { AbstractDataModel } from "./abstract";
 
 export class SourcePageConf extends AbstractDataModel<TypeSourcePageConf> {
-  data = {
+  protected data = {
     key: "",
     name: "",
     preview: "",
@@ -26,7 +33,7 @@ export class SourcePageConf extends AbstractDataModel<TypeSourcePageConf> {
 }
 
 export class ElementLayoutConf extends AbstractDataModel<TypeLayoutConf> {
-  data = {
+  protected data = {
     x: "",
     y: "",
     w: "",
@@ -40,9 +47,54 @@ export class ElementLayoutConf extends AbstractDataModel<TypeLayoutConf> {
   }
 }
 
+export class SourceImageElement extends AbstractDataModel<TypeSourceImageElement> {
+  protected data: TypeSourceImageElement = {
+    elementType: ELEMENT_TAG.IMAGE,
+    valueType: VALUE_TYPES.SOURCE,
+    name: "",
+    source: {
+      width: 0,
+      height: 0,
+      size: 0,
+      filename: "",
+      ninePatch: false,
+      src: "",
+      release: ""
+    },
+    layout: {
+      x: "0",
+      y: "0",
+      w: "0",
+      h: "0",
+      align: ALIGN_VALUES.LEFT,
+      alignV: ALIGN_V_VALUES.TOP
+    }
+  };
+}
+
+export class SourceValueElement extends AbstractDataModel<TypeSourceValueElement> {
+  protected data: TypeSourceValueElement = {
+    elementType: ELEMENT_TAG.TEXT,
+    valueType: VALUE_TYPES.COLOR,
+    name: "",
+    text: "",
+    value: {
+      valueName: "",
+      valueSrc: "",
+      defaultValue: ""
+    },
+    layout: {
+      x: "0",
+      y: "0",
+      align: ALIGN_VALUES.LEFT,
+      alignV: ALIGN_V_VALUES.TOP
+    }
+  };
+}
+
 export class SourcePageData extends AbstractDataModel<TypeSourcePageData> {
-  data = {
-    url: "",
+  protected data: TypeSourcePageData = {
+    config: "",
     version: "",
     description: "",
     screenWidth: "",
@@ -54,7 +106,7 @@ export class SourcePageData extends AbstractDataModel<TypeSourcePageData> {
 }
 
 export class SourcePageGroupConf extends AbstractDataModel<TypeSourcePageGroupConf> {
-  data = {
+  protected data = {
     name: "",
     pageList: []
   };
@@ -65,7 +117,7 @@ export class SourcePageGroupConf extends AbstractDataModel<TypeSourcePageGroupCo
 }
 
 export class SourceModuleConf extends AbstractDataModel<TypeSourceModuleConf> {
-  data = {
+  protected data = {
     index: 0,
     name: "",
     icon: "",
@@ -78,7 +130,7 @@ export class SourceModuleConf extends AbstractDataModel<TypeSourceModuleConf> {
 }
 
 export class SourceTypeConf extends AbstractDataModel<TypeSourceTypeConf> {
-  data = {
+  protected data = {
     tag: "",
     name: "",
     type: ""
@@ -90,7 +142,7 @@ export class SourceTypeConf extends AbstractDataModel<TypeSourceTypeConf> {
 }
 
 export class UiVersion extends AbstractDataModel<TypeProjectUiVersion> {
-  data = {
+  protected data = {
     name: "",
     code: ""
   };
@@ -100,9 +152,10 @@ export class UiVersion extends AbstractDataModel<TypeProjectUiVersion> {
 }
 
 export class SourceConfigInfo extends AbstractDataModel<TypeSourceConfigInfo> {
-  data = {
+  protected data: TypeSourceConfigInfo = {
     key: "",
-    url: "",
+    root: "",
+    config: "",
     name: "",
     preview: "",
     version: "",
@@ -114,7 +167,7 @@ export class SourceConfigInfo extends AbstractDataModel<TypeSourceConfigInfo> {
 }
 
 export class SourceConfigData extends AbstractDataModel<TypeSourceConfigData> {
-  data = {
+  protected data = {
     ...SourceConfigInfo.default(),
     sourceTypeList: [],
     moduleList: []

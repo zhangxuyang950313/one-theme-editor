@@ -45,10 +45,14 @@ function ColorPicker(props: TypeColorChangerProps): JSX.Element {
   }, [defaultColor]);
 
   useEffect(() => {
-    if (!ColorUtil.isUnit8Hex(inputColor)) return;
-    const colorUtil = new ColorUtil(inputColor, HEX_TYPES.ARGB);
-    setRgbColor(colorUtil.getRgbaData());
-    setCssColor(colorUtil.format(HEX_TYPES.RGBA));
+    try {
+      if (!ColorUtil.isUnit8Hex(inputColor)) return;
+      const colorUtil = new ColorUtil(inputColor, HEX_TYPES.ARGB);
+      setRgbColor(colorUtil.getRgbaData());
+      setCssColor(colorUtil.format(HEX_TYPES.RGBA));
+    } catch (err) {
+      console.log(err);
+    }
   }, [inputColor]);
 
   return (

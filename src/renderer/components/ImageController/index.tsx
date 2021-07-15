@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { RightCircleOutlined } from "@ant-design/icons";
 
 import { useSourceConfigRoot } from "@/hooks/source";
-import { useReleaseListWatcher } from "@/hooks/fileWatcher";
+// import { useReleaseListWatcher } from "@/hooks/fileWatcher";
 import { TypeSourceImageElement } from "types/source-config";
 
 import { useCopyReleaseWith } from "./hooks";
@@ -47,9 +47,12 @@ const StyleCopyButton = styled.div`
 `;
 
 const ImageController: React.FC<TypeSourceImageElement> = imageSource => {
-  const { source, releaseList, name } = imageSource;
-  const dynamicReleaseList = useReleaseListWatcher(releaseList);
-  const copyReleaseWith = useCopyReleaseWith(releaseList, imageSource.name);
+  const { source, name } = imageSource;
+  // TODO: 应该不需要监听列表了，或者直接改为使用 editor
+  const watchList = source?.src ? [source.src] : [];
+  // const dynamicReleaseList = useReleaseListWatcher(watchList);
+  const dynamicReleaseList = watchList;
+  const copyReleaseWith = useCopyReleaseWith(watchList, imageSource.name);
 
   if (!imageSource || !source) return null;
 
@@ -68,21 +71,21 @@ const ImageController: React.FC<TypeSourceImageElement> = imageSource => {
       </div>
       {/* 工程素材状态 */}
       <SourceStatus
-        releaseList={releaseList}
+        releaseList={watchList}
         dynamicReleaseList={dynamicReleaseList}
       />
       <div className="edit-wrapper">
         {/* 默认素材展示 */}
-        <LeftDisplay src={source.url} name={name} />
+        <LeftDisplay src={source.src} name={name} />
         {/* 一键拷贝默认素材 */}
         <MiddleCopyButton
-          sourceUrl={source.url}
+          sourceUrl={source.src}
           copyReleaseFn={copyReleaseWith}
         />
         {/* 工程素材展示 */}
         <RightDisplay
           sourceName={name}
-          releaseList={releaseList}
+          releaseList={watchList}
           dynamicReleaseList={dynamicReleaseList}
         />
       </div>
