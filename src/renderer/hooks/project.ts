@@ -177,12 +177,13 @@ export function useProjectWatcher1(
 }
 
 export function useFileWatcher(
-  callback: (watcher: FileWatcher) => void
+  callback: (watcher: FileWatcher) => void,
+  dependency: unknown[] = []
 ): FileWatcher {
   const { projectWatcher } = useContext(EditorContext);
   useEffect(() => {
     callback(projectWatcher);
-  }, []);
+  }, dependency);
   return projectWatcher;
 }
 

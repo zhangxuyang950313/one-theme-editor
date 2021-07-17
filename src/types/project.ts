@@ -33,7 +33,7 @@ export type TypeProjectInfo = {
 // 创建工程载荷
 export type TypeCreateProjectPayload = {
   projectPathname: string;
-  sourceConfigUrl: string;
+  sourceConfigPath: string;
   brandInfo: TypeBrandInfo;
   projectInfo: TypeProjectInfo;
 };
@@ -65,7 +65,7 @@ export type TypeProjectData = {
   projectPathname: string;
   projectInfo: TypeProjectInfo;
   uiVersion: TypeProjectUiVersion;
-  sourceConfigUrl: string;
+  sourceConfigPath: string;
 };
 
 // // 在数据空的图片映射

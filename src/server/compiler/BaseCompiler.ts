@@ -98,7 +98,7 @@ export default class BaseCompiler extends XMLNodeElement {
    * 以第一个节点作为根节点
    * @returns 返回这个节点的 node 实例
    */
-  protected getRootNode(): XMLNodeElement {
+  public getRootNode(): XMLNodeElement {
     return super.getFirstChildNode();
   }
 
@@ -106,7 +106,7 @@ export default class BaseCompiler extends XMLNodeElement {
    * 获取根节点的子节点实例列表
    * @returns
    */
-  protected getRootChildrenNodes(): XMLNodeElement[] {
+  public getRootChildrenNodes(): XMLNodeElement[] {
     return this.getRootNode().getChildrenNodes();
   }
 
@@ -115,7 +115,7 @@ export default class BaseCompiler extends XMLNodeElement {
    * @param tagname
    * @returns
    */
-  protected getRootFirstChildNodeOf(tagname: string): XMLNodeElement {
+  public getRootFirstChildNodeOf(tagname: string): XMLNodeElement {
     return this.getRootNode().getFirstChildNodeByTagname(tagname);
   }
 
@@ -124,7 +124,7 @@ export default class BaseCompiler extends XMLNodeElement {
    * @param tagname
    * @returns
    */
-  protected getRootChildrenNodesOf(tagname: string): XMLNodeElement[] {
+  public getRootChildrenNodesOf(tagname: string): XMLNodeElement[] {
     return this.getRootNode().getChildrenNodesByTagname(tagname);
   }
 }

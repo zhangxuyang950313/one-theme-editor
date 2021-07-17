@@ -4,7 +4,7 @@ import { BrandInfo } from "./BrandConfig";
 import { UiVersion } from "./SourceConfig";
 
 export class ProjectInfo extends AbstractDataModel<TypeProjectInfo> {
-  protected data = {};
+  protected data: TypeProjectInfo = {};
 
   static default(): TypeProjectInfo {
     return new ProjectInfo().default();
@@ -12,13 +12,13 @@ export class ProjectInfo extends AbstractDataModel<TypeProjectInfo> {
 }
 
 export class ProjectData extends AbstractDataModel<TypeProjectDataDoc> {
-  protected data = {
+  protected data: TypeProjectDataDoc = {
     uuid: "",
     brandInfo: BrandInfo.default(),
     projectPathname: "",
     projectInfo: ProjectInfo.default(),
     uiVersion: UiVersion.default(),
-    sourceConfigUrl: "",
+    sourceConfigPath: "",
     _id: "",
     createdAt: new Date(),
     updatedAt: new Date()

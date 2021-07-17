@@ -1,5 +1,6 @@
 import fse from "fs-extra";
 import React, { useEffect, useRef, useState } from "react";
+import styled from "styled-components";
 import { v4 as UUID } from "uuid";
 import { remote } from "electron";
 
@@ -9,7 +10,6 @@ import { useBrandConf, useSourceDescriptionList } from "@/hooks/source";
 import { TypeProjectInfo } from "types/project";
 import { TypeSourceConfigInfo } from "types/source-config";
 
-import styled from "styled-components";
 import { Modal, Button, Form, Input, message } from "antd";
 import { FileAddOutlined } from "@ant-design/icons";
 import Steps from "@/components/Steps";
@@ -206,7 +206,7 @@ const CreateProject: React.FC<TypeProps> = props => {
           updateCreating(true);
           return apiCreateProject({
             projectPathname: projectPathnameRef.current || "",
-            sourceConfigUrl: sourceConfig.config,
+            sourceConfigPath: sourceConfig.config,
             brandInfo: {
               name: brandConf.name,
               type: brandConf.type

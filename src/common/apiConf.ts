@@ -109,17 +109,17 @@ const API = {
     params: ["uuid"]
   }),
 
-  // 输出 xml 模板
-  XML_TEMPLATE_RELEASE: createApiConf({
-    url: "/project/xml/template/release",
+  // 按行写入 xml
+  XML_TEMPLATE_WRITE: createApiConf({
+    url: "/project/xml/template/write",
     query: ["uuid"],
-    bodyKeys: ["key", "value", "template", "releaseXml"],
+    bodyKeys: ["name", "value", "src"],
     body: {} as TypeReleaseXmlTempPayload
   }),
   // 通过 name 查找工程的 value
   GET_XML_TEMP_VALUE: createApiConf({
     url: "/project/xml/value",
-    query: ["uuid", "name", "release"]
+    query: ["uuid", "name", "src"]
   }),
 
   // 复制文件

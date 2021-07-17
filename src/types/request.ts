@@ -30,10 +30,9 @@ export type TypeGetCanceler = (c: Canceler) => void;
 
 // 释放 xml 模板请求载荷
 export type TypeReleaseXmlTempPayload = {
-  key: string;
+  name: string;
   value: string;
-  template: string;
-  releaseXml: string;
+  src: string;
 };
 
 // // 获取模板中 name 的值

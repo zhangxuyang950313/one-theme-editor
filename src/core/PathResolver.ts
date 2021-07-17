@@ -12,11 +12,11 @@ export default class PathResolver {
   ): string {
     let result = pathname;
     const execResult = placeholderRegexp.exec(result);
-    if (!execResult) return result;
+    if (!execResult) return path.normalize(result);
     const matched = execResult[0];
     const placeholder = execResult[1] as PLACEHOLDER;
     const value = placeholder && data[placeholder];
-    if (value) result = result.replace(matched, value);
-    return path.normalize(PathResolver.parse(data, result));
+    if (typeof value === "string") result = result.replace(matched, value);
+    return PathResolver.parse(data, result);
   }
 }

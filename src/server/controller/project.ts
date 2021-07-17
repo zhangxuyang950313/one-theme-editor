@@ -112,9 +112,9 @@ export default function project(service: Express): void {
   >(API.GET_XML_TEMP_VALUE.url, async (request, response) => {
     const { query } = request;
     checkParamsKey(query, API.GET_XML_TEMP_VALUE.query);
-    const { uuid, name, releaseXml } = query;
+    const { uuid, name, src } = query;
     const project = await findProjectByUUID(uuid);
-    const releaseFile = path.join(project.projectPathname, releaseXml);
+    const releaseFile = path.join(project.projectPathname, src);
     const value = new XmlTemplate(releaseFile).getValueByName(name);
     response.send(result.success({ value }));
   });
@@ -124,18 +124,14 @@ export default function project(service: Express): void {
    */
   service.post<
     never, // reqParams
-    TypeResponseFrame<typeof API.XML_TEMPLATE_RELEASE.body, string>, // resBody
-    typeof API.XML_TEMPLATE_RELEASE.body, // reqBody
-    UnionTupleToObjectKey<typeof API.XML_TEMPLATE_RELEASE.query> // reqQuery
-  >(API.XML_TEMPLATE_RELEASE.url, async (request, response) => {
+    TypeResponseFrame<Record<string, string>>, // resBody
+    typeof API.XML_TEMPLATE_WRITE.body, // reqBody
+    UnionTupleToObjectKey<typeof API.XML_TEMPLATE_WRITE.query> // reqQuery
+  >(API.XML_TEMPLATE_WRITE.url, async (request, response) => {
     const { body, query } = request;
-    checkParamsKey(query, API.XML_TEMPLATE_RELEASE.query);
-    checkParamsKey(body, API.XML_TEMPLATE_RELEASE.bodyKeys);
-    const project = await findProjectByUUID(query.uuid);
-    releaseXmlTemplate({
-      ...body,
-      releaseXml: path.join(project.projectPathname, body.releaseXml)
-    });
-    response.send(result.success(body));
+    checkParamsKey(query, API.XML_TEMPLATE_WRITE.query);
+    checkParamsKey(body, API.XML_TEMPLATE_WRITE.bodyKeys);
+    const data = await releaseXmlTemplate(query.uuid, body);
+    response.send(result.success(data));
   });
 }

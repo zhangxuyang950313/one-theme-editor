@@ -4,4 +4,6 @@
 	<!-- 桌面图标文字颜色 -->
 	<color name="icon_title_text">#ffff0000</color>
 	
+	<integer name="window_translucent_status" package="miui">1</integer>
+	
 </MIUI_Theme_Values>

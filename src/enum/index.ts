@@ -13,6 +13,12 @@ export enum ELEMENT_TAG {
   TEMPLATE = "Template"
 }
 
+// 元素类型
+export enum ELEMENT_TYPE {
+  IMAGE = "image",
+  TEXT = "text"
+}
+
 export enum VALUE_TYPES {
   SOURCE = "source",
   COLOR = "color"

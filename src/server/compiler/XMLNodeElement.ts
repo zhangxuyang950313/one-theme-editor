@@ -1,5 +1,5 @@
 import { js2xml, Element, Attributes, Options } from "xml-js";
-import { ELEMENT_TAG } from "src/enum/index";
+import { ELEMENT_TYPE } from "src/enum/index";
 
 const js2xmlOptions: Options.JS2XML = {
   spaces: 2,
@@ -16,13 +16,34 @@ const js2xmlOptions: Options.JS2XML = {
  * xml 节点基础解析类
  */
 class XMLNodeBase {
-  private node: Element;
+  protected node: Element;
   constructor(node: Element) {
     this.node = node;
   }
 
   public isEmpty(): boolean {
     return Object.keys(this.node).length === 0;
+  }
+
+  public clear(): this {
+    const { node } = this;
+    for (const key in node) {
+      const k = key as keyof typeof node;
+      delete node[k];
+    }
+    return this;
+  }
+
+  // 覆盖当前节点
+  setNode(node: XMLNodeElement): this {
+    this.node = node.getElement();
+    return this;
+  }
+
+  // 覆盖当前节点
+  public setElement(node: Element): this {
+    this.node = node;
+    return this;
   }
 
   // 获取当前节点元素
@@ -32,7 +53,7 @@ class XMLNodeBase {
 
   // 节点类型
   // TODO：枚举所有类型
-  public getType(): ELEMENT_TAG | string {
+  public getType(): ELEMENT_TYPE | string {
     return this.node.type || "";
   }
 
@@ -86,25 +107,36 @@ class XMLNodeBase {
    * @param attr
    * @param val
    */
-  public setAttributeOf(attr: string, val: string | number | boolean): void {
+  public setAttributeOf(attr: string, val: string | number | boolean): this {
     const attributes = this.getAttributes();
-    if (!attributes) return;
+    if (!attributes) return this;
     attributes[attr] = String(val);
+    return this;
   }
 
   /**
    * 设置 text 节点的值
    * @param value
    */
-  public setTextNodeValue(value: string): void {
-    if (this.getType() !== ELEMENT_TAG.TEXT) return;
+  public setTextNodeValue(value: string): this {
+    if (this.getType() !== ELEMENT_TYPE.TEXT) return this;
     this.node.text = value;
+    return this;
   }
 }
+
 /**
  * XML 子节点解析类
  */
 class XMLNodeChildren extends XMLNodeBase {
+  /**
+   * 清空子节点
+   * @returns
+   */
+  public clearChildren(): this {
+    this.getChildrenElements().length = 0;
+    return this;
+  }
   // 获取子节点元素列表
   public getChildrenElements(): Element[] {
     return this.getElement().elements || [];
@@ -123,7 +155,7 @@ class XMLNodeChildren extends XMLNodeBase {
    */
   public getTextChildrenNodes(): XMLNodeElement[] {
     return this.getChildrenNodes().filter(
-      item => item.getType() === ELEMENT_TAG.TEXT
+      item => item.getType() === ELEMENT_TYPE.TEXT
     );
   }
 
@@ -151,7 +183,7 @@ class XMLNodeChildren extends XMLNodeBase {
    * @param type
    * @returns
    */
-  public getFirstChildNodeByType(type: ELEMENT_TAG): XMLNodeElement {
+  public getFirstChildNodeByType(type: ELEMENT_TYPE): XMLNodeElement {
     const childNode = this.getChildrenNodes().find(
       item => item.getType() === type
     );
@@ -187,7 +219,7 @@ class XMLNodeChildren extends XMLNodeBase {
    */
   public getFirstTextChildNode(): XMLNodeElement {
     const childNode = this.getChildrenNodes().find(
-      item => item.getType() === ELEMENT_TAG.TEXT
+      item => item.getType() === ELEMENT_TYPE.TEXT
     );
     return childNode || XMLNodeElement.createEmptyNode();
   }
@@ -231,10 +263,25 @@ class XMLNodeChildren extends XMLNodeBase {
   }
 }
 
+// 处理 node 数据
+class XMLNodeHandler extends XMLNodeChildren {
+  // 向子节点添加一个节点
+  public appendChild(node: XMLNodeElement): this {
+    this.getChildrenElements().push(node.getElement());
+    return this;
+  }
+  // 替换节点
+  public replaceNode(newNode: XMLNodeElement): this {
+    if (newNode.isEmpty()) return this;
+    Object.assign(super.clear().getElement(), newNode.getElement());
+    return this;
+  }
+}
+
 /**
  * 继承合并导出，增加类即可
  */
-export default class XMLNodeElement extends XMLNodeChildren {
+export default class XMLNodeElement extends XMLNodeHandler {
   /**
    * 构建生成 xml 字符串
    * @param data
@@ -245,14 +292,19 @@ export default class XMLNodeElement extends XMLNodeChildren {
     return js2xml(this.getElement(), { ...js2xmlOptions, ...options });
   }
 
-  // 静态创建节点实例
+  // 创建节点实例
   public static createInstance(node: Element): XMLNodeElement {
     return new XMLNodeElement(node);
   }
 
-  // 静态创建一个空的节点实例
+  // 创建一个空的节点实例
   public static createEmptyNode(): XMLNodeElement {
     return new XMLNodeElement({});
+  }
+
+  // 创建已给文本节点
+  public static createTextNode(text?: string): XMLNodeElement {
+    return new XMLNodeElement({ type: ELEMENT_TYPE.TEXT, text: text || "" });
   }
 
   public createInstance(node: Element): XMLNodeElement {

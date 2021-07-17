@@ -50,7 +50,9 @@ export default class XmlTemplate extends BaseCompiler {
    */
   public replacePlaceholderByValFile(valuesFile: string): XMLNodeElement {
     const kvList = new TempKeyValMapper(valuesFile).getKeyValList();
-    return super.createInstance(BaseCompiler.compile(this.generateXml(kvList)));
+    return super.createInstance(
+      BaseCompiler.compile(this.generateXmlByKeyVal(kvList))
+    );
   }
 
   /**
@@ -72,7 +74,7 @@ export default class XmlTemplate extends BaseCompiler {
    */
   public getNameValueMapObj(kvList: TypeKeyValue[]): TypeXmlTempKeyValMap {
     return super
-      .createInstance(BaseCompiler.compile(this.generateXml(kvList)))
+      .createInstance(BaseCompiler.compile(this.generateXmlByKeyVal(kvList)))
       .getFirstChildNode()
       .getChildrenNodes()
       .reduce<TypeXmlTempKeyValMap>((obj, item) => {
@@ -110,7 +112,7 @@ export default class XmlTemplate extends BaseCompiler {
    * @param value
    * @returns xmlString
    */
-  public generateXml(kvList: TypeKeyValue[]): string {
+  public generateXmlByKeyVal(kvList: TypeKeyValue[]): string {
     const kvMap = kvList.reduce((t, o) => {
       t.set(o.key, o.value);
       return t;

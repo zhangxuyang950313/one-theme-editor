@@ -8,6 +8,11 @@
         <Preview src="../preview/preview1.jpg"/>
     </Previews>
 
+<!-- 
+    <Templates>
+        <Template />
+    </Templates> -->
+
 
     <!-- 动态预览配置 -->
     <Layout>
@@ -56,7 +61,7 @@
             name="图标字体"
             text="天气"
             x="168" y="1250" size="36" align="center" alignV="center"
-            value="src=${root}/wallpaper/theme_values.xml&amp;name=icon_title_text"
+            value="src=${root}/com.miui.home/theme_values.xml&amp;name=icon_title_text"
         />
         <Image 
             name="小米商城"

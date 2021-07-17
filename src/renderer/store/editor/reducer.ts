@@ -59,7 +59,7 @@ export default function EditorReducer(
       return updateState(state, {
         uuid: action.payload.uuid,
         projectPathname: action.payload.projectPathname,
-        sourceConfigUrl: action.payload.sourceConfigUrl,
+        sourceConfigUrl: action.payload.sourceConfigPath,
         projectInfo: action.payload.projectInfo,
         projectData: action.payload
       });

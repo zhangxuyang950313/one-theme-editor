@@ -35,11 +35,13 @@ export default class PageConfig extends BaseCompiler {
   private sourceNamespace: string;
   private pageNamespace: string;
   private pageConfig: string;
+  private sourceRootAbsolute: string;
   constructor(data: { namespace: string; config: string }) {
     super(path.join(PATH.SOURCE_CONFIG_DIR, data.namespace, data.config));
     this.sourceNamespace = path.normalize(data.namespace);
     this.pageNamespace = path.dirname(data.config);
     this.pageConfig = path.normalize(data.config);
+    this.sourceRootAbsolute = path.join(PATH.SOURCE_CONFIG_DIR, data.namespace);
   }
 
   // 被多次使用的数据添加缓存
@@ -51,11 +53,8 @@ export default class PageConfig extends BaseCompiler {
   };
 
   // ${root}/path/to/somewhere -> absolute/source/root/to/somewhere
-  private resolveSourcePath(pathname: string): string {
-    return PathResolver.parse(
-      { root: path.join(PATH.SOURCE_CONFIG_DIR, this.sourceNamespace) },
-      pathname
-    );
+  private resolveRootSourcePath(pathname: string): string {
+    return PathResolver.parse({ root: this.sourceRootAbsolute }, pathname);
   }
 
   // 处理当前页面资源的相对路径
@@ -232,7 +231,7 @@ export default class PageConfig extends BaseCompiler {
   private imageElement(node: XMLNodeElement): TypeSourceImageElement {
     const src = node.getAttributeOf("src");
     const source: TypeSourceImageElement["source"] = {
-      ...getImageData(this.resolveSourcePath(src)),
+      ...getImageData(this.resolveRootSourcePath(src)),
       src: path.normalize(src),
       release: path.normalize(src)
     };
@@ -306,16 +305,16 @@ export default class PageConfig extends BaseCompiler {
     const valueIsColor = value.startsWith("#");
     const valueData = this.getValueByQueryStr(value);
 
-    // const defaultValue = new XmlTemplate(
-    //   this.relativeSourcePath(valueData.file)
-    // ).getTextByAttrName(valueData.name);
+    const defaultValue = new XmlTemplate(
+      this.resolveRootSourcePath(valueData.src)
+    ).getTextByAttrName(valueData.name);
     return new SourceValueElement()
       .set("name", name)
       .set("text", text)
       .set("value", {
         valueName: valueData.name,
-        valueSrc: valueData.src,
-        defaultValue: valueIsColor ? value : value
+        src: valueData.src,
+        defaultValue: valueIsColor ? value : defaultValue
       })
       .set("layout", {
         x: layout.x,

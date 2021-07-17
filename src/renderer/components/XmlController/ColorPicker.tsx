@@ -19,10 +19,11 @@ const sketch2rgba = (sketch: RGBColor): RgbaObject => {
 type TypeColorChangerProps = {
   defaultColor: string;
   placeholder: string;
-  onChange: (color: string) => void;
+  onChange?: (color: string) => void;
+  onDisabled?: (color: string) => void;
 };
 function ColorPicker(props: TypeColorChangerProps): JSX.Element {
-  const { defaultColor, placeholder, onChange } = props;
+  const { defaultColor, placeholder, onChange, onDisabled } = props;
   const [inputColor, setInputColor] = useState(defaultColor);
   const [cssColor, setCssColor] = useState("");
   const [rgbColor, setRgbColor] = useState<RgbaObject>();
@@ -73,15 +74,16 @@ function ColorPicker(props: TypeColorChangerProps): JSX.Element {
             // presetColors={getLocalStorage.presetColors}
             color={rgbColor ? rgba2sketch(rgbColor) : ""}
             onChange={color => {
-              const rgba = sketch2rgba(color.rgb);
-              setInputColor(ColorUtil.rgbaFormat(rgba, HEX_TYPES.ARGB));
-            }}
-            onChangeComplete={color => {
-              const rgba = sketch2rgba(color.rgb);
-              onChange(ColorUtil.rgbaFormat(rgba, HEX_TYPES.ARGB));
+              const rgbaData = sketch2rgba(color.rgb);
+              const argbStr = ColorUtil.rgbaFormat(rgbaData, HEX_TYPES.ARGB);
+              setInputColor(argbStr);
+              onChange && onChange(argbStr);
             }}
           />
         }
+        onVisibleChange={visible => {
+          !visible && onDisabled && onDisabled(inputColor);
+        }}
       >
         <ColorBox color={cssColor} />
       </Tooltip>

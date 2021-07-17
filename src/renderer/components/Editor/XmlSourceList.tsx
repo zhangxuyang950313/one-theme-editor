@@ -16,7 +16,7 @@ const XmlSourceList: React.FC = () => {
     <>
       <Tabs>
         {sourceTypeList
-          .filter(item => item.type !== ELEMENT_TAG.IMAGE)
+          .filter(item => item.tag !== ELEMENT_TAG.IMAGE)
           .map((item, index) => (
             <Tabs.TabPane key={index} tab={item.name}>
               {/* {templateList.map(item=>item. === )} */}

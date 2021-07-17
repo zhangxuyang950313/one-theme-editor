@@ -20,7 +20,7 @@ import {
 import { AbstractDataModel } from "./abstract";
 
 export class SourcePageConf extends AbstractDataModel<TypeSourcePageConf> {
-  protected data = {
+  protected data: TypeSourcePageConf = {
     key: "",
     name: "",
     preview: "",
@@ -33,7 +33,7 @@ export class SourcePageConf extends AbstractDataModel<TypeSourcePageConf> {
 }
 
 export class ElementLayoutConf extends AbstractDataModel<TypeLayoutConf> {
-  protected data = {
+  protected data: TypeLayoutConf = {
     x: "",
     y: "",
     w: "",
@@ -79,9 +79,9 @@ export class SourceValueElement extends AbstractDataModel<TypeSourceValueElement
     name: "",
     text: "",
     value: {
+      defaultValue: "",
       valueName: "",
-      valueSrc: "",
-      defaultValue: ""
+      src: ""
     },
     layout: {
       x: "0",
@@ -106,7 +106,7 @@ export class SourcePageData extends AbstractDataModel<TypeSourcePageData> {
 }
 
 export class SourcePageGroupConf extends AbstractDataModel<TypeSourcePageGroupConf> {
-  protected data = {
+  protected data: TypeSourcePageGroupConf = {
     name: "",
     pageList: []
   };
@@ -117,7 +117,7 @@ export class SourcePageGroupConf extends AbstractDataModel<TypeSourcePageGroupCo
 }
 
 export class SourceModuleConf extends AbstractDataModel<TypeSourceModuleConf> {
-  protected data = {
+  protected data: TypeSourceModuleConf = {
     index: 0,
     name: "",
     icon: "",
@@ -130,7 +130,7 @@ export class SourceModuleConf extends AbstractDataModel<TypeSourceModuleConf> {
 }
 
 export class SourceTypeConf extends AbstractDataModel<TypeSourceTypeConf> {
-  protected data = {
+  protected data: TypeSourceTypeConf = {
     tag: "",
     name: "",
     type: ""
@@ -142,7 +142,7 @@ export class SourceTypeConf extends AbstractDataModel<TypeSourceTypeConf> {
 }
 
 export class UiVersion extends AbstractDataModel<TypeProjectUiVersion> {
-  protected data = {
+  protected data: TypeProjectUiVersion = {
     name: "",
     code: ""
   };
@@ -167,7 +167,7 @@ export class SourceConfigInfo extends AbstractDataModel<TypeSourceConfigInfo> {
 }
 
 export class SourceConfigData extends AbstractDataModel<TypeSourceConfigData> {
-  protected data = {
+  protected data: TypeSourceConfigData = {
     ...SourceConfigInfo.default(),
     sourceTypeList: [],
     moduleList: []

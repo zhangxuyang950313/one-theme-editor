@@ -105,9 +105,9 @@ export type TypeSourceValueElement = {
   name: string;
   text: string;
   value: {
-    valueName: string;
-    valueSrc: string;
     defaultValue: string;
+    valueName: string;
+    src: string;
   };
   layout: {
     x: string;

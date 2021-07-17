@@ -83,7 +83,7 @@ export async function apiOutputXmlTemplate(
   data: TypeReleaseXmlTempPayload
 ): Promise<void | null> {
   return createHttp()
-    .post<TypeRequestResult<null>>(API.XML_TEMPLATE_RELEASE.url, data, {
+    .post<TypeRequestResult<null>>(API.XML_TEMPLATE_WRITE.url, data, {
       params: { uuid }
     })
     .then(data => data.data.data);
