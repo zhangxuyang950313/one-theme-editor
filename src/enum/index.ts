@@ -10,7 +10,8 @@ export enum ELEMENT_TAG {
   UI_VERSION = "UiVersion",
   LAYOUT = "Layout",
   TEMPLATES = "Templates",
-  TEMPLATE = "Template"
+  TEMPLATE = "Template",
+  VALUE = "Value"
 }
 
 // 元素类型
@@ -19,9 +20,10 @@ export enum ELEMENT_TYPE {
   TEXT = "text"
 }
 
-export enum VALUE_TYPES {
-  SOURCE = "source",
-  COLOR = "color"
+export enum SOURCE_TYPES {
+  IMAGE = "image",
+  COLOR = "color",
+  VALUE = "value"
 }
 
 export enum ALIGN_VALUES {

@@ -26,7 +26,7 @@ const xml2jsConfig: Options.XML2JS = {
   instructionHasAttributes: false, // 将指令解析为属性
   alwaysChildren: true, // 是否总是生成 elements 元素，即使为空
   ignoreDeclaration: false, // 忽略顶部声明属性
-  ignoreComment: true, // 忽略注释
+  ignoreComment: false, // 忽略注释
   ignoreInstruction: false, // 忽略处理指令
   ignoreAttributes: false, // 忽略属性
   ignoreCdata: false, // 忽略 cData

@@ -9,11 +9,11 @@
     <UiVersion name="MIUI 12" code="10"/>
 
     <!-- 素材类型定义 -->
-    <Source tag="image"     name="图片素材"     type="image"/>
-    <Source tag="color"     name="颜色值"       type="xml" format="argb"/>
-    <Source tag="bool"      name="布尔值"       type="xml"/>
-    <Source tag="dimen"     name="尺寸值"       type="xml"/>
-    <Source tag="integer"   name="整型值"       type="xml"/>
+    <Source tag="Image"     name="图片素材"/>
+    <Source tag="Color"     name="颜色值" format="argb"/>
+    <Source tag="Bool"      name="布尔值"/>
+    <Source tag="Dimen"     name="尺寸值"/>
+    <Source tag="Integer"   name="整型值"/>
 
     <!-- 模块定义 -->
     <Module name="图标和壁纸" icon="icons/res/com.android.thememanager.png">

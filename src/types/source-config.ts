@@ -2,7 +2,7 @@ import {
   ALIGN_VALUES,
   ALIGN_V_VALUES,
   ELEMENT_TAG,
-  VALUE_TYPES
+  SOURCE_TYPES
 } from "../enum";
 import XMLNodeBase from "../server/compiler/XMLNodeElement";
 import { TypeImageData, TypeProjectUiVersion } from "./project";
@@ -59,13 +59,6 @@ export type TypeSourceXmlTempConf = {
   release: string;
 };
 
-// 配置模板数据
-export type TypeSourceXmlTempData = {
-  template: string;
-  release: string;
-  valueList: TypeSourceXmlKeyValConf[];
-};
-
 // 拷贝配置数据
 export type TypeSourceCopyConf = {
   from: string;
@@ -81,12 +74,16 @@ export type TypeLayoutConf = {
   alignV: ALIGN_V_VALUES;
 };
 
+export type TypeSourceImageData = TypeImageData & {
+  src: string;
+};
+
 // 图片元素数据
 export type TypeSourceImageElement = {
-  elementType: ELEMENT_TAG.IMAGE;
-  valueType: VALUE_TYPES.SOURCE;
+  readonly sourceTag: ELEMENT_TAG.IMAGE;
+  readonly sourceType: SOURCE_TYPES.IMAGE;
   name: string;
-  source: (TypeImageData & { src: string; release: string }) | null;
+  sourceData: TypeSourceImageData;
   layout: {
     x: string;
     y: string;
@@ -98,13 +95,13 @@ export type TypeSourceImageElement = {
   // releaseList: string[];
 };
 
-// 值元素数据
-export type TypeSourceValueElement = {
-  elementType: ELEMENT_TAG.TEXT;
-  valueType: VALUE_TYPES;
+// 颜色元素数据
+export type TypeSourceTextElement = {
+  readonly sourceTag: ELEMENT_TAG.TEXT;
+  readonly sourceType: SOURCE_TYPES;
   name: string;
   text: string;
-  value: {
+  valueData: {
     defaultValue: string;
     valueName: string;
     src: string;
@@ -117,8 +114,22 @@ export type TypeSourceValueElement = {
   };
 };
 
+// 值定义
+export type TypeSourceDefine = {
+  tagName: string;
+  name: string;
+  description: string;
+  valueData: {
+    defaultValue: string;
+    valueName: string;
+    src: string;
+  };
+};
+
 // 预览元素数据
-export type TypeSourceElement = TypeSourceImageElement | TypeSourceValueElement;
+export type TypeSourceLayoutElement =
+  | TypeSourceImageElement
+  | TypeSourceTextElement;
 
 // 预览单个页面配置
 export type TypeSourcePageConf = {
@@ -133,8 +144,8 @@ export type TypeSourcePageData = {
   description: string;
   screenWidth: string;
   previewList: string[];
-  elementList: TypeSourceElement[];
-  templateList: TypeSourceXmlTempData[];
+  sourceDefineList: TypeSourceDefine[];
+  layoutElementList: TypeSourceLayoutElement[];
   copyList: TypeSourceCopyConf[];
 };
 
@@ -145,5 +156,4 @@ export type TypeSourceXmlKeyValMapperMap = Map<string, XMLNodeBase>;
 export type TypeSourceTypeConf = {
   tag: string;
   name: string;
-  type: "image" | "xml" | string;
 };

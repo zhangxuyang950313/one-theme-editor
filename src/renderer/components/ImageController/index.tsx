@@ -47,25 +47,23 @@ const StyleCopyButton = styled.div`
 `;
 
 const ImageController: React.FC<TypeSourceImageElement> = imageSource => {
-  const { source, name } = imageSource;
+  const { sourceData, name } = imageSource;
+  const { width, height, size, src } = sourceData;
   // TODO: 应该不需要监听列表了，或者直接改为使用 editor
-  const watchList = source?.src ? [source.src] : [];
+  const watchList = src ? [src] : [];
   // const dynamicReleaseList = useReleaseListWatcher(watchList);
   const dynamicReleaseList = watchList;
   const copyReleaseWith = useCopyReleaseWith(watchList, imageSource.name);
-
-  if (!imageSource || !source) return null;
 
   return (
     <StyleImageController>
       {/* 图片名称 */}
       <div className="name">
-        {imageSource.name}
-        {source.width && source.height ? (
+        {name}
+        {width && height ? (
           <span className="image-size">
-            ({`${source.width}×${source.height}`}
-            {source.size && <span> | {(source.size / 1024).toFixed(1)}kb</span>}
-            )
+            ({`${width}×${height}`}
+            {size && <span> | {(size / 1024).toFixed(1)}kb</span>})
           </span>
         ) : null}
       </div>
@@ -76,12 +74,9 @@ const ImageController: React.FC<TypeSourceImageElement> = imageSource => {
       />
       <div className="edit-wrapper">
         {/* 默认素材展示 */}
-        <LeftDisplay src={source.src} name={name} />
+        <LeftDisplay src={src} name={name} />
         {/* 一键拷贝默认素材 */}
-        <MiddleCopyButton
-          sourceUrl={source.src}
-          copyReleaseFn={copyReleaseWith}
-        />
+        <MiddleCopyButton sourceUrl={src} copyReleaseFn={copyReleaseWith} />
         {/* 工程素材展示 */}
         <RightDisplay
           sourceName={name}

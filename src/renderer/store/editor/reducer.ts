@@ -11,6 +11,7 @@ import {
   SourceConfigData,
   SourceModuleConf,
   SourcePageConf
+  // SourcePageData
 } from "data/SourceConfig";
 import { ProjectData, ProjectInfo } from "data/ProjectData";
 import { ACTION_TYPES, TypeEditorActions } from "./action";
@@ -25,26 +26,24 @@ export type TypeEditorState = {
   sourceConfig: TypeSourceConfigData;
   sourceTypeList: TypeSourceTypeConf[];
   sourceModuleList: TypeSourceModuleConf[];
-  // sourceElementList: TypeSourceElement[];
   sourceModuleConf: TypeSourceModuleConf;
   sourcePageConf: TypeSourcePageConf;
-  // sourcePageData: TypeSourcePageData | null;
-  sourcePageDataMap: Record<string, TypeSourcePageData>;
+  // sourcePageData: TypeSourcePageData;
+  sourcePageDataMap: Partial<Record<string, TypeSourcePageData>>;
 };
 
 const editorState: TypeEditorState = {
-  projectData: ProjectData.default(),
-  projectInfo: ProjectInfo.default(),
+  projectData: new ProjectData().default(),
+  projectInfo: new ProjectInfo().default(),
   uuid: "",
   projectPathname: "",
   sourceConfigUrl: "",
-  sourceConfig: SourceConfigData.default(),
+  sourceConfig: new SourceConfigData().default(),
   sourceTypeList: [],
   sourceModuleList: [],
-  // sourceElementList: [],
-  sourceModuleConf: SourceModuleConf.default(),
-  sourcePageConf: SourcePageConf.default(),
-  // sourcePageData: null,
+  sourceModuleConf: new SourceModuleConf().default(),
+  sourcePageConf: new SourcePageConf().default(),
+  // sourcePageData: new SourcePageData().create(),
   sourcePageDataMap: {}
 };
 

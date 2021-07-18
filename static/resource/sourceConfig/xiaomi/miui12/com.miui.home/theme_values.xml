@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <MIUI_Theme_Values>
-	
 	<!-- 桌面图标文字颜色 -->
 	<color name="icon_title_text">#ffff0000</color>
-	
-	<integer name="window_translucent_status" package="miui">1</integer>
+	<!-- 桌面图标文字（深色壁纸） -->
+	<color name="icon_title_text_light">#e6ffffff</color>
+	<bool name="bool_test">true</bool>
+	<dimen name="dimen_test">100px</dimen>
+	<integer name="integer_test" package="miui">1</integer>
 	
 </MIUI_Theme_Values>

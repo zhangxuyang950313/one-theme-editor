@@ -3,19 +3,21 @@ import {
   TypeSourceConfigData,
   TypeSourceConfigInfo,
   TypeSourceImageElement,
-  TypeSourceValueElement,
+  TypeSourceTextElement,
   TypeSourceModuleConf,
   TypeSourcePageConf,
   TypeSourcePageData,
   TypeSourcePageGroupConf,
-  TypeSourceTypeConf
+  TypeSourceTypeConf,
+  TypeSourceDefine,
+  TypeSourceImageData
 } from "../types/source-config";
 import { TypeProjectUiVersion } from "../types/project";
 import {
   ALIGN_VALUES,
   ALIGN_V_VALUES,
   ELEMENT_TAG,
-  VALUE_TYPES
+  SOURCE_TYPES
 } from "../enum/index";
 import { AbstractDataModel } from "./abstract";
 
@@ -47,20 +49,23 @@ export class ElementLayoutConf extends AbstractDataModel<TypeLayoutConf> {
   }
 }
 
+export class SourceImageData extends AbstractDataModel<TypeSourceImageData> {
+  protected data: TypeSourceImageData = {
+    width: 0,
+    height: 0,
+    size: 0,
+    filename: "",
+    ninePatch: false,
+    src: ""
+  };
+}
+
 export class SourceImageElement extends AbstractDataModel<TypeSourceImageElement> {
   protected data: TypeSourceImageElement = {
-    elementType: ELEMENT_TAG.IMAGE,
-    valueType: VALUE_TYPES.SOURCE,
+    sourceTag: ELEMENT_TAG.IMAGE,
+    sourceType: SOURCE_TYPES.IMAGE,
     name: "",
-    source: {
-      width: 0,
-      height: 0,
-      size: 0,
-      filename: "",
-      ninePatch: false,
-      src: "",
-      release: ""
-    },
+    sourceData: new SourceImageData().default(),
     layout: {
       x: "0",
       y: "0",
@@ -72,13 +77,13 @@ export class SourceImageElement extends AbstractDataModel<TypeSourceImageElement
   };
 }
 
-export class SourceValueElement extends AbstractDataModel<TypeSourceValueElement> {
-  protected data: TypeSourceValueElement = {
-    elementType: ELEMENT_TAG.TEXT,
-    valueType: VALUE_TYPES.COLOR,
+export class SourceTextElement extends AbstractDataModel<TypeSourceTextElement> {
+  protected data: TypeSourceTextElement = {
+    sourceTag: ELEMENT_TAG.TEXT,
+    sourceType: SOURCE_TYPES.COLOR,
     name: "",
     text: "",
-    value: {
+    valueData: {
       defaultValue: "",
       valueName: "",
       src: ""
@@ -92,6 +97,18 @@ export class SourceValueElement extends AbstractDataModel<TypeSourceValueElement
   };
 }
 
+export class SourceValueDefine extends AbstractDataModel<TypeSourceDefine> {
+  protected data: TypeSourceDefine = {
+    tagName: "",
+    name: "",
+    description: "",
+    valueData: new SourceTextElement().default().valueData
+  };
+  static default(): TypeSourceTextElement {
+    return new SourceTextElement().default();
+  }
+}
+
 export class SourcePageData extends AbstractDataModel<TypeSourcePageData> {
   protected data: TypeSourcePageData = {
     config: "",
@@ -99,7 +116,8 @@ export class SourcePageData extends AbstractDataModel<TypeSourcePageData> {
     description: "",
     screenWidth: "",
     previewList: [],
-    elementList: [],
+    sourceDefineList: [],
+    layoutElementList: [],
     templateList: [],
     copyList: []
   };
@@ -132,8 +150,7 @@ export class SourceModuleConf extends AbstractDataModel<TypeSourceModuleConf> {
 export class SourceTypeConf extends AbstractDataModel<TypeSourceTypeConf> {
   protected data: TypeSourceTypeConf = {
     tag: "",
-    name: "",
-    type: ""
+    name: ""
   };
 
   static default(): TypeSourceTypeConf {

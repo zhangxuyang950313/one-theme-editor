@@ -88,11 +88,21 @@ export const getSourceTypeList = createSelector(
   state => state.sourceTypeList
 );
 
+export const getSourcePageDataMap = createSelector(
+  getState,
+  state => state.sourcePageDataMap
+);
+// 获取当前页面 sourcePageData
+export const getSourcePageData = createSelector(getState, state => {
+  const pageConfSrc = state.sourcePageConf.src;
+  return state.sourcePageDataMap[pageConfSrc] || null;
+});
+
 // 获取所有元素列表
 export const getSourceElementList = createSelector(getState, state => {
   const pageConfSrc = state.sourcePageConf.src;
   if (!pageConfSrc) return [];
-  return state.sourcePageDataMap[pageConfSrc]?.elementList || [];
+  return state.sourcePageDataMap[pageConfSrc]?.layoutElementList || [];
 });
 
 // 获取图片元素列表
@@ -100,7 +110,7 @@ export const getSourceImageList = createSelector(
   getSourceElementList,
   elementList =>
     elementList.flatMap(item =>
-      item.elementType === ELEMENT_TAG.IMAGE ? [item] : []
+      item.sourceTag === ELEMENT_TAG.IMAGE ? [item] : []
     )
 );
 
@@ -109,13 +119,12 @@ export const getSourceTextList = createSelector(
   getSourceElementList,
   elementList =>
     elementList.flatMap(item =>
-      item.elementType === ELEMENT_TAG.TEXT ? [item] : []
+      item.sourceTag === ELEMENT_TAG.TEXT ? [item] : []
     )
 );
 
-export const getSourcePageDataMap = createSelector(
-  getState,
-  state => state.sourcePageDataMap
+// 获取资源定义列表
+export const getSourceDefineList = createSelector(
+  getSourcePageData,
+  pageData => pageData?.sourceDefineList || []
 );
-
-export const getXmlTemplateList = createSelector(getState, state => []);

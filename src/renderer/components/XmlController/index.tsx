@@ -4,21 +4,21 @@ import styled from "styled-components";
 import { RightCircleOutlined } from "@ant-design/icons";
 import { apiGetTempValueByName, apiOutputXmlTemplate } from "@/request";
 import { useProjectUUID, useFileWatcher } from "@/hooks/project";
-import { TypeSourceValueElement } from "types/source-config";
+import { TypeSourceDefine } from "types/source-config";
 import ColorUtil, { HEX_TYPES } from "src/core/ColorUtil";
 import ColorPicker from "./ColorPicker";
 import ColorBox from "./ColorBox";
 
-const XmlController: React.FC<TypeSourceValueElement> = sourceConf => {
-  const { name, value } = sourceConf;
-  const { defaultValue, valueName, src } = value;
+const XmlController: React.FC<TypeSourceDefine> = sourceDefine => {
+  const { name, valueData } = sourceDefine;
+  const { defaultValue, valueName, src } = valueData;
   const [defaultColor, setDefaultColor] = useState("");
   const [releaseColor, setReleaseColor] = useState("");
   const uuid = useProjectUUID();
 
   useFileWatcher(watcher => {
     if (!uuid) return;
-    watcher.on(src.replace(/^\${root}\//, ""), file => {
+    watcher.on(src, file => {
       apiGetTempValueByName({ uuid, name: valueName, src: file })
         .then(value => setReleaseColor(value))
         .catch(err => message.error(err.message));

@@ -31,7 +31,7 @@ import {
   getSourceElementList,
   getSourceImageList,
   getSourceTextList,
-  getXmlTemplateList
+  getSourceDefineList
 } from "@/store/editor/selector";
 import {
   TypeSourceConfigData,
@@ -40,11 +40,11 @@ import {
   TypeSourceModuleConf,
   TypeSourcePageConf,
   TypeSourceTypeConf,
-  TypeSourceElement,
+  TypeSourceLayoutElement,
   TypeSourceImageElement,
-  TypeSourceValueElement,
-  TypeSourceXmlTempData,
-  TypeSourcePageData
+  TypeSourceTextElement,
+  TypeSourcePageData,
+  TypeSourceDefine
 } from "types/source-config";
 import { TypeBrandConf } from "types/project";
 import {
@@ -304,7 +304,7 @@ export function useSourceTypeList(): TypeSourceTypeConf[] {
  * 获取当前所有元素列表
  * @returns
  */
-export function useSourceElementList(): TypeSourceElement[] {
+export function useSourceElementList(): TypeSourceLayoutElement[] {
   return useEditorSelector(getSourceElementList);
 }
 
@@ -320,7 +320,7 @@ export function useImageSourceList(): TypeSourceImageElement[] {
  * 获取 xml 类型元素列表
  * @returns
  */
-export function useTextSourceList(): TypeSourceValueElement[] {
+export function useTextSourceList(): TypeSourceTextElement[] {
   return useEditorSelector(getSourceTextList);
 }
 
@@ -328,6 +328,6 @@ export function useTextSourceList(): TypeSourceValueElement[] {
  * 获取 xml 模板列表
  * @returns
  */
-export function useXmlTemplateList(): TypeSourceXmlTempData[] {
-  return useEditorSelector(getXmlTemplateList);
+export function useSourceDefineList(): TypeSourceDefine[] {
+  return useEditorSelector(getSourceDefineList);
 }
