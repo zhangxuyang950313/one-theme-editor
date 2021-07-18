@@ -353,15 +353,23 @@ export default class PageConfig extends BaseCompiler {
    */
   private valueDefineData(node: XMLNodeElement): TypeSourceDefine {
     const value = node.getAttributeOf("value");
-    const { src, searchParams } = this.getUrlData(value);
-    // url 中的 name 参数
-    // TODO： 先固定使用 name，后续看需求是否需要自定义其他属性去 xml 中查找
-    const valueName = searchParams.get("name") || "";
     let defaultValue = value;
-    if (valueName && src) {
-      defaultValue = new XmlTemplate(
-        this.resolveRootSourcePath(src)
-      ).getTextByAttrName(valueName);
+    let valueName = "";
+    let src = "";
+    if (value) {
+      const valData = this.getUrlData(value);
+      if (valData) {
+        src = valData.src;
+        // url 中的 name 参数
+        // TODO： 先固定使用 name，后续看需求是否需要自定义其他属性去 xml 中查找
+        valueName = valData.searchParams.get("name") || "";
+        defaultValue =
+          path.extname(src) === ".xml"
+            ? new XmlTemplate(
+                this.resolveRootSourcePath(src)
+              ).getTextByAttrName(valueName)
+            : src;
+      }
     }
     return new SourceValueDefine()
       .set("tagName", node.getTagname())

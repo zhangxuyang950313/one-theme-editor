@@ -4,7 +4,6 @@ import styled from "styled-components";
 import { RightCircleOutlined } from "@ant-design/icons";
 
 import { useSourceConfigRoot } from "@/hooks/source";
-// import { useReleaseListWatcher } from "@/hooks/fileWatcher";
 import { TypeSourceImageElement } from "types/source-config";
 
 import { useCopyReleaseWith } from "./hooks";

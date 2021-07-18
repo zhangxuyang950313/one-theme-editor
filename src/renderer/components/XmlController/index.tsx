@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { message } from "antd";
 import styled from "styled-components";
+import { message } from "antd";
 import { RightCircleOutlined } from "@ant-design/icons";
 import { apiGetTempValueByName, apiOutputXmlTemplate } from "@/request";
 import { useProjectUUID, useFileWatcher } from "@/hooks/project";
@@ -10,7 +10,7 @@ import ColorPicker from "./ColorPicker";
 import ColorBox from "./ColorBox";
 
 const XmlController: React.FC<TypeSourceDefine> = sourceDefine => {
-  const { name, valueData } = sourceDefine;
+  const { description, valueData } = sourceDefine;
   const { defaultValue, valueName, src } = valueData;
   const [defaultColor, setDefaultColor] = useState("");
   const [releaseColor, setReleaseColor] = useState("");
@@ -37,7 +37,7 @@ const XmlController: React.FC<TypeSourceDefine> = sourceDefine => {
   return (
     <StyleXmlController>
       <div className="text-wrapper">
-        <span className="name">{name}</span>
+        <span className="description">{description}</span>
         <span className="color-name">{valueName}</span>
       </div>
       <div className="color-wrapper">
@@ -50,7 +50,7 @@ const XmlController: React.FC<TypeSourceDefine> = sourceDefine => {
             apiOutputXmlTemplate(uuid, {
               name: valueName,
               value: color,
-              src: src
+              src
             });
           }}
         />
@@ -66,7 +66,7 @@ const StyleXmlController = styled.div`
   .text-wrapper {
     display: flex;
     flex-direction: column;
-    .name {
+    .description {
       font-size: ${({ theme }) => theme["@text-size-main"]};
       color: ${({ theme }) => theme["@text-color"]};
     }

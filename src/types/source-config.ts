@@ -25,6 +25,13 @@ export type TypeSourceConfigData = TypeSourceConfigInfo & {
   moduleList: TypeSourceModuleConf[];
 };
 
+// 素材类型定义数据
+export type TypeSourceTypeConf = {
+  name: string;
+  tag: string;
+  sourceType: SOURCE_TYPES;
+};
+
 // 预览模块
 export type TypeSourceModuleConf = {
   index: number;
@@ -151,9 +158,3 @@ export type TypeSourcePageData = {
 
 // 键值对映射 map
 export type TypeSourceXmlKeyValMapperMap = Map<string, XMLNodeBase>;
-
-// 素材类型定义数据
-export type TypeSourceTypeConf = {
-  tag: string;
-  name: string;
-};

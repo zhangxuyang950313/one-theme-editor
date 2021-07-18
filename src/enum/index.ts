@@ -11,7 +11,8 @@ export enum ELEMENT_TAG {
   LAYOUT = "Layout",
   TEMPLATES = "Templates",
   TEMPLATE = "Template",
-  VALUE = "Value"
+  VALUE = "Value",
+  Color = "Color"
 }
 
 // 元素类型
@@ -20,9 +21,12 @@ export enum ELEMENT_TYPE {
   TEXT = "text"
 }
 
+// 资源类型
 export enum SOURCE_TYPES {
   IMAGE = "image",
   COLOR = "color",
+  BOOLEAN = "boolean",
+  NUMBER = "number",
   VALUE = "value"
 }
 

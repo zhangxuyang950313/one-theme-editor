@@ -1,12 +1,12 @@
 import React from "react";
 import { Tabs } from "antd";
-import { ELEMENT_TAG } from "src/enum";
-import { useSourceTypeList, useSourceDefineList } from "@/hooks/source";
+import { ELEMENT_TAG, SOURCE_TYPES } from "src/enum";
+import { useSourceTypeList, useSourceDefineMap } from "@/hooks/source";
 import XmlController from "@/components/XmlController/index";
 
 const XmlSourceList: React.FC = () => {
   const sourceTypeList = useSourceTypeList();
-  const sourceDefineList = useSourceDefineList();
+  const sourceDefineMap = useSourceDefineMap();
   return (
     <>
       <Tabs>
@@ -17,14 +17,18 @@ const XmlSourceList: React.FC = () => {
               {/* {JSON.stringify(
                 sourceDefineList.filter(source => source.tagName === item.tag)
               )} */}
-              {sourceDefineList
-                .filter(source => source.tagName === item.tag)
-                .map((sourceDefine, key) => {
+              {(sourceDefineMap.get(item.tag) || []).map(
+                (sourceDefine, key) => {
                   if (sourceDefine.tagName === item.tag) {
-                    return <XmlController key={key} {...sourceDefine} />;
+                    switch (item.sourceType) {
+                      case SOURCE_TYPES.COLOR: {
+                        return <XmlController key={key} {...sourceDefine} />;
+                      }
+                    }
                   }
                   return null;
-                })}
+                }
+              )}
             </Tabs.TabPane>
           ))}
       </Tabs>

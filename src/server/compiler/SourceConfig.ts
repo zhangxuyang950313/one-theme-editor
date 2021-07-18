@@ -119,6 +119,7 @@ export default class SourceConfig extends BaseCompiler {
         new SourceTypeConf()
           .set("tag", item.getAttributeOf("tag"))
           .set("name", item.getAttributeOf("name"))
+          .set("sourceType", item.getAttributeOf("type"))
           .create()
       );
   }

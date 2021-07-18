@@ -118,7 +118,6 @@ export class SourcePageData extends AbstractDataModel<TypeSourcePageData> {
     previewList: [],
     sourceDefineList: [],
     layoutElementList: [],
-    templateList: [],
     copyList: []
   };
 }
@@ -149,8 +148,9 @@ export class SourceModuleConf extends AbstractDataModel<TypeSourceModuleConf> {
 
 export class SourceTypeConf extends AbstractDataModel<TypeSourceTypeConf> {
   protected data: TypeSourceTypeConf = {
+    name: "",
     tag: "",
-    name: ""
+    sourceType: SOURCE_TYPES.VALUE
   };
 
   static default(): TypeSourceTypeConf {

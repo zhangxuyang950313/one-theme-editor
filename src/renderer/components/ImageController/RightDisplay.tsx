@@ -1,11 +1,9 @@
-// 图片替换单元组件
 import path from "path";
 import React, { useEffect } from "react";
 import styled from "styled-components";
 import { remote } from "electron";
 import { useImageUrl } from "@/hooks/image";
 import { useProjectPathname } from "@/hooks/project";
-import PathResolver from "@/../core/PathResolver";
 import { useForceUpdateImageUrl } from "./hooks";
 import ImageDisplay from "./ImageDisplay";
 import ProjectImageHandler from "./ImageHandler";
@@ -21,9 +19,7 @@ const ProjectImageDisplay: React.FC<{
   const { dynamicReleaseList } = props;
   const projectPathname = useProjectPathname();
   const dynamicAbsReleaseList = projectPathname
-    ? dynamicReleaseList.map(item =>
-        PathResolver.parse({ root: projectPathname }, item)
-      )
+    ? dynamicReleaseList.map(item => path.join(projectPathname, item))
     : [];
   const absPath = dynamicAbsReleaseList[0] || "";
   const imageUrl = useImageUrl(absPath);

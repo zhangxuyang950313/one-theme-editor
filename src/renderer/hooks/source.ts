@@ -331,3 +331,11 @@ export function useTextSourceList(): TypeSourceTextElement[] {
 export function useSourceDefineList(): TypeSourceDefine[] {
   return useEditorSelector(getSourceDefineList);
 }
+
+export function useSourceDefineMap(): Map<string, TypeSourceDefine[]> {
+  const sourceDefineList = useSourceDefineList();
+  return sourceDefineList.reduce<Map<string, TypeSourceDefine[]>>((t, o) => {
+    t.set(o.tagName, [...(t.get(o.tagName) || []), o]);
+    return t;
+  }, new Map());
+}

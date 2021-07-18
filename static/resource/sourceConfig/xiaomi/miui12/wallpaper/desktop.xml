@@ -10,14 +10,23 @@
 
     <!-- 配置 -->
     <Value>
+        <Image 
+            name="wallpaper"
+            description="默认壁纸"
+            value="file://wallpaper/default_wallpaper.jpg"
+            />
         <Image
             name="com.android.contacts.activities.TwelveKeyDialer"
             description="拨号"
             value="file://icons/res/com.android.contacts.activities.TwelveKeyDialer.png"
             />
+        <Image
+            description="短信"
+            value="file://icons/res/com.android.mms.png"
+            />
         <Color
             name="icon_title_text"
-            description="颜色值测试"
+            description="图标字体"
             value="file://com.miui.home/theme_values.xml?name=icon_title_text"
             />
         <Bool
@@ -40,6 +49,10 @@
 
     <!-- 预览结构配置 -->
     <Layout>
+        <Image 
+            x="160" y="2150" w="186" h="186" align="center" alignV="center" 
+            src="${wallpaper}"
+        />
         <Image 
             x="160" y="2150" w="186" h="186" align="center" alignV="center" 
             src="${com.android.contacts.activities.TwelveKeyDialer}"
