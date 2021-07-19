@@ -27,7 +27,7 @@ export enum SOURCE_TYPES {
   COLOR = "color",
   BOOLEAN = "boolean",
   NUMBER = "number",
-  VALUE = "value"
+  STRING = "string"
 }
 
 export enum ALIGN_VALUES {

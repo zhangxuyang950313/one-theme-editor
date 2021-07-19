@@ -61,7 +61,7 @@ const EditorContainer: React.FC = () => {
 
 const StyleEditorContainer = styled.div`
   display: flex;
-  overflow: hidden;
+  /* overflow: hidden; */
   height: 100%;
   flex-grow: 1;
   box-sizing: border-box;
@@ -172,6 +172,7 @@ const StyleEditorContent = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+  overflow-x: auto;
 `;
 
 export default Editor;

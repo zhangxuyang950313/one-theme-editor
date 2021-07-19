@@ -2,7 +2,7 @@ import { TypeBrandConf, TypeBrandInfo } from "../types/project";
 import { AbstractDataModel } from "./abstract";
 
 export class BrandInfo extends AbstractDataModel<TypeBrandInfo> {
-  protected data = {
+  protected data: TypeBrandInfo = {
     type: "",
     name: ""
   };
@@ -13,7 +13,7 @@ export class BrandInfo extends AbstractDataModel<TypeBrandInfo> {
 }
 
 export class BrandConf extends AbstractDataModel<TypeBrandConf> {
-  protected data = {
+  protected data: TypeBrandConf = {
     ...BrandInfo.default(),
     sourceConfigs: []
   };

@@ -1,9 +1,9 @@
-import path from "path";
+// import path from "path";
 import fse from "fs-extra";
 import FileType from "file-type";
 import { Express } from "express";
 import API from "common/apiConf";
-import PATHS from "server/utils/pathUtils";
+// import PATHS from "server/utils/pathUtils";
 import ERR_CODE from "src/common/errorCode";
 import { UnionTupleToObjectKey } from "src/types/request";
 
@@ -31,17 +31,18 @@ export default function image(service: Express): void {
     }
     try {
       const { filepath } = req.query;
-      const { buff, fileType } = await getImgBuffAndFileType(filepath).catch(
-        async () => {
-          const errImg = path.join(PATHS.ASSETS_DIR, "img-err.png");
-          return getImgBuffAndFileType(errImg);
-        }
-      );
+      const { buff, fileType } = await getImgBuffAndFileType(filepath);
+      // .catch(
+      //   async () => {
+      //     const errImg = path.join(PATHS.ASSETS_DIR, "img-err.png");
+      //     return getImgBuffAndFileType(errImg);
+      //   }
+      // );
       res.set({ "Content-Type": fileType.mime });
       res.send(buff);
     } catch (err) {
       console.warn("图片加载异常", err.message);
-      res.status(400);
+      res.status(400).send();
     }
   });
 }
