@@ -8,8 +8,6 @@ import {
   TypeSourcePageData,
   TypeSourceImageElement,
   TypeSourceTextElement,
-  TypeSourceXmlTempConf,
-  TypeXmlTempKeyValMap,
   TypeSourceDefineData
 } from "types/source-config";
 import XMLNodeElement from "server/compiler/XMLNodeElement";
@@ -23,14 +21,8 @@ import {
 import { placeholderRegexp } from "src/common/regexp";
 import PATH from "server/utils/pathUtils";
 import BaseCompiler from "./BaseCompiler";
-import XmlTemplate from "./XmlTemplate";
 import SourceDefine from "./SourceDefine";
 
-type TypeCache = {
-  xmlTempConfList: TypeSourceXmlTempConf[] | null;
-  xmlTempReplacedMap: Map<string, XMLNodeElement> | null;
-  xmlTempKeyValMap: TypeXmlTempKeyValMap | null;
-};
 export default class PageConfig extends BaseCompiler {
   private sourceNamespace: string;
   private pageNamespace: string;
@@ -48,13 +40,6 @@ export default class PageConfig extends BaseCompiler {
       this.sourceRootAbsolute
     );
   }
-
-  // 被多次使用的数据添加缓存
-  private cache: TypeCache = {
-    xmlTempConfList: null,
-    xmlTempReplacedMap: null,
-    xmlTempKeyValMap: null
-  };
 
   // ${root}/path/to/somewhere -> absolute/source/root/to/somewhere
   private resolveRootSourcePath(pathname: string): string {
@@ -144,48 +129,6 @@ export default class PageConfig extends BaseCompiler {
       .getRootFirstChildNodeOf(ELEMENT_TAG.PREVIEWS)
       .getChildrenNodesByTagname(ELEMENT_TAG.PREVIEW)
       .map(item => this.relativePagePath(item.getAttributeOf("src")));
-  }
-
-  /**
-   * template 配置原始数据
-   * @returns
-   */
-  getXmlTempConfList(): TypeSourceXmlTempConf[] {
-    if (!this.cache.xmlTempConfList) {
-      this.cache.xmlTempConfList = super
-        .getRootChildrenNodesOf(ELEMENT_TAG.TEMPLATE)
-        .map<TypeSourceXmlTempConf>(item => ({
-          template: item.getAttributeOf("src"),
-          values: item.getAttributeOf("values"),
-          release: item.getAttributeOf("value")
-        }));
-    }
-    return this.cache.xmlTempConfList;
-  }
-
-  /**
-   * 处理所有模板生成替换占位符后的 XMLNode 实例
-   * @returns
-   */
-  getXmlTempDataMap(): Map<string, XMLNodeElement> {
-    if (!this.cache.xmlTempReplacedMap) {
-      const tempReplacedIterator = super
-        .getRootFirstChildNodeOf(ELEMENT_TAG.TEMPLATES)
-        .getChildrenNodesByTagname(ELEMENT_TAG.TEMPLATE)
-        .reduce<[string, XMLNodeElement][]>((t, o) => {
-          const src = o.getAttributeOf("src");
-          const values = o.getAttributeOf("values");
-          if (!src || !values) return t;
-          const valuesSrc = this.relativeSourcePath(values);
-          const replacedTempNode = new XmlTemplate(
-            this.relativeSourcePath(src)
-          ).replacePlaceholderByValFile(valuesSrc);
-          t.push([src, replacedTempNode]);
-          return t;
-        }, []);
-      this.cache.xmlTempReplacedMap = new Map(tempReplacedIterator);
-    }
-    return this.cache.xmlTempReplacedMap;
   }
 
   /**
@@ -340,8 +283,6 @@ export default class PageConfig extends BaseCompiler {
    * @returns
    */
   getLayoutElementList(): TypeSourceLayoutElement[] {
-    // 生成 template Map 数据
-    // this.getXmlTempDataMap();
     return this.getRootNode()
       .getFirstChildNodeByTagname(ELEMENT_TAG.LAYOUT)
       .getChildrenNodes()
