@@ -1,6 +1,5 @@
 import path from "path";
 import querystring from "querystring";
-import { URL } from "url";
 import { getImageData } from "common/utils";
 import { ELEMENT_TAG, ALIGN_VALUES, ALIGN_V_VALUES } from "enum/index";
 import {
@@ -11,25 +10,23 @@ import {
   TypeSourceTextElement,
   TypeSourceXmlTempConf,
   TypeXmlTempKeyValMap,
-  TypeSourceDefine
+  TypeSourceDefineData
 } from "types/source-config";
 import XMLNodeElement from "server/compiler/XMLNodeElement";
 import {
   ElementLayoutConf,
-  SourceImageData,
+  DefineSourceData,
   SourceImageElement,
   SourcePageData,
-  SourceTextElement,
-  SourceValueDefine
+  SourceTextElement
 } from "data/SourceConfig";
 import { placeholderRegexp } from "src/common/regexp";
 import PATH from "server/utils/pathUtils";
 import BaseCompiler from "./BaseCompiler";
 import XmlTemplate from "./XmlTemplate";
+import SourceDefine from "./SourceDefine";
 
 type TypeCache = {
-  xmlValueDefineList: TypeSourceDefine[];
-  xmlValueDefineMap: Map<string, TypeSourceDefine>;
   xmlTempConfList: TypeSourceXmlTempConf[] | null;
   xmlTempReplacedMap: Map<string, XMLNodeElement> | null;
   xmlTempKeyValMap: TypeXmlTempKeyValMap | null;
@@ -39,18 +36,21 @@ export default class PageConfig extends BaseCompiler {
   private pageNamespace: string;
   private pageConfig: string;
   private sourceRootAbsolute: string;
+  private sourceDefineInstance: SourceDefine;
   constructor(data: { namespace: string; config: string }) {
     super(path.join(PATH.SOURCE_CONFIG_DIR, data.namespace, data.config));
     this.sourceNamespace = path.normalize(data.namespace);
     this.pageNamespace = path.dirname(data.config);
     this.pageConfig = path.normalize(data.config);
     this.sourceRootAbsolute = path.join(PATH.SOURCE_CONFIG_DIR, data.namespace);
+    this.sourceDefineInstance = new SourceDefine(
+      this.getRootFirstChildNodeOf(ELEMENT_TAG.SOURCE),
+      this.sourceRootAbsolute
+    );
   }
 
   // 被多次使用的数据添加缓存
   private cache: TypeCache = {
-    xmlValueDefineList: [],
-    xmlValueDefineMap: new Map(),
     xmlTempConfList: null,
     xmlTempReplacedMap: null,
     xmlTempKeyValMap: null
@@ -88,6 +88,16 @@ export default class PageConfig extends BaseCompiler {
     );
     console.log({ relative });
     return path.join(relative, pathname);
+  }
+
+  /**
+   * 获取形如字符串 ${name} 中的 name 值
+   * @param str
+   * @returns
+   */
+  private getPlaceholderName(str: string): string {
+    const execResult = placeholderRegexp.exec(str);
+    return execResult?.[1] || "";
   }
 
   // /**
@@ -221,13 +231,10 @@ export default class PageConfig extends BaseCompiler {
     return { name, src };
   }
 
-  // 获取 url 解析数据
-  private getUrlData(url: string) {
-    const data = new URL(url);
-    return {
-      src: path.join(data.hostname, data.pathname),
-      searchParams: data.searchParams
-    };
+  // 获取定义的资源配置数据
+  private getSourceDefineByName(srcVal: string): TypeSourceDefineData | null {
+    const pName = this.getPlaceholderName(srcVal);
+    return this.sourceDefineInstance.getSourceDefineByName(pName);
   }
 
   /**
@@ -245,6 +252,7 @@ export default class PageConfig extends BaseCompiler {
       .set("alignV", node.getAttributeOf("alignV", ALIGN_V_VALUES.TOP))
       .create();
   }
+
   /**
    * 解析图片节点
    * ```xml
@@ -259,22 +267,22 @@ export default class PageConfig extends BaseCompiler {
    */
   private imageElement(node: XMLNodeElement): TypeSourceImageElement {
     const srcVal = node.getAttributeOf("src");
-    const valueDefine = this.getValueDefine(srcVal);
-    const sourceData = new SourceImageData();
+    const valueDefine = this.getSourceDefineByName(srcVal);
+    const sourceImageData = new DefineSourceData();
     const sourceImageElement = new SourceImageElement();
-    sourceData.set("src", path.normalize(srcVal)); // 默认使用 srcVal
-    if (valueDefine) {
-      const imageData = getImageData(
-        this.resolveRootSourcePath(valueDefine.valueData.src)
-      );
-      sourceData.set("width", imageData.width);
-      sourceData.set("height", imageData.height);
-      sourceData.set("filename", imageData.filename);
-      sourceData.set("ninePatch", imageData.ninePatch);
-      sourceData.set("size", imageData.size);
-      sourceData.set("src", path.normalize(valueDefine.valueData.src));
-      sourceImageElement.set("name", valueDefine.description);
-      sourceImageElement.set("sourceData", sourceData.create());
+    sourceImageData.set("src", path.normalize(srcVal)); // 默认使用 srcVal
+    if (valueDefine && valueDefine.sourceData) {
+      const { sourceData, description } = valueDefine;
+      const { src } = sourceData;
+      const imageData = getImageData(this.resolveRootSourcePath(src));
+      sourceImageData.set("width", imageData.width);
+      sourceImageData.set("height", imageData.height);
+      sourceImageData.set("filename", imageData.filename);
+      sourceImageData.set("ninePatch", imageData.ninePatch);
+      sourceImageData.set("size", imageData.size);
+      sourceImageData.set("src", src);
+      sourceImageElement.set("name", description);
+      sourceImageElement.set("sourceData", sourceImageData.create());
       sourceImageElement.set("layout", this.layoutConf(node));
     }
     return sourceImageElement.create();
@@ -309,7 +317,7 @@ export default class PageConfig extends BaseCompiler {
     const layout = this.layoutConf(node);
     const text = node.getAttributeOf("text");
     const colorVal = node.getAttributeOf("color");
-    const valueDefine = this.getValueDefine(colorVal);
+    const valueDefine = this.getSourceDefineByName(colorVal);
     const textElementData = new SourceTextElement();
     textElementData.set("text", text);
     textElementData.set("name", text);
@@ -320,105 +328,11 @@ export default class PageConfig extends BaseCompiler {
       alignV: layout.alignV
     });
     if (valueDefine) {
-      textElementData.set("name", valueDefine.description);
-      textElementData.set("valueData", valueDefine.valueData);
+      const { description, valueData } = valueDefine;
+      textElementData.set("name", description);
+      textElementData.set("valueData", valueData);
     }
     return textElementData.create();
-  }
-
-  /**
-   * 值节点定义数据
-   * ```xml
-   * <Color
-   *     name="icon_title_text"
-   *     description="颜色值测试"
-   *     value="file://com.miui.home/theme_values.xml?name=icon_title_text"
-   * />
-   * ```
-   * ->
-   * ```json
-   * {
-   *   "tagName": "Color",
-   *   "name": "icon_title_text",
-   *   "description": "颜色值测试",
-   *   "value": {
-   *      "defaultValue": "#ffff0000",
-   *      "valueName": "icon_title_text",
-   *      "src": "com.miui.home/theme_values.xml"
-   *   }
-   * }
-   * ```
-   * @param node
-   * @returns
-   */
-  private valueDefineData(node: XMLNodeElement): TypeSourceDefine {
-    const value = node.getAttributeOf("value");
-    let defaultValue = value;
-    let valueName = "";
-    let src = "";
-    if (value) {
-      const valData = this.getUrlData(value);
-      if (valData) {
-        src = valData.src;
-        // url 中的 name 参数
-        // TODO： 先固定使用 name，后续看需求是否需要自定义其他属性去 xml 中查找
-        valueName = valData.searchParams.get("name") || "";
-        defaultValue =
-          path.extname(src) === ".xml"
-            ? new XmlTemplate(
-                this.resolveRootSourcePath(src)
-              ).getTextByAttrName(valueName)
-            : src;
-      }
-    }
-    return new SourceValueDefine()
-      .set("tagName", node.getTagname())
-      .set("name", node.getAttributeOf("name"))
-      .set("description", node.getAttributeOf("description"))
-      .set("valueData", { defaultValue, valueName, src })
-      .create();
-  }
-
-  /**
-   * 获取定义的配置节点列表
-   * @returns
-   */
-  getSourceDefineList(): TypeSourceDefine[] {
-    if (this.cache.xmlValueDefineList.length === 0) {
-      this.cache.xmlValueDefineList = this.getRootNode()
-        .getFirstChildNodeByTagname(ELEMENT_TAG.VALUE)
-        .getChildrenNodes()
-        .map(item => {
-          const data = this.valueDefineData(item);
-          this.cache.xmlValueDefineMap.set(data.name, data);
-          return data;
-        });
-    }
-    return this.cache.xmlValueDefineList;
-  }
-
-  /**
-   * 获取定义的配置列表 map
-   * @returns
-   */
-  private getValueDefineMap(): Map<string, TypeSourceDefine> {
-    if (this.cache.xmlValueDefineMap.size === 0) {
-      this.getSourceDefineList();
-    }
-    return this.cache.xmlValueDefineMap;
-  }
-
-  /**
-   * 通过 name 获取定义 value 的数据节点
-   * @params str 形如字符串 ${name}
-   * @returns
-   */
-  getValueDefine(str: string): TypeSourceDefine | null {
-    const execResult = placeholderRegexp.exec(str);
-    // 未匹配到返回值
-    if (!execResult?.[1]) return null;
-    const name = execResult[1];
-    return this.getValueDefineMap().get(name) || null;
   }
 
   /**
@@ -453,7 +367,7 @@ export default class PageConfig extends BaseCompiler {
       .set("description", this.getDescription())
       .set("screenWidth", this.getScreenWidth())
       .set("previewList", this.getPreviewList())
-      .set("sourceDefineList", this.getSourceDefineList())
+      .set("sourceDefineList", this.sourceDefineInstance.getSourceDefineList())
       .set("layoutElementList", this.getLayoutElementList())
       .set("copyList", this.getCopyConfList())
       .create();

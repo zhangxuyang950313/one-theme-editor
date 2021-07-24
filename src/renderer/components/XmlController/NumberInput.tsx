@@ -1,9 +1,9 @@
 import React from "react";
 import { InputNumber } from "antd";
-import { TypeSourceDefine } from "types/source-config";
+import { TypePageValueDefine } from "types/source-config";
 
 const NumberInput: React.FC<
-  TypeSourceDefine & {
+  TypePageValueDefine & {
     onChange?: (e: string) => void;
   }
 > = props => {

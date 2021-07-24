@@ -9,8 +9,9 @@ import {
   TypeSourcePageData,
   TypeSourcePageGroupConf,
   TypeSourceTypeConf,
-  TypeSourceDefine,
-  TypeSourceImageData
+  TypeSourceDefineData,
+  TypePageSourceData,
+  TypePageValueData
 } from "../types/source-config";
 import { TypeProjectUiVersion } from "../types/project";
 import {
@@ -34,6 +35,38 @@ export class SourcePageConf extends AbstractDataModel<TypeSourcePageConf> {
   }
 }
 
+export class DefineSourceData extends AbstractDataModel<TypePageSourceData> {
+  protected data: TypePageSourceData = {
+    width: 0,
+    height: 0,
+    size: 0,
+    ninePatch: false,
+    filename: "",
+    src: ""
+  };
+}
+
+export class DefineValueData extends AbstractDataModel<TypePageValueData> {
+  protected data = {
+    defaultValue: "",
+    valueName: "",
+    src: ""
+  };
+}
+
+export class SourceValueDefine extends AbstractDataModel<TypeSourceDefineData> {
+  protected data: TypeSourceDefineData = {
+    tagName: "",
+    name: "",
+    description: "",
+    sourceData: null,
+    valueData: null
+  };
+  static default(): TypeSourceTextElement {
+    return new SourceTextElement().default();
+  }
+}
+
 export class ElementLayoutConf extends AbstractDataModel<TypeLayoutConf> {
   protected data: TypeLayoutConf = {
     x: "",
@@ -49,23 +82,12 @@ export class ElementLayoutConf extends AbstractDataModel<TypeLayoutConf> {
   }
 }
 
-export class SourceImageData extends AbstractDataModel<TypeSourceImageData> {
-  protected data: TypeSourceImageData = {
-    width: 0,
-    height: 0,
-    size: 0,
-    filename: "",
-    ninePatch: false,
-    src: ""
-  };
-}
-
 export class SourceImageElement extends AbstractDataModel<TypeSourceImageElement> {
   protected data: TypeSourceImageElement = {
     sourceTag: ELEMENT_TAG.IMAGE,
     sourceType: SOURCE_TYPES.IMAGE,
     name: "",
-    sourceData: new SourceImageData().default(),
+    sourceData: new DefineSourceData().default(),
     layout: {
       x: "0",
       y: "0",
@@ -95,18 +117,6 @@ export class SourceTextElement extends AbstractDataModel<TypeSourceTextElement> 
       alignV: ALIGN_V_VALUES.TOP
     }
   };
-}
-
-export class SourceValueDefine extends AbstractDataModel<TypeSourceDefine> {
-  protected data: TypeSourceDefine = {
-    tagName: "",
-    name: "",
-    description: "",
-    valueData: new SourceTextElement().default().valueData
-  };
-  static default(): TypeSourceTextElement {
-    return new SourceTextElement().default();
-  }
 }
 
 export class SourcePageData extends AbstractDataModel<TypeSourcePageData> {

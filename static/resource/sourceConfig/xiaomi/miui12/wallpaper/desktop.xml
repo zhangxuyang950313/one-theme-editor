@@ -2,14 +2,8 @@
 
 <Page version="1.0.0" description="桌面壁纸和首屏图标" screenWidth="1080">
 
-    <!-- 静态预览图 -->
-    <Previews>
-        <Preview src="../preview/preview.jpg"/>
-        <Preview src="../preview/preview1.jpg"/>
-    </Previews>
-
     <!-- 配置 -->
-    <Value>
+    <Source>
         <Image 
             name="wallpaper"
             description="默认壁纸"
@@ -29,22 +23,49 @@
             description="图标字体"
             value="file://com.miui.home/theme_values.xml?name=icon_title_text"
             />
+        <Color
+            name="action_bar_title_text_color_light"
+            description="图标字体"
+            value="file://wallpaper/theme_values.xml?name=action_bar_title_text_color_light"
+            />
         <Bool
-            name="bool_test"
+            name="bool_test1"
             description="布尔值测试"
-            value="file://com.miui.home/theme_values.xml?name=bool_test"
+            value="file://com.miui.home/theme_values.xml?name=bool_test1"
+            />
+        <Bool
+            name="bool_test2"
+            description="布尔值测试"
+            value="file://com.miui.home/theme_values.xml?name=bool_test2"
             />
         <Dimen
-            name="dimen_test"
+            name="dimen_test1"
             description="尺寸值测试"
-            value="file://com.miui.home/theme_values.xml?name=dimen_test"
+            value="file://com.miui.home/theme_values.xml?name=dimen_test1"
+            />
+        <Dimen
+            name="dimen_tes2t"
+            description="尺寸值测试"
+            value="file://com.miui.home/theme_values.xml?name=dimen_test2"
             />
         <Integer
-            name="integer_test"
+            name="integer_test1"
             description="整型值测试"
-            value="file://com.miui.home/theme_values.xml?name=integer_test"
+            value="file://com.miui.home/theme_values.xml?name=integer_test1"
             />
-    </Value>
+        <Integer
+            name="integer_test2"
+            description="整型值测试"
+            value="file://com.miui.home/theme_values.xml?name=integer_test2"
+            />
+    </Source>
+
+
+    <!-- 静态预览图 -->
+    <Previews>
+        <Preview src="../preview/preview.jpg"/>
+        <Preview src="../preview/preview1.jpg"/>
+    </Previews>
 
 
     <!-- 预览结构配置 -->

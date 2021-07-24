@@ -1,12 +1,13 @@
 import React from "react";
 
 import { Radio, RadioChangeEvent } from "antd";
-import { TypeSourceDefine } from "types/source-config";
+import { TypePageValueDefine } from "types/source-config";
 
 const BooleanSelector: React.FC<
-  TypeSourceDefine & { onChange?: (s: RadioChangeEvent) => void }
+  TypePageValueDefine & { onChange?: (s: RadioChangeEvent) => void }
 > = props => {
   const { name, description, valueData } = props;
+  if (!valueData) return null;
   const { defaultValue } = valueData;
   return (
     <>

@@ -4,8 +4,11 @@
 	<color name="icon_title_text">#ffff0000</color>
 	<!-- 桌面图标文字（深色壁纸） -->
 	<color name="icon_title_text_light">#e6ffffff</color>
-	<bool name="bool_test">true</bool>
-	<dimen name="dimen_test">100px</dimen>
-	<integer name="integer_test" package="miui">1</integer>
+	<bool name="bool_test1">true</bool>
+	<bool name="bool_test2">false</bool>
+	<dimen name="dimen_test1">100px</dimen>
+	<dimen name="dimen_test2">200px</dimen>
+	<integer name="integer_test1" package="miui">1</integer>
+	<integer name="integer_test2" package="miui">2</integer>
 	
 </MIUI_Theme_Values>

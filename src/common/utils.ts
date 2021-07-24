@@ -219,6 +219,15 @@ export async function fileIsImage(file: string): Promise<boolean> {
   }
 }
 
+/**
+ * 判断文件后缀为 xml
+ * @param filename
+ * @returns
+ */
+export function filenameIsXml(filename: string): boolean {
+  return path.extname(filename) === ".xml";
+}
+
 // 获取一个目录下所有文件
 export function getDirAllFiles(dir: string): dirTree.DirectoryTree[] {
   const result: dirTree.DirectoryTree[] = [];

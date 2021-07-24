@@ -2,7 +2,7 @@ import React from "react";
 import { Tabs } from "antd";
 import { ELEMENT_TAG, SOURCE_TYPES } from "src/enum";
 import { useSourceTypeList, useSourceDefineMap } from "@/hooks/source";
-import XmlController from "../XmlController/index";
+import ColorPicker from "../XmlController/ColorPicker";
 import BooleanSelector from "../XmlController/BooleanSelector";
 import StringInput from "../XmlController/StringInput";
 import NumberInput from "../XmlController/NumberInput";
@@ -28,7 +28,7 @@ const XmlSourceList: React.FC = () => {
                   // }
                   // 颜色选择器
                   case SOURCE_TYPES.COLOR: {
-                    return <XmlController key={key} {...sourceDefine} />;
+                    return <ColorPicker key={key} {...sourceDefine} />;
                   }
                   // 布尔选择器
                   case SOURCE_TYPES.BOOLEAN: {

@@ -44,7 +44,7 @@ import {
   TypeSourceImageElement,
   TypeSourceTextElement,
   TypeSourcePageData,
-  TypeSourceDefine
+  TypeSourceDefineData
 } from "types/source-config";
 import { TypeBrandConf } from "types/project";
 import {
@@ -328,14 +328,17 @@ export function useTextSourceList(): TypeSourceTextElement[] {
  * 获取 xml 模板列表
  * @returns
  */
-export function useSourceDefineList(): TypeSourceDefine[] {
+export function useSourceDefineList(): TypeSourceDefineData[] {
   return useEditorSelector(getSourceDefineList);
 }
 
-export function useSourceDefineMap(): Map<string, TypeSourceDefine[]> {
+export function useSourceDefineMap(): Map<string, TypeSourceDefineData[]> {
   const sourceDefineList = useSourceDefineList();
-  return sourceDefineList.reduce<Map<string, TypeSourceDefine[]>>((t, o) => {
-    t.set(o.tagName, [...(t.get(o.tagName) || []), o]);
-    return t;
-  }, new Map());
+  return sourceDefineList.reduce<Map<string, TypeSourceDefineData[]>>(
+    (t, o) => {
+      t.set(o.tagName, [...(t.get(o.tagName) || []), o]);
+      return t;
+    },
+    new Map()
+  );
 }

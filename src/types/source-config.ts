@@ -81,16 +81,12 @@ export type TypeLayoutConf = {
   alignV: ALIGN_V_VALUES;
 };
 
-export type TypeSourceImageData = TypeImageData & {
-  src: string;
-};
-
 // 图片元素数据
 export type TypeSourceImageElement = {
   readonly sourceTag: ELEMENT_TAG.IMAGE;
   readonly sourceType: SOURCE_TYPES.IMAGE;
   name: string;
-  sourceData: TypeSourceImageData;
+  sourceData: TypePageSourceData;
   layout: {
     x: string;
     y: string;
@@ -108,11 +104,7 @@ export type TypeSourceTextElement = {
   readonly sourceType: SOURCE_TYPES;
   name: string;
   text: string;
-  valueData: {
-    defaultValue: string;
-    valueName: string;
-    src: string;
-  };
+  valueData: TypePageValueData | null;
   layout: {
     x: string;
     y: string;
@@ -121,16 +113,23 @@ export type TypeSourceTextElement = {
   };
 };
 
-// 值定义
-export type TypeSourceDefine = {
+export type TypePageValueData = {
+  defaultValue: string;
+  valueName: string;
+  src: string;
+};
+
+export type TypePageSourceData = TypeImageData & {
+  src: string;
+};
+
+// 素材定义
+export type TypeSourceDefineData = {
   tagName: string;
   name: string;
   description: string;
-  valueData: {
-    defaultValue: string;
-    valueName: string;
-    src: string;
-  };
+  sourceData: TypePageSourceData | null;
+  valueData: TypePageValueData | null;
 };
 
 // 预览元素数据
@@ -151,7 +150,7 @@ export type TypeSourcePageData = {
   description: string;
   screenWidth: string;
   previewList: string[];
-  sourceDefineList: TypeSourceDefine[];
+  sourceDefineList: TypeSourceDefineData[];
   layoutElementList: TypeSourceLayoutElement[];
   copyList: TypeSourceCopyConf[];
 };

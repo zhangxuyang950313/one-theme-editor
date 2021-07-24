@@ -5,8 +5,48 @@ import { RgbaObject } from "hex-rgb";
 import { Input, message, Tooltip } from "antd";
 import { RGBColor, SketchPicker } from "react-color";
 import ColorUtil, { HEX_TYPES } from "src/core/ColorUtil";
-import ColorBox from "./ColorBox";
 
+import { RightCircleOutlined } from "@ant-design/icons";
+import { apiGetTempValueByName, apiOutputXmlTemplate } from "@/request";
+import { useProjectUUID, useFileWatcher } from "@/hooks/project";
+import { TypePageValueDefine } from "types/source-config";
+import { StyleGirdBackground } from "@/style";
+
+// 颜色小方块
+const ColorBox: React.FC<{ color: string; onClick?: () => void }> = props => {
+  const { color, onClick } = props;
+  return (
+    <Tooltip title={color}>
+      <StyleColorBox
+        girdSize={10}
+        color={color}
+        onClick={() => onClick && onClick()}
+      />
+    </Tooltip>
+  );
+};
+const StyleColorBox = styled(StyleGirdBackground)<{ color: string }>`
+  cursor: pointer;
+  flex-shrink: 0;
+  position: relative;
+  display: inline-block;
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  border: 3px solid;
+  border-color: ${({ theme }) => theme["@border-color-base"]};
+  box-sizing: border-box;
+  &::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 4px;
+    background-color: ${({ color }) => color};
+  }
+`;
+
+// rgba 和 react-color-picker 数据互转
 const rgba2sketch = (rgba: RgbaObject): RGBColor => {
   const { red, green, blue, alpha } = rgba;
   return { a: alpha, r: red, g: green, b: blue };
@@ -22,7 +62,9 @@ type TypeColorChangerProps = {
   onChange?: (color: string) => void;
   onDisabled?: (color: string) => void;
 };
-function ColorPicker(props: TypeColorChangerProps): JSX.Element {
+
+// 颜色选择器
+function ColorPick(props: TypeColorChangerProps): JSX.Element {
   const { defaultColor, placeholder, onChange, onDisabled } = props;
   const [inputColor, setInputColor] = useState(defaultColor);
   const [cssColor, setCssColor] = useState("");
@@ -57,7 +99,7 @@ function ColorPicker(props: TypeColorChangerProps): JSX.Element {
   }, [inputColor]);
 
   return (
-    <StyleColorPicker>
+    <StyleColorPick>
       <Tooltip
         overlayInnerStyle={{
           color: "black",
@@ -110,11 +152,11 @@ function ColorPicker(props: TypeColorChangerProps): JSX.Element {
           setInputColor(RefInputPrev.current);
         }}
       />
-    </StyleColorPicker>
+    </StyleColorPick>
   );
 }
 
-const StyleColorPicker = styled.div`
+const StyleColorPick = styled.div`
   display: flex;
   align-items: center;
   position: inline-block;
@@ -123,6 +165,91 @@ const StyleColorPicker = styled.div`
     height: 36px;
     margin: 0 10px;
     border-radius: 6px;
+  }
+`;
+
+// 颜色值选择器
+const ColorPicker: React.FC<TypePageValueDefine> = sourceDefine => {
+  const { description, valueData } = sourceDefine;
+  const { defaultValue, valueName, src } = valueData;
+  const [defaultColor, setDefaultColor] = useState("");
+  const [releaseColor, setReleaseColor] = useState("");
+  const uuid = useProjectUUID();
+
+  useFileWatcher(watcher => {
+    if (!uuid) return;
+    watcher.on(src, file => {
+      apiGetTempValueByName({ uuid, name: valueName, src: file })
+        .then(value => setReleaseColor(value))
+        .catch(err => message.error(err.message));
+    });
+  });
+  useEffect(() => {
+    try {
+      setDefaultColor(
+        new ColorUtil(defaultValue, HEX_TYPES.ARGB).format(HEX_TYPES.RGBA)
+      );
+    } catch (err) {
+      message.warn(err);
+    }
+  }, [defaultValue]);
+
+  return (
+    <StyleColorPicker>
+      <div className="text-wrapper">
+        <span className="description">{description}</span>
+        <span className="color-name">{valueName}</span>
+      </div>
+      <div className="color-wrapper">
+        <ColorBox color={defaultColor} />
+        <RightCircleOutlined className="middle-button" />
+        <ColorPick
+          defaultColor={releaseColor}
+          placeholder={defaultColor}
+          onDisabled={color => {
+            apiOutputXmlTemplate(uuid, {
+              name: valueName,
+              value: color,
+              src
+            });
+          }}
+        />
+      </div>
+    </StyleColorPicker>
+  );
+};
+
+const StyleColorPicker = styled.div`
+  margin-bottom: 20px;
+  flex-shrink: 0;
+  box-sizing: content-box;
+  .text-wrapper {
+    display: flex;
+    flex-direction: column;
+    .description {
+      font-size: ${({ theme }) => theme["@text-size-main"]};
+      color: ${({ theme }) => theme["@text-color"]};
+    }
+    .color-name {
+      user-select: text;
+      margin: 5px 0;
+      font-size: ${({ theme }) => theme["@text-size-secondary"]};
+      color: ${({ theme }) => theme["@text-color-secondary"]};
+    }
+  }
+  .color-wrapper {
+    display: flex;
+    align-items: center;
+  }
+  .middle-button {
+    cursor: pointer;
+    color: ${({ theme }) => theme["@text-color-secondary"]};
+    font-size: 22px;
+    margin: 10px;
+    transition: all 0.3s;
+    &:hover {
+      opacity: 0.5;
+    }
   }
 `;
 
