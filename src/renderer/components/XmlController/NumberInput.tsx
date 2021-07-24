@@ -1,19 +1,20 @@
 import React from "react";
 import { InputNumber } from "antd";
-import { TypePageValueDefine } from "types/source-config";
+import { TypeSourceDefine } from "types/source-config";
 
 const NumberInput: React.FC<
-  TypePageValueDefine & {
+  TypeSourceDefine & {
     onChange?: (e: string) => void;
   }
 > = props => {
   const { name, description, valueData } = props;
-  const { defaultValue } = valueData;
+  if (!valueData) return null;
+
   return (
     <>
       <div>{description}</div>
       <span>{name}：</span>
-      <InputNumber keyboard value={defaultValue} />
+      <InputNumber keyboard value={valueData.defaultValue} />
     </>
   );
 };

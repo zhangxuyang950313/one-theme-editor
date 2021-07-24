@@ -9,7 +9,7 @@ import ColorUtil, { HEX_TYPES } from "src/core/ColorUtil";
 import { RightCircleOutlined } from "@ant-design/icons";
 import { apiGetTempValueByName, apiOutputXmlTemplate } from "@/request";
 import { useProjectUUID, useFileWatcher } from "@/hooks/project";
-import { TypePageValueDefine } from "types/source-config";
+import { TypeSourceDefine } from "types/source-config";
 import { StyleGirdBackground } from "@/style";
 
 // 颜色小方块
@@ -169,36 +169,40 @@ const StyleColorPick = styled.div`
 `;
 
 // 颜色值选择器
-const ColorPicker: React.FC<TypePageValueDefine> = sourceDefine => {
+const ColorPicker: React.FC<TypeSourceDefine> = sourceDefine => {
   const { description, valueData } = sourceDefine;
-  const { defaultValue, valueName, src } = valueData;
   const [defaultColor, setDefaultColor] = useState("");
   const [releaseColor, setReleaseColor] = useState("");
   const uuid = useProjectUUID();
 
   useFileWatcher(watcher => {
-    if (!uuid) return;
-    watcher.on(src, file => {
-      apiGetTempValueByName({ uuid, name: valueName, src: file })
+    if (!uuid || !valueData || !valueData.src) return;
+    watcher.on(valueData.src, file => {
+      apiGetTempValueByName({ uuid, name: valueData.valueName, src: file })
         .then(value => setReleaseColor(value))
         .catch(err => message.error(err.message));
     });
   });
   useEffect(() => {
+    if (!valueData?.defaultValue) return;
     try {
       setDefaultColor(
-        new ColorUtil(defaultValue, HEX_TYPES.ARGB).format(HEX_TYPES.RGBA)
+        new ColorUtil(valueData.defaultValue, HEX_TYPES.ARGB).format(
+          HEX_TYPES.RGBA
+        )
       );
     } catch (err) {
       message.warn(err);
     }
-  }, [defaultValue]);
+  }, [valueData?.defaultValue]);
+
+  if (!valueData) return null;
 
   return (
     <StyleColorPicker>
       <div className="text-wrapper">
         <span className="description">{description}</span>
-        <span className="color-name">{valueName}</span>
+        <span className="color-name">{valueData.valueName}</span>
       </div>
       <div className="color-wrapper">
         <ColorBox color={defaultColor} />
@@ -208,9 +212,9 @@ const ColorPicker: React.FC<TypePageValueDefine> = sourceDefine => {
           placeholder={defaultColor}
           onDisabled={color => {
             apiOutputXmlTemplate(uuid, {
-              name: valueName,
+              name: valueData.valueName,
               value: color,
-              src
+              src: valueData.src
             });
           }}
         />
