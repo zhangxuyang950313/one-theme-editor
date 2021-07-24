@@ -28,9 +28,9 @@ import {
   getPageGroupList,
   getPageConf,
   getSourceTypeList,
-  getSourceElementList,
-  getSourceImageList,
-  getSourceTextList,
+  getLayoutSourceList,
+  getLayoutImageList,
+  getLayoutTextList,
   getSourceDefineList
 } from "@/store/editor/selector";
 import {
@@ -40,11 +40,12 @@ import {
   TypeSourceModuleConf,
   TypeSourcePageConf,
   TypeSourceTypeConf,
-  TypeSourceLayoutElement,
-  TypeSourceImageElement,
-  TypeSourceTextElement,
+  TypeLayoutElement,
+  TypeLayoutImageElement,
+  TypeLayoutTextElement,
   TypeSourcePageData,
-  TypeSourceDefineData
+  TypeSourceDefine,
+  TypePageDefineSourceData
 } from "types/source-config";
 import { TypeBrandConf } from "types/project";
 import {
@@ -56,6 +57,7 @@ import {
 } from "@/store/index";
 import ERR_CODE from "common/errorCode";
 import { asyncQueue } from "common/utils";
+import { SOURCE_TYPES } from "@/../enum";
 import { useAsyncUpdater } from "./index";
 
 /**
@@ -304,41 +306,49 @@ export function useSourceTypeList(): TypeSourceTypeConf[] {
  * 获取当前所有元素列表
  * @returns
  */
-export function useSourceElementList(): TypeSourceLayoutElement[] {
-  return useEditorSelector(getSourceElementList);
+export function useLayoutElementList(): TypeLayoutElement[] {
+  return useEditorSelector(getLayoutSourceList);
 }
 
 /**
  * 获取图片类型元素列表
  * @returns
  */
-export function useImageSourceList(): TypeSourceImageElement[] {
-  return useEditorSelector(getSourceImageList);
+export function useLayoutImageList(): TypeLayoutImageElement[] {
+  return useEditorSelector(getLayoutImageList);
 }
 
 /**
  * 获取 xml 类型元素列表
  * @returns
  */
-export function useTextSourceList(): TypeSourceTextElement[] {
-  return useEditorSelector(getSourceTextList);
+export function useTextSourceList(): TypeLayoutTextElement[] {
+  return useEditorSelector(getLayoutTextList);
 }
 
 /**
- * 获取 xml 模板列表
+ * 获取素材定义数据列表
  * @returns
  */
-export function useSourceDefineList(): TypeSourceDefineData[] {
+export function useSourceDefineList(): TypeSourceDefine[] {
   return useEditorSelector(getSourceDefineList);
 }
 
-export function useSourceDefineMap(): Map<string, TypeSourceDefineData[]> {
+export function useSourceDefineMap(): Map<string, TypeSourceDefine[]> {
   const sourceDefineList = useSourceDefineList();
-  return sourceDefineList.reduce<Map<string, TypeSourceDefineData[]>>(
-    (t, o) => {
-      t.set(o.tagName, [...(t.get(o.tagName) || []), o]);
-      return t;
-    },
-    new Map()
+  return sourceDefineList.reduce<Map<string, TypeSourceDefine[]>>((t, o) => {
+    t.set(o.tagName, [...(t.get(o.tagName) || []), o]);
+    return t;
+  }, new Map());
+}
+
+export function useDefineImageList(): TypeSourceDefine[] {
+  const sourceTypeList = useSourceTypeList();
+  const sourceDefineList = useSourceDefineList();
+  const imageSourceTypeConf = sourceTypeList.find(
+    item => item.sourceType === SOURCE_TYPES.IMAGE
+  );
+  return sourceDefineList.filter(
+    item => item.tagName === imageSourceTypeConf?.tag
   );
 }

@@ -23,9 +23,9 @@ const XmlSourceList: React.FC = () => {
             {(sourceDefineMap.get(item.tag) || []).map((sourceDefine, key) => {
               if (sourceDefine.tagName === item.tag) {
                 switch (item.sourceType) {
-                  // case SOURCE_TYPES.IMAGE: {
-                  //   return <ImageController key={key} {...sourceDefine} />;
-                  // }
+                  case SOURCE_TYPES.IMAGE: {
+                    return <ImageController key={key} {...sourceDefine} />;
+                  }
                   // 颜色选择器
                   case SOURCE_TYPES.COLOR: {
                     return <ColorPicker key={key} {...sourceDefine} />;

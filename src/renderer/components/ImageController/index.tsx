@@ -3,10 +3,11 @@ import React, { useMemo } from "react";
 import styled from "styled-components";
 import { RightCircleOutlined } from "@ant-design/icons";
 
+import { apiCopyFile } from "@/request";
+import { useProjectPathname } from "@/hooks/project";
 import { useSourceConfigRoot } from "@/hooks/source";
-import { TypeSourceImageElement } from "types/source-config";
+import { TypeSourceDefine } from "types/source-config";
 
-import { useCopyReleaseWith } from "./hooks";
 import LeftDisplay from "./LeftDisplay";
 import SourceStatus from "./SourceStatus";
 import RightDisplay from "./RightDisplay";
@@ -16,21 +17,20 @@ import RightDisplay from "./RightDisplay";
  * @param props
  * @returns
  */
-const MiddleCopyButton: React.FC<{
-  sourceUrl: string;
-  copyReleaseFn: (copyFrom: string) => void;
-}> = props => {
-  const { sourceUrl, copyReleaseFn } = props;
+const MiddleCopyButton: React.FC<{ src: string }> = props => {
+  const { src } = props;
   const sourceConfigRoot = useSourceConfigRoot();
+  const projectRoot = useProjectPathname();
   return useMemo(() => {
-    if (!sourceConfigRoot || !sourceUrl) return null;
-    const absoluteFrom = path.join(sourceConfigRoot, sourceUrl);
+    if (!sourceConfigRoot || !src) return null;
+    const from = path.join(sourceConfigRoot, src);
+    const release = path.join(projectRoot, src);
     return (
       <StyleCopyButton>
-        <RightCircleOutlined onClick={() => copyReleaseFn(absoluteFrom)} />
+        <RightCircleOutlined onClick={() => apiCopyFile(from, release)} />
       </StyleCopyButton>
     );
-  }, [sourceUrl]);
+  }, [src]);
 };
 
 const StyleCopyButton = styled.div`
@@ -45,20 +45,18 @@ const StyleCopyButton = styled.div`
   }
 `;
 
-const ImageController: React.FC<TypeSourceImageElement> = imageSource => {
-  const { sourceData, name } = imageSource;
-  const { width, height, size, src } = sourceData;
-  // TODO: 应该不需要监听列表了，或者直接改为使用 editor
-  const watchList = src ? [src] : [];
+const ImageController: React.FC<TypeSourceDefine> = sourceDefine => {
   // const dynamicReleaseList = useReleaseListWatcher(watchList);
-  const dynamicReleaseList = watchList;
-  const copyReleaseWith = useCopyReleaseWith(watchList, imageSource.name);
-
+  // const dynamicReleaseList = watchList;
+  // const copyReleaseWith = useCopyReleaseWith(watchList, description);
+  const { sourceData, description } = sourceDefine;
+  if (!sourceData) return null;
+  const { width, height, size, src } = sourceData;
   return (
     <StyleImageController>
       {/* 图片名称 */}
       <div className="name">
-        {name}
+        {description}
         {width && height ? (
           <span className="image-size">
             ({`${width}×${height}`}
@@ -67,29 +65,20 @@ const ImageController: React.FC<TypeSourceImageElement> = imageSource => {
         ) : null}
       </div>
       {/* 工程素材状态 */}
-      <SourceStatus
-        releaseList={watchList}
-        dynamicReleaseList={dynamicReleaseList}
-      />
+      <SourceStatus src={src} />
       <div className="edit-wrapper">
         {/* 默认素材展示 */}
-        <LeftDisplay src={src} name={name} />
+        <LeftDisplay src={src} sourceName={description} />
         {/* 一键拷贝默认素材 */}
-        <MiddleCopyButton sourceUrl={src} copyReleaseFn={copyReleaseWith} />
+        <MiddleCopyButton src={src} />
         {/* 工程素材展示 */}
-        <RightDisplay
-          sourceName={name}
-          releaseList={watchList}
-          dynamicReleaseList={dynamicReleaseList}
-        />
+        <RightDisplay src={src} />
       </div>
     </StyleImageController>
   );
 };
 
 const StyleImageController = styled.div`
-  /* display: inline; */
-  /* padding: 10px; */
   margin-bottom: 20px;
   .name {
     width: 100%;

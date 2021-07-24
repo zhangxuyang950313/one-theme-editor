@@ -1,11 +1,10 @@
 import React from "react";
 
-import { useImageSourceList } from "@/hooks/source";
+import { useDefineImageList } from "@/hooks/source";
 import ImageController from "@/components/ImageController/index";
 
 const ImageSourceList: React.FC = () => {
-  const imageSourceList = useImageSourceList();
-  // console.log({ imageSourceList });
+  const imageSourceList = useDefineImageList();
   return (
     <>
       {imageSourceList.map((sourceConf, key) => (

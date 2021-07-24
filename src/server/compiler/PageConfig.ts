@@ -4,11 +4,11 @@ import { getImageData } from "common/utils";
 import { ELEMENT_TAG, ALIGN_VALUES, ALIGN_V_VALUES } from "enum/index";
 import {
   TypeSourceCopyConf,
-  TypeSourceLayoutElement,
+  TypeLayoutElement,
   TypeSourcePageData,
-  TypeSourceImageElement,
-  TypeSourceTextElement,
-  TypeSourceDefineData
+  TypeLayoutImageElement,
+  TypeLayoutTextElement,
+  TypeSourceDefine
 } from "types/source-config";
 import XMLNodeElement from "server/compiler/XMLNodeElement";
 import {
@@ -175,7 +175,7 @@ export default class PageConfig extends BaseCompiler {
   }
 
   // 获取定义的资源配置数据
-  private getSourceDefineByName(srcVal: string): TypeSourceDefineData | null {
+  private getSourceDefineByName(srcVal: string): TypeSourceDefine | null {
     const pName = this.getPlaceholderName(srcVal);
     return this.sourceDefineInstance.getSourceDefineByName(pName);
   }
@@ -208,7 +208,7 @@ export default class PageConfig extends BaseCompiler {
    * @param node
    * @returns
    */
-  private imageElement(node: XMLNodeElement): TypeSourceImageElement {
+  private imageElement(node: XMLNodeElement): TypeLayoutImageElement {
     const srcVal = node.getAttributeOf("src");
     const valueDefine = this.getSourceDefineByName(srcVal);
     let src = srcVal;
@@ -263,7 +263,7 @@ export default class PageConfig extends BaseCompiler {
    * @param node
    * @returns
    */
-  private textElement(node: XMLNodeElement): TypeSourceTextElement {
+  private textElement(node: XMLNodeElement): TypeLayoutTextElement {
     const layout = this.layoutConf(node);
     const text = node.getAttributeOf("text");
     const colorVal = node.getAttributeOf("color");
@@ -289,7 +289,7 @@ export default class PageConfig extends BaseCompiler {
    * 获取布局元素对应的解析数据列表
    * @returns
    */
-  getLayoutElementList(): TypeSourceLayoutElement[] {
+  getLayoutElementList(): TypeLayoutElement[] {
     return this.getRootNode()
       .getFirstChildNodeByTagname(ELEMENT_TAG.LAYOUT)
       .getChildrenNodes()

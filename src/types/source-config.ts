@@ -82,11 +82,11 @@ export type TypeLayoutConf = {
 };
 
 // 图片元素数据
-export type TypeSourceImageElement = {
+export type TypeLayoutImageElement = {
   readonly sourceTag: ELEMENT_TAG.IMAGE;
   readonly sourceType: SOURCE_TYPES.IMAGE;
   description: string;
-  sourceData: TypePageSourceData;
+  sourceData: TypePageDefineSourceData;
   layout: {
     x: string;
     y: string;
@@ -95,16 +95,15 @@ export type TypeSourceImageElement = {
     align: ALIGN_VALUES;
     alignV: ALIGN_V_VALUES;
   };
-  // releaseList: string[];
 };
 
 // 颜色元素数据
-export type TypeSourceTextElement = {
+export type TypeLayoutTextElement = {
   readonly sourceTag: ELEMENT_TAG.TEXT;
   readonly sourceType: SOURCE_TYPES;
   name: string;
   text: string;
-  valueData: TypePageValueData | null;
+  valueData: TypePageDefineValueData | null;
   layout: {
     x: string;
     y: string;
@@ -113,29 +112,27 @@ export type TypeSourceTextElement = {
   };
 };
 
-export type TypePageValueData = {
+export type TypePageDefineValueData = {
   defaultValue: string;
   valueName: string;
   src: string;
 };
 
-export type TypePageSourceData = TypeImageData & {
+export type TypePageDefineSourceData = TypeImageData & {
   src: string;
 };
 
 // 素材定义
-export type TypeSourceDefineData = {
+export type TypeSourceDefine = {
   tagName: string;
   name: string;
   description: string;
-  sourceData: TypePageSourceData | null;
-  valueData: TypePageValueData | null;
+  sourceData: TypePageDefineSourceData | null;
+  valueData: TypePageDefineValueData | null;
 };
 
 // 预览元素数据
-export type TypeSourceLayoutElement =
-  | TypeSourceImageElement
-  | TypeSourceTextElement;
+export type TypeLayoutElement = TypeLayoutImageElement | TypeLayoutTextElement;
 
 // 预览单个页面配置
 export type TypeSourcePageConf = {
@@ -150,8 +147,8 @@ export type TypeSourcePageData = {
   description: string;
   screenWidth: string;
   previewList: string[];
-  sourceDefineList: TypeSourceDefineData[];
-  layoutElementList: TypeSourceLayoutElement[];
+  sourceDefineList: TypeSourceDefine[];
+  layoutElementList: TypeLayoutElement[];
   copyList: TypeSourceCopyConf[];
 };
 

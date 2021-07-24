@@ -82,26 +82,6 @@ export function useLoadImageByPath(filepath: string): string {
   return useLoadImage(imageUrl);
 }
 
-// /**
-//  * 将本地路径预加载输出为图片服务路径用于展示
-//  * @param filepathVal 本地路径
-//  * @returns
-//  */
-// export function useImageUrlPreload(
-//   filepathVal = ""
-// ): [string, (x: string) => void] {
-//   const prefix = useImagePrefix();
-//   const [filepath, doRefreshUrl] = useState(filepathVal);
-//   const [url, doReload] = useLoadImage(); // 预加载
-
-//   useEffect(() => {
-//     if (!filepath) return;
-//     doReload(prefix + filepath);
-//   }, [filepath]);
-
-//   return [url, doRefreshUrl];
-// }
-
 /**
  * 将本地路径输出为图片服务路径用于展示
  * @param filepathVal
@@ -137,4 +117,25 @@ export function useSourceImageUrl(relativePath?: string): string {
   return sourceConfigRoot && relativePath
     ? prefix + path.join(sourceConfigRoot, relativePath)
     : "";
+}
+
+/**
+ * 图片参数改变实现强制重载
+ * @param imageUrl
+ * @returns
+ */
+export function useForceUpdateImageUrl(imageUrl: string): [string, () => void] {
+  const [url, updateUrl] = useState(imageUrl);
+  const [count, updateCount] = useState(0);
+
+  const forceUpdate = () => {
+    updateUrl(imageUrl ? `${imageUrl}&count=${count}` : "");
+    updateCount(count + 1);
+  };
+
+  useEffect(() => {
+    forceUpdate();
+  }, [imageUrl]);
+
+  return [url, forceUpdate];
 }

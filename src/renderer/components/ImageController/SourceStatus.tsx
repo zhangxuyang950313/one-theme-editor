@@ -1,54 +1,34 @@
 import path from "path";
+import fse from "fs-extra";
 import React from "react";
 import styled from "styled-components";
 import { remote } from "electron";
 import { Tooltip } from "antd";
-import { CheckCircleTwoTone, CloseCircleTwoTone } from "@ant-design/icons";
 import { useProjectPathname } from "@/hooks/project";
 
-const SourceStatus: React.FC<{
-  releaseList: string[];
-  dynamicReleaseList: string[];
-}> = props => {
-  const { releaseList, dynamicReleaseList } = props;
+const SourceStatus: React.FC<{ src: string }> = props => {
+  const { src } = props;
   const projectPathname = useProjectPathname();
 
   if (!projectPathname) return null;
 
+  const basename = path.basename(src);
+  const hasIt = fse.existsSync(path.join(projectPathname, src));
+  const absPath = path.join(projectPathname, src);
   return (
-    <>
-      {releaseList.map((pathname, index) => {
-        const basename = path.basename(pathname);
-        // const hasIt = fse.existsSync(path.join(projectPathname, relativePath));
-        const hasIt = new Set(dynamicReleaseList).has(pathname);
-        const absPath = path.join(projectPathname, pathname);
-        return (
-          <Tooltip
-            key={`${basename}-${index}`}
-            title={pathname}
-            placement="top"
-          >
-            <StyleSourceStatusLine
-              title={pathname}
-              data-exists={String(hasIt)}
-              onClick={() => hasIt && remote.shell.showItemInFolder(absPath)}
-            >
-              {hasIt ? (
-                <CheckCircleTwoTone twoToneColor="#52c41a" />
-              ) : (
-                <CloseCircleTwoTone twoToneColor="#ff0000" />
-              )}
-              &ensp;
-              {basename}
-            </StyleSourceStatusLine>
-          </Tooltip>
-        );
-      })}
-    </>
+    <Tooltip title={src} placement="top">
+      <StyleSourceStatus
+        title={src}
+        data-exists={String(hasIt)}
+        onClick={() => hasIt && remote.shell.showItemInFolder(absPath)}
+      >
+        {basename}
+      </StyleSourceStatus>
+    </Tooltip>
   );
 };
 
-const StyleSourceStatusLine = styled.p`
+const StyleSourceStatus = styled.p`
   margin-bottom: 6px;
   max-width: 100%;
   word-wrap: break-word;

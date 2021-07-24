@@ -99,15 +99,15 @@ export const getSourcePageData = createSelector(getState, state => {
 });
 
 // 获取所有元素列表
-export const getSourceElementList = createSelector(getState, state => {
+export const getLayoutSourceList = createSelector(getState, state => {
   const pageConfSrc = state.sourcePageConf.src;
   if (!pageConfSrc) return [];
   return state.sourcePageDataMap[pageConfSrc]?.layoutElementList || [];
 });
 
 // 获取图片元素列表
-export const getSourceImageList = createSelector(
-  getSourceElementList,
+export const getLayoutImageList = createSelector(
+  getLayoutSourceList,
   elementList =>
     elementList.flatMap(item =>
       item.sourceTag === ELEMENT_TAG.IMAGE ? [item] : []
@@ -115,8 +115,8 @@ export const getSourceImageList = createSelector(
 );
 
 // 获取文字元素列表
-export const getSourceTextList = createSelector(
-  getSourceElementList,
+export const getLayoutTextList = createSelector(
+  getLayoutSourceList,
   elementList =>
     elementList.flatMap(item =>
       item.sourceTag === ELEMENT_TAG.TEXT ? [item] : []

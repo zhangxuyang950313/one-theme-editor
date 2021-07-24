@@ -2,16 +2,16 @@ import {
   TypeLayoutConf,
   TypeSourceConfigData,
   TypeSourceConfigInfo,
-  TypeSourceImageElement,
-  TypeSourceTextElement,
+  TypeLayoutImageElement,
+  TypeLayoutTextElement,
   TypeSourceModuleConf,
   TypeSourcePageConf,
   TypeSourcePageData,
   TypeSourcePageGroupConf,
   TypeSourceTypeConf,
-  TypeSourceDefineData,
-  TypePageSourceData,
-  TypePageValueData
+  TypeSourceDefine,
+  TypePageDefineSourceData,
+  TypePageDefineValueData
 } from "../types/source-config";
 import { TypeProjectUiVersion } from "../types/project";
 import {
@@ -35,8 +35,8 @@ export class SourcePageConf extends AbstractDataModel<TypeSourcePageConf> {
   }
 }
 
-export class DefineSourceData extends AbstractDataModel<TypePageSourceData> {
-  protected data: TypePageSourceData = {
+export class DefineSourceData extends AbstractDataModel<TypePageDefineSourceData> {
+  protected data: TypePageDefineSourceData = {
     width: 0,
     height: 0,
     size: 0,
@@ -46,7 +46,7 @@ export class DefineSourceData extends AbstractDataModel<TypePageSourceData> {
   };
 }
 
-export class DefineValueData extends AbstractDataModel<TypePageValueData> {
+export class DefineValueData extends AbstractDataModel<TypePageDefineValueData> {
   protected data = {
     defaultValue: "",
     valueName: "",
@@ -54,15 +54,15 @@ export class DefineValueData extends AbstractDataModel<TypePageValueData> {
   };
 }
 
-export class SourceValueDefine extends AbstractDataModel<TypeSourceDefineData> {
-  protected data: TypeSourceDefineData = {
+export class SourceValueDefine extends AbstractDataModel<TypeSourceDefine> {
+  protected data: TypeSourceDefine = {
     tagName: "",
     name: "",
     description: "",
     sourceData: null,
     valueData: null
   };
-  static default(): TypeSourceTextElement {
+  static default(): TypeLayoutTextElement {
     return new SourceTextElement().default();
   }
 }
@@ -82,8 +82,8 @@ export class ElementLayoutConf extends AbstractDataModel<TypeLayoutConf> {
   }
 }
 
-export class SourceImageElement extends AbstractDataModel<TypeSourceImageElement> {
-  protected data: TypeSourceImageElement = {
+export class SourceImageElement extends AbstractDataModel<TypeLayoutImageElement> {
+  protected data: TypeLayoutImageElement = {
     sourceTag: ELEMENT_TAG.IMAGE,
     sourceType: SOURCE_TYPES.IMAGE,
     description: "",
@@ -99,8 +99,8 @@ export class SourceImageElement extends AbstractDataModel<TypeSourceImageElement
   };
 }
 
-export class SourceTextElement extends AbstractDataModel<TypeSourceTextElement> {
-  protected data: TypeSourceTextElement = {
+export class SourceTextElement extends AbstractDataModel<TypeLayoutTextElement> {
+  protected data: TypeLayoutTextElement = {
     sourceTag: ELEMENT_TAG.TEXT,
     sourceType: SOURCE_TYPES.COLOR,
     name: "",

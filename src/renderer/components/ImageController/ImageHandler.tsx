@@ -4,28 +4,18 @@ import styled from "styled-components";
 import { remote } from "electron";
 import ERR_CODE from "common/errorCode";
 import { notification } from "antd";
-import {
-  DeleteOutlined,
-  // FormOutlined,
-  ImportOutlined
-} from "@ant-design/icons";
-import { apiDeleteFile } from "@/request";
-import { asyncQueue } from "common/utils";
+import { DeleteOutlined, ImportOutlined } from "@ant-design/icons";
+import { apiCopyFile, apiDeleteFile } from "@/request";
 import { useProjectPathname } from "@/hooks/project";
-import { useCopyReleaseWith } from "./hooks";
 
 // 图片操作区
 const ImageHandler: React.FC<{
-  sourceName: string;
-  releaseList: string[];
-  dynamicReleaseList: string[];
+  src: string;
 }> = props => {
-  const { sourceName, releaseList, dynamicReleaseList } = props;
-  const copyReleaseWith = useCopyReleaseWith(releaseList, sourceName);
+  const { src } = props;
   const projectPathname = useProjectPathname();
 
-  const mapToAbsolute = (list: string[]) =>
-    projectPathname ? list.map(item => path.join(projectPathname, item)) : [];
+  const absPath = path.join(projectPathname, src);
 
   // 手动选取素材
   const handleImport = () => {
@@ -37,17 +27,13 @@ const ImageHandler: React.FC<{
       })
       .then(result => {
         if (result.canceled) return;
-        copyReleaseWith(result.filePaths[0]);
+        apiCopyFile(result.filePaths[0], absPath);
       });
   };
 
   // 删除素材
   const handleDelete = () => {
-    const delAsyncList = mapToAbsolute(dynamicReleaseList).map(
-      item => () => apiDeleteFile(item)
-    );
-    asyncQueue(delAsyncList).catch(err => {
-      console.log(err);
+    apiDeleteFile(absPath).catch(err => {
       notification.warn({ message: ERR_CODE[4007] });
     });
   };
@@ -58,9 +44,7 @@ const ImageHandler: React.FC<{
       {/* .9编辑按钮 */}
       {/* <FormOutlined className="press edit" onClick={() => {}} /> */}
       {/* 删除按钮 */}
-      {dynamicReleaseList.length > 0 && (
-        <DeleteOutlined className="press delete" onClick={handleDelete} />
-      )}
+      <DeleteOutlined className="press delete" onClick={handleDelete} />
     </StyleHandler>
   );
 };

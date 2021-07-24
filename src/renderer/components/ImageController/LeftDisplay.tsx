@@ -7,8 +7,8 @@ import { useSourceConfigRoot } from "@/hooks/source";
 import { previewFile } from "./utils";
 import ImageDisplay from "./ImageDisplay";
 
-const LeftDisplay: React.FC<{ src: string; name: string }> = props => {
-  const { src, name } = props;
+const LeftDisplay: React.FC<{ src: string; sourceName: string }> = props => {
+  const { src, sourceName } = props;
   const sourceConfigRoot = useSourceConfigRoot();
   const filepath = path.join(sourceConfigRoot, src);
   const imageUrl = useImageUrl(filepath);
@@ -17,7 +17,7 @@ const LeftDisplay: React.FC<{ src: string; name: string }> = props => {
     if (process.platform !== "darwin") {
       remote.shell.showItemInFolder(filepath);
     } else {
-      previewFile(filepath, name);
+      previewFile(filepath, sourceName);
     }
   };
 

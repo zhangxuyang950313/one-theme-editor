@@ -6,7 +6,7 @@ import {
   SourceValueDefine
 } from "data/SourceConfig";
 import { filenameIsImage, filenameIsXml, getImageData } from "common/utils";
-import { TypeSourceDefineData } from "types/source-config";
+import { TypeSourceDefine } from "types/source-config";
 import XMLNodeElement from "server/compiler/XMLNodeElement";
 import XmlTemplate from "./XmlTemplate";
 
@@ -16,7 +16,7 @@ import XmlTemplate from "./XmlTemplate";
 export default class SourceDefine {
   private node: XMLNodeElement;
   private sourceRoot: string;
-  private sourceDefineMap: Map<string, TypeSourceDefineData> = new Map();
+  private sourceDefineMap: Map<string, TypeSourceDefine> = new Map();
   constructor(node: XMLNodeElement, sourceRoot: string) {
     this.node = node;
     this.sourceRoot = sourceRoot;
@@ -61,7 +61,7 @@ export default class SourceDefine {
    * @param node
    * @returns
    */
-  private getSourceDefineData(node: XMLNodeElement): TypeSourceDefineData {
+  private getSourceDefineData(node: XMLNodeElement): TypeSourceDefine {
     const value = node.getAttributeOf("value");
     const description = node.getAttributeOf("description");
     const { src, searchParams } = this.getUrlData(value);
@@ -100,7 +100,7 @@ export default class SourceDefine {
     return sourceValueDefineData.create();
   }
 
-  getSourceDefineMap(): Map<string, TypeSourceDefineData> {
+  getSourceDefineMap(): Map<string, TypeSourceDefine> {
     if (this.sourceDefineMap.size === 0) {
       this.node.getChildrenNodes().forEach(item => {
         const name = item.getAttributeOf("name");
@@ -114,13 +114,13 @@ export default class SourceDefine {
     return this.sourceDefineMap;
   }
 
-  getSourceDefineList(): TypeSourceDefineData[] {
-    const result: TypeSourceDefineData[] = [];
+  getSourceDefineList(): TypeSourceDefine[] {
+    const result: TypeSourceDefine[] = [];
     this.getSourceDefineMap().forEach(item => result.push(item));
     return result;
   }
 
-  getSourceDefineByName(name: string): TypeSourceDefineData | null {
+  getSourceDefineByName(name: string): TypeSourceDefine | null {
     return this.getSourceDefineMap().get(name) || null;
   }
 }
