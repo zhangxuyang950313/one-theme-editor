@@ -211,24 +211,31 @@ export default class PageConfig extends BaseCompiler {
   private imageElement(node: XMLNodeElement): TypeSourceImageElement {
     const srcVal = node.getAttributeOf("src");
     const valueDefine = this.getSourceDefineByName(srcVal);
-    const sourceImageData = new DefineSourceData();
-    const sourceImageElement = new SourceImageElement();
-    sourceImageData.set("src", path.normalize(srcVal)); // 默认使用 srcVal
+    let src = srcVal;
+    let description = node.getAttributeOf("description");
+    // 定义的数据，尝试解析 ${placeholder}
     if (valueDefine && valueDefine.sourceData) {
-      const { sourceData, description } = valueDefine;
-      const { src } = sourceData;
-      const imageData = getImageData(this.resolveRootSourcePath(src));
-      sourceImageData.set("width", imageData.width);
-      sourceImageData.set("height", imageData.height);
-      sourceImageData.set("filename", imageData.filename);
-      sourceImageData.set("ninePatch", imageData.ninePatch);
-      sourceImageData.set("size", imageData.size);
-      sourceImageData.set("src", src);
-      sourceImageElement.set("name", description);
-      sourceImageElement.set("sourceData", sourceImageData.create());
-      sourceImageElement.set("layout", this.layoutConf(node));
+      src = valueDefine.sourceData.src;
+      description = valueDefine.description;
+    } else {
+      // 直接定义，用于显示一些静态图片
+      src = this.sourceDefineInstance.getUrlData(srcVal).src;
     }
-    return sourceImageElement.create();
+    const imageData = getImageData(this.resolveRootSourcePath(src));
+    const sourceImageData = new DefineSourceData()
+      .set("width", imageData.width)
+      .set("height", imageData.height)
+      .set("filename", imageData.filename)
+      .set("ninePatch", imageData.ninePatch)
+      .set("size", imageData.size)
+      .set("src", src)
+      .create();
+    const sourceImageElement = new SourceImageElement()
+      .set("description", description)
+      .set("sourceData", sourceImageData)
+      .set("layout", this.layoutConf(node))
+      .create();
+    return sourceImageElement;
   }
 
   /**

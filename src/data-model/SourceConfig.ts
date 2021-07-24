@@ -86,7 +86,7 @@ export class SourceImageElement extends AbstractDataModel<TypeSourceImageElement
   protected data: TypeSourceImageElement = {
     sourceTag: ELEMENT_TAG.IMAGE,
     sourceType: SOURCE_TYPES.IMAGE,
-    name: "",
+    description: "",
     sourceData: new DefineSourceData().default(),
     layout: {
       x: "0",

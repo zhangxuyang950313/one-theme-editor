@@ -1,5 +1,5 @@
 import path from "path";
-import { URL } from "url";
+import { URL, URLSearchParams } from "url";
 import {
   DefineSourceData,
   DefineValueData,
@@ -23,7 +23,7 @@ export default class SourceDefine {
   }
 
   // 获取 url 解析数据
-  private getUrlData(url: string) {
+  getUrlData(url: string): { src: string; searchParams: URLSearchParams } {
     const data = new URL(url);
     return {
       src: path.join(data.hostname, data.pathname),

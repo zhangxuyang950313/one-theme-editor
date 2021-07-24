@@ -70,6 +70,11 @@
 
     <!-- 预览结构配置 -->
     <Layout>
+        <!-- 这个图片不会在素材区展示，因为它是静态的，没有在 Source 节点中定义 -->
+        <Image 
+            x="160" y="2150" w="186" h="186" align="center" alignV="center" 
+            src="file://wallpaper/default_wallpaper.jpg"
+        />
         <Image 
             x="160" y="2150" w="186" h="186" align="center" alignV="center" 
             src="${wallpaper}"

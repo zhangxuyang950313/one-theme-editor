@@ -85,7 +85,7 @@ export type TypeLayoutConf = {
 export type TypeSourceImageElement = {
   readonly sourceTag: ELEMENT_TAG.IMAGE;
   readonly sourceType: SOURCE_TYPES.IMAGE;
-  name: string;
+  description: string;
   sourceData: TypePageSourceData;
   layout: {
     x: string;
