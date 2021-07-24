@@ -1,12 +1,5 @@
 import path from "path";
-import { Stats } from "fs";
-import {
-  useLayoutEffect,
-  useEffect,
-  useState,
-  useCallback,
-  useContext
-} from "react";
+import { useLayoutEffect, useEffect, useState, useCallback } from "react";
 import { useParams } from "react-router";
 import { apiGetProjectByUUID, apiGetProjectList } from "@/request/index";
 import { useAxiosCanceler } from "@/hooks/index";
@@ -29,8 +22,6 @@ import { TypeProjectDataDoc, TypeProjectInfo } from "types/project";
 import ERR_CODE from "common/errorCode";
 import { sleep } from "common/utils";
 import { notification } from "antd";
-import { EditorContext } from "@/views/Editor";
-import FileWatcher from "src/core/FileWatcher";
 
 // 获取项目列表
 export function useProjectList(): [
@@ -153,88 +144,3 @@ export function useResolveSourcePath(relativePath: string): string {
 
   return sourcePath;
 }
-
-// project Context hook
-export function useProjectContext(): { projectWatcher: FileWatcher } {
-  return useContext(EditorContext);
-}
-
-// 监听器
-export function useProjectWatcher1(
-  filepath: string,
-  callback: (path: string, stats?: Stats) => void
-): FileWatcher {
-  const { projectWatcher } = useContext(EditorContext);
-  useEffect(() => {
-    projectWatcher.on(filepath, callback);
-    return () => {
-      projectWatcher.unListener(filepath);
-      projectWatcher.unwatch();
-      projectWatcher.close();
-    };
-  }, []);
-  return projectWatcher;
-}
-
-export function useFileWatcher(
-  callback: (watcher: FileWatcher) => void,
-  dependency: unknown[] = []
-): FileWatcher {
-  const { projectWatcher } = useContext(EditorContext);
-  useEffect(() => {
-    callback(projectWatcher);
-  }, dependency);
-  return projectWatcher;
-}
-
-// // 添加图片资源映射
-// export function useAddImageMapper(): (data: TypeImageMapper) => Promise<void> {
-//   const uuid = useSelector(getProjectUUID);
-//   const dispatch = useDispatch();
-//   // 更新标题
-//   return async data => {
-//     if (!uuid) throw new Error(ERR_CODE[2001]);
-//     const project = await apiAddImageMapper(uuid, data);
-//     dispatch(ActionSetProjectData(project));
-//   };
-// }
-
-// // 删除图片资源映射
-// export function useDelImageMapper(): (target: string) => Promise<void> {
-//   const uuid = useSelector(getProjectUUID);
-//   const dispatch = useDispatch();
-//   // 更新标题
-//   return async target => {
-//     if (!uuid) throw new Error(ERR_CODE[2001]);
-//     const project = await apiDelImageMapper(uuid, target);
-//     dispatch(ActionSetProjectData(project));
-//   };
-// }
-
-// // 更新缓存在 state.project.projectData 的所有数据
-// export function useUpdateProject(): () => void {
-//   const dispatch = useDispatch();
-//   const projectData = useSelector(getProjectData);
-//   const handleUpdate = () => {
-//     if (projectData && projectData.uuid) {
-//       updateProject(
-//         _.pick(projectData, [
-//           "uuid",
-//           "brand",
-//           "description",
-//           "uiVersion",
-//           "template",
-//           "imageDataList",
-//           "imageMapperList"
-//         ])
-//       ).then(data => {
-//         if (!data) {
-//           message.error(ERR_CODE[2003]);
-//           return;
-//         }
-//         dispatch(actionSetProject(data));
-//       });
-//     }
-//   };
-//   return handleUpdate;
-// }

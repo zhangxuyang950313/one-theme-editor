@@ -10,7 +10,7 @@ import {
   createProject,
   updateProject
 } from "server/db-handler/project";
-import { releaseXmlTemplate } from "server/file-handler/xml-template";
+import { appendXmlTemplate } from "server/file-handler/xml-template";
 import XmlTemplate from "server/compiler/XmlTemplate";
 import { checkParamsKey } from "./../utils/utils";
 
@@ -131,7 +131,7 @@ export default function project(service: Express): void {
     const { body, query } = request;
     checkParamsKey(query, API.XML_TEMPLATE_WRITE.query);
     checkParamsKey(body, API.XML_TEMPLATE_WRITE.bodyKeys);
-    const data = await releaseXmlTemplate(query.uuid, body);
+    const data = await appendXmlTemplate(query.uuid, body);
     response.send(result.success(data));
   });
 }

@@ -31,13 +31,13 @@ export default function image(service: Express): void {
     }
     try {
       const { filepath } = req.query;
-      const { buff, fileType } = await getImgBuffAndFileType(filepath);
-      // .catch(
-      //   async () => {
-      //     const errImg = path.join(PATHS.ASSETS_DIR, "img-err.png");
-      //     return getImgBuffAndFileType(errImg);
-      //   }
-      // );
+      const { buff, fileType } = await getImgBuffAndFileType(filepath).catch(
+        async () => {
+          // const errImg = path.join(PATHS.ASSETS_DIR, "img-err.png");
+          // return getImgBuffAndFileType(errImg);
+          return { buff: Buffer.from(""), fileType: { mime: "image/png" } };
+        }
+      );
       res.set({ "Content-Type": fileType.mime });
       res.send(buff);
     } catch (err) {

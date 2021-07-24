@@ -46,9 +46,6 @@ const StyleCopyButton = styled.div`
 `;
 
 const ImageController: React.FC<TypeSourceDefine> = sourceDefine => {
-  // const dynamicReleaseList = useReleaseListWatcher(watchList);
-  // const dynamicReleaseList = watchList;
-  // const copyReleaseWith = useCopyReleaseWith(watchList, description);
   const { sourceData, description } = sourceDefine;
   if (!sourceData) return null;
   const { width, height, size, src } = sourceData;

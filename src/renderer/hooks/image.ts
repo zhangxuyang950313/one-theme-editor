@@ -129,6 +129,7 @@ export function useForceUpdateImageUrl(imageUrl: string): [string, () => void] {
   const [count, updateCount] = useState(0);
 
   const forceUpdate = () => {
+    console.log(1, { url, count });
     updateUrl(imageUrl ? `${imageUrl}&count=${count}` : "");
     updateCount(count + 1);
   };

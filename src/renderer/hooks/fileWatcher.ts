@@ -67,18 +67,19 @@ export function useProjectFileWatcher(
   listener: (path: string, stats?: fse.Stats | undefined) => void
 ): void {
   const projectPathname = useProjectPathname();
-  const watcher = useFSWatcherInstance();
+  const watcher = useFSWatcherInstance({ cwd: projectPathname });
   useEffect(() => {
-    if (!projectPathname || !pathname) return;
-    const file = path.join(projectPathname, pathname);
-    watcher.unwatch(file);
+    if (!pathname) return;
+    watcher.unwatch(pathname);
     watcher
       .on(FILE_STATUS.ADD, listener)
       .on(FILE_STATUS.CHANGE, listener)
       .on(FILE_STATUS.UNLINK, listener)
-      .add(file);
+      .add(pathname);
+    console.debug("开始监听", pathname);
     return () => {
-      watcher.unwatch(file);
+      watcher.unwatch(pathname);
+      console.debug("取消监听", pathname);
     };
   }, [pathname]);
 }

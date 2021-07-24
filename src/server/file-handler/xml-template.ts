@@ -14,7 +14,7 @@ import { findProjectByUUID } from "server/db-handler/project";
  * 输出被 key value 处理过模板字符串的 xml 模板
  * @param data
  */
-export async function releaseXmlTemplate(
+export async function appendXmlTemplate(
   uuid: string,
   data: TypeReleaseXmlTempPayload
 ): Promise<Record<string, string>> {
@@ -24,8 +24,8 @@ export async function releaseXmlTemplate(
     PATHS.SOURCE_CONFIG_DIR,
     path.dirname(project.sourceConfigPath)
   );
-  const templateXml = PathResolver.parse({ root: sourceRoot }, src);
-  const releaseXml = PathResolver.parse({ root: project.projectPathname }, src);
+  const templateXml = path.join(sourceRoot, src);
+  const releaseXml = path.join(project.projectPathname, src);
   // 节点操作
   const templateNode = new XmlTemplate(templateXml);
   const releaseNode = new XmlTemplate(releaseXml);

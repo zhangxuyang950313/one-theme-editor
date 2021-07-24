@@ -1,14 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import { useHistory } from "react-router";
 import { Button, Empty, Spin } from "antd";
 import { StyleBorderRight } from "@/style";
-import {
-  useLoadProject,
-  useProjectData,
-  useProjectPathname
-} from "@/hooks/project";
-import FileWatcher from "src/core/FileWatcher";
+import { useLoadProject, useProjectData } from "@/hooks/project";
 import ModuleSelector from "@/components/Editor/ModuleSelector";
 import EditorToolsBar from "@/components/Editor/ToolsBar";
 import PageSelector from "@/components/Editor/PageSelector";
@@ -16,46 +11,26 @@ import Previewer from "@/components/Editor/Previewer";
 import ImageSourceList from "@/components/Editor/ImageSourceList";
 import XmlSourceList from "@/components/Editor/XmlSourceList";
 
-// 初始化目录监听器
-const projectWatcher = new FileWatcher();
-export const EditorContext = React.createContext({
-  projectWatcher
-});
-
 // 主编辑区域
 const EditorContainer: React.FC = () => {
-  const projectRoot = useProjectPathname();
-
-  // 添加工程目录监听
-  useEffect(() => {
-    if (!projectRoot) return;
-    projectWatcher.watch(projectRoot, { cwd: projectRoot || undefined });
-    return () => {
-      projectWatcher.unwatch();
-      projectWatcher.close();
-    };
-  }, [projectRoot]);
-
   return (
-    <EditorContext.Provider value={{ projectWatcher }}>
-      <StyleEditorContainer>
-        {/* 页面选择器 */}
-        <StylePageSelector>
-          <PageSelector />
-        </StylePageSelector>
-        {/* 预览 */}
-        <StylePreviewer>
-          <Previewer />
-        </StylePreviewer>
-        {/* 素材编辑区 */}
-        <StyleImageSourceList>
-          <ImageSourceList />
-        </StyleImageSourceList>
-        <StyleXmlSourceList>
-          <XmlSourceList />
-        </StyleXmlSourceList>
-      </StyleEditorContainer>
-    </EditorContext.Provider>
+    <StyleEditorContainer>
+      {/* 页面选择器 */}
+      <StylePageSelector>
+        <PageSelector />
+      </StylePageSelector>
+      {/* 预览 */}
+      <StylePreviewer>
+        <Previewer />
+      </StylePreviewer>
+      {/* 素材编辑区 */}
+      <StyleImageSourceList>
+        <ImageSourceList />
+      </StyleImageSourceList>
+      <StyleXmlSourceList>
+        <XmlSourceList />
+      </StyleXmlSourceList>
+    </StyleEditorContainer>
   );
 };
 

@@ -8,9 +8,10 @@ import ColorUtil, { HEX_TYPES } from "src/core/ColorUtil";
 
 import { RightCircleOutlined } from "@ant-design/icons";
 import { apiGetTempValueByName, apiOutputXmlTemplate } from "@/request";
-import { useProjectUUID, useFileWatcher } from "@/hooks/project";
+import { useProjectUUID } from "@/hooks/project";
 import { TypeSourceDefine } from "types/source-config";
 import { StyleGirdBackground } from "@/style";
+import { useProjectFileWatcher } from "@/hooks/fileWatcher";
 
 // 颜色小方块
 const ColorBox: React.FC<{ color: string; onClick?: () => void }> = props => {
@@ -175,14 +176,12 @@ const ColorPicker: React.FC<TypeSourceDefine> = sourceDefine => {
   const [releaseColor, setReleaseColor] = useState("");
   const uuid = useProjectUUID();
 
-  useFileWatcher(watcher => {
-    if (!uuid || !valueData || !valueData.src) return;
-    watcher.on(valueData.src, file => {
-      apiGetTempValueByName({ uuid, name: valueData.valueName, src: file })
-        .then(value => setReleaseColor(value))
-        .catch(err => message.error(err.message));
-    });
+  useProjectFileWatcher(valueData?.src || "", file => {
+    apiGetTempValueByName({ uuid, name: valueData?.valueName || "", src: file })
+      .then(value => setReleaseColor(value))
+      .catch(err => message.error(err.message));
   });
+
   useEffect(() => {
     if (!valueData?.defaultValue) return;
     try {
@@ -196,7 +195,7 @@ const ColorPicker: React.FC<TypeSourceDefine> = sourceDefine => {
     }
   }, [valueData?.defaultValue]);
 
-  if (!valueData) return null;
+  if (!uuid || !valueData) return null;
 
   return (
     <StyleColorPicker>
@@ -224,9 +223,12 @@ const ColorPicker: React.FC<TypeSourceDefine> = sourceDefine => {
 };
 
 const StyleColorPicker = styled.div`
-  margin-bottom: 20px;
   flex-shrink: 0;
   box-sizing: content-box;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid;
+  border-bottom-color: ${({ theme }) => theme["@border-color-base"]};
   .text-wrapper {
     display: flex;
     flex-direction: column;
@@ -244,15 +246,15 @@ const StyleColorPicker = styled.div`
   .color-wrapper {
     display: flex;
     align-items: center;
-  }
-  .middle-button {
-    cursor: pointer;
-    color: ${({ theme }) => theme["@text-color-secondary"]};
-    font-size: 22px;
-    margin: 10px;
-    transition: all 0.3s;
-    &:hover {
-      opacity: 0.5;
+    .middle-button {
+      cursor: pointer;
+      color: ${({ theme }) => theme["@text-color-secondary"]};
+      font-size: 22px;
+      margin: 10px;
+      transition: all 0.3s;
+      &:hover {
+        opacity: 0.5;
+      }
     }
   }
 `;
