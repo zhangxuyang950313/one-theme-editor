@@ -12,6 +12,7 @@ import { useProjectUUID } from "@/hooks/project";
 import { TypeSourceDefine } from "types/source-config";
 import { StyleGirdBackground } from "@/style";
 import { useProjectFileWatcher } from "@/hooks/fileWatcher";
+import Wrapper from "./Wrapper";
 
 // 颜色小方块
 const ColorBox: React.FC<{ color: string; onClick?: () => void }> = props => {
@@ -171,7 +172,7 @@ const StyleColorPick = styled.div`
 
 // 颜色值选择器
 const ColorPicker: React.FC<TypeSourceDefine> = sourceDefine => {
-  const { description, valueData } = sourceDefine;
+  const { name, description, valueData } = sourceDefine;
   const [defaultColor, setDefaultColor] = useState("");
   const [releaseColor, setReleaseColor] = useState("");
   const uuid = useProjectUUID();
@@ -198,12 +199,8 @@ const ColorPicker: React.FC<TypeSourceDefine> = sourceDefine => {
   if (!uuid || !valueData) return null;
 
   return (
-    <StyleColorPicker>
-      <div className="text-wrapper">
-        <span className="description">{description}</span>
-        <span className="color-name">{valueData.valueName}</span>
-      </div>
-      <div className="color-wrapper">
+    <Wrapper name={valueData.valueName} description={description}>
+      <StyleColorPicker>
         <ColorBox color={defaultColor} />
         <RightCircleOutlined className="middle-button" />
         <ColorPick
@@ -217,44 +214,22 @@ const ColorPicker: React.FC<TypeSourceDefine> = sourceDefine => {
             });
           }}
         />
-      </div>
-    </StyleColorPicker>
+      </StyleColorPicker>
+    </Wrapper>
   );
 };
 
 const StyleColorPicker = styled.div`
-  flex-shrink: 0;
-  box-sizing: content-box;
-  padding-bottom: 20px;
-  margin-bottom: 20px;
-  border-bottom: 1px solid;
-  border-bottom-color: ${({ theme }) => theme["@border-color-base"]};
-  .text-wrapper {
-    display: flex;
-    flex-direction: column;
-    .description {
-      font-size: ${({ theme }) => theme["@text-size-main"]};
-      color: ${({ theme }) => theme["@text-color"]};
-    }
-    .color-name {
-      user-select: text;
-      margin: 5px 0;
-      font-size: ${({ theme }) => theme["@text-size-secondary"]};
-      color: ${({ theme }) => theme["@text-color-secondary"]};
-    }
-  }
-  .color-wrapper {
-    display: flex;
-    align-items: center;
-    .middle-button {
-      cursor: pointer;
-      color: ${({ theme }) => theme["@text-color-secondary"]};
-      font-size: 22px;
-      margin: 10px;
-      transition: all 0.3s;
-      &:hover {
-        opacity: 0.5;
-      }
+  display: flex;
+  align-items: center;
+  .middle-button {
+    cursor: pointer;
+    color: ${({ theme }) => theme["@text-color-secondary"]};
+    font-size: 22px;
+    margin: 10px;
+    transition: all 0.3s;
+    &:hover {
+      opacity: 0.5;
     }
   }
 `;
