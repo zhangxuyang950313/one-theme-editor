@@ -6,7 +6,7 @@ import { RightCircleOutlined } from "@ant-design/icons";
 import { apiCopyFile } from "@/request";
 import { useProjectPathname } from "@/hooks/project";
 import { useSourceConfigRoot } from "@/hooks/source";
-import { TypeSourceDefine } from "types/source-config";
+import { TypeSourceDefineImage } from "types/source-config";
 
 import LeftDisplay from "./LeftDisplay";
 import SourceStatus from "./SourceStatus";
@@ -45,8 +45,12 @@ const StyleCopyButton = styled.div`
   }
 `;
 
-const ImageController: React.FC<TypeSourceDefine> = sourceDefine => {
-  const { sourceData, description } = sourceDefine;
+const ImageController: React.FC<{
+  sourceDefineImage: TypeSourceDefineImage;
+  onChange: (val: string) => void;
+}> = props => {
+  const { sourceDefineImage, onChange } = props;
+  const { sourceData, description } = sourceDefineImage;
   if (!sourceData) return null;
   const { width, height, size, src } = sourceData;
   return (
@@ -76,7 +80,6 @@ const ImageController: React.FC<TypeSourceDefine> = sourceDefine => {
 };
 
 const StyleImageController = styled.div`
-  margin-bottom: 20px;
   .name {
     width: 100%;
     margin-bottom: 6px;

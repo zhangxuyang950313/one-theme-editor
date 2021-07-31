@@ -27,9 +27,9 @@ export type TypeSourceConfigData = TypeSourceConfigInfo & {
 
 // 素材类型定义数据
 export type TypeSourceTypeConf = {
+  type: SOURCE_TYPES;
   name: string;
   tag: string;
-  sourceType: SOURCE_TYPES;
 };
 
 // 预览模块
@@ -123,13 +123,19 @@ export type TypePageDefineSourceData = TypeImageData & {
 };
 
 // 素材定义
-export type TypeSourceDefine = {
+export type TypeSourceDefineImage = {
   tagName: string;
   name: string;
   description: string;
   sourceData: TypePageDefineSourceData | null;
+};
+export type TypeSourceDefineValue = {
+  tagName: string;
+  name: string;
+  description: string;
   valueData: TypePageDefineValueData | null;
 };
+export type TypeSourceDefine = TypeSourceDefineImage | TypeSourceDefineValue;
 
 // 预览元素数据
 export type TypeLayoutElement = TypeLayoutImageElement | TypeLayoutTextElement;

@@ -1,17 +1,31 @@
 import React from "react";
+import styled from "styled-components";
 
-import { useDefineImageList } from "@/hooks/source";
+import { useSourceDefineImageList } from "@/hooks/source";
 import ImageController from "@/components/ImageController/index";
 
 const ImageSourceList: React.FC = () => {
-  const imageSourceList = useDefineImageList();
+  const sourceDefineList = useSourceDefineImageList();
   return (
-    <>
-      {imageSourceList.map((sourceConf, key) => (
-        <ImageController key={key} {...sourceConf} />
+    <StyleImageSourceList>
+      {sourceDefineList.map((sourceDefine, key) => (
+        <div className="image-controller" key={key}>
+          <ImageController
+            sourceDefineImage={sourceDefine}
+            onChange={value => {
+              console.log({ value });
+            }}
+          />
+        </div>
       ))}
-    </>
+    </StyleImageSourceList>
   );
 };
+
+const StyleImageSourceList = styled.div`
+  .image-controller {
+    margin-bottom: 20px;
+  }
+`;
 
 export default ImageSourceList;

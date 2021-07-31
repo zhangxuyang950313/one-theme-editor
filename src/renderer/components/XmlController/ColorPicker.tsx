@@ -9,7 +9,7 @@ import ColorUtil, { HEX_TYPES } from "src/core/ColorUtil";
 import { RightCircleOutlined } from "@ant-design/icons";
 import { apiGetTempValueByName, apiOutputXmlTemplate } from "@/request";
 import { useProjectUUID } from "@/hooks/project";
-import { TypeSourceDefine } from "types/source-config";
+import { TypeSourceDefineValue } from "types/source-config";
 import { StyleGirdBackground } from "@/style";
 import { useProjectFileWatcher } from "@/hooks/fileWatcher";
 import Wrapper from "./Wrapper";
@@ -171,8 +171,12 @@ const StyleColorPick = styled.div`
 `;
 
 // 颜色值选择器
-const ColorPicker: React.FC<TypeSourceDefine> = sourceDefine => {
-  const { name, description, valueData } = sourceDefine;
+const ColorPicker: React.FC<{
+  sourceDefineValue: TypeSourceDefineValue;
+  onChange: (x: string) => void;
+}> = props => {
+  const { sourceDefineValue, onChange } = props;
+  const { description, valueData } = sourceDefineValue;
   const [defaultColor, setDefaultColor] = useState("");
   const [releaseColor, setReleaseColor] = useState("");
   const uuid = useProjectUUID();

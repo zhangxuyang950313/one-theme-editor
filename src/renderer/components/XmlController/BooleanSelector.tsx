@@ -1,21 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
-import { Radio, RadioChangeEvent } from "antd";
-import { TypeSourceDefine } from "types/source-config";
+import { Radio } from "antd";
+import { TypeSourceDefineValue } from "types/source-config";
 import Wrapper from "./Wrapper";
 
-const BooleanSelector: React.FC<
-  TypeSourceDefine & { onChange?: (s: RadioChangeEvent) => void }
-> = props => {
-  const { name, description, valueData } = props;
+const BooleanSelector: React.FC<{
+  sourceDefineValue: TypeSourceDefineValue;
+  onChange: (s: string) => void;
+}> = props => {
+  const { sourceDefineValue: sourceValueDefine, onChange } = props;
+  const { name, description, valueData } = sourceValueDefine;
+  const [value, setValue] = useState("");
+
   if (!valueData) return null;
   return (
     <Wrapper name={name} description={description}>
       <StyleBooleanSelector>
         <Radio.Group
-          value={valueData.defaultValue}
-          onChange={e => props.onChange && props.onChange(e)}
+          value={value}
+          onChange={e => {
+            setValue(e.target.value);
+            onChange(e.target.value);
+          }}
         >
           <Radio value="">跟随系统</Radio>
           <Radio value="true">true</Radio>

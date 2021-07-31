@@ -160,7 +160,7 @@ export class SourceTypeConf extends AbstractDataModel<TypeSourceTypeConf> {
   protected data: TypeSourceTypeConf = {
     name: "",
     tag: "",
-    sourceType: SOURCE_TYPES.STRING
+    type: SOURCE_TYPES.STRING
   };
 
   static default(): TypeSourceTypeConf {

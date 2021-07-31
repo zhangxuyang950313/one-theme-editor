@@ -1,16 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { InputNumber } from "antd";
 import { RightCircleOutlined } from "@ant-design/icons";
-import { TypeSourceDefine } from "types/source-config";
+import { TypeSourceDefineValue } from "types/source-config";
 import Wrapper from "./Wrapper";
 
-const NumberInput: React.FC<
-  TypeSourceDefine & {
-    onChange?: (e: string) => void;
-  }
-> = props => {
-  const { name, description, valueData } = props;
+const NumberInput: React.FC<{
+  sourceDefineValue: TypeSourceDefineValue;
+  onChange: (e: string) => void;
+}> = props => {
+  const { sourceDefineValue: sourceValueDefine, onChange } = props;
+  const { name, description, valueData } = sourceValueDefine;
+  const [value, setValue] = useState("");
+
   if (!valueData) return null;
 
   return (
@@ -26,7 +28,11 @@ const NumberInput: React.FC<
         <InputNumber
           keyboard
           className="input"
-          value={valueData.defaultValue}
+          value={value}
+          onChange={val => {
+            setValue(val);
+            onChange(val);
+          }}
         />
       </StyleNumberInput>
     </Wrapper>

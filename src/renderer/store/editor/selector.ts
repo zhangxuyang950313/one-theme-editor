@@ -2,8 +2,8 @@ import path from "path";
 import { createSelector } from "reselect";
 import { GlobalStore } from "@/store/index";
 import { ELEMENT_TAG } from "src/enum";
+import { TypeSourceDefineImage } from "@/../types/source-config";
 import { TypeEditorState } from "./reducer";
-
 // 数据
 const getState = (state: TypeEditorState) => state;
 
@@ -127,4 +127,26 @@ export const getLayoutTextList = createSelector(
 export const getSourceDefineList = createSelector(
   getSourcePageData,
   pageData => pageData?.sourceDefineList || []
+);
+
+// 获取资源图片列表
+export const getSourceImageDefineList = createSelector(
+  getSourceDefineList,
+  sourceDefineList => {
+    return sourceDefineList.flatMap(item => {
+      if (item.tagName === ELEMENT_TAG.IMAGE) return [item];
+      return [];
+    });
+  }
+);
+
+// 获取值资源列表
+export const getSourceValueDefineList = createSelector(
+  getSourceDefineList,
+  sourceDefineList => {
+    return sourceDefineList.flatMap(item => {
+      if (item.tagName !== ELEMENT_TAG.IMAGE) return [item];
+      return [];
+    });
+  }
 );

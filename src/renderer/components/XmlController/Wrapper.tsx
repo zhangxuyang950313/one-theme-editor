@@ -19,12 +19,6 @@ const Wrapper: React.FC<{
 };
 
 const StyleWrapper = styled.div`
-  flex-shrink: 0;
-  box-sizing: content-box;
-  padding-bottom: 20px;
-  margin-bottom: 20px;
-  border-bottom: 1px solid;
-  border-bottom-color: ${({ theme }) => theme["@border-color-base"]};
   .text-wrapper {
     display: flex;
     flex-direction: column;

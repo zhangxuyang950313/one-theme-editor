@@ -45,7 +45,8 @@ import {
   TypeLayoutTextElement,
   TypeSourcePageData,
   TypeSourceDefine,
-  TypePageDefineSourceData
+  TypeSourceDefineImage,
+  TypeSourceDefineValue
 } from "types/source-config";
 import { TypeBrandConf } from "types/project";
 import {
@@ -57,7 +58,7 @@ import {
 } from "@/store/index";
 import ERR_CODE from "common/errorCode";
 import { asyncQueue } from "common/utils";
-import { SOURCE_TYPES } from "@/../enum";
+import { SOURCE_TYPES } from "enum/index";
 import { useAsyncUpdater } from "./index";
 
 /**
@@ -296,44 +297,22 @@ export function useFetchPageConfData(): [TypeSourcePageData[], boolean] {
 
 /**
  * 获取当前元素类型配置
- * @returns
  */
 export function useSourceTypeList(): TypeSourceTypeConf[] {
   return useEditorSelector(getSourceTypeList);
 }
 
 /**
- * 获取当前所有元素列表
- * @returns
- */
-export function useLayoutElementList(): TypeLayoutElement[] {
-  return useEditorSelector(getLayoutSourceList);
-}
-
-/**
- * 获取图片类型元素列表
- * @returns
- */
-export function useLayoutImageList(): TypeLayoutImageElement[] {
-  return useEditorSelector(getLayoutImageList);
-}
-
-/**
- * 获取 xml 类型元素列表
- * @returns
- */
-export function useTextSourceList(): TypeLayoutTextElement[] {
-  return useEditorSelector(getLayoutTextList);
-}
-
-/**
  * 获取素材定义数据列表
- * @returns
  */
 export function useSourceDefineList(): TypeSourceDefine[] {
   return useEditorSelector(getSourceDefineList);
 }
 
+/**
+ * 所有类型素材定义 map tag -> list
+ * @deprecated
+ */
 export function useSourceDefineMap(): Map<string, TypeSourceDefine[]> {
   const sourceDefineList = useSourceDefineList();
   return sourceDefineList.reduce<Map<string, TypeSourceDefine[]>>((t, o) => {
@@ -342,13 +321,84 @@ export function useSourceDefineMap(): Map<string, TypeSourceDefine[]> {
   }, new Map());
 }
 
-export function useDefineImageList(): TypeSourceDefine[] {
+/**
+ * 值类型素材定义 map tag -> list
+ * @deprecated
+ */
+export function useSourceDefineValueMap(): Map<
+  string,
+  TypeSourceDefineValue[]
+> {
+  const XML_VALUE_TYPE = new Set([
+    SOURCE_TYPES.COLOR,
+    SOURCE_TYPES.BOOLEAN,
+    SOURCE_TYPES.STRING,
+    SOURCE_TYPES.NUMBER
+  ]);
   const sourceTypeList = useSourceTypeList();
   const sourceDefineList = useSourceDefineList();
-  const imageSourceTypeConf = sourceTypeList.find(
-    item => item.sourceType === SOURCE_TYPES.IMAGE
-  );
-  return sourceDefineList.filter(
-    item => item.tagName === imageSourceTypeConf?.tag
-  );
+  const valueSourceTags = sourceTypeList
+    .filter(item => XML_VALUE_TYPE.has(item.type))
+    .map(item => item.tag);
+  return sourceDefineList.reduce((t, o) => {
+    if (valueSourceTags.includes(o.tagName)) {
+      t.set(o.tagName, [...(t.get(o.tagName) || []), o]);
+    }
+    return t;
+  }, new Map());
+}
+
+/**
+ * 图片类型素材定义列表
+ */
+export function useSourceDefineImageList(): TypeSourceDefineImage[] {
+  const sourceTypeList = useSourceTypeList();
+  const sourceDefineList = useSourceDefineList();
+  const imageSourceTags = sourceTypeList
+    .filter(item => item.type === SOURCE_TYPES.IMAGE)
+    .map(item => item.tag);
+  return sourceDefineList.flatMap(item =>
+    imageSourceTags.includes(item.tagName) ? [item] : []
+  ) as TypeSourceDefineImage[];
+}
+
+/**
+ * 值类型素材定义列表
+ */
+export function useSourceDefineValueList(): TypeSourceDefineValue[] {
+  const XML_VALUE_TYPE = new Set([
+    SOURCE_TYPES.COLOR,
+    SOURCE_TYPES.BOOLEAN,
+    SOURCE_TYPES.STRING,
+    SOURCE_TYPES.NUMBER
+  ]);
+  const sourceTypeList = useSourceTypeList();
+  const sourceDefineList = useSourceDefineList();
+  const valueSourceTags = sourceTypeList
+    .filter(item => XML_VALUE_TYPE.has(item.type))
+    .map(item => item.tag);
+  return sourceDefineList.flatMap(item =>
+    valueSourceTags.includes(item.tagName) ? [item] : []
+  ) as TypeSourceDefineValue[];
+}
+
+/**
+ * 获取当前所有元素列表
+ */
+export function useLayoutElementList(): TypeLayoutElement[] {
+  return useEditorSelector(getLayoutSourceList);
+}
+
+/**
+ * 获取图片类型元素列表
+ */
+export function useLayoutImageList(): TypeLayoutImageElement[] {
+  return useEditorSelector(getLayoutImageList);
+}
+
+/**
+ * 获取 xml 类型元素列表
+ */
+export function useTextSourceList(): TypeLayoutTextElement[] {
+  return useEditorSelector(getLayoutTextList);
 }
