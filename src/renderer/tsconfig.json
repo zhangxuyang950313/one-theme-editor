@@ -23,7 +23,7 @@
       "src/*": ["../*"],
       "enum/*": ["../enum/*"],
       "core/*": ["../core/*"],
-      "data/*": ["../data-model/*"],
+      "data/*": ["../data/*"],
       "types/*": ["../types/*"],
       "common/*": ["../common/*"],
       "server/*": ["../server/*"],

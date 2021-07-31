@@ -17,7 +17,7 @@ import {
   SourceImageElement,
   SourcePageData,
   SourceTextElement
-} from "data/SourceConfig";
+} from "src/data/SourceConfig";
 import { placeholderRegexp } from "src/common/regexp";
 import PATH from "server/utils/pathUtils";
 import BaseCompiler from "./BaseCompiler";

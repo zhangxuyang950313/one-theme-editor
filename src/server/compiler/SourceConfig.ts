@@ -18,7 +18,7 @@ import {
   SourcePageGroupConf,
   SourceTypeConf,
   UiVersion
-} from "data/SourceConfig";
+} from "@/../data/SourceConfig";
 import PATHS from "server/utils/pathUtils";
 import ERR_CODE from "common/errorCode";
 import PageConfig from "./PageConfig";

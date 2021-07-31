@@ -12,8 +12,8 @@ import {
   SourceModuleConf,
   SourcePageConf
   // SourcePageData
-} from "data/SourceConfig";
-import { ProjectData, ProjectInfo } from "data/ProjectData";
+} from "@/../data/SourceConfig";
+import { ProjectData, ProjectInfo } from "@/../data/ProjectData";
 import { ACTION_TYPES, TypeEditorActions } from "./action";
 
 // main states

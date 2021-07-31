@@ -36,7 +36,7 @@
     "paths": {
       "src/*": ["../*"],
       "enum/*": ["../enum/*"],
-      "data/*": ["../data-model/*"],
+      "data/*": ["../data/*"],
       "types/*": ["../types/*"],
       "core/*": ["../core/*"],
       "common/*": ["../common/*"],

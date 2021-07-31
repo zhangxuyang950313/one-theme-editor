@@ -4,7 +4,7 @@ import {
   DefineSourceData,
   DefineValueData,
   SourceDefineData
-} from "data/SourceConfig";
+} from "src/data/SourceConfig";
 import { filenameIsImage, filenameIsXml, getImageData } from "common/utils";
 import { TypeSourceDefine } from "types/source-config";
 import XMLNodeElement from "server/compiler/XMLNodeElement";

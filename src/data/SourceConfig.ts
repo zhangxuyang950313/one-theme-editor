@@ -12,8 +12,7 @@ import {
   TypeSourceDefine,
   TypePageDefineSourceData,
   TypePageDefineValueData,
-  TypeSourceDefineImage,
-  TypeSourceDefineValue
+  TypeSourceDefineImage
 } from "../types/source-config";
 import { TypeProjectUiVersion } from "../types/project";
 import {
