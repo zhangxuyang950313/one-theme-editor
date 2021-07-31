@@ -2,7 +2,6 @@ import path from "path";
 import { createSelector } from "reselect";
 import { GlobalStore } from "@/store/index";
 import { ELEMENT_TAG } from "src/enum";
-import { TypeSourceDefineImage } from "@/../types/source-config";
 import { TypeEditorState } from "./reducer";
 // 数据
 const getState = (state: TypeEditorState) => state;

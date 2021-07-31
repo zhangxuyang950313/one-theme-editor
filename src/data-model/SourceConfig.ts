@@ -11,7 +11,9 @@ import {
   TypeSourceTypeConf,
   TypeSourceDefine,
   TypePageDefineSourceData,
-  TypePageDefineValueData
+  TypePageDefineValueData,
+  TypeSourceDefineImage,
+  TypeSourceDefineValue
 } from "../types/source-config";
 import { TypeProjectUiVersion } from "../types/project";
 import {
@@ -54,17 +56,14 @@ export class DefineValueData extends AbstractDataModel<TypePageDefineValueData> 
   };
 }
 
-export class SourceValueDefine extends AbstractDataModel<TypeSourceDefine> {
-  protected data: TypeSourceDefine = {
+export class SourceDefineData extends AbstractDataModel<TypeSourceDefine> {
+  protected data: TypeSourceDefineImage = {
     tagName: "",
     name: "",
     description: "",
     sourceData: null,
     valueData: null
   };
-  static default(): TypeLayoutTextElement {
-    return new SourceTextElement().default();
-  }
 }
 
 export class ElementLayoutConf extends AbstractDataModel<TypeLayoutConf> {

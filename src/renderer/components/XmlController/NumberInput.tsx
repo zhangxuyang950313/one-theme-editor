@@ -6,12 +6,12 @@ import { TypeSourceDefineValue } from "types/source-config";
 import Wrapper from "./Wrapper";
 
 const NumberInput: React.FC<{
-  sourceDefineValue: TypeSourceDefineValue;
+  value: string;
+  sourceDefine: TypeSourceDefineValue;
   onChange: (e: string) => void;
 }> = props => {
-  const { sourceDefineValue: sourceValueDefine, onChange } = props;
-  const { name, description, valueData } = sourceValueDefine;
-  const [value, setValue] = useState("");
+  const { value, sourceDefine, onChange } = props;
+  const { name, description, valueData } = sourceDefine;
 
   if (!valueData) return null;
 
@@ -29,10 +29,7 @@ const NumberInput: React.FC<{
           keyboard
           className="input"
           value={value}
-          onChange={val => {
-            setValue(val);
-            onChange(val);
-          }}
+          onChange={onChange}
         />
       </StyleNumberInput>
     </Wrapper>

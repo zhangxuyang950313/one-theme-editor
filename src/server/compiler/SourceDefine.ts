@@ -3,7 +3,7 @@ import { URL, URLSearchParams } from "url";
 import {
   DefineSourceData,
   DefineValueData,
-  SourceValueDefine
+  SourceDefineData
 } from "data/SourceConfig";
 import { filenameIsImage, filenameIsXml, getImageData } from "common/utils";
 import { TypeSourceDefine } from "types/source-config";
@@ -65,7 +65,7 @@ export default class SourceDefine {
     const value = node.getAttributeOf("value");
     const description = node.getAttributeOf("description");
     const { src, searchParams } = this.getUrlData(value);
-    const sourceValueDefineData = new SourceValueDefine()
+    const sourceDefineData = new SourceDefineData()
       .set("tagName", node.getTagname())
       .set("name", node.getAttributeOf("name"))
       .set("description", description);
@@ -80,7 +80,7 @@ export default class SourceDefine {
         .set("filename", imageData.filename)
         .set("src", src)
         .create();
-      sourceValueDefineData.set("sourceData", sourceData);
+      sourceDefineData.set("sourceData", sourceData);
     }
     // xml 素材
     if (filenameIsXml(src)) {
@@ -95,9 +95,9 @@ export default class SourceDefine {
         .set("valueName", valueName)
         .set("defaultValue", defaultValue)
         .create();
-      sourceValueDefineData.set("valueData", valueData);
+      sourceDefineData.set("valueData", valueData);
     }
-    return sourceValueDefineData.create();
+    return sourceDefineData.create();
   }
 
   getSourceDefineMap(): Map<string, TypeSourceDefine> {

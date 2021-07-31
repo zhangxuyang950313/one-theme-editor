@@ -128,11 +128,13 @@ export type TypeSourceDefineImage = {
   name: string;
   description: string;
   sourceData: TypePageDefineSourceData | null;
+  valueData: null;
 };
 export type TypeSourceDefineValue = {
   tagName: string;
   name: string;
   description: string;
+  sourceData: null;
   valueData: TypePageDefineValueData | null;
 };
 export type TypeSourceDefine = TypeSourceDefineImage | TypeSourceDefineValue;

@@ -2,7 +2,6 @@ import path from "path";
 import fse from "fs-extra";
 import API from "src/common/apiConf";
 import PATHS from "server/utils/pathUtils";
-import PathResolver from "src/core/PathResolver";
 import XmlTemplate from "server/compiler/XmlTemplate";
 import {
   TypeReleaseXmlTempPayload,
@@ -14,7 +13,7 @@ import { findProjectByUUID } from "server/db-handler/project";
  * 输出被 key value 处理过模板字符串的 xml 模板
  * @param data
  */
-export async function appendXmlTemplate(
+export async function releaseXmlTemplate(
   uuid: string,
   data: TypeReleaseXmlTempPayload
 ): Promise<Record<string, string>> {

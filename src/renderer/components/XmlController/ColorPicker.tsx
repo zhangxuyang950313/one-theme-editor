@@ -7,11 +7,9 @@ import { RGBColor, SketchPicker } from "react-color";
 import ColorUtil, { HEX_TYPES } from "src/core/ColorUtil";
 
 import { RightCircleOutlined } from "@ant-design/icons";
-import { apiGetTempValueByName, apiOutputXmlTemplate } from "@/request";
 import { useProjectUUID } from "@/hooks/project";
 import { TypeSourceDefineValue } from "types/source-config";
 import { StyleGirdBackground } from "@/style";
-import { useProjectFileWatcher } from "@/hooks/fileWatcher";
 import Wrapper from "./Wrapper";
 
 // 颜色小方块
@@ -172,20 +170,20 @@ const StyleColorPick = styled.div`
 
 // 颜色值选择器
 const ColorPicker: React.FC<{
-  sourceDefineValue: TypeSourceDefineValue;
+  value: string;
+  sourceDefine: TypeSourceDefineValue;
   onChange: (x: string) => void;
 }> = props => {
-  const { sourceDefineValue, onChange } = props;
-  const { description, valueData } = sourceDefineValue;
+  const { value, sourceDefine, onChange } = props;
+  const { description, valueData } = sourceDefine;
   const [defaultColor, setDefaultColor] = useState("");
-  const [releaseColor, setReleaseColor] = useState("");
   const uuid = useProjectUUID();
 
-  useProjectFileWatcher(valueData?.src || "", file => {
-    apiGetTempValueByName({ uuid, name: valueData?.valueName || "", src: file })
-      .then(value => setReleaseColor(value))
-      .catch(err => message.error(err.message));
-  });
+  // useProjectFileWatcher(valueData?.src || "", file => {
+  //   apiGetTempValueByName({ uuid, name: valueData?.valueName || "", src: file })
+  //     .then(value => setReleaseColor(value))
+  //     .catch(err => message.error(err.message));
+  // });
 
   useEffect(() => {
     if (!valueData?.defaultValue) return;
@@ -208,15 +206,9 @@ const ColorPicker: React.FC<{
         <ColorBox color={defaultColor} />
         <RightCircleOutlined className="middle-button" />
         <ColorPick
-          defaultColor={releaseColor}
+          defaultColor={value}
           placeholder={defaultColor}
-          onDisabled={color => {
-            apiOutputXmlTemplate(uuid, {
-              name: valueData.valueName,
-              value: color,
-              src: valueData.src
-            });
-          }}
+          onDisabled={onChange}
         />
       </StyleColorPicker>
     </Wrapper>

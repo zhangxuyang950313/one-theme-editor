@@ -64,7 +64,7 @@ class XMLNodeBase {
 
   // 如果 getType 是 text，这里会获得节点的文本信息
   public getText(): string | number | boolean {
-    return this.node.text || "";
+    return this.node.text ?? "";
   }
 
   // 获取所有键值映射
@@ -97,9 +97,9 @@ class XMLNodeBase {
       return Number.isNaN(Number(val)) ? def : Number(val);
     }
     if (typeof val === "string") {
-      return val || def || "";
+      return val ?? def ?? "";
     }
-    return def || "";
+    return def ?? "";
   }
 
   /**
@@ -229,7 +229,7 @@ class XMLNodeChildren extends XMLNodeBase {
    * @returns
    */
   public getFirstTextChildValue(): string {
-    return String(this.getFirstTextChildNode().getText() || "");
+    return String(this.getFirstTextChildNode().getText()) ?? "";
   }
 
   /**
@@ -304,7 +304,7 @@ export default class XMLNodeElement extends XMLNodeHandler {
 
   // 创建已给文本节点
   public static createTextNode(text?: string): XMLNodeElement {
-    return new XMLNodeElement({ type: ELEMENT_TYPE.TEXT, text: text || "" });
+    return new XMLNodeElement({ type: ELEMENT_TYPE.TEXT, text: text ?? "" });
   }
 
   public createInstance(node: Element): XMLNodeElement {

@@ -1,13 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { TypeSourceDefineValue } from "types/source-config";
-import { apiOutputXmlTemplate } from "@/request";
+import { apiGetTempValueByName, apiOutputXmlTemplate } from "@/request";
 import { useProjectUUID } from "@/hooks/project";
 import { useProjectFileWatcher } from "@/hooks/fileWatcher";
 import { SOURCE_TYPES } from "enum/index";
 
-import { notification } from "antd";
-import ERR_CODE from "@/../common/errorCode";
 import ColorPicker from "./ColorPicker";
 import BooleanSelector from "./BooleanSelector";
 import NumberInput from "./NumberInput";
@@ -18,24 +16,29 @@ const XmlController: React.FC<{
   sourceDefineValue: TypeSourceDefineValue;
 }> = props => {
   const { sourceType, sourceDefineValue } = props;
+  const { valueData } = sourceDefineValue;
   const uuid = useProjectUUID();
+  const [value, setValue] = useState("");
 
-  useProjectFileWatcher(sourceDefineValue.valueData?.src || "", () => {
-    //
+  useProjectFileWatcher(valueData?.src || "", file => {
+    if (!valueData?.valueName) return;
+    console.log("get", valueData.valueName);
+    apiGetTempValueByName({
+      uuid,
+      name: valueData.valueName,
+      src: valueData.src
+    }).then(setValue);
   });
+
+  if (!valueData) return null;
 
   const Controllers = () => {
     // 写入 xml
     const writeXml = (value: string) => {
-      if (!sourceDefineValue.valueData) {
-        notification.warn({ message: ERR_CODE[4008] });
-        return;
-      }
-
       apiOutputXmlTemplate(uuid, {
-        name: sourceDefineValue.name,
+        name: valueData.valueName,
         value,
-        src: sourceDefineValue.valueData.src
+        src: valueData.src
       });
     };
     switch (sourceType) {
@@ -43,7 +46,8 @@ const XmlController: React.FC<{
       case SOURCE_TYPES.COLOR: {
         return (
           <ColorPicker
-            sourceDefineValue={sourceDefineValue}
+            value={value}
+            sourceDefine={sourceDefineValue}
             onChange={writeXml}
           />
         );
@@ -52,7 +56,8 @@ const XmlController: React.FC<{
       case SOURCE_TYPES.BOOLEAN: {
         return (
           <BooleanSelector
-            sourceDefineValue={sourceDefineValue}
+            value={value}
+            sourceDefine={sourceDefineValue}
             onChange={writeXml}
           />
         );
@@ -61,7 +66,8 @@ const XmlController: React.FC<{
       case SOURCE_TYPES.NUMBER: {
         return (
           <NumberInput
-            sourceDefineValue={sourceDefineValue}
+            value={value}
+            sourceDefine={sourceDefineValue}
             onChange={writeXml}
           />
         );
@@ -71,7 +77,8 @@ const XmlController: React.FC<{
       default: {
         return (
           <StringInput
-            sourceDefineValue={sourceDefineValue}
+            value={value}
+            sourceDefine={sourceDefineValue}
             onChange={writeXml}
           />
         );

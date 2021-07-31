@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 
 import { Radio } from "antd";
@@ -6,12 +6,12 @@ import { TypeSourceDefineValue } from "types/source-config";
 import Wrapper from "./Wrapper";
 
 const BooleanSelector: React.FC<{
-  sourceDefineValue: TypeSourceDefineValue;
+  value: string;
+  sourceDefine: TypeSourceDefineValue;
   onChange: (s: string) => void;
 }> = props => {
-  const { sourceDefineValue: sourceValueDefine, onChange } = props;
-  const { name, description, valueData } = sourceValueDefine;
-  const [value, setValue] = useState("");
+  const { value, sourceDefine, onChange } = props;
+  const { name, description, valueData } = sourceDefine;
 
   if (!valueData) return null;
   return (
@@ -20,7 +20,6 @@ const BooleanSelector: React.FC<{
         <Radio.Group
           value={value}
           onChange={e => {
-            setValue(e.target.value);
             onChange(e.target.value);
           }}
         >

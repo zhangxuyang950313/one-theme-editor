@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import { Input } from "antd";
 import { RightCircleOutlined } from "@ant-design/icons";
@@ -6,12 +6,12 @@ import { TypeSourceDefineValue } from "types/source-config";
 import Wrapper from "./Wrapper";
 
 const StringInput: React.FC<{
-  sourceDefineValue: TypeSourceDefineValue;
+  value: string;
+  sourceDefine: TypeSourceDefineValue;
   onChange: (e: string) => void;
 }> = props => {
-  const { sourceDefineValue: sourceValueDefine, onChange } = props;
-  const { name, description, valueData } = sourceValueDefine;
-  const [value, setValue] = useState("");
+  const { value, sourceDefine, onChange } = props;
+  const { name, description, valueData } = sourceDefine;
 
   if (!valueData) return null;
   return (
@@ -23,7 +23,6 @@ const StringInput: React.FC<{
           className="input"
           value={value}
           onChange={e => {
-            setValue(e.target.value);
             onChange(e.target.value);
           }}
         />
