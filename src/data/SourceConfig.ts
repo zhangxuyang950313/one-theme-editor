@@ -21,7 +21,7 @@ import {
   ELEMENT_TAG,
   SOURCE_TYPES
 } from "../enum/index";
-import { AbstractDataModel } from "./abstract";
+import { AbstractDataModel } from "./AbstractDataModel";
 
 export class SourcePageConf extends AbstractDataModel<TypeSourcePageConf> {
   protected data: TypeSourcePageConf = {
@@ -42,16 +42,14 @@ export class DefineSourceData extends AbstractDataModel<TypePageDefineImageData>
     height: 0,
     size: 0,
     ninePatch: false,
-    filename: "",
-    src: ""
+    filename: ""
   };
 }
 
 export class DefineValueData extends AbstractDataModel<TypePageDefineValueData> {
-  protected data = {
+  protected data: TypePageDefineValueData = {
     defaultValue: "",
-    valueName: "",
-    src: ""
+    valueName: ""
   };
 }
 
@@ -60,6 +58,7 @@ export class SourceDefineData extends AbstractDataModel<TypeSourceDefine> {
     tagName: "",
     name: "",
     description: "",
+    src: "",
     sourceData: null,
     valueData: null
   };
@@ -85,6 +84,7 @@ export class SourceImageElement extends AbstractDataModel<TypeLayoutImageElement
     sourceTag: ELEMENT_TAG.IMAGE,
     sourceType: SOURCE_TYPES.IMAGE,
     description: "",
+    src: "",
     sourceData: new DefineSourceData().default(),
     layout: {
       x: "0",
@@ -103,10 +103,10 @@ export class SourceTextElement extends AbstractDataModel<TypeLayoutTextElement> 
     sourceType: SOURCE_TYPES.COLOR,
     name: "",
     text: "",
+    src: "",
     valueData: {
       defaultValue: "",
-      valueName: "",
-      src: ""
+      valueName: ""
     },
     layout: {
       x: "0",

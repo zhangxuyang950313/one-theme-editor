@@ -1,5 +1,5 @@
 import { TypeProjectDataDoc, TypeProjectInfo } from "../types/project";
-import { AbstractDataModel } from "./abstract";
+import { AbstractDataModel } from "./AbstractDataModel";
 import { BrandInfo } from "./BrandConfig";
 import { UiVersion } from "./SourceConfig";
 
@@ -15,7 +15,7 @@ export class ProjectData extends AbstractDataModel<TypeProjectDataDoc> {
   protected data: TypeProjectDataDoc = {
     uuid: "",
     brandInfo: BrandInfo.default(),
-    projectPathname: "",
+    projectRoot: "",
     projectInfo: ProjectInfo.default(),
     uiVersion: UiVersion.default(),
     sourceConfigPath: "",

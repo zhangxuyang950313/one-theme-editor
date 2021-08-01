@@ -3,11 +3,7 @@ import styled from "styled-components";
 import { useHistory } from "react-router";
 import { Button, Empty, Spin } from "antd";
 import { StyleBorderRight } from "@/style";
-import {
-  useLoadProject,
-  useProjectData,
-  useUpdateProjectSourceData
-} from "@/hooks/project";
+import { useLoadProject, useProjectData } from "@/hooks/project";
 import ModuleSelector from "@/components/Editor/ModuleSelector";
 import EditorToolsBar from "@/components/Editor/ToolsBar";
 import EditorContainer from "@/components/Editor/index";
@@ -16,7 +12,6 @@ const Editor: React.FC = () => {
   const history = useHistory();
   const isLoading = useLoadProject();
   const projectData = useProjectData();
-  useUpdateProjectSourceData();
 
   // 还未安装
   if (isLoading) {

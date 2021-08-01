@@ -4,17 +4,17 @@ import React from "react";
 import styled from "styled-components";
 import { remote } from "electron";
 import { Tooltip } from "antd";
-import { useProjectPathname } from "@/hooks/project";
+import { useProjectRoot } from "@/hooks/project";
 
 const SourceStatus: React.FC<{ src: string }> = props => {
   const { src } = props;
-  const projectPathname = useProjectPathname();
+  const projectRoot = useProjectRoot();
 
-  if (!projectPathname) return null;
+  if (!projectRoot) return null;
 
   const basename = path.basename(src);
-  const hasIt = fse.existsSync(path.join(projectPathname, src));
-  const absPath = path.join(projectPathname, src);
+  const hasIt = fse.existsSync(path.join(projectRoot, src));
+  const absPath = path.join(projectRoot, src);
   return (
     <Tooltip title={src} placement="top">
       <StyleSourceStatus

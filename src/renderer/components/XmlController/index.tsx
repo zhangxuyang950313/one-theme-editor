@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { TypeSourceDefineValue } from "types/source";
-import { apiGetTempValueByName, apiOutputXmlTemplate } from "@/request";
+import { apiOutputXmlTemplate } from "@/request";
 import { useProjectUUID } from "@/hooks/project";
-import { useProjectFileWatcher } from "@/hooks/fileWatcher";
 import { SOURCE_TYPES } from "enum/index";
 
 import ColorPicker from "./ColorPicker";
@@ -16,30 +15,17 @@ const XmlController: React.FC<{
   sourceDefineValue: TypeSourceDefineValue;
 }> = props => {
   const { sourceType, sourceDefineValue } = props;
-  const { valueData } = sourceDefineValue;
+  const { valueData, src } = sourceDefineValue;
   const uuid = useProjectUUID();
   const [value, setValue] = useState("");
-
-  useProjectFileWatcher(valueData?.src || "", file => {
-    if (!valueData?.valueName) return;
-    console.log("get", valueData.valueName);
-    apiGetTempValueByName({
-      uuid,
-      name: valueData.valueName,
-      src: valueData.src
-    }).then(setValue);
-  });
 
   if (!valueData) return null;
 
   const Controllers = () => {
     // 写入 xml
     const writeXml = (value: string) => {
-      apiOutputXmlTemplate(uuid, {
-        name: valueData.valueName,
-        value,
-        src: valueData.src
-      });
+      const name = valueData.valueName;
+      apiOutputXmlTemplate(uuid, { name, value, src });
     };
     switch (sourceType) {
       // 颜色选择器

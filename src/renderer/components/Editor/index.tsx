@@ -5,9 +5,11 @@ import PageSelector from "@/components/Editor/PageSelector";
 import Previewer from "@/components/Editor/Previewer";
 import ImageSourceList from "@/components/Editor/ImageSourceList";
 import XmlSourceList from "@/components/Editor/XmlSourceList";
+import { usePatchPageSourceData } from "@/hooks/project";
 
 // 主编辑区域
 const EditorContainer: React.FC = () => {
+  usePatchPageSourceData();
   return (
     <StyleEditorContainer>
       {/* 页面选择器 */}

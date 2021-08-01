@@ -3,7 +3,8 @@ import {
   TypeBrandConf,
   TypeCreateProjectPayload,
   TypeProjectData,
-  TypeProjectDataDoc
+  TypeProjectDataDoc,
+  TypeProjectFileData
 } from "types/project";
 import {
   TypeRequestResult,
@@ -86,5 +87,23 @@ export async function apiOutputXmlTemplate(
     .post<TypeRequestResult<null>>(API.XML_TEMPLATE_WRITE.url, data, {
       params: { uuid }
     })
+    .then(data => data.data.data);
+}
+
+/**
+ * 获取工程中资源文件数据
+ * @param uuid
+ * @param filepath
+ * @returns
+ */
+export async function apiGetProjectFileData(
+  uuid: string,
+  filepath: string
+): Promise<TypeProjectFileData> {
+  return createHttp()
+    .get<TypeRequestResult<TypeProjectFileData>>(
+      `${API.GET_SOURCE_FILE_DATA.url}/${uuid}`,
+      { params: { filepath } }
+    )
     .then(data => data.data.data);
 }

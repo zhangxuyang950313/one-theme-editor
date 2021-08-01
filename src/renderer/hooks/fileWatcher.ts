@@ -3,7 +3,7 @@ import fse from "fs-extra";
 import logSymbols from "log-symbols";
 import { WatchOptions, FSWatcher } from "chokidar";
 import { useEffect, useState } from "react";
-import { useProjectPathname } from "@/hooks/project";
+import { useProjectRoot } from "@/hooks/project";
 import { FILE_STATUS } from "enum/index";
 
 const mapWatchers = (count: number, options?: WatchOptions) => {
@@ -55,48 +55,35 @@ export function useFSWatcherMultiInstance(
 
 /**
  * 监听一个文件
- * @param pathname
+ * @param paths
  * @param listener
  */
 export function useProjectFileWatcher(
-  pathname: string,
+  paths: ReadonlyArray<string>,
   listener: (path: string, stats?: fse.Stats | undefined) => void
 ): void {
-  const projectPathname = useProjectPathname();
-  const watcher = useFSWatcherInstance({ cwd: projectPathname });
+  const projectRoot = useProjectRoot();
+  const watchers = useFSWatcherMultiInstance(paths.length, {
+    cwd: projectRoot
+  });
   useEffect(() => {
-    if (!pathname) return;
-    watcher.unwatch(pathname);
-    watcher
-      .on(FILE_STATUS.ADD, listener)
-      .on(FILE_STATUS.CHANGE, listener)
-      .on(FILE_STATUS.UNLINK, listener)
-      .add(pathname);
-    console.debug("开始监听", pathname);
+    if (!paths) return;
+    watchers.forEach((watcher, index) => {
+      watcher.unwatch(paths[index]);
+      watcher
+        .on(FILE_STATUS.ADD, listener)
+        .on(FILE_STATUS.CHANGE, listener)
+        .on(FILE_STATUS.UNLINK, listener)
+        .add(paths[index]);
+    });
+    console.debug("开始监听", paths);
     return () => {
-      watcher.unwatch(pathname);
-      console.debug("取消监听", pathname);
+      watchers.forEach((watcher, index) => {
+        watcher.unwatch(paths[index]);
+      });
+      console.debug("取消监听", paths);
     };
-  }, [pathname]);
-}
-
-export function useProjectSourceWatcher(
-  listener: (path: string, stats?: fse.Stats | undefined) => void
-): void {
-  const projectPathname = useProjectPathname();
-  const watcher = useFSWatcherInstance({ cwd: projectPathname });
-  useEffect(() => {
-    if (!projectPathname) return;
-    watcher
-      .on(FILE_STATUS.ADD, listener)
-      .on(FILE_STATUS.CHANGE, listener)
-      .on(FILE_STATUS.UNLINK, listener);
-    console.debug("开始监听", projectPathname);
-    return () => {
-      watcher.unwatch(projectPathname);
-      console.debug("取消监听", projectPathname);
-    };
-  }, [projectPathname]);
+  }, [paths]);
 }
 
 /**
@@ -106,20 +93,20 @@ export function useProjectSourceWatcher(
  * @returns
  */
 export function useReleaseListWatcher(releaseList: string[]): string[] {
-  const projectPathname = useProjectPathname();
+  const projectRoot = useProjectRoot();
   const [list, setList] = useState<string[]>([]);
 
   useEffect(() => {
-    if (!projectPathname) return;
+    if (!projectRoot) return;
     const watchers = mapWatchers(releaseList.length, {
-      cwd: projectPathname || undefined,
+      cwd: projectRoot || undefined,
       ignoreInitial: false
     });
     const set = new Set<string>();
     // 更新数据
     const updateList = () => {
       const existsList = Array.from(set).filter(
-        item => item && fse.existsSync(path.join(projectPathname, item))
+        item => item && fse.existsSync(path.join(projectRoot, item))
       );
       setList(existsList);
     };

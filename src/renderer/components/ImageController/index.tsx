@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { RightCircleOutlined } from "@ant-design/icons";
 
 import { apiCopyFile } from "@/request";
-import { useProjectPathname } from "@/hooks/project";
+import { useProjectRoot } from "@/hooks/project";
 import { useSourceConfigRoot } from "@/hooks/source";
 import { TypeSourceDefineImage } from "types/source";
 
@@ -20,7 +20,7 @@ import RightDisplay from "./RightDisplay";
 const MiddleCopyButton: React.FC<{ src: string }> = props => {
   const { src } = props;
   const sourceConfigRoot = useSourceConfigRoot();
-  const projectRoot = useProjectPathname();
+  const projectRoot = useProjectRoot();
   return useMemo(() => {
     if (!sourceConfigRoot || !src) return null;
     const from = path.join(sourceConfigRoot, src);
@@ -46,13 +46,14 @@ const StyleCopyButton = styled.div`
 `;
 
 const ImageController: React.FC<{
+  urlValue: string;
   sourceDefineImage: TypeSourceDefineImage;
   onChange: (val: string) => void;
 }> = props => {
-  const { sourceDefineImage, onChange } = props;
-  const { sourceData, description } = sourceDefineImage;
+  const { sourceDefineImage, urlValue, onChange } = props;
+  const { sourceData, description, src } = sourceDefineImage;
   if (!sourceData) return null;
-  const { width, height, size, src } = sourceData;
+  const { width, height, size } = sourceData;
   return (
     <StyleImageController>
       {/* 图片名称 */}
@@ -73,7 +74,7 @@ const ImageController: React.FC<{
         {/* 一键拷贝默认素材 */}
         <MiddleCopyButton src={src} />
         {/* 工程素材展示 */}
-        <RightDisplay src={src} />
+        <RightDisplay src={src} url={urlValue} />
       </div>
     </StyleImageController>
   );

@@ -141,7 +141,6 @@ export default class SourceConfig extends BaseCompiler {
         .create();
     });
   }
-  // E:\\one-theme-editor\\static\\resource\\sourceConfig\\xiaomi\\miui12\\wallpaper\\desktop.xml
 
   // 页面分组数据
   getPageGroupList(groupNodeList: XMLNodeBase[]): TypeSourcePageGroupConf[] {

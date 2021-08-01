@@ -34,7 +34,7 @@ const CreateProject: React.FC<TypeProps> = props => {
   // 填写工程描述
   const [projectInfo, setProjectInfo] = useState<TypeProjectInfo>();
   // 填写本地目录
-  const projectPathnameRef = useRef<string>();
+  const projectRootRef = useRef<string>();
   // 创建状态
   const [isCreating, updateCreating] = useState(false);
   // 表单实例
@@ -83,9 +83,9 @@ const CreateProject: React.FC<TypeProps> = props => {
           // onChange(path.join(remote.app.getPath("desktop"), "test"));
           onChange("/Users/zhangxuyang/mine/theme-test");
         }, []);
-        const [projectPathname, setLocalPath] = useState<string>();
+        const [projectRoot, setLocalPath] = useState<string>();
         const onChange = (val: string) => {
-          projectPathnameRef.current = val;
+          projectRootRef.current = val;
           setLocalPath(val);
         };
         const selectDir = () => {
@@ -110,7 +110,7 @@ const CreateProject: React.FC<TypeProps> = props => {
                   <Input
                     placeholder="输入或选择目录"
                     allowClear
-                    value={projectPathname}
+                    value={projectRoot}
                     onChange={e => onChange(e.target.value)}
                   />
                   <Button
@@ -173,7 +173,7 @@ const CreateProject: React.FC<TypeProps> = props => {
       start: {
         disabled: isCreating,
         async handleStart() {
-          const local = projectPathnameRef.current;
+          const local = projectRootRef.current;
           if (!local) throw new Error("请选择正确的本地路径");
           if (!fse.existsSync(local)) {
             await new Promise<void>(resolve => {
@@ -205,7 +205,7 @@ const CreateProject: React.FC<TypeProps> = props => {
           }
           updateCreating(true);
           return apiCreateProject({
-            projectPathname: projectPathnameRef.current || "",
+            projectRoot: projectRootRef.current || "",
             sourceConfigPath: sourceConfig.config,
             brandInfo: {
               name: brandConf.name,

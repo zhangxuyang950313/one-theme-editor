@@ -24,7 +24,7 @@ export async function releaseXmlTemplate(
     path.dirname(project.sourceConfigPath)
   );
   const templateXml = path.join(sourceRoot, src);
-  const releaseXml = path.join(project.projectPathname, src);
+  const releaseXml = path.join(project.projectRoot, src);
   // 节点操作
   const templateNode = new XmlTemplate(templateXml);
   const releaseNode = new XmlTemplate(releaseXml);

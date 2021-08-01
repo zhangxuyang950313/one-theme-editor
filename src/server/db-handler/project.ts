@@ -37,7 +37,7 @@ const projectDB = createNedb(PATHS.PROJECTS_DB);
 export async function createProject(
   data: TypeCreateProjectPayload
 ): Promise<TypeProjectDataDoc> {
-  const { brandInfo, projectInfo, projectPathname, sourceConfigPath } = data;
+  const { brandInfo, projectInfo, projectRoot, sourceConfigPath } = data;
   const uiVersion = new SourceConfig(sourceConfigPath).getUiVersion();
   return projectDB.insert<TypeProjectData>({
     uuid: UUID(),
@@ -45,7 +45,7 @@ export async function createProject(
     brandInfo,
     uiVersion,
     sourceConfigPath,
-    projectPathname
+    projectRoot: projectRoot
   });
 }
 

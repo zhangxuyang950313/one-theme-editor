@@ -1,7 +1,7 @@
 import {
   TypeProjectDataDoc,
   TypeProjectInfo,
-  TypeProjectSourceData
+  TypeProjectFileData
 } from "types/project";
 import {
   TypeSourceConfigData,
@@ -66,7 +66,7 @@ type TypeActionSetProjectInfo = {
 // 更新工程文件数据表
 type TypeActionPatchProjectSourceDataMap = {
   type: typeof ACTION_TYPES.PATCH_PROJECT_SOURCE_DATA;
-  payload: TypeProjectSourceData;
+  payload: TypeProjectFileData;
 };
 
 // main actions
@@ -122,7 +122,7 @@ export function ActionSetDescription(
 }
 
 export function ActionPatchProjectSourceData(
-  payload: TypeProjectSourceData
+  payload: TypeProjectFileData
 ): TypeActionPatchProjectSourceDataMap {
   return { type: ACTION_TYPES.PATCH_PROJECT_SOURCE_DATA, payload };
 }

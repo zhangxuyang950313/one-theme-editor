@@ -1,7 +1,11 @@
 import io from "socket.io-client";
 import { HOST, PORT } from "common/config";
 import { SOCKET_EVENT } from "common/socketConf";
-import { TypeImageMapper, TypeProjectDataDoc } from "types/project";
+import {
+  TypeImageMapper,
+  TypeProjectDataDoc,
+  TypeProjectFileData
+} from "types/project";
 
 const socket = io(`ws://${HOST}:${PORT}`);
 
@@ -42,8 +46,16 @@ export function socketWatchFile(
   list: string[],
   callback: (data: TypeImageMapper[]) => void
 ): (data: { uuid: string; list: string[] }) => typeof socket {
-  return registerSocketOf(SOCKET_EVENT.WATCH_FILE, {
+  return registerSocketOf(SOCKET_EVENT.WATCH_PROJECT_FILE, {
     param: { uuid, list },
     callback
   });
+}
+
+export function socketWatchProjectFile(
+  filepathList: string[],
+  callback: (x: TypeProjectFileData) => void
+): void {
+  socket.emit(SOCKET_EVENT.WATCH_PROJECT_FILE, { filepathList });
+  socket.on(SOCKET_EVENT.WATCH_PROJECT_FILE, callback);
 }

@@ -6,16 +6,16 @@ import ERR_CODE from "common/errorCode";
 import { notification } from "antd";
 import { DeleteOutlined, ImportOutlined } from "@ant-design/icons";
 import { apiCopyFile, apiDeleteFile } from "@/request";
-import { useProjectPathname } from "@/hooks/project";
+import { useProjectRoot } from "@/hooks/project";
 
 // 图片操作区
 const ImageHandler: React.FC<{
   src: string;
 }> = props => {
   const { src } = props;
-  const projectPathname = useProjectPathname();
+  const projectRoot = useProjectRoot();
 
-  const absPath = path.join(projectPathname, src);
+  const absPath = path.join(projectRoot, src);
 
   // 手动选取素材
   const handleImport = () => {

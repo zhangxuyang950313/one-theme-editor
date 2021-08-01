@@ -86,6 +86,7 @@ export type TypeLayoutImageElement = {
   readonly sourceTag: ELEMENT_TAG.IMAGE;
   readonly sourceType: SOURCE_TYPES.IMAGE;
   description: string;
+  src: string;
   sourceData: TypePageDefineImageData;
   layout: {
     x: string;
@@ -103,6 +104,7 @@ export type TypeLayoutTextElement = {
   readonly sourceType: SOURCE_TYPES;
   name: string;
   text: string;
+  src: string;
   valueData: TypePageDefineValueData | null;
   layout: {
     x: string;
@@ -115,18 +117,16 @@ export type TypeLayoutTextElement = {
 export type TypePageDefineValueData = {
   defaultValue: string;
   valueName: string;
-  src: string;
 };
 
-export type TypePageDefineImageData = TypeImageData & {
-  src: string;
-};
+export type TypePageDefineImageData = TypeImageData;
 
 // 素材定义
 export type TypeSourceDefineImage = {
   tagName: string;
   name: string;
   description: string;
+  src: string;
   sourceData: TypePageDefineImageData | null;
   valueData: null;
 };
@@ -134,6 +134,7 @@ export type TypeSourceDefineValue = {
   tagName: string;
   name: string;
   description: string;
+  src: string;
   sourceData: null;
   valueData: TypePageDefineValueData | null;
 };

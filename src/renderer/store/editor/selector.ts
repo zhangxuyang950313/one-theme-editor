@@ -27,9 +27,9 @@ export const getProjectInfo = createSelector(
 export const getProjectUUID = createSelector(getState, state => state.uuid);
 
 // 获取工程本地路径
-export const getProjectPathname = createSelector(
+export const getProjectRoot = createSelector(
   getProjectData,
-  state => state.projectPathname
+  state => state.projectRoot
 );
 
 // 获取当前资源配置信息
@@ -148,4 +148,9 @@ export const getSourceValueDefineList = createSelector(
       return [];
     });
   }
+);
+
+export const getProjectFileDataMap = createSelector(
+  getState,
+  state => state.projectFileDataMap
 );

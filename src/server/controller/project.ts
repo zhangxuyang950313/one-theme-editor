@@ -4,7 +4,7 @@ import API from "common/apiConf";
 import {
   TypeCreateProjectPayload,
   TypeProjectDataDoc,
-  TypeProjectSourceData
+  TypeProjectFileData
 } from "types/project";
 import { TypeResponseFrame, UnionTupleToObjectKey } from "types/request";
 import { result } from "server/utils/utils";
@@ -14,9 +14,12 @@ import {
   createProject,
   updateProject
 } from "server/db-handler/project";
-import { releaseXmlTemplate } from "server/file-handler/xml-template";
+import { releaseXmlTemplate } from "server/services/xmlTemplate";
+import {
+  getPageDefineSourceData,
+  getProjectFileData
+} from "server/services/project";
 import XmlTemplate from "server/compiler/XmlTemplate";
-import { getPageDefineSourceData } from "server/file-handler/project";
 import { checkParamsKey } from "../utils/utils";
 
 export default function project(service: Express): void {
@@ -119,7 +122,7 @@ export default function project(service: Express): void {
     checkParamsKey(query, API.GET_XML_TEMP_VALUE.query);
     const { uuid, name, src } = query;
     const project = await findProjectByUUID(uuid);
-    const releaseFile = path.join(project.projectPathname, src);
+    const releaseFile = path.join(project.projectRoot, src);
     const value = new XmlTemplate(releaseFile).getValueByName(name);
     response.send(result.success({ value }));
   });
@@ -146,7 +149,7 @@ export default function project(service: Express): void {
    */
   service.get<
     UnionTupleToObjectKey<typeof API.GET_PAGE_SOURCE_DATA.params>,
-    TypeResponseFrame<Record<string, TypeProjectSourceData>>,
+    TypeResponseFrame<Record<string, TypeProjectFileData>>,
     never, // reqBody
     UnionTupleToObjectKey<typeof API.GET_PAGE_SOURCE_DATA.query>
   >(`${API.GET_PAGE_SOURCE_DATA.url}/:uuid`, async (request, response) => {
@@ -154,6 +157,23 @@ export default function project(service: Express): void {
     checkParamsKey(params, API.GET_PAGE_SOURCE_DATA.params);
     checkParamsKey(query, API.GET_PAGE_SOURCE_DATA.query);
     const data = await getPageDefineSourceData(params.uuid, query.config);
+    response.send(result.success(data));
+  });
+
+  /**
+   * 获取文件数据
+   */
+  service.get<
+    UnionTupleToObjectKey<typeof API.GET_SOURCE_FILE_DATA.params>,
+    TypeResponseFrame<TypeProjectFileData>,
+    never,
+    UnionTupleToObjectKey<typeof API.GET_SOURCE_FILE_DATA.query>
+  >(`${API.GET_SOURCE_FILE_DATA.url}/:uuid`, async (request, response) => {
+    const { params, query } = request;
+    checkParamsKey(params, API.GET_SOURCE_FILE_DATA.params);
+    checkParamsKey(query, API.GET_SOURCE_FILE_DATA.query);
+    const { projectRoot } = await findProjectByUUID(params.uuid);
+    const data = getProjectFileData(projectRoot, query.filepath);
     response.send(result.success(data));
   });
 }

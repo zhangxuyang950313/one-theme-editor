@@ -1,28 +1,43 @@
 import path from "path";
 import { useLayoutEffect, useEffect, useState, useCallback } from "react";
 import { useParams } from "react-router";
-import { apiGetProjectByUUID, apiGetProjectList } from "@/request/index";
+import {
+  apiGetProjectByUUID,
+  apiGetProjectFileData,
+  apiGetProjectList
+} from "@/request/index";
 import { useAxiosCanceler } from "@/hooks/index";
 import {
   useBrandConf,
   useFetchPageConfData,
   useFetchSourceConfig,
+  usePageData,
   useSourceConfigRoot
 } from "@/hooks/source";
-import { ActionSetProjectData } from "@/store/editor/action";
+import {
+  ActionPatchProjectSourceData,
+  ActionSetProjectData
+} from "@/store/editor/action";
 import {
   getProjectData,
+  getProjectFileDataMap,
   getProjectInfo,
-  getProjectPathname,
+  getProjectRoot,
   getProjectUUID
 } from "@/store/editor/selector";
 import { useEditorDispatch, useEditorSelector } from "@/store/index";
-import { TypeProjectDataDoc, TypeProjectInfo } from "types/project";
+import {
+  TypeProjectDataDoc,
+  TypeProjectFileData,
+  TypeProjectFileImageData,
+  TypeProjectInfo
+} from "types/project";
 
 import ERR_CODE from "common/errorCode";
 import { sleep } from "common/utils";
 import { notification } from "antd";
-import { useProjectFileWatcher, useProjectSourceWatcher } from "./fileWatcher";
+import { PROJECT_FILE_TYPE } from "@/../enum";
+import { useProjectFileWatcher } from "./fileWatcher";
 
 // 获取项目列表
 export function useProjectList(): [
@@ -111,8 +126,8 @@ export function useProjectInfo(): TypeProjectInfo {
 }
 
 // 获取工程目录
-export function useProjectPathname(): string {
-  return useEditorSelector(getProjectPathname);
+export function useProjectRoot(): string {
+  return useEditorSelector(getProjectRoot);
 }
 
 // 工程 uuid
@@ -122,12 +137,12 @@ export function useProjectUUID(): string {
 
 // 处理工程路径
 export function useResolveProjectPath(relativePath = ""): string {
-  const projectPathname = useProjectPathname();
+  const projectRoot = useProjectRoot();
   const [projectPath, setProjectPath] = useState("");
 
   useEffect(() => {
-    if (!(projectPathname && relativePath)) return;
-    setProjectPath(path.join(projectPathname, relativePath));
+    if (!(projectRoot && relativePath)) return;
+    setProjectPath(path.join(projectRoot, relativePath));
   }, [relativePath]);
 
   return projectPath;
@@ -146,8 +161,34 @@ export function useResolveSourcePath(relativePath: string): string {
   return sourcePath;
 }
 
-export function useUpdateProjectSourceData(): void {
-  useProjectSourceWatcher(file => {
-    console.log(file);
+export function usePatchPageSourceData(): void {
+  const uuid = useProjectUUID();
+  const pageData = usePageData();
+  const dispatch = useEditorDispatch();
+  const sourceFilepathSet = (pageData?.sourceDefineList || []) //
+    .reduce((t, o) => {
+      if (o.src) t.add(o.src);
+      return t;
+    }, new Set<string>());
+  useProjectFileWatcher(Array.from(sourceFilepathSet), async file => {
+    console.log({ file });
+    const fileData = await apiGetProjectFileData(uuid, file);
+    dispatch(ActionPatchProjectSourceData(fileData));
   });
+}
+
+export function useProjectFileDataMap(): Map<string, TypeProjectFileData> {
+  const projectFileDataMap = useEditorSelector(getProjectFileDataMap);
+  return new Map(Object.entries(projectFileDataMap));
+}
+
+export function useProjectImageFileDataMap(): Map<
+  string,
+  TypeProjectFileImageData
+> {
+  const projectFileDataMap = useEditorSelector(getProjectFileDataMap);
+  const entries = Object.entries(projectFileDataMap).filter(
+    item => item[1].type === PROJECT_FILE_TYPE.IMAGE
+  ) as [string, TypeProjectFileImageData][];
+  return new Map(entries);
 }

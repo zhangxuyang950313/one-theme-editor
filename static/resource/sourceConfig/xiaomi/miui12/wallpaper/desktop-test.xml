@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Page version="1.0.0" description="桌面壁纸和首屏图标" screenWidth="1080">
+
+    <!-- 配置 -->
+    <Source>
+        <Image 
+            name="wallpaper"
+            description="默认壁纸"
+            value="file://wallpaper/default_wallpaper.jpg"
+            />
+        <Image
+            name="com.android.contacts.activities.TwelveKeyDialer"
+            description="拨号"
+            value="file://icons/res/com.android.contacts.activities.TwelveKeyDialer.png"
+            />
+        <Image
+            description="短信"
+            value="file://icons/res/com.android.mms.png"
+            />
+        <Color
+            name="icon_title_text"
+            description="图标字体"
+            value="file://com.miui.home/theme_values.xml?name=icon_title_text"
+            />
+        <Color
+            name="action_bar_title_text_color_light"
+            description="图标字体"
+            value="file://wallpaper/theme_values.xml?name=action_bar_title_text_color_light"
+            />
+        <Bool
+            name="bool_test1"
+            description="布尔值测试"
+            value="file://com.miui.home/theme_values.xml?name=bool_test1"
+            />
+        <Bool
+            name="bool_test2"
+            description="布尔值测试"
+            value="file://com.miui.home/theme_values.xml?name=bool_test2"
+            />
+        <Dimen
+            name="dimen_test1"
+            description="尺寸值测试"
+            value="file://com.miui.home/theme_values.xml?name=dimen_test1"
+            />
+        <Dimen
+            name="dimen_tes2t"
+            description="尺寸值测试"
+            value="file://com.miui.home/theme_values.xml?name=dimen_test2"
+            />
+        <Integer
+            name="integer_test1"
+            description="整型值测试"
+            value="file://com.miui.home/theme_values.xml?name=integer_test1"
+            />
+        <Integer
+            name="integer_test2"
+            description="整型值测试"
+            value="file://com.miui.home/theme_values.xml?name=integer_test2"
+            />
+    </Source>
+
+
+    <!-- 静态预览图 -->
+    <Previews>
+        <Preview src="../preview/preview.jpg"/>
+        <Preview src="../preview/preview1.jpg"/>
+    </Previews>
+
+
+    <!-- 预览结构配置 -->
+    <Layout>
+        <!-- 这个图片不会在素材区展示，因为它是静态的，没有在 Source 节点中定义 -->
+        <Image 
+            x="160" y="2150" w="186" h="186" align="center" alignV="center" 
+            src="file://wallpaper/default_wallpaper.jpg"
+        />
+        <Image 
+            x="160" y="2150" w="186" h="186" align="center" alignV="center" 
+            src="${wallpaper}"
+        />
+        <Image 
+            x="160" y="2150" w="186" h="186" align="center" alignV="center" 
+            src="${com.android.contacts.activities.TwelveKeyDialer}"
+        />
+        <Text
+            text="拨号"
+            x="415" y="1250" size="36" align="center" alignV="center"
+            color="${icon_title_text}"
+        />
+    </Layout>
+</Page>
+
+
+
+        <!-- 底栏图标 
+        <Image 
+            x="160" y="2150" w="186" h="186" align="center" alignV="center" 
+            src="${com.android.contacts.activities.TwelveKeyDialer}"
+        />
+        <Text 
+            name="图标字体"
+            text="拨号"
+            x="415" y="1250" size="36" align="center" alignV="center"
+            value="${icon_title_text}"
+        />
+        <Image
+            name="短信"
+            x="415" y="2150" w="186" h="186" align="center" alignV="center"
+            src="${root}/icons/res/com.android.mms.png"
+        />
+
+        <Image
+            name="浏览器"
+            x="670" y="2150" w="186" h="186" align="center" alignV="center"
+            src="${root}/icons/res/com.android.browser.png"
+        />
+
+        <Image
+            name="相机"
+             x="925" y="2150" w="186" h="186" align="center" alignV="center"
+             src="${root}/icons/res/com.android.camera.png"
+        />
+        -->
+        <!-- 第一排图标 
+        <Image 
+            name="天气"
+            x="168" y="1100" w="186" h="186" align="center" alignV="center"
+            src="${root}/icons/res/com.miui.weather2.png"
+        />
+        <Text
+            name="图标字体"
+            text="天气"
+            x="168" y="1250" size="36" align="center" alignV="center"
+            value="src=${root}/com.miui.home/theme_values.xml&amp;name=icon_title_text_light"
+        />
+        <Image 
+            name="小米商城"
+            x="670" y="1400" w="186" h="186" align="center" alignV="center"
+            src="${root}/icons/res/com.xiaomi.shop.png"
+        />
+        <Image 
+            name="小米商城"
+            x="670" y="1400" w="186" h="186" align="center" alignV="center"
+            src="${root}/icons/res/com.xiaomi.padshop.png"
+        />
+        <Image 
+            name="小米商城"
+            x="670" y="1400" w="186" h="186" align="center" alignV="center"
+            src="${root}/icons/res/com.xiaomi.shop.activity.MainTabActivity.shop.png"
+        />-->
+
+
+
+

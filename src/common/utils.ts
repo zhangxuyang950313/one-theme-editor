@@ -4,6 +4,7 @@ import fse from "fs-extra";
 import FileType from "file-type";
 import imageSizeOf from "image-size";
 import dirTree from "directory-tree";
+import ImageData from "src/data/ImageData";
 import { TypeImageData, TypeImageMapper } from "../types/project";
 import { placeholderRegexp, urlRegexp } from "./regexp";
 import ERR_CODE from "./errorCode";
@@ -159,17 +160,15 @@ export function getImageData(file: string): TypeImageData {
   // TODO: 可以去图片数据库先查一下是否有，没有的话再进行接下来的步骤
   // const buff = fse.readFileSync(file);
   const { width, height } = getImageSizeOf(file);
-  const imageData: TypeImageData = {
-    // md5: md5(buff),
-    width,
-    height,
-    size: getFileSizeOf(file),
-    filename: path.basename(file),
-    ninePatch: isNinePatchPath(file)
-  };
+  const imageData = new ImageData();
+  imageData.set("width", width);
+  imageData.set("height", height);
+  imageData.set("size", getFileSizeOf(file));
+  imageData.set("filename", path.basename(file));
+  imageData.set("ninePatch", isNinePatchPath(file));
   // 同步存储到图片数据库
   // await insertImageData(imageData);
-  return imageData;
+  return imageData.create();
 }
 
 // 获取图片映射信息

@@ -32,6 +32,13 @@ export default function registerSocket(server: http.Server): void {
 
     // 创建调用实例
     // const connecter = new SocketConnecter(socket);
+    // 同步监听的文件数据
+    socket.on(SOCKET_EVENT.WATCH_PROJECT_FILE, (data: string) => {
+      console.log(data);
+      setTimeout(() => {
+        socket.emit(SOCKET_EVENT.WATCH_PROJECT_FILE, data);
+      }, 1000);
+    });
     // 同步工程数据
 
     // connecter.connect(SOCKET_EVENT.PROJECT, (uuid: string) => {

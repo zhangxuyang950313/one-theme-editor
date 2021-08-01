@@ -78,9 +78,8 @@ export default class SourceDefine {
         .set("size", imageData.size)
         .set("ninePatch", imageData.ninePatch)
         .set("filename", imageData.filename)
-        .set("src", src)
         .create();
-      sourceDefineData.set("sourceData", sourceData);
+      sourceDefineData.set("sourceData", sourceData).set("src", src);
     }
     // xml 素材
     if (filenameIsXml(src)) {
@@ -91,11 +90,10 @@ export default class SourceDefine {
         this.resolveRootSourcePath(src)
       ).getTextByAttrName(valueName);
       const valueData = new DefineValueData()
-        .set("src", src)
         .set("valueName", valueName)
         .set("defaultValue", defaultValue)
         .create();
-      sourceDefineData.set("valueData", valueData);
+      sourceDefineData.set("valueData", valueData).set("src", src);
     }
     return sourceDefineData.create();
   }

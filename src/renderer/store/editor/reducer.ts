@@ -2,7 +2,7 @@ import { updateState } from "@/store/utils";
 import {
   TypeProjectDataDoc,
   TypeProjectInfo,
-  TypeProjectSourceData
+  TypeProjectFileData
 } from "types/project";
 import {
   TypeSourceTypeConf,
@@ -24,22 +24,22 @@ export type TypeEditorState = {
   projectData: TypeProjectDataDoc;
   projectInfo: TypeProjectInfo;
   uuid: string;
-  projectPathname: string;
+  projectRoot: string;
   sourceConfigUrl: string;
   sourceConfig: TypeSourceConfigData;
   sourceTypeList: TypeSourceTypeConf[];
   sourceModuleList: TypeSourceModuleConf[];
   sourceModuleConf: TypeSourceModuleConf;
   sourcePageConf: TypeSourcePageConf;
-  sourcePageDataMap: Partial<Record<string, TypeSourcePageData>>;
-  projectSourceDataMap: Partial<Record<string, TypeProjectSourceData>>;
+  sourcePageDataMap: Record<string, TypeSourcePageData>;
+  projectFileDataMap: Record<string, TypeProjectFileData>;
 };
 
 const editorState: TypeEditorState = {
   projectData: new ProjectData().default(),
   projectInfo: new ProjectInfo().default(),
   uuid: "",
-  projectPathname: "",
+  projectRoot: "",
   sourceConfigUrl: "",
   sourceConfig: new SourceConfigData().default(),
   sourceTypeList: [],
@@ -47,7 +47,7 @@ const editorState: TypeEditorState = {
   sourceModuleConf: new SourceModuleConf().default(),
   sourcePageConf: new SourcePageConf().default(),
   sourcePageDataMap: {},
-  projectSourceDataMap: {}
+  projectFileDataMap: {}
 };
 
 export default function EditorReducer(
@@ -60,7 +60,7 @@ export default function EditorReducer(
       document.title = action.payload.projectInfo.name || document.title;
       return updateState(state, {
         uuid: action.payload.uuid,
-        projectPathname: action.payload.projectPathname,
+        projectRoot: action.payload.projectRoot,
         sourceConfigUrl: action.payload.sourceConfigPath,
         projectInfo: action.payload.projectInfo,
         projectData: action.payload
@@ -100,9 +100,9 @@ export default function EditorReducer(
     }
     case ACTION_TYPES.PATCH_PROJECT_SOURCE_DATA: {
       return updateState(state, {
-        projectSourceDataMap: {
-          ...state.projectSourceDataMap,
-          [action.payload.path]: action.payload
+        projectFileDataMap: {
+          ...state.projectFileDataMap,
+          [action.payload.src]: action.payload
         }
       });
     }

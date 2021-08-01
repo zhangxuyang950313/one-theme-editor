@@ -25,7 +25,7 @@ export type TypeProjectInfo = {
 
 // 创建工程载荷
 export type TypeCreateProjectPayload = {
-  projectPathname: string;
+  projectRoot: string;
   sourceConfigPath: string;
   brandInfo: TypeBrandInfo;
   projectInfo: TypeProjectInfo;
@@ -55,7 +55,7 @@ export type TypeXmlMapper = {
 export type TypeProjectData = {
   uuid: string;
   brandInfo: TypeBrandInfo;
-  projectPathname: string;
+  projectRoot: string;
   projectInfo: TypeProjectInfo;
   uiVersion: TypeProjectUiVersion;
   sourceConfigPath: string;
@@ -67,20 +67,19 @@ export type TypeImageDataDoc = TypeDatabase<TypeImageData>;
 // 在数据库中的工程信息
 export type TypeProjectDataDoc = TypeDatabase<TypeProjectData>;
 
-export type TypeProjectImageSourceData = {
-  type: PROJECT_FILE_TYPE.IMAGE;
-  path: string;
-  sourceData: {
-    src: string;
-  };
+export type TypeProjectFileImageData = {
+  readonly type: PROJECT_FILE_TYPE.IMAGE;
+  src: string;
+  url: string;
+  imageData: TypeImageData;
 };
 
-export type TypeProjectXmlSourceData = {
-  type: PROJECT_FILE_TYPE.XML;
-  path: string;
-  valueData: Element;
+export type TypeProjectFileXmlData = {
+  readonly type: PROJECT_FILE_TYPE.XML;
+  src: string;
+  element: Element;
 };
 
-export type TypeProjectSourceData =
-  | TypeProjectImageSourceData
-  | TypeProjectXmlSourceData;
+export type TypeProjectFileData =
+  | TypeProjectFileImageData
+  | TypeProjectFileXmlData;

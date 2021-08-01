@@ -114,6 +114,12 @@ const API = {
     params: ["uuid"],
     query: ["config"]
   }),
+  // 获取一个文件的数据
+  GET_SOURCE_FILE_DATA: createApiConf({
+    url: "/project/file",
+    params: ["uuid"],
+    query: ["filepath"]
+  }),
 
   // 按行写入 xml
   XML_TEMPLATE_WRITE: createApiConf({

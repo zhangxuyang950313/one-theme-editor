@@ -215,7 +215,7 @@ export default class PageConfig extends BaseCompiler {
     let description = node.getAttributeOf("description");
     // 定义的数据，尝试解析 ${placeholder}
     if (valueDefine && valueDefine.sourceData) {
-      src = valueDefine.sourceData.src;
+      src = valueDefine.src;
       description = valueDefine.description;
     } else {
       // 直接定义，用于显示一些静态图片
@@ -228,12 +228,12 @@ export default class PageConfig extends BaseCompiler {
       .set("filename", imageData.filename)
       .set("ninePatch", imageData.ninePatch)
       .set("size", imageData.size)
-      .set("src", src)
       .create();
     const sourceImageElement = new SourceImageElement()
       .set("description", description)
       .set("sourceData", sourceImageData)
       .set("layout", this.layoutConf(node))
+      .set("src", src)
       .create();
     return sourceImageElement;
   }
@@ -278,9 +278,10 @@ export default class PageConfig extends BaseCompiler {
       alignV: layout.alignV
     });
     if (valueDefine) {
-      const { description, valueData } = valueDefine;
+      const { description, valueData, src } = valueDefine;
       textElementData.set("name", description);
       textElementData.set("valueData", valueData);
+      textElementData.set("src", src);
     }
     return textElementData.create();
   }
@@ -314,7 +315,7 @@ export default class PageConfig extends BaseCompiler {
 
   getSourceDefinePathList(): string[] {
     return this.getSourceDefineList()
-      .map(item => item.sourceData?.src || item.valueData?.src || "")
+      .map(item => item.src)
       .filter(Boolean);
   }
 
