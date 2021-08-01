@@ -8,7 +8,7 @@ import ColorUtil, { HEX_TYPES } from "src/core/ColorUtil";
 
 import { RightCircleOutlined } from "@ant-design/icons";
 import { useProjectUUID } from "@/hooks/project";
-import { TypeSourceDefineValue } from "types/source-config";
+import { TypeSourceDefineValue } from "types/source";
 import { StyleGirdBackground } from "@/style";
 import Wrapper from "./Wrapper";
 

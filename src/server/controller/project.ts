@@ -1,7 +1,11 @@
 import path from "path";
 import { Express } from "express";
 import API from "common/apiConf";
-import { TypeCreateProjectPayload, TypeProjectDataDoc } from "types/project";
+import {
+  TypeCreateProjectPayload,
+  TypeProjectDataDoc,
+  TypeProjectSourceData
+} from "types/project";
 import { TypeResponseFrame, UnionTupleToObjectKey } from "types/request";
 import { result } from "server/utils/utils";
 import {
@@ -12,7 +16,8 @@ import {
 } from "server/db-handler/project";
 import { releaseXmlTemplate } from "server/file-handler/xml-template";
 import XmlTemplate from "server/compiler/XmlTemplate";
-import { checkParamsKey } from "./../utils/utils";
+import { getPageDefineSourceData } from "server/file-handler/project";
+import { checkParamsKey } from "../utils/utils";
 
 export default function project(service: Express): void {
   // 添加工程
@@ -132,6 +137,23 @@ export default function project(service: Express): void {
     checkParamsKey(query, API.XML_TEMPLATE_WRITE.query);
     checkParamsKey(body, API.XML_TEMPLATE_WRITE.bodyKeys);
     const data = await releaseXmlTemplate(query.uuid, body);
+    response.send(result.success(data));
+  });
+
+  /**
+   * @deprecated
+   * 获取配置页面所有素材数据映射
+   */
+  service.get<
+    UnionTupleToObjectKey<typeof API.GET_PAGE_SOURCE_DATA.params>,
+    TypeResponseFrame<Record<string, TypeProjectSourceData>>,
+    never, // reqBody
+    UnionTupleToObjectKey<typeof API.GET_PAGE_SOURCE_DATA.query>
+  >(`${API.GET_PAGE_SOURCE_DATA.url}/:uuid`, async (request, response) => {
+    const { params, query } = request;
+    checkParamsKey(params, API.GET_PAGE_SOURCE_DATA.params);
+    checkParamsKey(query, API.GET_PAGE_SOURCE_DATA.query);
+    const data = await getPageDefineSourceData(params.uuid, query.config);
     response.send(result.success(data));
   });
 }

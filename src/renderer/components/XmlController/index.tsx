@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { TypeSourceDefineValue } from "types/source-config";
+import { TypeSourceDefineValue } from "types/source";
 import { apiGetTempValueByName, apiOutputXmlTemplate } from "@/request";
 import { useProjectUUID } from "@/hooks/project";
 import { useProjectFileWatcher } from "@/hooks/fileWatcher";

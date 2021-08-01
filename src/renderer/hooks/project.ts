@@ -22,6 +22,7 @@ import { TypeProjectDataDoc, TypeProjectInfo } from "types/project";
 import ERR_CODE from "common/errorCode";
 import { sleep } from "common/utils";
 import { notification } from "antd";
+import { useProjectFileWatcher, useProjectSourceWatcher } from "./fileWatcher";
 
 // 获取项目列表
 export function useProjectList(): [
@@ -143,4 +144,10 @@ export function useResolveSourcePath(relativePath: string): string {
   }, [relativePath]);
 
   return sourcePath;
+}
+
+export function useUpdateProjectSourceData(): void {
+  useProjectSourceWatcher(file => {
+    console.log(file);
+  });
 }

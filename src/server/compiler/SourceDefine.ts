@@ -6,7 +6,7 @@ import {
   SourceDefineData
 } from "src/data/SourceConfig";
 import { filenameIsImage, filenameIsXml, getImageData } from "common/utils";
-import { TypeSourceDefine } from "types/source-config";
+import { TypeSourceDefine } from "types/source";
 import XMLNodeElement from "server/compiler/XMLNodeElement";
 import XmlTemplate from "./XmlTemplate";
 

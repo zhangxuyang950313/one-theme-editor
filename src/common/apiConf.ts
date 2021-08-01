@@ -108,6 +108,12 @@ const API = {
     url: "/project/get",
     params: ["uuid"]
   }),
+  // 获取页面配置的素材文件数据
+  GET_PAGE_SOURCE_DATA: createApiConf({
+    url: "/project/source",
+    params: ["uuid"],
+    query: ["config"]
+  }),
 
   // 按行写入 xml
   XML_TEMPLATE_WRITE: createApiConf({

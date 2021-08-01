@@ -1,5 +1,5 @@
-// import { projectInfoConfig } from "renderer/config/editor";
-// import { TypeSourceConfigData } from "./source-config";
+import { Element } from "xml-js";
+import { PROJECT_FILE_TYPE } from "../enum";
 import { TypeDatabase } from "./index";
 
 export type TypeBrandInfo = {
@@ -22,13 +22,6 @@ export type TypeProjectInfo = {
   // [k in keyof typeof projectInfoConfig]: string | null;
   [k: string]: string;
 };
-
-// // 预览页面配置储存数据
-// export type TypePageConf = {
-//   key: string;
-//   md5?: string;
-//   conf: TypeTempPageConf | null;
-// };
 
 // 创建工程载荷
 export type TypeCreateProjectPayload = {
@@ -68,11 +61,26 @@ export type TypeProjectData = {
   sourceConfigPath: string;
 };
 
-// // 在数据空的图片映射
-// export type TypeImageMapperDoc = Omit<TypeImageData, "url">;
-
 // 在数据库中的图片数据
 export type TypeImageDataDoc = TypeDatabase<TypeImageData>;
 
 // 在数据库中的工程信息
 export type TypeProjectDataDoc = TypeDatabase<TypeProjectData>;
+
+export type TypeProjectImageSourceData = {
+  type: PROJECT_FILE_TYPE.IMAGE;
+  path: string;
+  sourceData: {
+    src: string;
+  };
+};
+
+export type TypeProjectXmlSourceData = {
+  type: PROJECT_FILE_TYPE.XML;
+  path: string;
+  valueData: Element;
+};
+
+export type TypeProjectSourceData =
+  | TypeProjectImageSourceData
+  | TypeProjectXmlSourceData;

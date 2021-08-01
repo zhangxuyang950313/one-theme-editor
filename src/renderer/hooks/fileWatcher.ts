@@ -4,12 +4,8 @@ import logSymbols from "log-symbols";
 import { WatchOptions, FSWatcher } from "chokidar";
 import { useEffect, useState } from "react";
 import { useProjectPathname } from "@/hooks/project";
+import { FILE_STATUS } from "enum/index";
 
-export enum FILE_STATUS {
-  ADD = "add",
-  CHANGE = "change",
-  UNLINK = "unlink"
-}
 const mapWatchers = (count: number, options?: WatchOptions) => {
   return new Array(count).fill(0).map(() => new FSWatcher(options));
 };
@@ -84,7 +80,27 @@ export function useProjectFileWatcher(
   }, [pathname]);
 }
 
+export function useProjectSourceWatcher(
+  listener: (path: string, stats?: fse.Stats | undefined) => void
+): void {
+  const projectPathname = useProjectPathname();
+  const watcher = useFSWatcherInstance({ cwd: projectPathname });
+  useEffect(() => {
+    if (!projectPathname) return;
+    watcher
+      .on(FILE_STATUS.ADD, listener)
+      .on(FILE_STATUS.CHANGE, listener)
+      .on(FILE_STATUS.UNLINK, listener);
+    console.debug("开始监听", projectPathname);
+    return () => {
+      watcher.unwatch(projectPathname);
+      console.debug("取消监听", projectPathname);
+    };
+  }, [projectPathname]);
+}
+
 /**
+ * @deprecated
  * 监听 releaseList，列表改变会自动销毁 watcher 并重建
  * @param releaseList
  * @returns

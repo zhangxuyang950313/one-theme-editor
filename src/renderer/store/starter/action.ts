@@ -1,5 +1,5 @@
 import { TypeBrandConf } from "types/project";
-import { TypeSourceConfigInfo } from "types/source-config";
+import { TypeSourceConfigInfo } from "types/source";
 
 export enum ACTION_TYPES {
   // 设置厂商品牌列表

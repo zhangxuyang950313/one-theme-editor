@@ -86,7 +86,7 @@ export type TypeLayoutImageElement = {
   readonly sourceTag: ELEMENT_TAG.IMAGE;
   readonly sourceType: SOURCE_TYPES.IMAGE;
   description: string;
-  sourceData: TypePageDefineSourceData;
+  sourceData: TypePageDefineImageData;
   layout: {
     x: string;
     y: string;
@@ -118,7 +118,7 @@ export type TypePageDefineValueData = {
   src: string;
 };
 
-export type TypePageDefineSourceData = TypeImageData & {
+export type TypePageDefineImageData = TypeImageData & {
   src: string;
 };
 
@@ -127,7 +127,7 @@ export type TypeSourceDefineImage = {
   tagName: string;
   name: string;
   description: string;
-  sourceData: TypePageDefineSourceData | null;
+  sourceData: TypePageDefineImageData | null;
   valueData: null;
 };
 export type TypeSourceDefineValue = {

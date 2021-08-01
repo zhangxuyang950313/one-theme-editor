@@ -1,10 +1,14 @@
-import { TypeProjectDataDoc, TypeProjectInfo } from "types/project";
+import {
+  TypeProjectDataDoc,
+  TypeProjectInfo,
+  TypeProjectSourceData
+} from "types/project";
 import {
   TypeSourceConfigData,
   TypeSourceModuleConf,
   TypeSourcePageConf,
   TypeSourcePageData
-} from "types/source-config";
+} from "types/source";
 
 export enum ACTION_TYPES {
   // 设置资源配置
@@ -13,8 +17,10 @@ export enum ACTION_TYPES {
   SET_MODULE_CONFIG = "SET_MODULE_CONFIG",
   // 设置页面配置
   SET_PAGE_CONFIG = "SET_PAGE_CONFIG",
-  // 设置页面配置数据
-  UPDATE_PAGE_DATA = "UPDATE_PAGE_DATA",
+  // 添加页面配置数据映射
+  PATCH_PAGE_DATA = "PATCH_PAGE_DATA",
+  // 添加工程文件数据映射
+  PATCH_PROJECT_SOURCE_DATA = "PATCH_PROJECT_SOURCE_DATA",
 
   // 设置工程新数据
   SET_PROJECT_DATA = "SET_PROJECT_DATA",
@@ -34,8 +40,8 @@ type TypeActionSetModuleConf = {
 };
 
 // 更新页面配置表
-type TypeActionUpdatePageDataMap = {
-  type: typeof ACTION_TYPES.UPDATE_PAGE_DATA;
+type TypeActionPatchPageDataMap = {
+  type: typeof ACTION_TYPES.PATCH_PAGE_DATA;
   payload: TypeSourcePageData;
 };
 
@@ -57,14 +63,21 @@ type TypeActionSetProjectInfo = {
   payload: TypeProjectInfo;
 };
 
+// 更新工程文件数据表
+type TypeActionPatchProjectSourceDataMap = {
+  type: typeof ACTION_TYPES.PATCH_PROJECT_SOURCE_DATA;
+  payload: TypeProjectSourceData;
+};
+
 // main actions
 export type TypeEditorActions =
   | TypeActionSetSourceConfig
   | TypeActionSetModuleConf
-  | TypeActionUpdatePageDataMap
+  | TypeActionPatchPageDataMap
   | TypeActionSetPageConf
   | TypeActionSetProjectData
-  | TypeActionSetProjectInfo;
+  | TypeActionSetProjectInfo
+  | TypeActionPatchProjectSourceDataMap;
 
 // 设置当前资源配置
 export function ActionSetSourceConfig(
@@ -81,10 +94,10 @@ export function ActionSetCurrentModule(
 }
 
 // 更新页面数据表
-export function ActionUpdatePageDataMap(
+export function ActionPatchPageDataMap(
   payload: TypeSourcePageData
-): TypeActionUpdatePageDataMap {
-  return { type: ACTION_TYPES.UPDATE_PAGE_DATA, payload };
+): TypeActionPatchPageDataMap {
+  return { type: ACTION_TYPES.PATCH_PAGE_DATA, payload };
 }
 
 // 设置当前页面配置
@@ -106,4 +119,10 @@ export function ActionSetDescription(
   payload: TypeProjectInfo
 ): TypeActionSetProjectInfo {
   return { type: ACTION_TYPES.SET_PROJECT_INFO, payload };
+}
+
+export function ActionPatchProjectSourceData(
+  payload: TypeProjectSourceData
+): TypeActionPatchProjectSourceDataMap {
+  return { type: ACTION_TYPES.PATCH_PROJECT_SOURCE_DATA, payload };
 }

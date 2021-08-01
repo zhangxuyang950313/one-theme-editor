@@ -55,3 +55,14 @@ export enum PLACEHOLDER {
   MODULE = "module",
   NAMESPACE = "namespace"
 }
+
+export enum PROJECT_FILE_TYPE {
+  XML = "xml",
+  IMAGE = "image"
+}
+
+export enum FILE_STATUS {
+  ADD = "add",
+  CHANGE = "change",
+  UNLINK = "unlink"
+}

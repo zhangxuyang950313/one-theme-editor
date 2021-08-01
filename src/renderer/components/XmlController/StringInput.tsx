@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { Input } from "antd";
 import { RightCircleOutlined } from "@ant-design/icons";
-import { TypeSourceDefineValue } from "types/source-config";
+import { TypeSourceDefineValue } from "types/source";
 import Wrapper from "./Wrapper";
 
 const StringInput: React.FC<{

@@ -9,7 +9,7 @@ import {
   TypeSourcePageConf,
   TypeSourceConfigInfo,
   TypeSourceTypeConf
-} from "types/source-config";
+} from "types/source";
 import { TypeBrandConf, TypeProjectUiVersion } from "types/project";
 import {
   SourceConfigInfo,
@@ -18,7 +18,7 @@ import {
   SourcePageGroupConf,
   SourceTypeConf,
   UiVersion
-} from "@/../data/SourceConfig";
+} from "src/data/SourceConfig";
 import PATHS from "server/utils/pathUtils";
 import ERR_CODE from "common/errorCode";
 import PageConfig from "./PageConfig";

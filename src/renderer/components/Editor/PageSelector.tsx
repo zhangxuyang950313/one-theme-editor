@@ -4,7 +4,7 @@ import { Collapse } from "antd";
 import { useSourceImageUrl } from "@/hooks/image";
 import { usePageConf, usePageGroupList } from "@/hooks/source";
 import { PreloadImage } from "@/components/ImageCollection";
-import { TypeSourcePageConf } from "types/source-config";
+import { TypeSourcePageConf } from "types/source";
 
 const PagePreview: React.FC<{ pageData: TypeSourcePageConf }> = props => {
   const { pageData } = props;

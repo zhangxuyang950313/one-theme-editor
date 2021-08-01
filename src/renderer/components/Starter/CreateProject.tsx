@@ -8,7 +8,7 @@ import { isDev } from "@/core/constant";
 import { apiCreateProject } from "@/request";
 import { useBrandConf, useSourceDescriptionList } from "@/hooks/source";
 import { TypeProjectInfo } from "types/project";
-import { TypeSourceConfigInfo } from "types/source-config";
+import { TypeSourceConfigInfo } from "types/source";
 
 import { Modal, Button, Form, Input, message } from "antd";
 import { FileAddOutlined } from "@ant-design/icons";

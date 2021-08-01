@@ -18,7 +18,7 @@ import {
   ActionSetCurrentModule,
   ActionSetCurrentPage,
   ActionSetSourceConfig,
-  ActionUpdatePageDataMap
+  ActionPatchPageDataMap
 } from "@/store/editor/action";
 import {
   getSourceConfigUrl,
@@ -31,7 +31,8 @@ import {
   getLayoutSourceList,
   getLayoutImageList,
   getLayoutTextList,
-  getSourceDefineList
+  getSourceDefineList,
+  getSourcePageData
 } from "@/store/editor/selector";
 import {
   TypeSourceConfigData,
@@ -47,7 +48,7 @@ import {
   TypeSourceDefine,
   TypeSourceDefineImage,
   TypeSourceDefineValue
-} from "types/source-config";
+} from "types/source";
 import { TypeBrandConf } from "types/project";
 import {
   useStarterDispatch,
@@ -88,10 +89,8 @@ export function useBrandConf(): [
   (brandConf: TypeBrandConf) => void
 ] {
   const dispatch = useStarterDispatch();
-  return [
-    useStarterSelector(getBrandConf),
-    brandConf => dispatch(ActionSetBrandConf(brandConf))
-  ];
+  const brandConf = useStarterSelector(getBrandConf);
+  return [brandConf, brandConf => dispatch(ActionSetBrandConf(brandConf))];
 }
 
 /**
@@ -202,10 +201,8 @@ export function useModuleConf(): [
   (data: TypeSourceModuleConf) => void
 ] {
   const dispatch = useEditorDispatch();
-  return [
-    useEditorSelector(getModuleConf),
-    data => dispatch(ActionSetCurrentModule(data))
-  ];
+  const moduleConf = useEditorSelector(getModuleConf);
+  return [moduleConf, data => dispatch(ActionSetCurrentModule(data))];
 }
 
 /**
@@ -216,7 +213,7 @@ export function usePageGroupList(): TypeSourcePageGroupConf[] {
 }
 
 /**
- * 获取当前选择的页面
+ * 获取当前选择的页面配置
  * @returns
  */
 export function usePageConf(): [
@@ -224,10 +221,12 @@ export function usePageConf(): [
   (data: TypeSourcePageConf) => void
 ] {
   const dispatch = useEditorDispatch();
-  return [
-    useEditorSelector(getPageConf),
-    data => dispatch(ActionSetCurrentPage(data))
-  ];
+  const pageConf = useEditorSelector(getPageConf);
+  return [pageConf, data => dispatch(ActionSetCurrentPage(data))];
+}
+
+export function usePageData(): TypeSourcePageData | null {
+  return useEditorSelector(getSourcePageData);
 }
 
 /**
@@ -252,7 +251,7 @@ export function useFetchPageConfData1(): [
       config: pageConf.src
     });
     updateValue(data);
-    dispatch(ActionUpdatePageDataMap(data));
+    dispatch(ActionPatchPageDataMap(data));
     updateLoading(false);
   };
   useEffect(() => {
@@ -283,7 +282,7 @@ export function useFetchPageConfData(): [TypeSourcePageData[], boolean] {
           namespace: path.dirname(sourceConfigUrl),
           config: item.src
         });
-        dispatch(ActionUpdatePageDataMap(data));
+        dispatch(ActionPatchPageDataMap(data));
         return data;
       });
     updateLoading(true);

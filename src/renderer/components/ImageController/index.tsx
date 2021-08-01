@@ -6,7 +6,7 @@ import { RightCircleOutlined } from "@ant-design/icons";
 import { apiCopyFile } from "@/request";
 import { useProjectPathname } from "@/hooks/project";
 import { useSourceConfigRoot } from "@/hooks/source";
-import { TypeSourceDefineImage } from "types/source-config";
+import { TypeSourceDefineImage } from "types/source";
 
 import LeftDisplay from "./LeftDisplay";
 import SourceStatus from "./SourceStatus";

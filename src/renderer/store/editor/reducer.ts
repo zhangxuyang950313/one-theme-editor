@@ -1,19 +1,22 @@
 import { updateState } from "@/store/utils";
-import { TypeProjectDataDoc, TypeProjectInfo } from "types/project";
+import {
+  TypeProjectDataDoc,
+  TypeProjectInfo,
+  TypeProjectSourceData
+} from "types/project";
 import {
   TypeSourceTypeConf,
   TypeSourceModuleConf,
   TypeSourcePageConf,
   TypeSourcePageData,
   TypeSourceConfigData
-} from "types/source-config";
+} from "types/source";
 import {
   SourceConfigData,
   SourceModuleConf,
   SourcePageConf
-  // SourcePageData
-} from "@/../data/SourceConfig";
-import { ProjectData, ProjectInfo } from "@/../data/ProjectData";
+} from "src/data/SourceConfig";
+import { ProjectData, ProjectInfo } from "src/data/ProjectData";
 import { ACTION_TYPES, TypeEditorActions } from "./action";
 
 // main states
@@ -28,8 +31,8 @@ export type TypeEditorState = {
   sourceModuleList: TypeSourceModuleConf[];
   sourceModuleConf: TypeSourceModuleConf;
   sourcePageConf: TypeSourcePageConf;
-  // sourcePageData: TypeSourcePageData;
   sourcePageDataMap: Partial<Record<string, TypeSourcePageData>>;
+  projectSourceDataMap: Partial<Record<string, TypeProjectSourceData>>;
 };
 
 const editorState: TypeEditorState = {
@@ -43,8 +46,8 @@ const editorState: TypeEditorState = {
   sourceModuleList: [],
   sourceModuleConf: new SourceModuleConf().default(),
   sourcePageConf: new SourcePageConf().default(),
-  // sourcePageData: new SourcePageData().create(),
-  sourcePageDataMap: {}
+  sourcePageDataMap: {},
+  projectSourceDataMap: {}
 };
 
 export default function EditorReducer(
@@ -87,11 +90,19 @@ export default function EditorReducer(
       });
     }
     // 页面数据
-    case ACTION_TYPES.UPDATE_PAGE_DATA: {
+    case ACTION_TYPES.PATCH_PAGE_DATA: {
       return updateState(state, {
         sourcePageDataMap: {
           ...state.sourcePageDataMap,
           [action.payload.config]: action.payload
+        }
+      });
+    }
+    case ACTION_TYPES.PATCH_PROJECT_SOURCE_DATA: {
+      return updateState(state, {
+        projectSourceDataMap: {
+          ...state.projectSourceDataMap,
+          [action.payload.path]: action.payload
         }
       });
     }

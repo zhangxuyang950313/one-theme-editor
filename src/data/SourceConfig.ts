@@ -10,10 +10,10 @@ import {
   TypeSourcePageGroupConf,
   TypeSourceTypeConf,
   TypeSourceDefine,
-  TypePageDefineSourceData,
+  TypePageDefineImageData,
   TypePageDefineValueData,
   TypeSourceDefineImage
-} from "../types/source-config";
+} from "../types/source";
 import { TypeProjectUiVersion } from "../types/project";
 import {
   ALIGN_VALUES,
@@ -36,8 +36,8 @@ export class SourcePageConf extends AbstractDataModel<TypeSourcePageConf> {
   }
 }
 
-export class DefineSourceData extends AbstractDataModel<TypePageDefineSourceData> {
-  protected data: TypePageDefineSourceData = {
+export class DefineSourceData extends AbstractDataModel<TypePageDefineImageData> {
+  protected data: TypePageDefineImageData = {
     width: 0,
     height: 0,
     size: 0,

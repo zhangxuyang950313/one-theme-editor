@@ -5,7 +5,7 @@ import {
   TypeSourcePageData,
   TypeSourceConfigData,
   TypeSourceConfigInfo
-} from "types/source-config";
+} from "types/source";
 import { TypeBrandConf } from "src/types/project";
 import { TypeResponseFrame, UnionTupleToObjectKey } from "types/request";
 import { checkParamsKey, result } from "server/utils/utils";

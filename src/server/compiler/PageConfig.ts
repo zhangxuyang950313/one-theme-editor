@@ -9,7 +9,7 @@ import {
   TypeLayoutImageElement,
   TypeLayoutTextElement,
   TypeSourceDefine
-} from "types/source-config";
+} from "types/source";
 import XMLNodeElement from "server/compiler/XMLNodeElement";
 import {
   ElementLayoutConf,
@@ -306,6 +306,16 @@ export default class PageConfig extends BaseCompiler {
           }
         }
       });
+  }
+
+  getSourceDefineList(): TypeSourceDefine[] {
+    return this.sourceDefineInstance.getSourceDefineList();
+  }
+
+  getSourceDefinePathList(): string[] {
+    return this.getSourceDefineList()
+      .map(item => item.sourceData?.src || item.valueData?.src || "")
+      .filter(Boolean);
   }
 
   getData(): TypeSourcePageData {

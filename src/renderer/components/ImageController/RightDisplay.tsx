@@ -19,10 +19,7 @@ const ProjectImageDisplay: React.FC<{ src: string }> = props => {
   const imageUrl = useImageUrl(absPath);
   const [url, forceUpdate] = useForceUpdateImageUrl(imageUrl);
 
-  console.log({ url });
-
   useProjectFileWatcher(props.src, (f, s) => {
-    console.log({ f, s });
     forceUpdate();
   });
 

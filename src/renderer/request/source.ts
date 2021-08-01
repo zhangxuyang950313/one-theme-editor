@@ -4,7 +4,7 @@ import {
   TypeSourceConfigData,
   TypeSourceConfigInfo,
   TypeSourcePageData
-} from "types/source-config";
+} from "types/source";
 import { TypeRequestResult, UnionTupleToObjectKey } from "types/request";
 import { createHttp } from "./axios";
 

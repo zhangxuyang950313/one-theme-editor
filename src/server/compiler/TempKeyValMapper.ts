@@ -3,7 +3,7 @@ import {
   TypeSourceXmlKeyValConf,
   TypeSourceXmlKeyValMapperMap,
   TypeXmlTempKeyValMap
-} from "types/source-config";
+} from "types/source";
 import BaseCompiler from "./BaseCompiler";
 
 export default class TempKeyValMapper extends BaseCompiler {

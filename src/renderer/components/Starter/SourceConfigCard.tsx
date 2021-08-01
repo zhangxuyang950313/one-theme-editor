@@ -2,7 +2,7 @@ import path from "path";
 import React from "react";
 import styled from "styled-components";
 
-import { TypeSourceConfigInfo } from "types/source-config";
+import { TypeSourceConfigInfo } from "types/source";
 
 // components
 import { Card } from "antd";
