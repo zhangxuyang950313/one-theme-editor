@@ -44,7 +44,7 @@
             value="file://com.miui.home/theme_values.xml?name=dimen_test1"
             />
         <Dimen
-            name="dimen_tes2t"
+            name="dimen_test2"
             description="尺寸值测试"
             value="file://com.miui.home/theme_values.xml?name=dimen_test2"
             />

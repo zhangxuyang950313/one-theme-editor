@@ -19,24 +19,28 @@ import {
   ActionSetProjectData
 } from "@/store/editor/action";
 import {
-  getProjectData,
-  getProjectFileDataMap,
-  getProjectInfo,
-  getProjectRoot,
-  getProjectUUID
+  selectProjectUUID,
+  selectProjectData,
+  selectProjectInfo,
+  selectProjectRoot,
+  selectProjectFileDataMap,
+  selectProjectXmlFileDataMap,
+  selectProjectImageFileDataMap
 } from "@/store/editor/selector";
 import { useEditorDispatch, useEditorSelector } from "@/store/index";
 import {
   TypeProjectDataDoc,
+  TypeProjectInfo,
   TypeProjectFileData,
-  TypeProjectFileImageData,
-  TypeProjectInfo
+  TypeProjectImageFileData,
+  TypeProjectXmlFileData
 } from "types/project";
 
 import ERR_CODE from "common/errorCode";
 import { sleep } from "common/utils";
 import { notification } from "antd";
-import { PROJECT_FILE_TYPE } from "@/../enum";
+import XmlTemplate from "server/compiler/XmlTemplate";
+import XMLNodeElement from "server/compiler/XMLNodeElement";
 import { useProjectFileWatcher } from "./fileWatcher";
 
 // 获取项目列表
@@ -117,22 +121,22 @@ export function useLoadProject(): boolean {
 
 // 获取工程数据
 export function useProjectData(): TypeProjectDataDoc {
-  return useEditorSelector(getProjectData);
+  return useEditorSelector(selectProjectData);
 }
 
 // 获取 工程描述信息
 export function useProjectInfo(): TypeProjectInfo {
-  return useEditorSelector(getProjectInfo);
+  return useEditorSelector(selectProjectInfo);
 }
 
 // 获取工程目录
 export function useProjectRoot(): string {
-  return useEditorSelector(getProjectRoot);
+  return useEditorSelector(selectProjectRoot);
 }
 
 // 工程 uuid
 export function useProjectUUID(): string {
-  return useEditorSelector(getProjectUUID);
+  return useEditorSelector(selectProjectUUID);
 }
 
 // 处理工程路径
@@ -161,6 +165,9 @@ export function useResolveSourcePath(relativePath: string): string {
   return sourcePath;
 }
 
+/**
+ * 监听当前页面所有素材
+ */
 export function usePatchPageSourceData(): void {
   const uuid = useProjectUUID();
   const pageData = usePageData();
@@ -178,17 +185,28 @@ export function usePatchPageSourceData(): void {
 }
 
 export function useProjectFileDataMap(): Map<string, TypeProjectFileData> {
-  const projectFileDataMap = useEditorSelector(getProjectFileDataMap);
+  const projectFileDataMap = useEditorSelector(selectProjectFileDataMap);
   return new Map(Object.entries(projectFileDataMap));
 }
 
-export function useProjectImageFileDataMap(): Map<
-  string,
-  TypeProjectFileImageData
-> {
-  const projectFileDataMap = useEditorSelector(getProjectFileDataMap);
-  const entries = Object.entries(projectFileDataMap).filter(
-    item => item[1].type === PROJECT_FILE_TYPE.IMAGE
-  ) as [string, TypeProjectFileImageData][];
-  return new Map(entries);
+/**
+ * @returns 工程图片文件数据map
+ */
+export function useProjectImageUrlBySrc(src: string): string {
+  const imageFileDataMap = useEditorSelector(selectProjectImageFileDataMap);
+  const imageData = imageFileDataMap.get(src);
+  return imageData?.url || "";
+}
+
+/**
+ * @returns 工程中 xml 文件数据map
+ */
+export function useProjectXmlValueBySrc(name: string, src: string): string {
+  const xmlFileDataMap = useEditorSelector(selectProjectXmlFileDataMap);
+  const xmlData = xmlFileDataMap.get(src);
+  if (!xmlData?.element) return "";
+  return new XMLNodeElement(xmlData.element)
+    .getFirstChildNode()
+    .getFirstChildNodeByAttrValue("name", name)
+    .getFirstTextChildValue();
 }

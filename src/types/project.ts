@@ -67,19 +67,19 @@ export type TypeImageDataDoc = TypeDatabase<TypeImageData>;
 // 在数据库中的工程信息
 export type TypeProjectDataDoc = TypeDatabase<TypeProjectData>;
 
-export type TypeProjectFileImageData = {
+export type TypeProjectImageFileData = {
   readonly type: PROJECT_FILE_TYPE.IMAGE;
   src: string;
   url: string;
   imageData: TypeImageData;
 };
 
-export type TypeProjectFileXmlData = {
+export type TypeProjectXmlFileData = {
   readonly type: PROJECT_FILE_TYPE.XML;
   src: string;
   element: Element;
 };
 
 export type TypeProjectFileData =
-  | TypeProjectFileImageData
-  | TypeProjectFileXmlData;
+  | TypeProjectImageFileData
+  | TypeProjectXmlFileData;

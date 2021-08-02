@@ -1,56 +1,62 @@
 import path from "path";
 import { createSelector } from "reselect";
 import { GlobalStore } from "@/store/index";
-import { ELEMENT_TAG } from "src/enum";
+import { ELEMENT_TAG, PROJECT_FILE_TYPE } from "src/enum";
 import { TypeEditorState } from "./reducer";
 // 数据
-const getState = (state: TypeEditorState) => state;
+const stateSelector = (state: TypeEditorState) => state;
 
 // 获取工程数据
-export const getProjectData = createSelector(
-  getState,
+export const selectProjectData = createSelector(
+  stateSelector,
   state => state.projectData
 );
 
 // 获取厂商信息
-export const getProjectBrandInfo = createSelector(
-  getProjectData,
+export const selectProjectBrandInfo = createSelector(
+  selectProjectData,
   state => state.brandInfo
 );
 
-export const getProjectInfo = createSelector(
-  getProjectData,
+export const selectProjectInfo = createSelector(
+  selectProjectData,
   state => state.projectInfo
 );
 
 // 获取工程 uuid
-export const getProjectUUID = createSelector(getState, state => state.uuid);
+export const selectProjectUUID = createSelector(
+  stateSelector,
+  state => state.uuid
+);
 
 // 获取工程本地路径
-export const getProjectRoot = createSelector(
-  getProjectData,
+export const selectProjectRoot = createSelector(
+  selectProjectData,
   state => state.projectRoot
 );
 
 // 获取当前资源配置信息
-export const getSourceConfig = createSelector(
-  getState,
+export const selectSourceConfig = createSelector(
+  stateSelector,
   state => state.sourceConfig
 );
 
-export const getSourceConfigUrl = createSelector(
-  getState,
+export const selectSourceConfigUrl = createSelector(
+  stateSelector,
   state => state.sourceConfigUrl
 );
 
 // 获取当前 sourceConfig namespace
-export const getSourceConfigNamespace = createSelector(getState, state => {
-  return state.sourceConfigUrl ? path.dirname(state.sourceConfigUrl) : "";
-});
+export const selectSourceConfigNS = createSelector(
+  selectSourceConfigUrl,
+  sourceConfigUrl => {
+    return sourceConfigUrl ? path.dirname(sourceConfigUrl) : "";
+  }
+);
 
 // 获取当前资源配置根目录
-export const getSourceConfigRoot = createSelector(
-  getSourceConfigNamespace,
+export const selectSourceConfigRoot = createSelector(
+  selectSourceConfigNS,
   namespace => {
     const dir = GlobalStore.store.getState().base.pathConfig?.SOURCE_CONFIG_DIR;
     if (!dir || !namespace) return "";
@@ -59,54 +65,54 @@ export const getSourceConfigRoot = createSelector(
 );
 
 // 获取模块列表
-export const getModuleList = createSelector(
-  getState,
+export const selectSourceModuleList = createSelector(
+  stateSelector,
   state => state.sourceModuleList
 );
 
 // 获取当前模块
-export const getModuleConf = createSelector(
-  getState,
+export const selectSourceModuleConf = createSelector(
+  stateSelector,
   state => state.sourceModuleConf
 );
 
 // 获取页面组列表
-export const getPageGroupList = createSelector(
-  getState,
+export const selectSourcePageGroupList = createSelector(
+  stateSelector,
   state => state.sourceModuleConf.groupList || []
 );
 
 // 获取当前页面
-export const getPageConf = createSelector(
-  getState,
+export const selectSourcePageConf = createSelector(
+  stateSelector,
   state => state.sourcePageConf
 );
 
-export const getSourceTypeList = createSelector(
-  getState,
+export const selectSourceTypeList = createSelector(
+  stateSelector,
   state => state.sourceTypeList
 );
 
-export const getSourcePageDataMap = createSelector(
-  getState,
+export const selectSourcePageDataMap = createSelector(
+  stateSelector,
   state => state.sourcePageDataMap
 );
 // 获取当前页面 sourcePageData
-export const getSourcePageData = createSelector(getState, state => {
+export const selectSourcePageData = createSelector(stateSelector, state => {
   const pageConfSrc = state.sourcePageConf.src;
   return state.sourcePageDataMap[pageConfSrc] || null;
 });
 
 // 获取所有元素列表
-export const getLayoutSourceList = createSelector(getState, state => {
+export const selectLayoutSourceList = createSelector(stateSelector, state => {
   const pageConfSrc = state.sourcePageConf.src;
   if (!pageConfSrc) return [];
   return state.sourcePageDataMap[pageConfSrc]?.layoutElementList || [];
 });
 
 // 获取图片元素列表
-export const getLayoutImageList = createSelector(
-  getLayoutSourceList,
+export const selectLayoutImageList = createSelector(
+  selectLayoutSourceList,
   elementList =>
     elementList.flatMap(item =>
       item.sourceTag === ELEMENT_TAG.IMAGE ? [item] : []
@@ -114,8 +120,8 @@ export const getLayoutImageList = createSelector(
 );
 
 // 获取文字元素列表
-export const getLayoutTextList = createSelector(
-  getLayoutSourceList,
+export const selectLayoutTextList = createSelector(
+  selectLayoutSourceList,
   elementList =>
     elementList.flatMap(item =>
       item.sourceTag === ELEMENT_TAG.TEXT ? [item] : []
@@ -123,14 +129,14 @@ export const getLayoutTextList = createSelector(
 );
 
 // 获取资源定义列表
-export const getSourceDefineList = createSelector(
-  getSourcePageData,
+export const selectSourceDefineList = createSelector(
+  selectSourcePageData,
   pageData => pageData?.sourceDefineList || []
 );
 
 // 获取资源图片列表
-export const getSourceImageDefineList = createSelector(
-  getSourceDefineList,
+export const selectSourceImageDefineList = createSelector(
+  selectSourceDefineList,
   sourceDefineList => {
     return sourceDefineList.flatMap(item => {
       if (item.tagName === ELEMENT_TAG.IMAGE) return [item];
@@ -140,8 +146,8 @@ export const getSourceImageDefineList = createSelector(
 );
 
 // 获取值资源列表
-export const getSourceValueDefineList = createSelector(
-  getSourceDefineList,
+export const selectSourceValueDefineList = createSelector(
+  selectSourceDefineList,
   sourceDefineList => {
     return sourceDefineList.flatMap(item => {
       if (item.tagName !== ELEMENT_TAG.IMAGE) return [item];
@@ -150,7 +156,31 @@ export const getSourceValueDefineList = createSelector(
   }
 );
 
-export const getProjectFileDataMap = createSelector(
-  getState,
+export const selectProjectFileDataMap = createSelector(
+  stateSelector,
   state => state.projectFileDataMap
+);
+
+export const selectProjectImageFileDataMap = createSelector(
+  selectProjectFileDataMap,
+  projectFileDataMap => {
+    const entries = Object.entries(projectFileDataMap).flatMap(([key, val]) => {
+      return val.type === PROJECT_FILE_TYPE.IMAGE
+        ? [[key, val] as [string, typeof val]]
+        : [];
+    });
+    return new Map(entries);
+  }
+);
+
+export const selectProjectXmlFileDataMap = createSelector(
+  selectProjectFileDataMap,
+  projectFileDataMap => {
+    const entries = Object.entries(projectFileDataMap).flatMap(([key, val]) => {
+      return val.type === PROJECT_FILE_TYPE.XML
+        ? [[key, val] as [string, typeof val]]
+        : [];
+    });
+    return new Map(entries);
+  }
 );

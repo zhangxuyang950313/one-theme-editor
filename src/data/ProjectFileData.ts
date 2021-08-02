@@ -1,13 +1,13 @@
 import { PROJECT_FILE_TYPE } from "../enum";
 import {
-  TypeProjectFileImageData,
-  TypeProjectFileXmlData
+  TypeProjectImageFileData,
+  TypeProjectXmlFileData
 } from "../types/project";
 import { AbstractDataModel } from "./AbstractDataModel";
 import ImageData from "./ImageData";
 
-export class ProjectFileImageData extends AbstractDataModel<TypeProjectFileImageData> {
-  protected data: TypeProjectFileImageData = {
+export class ProjectFileImageData extends AbstractDataModel<TypeProjectImageFileData> {
+  protected data: TypeProjectImageFileData = {
     type: PROJECT_FILE_TYPE.IMAGE,
     src: "",
     url: "",
@@ -15,8 +15,8 @@ export class ProjectFileImageData extends AbstractDataModel<TypeProjectFileImage
   };
 }
 
-export class ProjectFileXmlData extends AbstractDataModel<TypeProjectFileXmlData> {
-  protected data: TypeProjectFileXmlData = {
+export class ProjectFileXmlData extends AbstractDataModel<TypeProjectXmlFileData> {
+  protected data: TypeProjectXmlFileData = {
     type: PROJECT_FILE_TYPE.XML,
     src: "",
     element: {}

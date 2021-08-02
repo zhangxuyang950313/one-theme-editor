@@ -21,18 +21,18 @@ import {
   ActionPatchPageDataMap
 } from "@/store/editor/action";
 import {
-  getSourceConfigUrl,
-  getSourceConfig,
-  getModuleList,
-  getModuleConf,
-  getPageGroupList,
-  getPageConf,
-  getSourceTypeList,
-  getLayoutSourceList,
-  getLayoutImageList,
-  getLayoutTextList,
-  getSourceDefineList,
-  getSourcePageData
+  selectSourceConfigUrl,
+  selectSourceConfig,
+  selectSourceModuleList,
+  selectSourceModuleConf,
+  selectSourcePageGroupList,
+  selectSourcePageConf,
+  selectSourceTypeList,
+  selectLayoutSourceList,
+  selectLayoutImageList,
+  selectLayoutTextList,
+  selectSourceDefineList,
+  selectSourcePageData
 } from "@/store/editor/selector";
 import {
   TypeSourceConfigData,
@@ -67,7 +67,7 @@ import { useAsyncUpdater } from "./index";
  * @returns
  */
 export function useSourceConfig(): TypeSourceConfigData {
-  return useEditorSelector(getSourceConfig);
+  return useEditorSelector(selectSourceConfig);
 }
 
 /**
@@ -181,7 +181,7 @@ export function useFetchSourceConfig(): [
  * @returns
  */
 export function useSourceConfigUrl(): string {
-  return useEditorSelector(getSourceConfigUrl);
+  return useEditorSelector(selectSourceConfigUrl);
 }
 
 /**
@@ -189,7 +189,7 @@ export function useSourceConfigUrl(): string {
  * @returns
  */
 export function useModuleList(): TypeSourceModuleConf[] {
-  return useEditorSelector(getModuleList);
+  return useEditorSelector(selectSourceModuleList);
 }
 
 /**
@@ -201,7 +201,7 @@ export function useModuleConf(): [
   (data: TypeSourceModuleConf) => void
 ] {
   const dispatch = useEditorDispatch();
-  const moduleConf = useEditorSelector(getModuleConf);
+  const moduleConf = useEditorSelector(selectSourceModuleConf);
   return [moduleConf, data => dispatch(ActionSetCurrentModule(data))];
 }
 
@@ -209,7 +209,7 @@ export function useModuleConf(): [
  * 当前当前模块页面组列表
  */
 export function usePageGroupList(): TypeSourcePageGroupConf[] {
-  return useEditorSelector(getPageGroupList);
+  return useEditorSelector(selectSourcePageGroupList);
 }
 
 /**
@@ -221,12 +221,12 @@ export function usePageConf(): [
   (data: TypeSourcePageConf) => void
 ] {
   const dispatch = useEditorDispatch();
-  const pageConf = useEditorSelector(getPageConf);
+  const pageConf = useEditorSelector(selectSourcePageConf);
   return [pageConf, data => dispatch(ActionSetCurrentPage(data))];
 }
 
 export function usePageData(): TypeSourcePageData | null {
-  return useEditorSelector(getSourcePageData);
+  return useEditorSelector(selectSourcePageData);
 }
 
 /**
@@ -298,14 +298,14 @@ export function useFetchPageConfData(): [TypeSourcePageData[], boolean] {
  * 获取当前元素类型配置
  */
 export function useSourceTypeList(): TypeSourceTypeConf[] {
-  return useEditorSelector(getSourceTypeList);
+  return useEditorSelector(selectSourceTypeList);
 }
 
 /**
  * 获取素材定义数据列表
  */
 export function useSourceDefineList(): TypeSourceDefine[] {
-  return useEditorSelector(getSourceDefineList);
+  return useEditorSelector(selectSourceDefineList);
 }
 
 /**
@@ -385,19 +385,19 @@ export function useSourceDefineValueList(): TypeSourceDefineValue[] {
  * 获取当前所有元素列表
  */
 export function useLayoutElementList(): TypeLayoutElement[] {
-  return useEditorSelector(getLayoutSourceList);
+  return useEditorSelector(selectLayoutSourceList);
 }
 
 /**
  * 获取图片类型元素列表
  */
 export function useLayoutImageList(): TypeLayoutImageElement[] {
-  return useEditorSelector(getLayoutImageList);
+  return useEditorSelector(selectLayoutImageList);
 }
 
 /**
  * 获取 xml 类型元素列表
  */
 export function useTextSourceList(): TypeLayoutTextElement[] {
-  return useEditorSelector(getLayoutTextList);
+  return useEditorSelector(selectLayoutTextList);
 }

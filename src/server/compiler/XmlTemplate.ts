@@ -7,15 +7,6 @@ import BaseCompiler from "./BaseCompiler";
 import TempKeyValMapper from "./TempKeyValMapper";
 
 export default class XmlTemplate extends BaseCompiler {
-  getData(): string[] {
-    return [];
-    // return super.getRootChildren().map(node => ({
-    //   name: node.getAttributeOf("name"),
-    //   attribute: node.getAttributes(),
-    //   child: node.getFirstTextChildValue()
-    // }));
-  }
-
   /**
    * 获取所有 element 节数据
    * @returns

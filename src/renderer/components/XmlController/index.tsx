@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { TypeSourceDefineValue } from "types/source";
 import { apiOutputXmlTemplate } from "@/request";
-import { useProjectUUID } from "@/hooks/project";
+import { useProjectUUID, useProjectXmlValueBySrc } from "@/hooks/project";
 import { SOURCE_TYPES } from "enum/index";
 
 import ColorPicker from "./ColorPicker";
@@ -17,7 +17,7 @@ const XmlController: React.FC<{
   const { sourceType, sourceDefineValue } = props;
   const { valueData, src } = sourceDefineValue;
   const uuid = useProjectUUID();
-  const [value, setValue] = useState("");
+  const value = useProjectXmlValueBySrc(sourceDefineValue.name, src);
 
   if (!valueData) return null;
 

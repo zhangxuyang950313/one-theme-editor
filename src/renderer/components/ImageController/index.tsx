@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { RightCircleOutlined } from "@ant-design/icons";
 
 import { apiCopyFile } from "@/request";
-import { useProjectRoot } from "@/hooks/project";
+import { useProjectImageUrlBySrc, useProjectRoot } from "@/hooks/project";
 import { useSourceConfigRoot } from "@/hooks/source";
 import { TypeSourceDefineImage } from "types/source";
 
@@ -46,12 +46,13 @@ const StyleCopyButton = styled.div`
 `;
 
 const ImageController: React.FC<{
-  urlValue: string;
-  sourceDefineImage: TypeSourceDefineImage;
+  sourceDefine: TypeSourceDefineImage;
   onChange: (val: string) => void;
 }> = props => {
-  const { sourceDefineImage, urlValue, onChange } = props;
-  const { sourceData, description, src } = sourceDefineImage;
+  const { sourceDefine, onChange } = props;
+  const { sourceData, description, src } = sourceDefine;
+
+  const imageUrl = useProjectImageUrlBySrc(sourceDefine.src);
   if (!sourceData) return null;
   const { width, height, size } = sourceData;
   return (
@@ -74,7 +75,7 @@ const ImageController: React.FC<{
         {/* 一键拷贝默认素材 */}
         <MiddleCopyButton src={src} />
         {/* 工程素材展示 */}
-        <RightDisplay src={src} url={urlValue} />
+        <RightDisplay src={src} url={imageUrl} />
       </div>
     </StyleImageController>
   );
