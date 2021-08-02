@@ -20,17 +20,20 @@ import {
 } from "src/data/SourceConfig";
 import { placeholderRegexp } from "src/common/regexp";
 import PATH from "server/utils/pathUtils";
-import BaseCompiler from "./BaseCompiler";
+import XmlFileCompiler from "./XmlFileCompiler";
 import SourceDefine from "./SourceDefine";
 
-export default class PageConfig extends BaseCompiler {
+export default class PageConfig extends XMLNodeElement {
+  private configFile: string;
   private sourceNamespace: string;
   private pageNamespace: string;
   private pageConfig: string;
   private sourceRootAbsolute: string;
   private sourceDefineInstance: SourceDefine;
   constructor(data: { namespace: string; config: string }) {
-    super(path.join(PATH.SOURCE_CONFIG_DIR, data.namespace, data.config));
+    const file = path.join(PATH.SOURCE_CONFIG_DIR, data.namespace, data.config);
+    super(new XmlFileCompiler(file).getElement());
+    this.configFile = file;
     this.sourceNamespace = path.normalize(data.namespace);
     this.pageNamespace = path.dirname(data.config);
     this.pageConfig = path.normalize(data.config);
@@ -39,6 +42,24 @@ export default class PageConfig extends BaseCompiler {
       this.getRootFirstChildNodeOf(ELEMENT_TAG.SOURCE),
       this.sourceRootAbsolute
     );
+  }
+
+  /**
+   * 获取根节点的第一个 {tagname} 节点
+   * @param tagname
+   * @returns
+   */
+  private getRootFirstChildNodeOf(tagname: string): XMLNodeElement {
+    return this.getFirstChildNode().getFirstChildNodeByTagname(tagname);
+  }
+
+  /**
+   * 获取根节点所有 {tagname} 节点
+   * @param tagname
+   * @returns
+   */
+  public getRootChildrenNodesOf(tagname: string): XMLNodeElement[] {
+    return this.getFirstChildNode().getChildrenNodesByTagname(tagname);
   }
 
   // ${root}/path/to/somewhere -> absolute/source/root/to/somewhere
@@ -51,14 +72,14 @@ export default class PageConfig extends BaseCompiler {
   private relativePath(pathname: string): string {
     const relative = path.relative(
       PATH.SOURCE_CONFIG_DIR,
-      path.dirname(this.getFile())
+      path.dirname(this.configFile)
     );
     return path.join(relative, pathname);
   }
 
   // 处理当前页面资源相对于素材根路径
   private relativeSourcePath(pathname: string): string {
-    return path.join(path.dirname(this.getFile()), pathname);
+    return path.join(path.dirname(this.configFile), pathname);
   }
 
   // 当前页面资源相对于当前素材根路径
@@ -69,7 +90,7 @@ export default class PageConfig extends BaseCompiler {
   private resolveRelativePath(pathname: string): string {
     const relative = path.relative(
       this.sourceNamespace,
-      path.dirname(this.getFile())
+      path.dirname(this.configFile)
     );
     console.log({ relative });
     return path.join(relative, pathname);
@@ -100,7 +121,7 @@ export default class PageConfig extends BaseCompiler {
   private getRootAttribute(
     attribute: "version" | "description" | "screenWidth"
   ): string {
-    return this.getRootNode().getAttributeOf(attribute);
+    return this.getFirstChildNode().getAttributeOf(attribute);
   }
 
   getVersion(): string {
@@ -125,8 +146,7 @@ export default class PageConfig extends BaseCompiler {
    * @returns
    */
   getPreviewList(): string[] {
-    return super
-      .getRootFirstChildNodeOf(ELEMENT_TAG.PREVIEWS)
+    return this.getRootFirstChildNodeOf(ELEMENT_TAG.PREVIEWS)
       .getChildrenNodesByTagname(ELEMENT_TAG.PREVIEW)
       .map(item => this.relativePagePath(item.getAttributeOf("src")));
   }
@@ -140,12 +160,12 @@ export default class PageConfig extends BaseCompiler {
    * @returns
    */
   getCopyConfList(): TypeSourceCopyConf[] {
-    return super
-      .getRootChildrenNodesOf("copy")
-      .map<TypeSourceCopyConf>(node => ({
+    return this.getRootChildrenNodesOf("copy").map<TypeSourceCopyConf>(
+      node => ({
         from: node.getAttributeOf("from"),
         release: node.getAttributeOf("source")
-      }));
+      })
+    );
   }
 
   /**
@@ -291,7 +311,7 @@ export default class PageConfig extends BaseCompiler {
    * @returns
    */
   getLayoutElementList(): TypeLayoutElement[] {
-    return this.getRootNode()
+    return this.getFirstChildNode()
       .getFirstChildNodeByTagname(ELEMENT_TAG.LAYOUT)
       .getChildrenNodes()
       .flatMap(node => {

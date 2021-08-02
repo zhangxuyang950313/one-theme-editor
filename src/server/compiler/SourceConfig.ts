@@ -23,10 +23,10 @@ import PATHS from "server/utils/pathUtils";
 import ERR_CODE from "common/errorCode";
 import PageConfig from "./PageConfig";
 import XMLNodeBase from "./XMLNodeElement";
-import BaseCompiler from "./BaseCompiler";
+import XmlFileCompiler from "./XmlFileCompiler";
 
 // 解析 sourceConfig xml 配置文件
-export default class SourceConfig extends BaseCompiler {
+export default class SourceConfig extends XmlFileCompiler {
   // xiaomi/miui12
   private namespace: string;
   constructor(pathname: string) {

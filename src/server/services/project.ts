@@ -4,7 +4,7 @@ import { filenameIsXml, getImageData } from "common/utils";
 import { findProjectByUUID } from "server/db-handler/project";
 import { TypeProjectFileData } from "src/types/project";
 import { filenameIsImage } from "src/common/utils";
-import BaseCompiler from "server/compiler/BaseCompiler";
+import XmlFileCompiler from "server/compiler/XmlFileCompiler";
 import {
   ProjectFileImageData,
   ProjectFileXmlData
@@ -54,7 +54,7 @@ export function getProjectFileData(
   if (filenameIsXml(src)) {
     const data = new ProjectFileXmlData().set("src", src);
     if (fileExists) {
-      data.set("element", new BaseCompiler(absPath).getElement());
+      data.set("element", new XmlFileCompiler(absPath).getElement());
     }
     return data.create();
   }

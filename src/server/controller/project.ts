@@ -20,6 +20,7 @@ import {
   getProjectFileData
 } from "server/services/project";
 import XmlTemplate from "server/compiler/XmlTemplate";
+import XmlFileCompiler from "server/compiler/XmlFileCompiler";
 import { checkParamsKey } from "../utils/utils";
 
 export default function project(service: Express): void {
@@ -123,7 +124,8 @@ export default function project(service: Express): void {
     const { uuid, name, src } = query;
     const project = await findProjectByUUID(uuid);
     const releaseFile = path.join(project.projectRoot, src);
-    const value = new XmlTemplate(releaseFile).getValueByName(name);
+    const xmlElement = new XmlFileCompiler(releaseFile).getElement();
+    const value = new XmlTemplate(xmlElement).getValueByName(name);
     response.send(result.success({ value }));
   });
 

@@ -8,6 +8,7 @@ import {
   UnionTupleToObjectKey
 } from "types/request";
 import { findProjectByUUID } from "server/db-handler/project";
+import XmlFileCompiler from "server/compiler/XmlFileCompiler";
 
 /**
  * 输出被 key value 处理过模板字符串的 xml 模板
@@ -26,8 +27,10 @@ export async function releaseXmlTemplate(
   const templateXml = path.join(sourceRoot, src);
   const releaseXml = path.join(project.projectRoot, src);
   // 节点操作
-  const templateNode = new XmlTemplate(templateXml);
-  const releaseNode = new XmlTemplate(releaseXml);
+  const templateElement = new XmlFileCompiler(templateXml).getElement();
+  const templateNode = new XmlTemplate(templateElement);
+  const releaseElement = new XmlFileCompiler(releaseXml).getElement();
+  const releaseNode = new XmlTemplate(releaseElement);
   const templateRoot = templateNode.getRootNode();
   const releaseRoot = releaseNode.getRootNode();
   const fromNode = templateRoot.getFirstChildNodeByAttrValue("name", name);
@@ -62,5 +65,6 @@ export async function releaseXmlTemplate(
 export function getXmlTempValueByNameAttrVal(
   data: UnionTupleToObjectKey<typeof API.GET_XML_TEMP_VALUE.query>
 ): string {
-  return new XmlTemplate(data.src).getValueByName(data.name);
+  const xmlElement = new XmlFileCompiler(data.src).getElement();
+  return new XmlTemplate(xmlElement).getValueByName(data.name);
 }

@@ -36,10 +36,10 @@ const xml2jsConfig: Options.XML2JS = {
 
 /**
  * 基础解析器，继承于 XMLNodeElement，不同的是，传入的是 xml 文件路径
- * BaseCompiler 实现业务级基础的方法
+ * XmlFileCompiler 实现业务级基础的方法
  * XMLNodeElement 实现纯粹的节点解析方法
  */
-export default class BaseCompiler extends XMLNodeElement {
+export default class XmlFileCompiler extends XMLNodeElement {
   private file: string;
   constructor(file: string) {
     if (typeof file === "string" && !fse.existsSync(file)) {
@@ -47,7 +47,7 @@ export default class BaseCompiler extends XMLNodeElement {
     }
     try {
       const data = fse.readFileSync(file, { encoding: "utf-8" });
-      super(BaseCompiler.compile(data));
+      super(XmlFileCompiler.compile(data));
       this.file = file;
     } catch (err) {
       throw new Error(`${err.message}（${file}）`);
@@ -91,7 +91,7 @@ export default class BaseCompiler extends XMLNodeElement {
   //  * @returns
   //  */
   // public compile(xmlStr: string): Element {
-  //   return BaseCompiler.compile(xmlStr);
+  //   return XmlFileCompiler.compile(xmlStr);
   // }
 
   /**

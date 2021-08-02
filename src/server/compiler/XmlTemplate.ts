@@ -3,17 +3,23 @@ import { getPlaceholderVal } from "common/utils";
 import { TypeKeyValue } from "src/types";
 import { TypeXmlTempKeyValMap } from "src/types/source";
 import XMLNodeElement from "./XMLNodeElement";
-import BaseCompiler from "./BaseCompiler";
+import XmlFileCompiler from "./XmlFileCompiler";
 import TempKeyValMapper from "./TempKeyValMapper";
 
-export default class XmlTemplate extends BaseCompiler {
+export default class XmlTemplate extends XMLNodeElement {
+  /**
+   * 获取第一个子节点
+   * @returns
+   */
+  public getRootNode(): XMLNodeElement {
+    return super.getFirstChildNode();
+  }
   /**
    * 获取所有 element 节数据
    * @returns
    */
   public getElementList(): Element[] {
-    return super
-      .getRootNode()
+    return this.getRootNode()
       .getChildrenNodes()
       .map(item => item.getElement());
   }
@@ -28,8 +34,7 @@ export default class XmlTemplate extends BaseCompiler {
    * @returns
    */
   public getValueByName(name: string): string {
-    return super
-      .getRootNode()
+    return this.getRootNode()
       .getFirstChildNodeByAttrValue("name", name)
       .getFirstTextChildValue();
   }
@@ -42,7 +47,7 @@ export default class XmlTemplate extends BaseCompiler {
   public replacePlaceholderByValFile(valuesFile: string): XMLNodeElement {
     const kvList = new TempKeyValMapper(valuesFile).getKeyValList();
     return super.createInstance(
-      BaseCompiler.compile(this.generateXmlByKeyVal(kvList))
+      XmlFileCompiler.compile(this.generateXmlByKeyVal(kvList))
     );
   }
 
@@ -65,7 +70,7 @@ export default class XmlTemplate extends BaseCompiler {
    */
   public getNameValueMapObj(kvList: TypeKeyValue[]): TypeXmlTempKeyValMap {
     return super
-      .createInstance(BaseCompiler.compile(this.generateXmlByKeyVal(kvList)))
+      .createInstance(XmlFileCompiler.compile(this.generateXmlByKeyVal(kvList)))
       .getFirstChildNode()
       .getChildrenNodes()
       .reduce<TypeXmlTempKeyValMap>((obj, item) => {

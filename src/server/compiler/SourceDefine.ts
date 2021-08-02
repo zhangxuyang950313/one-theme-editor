@@ -9,6 +9,7 @@ import { filenameIsImage, filenameIsXml, getImageData } from "common/utils";
 import { TypeSourceDefine } from "types/source";
 import XMLNodeElement from "server/compiler/XMLNodeElement";
 import XmlTemplate from "./XmlTemplate";
+import XmlFileCompiler from "./XmlFileCompiler";
 
 /**
  * 解析素材定义数据
@@ -87,7 +88,7 @@ export default class SourceDefine {
       // TODO： 先固定使用 name，后续看需求是否需要自定义其他属性去 xml 中查找
       const valueName = searchParams.get("name") || "";
       const defaultValue = new XmlTemplate(
-        this.resolveRootSourcePath(src)
+        new XmlFileCompiler(this.resolveRootSourcePath(src)).getElement()
       ).getTextByAttrName(valueName);
       const valueData = new DefineValueData()
         .set("valueName", valueName)
