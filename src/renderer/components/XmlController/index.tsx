@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import { TypeSourceDefineValue } from "types/source";
-import { apiOutputXmlTemplate } from "@/request";
+import { apiWriteXmlTemplate } from "@/request";
 import { useProjectUUID, useProjectXmlValueBySrc } from "@/hooks/project";
 import { SOURCE_TYPES } from "enum/index";
 
@@ -25,7 +25,7 @@ const XmlController: React.FC<{
     // 写入 xml
     const writeXml = (value: string) => {
       const name = valueData.valueName;
-      apiOutputXmlTemplate(uuid, { name, value, src });
+      apiWriteXmlTemplate(uuid, { name, value, src });
     };
     switch (sourceType) {
       // 颜色选择器

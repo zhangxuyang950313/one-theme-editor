@@ -1,9 +1,5 @@
-import path from "path";
 import { useState, useEffect, useRef } from "react";
-
 import { useServerHost } from "@/hooks/index";
-import { useProjectRoot } from "@/hooks/project";
-import { useSourceConfigRoot } from "@/hooks/source";
 
 // 返回图片前缀
 export function useImagePrefix(): string {
@@ -90,33 +86,6 @@ export function useLoadImageByPath(filepath: string): string {
 export function useImageUrl(filepath: string): string {
   const prefix = useImagePrefix();
   return filepath ? prefix + filepath : "";
-}
-
-/**
- * 生成工程资源图片 url
- * @param relativePath
- */
-export function useProjectImageUrl(relativePath?: string): string {
-  const prefix = useImagePrefix();
-  const projectRoot = useProjectRoot();
-
-  return projectRoot && relativePath
-    ? prefix + path.join(projectRoot, relativePath)
-    : "";
-}
-
-/**
- * 生成配置资源图片 url
- * @param relativePath
- * @returns
- */
-export function useSourceImageUrl(relativePath?: string): string {
-  const prefix = useImagePrefix();
-  const sourceConfigRoot = useSourceConfigRoot();
-
-  return sourceConfigRoot && relativePath
-    ? prefix + path.join(sourceConfigRoot, relativePath)
-    : "";
 }
 
 /**

@@ -60,6 +60,7 @@ import {
 import ERR_CODE from "common/errorCode";
 import { asyncQueue } from "common/utils";
 import { SOURCE_TYPES } from "enum/index";
+import { useImagePrefix } from "./image";
 import { useAsyncUpdater } from "./index";
 
 /**
@@ -188,7 +189,7 @@ export function useSourceConfigUrl(): string {
  * 获取当前配置模块列表
  * @returns
  */
-export function useModuleList(): TypeSourceModuleConf[] {
+export function useSourceModuleList(): TypeSourceModuleConf[] {
   return useEditorSelector(selectSourceModuleList);
 }
 
@@ -196,7 +197,7 @@ export function useModuleList(): TypeSourceModuleConf[] {
  * 获取当前选择的模块配置
  * @returns
  */
-export function useModuleConf(): [
+export function useSourceModuleConf(): [
   TypeSourceModuleConf,
   (data: TypeSourceModuleConf) => void
 ] {
@@ -208,7 +209,7 @@ export function useModuleConf(): [
 /**
  * 当前当前模块页面组列表
  */
-export function usePageGroupList(): TypeSourcePageGroupConf[] {
+export function useSourcePageGroupList(): TypeSourcePageGroupConf[] {
   return useEditorSelector(selectSourcePageGroupList);
 }
 
@@ -216,7 +217,7 @@ export function usePageGroupList(): TypeSourcePageGroupConf[] {
  * 获取当前选择的页面配置
  * @returns
  */
-export function usePageConf(): [
+export function useSourcePageConf(): [
   TypeSourcePageConf,
   (data: TypeSourcePageConf) => void
 ] {
@@ -225,7 +226,7 @@ export function usePageConf(): [
   return [pageConf, data => dispatch(ActionSetCurrentPage(data))];
 }
 
-export function usePageData(): TypeSourcePageData | null {
+export function useSourcePageData(): TypeSourcePageData | null {
   return useEditorSelector(selectSourcePageData);
 }
 
@@ -241,7 +242,7 @@ export function useFetchPageConfData1(): [
   const [loading, updateLoading] = useState(true);
   const [value, updateValue] = useState<TypeSourcePageData | null>(null);
   const dispatch = useEditorDispatch();
-  const pageConf = usePageConf()[0];
+  const pageConf = useSourcePageConf()[0];
   const sourceConfigUrl = useSourceConfigUrl();
   const fetchData = async () => {
     if (!pageConf?.src) return;
@@ -271,7 +272,7 @@ export function useFetchPageConfData(): [TypeSourcePageData[], boolean] {
   const [loading, updateLoading] = useState(true);
   const [value, updateValue] = useState<TypeSourcePageData[]>([]);
   const dispatch = useEditorDispatch();
-  const pageGroupList = usePageGroupList();
+  const pageGroupList = useSourcePageGroupList();
   const sourceConfigUrl = useSourceConfigUrl();
 
   useEffect(() => {
@@ -400,4 +401,25 @@ export function useLayoutImageList(): TypeLayoutImageElement[] {
  */
 export function useTextSourceList(): TypeLayoutTextElement[] {
   return useEditorSelector(selectLayoutTextList);
+}
+
+/**
+ * 获取素材的绝对路径
+ * @param relativePath
+ * @returns
+ */
+export function useAbsolutePathInSource(relativePath: string): string {
+  const sourceConfigRoot = useSourceConfigRoot();
+  return path.join(sourceConfigRoot, relativePath);
+}
+
+/**
+ * 生成配置资源图片 url
+ * @param relativePath
+ * @returns
+ */
+export function useSourceImageUrl(relativePath: string): string {
+  const prefix = useImagePrefix();
+  const absolute = useAbsolutePathInSource(relativePath);
+  return prefix + absolute;
 }

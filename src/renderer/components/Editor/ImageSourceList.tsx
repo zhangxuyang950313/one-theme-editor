@@ -11,12 +11,7 @@ const ImageSourceList: React.FC = () => {
       {sourceDefineList.map((sourceDefine, key) => {
         return (
           <div className="image-controller" key={key}>
-            <ImageController
-              sourceDefine={sourceDefine}
-              onChange={value => {
-                console.log({ value });
-              }}
-            />
+            <ImageController sourceDefine={sourceDefine} />
           </div>
         );
       })}

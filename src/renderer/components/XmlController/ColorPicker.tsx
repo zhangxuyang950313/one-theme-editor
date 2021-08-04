@@ -176,7 +176,6 @@ const ColorPicker: React.FC<{
 }> = props => {
   const { value, sourceDefine, onChange } = props;
   const { description, valueData } = sourceDefine;
-  const [defaultColor, setDefaultColor] = useState("");
   const uuid = useProjectUUID();
 
   // useProjectFileWatcher(valueData?.src || "", file => {
@@ -185,26 +184,20 @@ const ColorPicker: React.FC<{
   //     .catch(err => message.error(err.message));
   // });
 
-  useEffect(() => {
-    if (!valueData?.defaultValue) return;
-    try {
-      setDefaultColor(
-        new ColorUtil(valueData.defaultValue, HEX_TYPES.ARGB).format(
-          HEX_TYPES.RGBA
-        )
-      );
-    } catch (err) {
-      message.warn(err);
-    }
-  }, [valueData?.defaultValue]);
-
   if (!uuid || !valueData) return null;
+  const { defaultValue } = valueData;
+  const defaultColor = new ColorUtil(defaultValue, HEX_TYPES.ARGB).format(
+    HEX_TYPES.RGBA
+  );
 
   return (
     <Wrapper name={valueData.valueName} description={description}>
       <StyleColorPicker>
         <ColorBox color={defaultColor} />
-        <RightCircleOutlined className="middle-button" />
+        <RightCircleOutlined
+          className="middle-button"
+          onClick={() => onChange(defaultColor)}
+        />
         <ColorPick
           defaultColor={value}
           placeholder={defaultColor}

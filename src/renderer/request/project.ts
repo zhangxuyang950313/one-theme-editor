@@ -79,7 +79,7 @@ export async function apiGetTempValueByName(
  * @param data
  * @returns
  */
-export async function apiOutputXmlTemplate(
+export async function apiWriteXmlTemplate(
   uuid: string,
   data: TypeReleaseXmlTempPayload
 ): Promise<void | null> {

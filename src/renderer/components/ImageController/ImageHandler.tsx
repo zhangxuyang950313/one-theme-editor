@@ -38,23 +38,24 @@ const ImageHandler: React.FC<{
     });
   };
   return (
-    <StyleHandler>
+    <StyleImageHandler>
       {/* 导入按钮 */}
       <ImportOutlined className="press import" onClick={handleImport} />
       {/* .9编辑按钮 */}
       {/* <FormOutlined className="press edit" onClick={() => {}} /> */}
       {/* 删除按钮 */}
       <DeleteOutlined className="press delete" onClick={handleDelete} />
-    </StyleHandler>
+    </StyleImageHandler>
   );
 };
 
-const StyleHandler = styled.div`
+const StyleImageHandler = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   font-size: 20px;
   margin: 0 10px;
+  height: 100%;
   .press {
     cursor: pointer;
     &:hover {

@@ -1,12 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 
-import { usePageConf } from "@/hooks/source";
-import { useSourceImageUrl } from "@/hooks/image";
+import { useSourcePageConf, useSourceImageUrl } from "@/hooks/source";
 import { PreloadImage } from "../ImageCollection";
 
 const Preview: React.FC = () => {
-  const [currentPage] = usePageConf();
+  const [currentPage] = useSourcePageConf();
   const imageUrl = useSourceImageUrl(currentPage?.preview || "");
 
   return (

@@ -1,15 +1,18 @@
 import React from "react";
 import styled from "styled-components";
 import { Collapse } from "antd";
-import { useSourceImageUrl } from "@/hooks/image";
-import { usePageConf, usePageGroupList } from "@/hooks/source";
+import {
+  useSourcePageConf,
+  useSourcePageGroupList,
+  useSourceImageUrl
+} from "@/hooks/source";
 import { PreloadImage } from "@/components/ImageCollection";
 import { TypeSourcePageConf } from "types/source";
 
 const PagePreview: React.FC<{ pageData: TypeSourcePageConf }> = props => {
   const { pageData } = props;
   const sourceImageURL = useSourceImageUrl(pageData.preview);
-  const [pageConf, setPageConf] = usePageConf();
+  const [pageConf, setPageConf] = useSourcePageConf();
 
   return (
     <StylePreviewImage data-active={String(pageConf?.key === pageData.key)}>
@@ -47,7 +50,7 @@ const StylePreviewImage = styled.span`
 
 // 页面选择器
 const PageSelector: React.FC = () => {
-  const pageGroupList = usePageGroupList();
+  const pageGroupList = useSourcePageGroupList();
 
   if (pageGroupList.length === 0) return null;
 

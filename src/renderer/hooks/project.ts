@@ -11,7 +11,7 @@ import {
   useBrandConf,
   useFetchPageConfData,
   useFetchSourceConfig,
-  usePageData,
+  useSourcePageData,
   useSourceConfigRoot
 } from "@/hooks/source";
 import {
@@ -31,17 +31,15 @@ import { useEditorDispatch, useEditorSelector } from "@/store/index";
 import {
   TypeProjectDataDoc,
   TypeProjectInfo,
-  TypeProjectFileData,
-  TypeProjectImageFileData,
-  TypeProjectXmlFileData
+  TypeProjectFileData
 } from "types/project";
 
 import ERR_CODE from "common/errorCode";
 import { sleep } from "common/utils";
 import { notification } from "antd";
-import XmlTemplate from "server/compiler/XmlTemplate";
 import XMLNodeElement from "server/compiler/XMLNodeElement";
 import { useProjectFileWatcher } from "./fileWatcher";
+import { useImagePrefix } from "./image";
 
 // 获取项目列表
 export function useProjectList(): [
@@ -170,7 +168,7 @@ export function useResolveSourcePath(relativePath: string): string {
  */
 export function usePatchPageSourceData(): void {
   const uuid = useProjectUUID();
-  const pageData = usePageData();
+  const pageData = useSourcePageData();
   const dispatch = useEditorDispatch();
   const sourceFilepathSet = (pageData?.sourceDefineList || []) //
     .reduce((t, o) => {
@@ -178,7 +176,6 @@ export function usePatchPageSourceData(): void {
       return t;
     }, new Set<string>());
   useProjectFileWatcher(Array.from(sourceFilepathSet), async file => {
-    console.log({ file });
     const fileData = await apiGetProjectFileData(uuid, file);
     dispatch(ActionPatchProjectSourceData(fileData));
   });
@@ -209,4 +206,27 @@ export function useProjectXmlValueBySrc(name: string, src: string): string {
     .getFirstChildNode()
     .getFirstChildNodeByAttrValue("name", name)
     .getFirstTextChildValue();
+}
+
+/**
+ * 获取工程相对路径的绝对路径
+ * @param relativePath
+ * @returns
+ */
+export function useAbsolutePathInProject(relativePath: string): string {
+  const projectRoot = useProjectRoot();
+  return path.join(projectRoot, relativePath);
+}
+
+/**
+ * 生成工程资源图片 url
+ * @param relativePath
+ */
+export function useProjectImageUrl(relativePath?: string): string {
+  const prefix = useImagePrefix();
+  const projectRoot = useProjectRoot();
+
+  return projectRoot && relativePath
+    ? prefix + path.join(projectRoot, relativePath)
+    : "";
 }

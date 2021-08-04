@@ -14,11 +14,15 @@ const StringInput: React.FC<{
   const { name, description, valueData } = sourceDefine;
 
   if (!valueData) return null;
+  const { defaultValue } = valueData;
   return (
     <Wrapper name={name} description={description}>
       <StyleNumberInput>
-        <Input className="input" disabled value={valueData.defaultValue} />
-        <RightCircleOutlined className="middle-button" />
+        <Input className="input" disabled value={defaultValue} />
+        <RightCircleOutlined
+          className="middle-button"
+          onClick={() => onChange(defaultValue)}
+        />
         <Input
           className="input"
           value={value}

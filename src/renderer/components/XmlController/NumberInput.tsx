@@ -14,17 +14,16 @@ const NumberInput: React.FC<{
   const { name, description, valueData } = sourceDefine;
 
   if (!valueData) return null;
+  const { defaultValue } = valueData;
 
   return (
     <Wrapper name={name} description={description}>
       <StyleNumberInput>
-        <InputNumber
-          disabled
-          keyboard
-          className="input"
-          value={valueData.defaultValue}
+        <InputNumber disabled keyboard className="input" value={defaultValue} />
+        <RightCircleOutlined
+          className="middle-button"
+          onClick={() => onChange(defaultValue)}
         />
-        <RightCircleOutlined className="middle-button" />
         <InputNumber
           keyboard
           className="input"

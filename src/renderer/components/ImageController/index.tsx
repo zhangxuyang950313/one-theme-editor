@@ -1,58 +1,64 @@
-import path from "path";
-import React, { useMemo } from "react";
+import React from "react";
 import styled from "styled-components";
+import { remote } from "electron";
 import { RightCircleOutlined } from "@ant-design/icons";
 
 import { apiCopyFile } from "@/request";
-import { useProjectImageUrlBySrc, useProjectRoot } from "@/hooks/project";
-import { useSourceConfigRoot } from "@/hooks/source";
+import {
+  useAbsolutePathInProject,
+  useProjectImageUrlBySrc
+} from "@/hooks/project";
+import { useAbsolutePathInSource, useSourceImageUrl } from "@/hooks/source";
 import { TypeSourceDefineImage } from "types/source";
 
-import LeftDisplay from "./LeftDisplay";
 import SourceStatus from "./SourceStatus";
-import RightDisplay from "./RightDisplay";
+import ImageDisplay from "./ImageDisplay";
+import ImageHandler from "./ImageHandler";
+import { previewFile } from "./utils";
 
 /**
  * 拷贝素材按钮
  * @param props
  * @returns
  */
-const MiddleCopyButton: React.FC<{ src: string }> = props => {
-  const { src } = props;
-  const sourceConfigRoot = useSourceConfigRoot();
-  const projectRoot = useProjectRoot();
-  return useMemo(() => {
-    if (!sourceConfigRoot || !src) return null;
-    const from = path.join(sourceConfigRoot, src);
-    const release = path.join(projectRoot, src);
-    return (
-      <StyleCopyButton>
-        <RightCircleOutlined onClick={() => apiCopyFile(from, release)} />
-      </StyleCopyButton>
-    );
-  }, [src]);
-};
+// const MiddleCopyButton: React.FC<{ src: string }> = props => {
+//   const { src } = props;
+//   const sourceConfigRoot = useSourceConfigRoot();
+//   const projectRoot = useProjectRoot();
+//   return useMemo(() => {
+//     if (!sourceConfigRoot || !src) return null;
+//     const from = path.join(sourceConfigRoot, src);
+//     const release = path.join(projectRoot, src);
+//     return (
+//       <StyleCopyButton>
+//         <RightCircleOutlined onClick={() => apiCopyFile(from, release)} />
+//       </StyleCopyButton>
+//     );
+//   }, [src]);
+// };
 
-const StyleCopyButton = styled.div`
-  cursor: pointer;
-  font-size: 30px;
-  color: ${({ theme }) => theme["@text-color-secondary"]};
-  margin: 20px;
-  transition: all 0.5s ease;
-  &:hover {
-    opacity: 0.5;
-    transition: all 0.1s ease;
-  }
-`;
+// const StyleCopyButton = styled.div`
+//   cursor: pointer;
+//   font-size: 30px;
+//   color: ${({ theme }) => theme["@text-color-secondary"]};
+//   margin: 0 20px;
+//   transition: all 0.5s ease;
+//   &:hover {
+//     opacity: 0.5;
+//     transition: all 0.1s ease;
+//   }
+// `;
 
 const ImageController: React.FC<{
   sourceDefine: TypeSourceDefineImage;
-  onChange: (val: string) => void;
 }> = props => {
-  const { sourceDefine, onChange } = props;
+  const { sourceDefine } = props;
   const { sourceData, description, src } = sourceDefine;
+  const sourceImageUrl = useSourceImageUrl(src);
+  const projectImageUrl = useProjectImageUrlBySrc(src);
+  const absPathInSource = useAbsolutePathInSource(src);
+  const absPathInProject = useAbsolutePathInProject(src);
 
-  const imageUrl = useProjectImageUrlBySrc(sourceDefine.src);
   if (!sourceData) return null;
   const { width, height, size } = sourceData;
   return (
@@ -71,11 +77,29 @@ const ImageController: React.FC<{
       <SourceStatus src={src} />
       <div className="edit-wrapper">
         {/* 默认素材展示 */}
-        <LeftDisplay src={src} sourceName={description} />
+        <ImageDisplay
+          imageUrl={sourceImageUrl}
+          onClick={() => {
+            // 预览图片
+            // mac 打开图片预览器，其他平台跳转目录
+            if (process.platform !== "darwin") {
+              remote.shell.showItemInFolder(absPathInSource);
+            } else {
+              previewFile(absPathInSource, description);
+            }
+          }}
+        />
         {/* 一键拷贝默认素材 */}
-        <MiddleCopyButton src={src} />
+        <RightCircleOutlined
+          className="quick-copy-btn"
+          onClick={() => apiCopyFile(absPathInSource, absPathInProject)}
+        />
         {/* 工程素材展示 */}
-        <RightDisplay src={src} url={imageUrl} />
+        <ImageDisplay
+          imageUrl={projectImageUrl}
+          onClick={() => remote.shell.showItemInFolder(absPathInProject)}
+        />
+        <ImageHandler src={src} />
       </div>
     </StyleImageController>
   );
@@ -100,6 +124,18 @@ const StyleImageController = styled.div`
     display: flex;
     flex-direction: wrap;
     align-items: center;
+    height: 80px;
+    .quick-copy-btn {
+      cursor: pointer;
+      font-size: 30px;
+      color: ${({ theme }) => theme["@text-color-secondary"]};
+      margin: 0 20px;
+      transition: all 0.5s ease;
+      &:hover {
+        opacity: 0.5;
+        transition: all 0.1s ease;
+      }
+    }
   }
 `;
 export default ImageController;
