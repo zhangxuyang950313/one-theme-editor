@@ -5,7 +5,7 @@ import { remote } from "electron";
 import ERR_CODE from "common/errorCode";
 import { notification } from "antd";
 import { DeleteOutlined, ImportOutlined } from "@ant-design/icons";
-import { apiCopyFile, apiDeleteFile } from "@/request";
+import { apiCopyFile, apiDeleteFile } from "@/request/file";
 import { useProjectRoot } from "@/hooks/project";
 
 // 图片操作区

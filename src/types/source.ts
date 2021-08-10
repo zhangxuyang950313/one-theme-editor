@@ -1,7 +1,9 @@
+import archiver from "archiver";
 import {
   ALIGN_VALUES,
   ALIGN_V_VALUES,
   ELEMENT_TAG,
+  PACK_TYPE,
   SOURCE_TYPES
 } from "../enum";
 import XMLNodeBase from "../server/compiler/XMLNodeElement";
@@ -23,6 +25,14 @@ export type TypeSourceConfigInfo = {
 export type TypeSourceConfigData = TypeSourceConfigInfo & {
   sourceTypeList: TypeSourceTypeConf[];
   moduleList: TypeSourceModuleConf[];
+  packageConfig: TypePackageConf;
+};
+
+// 打包配置
+export type TypePackageConf = {
+  extname: string;
+  format: archiver.Format;
+  items: Array<{ type: PACK_TYPE; path: string }>;
 };
 
 // 素材类型定义数据

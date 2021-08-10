@@ -28,11 +28,6 @@ function createApiConf<T, Q extends string[], K extends Q[number]>(
 }
 
 const API = {
-  // 初始化，后端设置 cookies
-  INIT: createApiConf({
-    url: "/init",
-    body: {}
-  }),
   // 获取 sourceConfig 路径
   GET_PATH_CONFIG: createApiConf({
     url: "/path/config"
@@ -151,15 +146,16 @@ const API = {
 
   // 工程打包
   PACK_PROJECT: createApiConf({
-    url: "/tools/project/pack"
+    url: "/project/pack",
+    query: ["uuid"]
   }),
   // 工程解包
   UNPACK_PROJECT: createApiConf({
-    url: "/tools/project/unpack"
+    url: "/project/unpack"
   }),
   // 应用到手机
   APPLY_PROJECT: createApiConf({
-    url: "/tools/project/apply"
+    url: "/project/apply"
   })
 } as const;
 

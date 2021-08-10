@@ -1,3 +1,4 @@
+import archiver from "archiver";
 import {
   TypeLayoutConf,
   TypeSourceConfigData,
@@ -12,7 +13,8 @@ import {
   TypeSourceDefine,
   TypePageDefineImageData,
   TypePageDefineValueData,
-  TypeSourceDefineImage
+  TypeSourceDefineImage,
+  TypePackageConf
 } from "../types/source";
 import { TypeProjectUiVersion } from "../types/project";
 import {
@@ -176,6 +178,14 @@ export class UiVersion extends AbstractDataModel<TypeProjectUiVersion> {
   }
 }
 
+export class PackageConfig extends AbstractDataModel<TypePackageConf> {
+  protected data: TypePackageConf = {
+    extname: "",
+    format: "zip",
+    items: []
+  };
+}
+
 export class SourceConfigInfo extends AbstractDataModel<TypeSourceConfigInfo> {
   protected data: TypeSourceConfigInfo = {
     key: "",
@@ -195,7 +205,8 @@ export class SourceConfigData extends AbstractDataModel<TypeSourceConfigData> {
   protected data: TypeSourceConfigData = {
     ...SourceConfigInfo.default(),
     sourceTypeList: [],
-    moduleList: []
+    moduleList: [],
+    packageConfig: new PackageConfig().create()
   };
   static default(): TypeSourceConfigData {
     return new SourceConfigData().default();

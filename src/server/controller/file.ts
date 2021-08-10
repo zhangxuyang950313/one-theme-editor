@@ -4,27 +4,10 @@ import { Express } from "express";
 import API from "common/apiConf";
 import PATHS from "server/utils/pathUtils";
 import ERR_CODE from "common/errorCode";
-import { checkParamsKey, result } from "server/utils/utils";
+import { checkParamsKey, result } from "server/utils/index";
 import { TypeResponseFrame, UnionTupleToObjectKey } from "types/request";
-import { compactNinePatch } from "server/core/pack";
 
 export default function utils(service: Express): void {
-  /**
-   * 初始化接口，用于前后端数据交换
-   * 客户端传来高频参数数据写入 cookies，下次客户端自动带上后端自由选取
-   */
-  service.post<
-    never,
-    TypeResponseFrame<typeof API.INIT.body, string>,
-    typeof API.INIT.body
-  >(API.INIT.url, async (request, response) => {
-    for (const key in request.body) {
-      response.cookie(key, request.body[key]);
-    }
-    response.cookie("sourcePathname", PATHS.SOURCE_CONFIG_DIR);
-    response.send(result.success(request.body));
-  });
-
   // 获取路径配置
   service.get<never, TypeResponseFrame<typeof PATHS>, typeof PATHS>(
     API.GET_PATH_CONFIG.url,
@@ -49,6 +32,7 @@ export default function utils(service: Express): void {
     // fse.createReadStream(from).pipe(fse.createWriteStream(to)).destroy();
     response.send(result.success(null));
   });
+
   // 删除本地文件
   service.post<
     never,
@@ -93,12 +77,4 @@ export default function utils(service: Express): void {
   //     }
   //   }
   // );
-
-  /**
-   * 打包工程
-   */
-  service.get(API.PACK_PROJECT.url, async (request, response) => {
-    const data = compactNinePatch();
-    response.send(result.success(data));
-  });
 }

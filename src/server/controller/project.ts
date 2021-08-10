@@ -1,13 +1,14 @@
 import path from "path";
 import { Express } from "express";
 import API from "common/apiConf";
+import PATH from "server/utils/pathUtils";
 import {
   TypeCreateProjectPayload,
   TypeProjectDataDoc,
   TypeProjectFileData
 } from "types/project";
 import { TypeResponseFrame, UnionTupleToObjectKey } from "types/request";
-import { result } from "server/utils/utils";
+import { result } from "server/utils/index";
 import {
   findProjectByUUID,
   getProjectListOf,
@@ -17,11 +18,14 @@ import {
 import { releaseXmlTemplate } from "server/services/xmlTemplate";
 import {
   getPageDefineSourceData,
-  getProjectFileData
+  getProjectFileData,
+  packProject
 } from "server/services/project";
 import XmlTemplate from "server/compiler/XmlTemplate";
 import XmlFileCompiler from "server/compiler/XmlFileCompiler";
-import { checkParamsKey } from "../utils/utils";
+import SourceConfig from "server/compiler/SourceConfig";
+import { compactNinePatch } from "server/core/pack";
+import { checkParamsKey } from "../utils/index";
 
 export default function project(service: Express): void {
   // 添加工程
@@ -177,5 +181,31 @@ export default function project(service: Express): void {
     const { projectRoot } = await findProjectByUUID(params.uuid);
     const data = getProjectFileData(projectRoot, query.filepath);
     response.send(result.success(data));
+  });
+
+  /**
+   * 打包工程
+   */
+  service.post<
+    never, // reqParams
+    TypeResponseFrame<string[]>, // resBody
+    typeof API.PACK_PROJECT.body, // reqBody
+    UnionTupleToObjectKey<typeof API.PACK_PROJECT.query> // reqQuery
+  >(API.PACK_PROJECT.url, async (request, response) => {
+    const { query } = request;
+    checkParamsKey(query, API.PACK_PROJECT.query);
+    const { projectRoot, sourceConfigPath } = await findProjectByUUID(
+      query.uuid
+    );
+    const packConfig = new SourceConfig(sourceConfigPath).getPackageConfig();
+    const files = await packProject({
+      projectRoot: path.normalize(
+        "/Users/zhangxuyang/Desktop/素白App（超级锁屏+简约不简单+返现）"
+      ),
+      packConfig,
+      outputDir: ""
+    });
+    // const data = compactNinePatch();
+    response.send(result.success(files));
   });
 }

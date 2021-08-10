@@ -1,3 +1,4 @@
+import { createGzip } from "zlib";
 import { TypeResultSuccess, TypeResultFail } from "types/request";
 
 export const result: {
@@ -17,3 +18,6 @@ export const checkParamsKey = <T>(obj: T, keys: readonly string[]): void => {
     }
   });
 };
+
+// 压缩目录
+// export function zipDir(dir: string) {}

@@ -8,7 +8,7 @@ import {
 } from "types/source";
 import { TypeBrandConf } from "src/types/project";
 import { TypeResponseFrame, UnionTupleToObjectKey } from "types/request";
-import { checkParamsKey, result } from "server/utils/utils";
+import { checkParamsKey, result } from "server/utils/index";
 import PageConfig from "server/compiler/PageConfig";
 import SourceConfig from "server/compiler/SourceConfig";
 

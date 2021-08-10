@@ -3,19 +3,6 @@ import { TypePathConfig } from "server/utils/pathUtils";
 import { TypeRequestResult } from "types/request";
 import { createHttp } from "./axios";
 
-/**
- * 初始化接口，用于给后端传前端数据放入 cookies，避免每次都要传参
- * @param data
- * @returns
- */
-export async function apiInitCookies(
-  data: Record<string, string>
-): Promise<null> {
-  return createHttp()
-    .post<TypeRequestResult<null>>(API.INIT.url, data)
-    .then(data => data.data.data);
-}
-
 // 获取路径信息
 export async function apiGetPathConfig(): Promise<TypePathConfig> {
   return createHttp()

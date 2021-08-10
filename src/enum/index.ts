@@ -3,6 +3,8 @@ export enum ELEMENT_TAG {
   TEXT = "Text",
   PAGE = "Page",
   MODULE = "Module",
+  PACKAGE = "Package",
+  ITEM = "Item",
   GROUP = "Group",
   SOURCE = "Source",
   PREVIEWS = "Previews",
@@ -65,4 +67,10 @@ export enum FILE_STATUS {
   ADD = "add",
   CHANGE = "change",
   UNLINK = "unlink"
+}
+
+export enum PACK_TYPE {
+  DIR = "dir",
+  PACK = "pack",
+  FILE = "file"
 }

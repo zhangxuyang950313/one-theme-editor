@@ -1,17 +1,19 @@
 import path from "path";
-import { ELEMENT_TAG } from "src/enum";
 import fse from "fs-extra";
 import { v4 as UUID } from "uuid";
+import { ELEMENT_TAG, PACK_TYPE } from "src/enum";
 import {
   TypeSourceConfigData,
   TypeSourceModuleConf,
   TypeSourcePageGroupConf,
   TypeSourcePageConf,
   TypeSourceConfigInfo,
-  TypeSourceTypeConf
+  TypeSourceTypeConf,
+  TypePackageConf
 } from "types/source";
 import { TypeBrandConf, TypeProjectUiVersion } from "types/project";
 import {
+  PackageConfig,
   SourceConfigInfo,
   SourceModuleConf,
   SourcePageConf,
@@ -172,6 +174,23 @@ export default class SourceConfig extends XmlFileCompiler {
       });
   }
 
+  // 解析打包配置
+  getPackageConfig(): TypePackageConf {
+    const packageNode = super.getRootFirstChildNodeOf(ELEMENT_TAG.PACKAGE);
+    const packageConf = new PackageConfig();
+    packageConf.set("extname", packageNode.getAttributeOf("extname"));
+    packageConf.set("format", packageNode.getAttributeOf("format"));
+    const items: TypePackageConf["items"] = packageNode
+      .getChildrenNodesByTagname(ELEMENT_TAG.ITEM)
+      .map(item => ({
+        type: item.getAttributeOf<PACK_TYPE>("type"),
+        path: item.getAttributeOf("path"),
+        name: item.getAttributeOf("name") // TODO 若没定义 name 正则取 path root
+      }));
+    packageConf.set("items", items);
+    return packageConf.create();
+  }
+
   /**
    * 解析配置配置的简略信息
    * 只解析 description.xml 不需要进一步解析页面
@@ -195,7 +214,8 @@ export default class SourceConfig extends XmlFileCompiler {
     return {
       ...this.getInfo(),
       sourceTypeList: this.getSourceTypeList(),
-      moduleList: this.getModuleList()
+      moduleList: this.getModuleList(),
+      packageConfig: this.getPackageConfig()
     };
   }
 }

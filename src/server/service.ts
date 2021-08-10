@@ -1,11 +1,11 @@
 import logSymbols from "log-symbols";
-import { result } from "server/utils/utils";
+import { result } from "server/utils/index";
 import express, { ErrorRequestHandler, Express, RequestHandler } from "express";
 import cookieParser from "cookie-parser";
 import imageService from "./controller/image";
 import sourceService from "./controller/source";
 import projectService from "./controller/project";
-import utilsService from "./controller/utils";
+import fileService from "./controller/file";
 
 const HeaderHandler: RequestHandler = (req, res, next) => {
   //判断路径
@@ -44,7 +44,7 @@ export default function registerService(service: Express): void {
   projectService(service);
 
   // 工具服务
-  utilsService(service);
+  fileService(service);
 
   // 包含异步拦截器，一定要放在最后
   service.use(ErrorHandler);

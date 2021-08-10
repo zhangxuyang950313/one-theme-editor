@@ -83,4 +83,33 @@
             <Page src="framework-res/pages/page2.xml"/> -->
         </Group>
     </Module>
+
+    <!-- 打包配置 -->
+    <Package extname="zip" format="zip">
+        <Item type="dir"  path="boots/**"/>
+        <Item type="pack" path="clock_2x4/**"/>
+        <Item type="pack" path="com.*/**"/>
+        <Item type="pack" path="framework.*/**"/>
+        <Item type="pack" path="icons/**"/>
+        <Item type="pack" path="lockscreen/**"/>
+        <Item type="pack" path="miwallpaper/**"/>
+        <Item type="dir"  path="wallpaper/**"/>
+        <Item type="file" path="description.xml"/>
+    </Package>
 </Root>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

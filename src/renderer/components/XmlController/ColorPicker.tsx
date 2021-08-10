@@ -196,7 +196,7 @@ const ColorPicker: React.FC<{
         <ColorBox color={defaultColor} />
         <RightCircleOutlined
           className="middle-button"
-          onClick={() => onChange(defaultColor)}
+          onClick={() => onChange(defaultValue)}
         />
         <ColorPick
           defaultColor={value}
