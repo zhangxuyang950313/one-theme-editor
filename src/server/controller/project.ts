@@ -194,18 +194,22 @@ export default function project(service: Express): void {
   >(API.PACK_PROJECT.url, async (request, response) => {
     const { query } = request;
     checkParamsKey(query, API.PACK_PROJECT.query);
-    const { projectRoot, sourceConfigPath } = await findProjectByUUID(
-      query.uuid
+    // const { projectRoot, sourceConfigPath } = await findProjectByUUID(
+    //   query.uuid
+    // );
+    // const packConfig = new SourceConfig(sourceConfigPath).getPackageConfig();
+    // const files = await packProject({
+    //   projectRoot: path.normalize(
+    //     "/Users/zhangxuyang/Desktop/素白App（超级锁屏+简约不简单+返现）"
+    //   ),
+    //   packConfig,
+    //   outputDir: ""
+    // });
+    await compactNinePatch(
+      path.normalize("/Users/zhangxuyang/Desktop/b"),
+      path.normalize("/Users/zhangxuyang/Desktop/a")
     );
-    const packConfig = new SourceConfig(sourceConfigPath).getPackageConfig();
-    const files = await packProject({
-      projectRoot: path.normalize(
-        "/Users/zhangxuyang/Desktop/素白App（超级锁屏+简约不简单+返现）"
-      ),
-      packConfig,
-      outputDir: ""
-    });
     // const data = compactNinePatch();
-    response.send(result.success(files));
+    response.send(result.success([]));
   });
 }

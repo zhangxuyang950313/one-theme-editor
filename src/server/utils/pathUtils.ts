@@ -1,4 +1,5 @@
 import path from "path";
+import os from "os";
 
 const PATH = {
   // 静态资源目录
@@ -37,7 +38,7 @@ const PATH = {
 
   // 二进制目录
   get BINARY_DIR(): string {
-    return path.resolve(this.RESOURCE_DIR, "binary");
+    return path.resolve(this.STATIC_DIR, "binary");
   },
 
   // 配置目录
@@ -48,6 +49,26 @@ const PATH = {
   // 模板总配置文件
   get SOURCE_CONFIG_FILE(): string {
     return path.resolve(this.SOURCE_CONFIG_DIR, "config.json");
+  },
+
+  get AAPT_TOOL(): string | null {
+    const ns = {
+      Linux: path.join("Linux", "aapt"),
+      Darwin: path.join("Darwin", "aapt"),
+      Windows_NT: path.join("Windows", "aapt.exe")
+    }[os.type()];
+    if (!ns) return null;
+    return path.resolve(this.BINARY_DIR, ns);
+  },
+
+  get ADB_TOOL(): string | null {
+    const ns = {
+      Linux: path.join("Linux", "adb"),
+      Darwin: path.join("Darwin", "adb"),
+      Windows_NT: path.join("Windows", "adb.exe")
+    }[os.type()];
+    if (!ns) return null;
+    return path.resolve(this.BINARY_DIR, ns);
   }
 };
 export default PATH;

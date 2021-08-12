@@ -2,19 +2,18 @@ import path from "path";
 import JsZip from "jszip";
 import glob from "glob";
 import fse from "fs-extra";
-import archiver from "archiver";
 import { filenameIsXml, getImageData } from "common/utils";
 import { findProjectByUUID } from "server/db-handler/project";
 import { TypeProjectFileData } from "src/types/project";
 import { filenameIsImage } from "src/common/utils";
-import XmlFileCompiler from "server/compiler/XmlFileCompiler";
+import { TypePackageConf } from "src/types/source";
+import { PACK_TYPE } from "src/enum";
 import {
   ProjectFileImageData,
   ProjectFileXmlData
 } from "src/data/ProjectFileData";
 import PageConfig from "server/compiler/PageConfig";
-import { TypePackageConf } from "src/types/source";
-import { PACK_TYPE } from "src/enum";
+import XmlFileCompiler from "server/compiler/XmlFileCompiler";
 
 export async function getPageDefineSourceData(
   uuid: string,
@@ -168,9 +167,8 @@ export async function packProject(data: {
     }
   });
   await Promise.all(queue);
-  await zip.generateAsync(zipOpt).then(content => {
-    console.log(`${outputDir}/a/example.zip`);
-    fse.writeFileSync(`${projectRoot}/a/example.zip`, content);
-  });
+  const content = await zip.generateAsync(zipOpt);
+  console.log(`${outputDir}/a/example.zip`);
+  fse.writeFileSync(`${projectRoot}/a/example.zip`, content);
   return log;
 }
