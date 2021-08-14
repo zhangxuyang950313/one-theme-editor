@@ -1,7 +1,7 @@
 import path from "path";
 import { placeholderRegexp } from "../common/regexp";
 import { PLACEHOLDER } from "../enum";
-// import PATHS_CONFIG from "../server/utils/pathUtils";
+// import PATHS_CONFIG from "../types/extraConfig";
 
 export default class PathResolver {
   // 格式化模板字符串

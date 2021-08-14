@@ -8,11 +8,11 @@ import {
 } from "types/source";
 import { TypeBrandConf } from "src/types/project";
 import { TypeResponseFrame, UnionTupleToObjectKey } from "types/request";
-import { checkParamsKey, result } from "server/utils/index";
+import { checkParamsKey, result } from "server/utils/requestUtil";
 import PageConfig from "server/compiler/PageConfig";
 import SourceConfig from "server/compiler/SourceConfig";
 
-export default function source(service: Express): void {
+export default function sourceController(service: Express): void {
   /**
    * 获取厂商配置列表
    */

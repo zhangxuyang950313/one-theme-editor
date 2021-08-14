@@ -1,7 +1,7 @@
 import path from "path";
 import fse from "fs-extra";
 import API from "src/common/apiConf";
-import PATHS from "server/utils/pathUtils";
+import pathUtil from "server/utils/pathUtil";
 import XmlTemplate from "server/compiler/XmlTemplate";
 import {
   TypeReleaseXmlTempPayload,
@@ -21,7 +21,7 @@ export async function releaseXmlTemplate(
   const project = await findProjectByUUID(uuid);
   const { name, value, src } = data;
   const sourceRoot = path.join(
-    PATHS.SOURCE_CONFIG_DIR,
+    pathUtil.SOURCE_CONFIG_DIR,
     path.dirname(project.sourceConfigPath)
   );
   const templateXml = path.join(sourceRoot, src);

@@ -1,11 +1,12 @@
 import logSymbols from "log-symbols";
-import { result } from "server/utils/index";
+import { result } from "server/utils/requestUtil";
 import express, { ErrorRequestHandler, Express, RequestHandler } from "express";
 import cookieParser from "cookie-parser";
-import imageService from "./controller/image";
-import sourceService from "./controller/source";
-import projectService from "./controller/project";
-import fileService from "./controller/file";
+import imageController from "./imageController";
+import sourceController from "./sourceController";
+import projectController from "./projectController";
+import fileController from "./fileController";
+import extraController from "./extraController";
 
 const HeaderHandler: RequestHandler = (req, res, next) => {
   //判断路径
@@ -29,22 +30,25 @@ const ErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
 };
 
 // 注册服务
-export default function registerService(service: Express): void {
+export default function registerServiceController(service: Express): void {
   service.use(express.json());
   service.use(cookieParser());
   service.use(express.urlencoded({ extended: false }));
   service.use(HeaderHandler);
   // 图片服务
-  imageService(service);
+  imageController(service);
 
   // 资源服务
-  sourceService(service);
+  sourceController(service);
 
   // 工程服务
-  projectService(service);
+  projectController(service);
 
-  // 工具服务
-  fileService(service);
+  // 文件服务
+  fileController(service);
+
+  // 扩展服务
+  extraController(service);
 
   // 包含异步拦截器，一定要放在最后
   service.use(ErrorHandler);

@@ -1,14 +1,12 @@
 import path from "path";
 import { Express } from "express";
 import API from "common/apiConf";
-import PATH from "server/utils/pathUtils";
 import {
   TypeCreateProjectPayload,
   TypeProjectDataDoc,
   TypeProjectFileData
 } from "types/project";
 import { TypeResponseFrame, UnionTupleToObjectKey } from "types/request";
-import { result } from "server/utils/index";
 import {
   findProjectByUUID,
   getProjectListOf,
@@ -18,16 +16,14 @@ import {
 import { releaseXmlTemplate } from "server/services/xmlTemplate";
 import {
   getPageDefineSourceData,
-  getProjectFileData,
-  packProject
+  getProjectFileData
 } from "server/services/project";
+import { compactNinePatch } from "server/utils/packUtil";
+import { checkParamsKey, result } from "server/utils/requestUtil";
 import XmlTemplate from "server/compiler/XmlTemplate";
 import XmlFileCompiler from "server/compiler/XmlFileCompiler";
-import SourceConfig from "server/compiler/SourceConfig";
-import { compactNinePatch } from "server/core/pack";
-import { checkParamsKey } from "../utils/index";
 
-export default function project(service: Express): void {
+export default function projectController(service: Express): void {
   // 添加工程
   service.post<
     never,

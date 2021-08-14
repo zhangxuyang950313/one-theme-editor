@@ -21,7 +21,7 @@ import {
   SourceTypeConf,
   UiVersion
 } from "src/data/SourceConfig";
-import PATHS from "server/utils/pathUtils";
+import pathUtil from "server/utils/pathUtil";
 import ERR_CODE from "common/errorCode";
 import PageConfig from "./PageConfig";
 import XMLNodeBase from "./XMLNodeElement";
@@ -32,19 +32,19 @@ export default class SourceConfig extends XmlFileCompiler {
   // xiaomi/miui12
   private namespace: string;
   constructor(pathname: string) {
-    super(path.join(PATHS.SOURCE_CONFIG_DIR, pathname));
+    super(path.join(pathUtil.SOURCE_CONFIG_DIR, pathname));
     this.namespace = path.relative(
-      PATHS.SOURCE_CONFIG_DIR,
+      pathUtil.SOURCE_CONFIG_DIR,
       path.dirname(this.getDescFile())
     );
   }
 
   // 读取厂商配置
   static readBrandConf(): TypeBrandConf[] {
-    if (!fse.existsSync(PATHS.SOURCE_CONFIG_FILE)) {
+    if (!fse.existsSync(pathUtil.SOURCE_CONFIG_FILE)) {
       throw new Error(ERR_CODE[4003]);
     }
-    return fse.readJsonSync(PATHS.SOURCE_CONFIG_FILE);
+    return fse.readJsonSync(pathUtil.SOURCE_CONFIG_FILE);
   }
 
   /**
@@ -57,7 +57,7 @@ export default class SourceConfig extends XmlFileCompiler {
     const brandConf = brandConfList.find(item => item.type === brandType);
     if (!brandConf?.sourceConfigs) return [];
     const existsConfigs = brandConf.sourceConfigs.filter(item =>
-      fse.existsSync(path.join(PATHS.SOURCE_CONFIG_DIR, item))
+      fse.existsSync(path.join(pathUtil.SOURCE_CONFIG_DIR, item))
     );
     return existsConfigs.map(configUrl =>
       new SourceConfig(configUrl).getInfo()

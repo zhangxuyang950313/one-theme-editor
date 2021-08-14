@@ -1,4 +1,4 @@
-import PATHS from "server/utils/pathUtils";
+import { TypePathConfig } from "types/extraConfig";
 import ACTION_TYPES from "@/store/global/actionType";
 
 type TypeActionSetServerPort = {
@@ -6,12 +6,12 @@ type TypeActionSetServerPort = {
   payload: string | number;
 };
 
-type TypeActionSetPathConfig = {
-  type: typeof ACTION_TYPES.SET_PATH_CONFIG;
-  payload: typeof PATHS;
+type TypeActionSetAppPath = {
+  type: typeof ACTION_TYPES.SET_APP_PATH;
+  payload: TypePathConfig;
 };
 
-export type TypeActions = TypeActionSetServerPort | TypeActionSetPathConfig;
+export type TypeActions = TypeActionSetServerPort | TypeActionSetAppPath;
 
 // 设置本次服务端口
 export function ActionSetServerPort(
@@ -21,8 +21,8 @@ export function ActionSetServerPort(
 }
 
 // 设置编辑器路径配置
-export function ActionSetPathConfig(
-  payload: typeof PATHS
-): TypeActionSetPathConfig {
-  return { type: ACTION_TYPES.SET_PATH_CONFIG, payload };
+export function ActionSetAppConfig(
+  payload: TypePathConfig
+): TypeActionSetAppPath {
+  return { type: ACTION_TYPES.SET_APP_PATH, payload };
 }

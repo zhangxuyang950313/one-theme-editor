@@ -3,18 +3,17 @@ import fse from "fs-extra";
 import FileType from "file-type";
 import { Express } from "express";
 import API from "common/apiConf";
-// import PATHS from "server/utils/pathUtils";
 import ERR_CODE from "src/common/errorCode";
 import { UnionTupleToObjectKey } from "src/types/request";
 
-export default function image(service: Express): void {
+export default function imageController(service: Express): void {
   /**
    * 图片服务
    * @params file 图片本地路径
    */
   service.get<
     never, // reqParams
-    typeof API.IMAGE.body, // resBody
+    Buffer, // resBody
     never, // reqBody
     UnionTupleToObjectKey<typeof API.IMAGE.query> // reqQuery
   >(API.IMAGE.url, async (req, res) => {
@@ -33,7 +32,7 @@ export default function image(service: Express): void {
       const { filepath } = req.query;
       const { buff, fileType } = await getImgBuffAndFileType(filepath).catch(
         async () => {
-          // const errImg = path.join(PATHS.ASSETS_DIR, "img-err.png");
+          // const errImg = path.join(pathUtil.ASSETS_DIR, "img-err.png");
           // return getImgBuffAndFileType(errImg);
           return { buff: Buffer.from(""), fileType: { mime: "image/png" } };
         }

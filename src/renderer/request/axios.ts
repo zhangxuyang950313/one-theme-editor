@@ -8,6 +8,9 @@ export const createHttp = (getCanceler?: TypeGetCanceler): AxiosInstance => {
     cancelToken: getCanceler && new axios.CancelToken(getCanceler),
     validateStatus: status => [200, 400].includes(status)
   });
+  http.interceptors.request.use(config => {
+    return config;
+  });
   http.interceptors.response.use(data => {
     if (data.status === 200) return data;
     throw new Error(data.data.data);

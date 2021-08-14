@@ -2,20 +2,11 @@ import fse from "fs-extra";
 import { Express } from "express";
 
 import API from "common/apiConf";
-import PATHS from "server/utils/pathUtils";
 import ERR_CODE from "common/errorCode";
-import { checkParamsKey, result } from "server/utils/index";
+import { checkParamsKey, result } from "server/utils/requestUtil";
 import { TypeResponseFrame, UnionTupleToObjectKey } from "types/request";
 
-export default function utils(service: Express): void {
-  // 获取路径配置
-  service.get<never, TypeResponseFrame<typeof PATHS>, typeof PATHS>(
-    API.GET_PATH_CONFIG.url,
-    async (request, response) => {
-      response.send(result.success(PATHS));
-    }
-  );
-
+export default function fileController(service: Express): void {
   // 复制本地文件
   service.post<
     never, // reqParams

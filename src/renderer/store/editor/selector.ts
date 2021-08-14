@@ -58,7 +58,7 @@ export const selectSourceConfigNS = createSelector(
 export const selectSourceConfigRoot = createSelector(
   selectSourceConfigNS,
   namespace => {
-    const dir = GlobalStore.store.getState().base.pathConfig?.SOURCE_CONFIG_DIR;
+    const dir = GlobalStore.store.getState().base.appPath?.SOURCE_CONFIG_DIR;
     if (!dir || !namespace) return "";
     return path.join(dir, namespace);
   }

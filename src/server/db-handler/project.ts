@@ -1,9 +1,6 @@
-import path from "path";
-import fse from "fs-extra";
-import logSymbols from "log-symbols";
 import { v4 as UUID } from "uuid";
-import Nedb from "nedb-promises";
-import PATHS from "server/utils/pathUtils";
+import logSymbols from "log-symbols";
+import pathUtil from "server/utils/pathUtil";
 import SourceConfig from "server/compiler/SourceConfig";
 import ERR_CODE from "common/errorCode";
 
@@ -12,26 +9,11 @@ import {
   TypeProjectData,
   TypeProjectDataDoc
 } from "types/project";
-
-function createNedb(filename: string) {
-  fse.ensureDirSync(path.dirname(filename));
-  fse.ensureFileSync(filename);
-  const db = new Nedb({
-    filename,
-    autoload: false,
-    timestampData: true
-  });
-  // 创建数据库有，如果 filename 文件内容不是 nedb 能接受的数据格式则会导致服务崩溃
-  db.load().catch(err => {
-    // TODO 当数据库错误的处理办法
-    console.log("db 文件错误");
-  });
-  return db;
-}
+import createNedb from "./util";
 
 // 频繁修改工程数据，常驻内存
-console.debug(logSymbols.info, "工程数据库文件：", PATHS.PROJECTS_DB);
-const projectDB = createNedb(PATHS.PROJECTS_DB);
+console.debug(logSymbols.info, "工程数据库文件：", pathUtil.PROJECTS_DB);
+const projectDB = createNedb(pathUtil.PROJECTS_DB);
 
 // 创建工程
 export async function createProject(

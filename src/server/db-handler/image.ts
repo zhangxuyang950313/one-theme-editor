@@ -1,13 +1,11 @@
-import path from "path";
 import fse from "fs-extra";
 import Nedb from "nedb-promises";
-import PATHS from "server/utils/pathUtils";
+import pathUtil from "server/utils/pathUtil";
 import { TypeImageData, TypeImageDataDoc } from "types/project";
 
-const imageDBFile = path.resolve(PATHS.USER_DATA, "image");
-fse.ensureFileSync(imageDBFile);
+fse.ensureFileSync(pathUtil.IMAGE_DATA_DB);
 const imageDB = new Nedb({
-  filename: imageDBFile,
+  filename: pathUtil.IMAGE_DATA_DB,
   autoload: true,
   timestampData: true
 });

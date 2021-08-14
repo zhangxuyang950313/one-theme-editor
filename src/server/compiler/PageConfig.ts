@@ -19,7 +19,7 @@ import {
   SourceTextElement
 } from "src/data/SourceConfig";
 import { placeholderRegexp } from "src/common/regexp";
-import PATH from "server/utils/pathUtils";
+import pathUtil from "server/utils/pathUtil";
 import XmlFileCompiler from "./XmlFileCompiler";
 import SourceDefine from "./SourceDefine";
 
@@ -31,13 +31,20 @@ export default class PageConfig extends XMLNodeElement {
   private sourceRootAbsolute: string;
   private sourceDefineInstance: SourceDefine;
   constructor(data: { namespace: string; config: string }) {
-    const file = path.join(PATH.SOURCE_CONFIG_DIR, data.namespace, data.config);
+    const file = path.join(
+      pathUtil.SOURCE_CONFIG_DIR,
+      data.namespace,
+      data.config
+    );
     super(new XmlFileCompiler(file).getElement());
     this.configFile = file;
     this.sourceNamespace = path.normalize(data.namespace);
     this.pageNamespace = path.dirname(data.config);
     this.pageConfig = path.normalize(data.config);
-    this.sourceRootAbsolute = path.join(PATH.SOURCE_CONFIG_DIR, data.namespace);
+    this.sourceRootAbsolute = path.join(
+      pathUtil.SOURCE_CONFIG_DIR,
+      data.namespace
+    );
     this.sourceDefineInstance = new SourceDefine(
       this.getRootFirstChildNodeOf(ELEMENT_TAG.SOURCE),
       this.sourceRootAbsolute
@@ -71,7 +78,7 @@ export default class PageConfig extends XMLNodeElement {
   // 处理当前页面资源的相对路径
   private relativePath(pathname: string): string {
     const relative = path.relative(
-      PATH.SOURCE_CONFIG_DIR,
+      pathUtil.SOURCE_CONFIG_DIR,
       path.dirname(this.configFile)
     );
     return path.join(relative, pathname);

@@ -44,7 +44,8 @@ export enum ALIGN_V_VALUES {
   BOTTOM = "bottom"
 }
 
-export enum HEX_TYPES {
+// 颜色格式化
+export enum HEX_FORMAT {
   RGBA = "rgba",
   ARGB = "argb",
   RGB = "rgb"
@@ -58,19 +59,27 @@ export enum PLACEHOLDER {
   NAMESPACE = "namespace"
 }
 
+// 工程文件类型
 export enum PROJECT_FILE_TYPE {
   XML = "xml",
   IMAGE = "image"
 }
 
+// 文件变动类型
 export enum FILE_STATUS {
-  ADD = "add",
-  CHANGE = "change",
-  UNLINK = "unlink"
+  ADD = "add", // 增加
+  CHANGE = "change", // 内容变更
+  UNLINK = "unlink" // 删除
 }
 
+// 打包方式类型
 export enum PACK_TYPE {
   DIR = "dir",
   PACK = "pack",
   FILE = "file"
+}
+
+// 扩展数据类型
+export enum EXTRA_DATA_TYPE {
+  PATH_CONFIG = "pathConfig"
 }

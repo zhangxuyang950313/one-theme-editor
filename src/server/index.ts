@@ -2,7 +2,7 @@ import http from "http";
 import logSymbols from "log-symbols";
 import express from "express";
 import { PORT, HOST } from "common/config";
-import registerService from "./service";
+import registerServiceController from "./controllers/index";
 import registerSocket from "./socket";
 
 require("express-async-errors");
@@ -12,7 +12,7 @@ const service = express();
 const server = http.createServer(service);
 
 // 注册 http 服务
-registerService(service);
+registerServiceController(service);
 
 // 注册 socket 服务
 registerSocket(server);

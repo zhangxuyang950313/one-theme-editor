@@ -1,13 +1,13 @@
 import os from "os";
 import childProcess from "child_process";
 // import fse from "fs-extra";
-import PATHS from "server/utils/pathUtils";
+import pathUtil from "server/utils/pathUtil";
 
 export function compactNinePatch(
   fromDir: string,
   toDir: string
 ): Promise<string> {
-  const { AAPT_TOOL } = PATHS;
+  const { AAPT_TOOL } = pathUtil;
   if (!AAPT_TOOL) {
     throw new Error(`未知系统类型：${os.type()}`);
   }

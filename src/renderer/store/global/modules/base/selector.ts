@@ -8,12 +8,9 @@ const getState = (state: TypeGlobalState) => state.base;
 export const getServerPort = createSelector(getState, state => state.port);
 
 // 获取路径配置信息
-export const getPathConfig = createSelector(
-  getState,
-  state => state.pathConfig
-);
+export const getAppPath = createSelector(getState, state => state.appPath);
 
 export const getSourceConfigDir = createSelector(
-  getPathConfig,
+  getAppPath,
   state => state.SOURCE_CONFIG_DIR || ""
 );

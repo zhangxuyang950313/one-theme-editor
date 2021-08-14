@@ -1,14 +1,6 @@
 import API from "common/apiConf";
-import { TypePathConfig } from "server/utils/pathUtils";
 import { TypeRequestResult } from "types/request";
 import { createHttp } from "./axios";
-
-// 获取路径信息
-export async function apiGetPathConfig(): Promise<TypePathConfig> {
-  return createHttp()
-    .get<TypeRequestResult<TypePathConfig>>(API.GET_PATH_CONFIG.url)
-    .then(data => data.data.data);
-}
 
 // // 写入文件
 // export async function apiWriteFile(

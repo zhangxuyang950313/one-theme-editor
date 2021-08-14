@@ -1,56 +1,45 @@
 import path from "path";
 import os from "os";
+import { TypeServerPath } from "types/extraConfig";
 
-const PATH = {
+const paths: TypeServerPath = {
+  // 软件数据
+  CLIENT_DATA: path.resolve(__dirname, "../appData"),
   // 静态资源目录
-  STATIC_DIR: path.resolve(__dirname, "../static"),
-
-  // 用户数据
-  USER_DATA: path.resolve(__dirname, "../userData"),
-
+  CLIENT_STATIC: path.resolve(__dirname, "../static"),
   // 用户缓存
-  get USER_CACHE(): string {
-    return path.resolve(this.USER_DATA, "cache");
+  get CLIENT_CACHE(): string {
+    return path.resolve(this.CLIENT_DATA, "cache");
   },
-
+  // 扩展数据存储
+  get EXTRA_DATA_DB(): string {
+    return path.resolve(this.CLIENT_DATA, "extra-data.nedb");
+  },
   // 工程列表数据
   get PROJECTS_DB(): string {
-    return path.resolve(this.USER_DATA, "projects");
+    return path.resolve(this.CLIENT_DATA, "projects.nedb");
   },
-
-  // 图片缓存数据
-  get IMAGE_DATA_DB(): string {
-    return path.resolve(this.USER_DATA, "imageData");
-  },
-
-  // // 工程文件索引
-  // export const PROJECT_INDEX = path.resolve(PROJECTS_DIR, "index");
-
   // 资源目录
   get RESOURCE_DIR(): string {
-    return path.resolve(this.STATIC_DIR, "resource");
+    return path.resolve(this.CLIENT_STATIC, "resource");
   },
-
   // 静态图片素材
   get ASSETS_DIR(): string {
-    return path.resolve(this.STATIC_DIR, "assets");
+    return path.resolve(this.CLIENT_STATIC, "assets");
   },
-
   // 二进制目录
   get BINARY_DIR(): string {
-    return path.resolve(this.STATIC_DIR, "binary");
+    return path.resolve(this.CLIENT_STATIC, "binary");
   },
-
   // 配置目录
   get SOURCE_CONFIG_DIR(): string {
     return path.resolve(this.RESOURCE_DIR, "sourceConfig");
   },
-
   // 模板总配置文件
   get SOURCE_CONFIG_FILE(): string {
     return path.resolve(this.SOURCE_CONFIG_DIR, "config.json");
   },
-
+  // aapt 工具
   get AAPT_TOOL(): string | null {
     const ns = {
       Linux: path.join("Linux", "aapt"),
@@ -60,7 +49,7 @@ const PATH = {
     if (!ns) return null;
     return path.resolve(this.BINARY_DIR, ns);
   },
-
+  // adb 工具
   get ADB_TOOL(): string | null {
     const ns = {
       Linux: path.join("Linux", "adb"),
@@ -71,14 +60,12 @@ const PATH = {
     return path.resolve(this.BINARY_DIR, ns);
   }
 };
-export default PATH;
-
-export type TypePathConfig = typeof PATH;
+export default paths;
 
 export function resolveSourcePath(relative: string): string {
-  return path.join(PATH.SOURCE_CONFIG_DIR, relative);
+  return path.join(paths.SOURCE_CONFIG_DIR, relative);
 }
 
 export function getSCDescriptionByNamespace(namespace: string): string {
-  return path.join(PATH.SOURCE_CONFIG_DIR, namespace, "description.xml");
+  return path.join(paths.SOURCE_CONFIG_DIR, namespace, "description.xml");
 }

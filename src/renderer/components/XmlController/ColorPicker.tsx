@@ -4,7 +4,7 @@ import { RgbaObject } from "hex-rgb";
 
 import { Input, message, Tooltip } from "antd";
 import { RGBColor, SketchPicker } from "react-color";
-import ColorUtil, { HEX_TYPES } from "src/core/ColorUtil";
+import ColorUtil, { HEX_FORMAT } from "src/core/ColorUtil";
 
 import { RightCircleOutlined } from "@ant-design/icons";
 import { useProjectUUID } from "@/hooks/project";
@@ -75,7 +75,7 @@ function ColorPick(props: TypeColorChangerProps): JSX.Element {
     try {
       // TODO: 根据项目配置颜色格式转换
       if (!defaultColor) return;
-      const colorUtil = new ColorUtil(defaultColor, HEX_TYPES.ARGB);
+      const colorUtil = new ColorUtil(defaultColor, HEX_FORMAT.ARGB);
       setRgbColor(colorUtil.getRgbaData());
     } catch (err) {
       console.log(err);
@@ -90,9 +90,9 @@ function ColorPick(props: TypeColorChangerProps): JSX.Element {
   useEffect(() => {
     try {
       if (!ColorUtil.isUnit8Hex(inputColor)) return;
-      const colorUtil = new ColorUtil(inputColor, HEX_TYPES.ARGB);
+      const colorUtil = new ColorUtil(inputColor, HEX_FORMAT.ARGB);
       setRgbColor(colorUtil.getRgbaData());
-      setCssColor(colorUtil.format(HEX_TYPES.RGBA));
+      setCssColor(colorUtil.format(HEX_FORMAT.RGBA));
     } catch (err) {
       console.log(err);
     }
@@ -117,7 +117,7 @@ function ColorPick(props: TypeColorChangerProps): JSX.Element {
             color={rgbColor ? rgba2sketch(rgbColor) : ""}
             onChange={color => {
               const rgbaData = sketch2rgba(color.rgb);
-              const argbStr = ColorUtil.rgbaFormat(rgbaData, HEX_TYPES.ARGB);
+              const argbStr = ColorUtil.rgbaFormat(rgbaData, HEX_FORMAT.ARGB);
               setInputColor(argbStr);
               onChange && onChange(argbStr);
             }}
@@ -186,8 +186,8 @@ const ColorPicker: React.FC<{
 
   if (!uuid || !valueData) return null;
   const { defaultValue } = valueData;
-  const defaultColor = new ColorUtil(defaultValue, HEX_TYPES.ARGB).format(
-    HEX_TYPES.RGBA
+  const defaultColor = new ColorUtil(defaultValue, HEX_FORMAT.ARGB).format(
+    HEX_FORMAT.RGBA
   );
 
   return (

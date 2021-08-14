@@ -1,3 +1,4 @@
+import path from "path";
 import fse from "fs-extra";
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
@@ -206,7 +207,7 @@ const CreateProject: React.FC<TypeProps> = props => {
           updateCreating(true);
           return apiCreateProject({
             projectRoot: projectRootRef.current || "",
-            sourceConfigPath: sourceConfig.config,
+            sourceConfigPath: path.join(sourceConfig.root, sourceConfig.config),
             brandInfo: {
               name: brandConf.name,
               type: brandConf.type

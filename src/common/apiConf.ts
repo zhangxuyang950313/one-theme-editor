@@ -5,6 +5,7 @@ import {
   TypeProjectInfo,
   TypeProjectUiVersion
 } from "../types/project";
+import { TypePathConfig } from "../types/extraConfig";
 
 type TypeApiConf<T, Q extends string[]> = Readonly<{
   url: string;
@@ -28,6 +29,12 @@ function createApiConf<T, Q extends string[], K extends Q[number]>(
 }
 
 const API = {
+  // 交换前后端路径配置信息
+  SWOP_PATH_CONFIG: createApiConf({
+    url: "/path/config/swop",
+    body: {} as TypePathConfig
+  }),
+
   // 获取 sourceConfig 路径
   GET_PATH_CONFIG: createApiConf({
     url: "/path/config"
@@ -35,8 +42,8 @@ const API = {
   // 图片服务
   IMAGE: createApiConf({
     url: "/image",
-    query: ["filepath"],
-    body: Buffer.from("")
+    query: ["filepath"]
+    // body: Buffer.from("")
   }),
   // 获取图片数据
   IMAGE_DATA: createApiConf({

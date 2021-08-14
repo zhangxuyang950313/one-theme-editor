@@ -1,19 +1,19 @@
 import rgb2hex from "rgb-hex";
 import hex2rgb, { RgbaObject } from "hex-rgb";
-import { HEX_TYPES } from "../enum";
+import { HEX_FORMAT } from "../enum";
 import { hexRegexp, hex6Regexp, hex8Regexp } from "../common/regexp";
 
-export { HEX_TYPES };
+export { HEX_FORMAT };
 
 class ColorUtil {
   private hex: string;
-  private hexType: HEX_TYPES;
+  private hexType: HEX_FORMAT;
   /**
    * 要明确指定传入 hex 的格式
    * @param hex
    * @param type
    */
-  constructor(hex: string, type: HEX_TYPES) {
+  constructor(hex: string, type: HEX_FORMAT) {
     if (!ColorUtil.isHex(hex)) {
       throw new Error(`"${hex}" 不是合法颜色值`);
     }
@@ -62,7 +62,7 @@ class ColorUtil {
    * @param format
    * @returns
    */
-  static rgbaFormat(rgba: RgbaObject, format: HEX_TYPES): string {
+  static rgbaFormat(rgba: RgbaObject, format: HEX_FORMAT): string {
     const keyList = ["red", "green", "blue", "alpha"];
     const keySet = new Set(Object.keys(rgba));
     if (!keyList.every(keySet.has.bind(keySet))) {
@@ -91,7 +91,7 @@ class ColorUtil {
      * hex2rgb 解析为 rgba 格式
      * argb 需要将 alpha 挪到前面
      */
-    if (this.hexType === HEX_TYPES.ARGB) {
+    if (this.hexType === HEX_FORMAT.ARGB) {
       const [alpha, red, green, blue] = hex2rgb(this.hex, { format: "array" });
       return { alpha: alpha / 255, red, green, blue: blue * 255 };
     }
@@ -103,7 +103,7 @@ class ColorUtil {
    * @param format
    * @returns
    */
-  format(format: HEX_TYPES): string {
+  format(format: HEX_FORMAT): string {
     return ColorUtil.rgbaFormat(this.getRgbaData(), format);
   }
 }
