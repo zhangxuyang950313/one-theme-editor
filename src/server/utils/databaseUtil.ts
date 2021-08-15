@@ -2,7 +2,7 @@ import path from "path";
 import fse from "fs-extra";
 import Nedb from "nedb-promises";
 
-export default function createNedb(
+export function createNedb(
   filename: string,
   config?: ConstructorParameters<typeof Nedb>[0]
 ): Nedb {

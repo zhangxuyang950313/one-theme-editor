@@ -58,8 +58,8 @@ import {
   useGlobalSelector
 } from "@/store/index";
 import ERR_CODE from "common/errorCode";
-import { asyncQueue } from "common/utils";
-import { SOURCE_TYPES } from "enum/index";
+import { asyncQueue } from "src/utils/index";
+import { SOURCE_TYPES } from "src/enum/index";
 import { useImagePrefix } from "./image";
 import { useAsyncUpdater } from "./index";
 

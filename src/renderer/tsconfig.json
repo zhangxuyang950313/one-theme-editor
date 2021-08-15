@@ -19,15 +19,14 @@
     "jsx": "react-jsx",
     "baseUrl": "./",
     "paths": {
-      "@/*": ["./*"],
-      "src/*": ["../*"],
       "enum/*": ["../enum/*"],
-      "core/*": ["../core/*"],
       "data/*": ["../data/*"],
       "types/*": ["../types/*"],
       "common/*": ["../common/*"],
       "server/*": ["../server/*"],
       "renderer/*": ["../renderer/*"],
+      "src/*": ["../*"],
+      "@/*": ["./*"],
     },
     "types": ["webpack", "webpack-env", "node"]
   },

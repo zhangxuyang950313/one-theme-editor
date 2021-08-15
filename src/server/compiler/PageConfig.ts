@@ -1,6 +1,6 @@
 import path from "path";
 import querystring from "querystring";
-import { getImageData } from "common/utils";
+import { getImageData } from "src/utils/index";
 import { ELEMENT_TAG, ALIGN_VALUES, ALIGN_V_VALUES } from "enum/index";
 import {
   TypeSourceCopyConf,

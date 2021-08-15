@@ -35,7 +35,7 @@ import {
 } from "types/project";
 
 import ERR_CODE from "common/errorCode";
-import { sleep } from "common/utils";
+import { sleep } from "src/utils/index";
 import { notification } from "antd";
 import XMLNodeElement from "server/compiler/XMLNodeElement";
 import { useProjectFileWatcher } from "./fileWatcher";

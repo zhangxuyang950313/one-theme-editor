@@ -2,10 +2,9 @@ import path from "path";
 import JsZip from "jszip";
 import glob from "glob";
 import fse from "fs-extra";
-import { filenameIsXml, getImageData } from "common/utils";
+import { filenameIsImage, filenameIsXml, getImageData } from "src/utils/index";
 import { findProjectByUUID } from "server/db-handler/project";
 import { TypeProjectFileData } from "src/types/project";
-import { filenameIsImage } from "src/common/utils";
 import { TypePackageConf } from "src/types/source";
 import { PACK_TYPE } from "src/enum";
 import {

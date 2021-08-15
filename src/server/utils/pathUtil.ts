@@ -2,6 +2,10 @@ import path from "path";
 import os from "os";
 import { TypeServerPath } from "types/extraConfig";
 
+/**
+ * 这些路径是基于 __dirname 的相对路径，调用前请确保你的执行路径
+ * 目前只是在 server 模块中使用
+ */
 const paths: TypeServerPath = {
   // 软件数据
   CLIENT_DATA: path.resolve(__dirname, "../appData"),

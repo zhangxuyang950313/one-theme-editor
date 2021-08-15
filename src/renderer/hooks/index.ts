@@ -10,7 +10,7 @@ import {
 import { ActionSetAppConfig } from "@/store/global/modules/base/action";
 import { useGlobalSelector, useGlobalDispatch } from "@/store/index";
 import { TypePathConfig } from "types/extraConfig";
-import { sleep } from "common/utils";
+import { sleep } from "src/utils/index";
 
 export function useDocumentTitle(): [string, typeof setTitleMethod] {
   const setTitleMethod = (title: string) => {

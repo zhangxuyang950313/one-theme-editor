@@ -1,15 +1,14 @@
-import { v4 as UUID } from "uuid";
 import logSymbols from "log-symbols";
-import pathUtil from "server/utils/pathUtil";
-import SourceConfig from "server/compiler/SourceConfig";
-import ERR_CODE from "common/errorCode";
-
+import { v4 as UUID } from "uuid";
 import {
   TypeCreateProjectPayload,
   TypeProjectData,
   TypeProjectDataDoc
 } from "types/project";
-import createNedb from "../utils/databaseUtil";
+import { createNedb } from "server/utils/databaseUtil";
+import pathUtil from "server/utils/pathUtil";
+import SourceConfig from "server/compiler/SourceConfig";
+import ERR_CODE from "common/errorCode";
 
 // 频繁修改工程数据，常驻内存
 console.debug(logSymbols.info, "工程数据库文件：", pathUtil.PROJECTS_DB);

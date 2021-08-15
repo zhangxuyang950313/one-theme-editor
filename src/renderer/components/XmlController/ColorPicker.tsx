@@ -4,7 +4,7 @@ import { RgbaObject } from "hex-rgb";
 
 import { Input, message, Tooltip } from "antd";
 import { RGBColor, SketchPicker } from "react-color";
-import ColorUtil, { HEX_FORMAT } from "src/core/ColorUtil";
+import ColorUtil, { HEX_FORMAT } from "src/utils/ColorUtil";
 
 import { RightCircleOutlined } from "@ant-design/icons";
 import { useProjectUUID } from "@/hooks/project";

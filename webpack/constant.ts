@@ -70,7 +70,6 @@ export const alias = {
   src: path.resolve(rootDir, "src"),
   enum: path.resolve(rootDir, "src/enum"),
   data: path.resolve(rootDir, "src/data"),
-  core: path.resolve(rootDir, "src/core"),
   types: path.resolve(rootDir, "src/types"),
   common: path.resolve(rootDir, "src/common"),
   server: path.resolve(rootDir, "src/server"),

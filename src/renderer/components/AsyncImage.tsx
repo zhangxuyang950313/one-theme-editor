@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { localImageToBase64Async } from "common/utils";
+import { localImageToBase64Async } from "src/utils/index";
 
 type TypeProps = {
   src: string;

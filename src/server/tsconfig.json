@@ -34,14 +34,13 @@
     "types": ["node"],
     "baseUrl": "./",
     "paths": {
-      "src/*": ["../*"],
       "enum/*": ["../enum/*"],
       "data/*": ["../data/*"],
       "types/*": ["../types/*"],
-      "core/*": ["../core/*"],
       "common/*": ["../common/*"],
       "server/*": ["../server/*"],
       "renderer/*": ["../renderer/*"],
+      "src/*": ["../*"],
     }
   }
 }
