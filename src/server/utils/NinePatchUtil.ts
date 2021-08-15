@@ -1,3 +1,9 @@
+import os from "os";
+import path from "path";
+import childProcess from "child_process";
+import fse from "fs-extra";
+import pathUtil from "server/utils/pathUtil";
+
 type TypeRange = readonly [number, number];
 type TypeNinePatchData = {
   padLeft: number;
@@ -170,4 +176,30 @@ export default class NinePatchUtil {
     // TODO
     return Buffer.alloc(0);
   }
+}
+
+export async function compactNinePatch(
+  fromDir: string,
+  toDir: string
+): Promise<void> {
+  const { AAPT_TOOL } = pathUtil;
+  if (!AAPT_TOOL) {
+    throw new Error(`未知系统类型：${os.type()}`);
+  }
+  const files = fse.readdirSync(fromDir);
+  const task = files.map(item => {
+    console.log("开启一个进程处理: ", item);
+    return new Promise<void>((resolve, reject) => {
+      childProcess.execFile(
+        AAPT_TOOL,
+        ["c", "-S", path.join(fromDir, item), "-C", path.join(toDir, item)],
+        (err, stdout, stderr) => {
+          if (err) reject(err);
+          console.log("进程处理完毕", item);
+          resolve();
+        }
+      );
+    });
+  });
+  await Promise.all(task);
 }

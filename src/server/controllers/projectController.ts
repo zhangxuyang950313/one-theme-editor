@@ -19,7 +19,6 @@ import {
   getProjectFileData,
   packProject
 } from "server/services/project";
-import { compactNinePatch } from "server/utils/packUtil";
 import { checkParamsKey, result } from "server/utils/requestUtil";
 import XmlTemplate from "server/compiler/XmlTemplate";
 import XmlFileCompiler from "server/compiler/XmlFileCompiler";
@@ -195,11 +194,6 @@ export default function projectController(service: Express): void {
     const { sourceConfigPath, projectRoot } = await findProjectByUUID(uuid);
     const packConfig = new SourceConfig(sourceConfigPath).getPackageConfig();
     const files = await packProject({ projectRoot, packConfig, outputFile });
-    // await compactNinePatch(
-    //   path.normalize("/Users/zhangxuyang/Desktop/b"),
-    //   path.normalize("/Users/zhangxuyang/Desktop/a")
-    // );
-    // const data = compactNinePatch();
     response.send(result.success(files));
   });
 }
