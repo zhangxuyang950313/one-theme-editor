@@ -37,7 +37,7 @@ export class SourcePageConf extends AbstractDataModel<TypeSourcePageConf> {
   }
 }
 
-export class DefineSourceData extends AbstractDataModel<TypePageDefineImageData> {
+export class DefineImageData extends AbstractDataModel<TypePageDefineImageData> {
   protected data: TypePageDefineImageData = {
     width: 0,
     height: 0,
@@ -86,7 +86,7 @@ export class SourceImageElement extends AbstractDataModel<TypeLayoutImageElement
     sourceType: SOURCE_TYPES.IMAGE,
     description: "",
     src: "",
-    sourceData: new DefineSourceData().default(),
+    sourceData: new DefineImageData().default(),
     layout: {
       x: "0",
       y: "0",

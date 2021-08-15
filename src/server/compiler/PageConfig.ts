@@ -1,5 +1,6 @@
 import path from "path";
 import querystring from "querystring";
+import fse from "fs-extra";
 import { getImageData } from "src/utils/index";
 import { ELEMENT_TAG, ALIGN_VALUES, ALIGN_V_VALUES } from "enum/index";
 import {
@@ -13,7 +14,7 @@ import {
 import XMLNodeElement from "server/compiler/XMLNodeElement";
 import {
   ElementLayoutConf,
-  DefineSourceData,
+  DefineImageData,
   SourceImageElement,
   SourcePageData,
   SourceTextElement
@@ -248,21 +249,24 @@ export default class PageConfig extends XMLNodeElement {
       // 直接定义，用于显示一些静态图片
       src = this.sourceDefineInstance.getUrlData(srcVal).src;
     }
-    const imageData = getImageData(this.resolveRootSourcePath(src));
-    const sourceImageData = new DefineSourceData()
-      .set("width", imageData.width)
-      .set("height", imageData.height)
-      .set("filename", imageData.filename)
-      .set("ninePatch", imageData.ninePatch)
-      .set("size", imageData.size)
-      .create();
-    const sourceImageElement = new SourceImageElement()
-      .set("description", description)
-      .set("sourceData", sourceImageData)
-      .set("layout", this.layoutConf(node))
-      .set("src", src)
-      .create();
-    return sourceImageElement;
+    const sourceImageData = new DefineImageData();
+    const sourceImageElement = new SourceImageElement();
+    const sourcePath = this.resolveRootSourcePath(src);
+    if (fse.existsSync(sourcePath)) {
+      const imageData = getImageData(this.resolveRootSourcePath(src));
+      sourceImageData
+        .set("width", imageData.width)
+        .set("height", imageData.height)
+        .set("filename", imageData.filename)
+        .set("ninePatch", imageData.ninePatch)
+        .set("size", imageData.size);
+      sourceImageElement
+        .set("description", description)
+        .set("sourceData", sourceImageData.create())
+        .set("layout", this.layoutConf(node))
+        .set("src", src);
+    }
+    return sourceImageElement.create();
   }
 
   /**

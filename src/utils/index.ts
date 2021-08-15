@@ -155,20 +155,20 @@ export function getFileSizeOf(file: string): number {
 
 // 获取图片信息
 export function getImageData(file: string): TypeImageData {
-  if (!file) throw new Error(ERR_CODE[4000]);
-  if (!fse.existsSync(file)) throw new Error(`${ERR_CODE[4003]}: ${file}`);
-  // TODO: 可以去图片数据库先查一下是否有，没有的话再进行接下来的步骤
-  // const buff = fse.readFileSync(file);
+  if (!file) {
+    throw new Error(`${ERR_CODE[4000]}: ${file}`);
+  }
+  if (!fse.existsSync(file)) {
+    throw new Error(`${ERR_CODE[4003]}: ${file}`);
+  }
   const { width, height } = getImageSizeOf(file);
-  const imageData = new ImageData();
-  imageData.set("width", width);
-  imageData.set("height", height);
-  imageData.set("size", getFileSizeOf(file));
-  imageData.set("filename", path.basename(file));
-  imageData.set("ninePatch", isNinePatchPath(file));
-  // 同步存储到图片数据库
-  // await insertImageData(imageData);
-  return imageData.create();
+  return new ImageData()
+    .set("width", width)
+    .set("height", height)
+    .set("size", getFileSizeOf(file))
+    .set("filename", path.basename(file))
+    .set("ninePatch", isNinePatchPath(file))
+    .create();
 }
 
 // 获取图片映射信息

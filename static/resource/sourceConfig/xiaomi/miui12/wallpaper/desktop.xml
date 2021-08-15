@@ -12,7 +12,7 @@
         <Image
             name="com.android.contacts.activities.TwelveKeyDialer"
             description="拨号"
-            value="file://icons/res/com.android.contacts.activities.TwelveKeyDialer.png"
+            value="file://icons/res/drawable-xxhdpi/com.android.contacts.activities.TwelveKeyDialer.png"
             />
         <Image
             description="短信"

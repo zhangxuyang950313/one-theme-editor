@@ -1,7 +1,8 @@
 import path from "path";
 import { URL, URLSearchParams } from "url";
+import fse from "fs-extra";
 import {
-  DefineSourceData,
+  DefineImageData,
   DefineValueData,
   SourceDefineData
 } from "src/data/SourceConfig";
@@ -72,15 +73,17 @@ export default class SourceDefine {
       .set("description", description);
     // 图片素材
     if (filenameIsImage(src)) {
-      const imageData = getImageData(this.resolveRootSourcePath(src));
-      const sourceData = new DefineSourceData()
-        .set("width", imageData.width)
-        .set("height", imageData.height)
-        .set("size", imageData.size)
-        .set("ninePatch", imageData.ninePatch)
-        .set("filename", imageData.filename)
-        .create();
-      sourceDefineData.set("sourceData", sourceData).set("src", src);
+      const sourceData = new DefineImageData();
+      if (fse.existsSync(src)) {
+        const imageData = getImageData(this.resolveRootSourcePath(src));
+        sourceData
+          .set("width", imageData.width)
+          .set("height", imageData.height)
+          .set("size", imageData.size)
+          .set("ninePatch", imageData.ninePatch)
+          .set("filename", imageData.filename);
+      }
+      sourceDefineData.set("sourceData", sourceData.create()).set("src", src);
     }
     // xml 素材
     if (filenameIsXml(src)) {
