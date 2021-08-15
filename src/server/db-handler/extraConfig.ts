@@ -3,7 +3,7 @@ import pathUtil from "server/utils/pathUtil";
 import { TypePathConfig, TypePathConfigInDoc } from "types/extraConfig";
 import { EXTRA_DATA_TYPE } from "src/enum";
 import AppPath from "data/AppPath";
-import createNedb from "./util";
+import createNedb from "../utils/databaseUtil";
 
 // 频繁修改工程数据，常驻内存
 console.debug(logSymbols.info, "扩展数据库文件：", pathUtil.EXTRA_DATA_DB);

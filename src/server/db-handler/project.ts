@@ -9,7 +9,7 @@ import {
   TypeProjectData,
   TypeProjectDataDoc
 } from "types/project";
-import createNedb from "./util";
+import createNedb from "../utils/databaseUtil";
 
 // 频繁修改工程数据，常驻内存
 console.debug(logSymbols.info, "工程数据库文件：", pathUtil.PROJECTS_DB);

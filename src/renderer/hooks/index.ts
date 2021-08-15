@@ -12,10 +12,6 @@ import { useGlobalSelector, useGlobalDispatch } from "@/store/index";
 import { TypePathConfig } from "types/extraConfig";
 import { sleep } from "common/utils";
 
-// 设置页面标题
-export enum presetTitle {
-  default = "一个主题编辑器"
-}
 export function useDocumentTitle(): [string, typeof setTitleMethod] {
   const setTitleMethod = (title: string) => {
     document.title = title;

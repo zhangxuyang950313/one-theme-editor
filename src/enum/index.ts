@@ -1,3 +1,8 @@
+// 设置页面标题
+export enum PRESET_TITLE {
+  default = "一个主题编辑器"
+}
+
 export enum ELEMENT_TAG {
   IMAGE = "Image",
   TEXT = "Text",
