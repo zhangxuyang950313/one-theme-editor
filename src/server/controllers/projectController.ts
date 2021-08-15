@@ -16,12 +16,14 @@ import {
 import { releaseXmlTemplate } from "server/services/xmlTemplate";
 import {
   getPageDefineSourceData,
-  getProjectFileData
+  getProjectFileData,
+  packProject
 } from "server/services/project";
 import { compactNinePatch } from "server/utils/packUtil";
 import { checkParamsKey, result } from "server/utils/requestUtil";
 import XmlTemplate from "server/compiler/XmlTemplate";
 import XmlFileCompiler from "server/compiler/XmlFileCompiler";
+import SourceConfig from "server/compiler/SourceConfig";
 
 export default function projectController(service: Express): void {
   // 添加工程
@@ -188,24 +190,16 @@ export default function projectController(service: Express): void {
     typeof API.PACK_PROJECT.body, // reqBody
     UnionTupleToObjectKey<typeof API.PACK_PROJECT.query> // reqQuery
   >(API.PACK_PROJECT.url, async (request, response) => {
-    const { query } = request;
-    checkParamsKey(query, API.PACK_PROJECT.query);
-    // const { projectRoot, sourceConfigPath } = await findProjectByUUID(
-    //   query.uuid
+    checkParamsKey(request.query, API.PACK_PROJECT.query);
+    const { outputFile, uuid } = request.query;
+    const { sourceConfigPath, projectRoot } = await findProjectByUUID(uuid);
+    const packConfig = new SourceConfig(sourceConfigPath).getPackageConfig();
+    const files = await packProject({ projectRoot, packConfig, outputFile });
+    // await compactNinePatch(
+    //   path.normalize("/Users/zhangxuyang/Desktop/b"),
+    //   path.normalize("/Users/zhangxuyang/Desktop/a")
     // );
-    // const packConfig = new SourceConfig(sourceConfigPath).getPackageConfig();
-    // const files = await packProject({
-    //   projectRoot: path.normalize(
-    //     "/Users/zhangxuyang/Desktop/素白App（超级锁屏+简约不简单+返现）"
-    //   ),
-    //   packConfig,
-    //   outputDir: ""
-    // });
-    await compactNinePatch(
-      path.normalize("/Users/zhangxuyang/Desktop/b"),
-      path.normalize("/Users/zhangxuyang/Desktop/a")
-    );
     // const data = compactNinePatch();
-    response.send(result.success([]));
+    response.send(result.success(files));
   });
 }

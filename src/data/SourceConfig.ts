@@ -1,4 +1,3 @@
-import archiver from "archiver";
 import {
   TypeLayoutConf,
   TypeSourceConfigData,

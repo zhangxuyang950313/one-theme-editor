@@ -161,7 +161,7 @@ const API = {
   // 工程打包
   PACK_PROJECT: createApiConf({
     url: "/project/pack",
-    query: ["uuid"]
+    query: ["uuid", "outputFile"]
   }),
   // 工程解包
   UNPACK_PROJECT: createApiConf({

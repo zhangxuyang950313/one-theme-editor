@@ -85,7 +85,7 @@
     </Module>
 
     <!-- 打包配置 -->
-    <Package extname="zip" format="zip">
+    <Package extname="zip">
         <Item type="dir"  path="boots/**"/>
         <Item type="pack" path="clock_2x4/**"/>
         <Item type="pack" path="com.*/**"/>

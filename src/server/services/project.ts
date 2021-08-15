@@ -1,7 +1,7 @@
 import path from "path";
 import JsZip from "jszip";
 import glob from "glob";
-import fse from "fs-extra";
+import fse, { ensureDirSync } from "fs-extra";
 import { filenameIsImage, filenameIsXml, getImageData } from "src/utils/index";
 import { findProjectByUUID } from "server/db-handler/project";
 import { TypeProjectFileData } from "src/types/project";
@@ -11,8 +11,10 @@ import {
   ProjectFileImageData,
   ProjectFileXmlData
 } from "src/data/ProjectFileData";
-import PageConfig from "server/compiler/PageConfig";
+import { compactNinePatch } from "server/utils/packUtil";
 import XmlFileCompiler from "server/compiler/XmlFileCompiler";
+import PageConfig from "server/compiler/PageConfig";
+import pathUtil from "server/utils/pathUtil";
 
 export async function getPageDefineSourceData(
   uuid: string,
@@ -111,30 +113,24 @@ function zipFolderAndFile(
   });
 }
 
-/**
- * 打包工程
- * @param data
- */
-export async function packProject(data: {
-  projectRoot: string;
-  outputDir: string;
-  packConfig: TypePackageConf;
-}): Promise<string[]> {
-  const { projectRoot, outputDir, packConfig } = data;
+// 按照压缩配置项对目录压缩打包
+async function zipProjectByRules(
+  root: string,
+  items: TypePackageConf["items"]
+): Promise<Buffer> {
   const zipOpt: JsZip.JSZipGeneratorOptions<"nodebuffer"> = {
     type: "nodebuffer",
     compression: "DEFLATE",
     compressionOptions: { level: 9 }
   };
-  const log: string[] = [];
   const zip = new JsZip();
-  const queue = packConfig.items.map(async item => {
-    const files = getFilesByPattern(item.path, projectRoot);
+  const queue = items.map(async item => {
+    const files = getFilesByPattern(item.path, root);
     switch (item.type) {
       // 文件和目录
       case PACK_TYPE.FILE:
       case PACK_TYPE.DIR: {
-        zipFolderAndFile(zip, files, projectRoot);
+        zipFolderAndFile(zip, files, root);
         break;
       }
       // 内联打包目录
@@ -155,7 +151,7 @@ export async function packProject(data: {
           const innerZip = new JsZip();
           const [dir, files] = item;
           if (!files) continue;
-          zipFolderAndFile(innerZip, Array.from(files), projectRoot);
+          zipFolderAndFile(innerZip, Array.from(files), root);
           zip.file(dir, await innerZip.generateAsync(zipOpt));
         }
         break;
@@ -166,8 +162,47 @@ export async function packProject(data: {
     }
   });
   await Promise.all(queue);
-  const content = await zip.generateAsync(zipOpt);
-  console.log(`${outputDir}/a/example.zip`);
-  fse.writeFileSync(`${projectRoot}/a/example.zip`, content);
+  return zip.generateAsync(zipOpt);
+}
+
+/**
+ * 打包工程
+ * @param data
+ */
+export async function packProject(data: {
+  projectRoot: string;
+  outputFile: string;
+  packConfig: TypePackageConf;
+}): Promise<string[]> {
+  const { projectRoot, outputFile, packConfig } = data;
+  const temporaryPath = path.join(
+    pathUtil.PACK_TEMPORARY,
+    path.basename(projectRoot)
+  );
+  console.log("工程目录: ", projectRoot);
+  console.log("临时打包目录: ", temporaryPath);
+  // 确保目录存在
+  ensureDirSync(temporaryPath);
+  if (fse.existsSync(temporaryPath)) {
+    fse.removeSync(temporaryPath);
+  }
+  const log: string[] = [];
+  // 处理 .9 到临时目录
+  await compactNinePatch(projectRoot, temporaryPath);
+  // 拷贝目录，.9 处理过的不覆盖
+  fse.copySync(projectRoot, temporaryPath, { overwrite: false });
+  // zip 压缩
+  const content = await zipProjectByRules(temporaryPath, packConfig.items);
+  // 确保输出目录存在
+  ensureDirSync(path.dirname(outputFile));
+  // 变更扩展名
+  const pathObj = path.parse(outputFile);
+  pathObj.ext = packConfig.extname;
+  pathObj.base = `${pathObj.name}.${packConfig.extname}`;
+  // 写入文件
+  fse.outputFileSync(path.format(pathObj), content);
+  fse.remove(temporaryPath).then(() => {
+    console.log("删除临时目录");
+  });
   return log;
 }

@@ -15,6 +15,10 @@ const paths: TypeServerPath = {
   get CLIENT_CACHE(): string {
     return path.resolve(this.CLIENT_DATA, "cache");
   },
+  // 打包临时目录
+  get PACK_TEMPORARY(): string {
+    return path.join(this.CLIENT_DATA, "pack");
+  },
   // 扩展数据存储
   get EXTRA_DATA_DB(): string {
     return path.resolve(this.CLIENT_DATA, "extra-data.nedb");
