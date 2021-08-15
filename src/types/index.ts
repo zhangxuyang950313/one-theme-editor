@@ -10,5 +10,5 @@ export type TypeImagePathLike = string;
 
 export type TypeKeyValue = { key: string; value: string };
 
-// 美剧对象 key
+// 枚举对象 key
 export type KeysEnum<T> = [...Array<keyof T>];

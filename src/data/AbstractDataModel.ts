@@ -17,11 +17,16 @@
 export abstract class AbstractDataModel<T> {
   protected abstract data: T;
   protected defaultVal = { ...this.create() };
+  has<K extends keyof T>(k: K): boolean {
+    return k in this.data;
+  }
   get<K extends keyof T>(k: K): T[K] {
     return this.data[k];
   }
   set<K extends keyof T>(k: K, value: T[K]): this {
-    this.data[k] = value;
+    if (this.has(k)) {
+      this.data[k] = value;
+    }
     return this;
   }
   default(): T {

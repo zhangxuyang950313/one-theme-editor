@@ -1,8 +1,12 @@
-import { TypePathConfig } from "../types/extraConfig";
+import {
+  TypeElectronPath,
+  TypePathConfig,
+  TypeServerPath
+} from "../types/extraConfig";
 import { AbstractDataModel } from "./AbstractDataModel";
 
-export default class AppPath extends AbstractDataModel<TypePathConfig> {
-  protected data: TypePathConfig = {
+export class ElectronPathCollection extends AbstractDataModel<TypeElectronPath> {
+  protected data: TypeElectronPath = {
     ELECTRON_APP_DATA: "",
     ELECTRON_APP_PATH: "",
     ELECTRON_CACHE: "",
@@ -12,7 +16,12 @@ export default class AppPath extends AbstractDataModel<TypePathConfig> {
     ELECTRON_EXE: "",
     ELECTRON_HOME: "",
     ELECTRON_LOCAL: "",
-    ELECTRON_LOGS: "",
+    ELECTRON_LOGS: ""
+  };
+}
+
+export class ServerPathCollection extends AbstractDataModel<TypeServerPath> {
+  protected data: TypeServerPath = {
     CLIENT_DATA: "",
     CLIENT_STATIC: "",
     CLIENT_CACHE: "",
@@ -25,5 +34,12 @@ export default class AppPath extends AbstractDataModel<TypePathConfig> {
     SOURCE_CONFIG_FILE: "",
     AAPT_TOOL: "",
     ADB_TOOL: ""
+  };
+}
+
+export default class AppPathCollection extends AbstractDataModel<TypePathConfig> {
+  protected data: TypePathConfig = {
+    ...new ElectronPathCollection().create(),
+    ...new ServerPathCollection().create()
   };
 }

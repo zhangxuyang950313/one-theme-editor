@@ -1,3 +1,4 @@
+import { ElectronPathCollection } from "src/data/AppPath";
 import { TypeReleaseXmlTempPayload } from "../types/request";
 import {
   TypeCreateProjectPayload,
@@ -32,10 +33,16 @@ const API = {
   // 交换前后端路径配置信息
   SWOP_PATH_CONFIG: createApiConf({
     url: "/path/config/swop",
+    bodyKeys: Object.keys(new ElectronPathCollection().create()) as [
+      ...Array<keyof TypePathConfig>
+    ],
     body: {} as TypePathConfig
   }),
 
-  // 获取 sourceConfig 路径
+  /**
+   * @deprecated
+   * 获取 sourceConfig 路径
+   */
   GET_PATH_CONFIG: createApiConf({
     url: "/path/config"
   }),

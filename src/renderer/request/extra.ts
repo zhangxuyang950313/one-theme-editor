@@ -15,8 +15,6 @@ export async function apiSwopPathConfig(
   config: TypeElectronPath
 ): Promise<TypePathConfig> {
   return createHttp()
-    .post<TypeRequestResult<TypePathConfig>>(API.SWOP_PATH_CONFIG.url, config, {
-      data: config
-    })
+    .post<TypeRequestResult<TypePathConfig>>(API.SWOP_PATH_CONFIG.url, config)
     .then(data => data.data.data);
 }
