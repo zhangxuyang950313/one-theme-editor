@@ -23,6 +23,7 @@ import {
 } from "src/data/SourceConfig";
 import pathUtil from "server/utils/pathUtil";
 import ERR_CODE from "common/errorCode";
+import BrandConfig from "server/compiler/BrandConfig";
 import PageConfig from "./PageConfig";
 import XMLNodeBase from "./XMLNodeElement";
 import XmlFileCompiler from "./XmlFileCompiler";
@@ -44,7 +45,11 @@ export default class SourceConfig extends XmlFileCompiler {
     if (!fse.existsSync(pathUtil.SOURCE_CONFIG_FILE)) {
       throw new Error(ERR_CODE[4003]);
     }
-    return fse.readJsonSync(pathUtil.SOURCE_CONFIG_FILE);
+    const brandConf = new BrandConfig(
+      new XmlFileCompiler(pathUtil.SOURCE_CONFIG_FILE).getElement()
+    ).getBrandConfList();
+    return brandConf;
+    // return fse.readJsonSync(pathUtil.SOURCE_CONFIG_FILE);
   }
 
   /**

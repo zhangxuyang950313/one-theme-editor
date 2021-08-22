@@ -16,7 +16,9 @@ const HeaderHandler: RequestHandler = (req, res, next) => {
       "Access-Control-Allow-Origin": req.headers.origin || "*", //任意域名都可以访问,或者基于我请求头里面的域
       "Access-Control-Allow-Headers": "X-Requested-With,Content-Type", //设置请求头格式和类型
       "Access-Control-Allow-Methods": "GET,POST,PUT,DELETE,OPTIONS", //允许支持的请求方式
-      "Content-Type": "application/json; charset=utf-8" //默认与允许的文本格式json和编码格式
+      "Content-Type": "application/json; charset=utf-8", //默认与允许的文本格式json和编码格式
+      "Cache-Control": "max-age=0", // 不使用强缓存而使用协商缓存，主要是根据本地文件最后的修改时间来确定
+      "Expires": "0"
     });
   }
   req.method === "OPTIONS" ? res.status(204).end() : next();

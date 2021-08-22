@@ -14,7 +14,7 @@ export class BrandInfo extends AbstractDataModel<TypeBrandInfo> {
 
 export class BrandConf extends AbstractDataModel<TypeBrandConf> {
   protected data: TypeBrandConf = {
-    ...BrandInfo.default(),
+    ...new BrandInfo().create(),
     sourceConfigs: []
   };
 

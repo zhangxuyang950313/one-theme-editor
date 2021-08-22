@@ -45,7 +45,7 @@ const paths: TypeServerPath = {
   },
   // 模板总配置文件
   get SOURCE_CONFIG_FILE(): string {
-    return path.resolve(this.SOURCE_CONFIG_DIR, "config.json");
+    return path.resolve(this.SOURCE_CONFIG_DIR, "config.xml");
   },
   // aapt 工具
   get AAPT_TOOL(): string | null {
