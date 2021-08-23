@@ -1,7 +1,7 @@
-<Config>
-  <Brand name="小米主题" type="xiaomi">
+<Configuration>
+  <Brand name="小米主题">
     <Config src="xiaomi/miui12/description.xml"/>
   </Brand>
-  <Brand name="华为主题" type="huawei">
+  <Brand name="华为主题">
   </Brand>
-</Config>
+</Configuration>

@@ -47,7 +47,7 @@ export default class PageConfig extends XMLNodeElement {
       data.namespace
     );
     this.sourceDefineInstance = new SourceDefine(
-      this.getRootFirstChildNodeOf(ELEMENT_TAG.SOURCE),
+      this.getRootFirstChildNodeOf(ELEMENT_TAG.Source),
       this.sourceRootAbsolute
     );
   }
@@ -154,8 +154,8 @@ export default class PageConfig extends XMLNodeElement {
    * @returns
    */
   getPreviewList(): string[] {
-    return this.getRootFirstChildNodeOf(ELEMENT_TAG.PREVIEWS)
-      .getChildrenNodesByTagname(ELEMENT_TAG.PREVIEW)
+    return this.getRootFirstChildNodeOf(ELEMENT_TAG.Previews)
+      .getChildrenNodesByTagname(ELEMENT_TAG.Preview)
       .map(item => this.relativePagePath(item.getAttributeOf("src")));
   }
 
@@ -323,14 +323,14 @@ export default class PageConfig extends XMLNodeElement {
    */
   getLayoutElementList(): TypeLayoutElement[] {
     return this.getFirstChildNode()
-      .getFirstChildNodeByTagname(ELEMENT_TAG.LAYOUT)
+      .getFirstChildNodeByTagname(ELEMENT_TAG.Layout)
       .getChildrenNodes()
       .flatMap(node => {
         switch (node.getTagname()) {
-          case ELEMENT_TAG.IMAGE: {
+          case ELEMENT_TAG.Image: {
             return this.imageElement(node);
           }
-          case ELEMENT_TAG.TEXT: {
+          case ELEMENT_TAG.Text: {
             return this.textElement(node);
           }
           default: {

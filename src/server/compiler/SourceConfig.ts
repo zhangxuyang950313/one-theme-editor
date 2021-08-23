@@ -105,13 +105,13 @@ export default class SourceConfig extends XmlFileCompiler {
   getPreview(): string {
     // TODO: 默认预览图
     return path.normalize(
-      super.getRootFirstChildNodeOf(ELEMENT_TAG.PREVIEW).getAttributeOf("src")
+      super.getRootFirstChildNodeOf(ELEMENT_TAG.Preview).getAttributeOf("src")
     );
   }
 
   // UI信息
   getUiVersion(): TypeProjectUiVersion {
-    const uiVersionNode = super.getRootFirstChildNodeOf(ELEMENT_TAG.UI_VERSION);
+    const uiVersionNode = super.getRootFirstChildNodeOf(ELEMENT_TAG.UiVersion);
     return new UiVersion()
       .set("name", uiVersionNode.getAttributeOf("name"))
       .set("code", uiVersionNode.getAttributeOf("code"))
@@ -121,7 +121,7 @@ export default class SourceConfig extends XmlFileCompiler {
   // 素材类型定义列表
   getSourceTypeList(): TypeSourceTypeConf[] {
     return super
-      .getRootChildrenNodesOf(ELEMENT_TAG.SOURCE)
+      .getRootChildrenNodesOf(ELEMENT_TAG.Source)
       .map(item =>
         new SourceTypeConf()
           .set("tag", item.getAttributeOf("tag"))
@@ -153,7 +153,7 @@ export default class SourceConfig extends XmlFileCompiler {
   getPageGroupList(groupNodeList: XMLNodeBase[]): TypeSourcePageGroupConf[] {
     return groupNodeList.map(groupNode => {
       const pageList = this.getPageList(
-        groupNode.getChildrenNodesByTagname(ELEMENT_TAG.PAGE)
+        groupNode.getChildrenNodesByTagname(ELEMENT_TAG.Page)
       );
       return new SourcePageGroupConf()
         .set("name", groupNode.getAttributeOf("name"))
@@ -165,10 +165,10 @@ export default class SourceConfig extends XmlFileCompiler {
   // 模块配置数据
   getModuleList(): TypeSourceModuleConf[] {
     return super
-      .getRootChildrenNodesOf(ELEMENT_TAG.MODULE)
+      .getRootChildrenNodesOf(ELEMENT_TAG.Module)
       .map((moduleNode, index) => {
         const groupList = this.getPageGroupList(
-          moduleNode.getChildrenNodesByTagname(ELEMENT_TAG.GROUP)
+          moduleNode.getChildrenNodesByTagname(ELEMENT_TAG.Group)
         );
         return new SourceModuleConf()
           .set("index", index)
@@ -181,12 +181,12 @@ export default class SourceConfig extends XmlFileCompiler {
 
   // 解析打包配置
   getPackageConfig(): TypePackageConf {
-    const packageNode = super.getRootFirstChildNodeOf(ELEMENT_TAG.PACKAGE);
+    const packageNode = super.getRootFirstChildNodeOf(ELEMENT_TAG.Package);
     const packageConf = new PackageConfig();
     packageConf.set("extname", packageNode.getAttributeOf("extname"));
     packageConf.set("format", packageNode.getAttributeOf("format"));
     const items: TypePackageConf["items"] = packageNode
-      .getChildrenNodesByTagname(ELEMENT_TAG.ITEM)
+      .getChildrenNodesByTagname(ELEMENT_TAG.Item)
       .map(item => ({
         type: item.getAttributeOf<PACK_TYPE>("type"),
         path: item.getAttributeOf("path"),

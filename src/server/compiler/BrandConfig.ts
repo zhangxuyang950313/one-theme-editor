@@ -1,3 +1,4 @@
+import md5 from "md5";
 import { TypeBrandConf } from "types/project";
 import { BrandConf } from "src/data/BrandConfig";
 import { ELEMENT_TAG } from "src/enum/index";
@@ -12,9 +13,10 @@ export default class BrandConfig extends XmlTemplate {
       const sourceConfigs = brandNode
         .getChildrenNodesByTagname(ELEMENT_TAG.Config)
         .map(configNode => configNode.getAttributeOf("src"));
+      const name = brandNode.getAttributeOf("name");
       return new BrandConf()
-        .set("name", brandNode.getAttributeOf("name"))
-        .set("type", brandNode.getAttributeOf("type"))
+        .set("name", name)
+        .set("type", md5(name))
         .set("sourceConfigs", sourceConfigs)
         .create();
     });

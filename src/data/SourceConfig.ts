@@ -82,7 +82,7 @@ export class ElementLayoutConf extends AbstractDataModel<TypeLayoutConf> {
 
 export class SourceImageElement extends AbstractDataModel<TypeLayoutImageElement> {
   protected data: TypeLayoutImageElement = {
-    sourceTag: ELEMENT_TAG.IMAGE,
+    sourceTag: ELEMENT_TAG.Image,
     sourceType: SOURCE_TYPES.IMAGE,
     description: "",
     src: "",
@@ -100,7 +100,7 @@ export class SourceImageElement extends AbstractDataModel<TypeLayoutImageElement
 
 export class SourceTextElement extends AbstractDataModel<TypeLayoutTextElement> {
   protected data: TypeLayoutTextElement = {
-    sourceTag: ELEMENT_TAG.TEXT,
+    sourceTag: ELEMENT_TAG.Text,
     sourceType: SOURCE_TYPES.COLOR,
     name: "",
     text: "",

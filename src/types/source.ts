@@ -93,7 +93,7 @@ export type TypeLayoutConf = {
 
 // 图片元素数据
 export type TypeLayoutImageElement = {
-  readonly sourceTag: ELEMENT_TAG.IMAGE;
+  readonly sourceTag: ELEMENT_TAG.Image;
   readonly sourceType: SOURCE_TYPES.IMAGE;
   description: string;
   src: string;
@@ -110,7 +110,7 @@ export type TypeLayoutImageElement = {
 
 // 颜色元素数据
 export type TypeLayoutTextElement = {
-  readonly sourceTag: ELEMENT_TAG.TEXT;
+  readonly sourceTag: ELEMENT_TAG.Text;
   readonly sourceType: SOURCE_TYPES;
   name: string;
   text: string;
