@@ -16,7 +16,7 @@ export default class BrandConfig extends XmlTemplate {
       const name = brandNode.getAttributeOf("name");
       return new BrandConf()
         .set("name", name)
-        .set("type", md5(name))
+        .set("md5", md5(name))
         .set("sourceConfigs", sourceConfigs)
         .create();
     });

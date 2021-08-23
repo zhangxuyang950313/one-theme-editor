@@ -55,7 +55,7 @@ export function useProjectList(): [
 
   const refresh = useCallback(async () => {
     updateLoading(true);
-    if (!brandConf.type) return;
+    if (!brandConf.md5) return;
     return apiGetProjectList(brandConf, registerCancelToken)
       .then(projects => {
         console.log("获取工程列表：", projects);

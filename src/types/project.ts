@@ -3,7 +3,7 @@ import { PROJECT_FILE_TYPE } from "../enum";
 import { TypeDatabase } from "./index";
 
 export type TypeBrandInfo = {
-  type: string;
+  md5: string;
   name: string;
 };
 

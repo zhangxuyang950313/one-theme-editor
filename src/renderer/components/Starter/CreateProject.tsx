@@ -210,7 +210,7 @@ const CreateProject: React.FC<TypeProps> = props => {
             sourceConfigPath: path.join(sourceConfig.root, sourceConfig.config),
             brandInfo: {
               name: brandConf.name,
-              type: brandConf.type
+              md5: brandConf.md5
             },
             projectInfo
           })

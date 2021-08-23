@@ -106,7 +106,7 @@ export function useBrandConfList(): TypeBrandConf[] {
     apiGetBrandConfList().then(conf => {
       // 添加默认小米，去重
       const list = conf.reduce<TypeBrandConf[]>((t, o) => {
-        if (!t.some(item => item.type === o.type)) t.push(o);
+        if (!t.some(item => item.md5 === o.md5)) t.push(o);
         return t;
       }, []);
       registerUpdater(() => {
@@ -128,8 +128,8 @@ export function useSourceDescriptionList(): [TypeSourceConfigInfo[], boolean] {
   const [brandConf] = useBrandConf();
   const dispatch = useStarterDispatch();
   useLayoutEffect(() => {
-    if (!brandConf.type) return;
-    apiGetSourceInfoList(brandConf.type)
+    if (!brandConf.md5) return;
+    apiGetSourceInfoList(brandConf.md5)
       .then(data => {
         console.log("配置预览列表：", data);
         updateValue(data);

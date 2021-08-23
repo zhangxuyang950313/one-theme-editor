@@ -59,7 +59,7 @@ export default class SourceConfig extends XmlFileCompiler {
    */
   static getSourceConfigInfoList(brandType: string): TypeSourceConfigInfo[] {
     const brandConfList = this.readBrandConf();
-    const brandConf = brandConfList.find(item => item.type === brandType);
+    const brandConf = brandConfList.find(item => item.md5 === brandType);
     if (!brandConf?.sourceConfigs) return [];
     const existsConfigs = brandConf.sourceConfigs.filter(item =>
       fse.existsSync(path.join(pathUtil.SOURCE_CONFIG_DIR, item))

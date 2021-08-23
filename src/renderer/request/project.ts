@@ -30,7 +30,7 @@ export async function apiGetProjectList(
 ): Promise<TypeProjectDataDoc[]> {
   return createHttp(canceler)
     .get<TypeRequestResult<TypeProjectDataDoc[]>>(
-      `${API.GET_PROJECT_LIST.url}/${brandInfo.type}`
+      `${API.GET_PROJECT_LIST.url}/${brandInfo.md5}`
     )
     .then(data => data.data.data);
 }

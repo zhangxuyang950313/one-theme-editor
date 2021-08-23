@@ -3,8 +3,8 @@ import { AbstractDataModel } from "./AbstractDataModel";
 
 export class BrandInfo extends AbstractDataModel<TypeBrandInfo> {
   protected data: TypeBrandInfo = {
-    type: "",
-    name: ""
+    name: "",
+    md5: ""
   };
 
   static default(): TypeBrandInfo {

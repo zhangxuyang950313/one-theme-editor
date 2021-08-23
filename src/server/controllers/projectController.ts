@@ -39,23 +39,23 @@ export default function projectController(service: Express): void {
   service.get<
     UnionTupleToObjectKey<typeof API.GET_PROJECT_LIST.params>, // reqParams
     TypeResponseFrame<TypeProjectDataDoc[], string>
-  >(`${API.GET_PROJECT_LIST.url}/:brandType`, async (request, response) => {
-    const project = await getProjectListOf(request.params.brandType);
+  >(`${API.GET_PROJECT_LIST.url}/:brandMd5`, async (request, response) => {
+    const project = await getProjectListOf(request.params.brandMd5);
     response.send(result.success(project));
   });
 
   // 通过参数获取工程
-  service.get<UnionTupleToObjectKey<typeof API.GET_PROJECT.params>>(
-    `${API.GET_PROJECT.url}/:uuid`,
-    async (request, response) => {
-      const project = await findProjectByUUID(request.params.uuid);
-      response.send(result.success(project));
-    }
-  );
+  service.get<
+    UnionTupleToObjectKey<typeof API.GET_PROJECT.params>,
+    TypeResponseFrame<TypeProjectDataDoc>
+  >(`${API.GET_PROJECT.url}/:uuid`, async (request, response) => {
+    const project = await findProjectByUUID(request.params.uuid);
+    response.send(result.success(project));
+  });
 
   // 更新数据
   service.post<
-    { uuid: string }, // reqParams
+    UnionTupleToObjectKey<typeof API.UPDATE_PROJECT.params>, // reqParams
     TypeResponseFrame<TypeProjectDataDoc, string>, // resBody
     typeof API.UPDATE_PROJECT.body // reqBody
   >(`${API.UPDATE_PROJECT.url}/:uuid`, async (request, response) => {

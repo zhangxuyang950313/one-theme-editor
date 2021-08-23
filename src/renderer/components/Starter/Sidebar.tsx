@@ -16,14 +16,14 @@ const Sidebar: React.FC = () => {
     return (
       <Menu
         className="menu"
-        selectedKeys={[brandConf.type]}
+        selectedKeys={[brandConf.md5]}
         onSelect={v => {
-          const brandInfo = brandConfList.find(o => v.key === o.type);
+          const brandInfo = brandConfList.find(o => v.key === o.md5);
           if (brandInfo) setBrandConf(brandInfo);
         }}
       >
         {brandConfList.map(item => (
-          <Menu.Item key={item.type}>{item.name}</Menu.Item>
+          <Menu.Item key={item.md5}>{item.name}</Menu.Item>
         ))}
       </Menu>
     );

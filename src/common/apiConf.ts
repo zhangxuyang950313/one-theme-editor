@@ -10,7 +10,7 @@ import { TypePathConfig } from "../types/extraConfig";
 
 type TypeApiConf<T, Q extends string[]> = Readonly<{
   url: string;
-  params: string[];
+  params: Q;
   query: Q;
   bodyKeys: T extends Record<string, unknown> ? Array<keyof T> : string[];
   body: T;
@@ -93,6 +93,7 @@ const API = {
   // 更新工程
   UPDATE_PROJECT: createApiConf({
     url: "/project/update",
+    params: ["uuid"],
     body: {} as Partial<TypeProjectData>
   }),
   // 更新描述信息
@@ -110,7 +111,7 @@ const API = {
   // 获取工程列表
   GET_PROJECT_LIST: createApiConf({
     url: "/project/list",
-    params: ["brandType"]
+    params: ["brandMd5"]
   }),
   // 通过 id 获取工程信息
   GET_PROJECT: createApiConf({
