@@ -104,33 +104,29 @@ const CreateProject: React.FC<TypeProps> = props => {
         return (
           <StyleFillInfo>
             {/* 填写信息 */}
-            <div className="project-info">
-              <StyleSetLocalPath>
-                <p>选择本地目录</p>
-                <div className="input-area">
-                  <Input
-                    placeholder="输入或选择目录"
-                    allowClear
-                    value={projectRoot}
-                    onChange={e => onChange(e.target.value)}
-                  />
-                  <Button
-                    type="primary"
-                    icon={<FileAddOutlined />}
-                    onClick={selectDir}
-                  >
-                    选择
-                  </Button>
-                </div>
-              </StyleSetLocalPath>
-              <SourceConfigManager
-                isLoading={isLoading}
-                sourceConfigList={sourceDescList}
-                selectedConfig={sourceConfig}
-                onSelected={setSourceConfig}
-              />
-              <ProjectInfoForm form={form} initialValues={initialValues} />
-            </div>
+            <ProjectInfoForm
+              className="project-info-form"
+              form={form}
+              initialValues={initialValues}
+            />
+            <StyleSetLocalPath>
+              <p>选择本地目录</p>
+              <div className="input-area">
+                <Input
+                  placeholder="输入或选择目录"
+                  allowClear
+                  value={projectRoot}
+                  onChange={e => onChange(e.target.value)}
+                />
+                <Button
+                  type="primary"
+                  icon={<FileAddOutlined />}
+                  onClick={selectDir}
+                >
+                  选择
+                </Button>
+              </div>
+            </StyleSetLocalPath>
           </StyleFillInfo>
         );
       },
@@ -147,6 +143,35 @@ const CreateProject: React.FC<TypeProps> = props => {
             }
           });
         }
+      },
+      next: {
+        disabled: isCreating,
+        async handleNext() {
+          return form
+            .validateFields()
+            .then(setProjectInfo)
+            .then(nextStep)
+            .catch(() => {
+              throw new Error("请填写正确表单");
+            });
+        }
+      }
+    },
+    {
+      name: "选择配置",
+      Component() {
+        return (
+          <SourceConfigManager
+            isLoading={isLoading}
+            sourceConfigList={sourceDescList}
+            selectedConfig={sourceConfig}
+            onSelected={setSourceConfig}
+          />
+        );
+      },
+      prev: {
+        disabled: isCreating,
+        handlePrev: prevStep
       },
       next: {
         disabled: isCreating,
@@ -232,8 +257,12 @@ const CreateProject: React.FC<TypeProps> = props => {
   ];
 
   // 创建主题步骤容器
-  const StepContainer: React.FC = () => {
-    return steps[curStep]?.Component() || null;
+  const StepContainer: React.FC<{ className?: string }> = props => {
+    return (
+      <div className={props.className}>
+        {steps[curStep].Component() || null}
+      </div>
+    );
   };
 
   const CancelButton = () => {
@@ -314,13 +343,12 @@ const CreateProject: React.FC<TypeProps> = props => {
         onCancel={closeModal}
         footer={modalFooter}
       >
-        <div className="step">
-          <Steps steps={steps.map(o => o.name)} current={curStep} />
-        </div>
-        <br />
-        <StyleStepContainer>
-          <StepContainer />
-        </StyleStepContainer>
+        <Steps
+          className="step"
+          steps={steps.map(o => o.name)}
+          current={curStep}
+        />
+        <StepContainer className="step-container" />
       </Modal>
     </StyleCreateProject>
   );
@@ -328,31 +356,29 @@ const CreateProject: React.FC<TypeProps> = props => {
 
 const StyleCreateProject = styled.div`
   .step {
-    padding: 0 50px;
+    padding: 0 50px 50px 50px;
+  }
+  .step-container {
+    height: 50vh;
   }
 `;
 
 const StyleSetLocalPath = styled.div`
+  border-top: 0.5px ${({ theme }) => theme["@disabled-color"]} solid;
+  padding-top: 20px;
   .input-area {
     display: flex;
   }
 `;
 
-const StyleStepContainer = styled.div`
-  height: 50vh;
-  overflow: auto;
-`;
-
 const StyleFillInfo = styled.div`
   display: flex;
-  padding: 10px 0;
-  .template-card {
-    flex-shrink: 0;
-    width: 200px;
-  }
-  .project-info {
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  margin: 40px 0 20px 0;
+  .project-info-form {
     width: 100%;
-    margin-left: 30px;
   }
 `;
 

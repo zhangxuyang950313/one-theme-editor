@@ -5,10 +5,11 @@ import { CheckCircleOutlined, ClockCircleOutlined } from "@ant-design/icons";
 type TypeProps = {
   current: number;
   steps: string[];
+  className?: string;
 };
 const Steps: React.FC<TypeProps> = props => {
   return (
-    <StyleSteps>
+    <StyleSteps className={props.className}>
       {props.steps.map((step, key) => {
         const isStep = props.current >= key;
         const isStepped = props.current > key;

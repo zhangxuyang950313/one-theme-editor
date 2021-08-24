@@ -115,7 +115,7 @@ export const selectLayoutImageList = createSelector(
   selectLayoutSourceList,
   elementList =>
     elementList.flatMap(item =>
-      item.sourceTag === ELEMENT_TAG.IMAGE ? [item] : []
+      item.sourceTag === ELEMENT_TAG.Image ? [item] : []
     )
 );
 
@@ -124,7 +124,7 @@ export const selectLayoutTextList = createSelector(
   selectLayoutSourceList,
   elementList =>
     elementList.flatMap(item =>
-      item.sourceTag === ELEMENT_TAG.TEXT ? [item] : []
+      item.sourceTag === ELEMENT_TAG.Text ? [item] : []
     )
 );
 
@@ -139,7 +139,7 @@ export const selectSourceImageDefineList = createSelector(
   selectSourceDefineList,
   sourceDefineList => {
     return sourceDefineList.flatMap(item => {
-      if (item.tagName === ELEMENT_TAG.IMAGE) return [item];
+      if (item.tagName === ELEMENT_TAG.Image) return [item];
       return [];
     });
   }
@@ -150,7 +150,7 @@ export const selectSourceValueDefineList = createSelector(
   selectSourceDefineList,
   sourceDefineList => {
     return sourceDefineList.flatMap(item => {
-      if (item.tagName !== ELEMENT_TAG.IMAGE) return [item];
+      if (item.tagName !== ELEMENT_TAG.Image) return [item];
       return [];
     });
   }

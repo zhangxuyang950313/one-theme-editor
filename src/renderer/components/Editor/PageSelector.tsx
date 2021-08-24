@@ -15,7 +15,7 @@ const PagePreview: React.FC<{ pageData: TypeSourcePageConf }> = props => {
   const [pageConf, setPageConf] = useSourcePageConf();
 
   return (
-    <StylePreviewImage data-active={String(pageConf?.key === pageData.key)}>
+    <StylePreviewImage data-active={String(pageConf.key === pageData.key)}>
       <PreloadImage
         className="preview-image"
         src={sourceImageURL}

@@ -66,7 +66,8 @@ const SourceConfigManager: React.FC<TypeProps> = props => {
 const StyleSourceConfigCard = styled.div`
   display: flex;
   flex-wrap: wrap;
-  height: 350px;
+  width: 100%;
+  height: 100%;
   overflow-y: auto;
   .center {
     margin: auto;
@@ -81,6 +82,7 @@ const StyleCardContainer = styled.div<TypeCardContainerProps>`
   opacity: ${({ isInit, isActive }) => 0.5 + 0.5 * Number(isInit || isActive)};
   transition: 0.3s opacity ease-in;
   position: relative;
+  flex-shrink: 0;
   .check-icon {
     position: absolute;
     top: 0px;
