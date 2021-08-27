@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import { Card } from "antd";
 
 import { TypeProjectInfo } from "src/types/project";
+import { LazyImage } from "../ImageCollection";
 
 type TypeProps = {
   hoverable?: boolean;
@@ -17,35 +17,39 @@ function ProjectCard(props: TypeProps): JSX.Element {
       data-hoverable={props.hoverable}
       onClick={() => props.onClick && props.onClick(projectInfo)}
     >
-      <Card
-        hoverable={props.hoverable}
-        style={{ width: "100%" }}
-        cover={
-          <img
-            alt="example"
-            src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
-          />
-        }
-      >
-        <Card.Meta
-          title={projectInfo?.name}
-          description={projectInfo?.uiVersion}
-        />
-      </Card>
+      <LazyImage
+        className="preview"
+        src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
+      />
+      <div className="name">{projectInfo.name}</div>
     </StyleProjectCard>
   );
 }
 
 const StyleProjectCard = styled.div`
   cursor: pointer;
-  width: 100%;
-  height: 100%;
-  box-sizing: border-box;
-  .ant-card-body {
-    padding: 16px;
+  width: 160px;
+  height: 260px;
+  border: 1px solid;
+  border-color: ${({ theme }) => theme["@border-color-base"]};
+  border-radius: ${({ theme }) => theme["@border-radius-base"]};
+  box-sizing: content-box;
+  overflow: hidden;
+  .preview {
+    width: 100%;
+    height: 85%;
+    object-fit: cover;
+  }
+  .name {
+    height: 15%;
+    padding: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   &:hover[data-hoverable] {
     transform: translateY(-5px);
+    box-shadow: 5px;
   }
   transition: 0.3s all ease-in;
 `;

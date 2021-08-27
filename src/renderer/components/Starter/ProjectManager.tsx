@@ -109,8 +109,6 @@ const StyleProjectList = styled.div`
   padding: 20px 30px 0 30px;
   overflow-y: auto;
   .project-card {
-    width: 150px;
-    height: 267px;
     margin: 0 20px 20px 0;
   }
 `;

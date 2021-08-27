@@ -81,8 +81,7 @@ const CreateProject: React.FC<TypeProps> = props => {
       name: "主题信息",
       Component() {
         useEffect(() => {
-          // onChange(path.join(remote.app.getPath("desktop"), "test"));
-          onChange("/Users/zhangxuyang/mine/theme-test");
+          onChange(path.join(remote.app.getPath("desktop"), "test"));
         }, []);
         const [projectRoot, setLocalPath] = useState<string>();
         const onChange = (val: string) => {

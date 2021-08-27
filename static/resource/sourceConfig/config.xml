@@ -1,6 +1,25 @@
 <Configuration>
   <Brand name="小米主题">
     <Config src="xiaomi/miui12/description.xml"/>
+    
+    <!-- 打包配置 -->
+    <Package extname="zip">
+        <Item type="dir"  path="boots/**"/>
+        <Item type="pack" path="clock_2x4/**"/>
+        <Item type="pack" path="com.*/**"/>
+        <Item type="pack" path="framework.*/**"/>
+        <Item type="pack" path="icons/**"/>
+        <Item type="pack" path="lockscreen/**"/>
+        <Item type="pack" path="miwallpaper/**"/>
+        <Item type="dir"  path="wallpaper/**"/>
+        <Item type="file" path="description.xml"/>
+    </Package>
+
+    <!-- 应用步骤 -->
+    <Apply>
+        <Step description="推送到手机..." cmd="push ${package_path} /sdcard/${project_package}"/>
+        <Step description="应用到主题..." cmd="shell am start -n com.android.thememanager/com.android.thememanager.ApplyThemeForScreenshot -e theme_file_path /sdcard/${project_package} -e api_called_from OneThemeEditor"/>
+    </Apply>
   </Brand>
   <Brand name="华为主题">
   </Brand>

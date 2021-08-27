@@ -36,7 +36,7 @@
     "build:linux": "npm run build:render:pro && npm run build:main:pro && npm run build:electron:linux",
     "build:mac": "npm run build:render:pro && npm run build:main:pro && npm run build:electron:mac",
     "build": "npm run build:render:pro && npm run build:main:pro && npm run build:electron",
-    "start:server": "npm run build:server:dev & nodemon release.server/index.js",
+    "start:server": "npm run build:server:dev && nodemon release.server/index.js",
     "start:electron": "electron ./release.main/index.js",
     "start": "npm run build:webpack && concurrently \"npm run build:server:dev\" \"npm run build:render:dev\" \"npm run build:main:dev\" \"npm run start:server\" \"wait-on http://localhost:3000 && npm run start:electron\"",
     "render:analyzer": "npm run build:webpack && npm run webpack:render:pro:analyze",
