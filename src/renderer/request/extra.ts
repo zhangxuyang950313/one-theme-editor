@@ -1,6 +1,6 @@
 import API from "src/common/apiConf";
-import { TypeElectronPath, TypePathConfig } from "types/extraConfig";
-import { TypeRequestResult } from "types/request";
+import { TypeElectronPath, TypePathConfig } from "src/types/extraConfig";
+import { TypeRequestResult } from "src/types/request";
 import { createHttp } from "./axios";
 
 // 获取后端路径信息

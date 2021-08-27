@@ -4,7 +4,7 @@ import logSymbols from "log-symbols";
 import { WatchOptions, FSWatcher } from "chokidar";
 import { useEffect, useState } from "react";
 import { useProjectRoot } from "@/hooks/project";
-import { FILE_STATUS } from "enum/index";
+import { FILE_STATUS } from "src/enum/index";
 
 const mapWatchers = (count: number, options?: WatchOptions) => {
   return new Array(count).fill(0).map(() => new FSWatcher(options));

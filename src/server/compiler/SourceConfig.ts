@@ -10,8 +10,8 @@ import {
   TypeSourceConfigInfo,
   TypeSourceTypeConf,
   TypePackageConf
-} from "types/source";
-import { TypeBrandConf, TypeProjectUiVersion } from "types/project";
+} from "src/types/source";
+import { TypeBrandConf, TypeProjectUiVersion } from "src/types/project";
 import {
   PackageConfig,
   SourceConfigInfo,
@@ -22,7 +22,7 @@ import {
   UiVersion
 } from "src/data/SourceConfig";
 import pathUtil from "server/utils/pathUtil";
-import ERR_CODE from "common/errorCode";
+import ERR_CODE from "src/common/errorCode";
 import BrandConfig from "server/compiler/BrandConfig";
 import PageConfig from "./PageConfig";
 import XMLNodeBase from "./XMLNodeElement";

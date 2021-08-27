@@ -1,6 +1,6 @@
 import http from "http";
 import { Server, Socket } from "socket.io";
-import { SOCKET_EVENT } from "common/socketConf";
+import { SOCKET_EVENT } from "src/common/socketConf";
 
 // 快速将 socket event 建立通讯通道
 class SocketConnecter {

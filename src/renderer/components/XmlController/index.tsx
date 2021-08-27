@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import { TypeSourceDefineValue } from "types/source";
+import { TypeSourceDefineValue } from "src/types/source";
 import { apiWriteXmlTemplate } from "@/request";
 import { useProjectUUID, useProjectXmlValueBySrc } from "@/hooks/project";
-import { SOURCE_TYPES } from "enum/index";
+import { SOURCE_TYPES } from "src/enum/index";
 
 import ColorPicker from "./ColorPicker";
 import BooleanSelector from "./BooleanSelector";

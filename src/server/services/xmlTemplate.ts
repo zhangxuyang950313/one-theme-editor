@@ -6,7 +6,7 @@ import XmlTemplate from "server/compiler/XmlTemplate";
 import {
   TypeReleaseXmlTempPayload,
   UnionTupleToObjectKey
-} from "types/request";
+} from "src/types/request";
 import { findProjectByUUID } from "server/db-handler/project";
 import XmlFileCompiler from "server/compiler/XmlFileCompiler";
 

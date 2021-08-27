@@ -2,7 +2,7 @@
 import fse from "fs-extra";
 import FileType from "file-type";
 import { Express } from "express";
-import API from "common/apiConf";
+import API from "src/common/apiConf";
 import ERR_CODE from "src/common/errorCode";
 import { UnionTupleToObjectKey } from "src/types/request";
 

@@ -48,8 +48,8 @@ import {
   TypeSourceDefine,
   TypeSourceDefineImage,
   TypeSourceDefineValue
-} from "types/source";
-import { TypeBrandConf } from "types/project";
+} from "src/types/source";
+import { TypeBrandConf } from "src/types/project";
 import {
   useStarterDispatch,
   useEditorDispatch,
@@ -57,7 +57,7 @@ import {
   useEditorSelector,
   useGlobalSelector
 } from "@/store/index";
-import ERR_CODE from "common/errorCode";
+import ERR_CODE from "src/common/errorCode";
 import { asyncQueue } from "src/utils/index";
 import { SOURCE_TYPES } from "src/enum/index";
 import { useImagePrefix } from "./image";

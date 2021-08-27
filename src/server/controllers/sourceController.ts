@@ -1,13 +1,13 @@
 import { Express } from "express";
-import API from "common/apiConf";
+import API from "src/common/apiConf";
 import {
   TypeSourceModuleConf,
   TypeSourcePageData,
   TypeSourceConfigData,
   TypeSourceConfigInfo
-} from "types/source";
+} from "src/types/source";
 import { TypeBrandConf } from "src/types/project";
-import { TypeResponseFrame, UnionTupleToObjectKey } from "types/request";
+import { TypeResponseFrame, UnionTupleToObjectKey } from "src/types/request";
 import { checkParamsKey, result } from "server/utils/requestUtil";
 import PageConfig from "server/compiler/PageConfig";
 import SourceConfig from "server/compiler/SourceConfig";

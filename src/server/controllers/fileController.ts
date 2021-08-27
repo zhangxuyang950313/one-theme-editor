@@ -1,10 +1,10 @@
 import fse from "fs-extra";
 import { Express } from "express";
 
-import API from "common/apiConf";
-import ERR_CODE from "common/errorCode";
+import API from "src/common/apiConf";
+import ERR_CODE from "src/common/errorCode";
 import { checkParamsKey, result } from "server/utils/requestUtil";
-import { TypeResponseFrame, UnionTupleToObjectKey } from "types/request";
+import { TypeResponseFrame, UnionTupleToObjectKey } from "src/types/request";
 
 export default function fileController(service: Express): void {
   // 复制本地文件

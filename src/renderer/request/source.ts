@@ -1,11 +1,11 @@
-import API from "common/apiConf";
-import { TypeBrandConf } from "types/project";
+import API from "src/common/apiConf";
+import { TypeBrandConf } from "src/types/project";
 import {
   TypeSourceConfigData,
   TypeSourceConfigInfo,
   TypeSourcePageData
-} from "types/source";
-import { TypeRequestResult, UnionTupleToObjectKey } from "types/request";
+} from "src/types/source";
+import { TypeRequestResult, UnionTupleToObjectKey } from "src/types/request";
 import { createHttp } from "./axios";
 
 // 获取厂商列表

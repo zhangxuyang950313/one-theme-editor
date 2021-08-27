@@ -1,7 +1,7 @@
 import rgb2hex from "rgb-hex";
 import hex2rgb, { RgbaObject } from "hex-rgb";
-import { HEX_FORMAT } from "../enum";
-import { hexRegexp, hex6Regexp, hex8Regexp } from "../common/regexp";
+import { HEX_FORMAT } from "src/enum/index";
+import { hexRegexp, hex6Regexp, hex8Regexp } from "src/common/regexp";
 
 export { HEX_FORMAT };
 

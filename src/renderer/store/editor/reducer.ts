@@ -3,14 +3,14 @@ import {
   TypeProjectDataDoc,
   TypeProjectInfo,
   TypeProjectFileData
-} from "types/project";
+} from "src/types/project";
 import {
   TypeSourceTypeConf,
   TypeSourceModuleConf,
   TypeSourcePageConf,
   TypeSourcePageData,
   TypeSourceConfigData
-} from "types/source";
+} from "src/types/source";
 import {
   SourceConfigData,
   SourceModuleConf,

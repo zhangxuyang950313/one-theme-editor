@@ -7,7 +7,7 @@ import {
   useSourceImageUrl
 } from "@/hooks/source";
 import { PreloadImage } from "@/components/ImageCollection";
-import { TypeSourcePageConf } from "types/source";
+import { TypeSourcePageConf } from "src/types/source";
 
 const PagePreview: React.FC<{ pageData: TypeSourcePageConf }> = props => {
   const { pageData } = props;

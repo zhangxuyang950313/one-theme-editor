@@ -32,9 +32,9 @@ import {
   TypeProjectDataDoc,
   TypeProjectInfo,
   TypeProjectFileData
-} from "types/project";
+} from "src/types/project";
 
-import ERR_CODE from "common/errorCode";
+import ERR_CODE from "src/common/errorCode";
 import { sleep } from "src/utils/index";
 import { notification } from "antd";
 import XMLNodeElement from "server/compiler/XMLNodeElement";

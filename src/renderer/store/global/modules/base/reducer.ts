@@ -1,7 +1,7 @@
 import ACTION_TYPES from "@/store/global/actionType";
 import { updateState } from "@/store/utils";
-import { TypePathConfig } from "types/extraConfig";
-import AppPath from "data/AppPath";
+import { TypePathConfig } from "src/types/extraConfig";
+import AppPath from "src/data/AppPath";
 import { TypeActions } from "./action";
 
 type TypeBaseState = {

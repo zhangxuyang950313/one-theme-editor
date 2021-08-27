@@ -34,13 +34,9 @@
     "types": ["node"],
     "baseUrl": "./",
     "paths": {
-      "enum/*": ["../enum/*"],
-      "data/*": ["../data/*"],
-      "types/*": ["../types/*"],
-      "common/*": ["../common/*"],
-      "server/*": ["../server/*"],
-      "renderer/*": ["../renderer/*"],
-      "src/*": ["../*"],
+      "server/*": ["./server/*"],
+      "renderer/*": ["./renderer/*"],
+      "src/*": ["./*"],
     }
   }
 }

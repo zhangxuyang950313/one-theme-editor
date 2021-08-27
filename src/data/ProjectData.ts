@@ -1,4 +1,4 @@
-import { TypeProjectDataDoc, TypeProjectInfo } from "../types/project";
+import { TypeProjectDataDoc, TypeProjectInfo } from "src/types/project";
 import { AbstractDataModel } from "./AbstractDataModel";
 import { BrandInfo } from "./BrandConfig";
 import { UiVersion } from "./SourceConfig";

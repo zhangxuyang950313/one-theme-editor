@@ -1,5 +1,5 @@
-import { EXTRA_DATA_TYPE } from "enum/index";
-import { TypeDatabase } from "types/index";
+import { EXTRA_DATA_TYPE } from "../enum/index";
+import { TypeDatabase } from "../types/index";
 
 export type TypeElectronPath = Readonly<{
   ELECTRON_CACHE: string;

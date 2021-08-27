@@ -1,4 +1,4 @@
-import { TypeImageData } from "../types/project";
+import { TypeImageData } from "src/types/project";
 import { AbstractDataModel } from "./AbstractDataModel";
 
 export default class ImageData extends AbstractDataModel<TypeImageData> {

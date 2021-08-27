@@ -1,8 +1,8 @@
 import { Express } from "express";
-import API from "common/apiConf";
+import API from "src/common/apiConf";
 import { checkParamsKey, result } from "server/utils/requestUtil";
-import { TypeResponseFrame } from "types/request";
-import { TypeElectronPath, TypePathConfig } from "types/extraConfig";
+import { TypeResponseFrame } from "src/types/request";
+import { TypeElectronPath, TypePathConfig } from "src/types/extraConfig";
 import { swopPathConfig } from "server/services/extra";
 
 export default function extraController(service: Express): void {

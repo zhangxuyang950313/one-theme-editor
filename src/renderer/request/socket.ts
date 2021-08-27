@@ -1,11 +1,11 @@
 import io from "socket.io-client";
-import { HOST, PORT } from "common/config";
-import { SOCKET_EVENT } from "common/socketConf";
+import { HOST, PORT } from "src/common/config";
+import { SOCKET_EVENT } from "src/common/socketConf";
 import {
   TypeImageMapper,
   TypeProjectDataDoc,
   TypeProjectFileData
-} from "types/project";
+} from "src/types/project";
 
 const socket = io(`ws://${HOST}:${PORT}`);
 

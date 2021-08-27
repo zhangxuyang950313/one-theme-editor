@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from "axios";
-import { HOST, PORT } from "common/config";
-import { TypeGetCanceler } from "types/request";
+import { HOST, PORT } from "src/common/config";
+import { TypeGetCanceler } from "src/types/request";
 
 export const createHttp = (getCanceler?: TypeGetCanceler): AxiosInstance => {
   const http = axios.create({

@@ -1,7 +1,7 @@
 import React, { forwardRef, useImperativeHandle } from "react";
 import styled from "styled-components";
 
-import { TypeProjectInfo } from "types/project";
+import { TypeProjectInfo } from "src/types/project";
 
 // components
 import { Form, FormInstance } from "antd";

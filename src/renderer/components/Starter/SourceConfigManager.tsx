@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import { TypeSourceConfigInfo } from "types/source";
+import { TypeSourceConfigInfo } from "src/types/source";
 
 // components
 import { CheckCircleTwoTone } from "@ant-design/icons";

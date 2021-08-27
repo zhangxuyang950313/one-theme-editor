@@ -2,13 +2,13 @@ import {
   TypeProjectDataDoc,
   TypeProjectInfo,
   TypeProjectFileData
-} from "types/project";
+} from "src/types/project";
 import {
   TypeSourceConfigData,
   TypeSourceModuleConf,
   TypeSourcePageConf,
   TypeSourcePageData
-} from "types/source";
+} from "src/types/source";
 
 export enum ACTION_TYPES {
   // 设置资源配置

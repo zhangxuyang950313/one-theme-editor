@@ -1,12 +1,12 @@
 import path from "path";
 import { Express } from "express";
-import API from "common/apiConf";
+import API from "src/common/apiConf";
 import {
   TypeCreateProjectPayload,
   TypeProjectDataDoc,
   TypeProjectFileData
-} from "types/project";
-import { TypeResponseFrame, UnionTupleToObjectKey } from "types/request";
+} from "src/types/project";
+import { TypeResponseFrame, UnionTupleToObjectKey } from "src/types/request";
 import {
   findProjectByUUID,
   getProjectListOf,

@@ -1,5 +1,5 @@
-import API from "common/apiConf";
-import { TypeRequestResult } from "types/request";
+import API from "src/common/apiConf";
+import { TypeRequestResult } from "src/types/request";
 import { createHttp } from "./axios";
 
 // // 写入文件

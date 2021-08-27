@@ -1,12 +1,12 @@
 import { ElectronPathCollection } from "src/data/AppPath";
-import { TypeReleaseXmlTempPayload } from "../types/request";
+import { TypeReleaseXmlTempPayload } from "src/types/request";
 import {
   TypeCreateProjectPayload,
   TypeProjectData,
   TypeProjectInfo,
   TypeProjectUiVersion
-} from "../types/project";
-import { TypePathConfig } from "../types/extraConfig";
+} from "src/types/project";
+import { TypePathConfig } from "src/types/extraConfig";
 
 type TypeApiConf<T, Q extends string[]> = Readonly<{
   url: string;

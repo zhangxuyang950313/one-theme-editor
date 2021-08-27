@@ -1,5 +1,5 @@
 import md5 from "md5";
-import { TypeBrandConf } from "types/project";
+import { TypeBrandConf } from "src/types/project";
 import { BrandConf } from "src/data/BrandConfig";
 import { ELEMENT_TAG } from "src/enum/index";
 import XmlTemplate from "./XmlTemplate";

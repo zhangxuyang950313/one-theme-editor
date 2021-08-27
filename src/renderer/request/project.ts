@@ -1,17 +1,17 @@
-import API from "common/apiConf";
+import API from "src/common/apiConf";
 import {
   TypeBrandConf,
   TypeCreateProjectPayload,
   TypeProjectData,
   TypeProjectDataDoc,
   TypeProjectFileData
-} from "types/project";
+} from "src/types/project";
 import {
   TypeRequestResult,
   TypeGetCanceler,
   UnionTupleToObjectKey,
   TypeReleaseXmlTempPayload
-} from "types/request";
+} from "src/types/request";
 import { createHttp } from "./axios";
 
 // 创建工程

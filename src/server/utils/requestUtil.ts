@@ -1,5 +1,5 @@
 import { createGzip } from "zlib";
-import { TypeResultSuccess, TypeResultFail } from "types/request";
+import { TypeResultSuccess, TypeResultFail } from "src/types/request";
 
 export const result: {
   success: <T>(data: T) => TypeResultSuccess<T>;

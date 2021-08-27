@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 import { Radio } from "antd";
-import { TypeSourceDefineValue } from "types/source";
+import { TypeSourceDefineValue } from "src/types/source";
 import Wrapper from "./Wrapper";
 
 const BooleanSelector: React.FC<{

@@ -1,7 +1,7 @@
 import logSymbols from "log-symbols";
 import pathUtil from "server/utils/pathUtil";
-import AppPathCollection from "data/AppPath";
-import { TypePathConfig, TypePathConfigInDoc } from "types/extraConfig";
+import AppPathCollection from "src/data/AppPath";
+import { TypePathConfig, TypePathConfigInDoc } from "src/types/extraConfig";
 import { EXTRA_DATA_TYPE } from "src/enum";
 import { createNedb } from "server/utils/databaseUtil";
 import { KeysEnum } from "src/types";

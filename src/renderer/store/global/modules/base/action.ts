@@ -1,4 +1,4 @@
-import { TypePathConfig } from "types/extraConfig";
+import { TypePathConfig } from "src/types/extraConfig";
 import ACTION_TYPES from "@/store/global/actionType";
 
 type TypeActionSetServerPort = {

@@ -1,8 +1,8 @@
-import { PROJECT_FILE_TYPE } from "../enum";
+import { PROJECT_FILE_TYPE } from "src/enum/index";
 import {
   TypeProjectImageFileData,
   TypeProjectXmlFileData
-} from "../types/project";
+} from "src/types/project";
 import { AbstractDataModel } from "./AbstractDataModel";
 import ImageData from "./ImageData";
 

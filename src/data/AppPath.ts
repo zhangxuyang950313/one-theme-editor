@@ -2,7 +2,7 @@ import {
   TypeElectronPath,
   TypePathConfig,
   TypeServerPath
-} from "../types/extraConfig";
+} from "src/types/extraConfig";
 import { AbstractDataModel } from "./AbstractDataModel";
 
 export class ElectronPathCollection extends AbstractDataModel<TypeElectronPath> {
@@ -33,7 +33,8 @@ export class ServerPathCollection extends AbstractDataModel<TypeServerPath> {
     SOURCE_CONFIG_DIR: "",
     SOURCE_CONFIG_FILE: "",
     AAPT_TOOL: "",
-    ADB_TOOL: ""
+    ADB_TOOL: "",
+    PACK_TEMPORARY: ""
   };
 }
 

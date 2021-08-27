@@ -1,8 +1,6 @@
 import path from "path";
 import querystring from "querystring";
 import fse from "fs-extra";
-import { getImageData } from "src/utils/index";
-import { ELEMENT_TAG, ALIGN_VALUES, ALIGN_V_VALUES } from "enum/index";
 import {
   TypeSourceCopyConf,
   TypeLayoutElement,
@@ -10,8 +8,7 @@ import {
   TypeLayoutImageElement,
   TypeLayoutTextElement,
   TypeSourceDefine
-} from "types/source";
-import XMLNodeElement from "server/compiler/XMLNodeElement";
+} from "src/types/source";
 import {
   ElementLayoutConf,
   DefineImageData,
@@ -19,8 +16,11 @@ import {
   SourcePageData,
   SourceTextElement
 } from "src/data/SourceConfig";
+import { getImageData } from "src/utils/index";
 import { placeholderRegexp } from "src/common/regexp";
+import { ELEMENT_TAG, ALIGN_VALUES, ALIGN_V_VALUES } from "src/enum/index";
 import pathUtil from "server/utils/pathUtil";
+import XMLNodeElement from "server/compiler/XMLNodeElement";
 import XmlFileCompiler from "./XmlFileCompiler";
 import SourceDefine from "./SourceDefine";
 

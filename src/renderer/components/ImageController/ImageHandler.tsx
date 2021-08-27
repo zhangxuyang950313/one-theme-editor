@@ -2,7 +2,7 @@ import path from "path";
 import React from "react";
 import styled from "styled-components";
 import { remote } from "electron";
-import ERR_CODE from "common/errorCode";
+import ERR_CODE from "src/common/errorCode";
 import { notification } from "antd";
 import { DeleteOutlined, ImportOutlined } from "@ant-design/icons";
 import { apiCopyFile, apiDeleteFile } from "@/request/file";

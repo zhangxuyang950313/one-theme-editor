@@ -1,9 +1,9 @@
-import { TypeKeyValue } from "types/index";
+import { TypeKeyValue } from "src/types/index";
 import {
   TypeSourceXmlKeyValConf,
   TypeSourceXmlKeyValMapperMap,
   TypeXmlTempKeyValMap
-} from "types/source";
+} from "src/types/source";
 import XmlFileCompiler from "./XmlFileCompiler";
 
 export default class TempKeyValMapper extends XmlFileCompiler {

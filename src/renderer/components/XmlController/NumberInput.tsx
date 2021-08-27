@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { InputNumber } from "antd";
 import { RightCircleOutlined } from "@ant-design/icons";
-import { TypeSourceDefineValue } from "types/source";
+import { TypeSourceDefineValue } from "src/types/source";
 import Wrapper from "./Wrapper";
 
 const NumberInput: React.FC<{

@@ -1,6 +1,6 @@
 import path from "path";
-import { placeholderRegexp } from "../common/regexp";
-import { PLACEHOLDER } from "../enum";
+import { placeholderRegexp } from "src/common/regexp";
+import { PLACEHOLDER } from "src/enum/index";
 // import PATHS_CONFIG from "../types/extraConfig";
 
 export default class PathResolver {

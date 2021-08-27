@@ -1,6 +1,6 @@
 import path from "path";
 import os from "os";
-import { TypeServerPath } from "types/extraConfig";
+import { TypeServerPath } from "src/types/extraConfig";
 
 /**
  * 这些路径是基于 __dirname 的相对路径，调用前请确保你的执行路径

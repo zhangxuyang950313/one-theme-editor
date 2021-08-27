@@ -9,7 +9,7 @@ import {
 } from "@/store/global/modules/base/selector";
 import { ActionSetAppConfig } from "@/store/global/modules/base/action";
 import { useGlobalSelector, useGlobalDispatch } from "@/store/index";
-import { TypePathConfig } from "types/extraConfig";
+import { TypePathConfig } from "src/types/extraConfig";
 import { sleep } from "src/utils/index";
 
 export function useDocumentTitle(): [string, typeof setTitleMethod] {
