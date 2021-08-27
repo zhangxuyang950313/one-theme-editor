@@ -1,6 +1,7 @@
 import logSymbols from "log-symbols";
 import { v4 as UUID } from "uuid";
 import {
+  TypeBrandInfo,
   TypeCreateProjectPayload,
   TypeProjectData,
   TypeProjectDataDoc
@@ -26,16 +27,17 @@ export async function createProject(
     brandInfo,
     uiVersion,
     sourceConfigPath,
-    projectRoot: projectRoot
+    projectRoot
   });
 }
 
 // brandType 筛选所有工程
 export async function getProjectListOf(
-  brandType: string
+  brandMd5: string
 ): Promise<TypeProjectDataDoc[]> {
+  const findKey: `brandInfo.${keyof TypeBrandInfo}` = "brandInfo.md5";
   return projectDB
-    .find<TypeProjectData>({ "brandInfo.type": brandType })
+    .find<TypeProjectData>({ [findKey]: brandMd5 })
     .sort({ updatedAt: -1 });
 }
 

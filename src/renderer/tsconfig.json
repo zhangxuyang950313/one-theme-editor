@@ -19,11 +19,11 @@
     "jsx": "react-jsx",
     "baseUrl": "./",
     "paths": {
+      "src/*" : ["../*"],
       "@/*": ["./*"],
     },
     "types": ["webpack", "webpack-env", "node"]
   },
   "include": ["./**/*"],
   "exclude": ["node_modules"]
-  // "extends": "./tsconfig-path.json"
 }

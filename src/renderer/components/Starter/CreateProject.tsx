@@ -1,10 +1,10 @@
 import path from "path";
 import fse from "fs-extra";
-import React, { useEffect, useRef, useState } from "react";
-import styled from "styled-components";
 import { v4 as UUID } from "uuid";
 import { remote } from "electron";
 
+import React, { useEffect, useRef, useState } from "react";
+import styled from "styled-components";
 import { isDev } from "@/core/constant";
 import { apiCreateProject } from "@/request";
 import { useBrandConf, useSourceDescriptionList } from "@/hooks/source";
@@ -152,7 +152,7 @@ const CreateProject: React.FC<TypeProps> = props => {
             .then(setProjectInfo)
             .then(nextStep)
             .catch(() => {
-              throw new Error("请填写正确表单");
+              message.warn("请填写正确表单");
             });
         }
       }
@@ -174,15 +174,13 @@ const CreateProject: React.FC<TypeProps> = props => {
         handlePrev: prevStep
       },
       next: {
-        disabled: isCreating,
+        disabled: !sourceConfig,
         async handleNext() {
-          return form
-            .validateFields()
-            .then(setProjectInfo)
-            .then(nextStep)
-            .catch(() => {
-              throw new Error("请填写正确表单");
-            });
+          if (!sourceConfig) {
+            message.warn("请选择配置模板");
+          } else {
+            nextStep();
+          }
         }
       }
     },

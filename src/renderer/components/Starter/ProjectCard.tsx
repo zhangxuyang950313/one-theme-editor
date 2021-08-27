@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-
 import { Card } from "antd";
 
 import { TypeProjectInfo } from "src/types/project";
