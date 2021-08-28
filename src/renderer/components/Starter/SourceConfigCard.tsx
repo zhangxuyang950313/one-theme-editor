@@ -1,55 +1,35 @@
+import path from "path";
+
 import React from "react";
 import styled from "styled-components";
+import { useSourceConfigDir } from "@/hooks/source";
+import { useImagePrefix } from "@/hooks/image";
 
 import { TypeSourceConfigInfo } from "src/types/source";
-
-// components
-import { Card } from "antd";
-import { useSourceImageUrl } from "@/hooks/source";
+import { LazyImage } from "../ImageCollection";
 
 type TypeProps = {
-  hoverable?: boolean;
   sourceDescription: TypeSourceConfigInfo;
 };
 
 // 配置卡片
 const SourceConfigCard: React.FC<TypeProps> = props => {
   const { sourceDescription } = props;
-  const imgUrl = useSourceImageUrl(sourceDescription.preview);
+  const { root, preview } = sourceDescription;
+  const imgPrefix = useImagePrefix();
+  const sourceDir = useSourceConfigDir();
+  const imgUrl = imgPrefix + path.join(sourceDir, root, preview);
   return (
-    <StyleSourceConfigCard data-hoverable={props.hoverable}>
-      <Card
-        hoverable={props.hoverable}
-        style={{ width: "100%" }}
-        cover={<img alt={sourceDescription.name} src={imgUrl} />}
-      >
-        <Card.Meta
-          title={sourceDescription.name}
-          description={sourceDescription.uiVersion.name}
-        />
-      </Card>
+    <StyleSourceConfigCard>
+      <LazyImage style={{ width: "100%" }} src={imgUrl} />
+      <div>{sourceDescription.name}</div>
+      <div>{sourceDescription.uiVersion.name}</div>
     </StyleSourceConfigCard>
   );
 };
 
 const StyleSourceConfigCard = styled.div`
-  width: 100%;
-  height: 100%;
-  box-sizing: border-box;
-  .ant-card {
-    box-sizing: border-box;
-  }
-  .ant-card-body {
-    padding: 10px;
-    font-size: 10px;
-    .ant-card-meta-title {
-      font-size: 12px;
-    }
-  }
-  &:hover[data-hoverable="true"] {
-    transform: translateY(-2px);
-  }
-  transition: 0.3s all ease-in;
+  cursor: pointer;
 `;
 
 export default SourceConfigCard;

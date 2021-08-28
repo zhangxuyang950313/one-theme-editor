@@ -254,12 +254,8 @@ const CreateProject: React.FC<TypeProps> = props => {
   ];
 
   // 创建主题步骤容器
-  const StepContainer: React.FC<{ className?: string }> = props => {
-    return (
-      <div className={props.className}>
-        {steps[curStep].Component() || null}
-      </div>
-    );
+  const StepContainer: React.FC = () => {
+    return <>{steps[curStep].Component() || null}</>;
   };
 
   const CancelButton = () => {
@@ -328,11 +324,12 @@ const CreateProject: React.FC<TypeProps> = props => {
   ];
 
   return (
-    <StyleCreateProject>
+    <>
       <Button type="primary" onClick={handleStartCreate}>
         新建主题
       </Button>
-      <Modal
+      <StyleModal
+        centered={true}
         width="700px"
         visible={modalVisible}
         title={`创建${brandConf.name}`}
@@ -340,24 +337,23 @@ const CreateProject: React.FC<TypeProps> = props => {
         onCancel={closeModal}
         footer={modalFooter}
       >
-        <Steps
-          className="step"
-          steps={steps.map(o => o.name)}
-          current={curStep}
-        />
-        <StepContainer className="step-container" />
-      </Modal>
-    </StyleCreateProject>
+        <StyleSteps steps={steps.map(o => o.name)} current={curStep} />
+        <StepContainer />
+      </StyleModal>
+    </>
   );
 };
 
-const StyleCreateProject = styled.div`
-  .step {
-    padding: 0 50px 50px 50px;
+const StyleModal = styled(Modal)`
+  .ant-modal-body {
+    display: flex;
+    flex-direction: column;
+    height: 450px;
   }
-  .step-container {
-    height: 50vh;
-  }
+`;
+
+const StyleSteps = styled(Steps)`
+  padding: 0 0 30px 0;
 `;
 
 const StyleSetLocalPath = styled.div`
@@ -373,7 +369,6 @@ const StyleFillInfo = styled.div`
   flex-direction: column;
   width: 100%;
   height: 100%;
-  margin: 40px 0 20px 0;
   .project-info-form {
     width: 100%;
   }

@@ -12,7 +12,7 @@ import {
   useFetchPageConfData,
   useFetchSourceConfig,
   useSourcePageData,
-  useSourceConfigRoot
+  useSourceConfigRootWithNS
 } from "@/hooks/source";
 import {
   ActionPatchProjectSourceData,
@@ -37,7 +37,7 @@ import {
 import ERR_CODE from "src/common/errorCode";
 import { sleep } from "src/utils/index";
 import { notification } from "antd";
-import XMLNodeElement from "server/compiler/XMLNodeElement";
+import XMLNodeElement from "src/server/compiler/XMLNodeElement";
 import { useProjectFileWatcher } from "./fileWatcher";
 import { useImagePrefix } from "./image";
 
@@ -152,7 +152,7 @@ export function useResolveProjectPath(relativePath = ""): string {
 
 // 处理素材路径
 export function useResolveSourcePath(relativePath: string): string {
-  const sourceRoot = useSourceConfigRoot();
+  const sourceRoot = useSourceConfigRootWithNS();
   const [sourcePath, setSourcePath] = useState("");
 
   useEffect(() => {

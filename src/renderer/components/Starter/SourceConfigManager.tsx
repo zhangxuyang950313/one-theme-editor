@@ -1,11 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-
-import { TypeSourceConfigInfo } from "src/types/source";
-
-// components
-import { CheckCircleTwoTone } from "@ant-design/icons";
 import { Empty, Spin } from "antd";
+import { CheckCircleTwoTone } from "@ant-design/icons";
+import { TypeSourceConfigInfo } from "src/types/source";
 import SourceConfigCard from "./SourceConfigCard";
 
 type TypeProps = {
@@ -21,26 +18,26 @@ const SourceConfigManager: React.FC<TypeProps> = props => {
 
   if (isLoading) {
     return (
-      <StyleSourceConfigCard>
+      <StyleSourceConfigManager>
         <Spin className="center" tip="加载中" />
-      </StyleSourceConfigCard>
+      </StyleSourceConfigManager>
     );
   }
 
   if (sourceConfigList.length === 0) {
     return (
-      <StyleSourceConfigCard>
+      <StyleSourceConfigManager>
         <Empty
           className="center"
           image={Empty.PRESENTED_IMAGE_SIMPLE}
           description={`暂无模板`}
         />
-      </StyleSourceConfigCard>
+      </StyleSourceConfigManager>
     );
   }
 
   return (
-    <StyleSourceConfigCard>
+    <StyleSourceConfigManager>
       {sourceConfigList.map((item, key) => {
         const isActive = selectedConfig?.key === item.key;
         const isInit = !selectedConfig?.key;
@@ -54,16 +51,16 @@ const SourceConfigManager: React.FC<TypeProps> = props => {
               onSelected(isActive ? undefined : item);
             }}
           >
-            <SourceConfigCard hoverable sourceDescription={item} />
+            <SourceConfigCard sourceDescription={item} />
             <CheckCircleTwoTone className="check-icon" />
           </StyleCardContainer>
         );
       })}
-    </StyleSourceConfigCard>
+    </StyleSourceConfigManager>
   );
 };
 
-const StyleSourceConfigCard = styled.div`
+const StyleSourceConfigManager = styled.div`
   display: flex;
   flex-wrap: wrap;
   width: 100%;
@@ -76,8 +73,7 @@ const StyleSourceConfigCard = styled.div`
 
 type TypeCardContainerProps = { isActive: boolean; isInit: boolean };
 const StyleCardContainer = styled.div<TypeCardContainerProps>`
-  width: 130px;
-  height: 213px;
+  width: 120px;
   margin: 10px;
   opacity: ${({ isInit, isActive }) => 0.5 + 0.5 * Number(isInit || isActive)};
   transition: 0.3s opacity ease-in;

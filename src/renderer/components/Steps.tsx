@@ -38,7 +38,6 @@ const StyleStep = styled.div<StyleStepProps>`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 10px;
   opacity: ${({ isStep }) => (isStep ? 1 : 0.5)};
   color: ${({ theme, isStepped }) =>
     isStepped ? theme["@primary-color"] : theme["@text-color"]};
@@ -49,6 +48,7 @@ const StyleStep = styled.div<StyleStepProps>`
   }
   &:not(:last-child) {
     width: 100%;
+    margin-right: 10px;
     .step-item-divider {
       width: 100%;
       height: 1px;

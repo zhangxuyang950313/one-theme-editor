@@ -72,10 +72,18 @@ export function useSourceConfig(): TypeSourceConfigData {
 }
 
 /**
+ * 获取资源配置根目录
+ * @returns
+ */
+export function useSourceConfigDir(): string {
+  return useGlobalSelector(getSourceConfigDir);
+}
+
+/**
  * 获取当前资源配置目录
  * @returns
  */
-export function useSourceConfigRoot(): string {
+export function useSourceConfigRootWithNS(): string {
   const sourceConfigUrl = useSourceConfigUrl();
   const sourceConfigDir = useGlobalSelector(getSourceConfigDir);
   return path.join(sourceConfigDir, path.dirname(sourceConfigUrl));
@@ -409,7 +417,7 @@ export function useTextSourceList(): TypeLayoutTextElement[] {
  * @returns
  */
 export function useAbsolutePathInSource(relativePath: string): string {
-  const sourceConfigRoot = useSourceConfigRoot();
+  const sourceConfigRoot = useSourceConfigRootWithNS();
   return path.join(sourceConfigRoot, relativePath);
 }
 
