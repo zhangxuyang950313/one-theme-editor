@@ -38,7 +38,7 @@ import ERR_CODE from "src/common/errorCode";
 import { sleep } from "src/utils/index";
 import { notification } from "antd";
 import XMLNodeElement from "src/server/compiler/XMLNodeElement";
-import { useProjectFileWatcher } from "./fileWatcher";
+// import { useProjectFileWatcher } from "./fileWatcher";
 import { useImagePrefix } from "./image";
 
 // 获取项目列表
@@ -170,15 +170,18 @@ export function usePatchPageSourceData(): void {
   const uuid = useProjectUUID();
   const pageData = useSourcePageData();
   const dispatch = useEditorDispatch();
-  const sourceFilepathSet = (pageData?.sourceDefineList || []) //
-    .reduce((t, o) => {
-      if (o.src) t.add(o.src);
-      return t;
-    }, new Set<string>());
-  useProjectFileWatcher(Array.from(sourceFilepathSet), async file => {
-    const fileData = await apiGetProjectFileData(uuid, file);
-    dispatch(ActionPatchProjectSourceData(fileData));
-  });
+  useEffect(() => {
+    if (!pageData || !uuid) return;
+    new Set(pageData.sourceDefineList.map(o => o.src)).forEach(async file => {
+      const fileData = await apiGetProjectFileData(uuid, file);
+      dispatch(ActionPatchProjectSourceData(fileData));
+    });
+  }, [uuid, pageData]);
+
+  // useProjectFileWatcher(Array.from(sourceFilepathSet), async file => {
+  //   const fileData = await apiGetProjectFileData(uuid, file);
+  //   dispatch(ActionPatchProjectSourceData(fileData));
+  // });
 }
 
 export function useProjectFileDataMap(): Map<string, TypeProjectFileData> {

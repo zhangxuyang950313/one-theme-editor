@@ -8,7 +8,7 @@ import { extensions, entryFile, outputDir, alias, rootDir } from "./constant";
 const config: webpack.ConfigurationFactory = (env, args) => {
   const isDev = args.mode !== "production";
   return {
-    target: "node",
+    target: "electron-preload",
     node: {
       __filename: false,
       __dirname: false
@@ -21,7 +21,6 @@ const config: webpack.ConfigurationFactory = (env, args) => {
     stats: "errors-warnings", // 构建时控制台信息
     entry: { index: entryFile.server },
     output: {
-      // 输出目录: release.main
       path: outputDir.server,
       filename: "[name].js"
     },

@@ -11,6 +11,7 @@
   "private": true,
   "main": "release.main/index.js",
   "scripts": {
+    "clean": "rm -rf release.*",
     "build:webpack": "tsc --project webpack/tsconfig.json",
     "build:builder": "tsc --project scripts/tsconfig.json",
     "webpack:main:dev": "webpack --mode=development --config release.webpack/config.main.js",
@@ -36,9 +37,10 @@
     "build:linux": "npm run build:render:pro && npm run build:main:pro && npm run build:electron:linux",
     "build:mac": "npm run build:render:pro && npm run build:main:pro && npm run build:electron:mac",
     "build": "npm run build:render:pro && npm run build:main:pro && npm run build:electron",
-    "start:server": "npm run build:server:dev && nodemon release.server/index.js",
-    "start:electron": "electron ./release.main/index.js",
-    "start": "npm run build:webpack && concurrently \"npm run build:server:dev\" \"npm run build:render:dev\" \"npm run build:main:dev\" \"npm run start:server\" \"wait-on http://localhost:3000 && npm run start:electron\"",
+    "start:server": "nodemon release.server/index.js",
+    "start:electron": "electron release.main/index.js",
+    "serve": "npm run build:webpack && concurrently 'npm run webpack:server:dev' 'wait-on release.server/index.js && npm run start:server'",
+    "start": "npm run build:webpack && concurrently 'npm run webpack:render:dev' 'npm run webpack:main:dev' 'wait-on release.server/index.js && npm run start:server' 'wait-on http://localhost:3000 && npm run start:electron'",
     "render:analyzer": "npm run build:webpack && npm run webpack:render:pro:analyze",
     "lint:eslint": "eslint --config .eslintrc.js --fix --ext .js,.jsx,.ts,.tsx,.less",
     "lint:style": "stylelint --config .stylelintrc.js **/*"

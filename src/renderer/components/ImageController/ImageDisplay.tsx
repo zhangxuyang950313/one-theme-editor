@@ -48,6 +48,7 @@ const StyleShowImage = styled(StyleImageBackground)`
     width: 100%;
     height: 100%;
     object-fit: contain;
+    /* border: 1px dashed red; */
     /* background: center/contain no-repeat; */
     &[can-click="true"] {
       cursor: pointer;
