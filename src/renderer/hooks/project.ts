@@ -39,7 +39,9 @@ import { sleep } from "src/utils/index";
 import { notification } from "antd";
 import XMLNodeElement from "src/server/compiler/XMLNodeElement";
 // import { useProjectFileWatcher } from "./fileWatcher";
+import { FILE_STATUS } from "src/enum";
 import { useImagePrefix } from "./image";
+import { useFSWatcherInstance } from "./fileWatcher";
 
 // 获取项目列表
 export function useProjectList(): [
@@ -168,14 +170,31 @@ export function useResolveSourcePath(relativePath: string): string {
  */
 export function usePatchPageSourceData(): void {
   const uuid = useProjectUUID();
+  const projectRoot = useProjectRoot();
   const pageData = useSourcePageData();
   const dispatch = useEditorDispatch();
+  const watcher = useFSWatcherInstance({ cwd: projectRoot });
   useEffect(() => {
     if (!pageData || !uuid) return;
-    new Set(pageData.sourceDefineList.map(o => o.src)).forEach(async file => {
-      const fileData = await apiGetProjectFileData(uuid, file);
-      dispatch(ActionPatchProjectSourceData(fileData));
-    });
+    const sourceSrcSet = new Set(pageData.sourceDefineList.map(o => o.src));
+    console.log({ sourceSrcSet });
+    const listener = async (file: string, event: FILE_STATUS) => {
+      if (!sourceSrcSet.has(file)) return;
+      console.log(`监听文件变动（${event}） '${file}' `);
+      switch (event) {
+        case FILE_STATUS.ADD:
+        case FILE_STATUS.UNLINK:
+        case FILE_STATUS.CHANGE: {
+          const fileData = await apiGetProjectFileData(uuid, file);
+          dispatch(ActionPatchProjectSourceData(fileData));
+        }
+      }
+    };
+    watcher
+      .on(FILE_STATUS.ADD, file => listener(file, FILE_STATUS.ADD))
+      .on(FILE_STATUS.CHANGE, file => listener(file, FILE_STATUS.CHANGE))
+      .on(FILE_STATUS.UNLINK, file => listener(file, FILE_STATUS.UNLINK))
+      .add(projectRoot);
   }, [uuid, pageData]);
 
   // useProjectFileWatcher(Array.from(sourceFilepathSet), async file => {

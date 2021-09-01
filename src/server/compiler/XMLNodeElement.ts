@@ -133,10 +133,11 @@ class XMLNodeChildren extends XMLNodeBase {
    * 清空子节点
    * @returns
    */
-  public clearChildren(): this {
+  public removeChildren(): this {
     this.getChildrenElements().length = 0;
     return this;
   }
+
   // 获取子节点元素列表
   public getChildrenElements(): Element[] {
     return this.getElement().elements || [];

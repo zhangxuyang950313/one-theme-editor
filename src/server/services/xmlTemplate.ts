@@ -26,10 +26,20 @@ export async function releaseXmlTemplate(
   );
   const templateXml = path.join(sourceRoot, src);
   const releaseXml = path.join(project.projectRoot, src);
+  const releaseFileIsExists = fse.pathExistsSync(releaseXml);
+
   // 节点操作
+  let releaseElement = XmlTemplate.createEmptyNode().getElement();
+  if (releaseFileIsExists) {
+    releaseElement = new XmlFileCompiler(releaseXml).getElement();
+  } else {
+    const templateElement = new XmlFileCompiler(templateXml).getElement();
+    const templateNode = new XmlTemplate(templateElement);
+    templateNode.getRootNode().removeChildren();
+    releaseElement = templateNode.getElement();
+  }
   const templateElement = new XmlFileCompiler(templateXml).getElement();
   const templateNode = new XmlTemplate(templateElement);
-  const releaseElement = new XmlFileCompiler(releaseXml).getElement();
   const releaseNode = new XmlTemplate(releaseElement);
   const templateRoot = templateNode.getRootNode();
   const releaseRoot = releaseNode.getRootNode();
@@ -37,7 +47,7 @@ export async function releaseXmlTemplate(
   const targetNode = releaseRoot.getFirstChildNodeByAttrValue("name", name);
   // 空文件用模板替换
   if (releaseNode.isEmpty()) {
-    templateRoot.clearChildren();
+    templateRoot.removeChildren();
     releaseNode.setNode(templateNode);
   }
   // 创建 text value 并替换子节点

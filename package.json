@@ -40,7 +40,7 @@
     "start:server": "nodemon release.server/index.js",
     "start:electron": "electron release.main/index.js",
     "serve": "npm run build:webpack && concurrently 'npm run webpack:server:dev' 'wait-on release.server/index.js && npm run start:server'",
-    "start": "npm run build:webpack && concurrently 'npm run webpack:render:dev' 'npm run webpack:main:dev' 'wait-on release.server/index.js && npm run start:server' 'wait-on http://localhost:3000 && npm run start:electron'",
+    "start": "npm run build:webpack && concurrently 'npm run webpack:render:dev' 'npm run webpack:main:dev' 'npm run webpack:server:dev' 'wait-on release.server/index.js && npm run start:server' 'wait-on http://localhost:3000 && npm run start:electron'",
     "render:analyzer": "npm run build:webpack && npm run webpack:render:pro:analyze",
     "lint:eslint": "eslint --config .eslintrc.js --fix --ext .js,.jsx,.ts,.tsx,.less",
     "lint:style": "stylelint --config .stylelintrc.js **/*"

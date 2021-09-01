@@ -46,7 +46,7 @@ export function getProjectFileData(
   const fileExists = fse.pathExistsSync(absPath);
   if (filenameIsImage(src)) {
     // TODO host
-    const url = `http://localhost:30000/image?filepath=${absPath}`;
+    const url = `http://localhost:30000/image?filepath=${absPath}&time=${Date.now()}`;
     const data = new ProjectFileImageData();
     data.set("src", src);
     data.set("url", url);

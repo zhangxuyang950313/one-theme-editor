@@ -20,7 +20,10 @@ export function useFSWatcherInstance(options?: WatchOptions): FSWatcher {
   useEffect(() => {
     watcher.setMaxListeners(9999);
     return () => {
-      watcher.close();
+      const watcherList = watcher.getWatched();
+      watcher.close().then(() => {
+        console.log("关闭文件监听", watcherList);
+      });
     };
   }, []);
   return watcher;
