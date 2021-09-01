@@ -1,15 +1,7 @@
 import { Element } from "xml-js";
 import { PROJECT_FILE_TYPE } from "../enum";
+import { TypeBrandInfo } from "./source";
 import { TypeDatabase } from "./index";
-
-export type TypeBrandInfo = {
-  md5: string;
-  name: string;
-};
-
-export type TypeBrandConf = TypeBrandInfo & {
-  sourceConfigs: string[];
-};
 
 // 版本信息
 export type TypeProjectUiVersion = {

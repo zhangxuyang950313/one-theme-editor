@@ -1,11 +1,11 @@
 import logSymbols from "log-symbols";
 import { v4 as UUID } from "uuid";
 import {
-  TypeBrandInfo,
   TypeCreateProjectPayload,
   TypeProjectData,
   TypeProjectDataDoc
 } from "src/types/project";
+import { TypeBrandInfo } from "src/types/source";
 import { createNedb } from "server/utils/databaseUtil";
 import pathUtil from "server/utils/pathUtil";
 import SourceConfig from "server/compiler/SourceConfig";

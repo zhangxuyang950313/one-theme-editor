@@ -35,7 +35,7 @@ class XMLNodeBase {
   }
 
   // 覆盖当前节点
-  setNode(node: XMLNodeElement): this {
+  public setNode(node: XMLNodeElement): this {
     this.node = node.getElement();
     return this;
   }

@@ -1,6 +1,13 @@
-import { TypeBrandConf, TypeBrandInfo } from "src/types/project";
+import { TypeBrandConf, TypeBrandInfo, TypePackConf } from "src/types/source";
 import { AbstractDataModel } from "./AbstractDataModel";
 
+export class PackageConfig extends AbstractDataModel<TypePackConf> {
+  protected data: TypePackConf = {
+    extname: "",
+    format: "zip",
+    items: []
+  };
+}
 export class BrandInfo extends AbstractDataModel<TypeBrandInfo> {
   protected data: TypeBrandInfo = {
     name: "",
@@ -15,7 +22,8 @@ export class BrandInfo extends AbstractDataModel<TypeBrandInfo> {
 export class BrandConf extends AbstractDataModel<TypeBrandConf> {
   protected data: TypeBrandConf = {
     ...new BrandInfo().create(),
-    sourceConfigs: []
+    sourceConfigs: [],
+    packageConfig: new PackageConfig().create()
   };
 
   static default(): TypeBrandConf {

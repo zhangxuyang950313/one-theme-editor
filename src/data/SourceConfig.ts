@@ -13,7 +13,7 @@ import {
   TypePageDefineImageData,
   TypePageDefineValueData,
   TypeSourceDefineImage,
-  TypePackageConf
+  TypePackConf
 } from "../types/source";
 import { TypeProjectUiVersion } from "../types/project";
 import {
@@ -177,8 +177,8 @@ export class UiVersion extends AbstractDataModel<TypeProjectUiVersion> {
   }
 }
 
-export class PackageConfig extends AbstractDataModel<TypePackageConf> {
-  protected data: TypePackageConf = {
+export class PackageConfig extends AbstractDataModel<TypePackConf> {
+  protected data: TypePackConf = {
     extname: "",
     format: "zip",
     items: []
@@ -204,8 +204,7 @@ export class SourceConfigData extends AbstractDataModel<TypeSourceConfigData> {
   protected data: TypeSourceConfigData = {
     ...SourceConfigInfo.default(),
     sourceTypeList: [],
-    moduleList: [],
-    packageConfig: new PackageConfig().create()
+    moduleList: []
   };
   static default(): TypeSourceConfigData {
     return new SourceConfigData().default();

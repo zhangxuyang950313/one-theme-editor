@@ -4,9 +4,9 @@ import {
   TypeSourceModuleConf,
   TypeSourcePageData,
   TypeSourceConfigData,
-  TypeSourceConfigInfo
+  TypeSourceConfigInfo,
+  TypeBrandConf
 } from "src/types/source";
-import { TypeBrandConf } from "src/types/project";
 import { TypeResponseFrame, UnionTupleToObjectKey } from "src/types/request";
 import { checkParamsKey, result } from "server/utils/requestUtil";
 import PageConfig from "server/compiler/PageConfig";
@@ -30,9 +30,9 @@ export default function sourceController(service: Express): void {
   service.get<
     UnionTupleToObjectKey<typeof API.GET_SOURCE_CONF_LIST.params>,
     TypeResponseFrame<TypeSourceConfigInfo[], string>
-  >(`${API.GET_SOURCE_CONF_LIST.url}/:brandType`, (request, response) => {
-    const { brandType } = request.params;
-    const list = SourceConfig.getSourceConfigInfoList(brandType);
+  >(`${API.GET_SOURCE_CONF_LIST.url}/:brandMd5`, (request, response) => {
+    const { brandMd5 } = request.params;
+    const list = SourceConfig.getSourceConfigInfoList(brandMd5);
     response.send(result.success(list));
   });
 

@@ -3,7 +3,7 @@ import fse from "fs-extra";
 import { filenameIsImage, filenameIsXml, getImageData } from "src/utils/index";
 import { findProjectByUUID } from "server/db-handler/project";
 import { TypeProjectFileData } from "src/types/project";
-import { TypePackageConf } from "src/types/source";
+import { TypePackConf } from "src/types/source";
 import {
   ProjectFileImageData,
   ProjectFileXmlData
@@ -73,7 +73,7 @@ export function getProjectFileData(
 export async function packProject(data: {
   projectRoot: string;
   outputFile: string;
-  packConfig: TypePackageConf;
+  packConfig: TypePackConf;
 }): Promise<string[]> {
   const { projectRoot, outputFile, packConfig } = data;
   const temporaryPath = path.join(

@@ -67,7 +67,7 @@ const API = {
   // 获取配置信息列表
   GET_SOURCE_CONF_LIST: createApiConf({
     url: "/source/config/list",
-    params: ["brandType"]
+    params: ["brandMd5"]
   }),
   // 获取模板配置数据
   GET_SOURCE_CONF_DATA: createApiConf({

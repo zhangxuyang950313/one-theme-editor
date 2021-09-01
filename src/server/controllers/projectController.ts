@@ -1,4 +1,5 @@
 import path from "path";
+import pathUtil from "server/utils/pathUtil";
 import { Express } from "express";
 import API from "src/common/apiConf";
 import {
@@ -22,7 +23,7 @@ import {
 import { checkParamsKey, result } from "server/utils/requestUtil";
 import XmlTemplate from "server/compiler/XmlTemplate";
 import XmlFileCompiler from "server/compiler/XmlFileCompiler";
-import SourceConfig from "server/compiler/SourceConfig";
+import BrandConfig from "server/compiler/BrandConfig";
 
 export default function projectController(service: Express): void {
   // 添加工程
@@ -191,8 +192,14 @@ export default function projectController(service: Express): void {
   >(API.PACK_PROJECT.url, async (request, response) => {
     checkParamsKey(request.query, API.PACK_PROJECT.query);
     const { outputFile, uuid } = request.query;
-    const { sourceConfigPath, projectRoot } = await findProjectByUUID(uuid);
-    const packConfig = new SourceConfig(sourceConfigPath).getPackageConfig();
+    const { brandInfo, projectRoot } = await findProjectByUUID(uuid);
+    const brandConfig = BrandConfig.from(pathUtil.SOURCE_CONFIG_FILE);
+    const packageConfig = brandConfig.getPackageConfigByBrandMd5(brandInfo.md5);
+    const packConfig = packageConfig?.packageConfig;
+    if (!packConfig) {
+      response.send(result.fail("未配置打包规则"));
+      return;
+    }
     const files = await packProject({ projectRoot, packConfig, outputFile });
     response.send(result.success(files));
   });

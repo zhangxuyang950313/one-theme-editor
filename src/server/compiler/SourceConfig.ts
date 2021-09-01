@@ -1,7 +1,7 @@
 import path from "path";
 import fse from "fs-extra";
 import { v4 as UUID } from "uuid";
-import { ELEMENT_TAG, PACK_TYPE } from "src/enum";
+import { ELEMENT_TAG } from "src/enum";
 import {
   TypeSourceConfigData,
   TypeSourceModuleConf,
@@ -9,11 +9,9 @@ import {
   TypeSourcePageConf,
   TypeSourceConfigInfo,
   TypeSourceTypeConf,
-  TypePackageConf
+  TypeBrandConf
 } from "src/types/source";
-import { TypeBrandConf, TypeProjectUiVersion } from "src/types/project";
 import {
-  PackageConfig,
   SourceConfigInfo,
   SourceModuleConf,
   SourcePageConf,
@@ -21,6 +19,7 @@ import {
   SourceTypeConf,
   UiVersion
 } from "src/data/SourceConfig";
+import { TypeProjectUiVersion } from "src/types/project";
 import pathUtil from "server/utils/pathUtil";
 import ERR_CODE from "src/common/errorCode";
 import BrandConfig from "server/compiler/BrandConfig";
@@ -45,11 +44,7 @@ export default class SourceConfig extends XmlFileCompiler {
     if (!fse.existsSync(pathUtil.SOURCE_CONFIG_FILE)) {
       throw new Error(ERR_CODE[4003]);
     }
-    const brandConf = new BrandConfig(
-      new XmlFileCompiler(pathUtil.SOURCE_CONFIG_FILE).getElement()
-    ).getBrandConfList();
-    return brandConf;
-    // return fse.readJsonSync(pathUtil.SOURCE_CONFIG_FILE);
+    return BrandConfig.from(pathUtil.SOURCE_CONFIG_FILE).getBrandConfList();
   }
 
   /**
@@ -179,23 +174,6 @@ export default class SourceConfig extends XmlFileCompiler {
       });
   }
 
-  // 解析打包配置
-  getPackageConfig(): TypePackageConf {
-    const packageNode = super.getRootFirstChildNodeOf(ELEMENT_TAG.Package);
-    const packageConf = new PackageConfig();
-    packageConf.set("extname", packageNode.getAttributeOf("extname"));
-    packageConf.set("format", packageNode.getAttributeOf("format"));
-    const items: TypePackageConf["items"] = packageNode
-      .getChildrenNodesByTagname(ELEMENT_TAG.Item)
-      .map(item => ({
-        type: item.getAttributeOf<PACK_TYPE>("type"),
-        path: item.getAttributeOf("path"),
-        name: item.getAttributeOf("name") // TODO 若没定义 name 正则取 path root
-      }));
-    packageConf.set("items", items);
-    return packageConf.create();
-  }
-
   /**
    * 解析配置配置的简略信息
    * 只解析 description.xml 不需要进一步解析页面
@@ -219,8 +197,7 @@ export default class SourceConfig extends XmlFileCompiler {
     return {
       ...this.getInfo(),
       sourceTypeList: this.getSourceTypeList(),
-      moduleList: this.getModuleList(),
-      packageConfig: this.getPackageConfig()
+      moduleList: this.getModuleList()
     };
   }
 }

@@ -2,7 +2,7 @@ import path from "path";
 import glob from "glob";
 import fse from "fs-extra";
 import JsZip from "jszip";
-import { TypePackageConf } from "src/types/source";
+import { TypePackConf } from "src/types/source";
 import { PACK_TYPE } from "src/enum";
 /**
  * 筛选一个字符串第一个 "/" 之前的前缀
@@ -52,7 +52,7 @@ function zipFolderAndFile(
 // 按照压缩配置项对目录压缩打包
 export async function zipProjectByRules(
   root: string,
-  items: TypePackageConf["items"]
+  items: TypePackConf["items"]
 ): Promise<Buffer> {
   const zipOpt: JsZip.JSZipGeneratorOptions<"nodebuffer"> = {
     type: "nodebuffer",

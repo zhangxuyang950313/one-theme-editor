@@ -1,7 +1,6 @@
 import { updateState } from "@/store/utils";
-import { TypeBrandConf } from "src/types/project";
-import { TypeSourceConfigInfo } from "src/types/source";
 import { BrandConf } from "src/data/BrandConfig";
+import { TypeBrandConf, TypeSourceConfigInfo } from "src/types/source";
 import { ACTION_TYPES, TypeStarterActions } from "./action";
 
 // main states

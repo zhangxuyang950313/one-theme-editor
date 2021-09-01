@@ -47,9 +47,9 @@ import {
   TypeSourcePageData,
   TypeSourceDefine,
   TypeSourceDefineImage,
-  TypeSourceDefineValue
+  TypeSourceDefineValue,
+  TypeBrandConf
 } from "src/types/source";
-import { TypeBrandConf } from "src/types/project";
 import {
   useStarterDispatch,
   useEditorDispatch,

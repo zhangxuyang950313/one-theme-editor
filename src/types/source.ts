@@ -10,6 +10,16 @@ import XMLNodeBase from "../server/compiler/XMLNodeElement";
 import { TypeImageData, TypeProjectUiVersion } from "./project";
 import { TypeImagePathLike } from "./index";
 
+export type TypeBrandInfo = {
+  md5: string;
+  name: string;
+};
+
+export type TypeBrandConf = TypeBrandInfo & {
+  sourceConfigs: string[];
+  packageConfig: TypePackConf;
+};
+
 // 资源配置信息
 export type TypeSourceConfigInfo = {
   key: string;
@@ -25,11 +35,10 @@ export type TypeSourceConfigInfo = {
 export type TypeSourceConfigData = TypeSourceConfigInfo & {
   sourceTypeList: TypeSourceTypeConf[];
   moduleList: TypeSourceModuleConf[];
-  packageConfig: TypePackageConf;
 };
 
 // 打包配置
-export type TypePackageConf = {
+export type TypePackConf = {
   extname: string;
   format: archiver.Format;
   items: Array<{ type: PACK_TYPE; path: string }>;

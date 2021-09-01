@@ -1,9 +1,9 @@
 import API from "src/common/apiConf";
-import { TypeBrandConf } from "src/types/project";
 import {
   TypeSourceConfigData,
   TypeSourceConfigInfo,
-  TypeSourcePageData
+  TypeSourcePageData,
+  TypeBrandConf
 } from "src/types/source";
 import { TypeRequestResult, UnionTupleToObjectKey } from "src/types/request";
 import { createHttp } from "./axios";
@@ -17,11 +17,11 @@ export async function apiGetBrandConfList(): Promise<TypeBrandConf[]> {
 
 // 获取厂商配置描述列表
 export async function apiGetSourceInfoList(
-  brandType: TypeBrandConf["type"]
+  brandMd5: string
 ): Promise<TypeSourceConfigInfo[]> {
   return createHttp()
     .get<TypeRequestResult<TypeSourceConfigInfo[]>>(
-      `${API.GET_SOURCE_CONF_LIST.url}/${brandType}`
+      `${API.GET_SOURCE_CONF_LIST.url}/${brandMd5}`
     )
     .then(data => data.data.data);
 }
