@@ -186,16 +186,19 @@ export async function compactNinePatch(
   if (!AAPT_TOOL) {
     throw new Error(`未知系统类型：${os.type()}`);
   }
-  const files = fse.readdirSync(fromDir);
-  const task = files.map(item => {
-    console.log("开启一个进程处理: ", item);
+  // TODO 目前是粗暴按照文件目录分配进程数，可优化按照实际资源平均分配
+  const dirs = fse.readdirSync(fromDir);
+  const task = dirs.map(targetDir => {
+    console.log("开启一个进程处理: ", targetDir);
     return new Promise<void>((resolve, reject) => {
+      const from = path.join(fromDir, targetDir);
+      const to = path.join(toDir, targetDir);
       childProcess.execFile(
         AAPT_TOOL,
-        ["c", "-S", path.join(fromDir, item), "-C", path.join(toDir, item)],
+        ["c", "-S", from, "-C", to],
         (err, stdout, stderr) => {
           if (err) reject(err);
-          console.log("进程处理完毕", item);
+          console.log("进程处理完毕", targetDir);
           resolve();
         }
       );

@@ -33,9 +33,19 @@ function getFilesByPattern(pattern: string, root: string) {
 function zipFolderAndFile(
   zipInstance: JsZip,
   files: string[],
-  cwd: string
+  cwd: string,
+  excludes: TypePackConf["excludes"] = []
 ): void {
   files.forEach(item => {
+    // 命中正则排除
+    const filename = path.dirname(item);
+    const checkIsExcludes = excludes.some(regexpStr => {
+      return new RegExp(regexpStr).test(filename);
+    });
+    if (checkIsExcludes) {
+      console.log(`打包排除 '${item}'`);
+      return;
+    }
     const file = path.join(cwd, item);
     if (fse.statSync(file).isDirectory()) {
       // console.log(`folder: ${item}`);
@@ -52,7 +62,8 @@ function zipFolderAndFile(
 // 按照压缩配置项对目录压缩打包
 export async function zipProjectByRules(
   root: string,
-  items: TypePackConf["items"]
+  items: TypePackConf["items"],
+  excludes: TypePackConf["excludes"] = []
 ): Promise<Buffer> {
   const zipOpt: JsZip.JSZipGeneratorOptions<"nodebuffer"> = {
     type: "nodebuffer",
@@ -66,7 +77,7 @@ export async function zipProjectByRules(
       // 文件和目录
       case PACK_TYPE.FILE:
       case PACK_TYPE.DIR: {
-        zipFolderAndFile(zip, files, root);
+        zipFolderAndFile(zip, files, root, excludes);
         break;
       }
       // 内联打包目录
@@ -87,7 +98,7 @@ export async function zipProjectByRules(
           const innerZip = new JsZip();
           const [dir, files] = item;
           if (!files) continue;
-          zipFolderAndFile(innerZip, Array.from(files), root);
+          zipFolderAndFile(innerZip, Array.from(files), root, excludes);
           zip.file(dir, await innerZip.generateAsync(zipOpt));
         }
         break;

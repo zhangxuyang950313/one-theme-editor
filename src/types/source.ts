@@ -41,7 +41,9 @@ export type TypeSourceConfigData = TypeSourceConfigInfo & {
 export type TypePackConf = {
   extname: string;
   format: archiver.Format;
+  execute9patch: boolean;
   items: Array<{ type: PACK_TYPE; path: string }>;
+  excludes: Array<string>;
 };
 
 // 素材类型定义数据

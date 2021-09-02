@@ -1,10 +1,10 @@
-// import path from "path";
 import fse from "fs-extra";
 import FileType from "file-type";
 import { Express } from "express";
 import API from "src/common/apiConf";
 import ERR_CODE from "src/common/errorCode";
 import { UnionTupleToObjectKey } from "src/types/request";
+import { checkParamsKey } from "server/utils/requestUtil";
 
 export default function imageController(service: Express): void {
   /**
@@ -17,6 +17,7 @@ export default function imageController(service: Express): void {
     never, // reqBody
     UnionTupleToObjectKey<typeof API.IMAGE.query> // reqQuery
   >(API.IMAGE.url, async (req, res) => {
+    checkParamsKey(req.query, API.IMAGE.query);
     async function getImgBuffAndFileType(file: string) {
       if (!fse.existsSync(file)) {
         throw new Error(ERR_CODE[4003]);

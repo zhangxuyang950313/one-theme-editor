@@ -3,7 +3,8 @@
     <Config src="xiaomi/miui12/description.xml"/>
     
     <!-- 打包配置 -->
-    <Package extname="zip">
+    <Package extname="zip" execute9patch="true">
+        <Exclude regex="^\..+"/>
         <Item type="dir"  path="boots/**"/>
         <Item type="pack" path="clock_2x4/**"/>
         <Item type="pack" path="com.*/**"/>

@@ -68,6 +68,10 @@ export function getProjectFileData(
 
 /**
  * 打包工程
+ * 打包步骤：
+ * 1. 将工程中 .9 图片直接处理到缓存目录
+ * 2. 将模板工程目录拷贝到临时目录，overwrite 为 false，不覆盖处理好的 .9 图片文件
+ * 3. 根据打包配制酒进行打包
  * @param data
  */
 export async function packProject(data: {
@@ -82,24 +86,30 @@ export async function packProject(data: {
   );
   console.log("工程目录: ", projectRoot);
   console.log("临时打包目录: ", temporaryPath);
-  // 确保目录存在
-  fse.ensureDirSync(temporaryPath);
   if (fse.existsSync(temporaryPath)) {
     fse.removeSync(temporaryPath);
   }
+  // // 确保目录存在
+  // fse.ensureDirSync(temporaryPath);
   const log: string[] = [];
   console.time("打包耗时");
   // 处理 .9 到临时目录
-  console.log("开始处理 .9");
-  console.time("处理.9耗时");
-  await compactNinePatch(projectRoot, temporaryPath);
-  console.log(".9 处理完毕");
-  console.timeEnd("处理.9耗时");
+  if (packConfig.execute9patch) {
+    console.log("开始处理 .9");
+    console.time("处理.9耗时");
+    await compactNinePatch(projectRoot, temporaryPath);
+    console.log(".9 处理完毕");
+    console.timeEnd("处理.9耗时");
+  }
   // 拷贝目录，.9 处理过的不覆盖
   fse.copySync(projectRoot, temporaryPath, { overwrite: false });
   // zip 压缩
   console.time("压缩耗时");
-  const content = await zipProjectByRules(temporaryPath, packConfig.items);
+  const content = await zipProjectByRules(
+    temporaryPath,
+    packConfig.items,
+    packConfig.excludes
+  );
   console.timeEnd("压缩耗时");
   // 确保输出目录存在
   fse.ensureDirSync(path.dirname(outputFile));

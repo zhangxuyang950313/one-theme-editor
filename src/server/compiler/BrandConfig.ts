@@ -1,8 +1,7 @@
 import md5 from "md5";
 import { TypeBrandConf, TypePackConf } from "src/types/source";
 import { ELEMENT_TAG, PACK_TYPE } from "src/enum/index";
-import { PackageConfig } from "src/data/SourceConfig";
-import { BrandConf } from "src/data/BrandConfig";
+import { BrandConf, PackageConfig } from "src/data/BrandConfig";
 import XmlTemplate from "./XmlTemplate";
 import XmlFileCompiler from "./XmlFileCompiler";
 import XMLNodeElement from "./XMLNodeElement";
@@ -28,11 +27,24 @@ export default class BrandConfig extends XmlTemplate {
       .map(item => ({
         type: item.getAttributeOf<PACK_TYPE>("type"),
         path: item.getAttributeOf("path"),
-        name: item.getAttributeOf("name") // TODO 若没定义 name 正则取 path root
+        // TODO 若没定义 name 正则取 path root
+        // TODO 忘了这是干嘛的，留着以后想
+        name: item.getAttributeOf("name")
       }));
+    const excludes: TypePackConf["excludes"] = packageNode
+      .getChildrenNodesByTagname(ELEMENT_TAG.Exclude)
+      .flatMap(item => {
+        const regex = item.getAttributeOf("regex");
+        return regex ? [regex] : [];
+      });
     packageConf.set("items", items);
+    packageConf.set("excludes", excludes);
     packageConf.set("extname", packageNode.getAttributeOf("extname", "zip"));
     packageConf.set("format", packageNode.getAttributeOf("format", "zip"));
+    packageConf.set(
+      "execute9patch",
+      packageNode.getAttributeOf("execute9patch", "true") === "true"
+    );
     return packageConf.create();
   }
 

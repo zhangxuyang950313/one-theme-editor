@@ -5,7 +5,9 @@ export class PackageConfig extends AbstractDataModel<TypePackConf> {
   protected data: TypePackConf = {
     extname: "",
     format: "zip",
-    items: []
+    execute9patch: true,
+    items: [],
+    excludes: []
   };
 }
 export class BrandInfo extends AbstractDataModel<TypeBrandInfo> {

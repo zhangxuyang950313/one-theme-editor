@@ -10,6 +10,7 @@ export enum ELEMENT_TAG {
   Module = "Module",
   Package = "Package",
   Item = "Item",
+  Exclude = "Exclude",
   Group = "Group",
   Source = "Source",
   Previews = "Previews",

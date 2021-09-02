@@ -1,4 +1,4 @@
-### Electron React TypeScript 模板
+### 一个全平台主题编辑器
 
 #### 介绍
 技术栈：Electron React Reselect TypeScript Nedb Socket.io
