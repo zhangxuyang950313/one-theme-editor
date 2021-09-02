@@ -13,11 +13,11 @@ import { TypeImagePathLike } from "./index";
 export type TypeBrandInfo = {
   md5: string;
   name: string;
+  packageConfig: TypePackConf;
 };
 
 export type TypeBrandConf = TypeBrandInfo & {
   sourceConfigs: string[];
-  packageConfig: TypePackConf;
 };
 
 // 资源配置信息

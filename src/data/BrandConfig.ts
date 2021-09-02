@@ -13,7 +13,8 @@ export class PackageConfig extends AbstractDataModel<TypePackConf> {
 export class BrandInfo extends AbstractDataModel<TypeBrandInfo> {
   protected data: TypeBrandInfo = {
     name: "",
-    md5: ""
+    md5: "",
+    packageConfig: new PackageConfig().create()
   };
 
   static default(): TypeBrandInfo {

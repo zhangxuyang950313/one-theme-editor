@@ -3,54 +3,52 @@ import fse from "fs-extra";
 import { v4 as UUID } from "uuid";
 import { remote } from "electron";
 
-import React, { useEffect, useRef, useState } from "react";
-import styled from "styled-components";
 import { isDev } from "@/core/constant";
 import { apiCreateProject } from "@/request";
-import { useBrandConf, useSourceDescriptionList } from "@/hooks/source";
+import { useBrandConf } from "@/hooks/source";
 import { TypeProjectInfo } from "src/types/project";
 import { TypeSourceConfigInfo } from "src/types/source";
 
+import React, { useRef, useState } from "react";
+import styled from "styled-components";
 import { Modal, Button, Form, Input, message } from "antd";
 import { FileAddOutlined } from "@ant-design/icons";
+import { BrandInfo } from "src/data/BrandConfig";
 import Steps from "@/components/Steps";
 import ProjectInfoForm from "@/components/ProjectInfoForm";
 import SourceConfigManager from "./SourceConfigManager";
 
-// 创建主题按钮
-type TypeProps = {
-  onProjectCreated: (projectInfo: TypeProjectInfo) => Promise<void>;
+// 表单默认值
+const initialValues = {
+  name: isDev ? `测试${UUID()}` : "",
+  designer: isDev ? "测试" : "",
+  author: isDev ? "测试" : "",
+  version: "1.0.0",
+  uiVersion: "10"
 };
-const CreateProject: React.FC<TypeProps> = props => {
+
+// 创建主题按钮
+const CreateProject: React.FC<{
+  onProjectCreated: (projectInfo: TypeProjectInfo) => Promise<void>;
+}> = props => {
   // 机型配置
   const [brandConf] = useBrandConf();
   // 弹框控制
   const [modalVisible, setModalVisible] = useState(false);
-  // 模板列表
-  const [sourceDescList, isLoading] = useSourceDescriptionList();
-  // 选择的模板
-  const [sourceConfig, setSourceConfig] = useState<TypeSourceConfigInfo>();
   // 当前步骤
   const [curStep, setCurStep] = useState(0);
-  // 填写工程描述
-  const [projectInfo, setProjectInfo] = useState<TypeProjectInfo>();
-  // 填写本地目录
-  const projectRootRef = useRef<string>();
   // 创建状态
   const [isCreating, updateCreating] = useState(false);
   // 表单实例
   const [form] = Form.useForm<TypeProjectInfo>();
+  // 填写工程描述
+  const projectInfoRef = useRef<TypeProjectInfo>();
+  // 选择的模板
+  const sourceConfigRef = useRef<TypeSourceConfigInfo>();
+  // 填写本地目录
+  const projectRootRef = useRef<string>(remote.app.getPath("desktop"));
 
   if (!brandConf) return null;
-
-  // 表单默认值
-  const initialValues = {
-    name: isDev ? `测试${UUID()}` : "",
-    designer: isDev ? "测试" : "",
-    author: isDev ? "测试" : "",
-    version: "1.0.0",
-    uiVersion: "10"
-  };
 
   // 步骤控制
   const nextStep = () => setCurStep(curStep + 1);
@@ -64,8 +62,8 @@ const CreateProject: React.FC<TypeProps> = props => {
   // 复位
   const init = () => {
     jumpStep(0);
-    setSourceConfig(undefined);
-    setProjectInfo(undefined);
+    sourceConfigRef.current = undefined;
+    projectInfoRef.current = undefined;
     form.resetFields();
   };
 
@@ -80,13 +78,11 @@ const CreateProject: React.FC<TypeProps> = props => {
     {
       name: "主题信息",
       Component() {
-        useEffect(() => {
-          onChange(path.join(remote.app.getPath("desktop"), "test"));
-        }, []);
-        const [projectRoot, setLocalPath] = useState<string>();
+        const { current } = projectRootRef;
+        const [projectRoot, setProjectRoot] = useState<string>(current);
         const onChange = (val: string) => {
           projectRootRef.current = val;
-          setLocalPath(val);
+          setProjectRoot(val);
         };
         const selectDir = () => {
           remote.dialog
@@ -148,7 +144,7 @@ const CreateProject: React.FC<TypeProps> = props => {
         async handleNext() {
           return form
             .validateFields()
-            .then(setProjectInfo)
+            .then(data => (projectInfoRef.current = data))
             .then(nextStep)
             .catch(() => {
               message.warn("请填写正确表单");
@@ -161,10 +157,9 @@ const CreateProject: React.FC<TypeProps> = props => {
       Component() {
         return (
           <SourceConfigManager
-            isLoading={isLoading}
-            sourceConfigList={sourceDescList}
-            selectedConfig={sourceConfig}
-            onSelected={setSourceConfig}
+            onSelected={data => {
+              sourceConfigRef.current = data;
+            }}
           />
         );
       },
@@ -173,9 +168,9 @@ const CreateProject: React.FC<TypeProps> = props => {
         handlePrev: prevStep
       },
       next: {
-        disabled: !sourceConfig,
+        disabled: !sourceConfigRef.current,
         async handleNext() {
-          if (!sourceConfig) {
+          if (!sourceConfigRef.current) {
             message.warn("请选择配置模板");
           } else {
             nextStep();
@@ -220,28 +215,33 @@ const CreateProject: React.FC<TypeProps> = props => {
               });
             });
           }
-          if (!sourceConfig) {
-            throw new Error("未选择版本");
+          if (!sourceConfigRef.current) {
+            throw new Error("未选择配置模板");
           }
-          if (!projectInfo) {
+          if (!projectInfoRef.current) {
             throw new Error("信息为空");
           }
           updateCreating(true);
+          const brandInfo = new BrandInfo()
+            .set("name", brandConf.name)
+            .set("md5", brandConf.md5)
+            .set("packageConfig", brandConf.packageConfig)
+            .create();
           return apiCreateProject({
             projectRoot: projectRootRef.current || "",
-            sourceConfigPath: path.join(sourceConfig.root, sourceConfig.config),
-            brandInfo: {
-              name: brandConf.name,
-              md5: brandConf.md5
-            },
-            projectInfo
+            sourceConfigPath: path.join(
+              sourceConfigRef.current.root,
+              sourceConfigRef.current.config
+            ),
+            brandInfo,
+            projectInfo: projectInfoRef.current
           })
             .then(data => {
               console.log("创建工程：", data);
-              if (!projectInfo) {
+              if (!projectInfoRef.current) {
                 throw new Error("工程信息为空");
               }
-              props.onProjectCreated(projectInfo);
+              props.onProjectCreated(projectInfoRef.current);
             })
             .finally(() => {
               closeModal();
@@ -253,13 +253,9 @@ const CreateProject: React.FC<TypeProps> = props => {
     }
   ];
 
-  // 创建主题步骤容器
-  const StepContainer: React.FC = () => {
-    return <>{steps[curStep].Component() || null}</>;
-  };
+  const step = steps[curStep];
 
   const CancelButton = () => {
-    const step = steps[curStep];
     if (!step.cancel) return null;
     return (
       <Button
@@ -272,7 +268,6 @@ const CreateProject: React.FC<TypeProps> = props => {
   };
 
   const PrevButton = () => {
-    const step = steps[curStep];
     if (!step.prev) return null;
     return (
       <Button onClick={step.prev.handlePrev} disabled={step.prev.disabled}>
@@ -282,7 +277,6 @@ const CreateProject: React.FC<TypeProps> = props => {
   };
 
   const NextButton = () => {
-    const step = steps[curStep];
     if (!step.next) return null;
     return (
       <Button
@@ -297,17 +291,16 @@ const CreateProject: React.FC<TypeProps> = props => {
   };
 
   const StartButton = () => {
-    const step = steps[curStep];
     if (!step.start) return null;
     return (
       <Button
         type="primary"
-        onClick={() =>
+        onClick={() => {
           step.start
             .handleStart()
-            .catch(err => message.error({ content: err.message }))
-        }
-        disabled={step.start?.disabled}
+            .catch(err => message.error({ content: err.message }));
+        }}
+        disabled={step.start.disabled}
         loading={isCreating}
       >
         开始
@@ -338,7 +331,7 @@ const CreateProject: React.FC<TypeProps> = props => {
         footer={modalFooter}
       >
         <StyleSteps steps={steps.map(o => o.name)} current={curStep} />
-        <StepContainer />
+        <step.Component />
       </StyleModal>
     </>
   );

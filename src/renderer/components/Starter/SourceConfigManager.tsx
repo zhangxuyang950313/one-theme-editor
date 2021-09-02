@@ -1,20 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Empty, Spin } from "antd";
 import { CheckCircleTwoTone } from "@ant-design/icons";
 import { TypeSourceConfigInfo } from "src/types/source";
+import { useSourceDescriptionList } from "@/hooks/source";
 import SourceConfigCard from "./SourceConfigCard";
 
-type TypeProps = {
-  isLoading: boolean;
-  sourceConfigList: TypeSourceConfigInfo[];
-  selectedConfig: TypeSourceConfigInfo | undefined;
-  onSelected: (config?: TypeSourceConfigInfo) => void;
-};
-
 // 配置管理
-const SourceConfigManager: React.FC<TypeProps> = props => {
-  const { sourceConfigList, selectedConfig, isLoading, onSelected } = props;
+const SourceConfigManager: React.FC<{
+  onSelected: (config?: TypeSourceConfigInfo) => void;
+}> = props => {
+  // 模板列表
+  const [sourceConfigList, isLoading] = useSourceDescriptionList();
+  const [selectedConfKey, setSelectedConfKey] = useState("");
 
   if (isLoading) {
     return (
@@ -39,8 +37,8 @@ const SourceConfigManager: React.FC<TypeProps> = props => {
   return (
     <StyleSourceConfigManager>
       {sourceConfigList.map((item, key) => {
-        const isActive = selectedConfig?.key === item.key;
-        const isInit = !selectedConfig?.key;
+        const isActive = selectedConfKey === item.key;
+        const isInit = !selectedConfKey;
         return (
           <StyleCardContainer
             key={key}
@@ -48,7 +46,8 @@ const SourceConfigManager: React.FC<TypeProps> = props => {
             isActive={isActive}
             onClick={() => {
               // 点选中的恢复初始状态
-              onSelected(isActive ? undefined : item);
+              props.onSelected(isActive ? undefined : item);
+              setSelectedConfKey(isActive ? "" : item.key);
             }}
           >
             <SourceConfigCard sourceDescription={item} />
