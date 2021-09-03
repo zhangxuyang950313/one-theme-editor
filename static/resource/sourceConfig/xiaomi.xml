@@ -1,0 +1,62 @@
+<Configuration>
+
+    <!-- 描述文件模板 -->
+    <InfoTemplate file="description.xml">
+        <?xml version="1.0" encoding="utf-8"?>
+        <MIUI-Theme>
+            <title>${project_name}</title>
+            <designer>${project_designer}</designer>
+            <author>${project_author}</author>
+            <version>${project_version}</version>
+            <uiVersion>${project_ui_version}</uiVersion>
+        </MIUI-Theme>
+    </InfoTemplate>
+
+    <!-- 编辑器资源配置 -->
+    <Config src="xiaomi/miui12/description.xml"/>
+
+    <!-- 
+        打包配置 
+        format:         打包格式 zip | tar (默认 zip)
+        extname:        打包后扩展名 (默认 zip)
+        execute9patch:  处理.9信息 (默认 true)
+    -->
+    <Package extname="zip" execute9patch="true">
+        <!-- 
+            匹配不打包的规则 
+            regex:      正则表达式
+            pattern:    匹配模式（暂不支持)
+        -->
+        <Exclude regex="^\..+" pattern=".DS_Store"/>
+        <!-- 
+            type: dir | pack | file     打包文件类型标识，dir 目录，pack 压缩，file 文件
+            pattern:                    匹配模式
+        -->
+        <Item type="dir"  pattern="boots/**"/>
+        <Item type="pack" pattern="clock_2x4/**"/>
+        <Item type="pack" pattern="com.*/**"/>
+        <Item type="pack" pattern="framework.*/**"/>
+        <Item type="pack" pattern="icons/**"/>
+        <Item type="pack" pattern="lockscreen/**"/>
+        <Item type="pack" pattern="miwallpaper/**"/>
+        <Item type="dir"  pattern="wallpaper/**"/>
+        <Item type="file" pattern="description.xml"/>
+    </Package>
+
+    <!-- 应用步骤 -->
+    <Apply>
+        <!-- 
+            编辑器打包时包含环境变量：
+            editor_package_file:  本地打包后的文件路径
+            phone_package_file:   放入手机目录的文件路径
+        -->
+        <Step 
+            description="推送到手机..." 
+            cmd="adb push ${editor_package_file} /sdcard/${phone_package_file}"
+        />
+        <Step 
+            description="应用到主题..." 
+            cmd="adb shell am start -n com.android.thememanager/com.android.thememanager.ApplyThemeForScreenshot -e theme_file_path /sdcard/${phone_package_file} -e api_called_from OneThemeEditor"
+        />
+    </Apply>
+</Configuration>

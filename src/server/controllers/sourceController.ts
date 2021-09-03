@@ -5,22 +5,24 @@ import {
   TypeSourcePageData,
   TypeSourceConfigData,
   TypeSourceConfigInfo,
-  TypeBrandConf
+  TypeBrandOption
 } from "src/types/source";
 import { TypeResponseFrame, UnionTupleToObjectKey } from "src/types/request";
 import { checkParamsKey, result } from "server/utils/requestUtil";
 import PageConfig from "server/compiler/PageConfig";
 import SourceConfig from "server/compiler/SourceConfig";
+import BrandOptions from "server/compiler/BrandOptions";
+import BrandConfig from "server/compiler/BrandConfig";
 
 export default function sourceController(service: Express): void {
   /**
    * 获取厂商配置列表
    */
-  service.get<never, TypeResponseFrame<TypeBrandConf[], string>>(
-    API.GET_BRAND_LIST.url,
+  service.get<never, TypeResponseFrame<TypeBrandOption[], string>>(
+    API.GET_BRAND_OPTION_LIST.url,
     (request, response) => {
-      const brandConfList = SourceConfig.readBrandConf();
-      response.send(result.success(brandConfList));
+      const brandOptionList = BrandOptions.readBrandOptions();
+      response.send(result.success(brandOptionList));
     }
   );
 
@@ -28,11 +30,13 @@ export default function sourceController(service: Express): void {
    * 获取配置信息列表
    */
   service.get<
-    UnionTupleToObjectKey<typeof API.GET_SOURCE_CONF_LIST.params>,
-    TypeResponseFrame<TypeSourceConfigInfo[], string>
-  >(`${API.GET_SOURCE_CONF_LIST.url}/:brandMd5`, (request, response) => {
-    const { brandMd5 } = request.params;
-    const list = SourceConfig.getSourceConfigInfoList(brandMd5);
+    never,
+    TypeResponseFrame<TypeSourceConfigInfo[], string>,
+    never,
+    UnionTupleToObjectKey<typeof API.GET_SOURCE_CONF_LIST.query>
+  >(`${API.GET_SOURCE_CONF_LIST.url}`, (request, response) => {
+    checkParamsKey(request.query, API.GET_SOURCE_CONF_LIST.query);
+    const list = BrandConfig.from(request.query.src).getSourceConfigList();
     response.send(result.success(list));
   });
 
@@ -46,9 +50,8 @@ export default function sourceController(service: Express): void {
     UnionTupleToObjectKey<typeof API.GET_SOURCE_CONF_MODULE_LIST.query> // reqQuery
   >(API.GET_SOURCE_CONF_MODULE_LIST.url, (request, response) => {
     checkParamsKey(request.query, API.GET_SOURCE_CONF_MODULE_LIST.query);
-    const { config } = request.query;
-    const data = new SourceConfig(config).getModuleList();
-    response.send(result.success(data));
+    const list = new SourceConfig(request.query.config).getModuleList();
+    response.send(result.success(list));
   });
 
   /**
@@ -78,8 +81,7 @@ export default function sourceController(service: Express): void {
     UnionTupleToObjectKey<typeof API.GET_SOURCE_CONF_DATA.query> // reqQuery
   >(API.GET_SOURCE_CONF_DATA.url, async (request, response) => {
     checkParamsKey(request.query, API.GET_SOURCE_CONF_DATA.query);
-    const { config } = request.query;
-    const data = new SourceConfig(config).getConfig();
+    const data = new SourceConfig(request.query.config).getConfig();
     response.send(result.success(data));
   });
 }

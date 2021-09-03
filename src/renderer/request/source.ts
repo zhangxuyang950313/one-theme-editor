@@ -3,25 +3,26 @@ import {
   TypeSourceConfigData,
   TypeSourceConfigInfo,
   TypeSourcePageData,
-  TypeBrandConf
+  TypeBrandOption
 } from "src/types/source";
 import { TypeRequestResult, UnionTupleToObjectKey } from "src/types/request";
 import { createHttp } from "./axios";
 
 // 获取厂商列表
-export async function apiGetBrandConfList(): Promise<TypeBrandConf[]> {
+export async function apiGetBrandOptionList(): Promise<TypeBrandOption[]> {
   return createHttp()
-    .get<TypeRequestResult<TypeBrandConf[]>>(API.GET_BRAND_LIST.url)
+    .get<TypeRequestResult<TypeBrandOption[]>>(API.GET_BRAND_OPTION_LIST.url)
     .then(data => data.data.data);
 }
 
 // 获取厂商配置描述列表
 export async function apiGetSourceInfoList(
-  brandMd5: string
+  src: string
 ): Promise<TypeSourceConfigInfo[]> {
   return createHttp()
     .get<TypeRequestResult<TypeSourceConfigInfo[]>>(
-      `${API.GET_SOURCE_CONF_LIST.url}/${brandMd5}`
+      `${API.GET_SOURCE_CONF_LIST.url}`,
+      { params: { src } }
     )
     .then(data => data.data.data);
 }

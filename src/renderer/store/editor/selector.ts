@@ -15,7 +15,7 @@ export const selectProjectData = createSelector(
 // 获取厂商信息
 export const selectProjectBrandInfo = createSelector(
   selectProjectData,
-  state => state.brandInfo
+  state => state.brandOption
 );
 
 export const selectProjectInfo = createSelector(

@@ -1,19 +1,25 @@
+import path from "path";
+import fse from "fs-extra";
 import md5 from "md5";
 import {
   TypeBrandConf,
   TypePackConf,
   TypeApplyConf,
-  TypeInfoTempConf
+  TypeInfoTempConf,
+  TypeSourceConfigInfo
 } from "src/types/source";
 import { ELEMENT_TAG, PACK_TYPE } from "src/enum/index";
 import { ApplyConfig, BrandConf, PackageConfig } from "src/data/BrandConfig";
+import SourceConfig from "server/compiler/SourceConfig";
+import pathUtil from "server/utils/pathUtil";
 import XmlTemplate from "./XmlTemplate";
 import XmlFileCompiler from "./XmlFileCompiler";
 import XMLNodeElement from "./XMLNodeElement";
 
 export default class BrandConfig extends XmlTemplate {
   // 从文件创建实例
-  static from(file: string): BrandConfig {
+  static from(src: string): BrandConfig {
+    const file = path.join(pathUtil.SOURCE_CONFIG_DIR, src);
     const element = new XmlFileCompiler(file).getElement();
     return new BrandConfig(element);
   }
@@ -105,5 +111,18 @@ export default class BrandConfig extends XmlTemplate {
   getApplyConfigByBrandMd5(md5: string): TypeApplyConf | null {
     const brandConf = this.getBrandConfList().find(item => item.md5 === md5);
     return brandConf ? brandConf.applyConfig : null;
+  }
+
+  getSourceConfigList(): TypeSourceConfigInfo[] {
+    return super
+      .getRootNode()
+      .getChildrenNodesByTagname(ELEMENT_TAG.Config)
+      .flatMap(brandNode => {
+        const src = brandNode.getAttributeOf("src");
+        const isExists = fse.pathExistsSync(
+          path.join(pathUtil.SOURCE_CONFIG_DIR, src)
+        );
+        return isExists ? [new SourceConfig(src).getInfo()] : [];
+      });
   }
 }

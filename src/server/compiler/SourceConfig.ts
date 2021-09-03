@@ -1,5 +1,4 @@
 import path from "path";
-import fse from "fs-extra";
 import { v4 as UUID } from "uuid";
 import { ELEMENT_TAG } from "src/enum";
 import {
@@ -8,8 +7,7 @@ import {
   TypeSourcePageGroupConf,
   TypeSourcePageConf,
   TypeSourceConfigInfo,
-  TypeSourceTypeConf,
-  TypeBrandConf
+  TypeSourceTypeConf
 } from "src/types/source";
 import {
   SourceConfigInfo,
@@ -21,8 +19,6 @@ import {
 } from "src/data/SourceConfig";
 import { TypeProjectUiVersion } from "src/types/project";
 import pathUtil from "server/utils/pathUtil";
-import ERR_CODE from "src/common/errorCode";
-import BrandConfig from "server/compiler/BrandConfig";
 import PageConfig from "./PageConfig";
 import XMLNodeBase from "./XMLNodeElement";
 import XmlFileCompiler from "./XmlFileCompiler";
@@ -36,31 +32,6 @@ export default class SourceConfig extends XmlFileCompiler {
     this.namespace = path.relative(
       pathUtil.SOURCE_CONFIG_DIR,
       path.dirname(this.getDescFile())
-    );
-  }
-
-  // 读取厂商配置
-  static readBrandConf(): TypeBrandConf[] {
-    if (!fse.existsSync(pathUtil.SOURCE_CONFIG_FILE)) {
-      throw new Error(ERR_CODE[4003]);
-    }
-    return BrandConfig.from(pathUtil.SOURCE_CONFIG_FILE).getBrandConfList();
-  }
-
-  /**
-   * 解析当前厂商下所有配置信息
-   * @param brandType 厂商 type
-   * @returns
-   */
-  static getSourceConfigInfoList(brandType: string): TypeSourceConfigInfo[] {
-    const brandConfList = this.readBrandConf();
-    const brandConf = brandConfList.find(item => item.md5 === brandType);
-    if (!brandConf?.sourceConfigs) return [];
-    const existsConfigs = brandConf.sourceConfigs.filter(item =>
-      fse.existsSync(path.join(pathUtil.SOURCE_CONFIG_DIR, item))
-    );
-    return existsConfigs.map(configUrl =>
-      new SourceConfig(configUrl).getInfo()
     );
   }
 

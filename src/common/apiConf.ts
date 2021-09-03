@@ -61,13 +61,13 @@ const API = {
    * 获取资源配置数据
    */
   // 获取厂商信息列表
-  GET_BRAND_LIST: createApiConf({
-    url: "/brand/list"
+  GET_BRAND_OPTION_LIST: createApiConf({
+    url: "/brand/options"
   }),
   // 获取配置信息列表
   GET_SOURCE_CONF_LIST: createApiConf({
     url: "/source/config/list",
-    params: ["brandMd5"]
+    query: ["src"]
   }),
   // 获取模板配置数据
   GET_SOURCE_CONF_DATA: createApiConf({

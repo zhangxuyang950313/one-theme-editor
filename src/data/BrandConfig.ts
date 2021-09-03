@@ -1,9 +1,9 @@
 import {
   TypeBrandConf,
-  TypeBrandInfo,
   TypePackConf,
   TypeApplyConf,
-  TypeInfoTempConf
+  TypeInfoTempConf,
+  TypeBrandOption
 } from "src/types/source";
 import { AbstractDataModel } from "./AbstractDataModel";
 
@@ -32,23 +32,23 @@ export class ApplyConfig extends AbstractDataModel<TypeApplyConf> {
     steps: []
   };
 }
-export class BrandInfo extends AbstractDataModel<TypeBrandInfo> {
-  protected data: TypeBrandInfo = {
+
+// 厂商选项列表配置
+export class BrandOption extends AbstractDataModel<TypeBrandOption> {
+  protected data: TypeBrandOption = {
     name: "",
     md5: "",
+    src: "",
     infoTemplate: new InfoTemplate().create(),
     packageConfig: new PackageConfig().create(),
     applyConfig: new ApplyConfig().create()
   };
-
-  static default(): TypeBrandInfo {
-    return new BrandInfo().default();
-  }
 }
 
+// 厂商配置
 export class BrandConf extends AbstractDataModel<TypeBrandConf> {
   protected data: TypeBrandConf = {
-    ...new BrandInfo().create(),
+    ...new BrandOption().create(),
     sourceConfigs: []
   };
 

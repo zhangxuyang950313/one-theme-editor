@@ -1,18 +1,18 @@
-import { TypeBrandConf, TypeSourceConfigInfo } from "src/types/source";
+import { TypeBrandOption, TypeSourceConfigInfo } from "src/types/source";
 
 export enum ACTION_TYPES {
   // 设置厂商品牌列表
-  SET_BRAND_CONF_LIST = "SET_BRAND_LIST",
+  SET_BRAND_OPTION_LIST = "SET_BRAND_OPTION_LIST",
   // 设置当前选择的厂商
-  SET_BRAND_CONF = "SET_BRAND_CONFIG",
+  SET_BRAND_OPTION = "SET_BRAND_OPTION",
   // 设置资源预览列表
   SET_SOURCE_BRIEF_LIST = "SET_SOURCE_BRIEF_LIST"
 }
 
 // 设置品牌信息列表
-type TypeSetBrandInfoList = {
-  type: typeof ACTION_TYPES.SET_BRAND_CONF_LIST;
-  brandConfList: TypeBrandConf[];
+type TypeSetBrandOptionList = {
+  type: typeof ACTION_TYPES.SET_BRAND_OPTION_LIST;
+  brandOptionList: TypeBrandOption[];
 };
 
 // 配置描述列表
@@ -22,22 +22,25 @@ type TypeActionSetSourceDescriptionList = {
 };
 
 // 设置品牌信息
-type TypeActionSetBrandInfo = {
-  type: typeof ACTION_TYPES.SET_BRAND_CONF;
-  payload: TypeBrandConf;
+type TypeActionSetBrandOption = {
+  type: typeof ACTION_TYPES.SET_BRAND_OPTION;
+  payload: TypeBrandOption;
 };
 
 // main actions
 export type TypeStarterActions =
-  | TypeSetBrandInfoList
+  | TypeSetBrandOptionList
   | TypeActionSetSourceDescriptionList
-  | TypeActionSetBrandInfo;
+  | TypeActionSetBrandOption;
 
 // 设置厂商信息列表
-export function ActionSetBrandInfoList(
-  brandConfList: TypeBrandConf[]
-): TypeSetBrandInfoList {
-  return { type: ACTION_TYPES.SET_BRAND_CONF_LIST, brandConfList };
+export function ActionSetBrandOptionList(
+  brandConfList: TypeBrandOption[]
+): TypeSetBrandOptionList {
+  return {
+    type: ACTION_TYPES.SET_BRAND_OPTION_LIST,
+    brandOptionList: brandConfList
+  };
 }
 
 // 设置当前资源配置预览列表
@@ -48,8 +51,8 @@ export function ActionSetSourceDescriptionList(
 }
 
 // 设置选择的厂商信息
-export function ActionSetBrandConf(
-  brandInfo: TypeBrandConf
-): TypeActionSetBrandInfo {
-  return { type: ACTION_TYPES.SET_BRAND_CONF, payload: brandInfo };
+export function ActionSetBrandOption(
+  brandOption: TypeBrandOption
+): TypeActionSetBrandOption {
+  return { type: ACTION_TYPES.SET_BRAND_OPTION, payload: brandOption };
 }

@@ -5,24 +5,25 @@ import { remote } from "electron";
 
 import { isDev } from "@/core/constant";
 import { apiCreateProject } from "@/request";
-import { useBrandConf } from "@/hooks/source";
+import { useBrandOption } from "@/hooks/source";
 import { TypeProjectInfo } from "src/types/project";
 import { TypeSourceConfigInfo } from "src/types/source";
 
-import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
+import React, { useEffect, useRef, useState } from "react";
 import { Modal, Button, Form, Input, message } from "antd";
 import { FileAddOutlined } from "@ant-design/icons";
-import { BrandInfo } from "src/data/BrandConfig";
+import { BrandOption } from "src/data/BrandConfig";
 import Steps from "@/components/Steps";
 import ProjectInfoForm from "@/components/ProjectInfoForm";
 import SourceConfigManager from "./SourceConfigManager";
 
 // 表单默认值
+const txt = `测试${UUID()}`;
 const initialValues = {
-  name: isDev ? `测试${UUID()}` : "",
-  designer: isDev ? "测试" : "",
-  author: isDev ? "测试" : "",
+  name: isDev ? txt : "",
+  designer: isDev ? txt : "",
+  author: isDev ? txt : "",
   version: "1.0.0",
   uiVersion: "10"
 };
@@ -34,7 +35,7 @@ const CreateProject: React.FC<{
   onProjectCreated: (projectInfo: TypeProjectInfo) => Promise<void>;
 }> = props => {
   // 机型配置
-  const [brandConf] = useBrandConf();
+  const [selectedBrandOption] = useBrandOption();
   // 弹框控制
   const [modalVisible, setModalVisible] = useState(false);
   // 当前步骤
@@ -54,6 +55,9 @@ const CreateProject: React.FC<{
 
   // 当前按钮组件
   const thisRef = useRef<HTMLElement | null>(null);
+
+  // projectInfo
+  const projectInfoRef = useRef<TypeProjectInfo>({});
 
   useEffect(() => {
     if (!projectRoot) {
@@ -136,6 +140,7 @@ const CreateProject: React.FC<{
             }}
             onFieldsChange={() => {
               setFieldsError(form.getFieldsError());
+              projectInfoRef.current = form.getFieldsValue();
             }}
           />
           <StyleSetLocalPath>
@@ -243,22 +248,24 @@ const CreateProject: React.FC<{
             throw new Error("未选择配置模板");
           }
           updateCreating(true);
-          const brandInfo = new BrandInfo()
-            .set("name", brandConf.name)
-            .set("md5", brandConf.md5)
-            .set("infoTemplate", brandConf.infoTemplate)
-            .set("packageConfig", brandConf.packageConfig)
-            .set("applyConfig", brandConf.applyConfig)
+          const brandOption = new BrandOption()
+            .set("name", selectedBrandOption.name)
+            .set("md5", selectedBrandOption.md5)
+            .set("src", selectedBrandOption.src)
+            .set("infoTemplate", selectedBrandOption.infoTemplate)
+            .set("packageConfig", selectedBrandOption.packageConfig)
+            .set("applyConfig", selectedBrandOption.applyConfig)
             .create();
+          const projectInfo = projectInfoRef.current;
           return apiCreateProject({
-            brandInfo,
+            brandOption: brandOption,
             projectRoot,
-            projectInfo: form.getFieldsValue(),
+            projectInfo,
             sourceConfigPath: path.join(sourceConfig.root, sourceConfig.config)
           })
             .then(data => {
               console.log("创建工程：", data);
-              props.onProjectCreated(form.getFieldsValue());
+              props.onProjectCreated(projectInfo);
             })
             .finally(() => {
               closeModal();
@@ -347,7 +354,7 @@ const CreateProject: React.FC<{
         width="700px"
         centered={true}
         visible={modalVisible}
-        title={`创建${brandConf.name}`}
+        title={`创建${selectedBrandOption.name}`}
         destroyOnClose={true}
         onCancel={closeModal}
         footer={modalFooter}

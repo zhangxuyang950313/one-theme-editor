@@ -2,18 +2,18 @@ import path from "path";
 import { useEffect, useLayoutEffect, useState, useCallback } from "react";
 import { message, notification } from "antd";
 import {
-  apiGetBrandConfList,
+  apiGetBrandOptionList,
   apiGetSourceInfoList,
   apiGetSourceConfig,
   apiGetSourcePageConfData
 } from "@/request/index";
 import { getSourceConfigDir } from "@/store/global/modules/base/selector";
 import {
-  ActionSetBrandInfoList,
+  ActionSetBrandOptionList,
   ActionSetSourceDescriptionList,
-  ActionSetBrandConf
+  ActionSetBrandOption
 } from "@/store/starter/action";
-import { getBrandConf } from "@/store/starter/selector";
+import { getBrandOption } from "@/store/starter/selector";
 import {
   ActionSetCurrentModule,
   ActionSetCurrentPage,
@@ -48,7 +48,7 @@ import {
   TypeSourceDefine,
   TypeSourceDefineImage,
   TypeSourceDefineValue,
-  TypeBrandConf
+  TypeBrandOption
 } from "src/types/source";
 import {
   useStarterDispatch,
@@ -93,33 +93,33 @@ export function useSourceConfigRootWithNS(): string {
  * 获取当前选择厂商信息
  * @returns
  */
-export function useBrandConf(): [
-  TypeBrandConf,
-  (brandConf: TypeBrandConf) => void
+export function useBrandOption(): [
+  TypeBrandOption,
+  (brandConf: TypeBrandOption) => void
 ] {
   const dispatch = useStarterDispatch();
-  const brandConf = useStarterSelector(getBrandConf);
-  return [brandConf, brandConf => dispatch(ActionSetBrandConf(brandConf))];
+  const brandOption = useStarterSelector(getBrandOption);
+  return [brandOption, data => dispatch(ActionSetBrandOption(data))];
 }
 
 /**
  * 获取配置的厂商列表
  * @returns
  */
-export function useBrandConfList(): TypeBrandConf[] {
-  const [value, updateValue] = useState<TypeBrandConf[]>([]);
+export function useBrandOptionList(): TypeBrandOption[] {
+  const [value, updateValue] = useState<TypeBrandOption[]>([]);
   const dispatch = useStarterDispatch();
   const registerUpdater = useAsyncUpdater();
   useLayoutEffect(() => {
-    apiGetBrandConfList().then(conf => {
+    apiGetBrandOptionList().then(conf => {
       // 添加默认小米，去重
-      const list = conf.reduce<TypeBrandConf[]>((t, o) => {
+      const list = conf.reduce<TypeBrandOption[]>((t, o) => {
         if (!t.some(item => item.md5 === o.md5)) t.push(o);
         return t;
       }, []);
       registerUpdater(() => {
         updateValue(list);
-        dispatch(ActionSetBrandInfoList(list));
+        dispatch(ActionSetBrandOptionList(list));
       });
     });
   }, []);
@@ -133,11 +133,11 @@ export function useBrandConfList(): TypeBrandConf[] {
 export function useSourceDescriptionList(): [TypeSourceConfigInfo[], boolean] {
   const [value, updateValue] = useState<TypeSourceConfigInfo[]>([]);
   const [loading, updateLoading] = useState(true);
-  const [brandConf] = useBrandConf();
+  const [brandOption] = useBrandOption();
   const dispatch = useStarterDispatch();
   useLayoutEffect(() => {
-    if (!brandConf.md5) return;
-    apiGetSourceInfoList(brandConf.md5)
+    if (!brandOption.src) return;
+    apiGetSourceInfoList(brandOption.src)
       .then(data => {
         console.log("配置预览列表：", data);
         updateValue(data);
@@ -151,7 +151,7 @@ export function useSourceDescriptionList(): [TypeSourceConfigInfo[], boolean] {
       .finally(() => {
         updateLoading(false);
       });
-  }, [brandConf, dispatch]);
+  }, [brandOption, dispatch]);
   return [value, loading];
 }
 

@@ -5,12 +5,12 @@ import { TypeStarterState } from "@/store/index";
 const getStarterState = (state: TypeStarterState) => state;
 
 // 获取厂商信息列表
-export const getBrandInfoList = createSelector(
+export const getBrandOptionList = createSelector(
   getStarterState,
-  state => state.brandConfList
+  state => state.brandOptionList
 );
 
 // 获取前选择的厂商信息
-export const getBrandConf = createSelector(getStarterState, state => {
-  return state.brandConf;
+export const getBrandOption = createSelector(getStarterState, state => {
+  return state.brandOption;
 });

@@ -46,17 +46,18 @@ export type TypeApplyConf = {
   steps: Array<{ description: string; command: string }>;
 };
 
-// 厂商配置信息
-export type TypeBrandInfo = {
-  md5: string;
+// 品牌配置选项
+export type TypeBrandOption = {
   name: string;
+  md5: string;
+  src: string;
   infoTemplate: TypeInfoTempConf;
   packageConfig: TypePackConf;
   applyConfig: TypeApplyConf;
 };
 
 // 厂商配置
-export type TypeBrandConf = TypeBrandInfo & {
+export type TypeBrandConf = TypeBrandOption & {
   sourceConfigs: string[];
 };
 
