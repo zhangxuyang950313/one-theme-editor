@@ -33,36 +33,39 @@ const EditorContainer: React.FC = () => {
 
 const StyleEditorContainer = styled.div`
   display: flex;
-  /* overflow: hidden; */
-  height: 100%;
+  overflow: auto;
+  /* height: 100%; */
   flex-grow: 1;
   box-sizing: border-box;
 `;
 
 const StylePageSelector = styled(StyleBorderRight)`
-  width: 230px;
-  flex-shrink: 0;
+  flex: 1;
+  min-width: 200px;
+  max-width: 250px;
   overflow: auto;
 `;
 
 const StylePreviewer = styled(StyleBorderRight)`
-  width: 330px;
-  padding: 20px;
+  flex: 1;
   flex-shrink: 0;
+  padding: 20px;
+  min-width: 300px;
+  max-width: 350px;
   overflow: auto;
 `;
 
 const StyleImageSourceList = styled(StyleBorderRight)`
-  width: 320px;
-  padding: 20px;
+  flex-basis: 320px;
   flex-shrink: 0;
+  padding: 20px;
   overflow: auto;
 `;
 
 const StyleXmlSourceList = styled.div`
-  flex: 1;
-  padding: 0 20px;
+  flex-basis: 400px;
   flex-shrink: 0;
+  padding: 0 20px;
   overflow: auto;
 `;
 

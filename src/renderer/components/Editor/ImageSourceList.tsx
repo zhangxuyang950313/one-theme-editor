@@ -7,22 +7,16 @@ import ImageController from "@/components/ImageController/index";
 const ImageSourceList: React.FC = () => {
   const sourceDefineList = useSourceDefineImageList();
   return (
-    <StyleImageSourceList>
-      {sourceDefineList.map((sourceDefine, key) => {
-        return (
-          <div className="image-controller" key={key}>
-            <ImageController sourceDefine={sourceDefine} />
-          </div>
-        );
-      })}
-    </StyleImageSourceList>
+    <>
+      {sourceDefineList.map((sourceDefine, key) => (
+        <StyleImageController key={key} sourceDefine={sourceDefine} />
+      ))}
+    </>
   );
 };
 
-const StyleImageSourceList = styled.div`
-  .image-controller {
-    margin-bottom: 20px;
-  }
+const StyleImageController = styled(ImageController)`
+  margin-bottom: 20px;
 `;
 
 export default ImageSourceList;

@@ -42,7 +42,7 @@ const ModuleSelector: React.FC = () => {
 
 const StyleIcon = styled.div`
   width: 100%;
-  height: 65px;
+  height: 70px;
   display: flex;
   align-items: center;
   justify-content: center;
