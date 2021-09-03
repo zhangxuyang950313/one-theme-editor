@@ -1,5 +1,9 @@
-import { TypeBrandConf, TypeBrandInfo, TypePackConf } from "src/types/source";
-import { TypeApplyConf } from "./../types/source";
+import {
+  TypeBrandConf,
+  TypeBrandInfo,
+  TypePackConf,
+  TypeApplyConf
+} from "src/types/source";
 import { AbstractDataModel } from "./AbstractDataModel";
 
 export class PackageConfig extends AbstractDataModel<TypePackConf> {

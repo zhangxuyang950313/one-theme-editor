@@ -39,8 +39,8 @@ function zipFolderAndFile(
   files.forEach(item => {
     // 命中正则排除
     const filename = path.dirname(item);
-    const checkIsExcludes = excludes.some(regexpStr => {
-      return new RegExp(regexpStr).test(filename);
+    const checkIsExcludes = excludes.some(item => {
+      return new RegExp(item.regex).test(filename);
     });
     if (checkIsExcludes) {
       console.log(`打包排除 '${item}'`);
@@ -72,7 +72,7 @@ export async function zipProjectByRules(
   };
   const zip = new JsZip();
   const queue = items.map(async item => {
-    const files = getFilesByPattern(item.path, root);
+    const files = getFilesByPattern(item.pattern, root);
     switch (item.type) {
       // 文件和目录
       case PACK_TYPE.FILE:

@@ -32,8 +32,8 @@ export type TypePackConf = {
   extname: string;
   format: archiver.Format;
   execute9patch: boolean;
-  items: Array<{ type: PACK_TYPE; path: string }>;
-  excludes: Array<string>;
+  items: Array<{ type: PACK_TYPE; pattern: string }>;
+  excludes: Array<{ regex: string; pattern: string }>;
 };
 
 // 应用配置
