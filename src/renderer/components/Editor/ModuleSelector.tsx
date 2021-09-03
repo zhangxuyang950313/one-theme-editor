@@ -7,19 +7,19 @@ import { SourceImage } from "../ImageCollection";
 
 // 模块选择器
 const ModuleSelector: React.FC = () => {
-  const moduleList = useSourceModuleList();
+  const sourceModuleList = useSourceModuleList();
   const [currentModule, setCurrentModule] = useSourceModuleConf();
 
   if (!currentModule) return null;
 
-  if (moduleList.length === 0) {
+  if (sourceModuleList.length === 0) {
     console.log(logSymbols.error, "modules 为空");
     return null;
   }
 
   return (
     <>
-      {moduleList.map((item, key) => (
+      {sourceModuleList.map((item, key) => (
         <Tooltip key={key} title={item.name} placement="right">
           <StyleIcon onClick={() => setCurrentModule(item)}>
             {/* <img

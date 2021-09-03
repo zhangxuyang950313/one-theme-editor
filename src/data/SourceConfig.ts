@@ -195,7 +195,7 @@ export class SourceConfigData extends AbstractDataModel<TypeSourceConfigData> {
   protected data: TypeSourceConfigData = {
     ...SourceConfigInfo.default(),
     sourceTypeList: [],
-    moduleList: []
+    sourceModuleList: []
   };
   static default(): TypeSourceConfigData {
     return new SourceConfigData().default();

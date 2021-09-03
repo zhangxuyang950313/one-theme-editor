@@ -168,7 +168,7 @@ export default class SourceConfig extends XmlFileCompiler {
     return {
       ...this.getInfo(),
       sourceTypeList: this.getSourceTypeList(),
-      moduleList: this.getModuleList()
+      sourceModuleList: this.getModuleList()
     };
   }
 }

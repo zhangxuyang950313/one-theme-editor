@@ -73,19 +73,19 @@ export const selectSourceModuleList = createSelector(
 // 获取当前模块
 export const selectSourceModuleConf = createSelector(
   stateSelector,
-  state => state.sourceModuleConf
+  state => state.sourceModuleSelected
 );
 
 // 获取页面组列表
 export const selectSourcePageGroupList = createSelector(
   stateSelector,
-  state => state.sourceModuleConf.groupList || []
+  state => state.sourceModuleSelected.groupList || []
 );
 
 // 获取当前页面
 export const selectSourcePageConf = createSelector(
   stateSelector,
-  state => state.sourcePageConf
+  state => state.sourcePageSelected
 );
 
 export const selectSourceTypeList = createSelector(
@@ -99,13 +99,13 @@ export const selectSourcePageDataMap = createSelector(
 );
 // 获取当前页面 sourcePageData
 export const selectSourcePageData = createSelector(stateSelector, state => {
-  const pageConfSrc = state.sourcePageConf.src;
+  const pageConfSrc = state.sourcePageSelected.src;
   return state.sourcePageDataMap[pageConfSrc] || null;
 });
 
 // 获取所有元素列表
 export const selectLayoutSourceList = createSelector(stateSelector, state => {
-  const pageConfSrc = state.sourcePageConf.src;
+  const pageConfSrc = state.sourcePageSelected.src;
   if (!pageConfSrc) return [];
   return state.sourcePageDataMap[pageConfSrc]?.layoutElementList || [];
 });

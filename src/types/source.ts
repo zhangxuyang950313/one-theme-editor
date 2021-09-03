@@ -24,7 +24,7 @@ export type TypeSourceConfigInfo = {
 // 资源配置数据
 export type TypeSourceConfigData = TypeSourceConfigInfo & {
   sourceTypeList: TypeSourceTypeConf[];
-  moduleList: TypeSourceModuleConf[];
+  sourceModuleList: TypeSourceModuleConf[];
 };
 
 export type TypeInfoTempConf = {

@@ -29,23 +29,23 @@ export type TypeEditorState = {
   sourceConfig: TypeSourceConfigData;
   sourceTypeList: TypeSourceTypeConf[];
   sourceModuleList: TypeSourceModuleConf[];
-  sourceModuleConf: TypeSourceModuleConf;
-  sourcePageConf: TypeSourcePageConf;
+  sourceModuleSelected: TypeSourceModuleConf;
+  sourcePageSelected: TypeSourcePageConf;
   sourcePageDataMap: Record<string, TypeSourcePageData>;
   projectFileDataMap: Record<string, TypeProjectFileData>;
 };
 
 const editorState: TypeEditorState = {
-  projectData: new ProjectData().default(),
-  projectInfo: new ProjectInfo().default(),
+  projectData: new ProjectData().create(),
+  projectInfo: new ProjectInfo().create(),
   uuid: "",
   projectRoot: "",
   sourceConfigUrl: "",
-  sourceConfig: new SourceConfigData().default(),
+  sourceConfig: new SourceConfigData().create(),
   sourceTypeList: [],
   sourceModuleList: [],
-  sourceModuleConf: new SourceModuleConf().default(),
-  sourcePageConf: new SourcePageConf().default(),
+  sourceModuleSelected: new SourceModuleConf().create(),
+  sourcePageSelected: new SourcePageConf().create(),
   sourcePageDataMap: {},
   projectFileDataMap: {}
 };
@@ -68,25 +68,25 @@ export default function EditorReducer(
     }
     // 配置数据
     case ACTION_TYPES.SET_SOURCE_CONFIG: {
-      const moduleList = action.payload.moduleList;
+      const { sourceModuleList } = action.payload;
       return updateState(state, {
         sourceConfig: action.payload,
         sourceTypeList: action.payload.sourceTypeList,
-        sourceModuleList: moduleList,
-        sourceModuleConf: moduleList[0],
-        sourcePageConf: moduleList[0]?.groupList?.[0].pageList?.[0]
+        sourceModuleList: sourceModuleList,
+        sourceModuleSelected: sourceModuleList[0],
+        sourcePageSelected: sourceModuleList[0]?.groupList?.[0].pageList?.[0]
       });
     }
     // 模块配置
     case ACTION_TYPES.SET_MODULE_CONFIG: {
       return updateState(state, {
-        sourceModuleConf: action.payload
+        sourceModuleSelected: action.payload
       });
     }
     // 页面配置
     case ACTION_TYPES.SET_PAGE_CONFIG: {
       return updateState(state, {
-        sourcePageConf: action.payload
+        sourcePageSelected: action.payload
       });
     }
     // 页面数据
