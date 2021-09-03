@@ -27,6 +27,11 @@ export type TypeSourceConfigData = TypeSourceConfigInfo & {
   moduleList: TypeSourceModuleConf[];
 };
 
+export type TypeInfoTempConf = {
+  file: string;
+  content: string;
+};
+
 // 打包配置
 export type TypePackConf = {
   extname: string;
@@ -45,6 +50,7 @@ export type TypeApplyConf = {
 export type TypeBrandInfo = {
   md5: string;
   name: string;
+  infoTemplate: TypeInfoTempConf;
   packageConfig: TypePackConf;
   applyConfig: TypeApplyConf;
 };

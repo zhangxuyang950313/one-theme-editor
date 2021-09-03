@@ -24,7 +24,8 @@ export enum ELEMENT_TAG {
   Value = "Value",
   Color = "Color",
   Brand = "Brand",
-  Config = "Config"
+  Config = "Config",
+  InfoTemplate = "InfoTemplate"
 }
 
 // 元素类型

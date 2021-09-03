@@ -43,19 +43,19 @@
             <!-- <Page src="com.android.contacts/pages/page4.xml"/> -->
         </Group>
     </Module>
-    <Module name="短信" icon="icons/res/drawable-xxhdpi//com.android.mms.png">
+    <Module name="短信" icon="icons/res/drawable-xxhdpi/com.android.mms.png">
         <Group name="短信主页面">
             <!-- <Page src="com.android.mms/pages/page1.xml"/> -->
             <!-- <Page src="com.android.mms/pages/page2.xml"/> -->
         </Group>
     </Module>
-    <Module name="设置" icon="icons/res/drawable-xxhdpi//com.android.settings.png">
+    <Module name="设置" icon="icons/res/drawable-xxhdpi/com.android.settings.png">
         <Group name="设置第一页">
             <!-- <Page src="com.android.settings/pages/page1.xml"/>
             <Page src="com.android.settings/pages/page2.xml"/> -->
         </Group>
     </Module>
-    <Module name="通知栏" icon="icons/res/drawable-xxhdpi//com.android.systemui.png">
+    <Module name="通知栏" icon="icons/res/drawable-xxhdpi/com.android.systemui.png">
         <Group name="通知栏1">
             <!-- <Page src="com.android.systemui/pages/page1.xml"/>
             <Page src="com.android.systemui/pages/page2.xml"/> -->
@@ -65,43 +65,24 @@
             <Page src="com.miui.notification/pages/page2.xml"/> -->
         </Group>
     </Module>
-    <Module name="桌面" icon="icons/res/drawable-xxhdpi//com.android.system.notification_phone.png">
+    <Module name="桌面" icon="icons/res/drawable-xxhdpi/com.android.system.notification_phone.png">
         <Group name="桌面小部件">
             <!-- <Page src="com.miui.home/pages/page1.xml"/>
             <Page src="com.miui.home/pages/page2.xml"/> -->
         </Group>
     </Module>
-    <Module name="安全中心" icon="icons/res/drawable-xxhdpi//com.miui.securitycenter.png">
+    <Module name="安全中心" icon="icons/res/drawable-xxhdpi/com.miui.securitycenter.png">
         <Group name="安全中心">
             <!-- <Page src="com.miui.securitycenter/pages/page1.xml"/>
             <Page src="com.miui.securitycenter/pages/page2.xml"/> -->
         </Group>
     </Module>
-    <Module name="原生全局" icon="icons/res/drawable-xxhdpi//android.png">
+    <Module name="原生全局" icon="icons/res/drawable-xxhdpi/android.png">
         <Group name="原生全局">
             <!-- <Page src="framework-res/pages/page1.xml"/>
             <Page src="framework-res/pages/page2.xml"/> -->
         </Group>
     </Module>
-
-    <!-- 打包配置 -->
-    <Package extname="zip">
-        <Item type="dir"  path="boots/**"/>
-        <Item type="pack" path="clock_2x4/**"/>
-        <Item type="pack" path="com.*/**"/>
-        <Item type="pack" path="framework.*/**"/>
-        <Item type="pack" path="icons/**"/>
-        <Item type="pack" path="lockscreen/**"/>
-        <Item type="pack" path="miwallpaper/**"/>
-        <Item type="dir"  path="wallpaper/**"/>
-        <Item type="file" path="description.xml"/>
-    </Package>
-
-    <!-- 应用步骤 -->
-    <Apply>
-        <Step description="推送到手机..." cmd="push ${package_path} /sdcard/${project_package}"/>
-        <Step description="应用到主题..." cmd="shell am start -n com.android.thememanager/com.android.thememanager.ApplyThemeForScreenshot -e theme_file_path /sdcard/${project_package} -e api_called_from OneThemeEditor"/>
-    </Apply>
 </Root>
 
 

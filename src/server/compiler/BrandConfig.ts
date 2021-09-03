@@ -1,5 +1,10 @@
 import md5 from "md5";
-import { TypeBrandConf, TypePackConf, TypeApplyConf } from "src/types/source";
+import {
+  TypeBrandConf,
+  TypePackConf,
+  TypeApplyConf,
+  TypeInfoTempConf
+} from "src/types/source";
 import { ELEMENT_TAG, PACK_TYPE } from "src/enum/index";
 import { ApplyConfig, BrandConf, PackageConfig } from "src/data/BrandConfig";
 import XmlTemplate from "./XmlTemplate";
@@ -44,6 +49,7 @@ export default class BrandConfig extends XmlTemplate {
       .create();
   }
 
+  // 解析应用配置
   getApplyConfigByBrandNode(node: XMLNodeElement): TypeApplyConf {
     const applyNode = node.getFirstChildNodeByTagname(ELEMENT_TAG.Apply);
     const steps: TypeApplyConf["steps"] = applyNode
@@ -53,6 +59,16 @@ export default class BrandConfig extends XmlTemplate {
         command: item.getAttributeOf("cmd")
       }));
     return new ApplyConfig().set("steps", steps).create();
+  }
+
+  // 解析工程描述模板
+  getProjectInfoTemplateByBrandNode(node: XMLNodeElement): TypeInfoTempConf {
+    const infoTempNode = node.getFirstChildNodeByTagname(
+      ELEMENT_TAG.InfoTemplate
+    );
+    const file = infoTempNode.getAttributeOf("file");
+    const content = infoTempNode.buildXml();
+    return { file, content };
   }
 
   // 获取厂商配置列表
@@ -67,10 +83,12 @@ export default class BrandConfig extends XmlTemplate {
       const name = brandNode.getAttributeOf("name");
       const packageConfig = this.getPackageConfigByBrandNode(brandNode);
       const applyConfig = this.getApplyConfigByBrandNode(brandNode);
+      const infoTemplate = this.getProjectInfoTemplateByBrandNode(brandNode);
       return new BrandConf()
         .set("name", name)
         .set("md5", md5(name))
         .set("sourceConfigs", sourceConfigs)
+        .set("infoTemplate", infoTemplate)
         .set("packageConfig", packageConfig)
         .set("applyConfig", applyConfig)
         .create();

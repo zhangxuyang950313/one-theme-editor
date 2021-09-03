@@ -1,5 +1,19 @@
 <Configuration>
   <Brand name="小米主题">
+
+    <!-- 描述文件模板 -->
+    <InfoTemplate file="description.xml">
+        <?xml version="1.0" encoding="utf-8"?>
+        <MIUI-Theme>
+            <title>${project_name}</title>
+            <designer>${project_designer}</designer>
+            <author>${project_author}</author>
+            <version>${project_version}</version>
+            <uiVersion>${project_ui_version}</uiVersion>
+        </MIUI-Theme>
+    </InfoTemplate>
+
+    <!-- 编辑器资源配置 -->
     <Config src="xiaomi/miui12/description.xml"/>
     
     <!-- 
