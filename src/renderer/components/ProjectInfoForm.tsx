@@ -1,10 +1,6 @@
 import React, { forwardRef, useImperativeHandle } from "react";
-import styled from "styled-components";
-
+import { Form, FormInstance, FormProps } from "antd";
 import { TypeProjectInfo } from "src/types/project";
-
-// components
-import { Form, FormInstance } from "antd";
 import {
   ProjectAuthor,
   ProjectDesigner,
@@ -17,7 +13,7 @@ type TypeProps = {
   // 初始化数据
   initialValues: TypeProjectInfo | undefined;
   form: FormInstance<TypeProjectInfo>;
-};
+} & FormProps;
 
 type TypeRef = FormInstance<TypeProjectInfo>;
 
@@ -41,10 +37,11 @@ function ProjectInfoForm(props: TypeProps, ref: React.ForwardedRef<TypeRef>) {
     <Form
       name="FormProductInfo"
       className={className}
-      form={form}
       colon={false}
       labelAlign="right"
       labelCol={{ span: 4 }}
+      {...props}
+      form={form}
       initialValues={initialValues}
     >
       <ProjectName onChange={onInputChange("name")} />

@@ -7,7 +7,6 @@ import {
   Select,
   SelectProps
 } from "antd";
-import { TypeUiVersion } from "src/types/project";
 import { projectInfoConfig } from "@/config/editor";
 
 function getRuleNormalized(label: React.ReactNode) {
@@ -83,9 +82,14 @@ export function ProjectVersion(inputProps: InputProps): JSX.Element {
   return getInputForm({ label, name }, inputProps);
 }
 
-// UI版本
+/**
+ * @deprecated
+ * UI版本
+ * @param props
+ * @returns
+ */
 export function ProjectUIVersion(props: {
-  uiVersions: TypeUiVersion[];
+  uiVersions: Array<{ code: string; name: string }>;
   onChange: SelectProps<any>["onChange"];
 }): JSX.Element {
   const { name: label, key: name } = projectInfoConfig.uiVersion;

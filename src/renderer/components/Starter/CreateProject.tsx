@@ -9,7 +9,7 @@ import { useBrandConf } from "@/hooks/source";
 import { TypeProjectInfo } from "src/types/project";
 import { TypeSourceConfigInfo } from "src/types/source";
 
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { Modal, Button, Form, Input, message } from "antd";
 import { FileAddOutlined } from "@ant-design/icons";
@@ -27,6 +27,8 @@ const initialValues = {
   uiVersion: "10"
 };
 
+const defaultPath = remote.app.getPath("desktop");
+
 // 创建主题按钮
 const CreateProject: React.FC<{
   onProjectCreated: (projectInfo: TypeProjectInfo) => Promise<void>;
@@ -41,14 +43,24 @@ const CreateProject: React.FC<{
   const [isCreating, updateCreating] = useState(false);
   // 表单实例
   const [form] = Form.useForm<TypeProjectInfo>();
-  // 填写工程描述
-  const projectInfoRef = useRef<TypeProjectInfo>();
   // 选择的模板
-  const sourceConfigRef = useRef<TypeSourceConfigInfo>();
+  const [sourceConfig, setSourceConfig] = useState<TypeSourceConfigInfo>();
   // 填写本地目录
-  const projectRootRef = useRef<string>(remote.app.getPath("desktop"));
+  const [projectRoot, setProjectRoot] = useState(
+    path.join(defaultPath, initialValues.name)
+  );
+  // 表单错误列表
+  const [fieldsError, setFieldsError] = useState(form.getFieldsError());
 
-  if (!brandConf) return null;
+  // 当前按钮组件
+  const thisRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    if (!projectRoot) {
+      message.warn("路径不能为空");
+      setProjectRoot(path.join(defaultPath, form.getFieldValue("name")));
+    }
+  }, [projectRoot]);
 
   // 步骤控制
   const nextStep = () => setCurStep(curStep + 1);
@@ -62,8 +74,7 @@ const CreateProject: React.FC<{
   // 复位
   const init = () => {
     jumpStep(0);
-    sourceConfigRef.current = undefined;
-    projectInfoRef.current = undefined;
+    setSourceConfig(undefined);
     form.resetFields();
   };
 
@@ -73,58 +84,83 @@ const CreateProject: React.FC<{
     openModal();
   };
 
+  const selectDir = () => {
+    remote.dialog
+      .showOpenDialog({
+        // https://www.electronjs.org/docs/api/dialog#dialogshowopendialogsyncbrowserwindow-options
+        title: "选择工程文件",
+        properties: ["openDirectory", "createDirectory", "promptToCreate"]
+      })
+      .then(result => {
+        if (result.canceled) return;
+        setProjectRoot(
+          path.join(result.filePaths[0], form.getFieldValue("name"))
+        );
+      });
+  };
+
   // 每一步配置
   const steps = [
     {
       name: "主题信息",
-      Component() {
-        const { current } = projectRootRef;
-        const [projectRoot, setProjectRoot] = useState<string>(current);
-        const onChange = (val: string) => {
-          projectRootRef.current = val;
-          setProjectRoot(val);
-        };
-        const selectDir = () => {
-          remote.dialog
-            .showOpenDialog({
-              // https://www.electronjs.org/docs/api/dialog#dialogshowopendialogsyncbrowserwindow-options
-              title: "选择工程文件",
-              properties: ["openDirectory", "createDirectory", "promptToCreate"]
-            })
-            .then(result => {
-              if (result.canceled) return;
-              onChange(result.filePaths[0]);
-            });
-        };
-        return (
-          <StyleFillInfo>
-            {/* 填写信息 */}
-            <ProjectInfoForm
-              className="project-info-form"
-              form={form}
-              initialValues={initialValues}
-            />
-            <StyleSetLocalPath>
-              <p>选择本地目录</p>
-              <div className="input-area">
-                <Input
-                  placeholder="输入或选择目录"
-                  allowClear
-                  value={projectRoot}
-                  onChange={e => onChange(e.target.value)}
-                />
-                <Button
-                  type="primary"
-                  icon={<FileAddOutlined />}
-                  onClick={selectDir}
-                >
-                  选择
-                </Button>
-              </div>
-            </StyleSetLocalPath>
-          </StyleFillInfo>
-        );
-      },
+      Context: (
+        <StyleFillInfo>
+          {/* 填写信息 */}
+          <ProjectInfoForm
+            form={form}
+            // <Modal /> 和 Form 一起配合使用时，
+            // 设置 destroyOnClose 也不会在 Modal 关闭时销毁表单字段数据，
+            // 需要设置 <Form preserve={false} />
+            preserve={false}
+            initialValues={initialValues}
+            onValuesChange={(changedValue: TypeProjectInfo) => {
+              const projectName = changedValue.name;
+              if (!projectName) return;
+              if (path.basename(projectRoot) === projectName) return;
+              // 非绝对路径使用默认路径
+              if (!path.isAbsolute(projectRoot)) {
+                setProjectRoot(path.join(defaultPath, projectName));
+                return;
+              }
+              // 路径存在视为目标根路径，向后追加工程名称
+              if (fse.pathExistsSync(projectRoot)) {
+                setProjectRoot(path.join(projectRoot, projectName));
+                return;
+              }
+              // 当前路径不存在且向上一级路径存在视为当前的目标路径，替换最后一级路径
+              const dirname = path.dirname(projectRoot);
+              if (fse.pathExistsSync(dirname)) {
+                setProjectRoot(path.join(dirname, projectName));
+                return;
+              }
+            }}
+            onFieldsChange={() => {
+              setFieldsError(form.getFieldsError());
+            }}
+          />
+          <StyleSetLocalPath>
+            <p>选择本地目录</p>
+            <div className="input-area">
+              <Input
+                placeholder="输入或选择目录"
+                allowClear
+                value={projectRoot}
+                onChange={e => {
+                  form.setFieldsValue({ projectRoot: e.target.value });
+                  setProjectRoot(e.target.value);
+                }}
+              />
+              <Button
+                type="primary"
+                icon={<FileAddOutlined />}
+                onClick={selectDir}
+              >
+                选择
+              </Button>
+            </div>
+          </StyleSetLocalPath>
+        </StyleFillInfo>
+      ),
       // 取消
       cancel: {
         disabled: isCreating,
@@ -140,11 +176,10 @@ const CreateProject: React.FC<{
         }
       },
       next: {
-        disabled: isCreating,
+        disabled: isCreating || fieldsError.flatMap(o => o.errors).length > 0,
         async handleNext() {
           return form
             .validateFields()
-            .then(data => (projectInfoRef.current = data))
             .then(nextStep)
             .catch(() => {
               message.warn("请填写正确表单");
@@ -154,23 +189,15 @@ const CreateProject: React.FC<{
     },
     {
       name: "选择配置",
-      Component() {
-        return (
-          <SourceConfigManager
-            onSelected={data => {
-              sourceConfigRef.current = data;
-            }}
-          />
-        );
-      },
+      Component: <SourceConfigManager onSelected={setSourceConfig} />,
       prev: {
         disabled: isCreating,
         handlePrev: prevStep
       },
       next: {
-        disabled: !sourceConfigRef.current,
+        disabled: !sourceConfig,
         async handleNext() {
-          if (!sourceConfigRef.current) {
+          if (!sourceConfig) {
             message.warn("请选择配置模板");
           } else {
             nextStep();
@@ -180,9 +207,7 @@ const CreateProject: React.FC<{
     },
     {
       name: "选择模板",
-      Component() {
-        return null;
-      },
+      Component: null,
       prev: {
         disabled: isCreating,
         handlePrev: prevStep
@@ -191,35 +216,31 @@ const CreateProject: React.FC<{
       start: {
         disabled: isCreating,
         async handleStart() {
-          const local = projectRootRef.current;
-          if (!local) throw new Error("请选择正确的本地路径");
-          if (!fse.existsSync(local)) {
+          if (!projectRoot) throw new Error("请选择正确的本地路径");
+          if (!fse.existsSync(projectRoot)) {
             await new Promise<void>(resolve => {
               Modal.confirm({
                 title: "提示",
-                content: `目录"${local}"不存在，是否创建？`,
+                content: `目录"${projectRoot}"不存在，是否创建？`,
                 onOk: () => {
-                  fse.ensureDirSync(local);
+                  fse.ensureDirSync(projectRoot);
                   resolve();
                 }
               });
             });
-          } else if (fse.readdirSync(local).length > 0) {
+          } else if (fse.readdirSync(projectRoot).length > 0) {
             await new Promise<void>(resolve => {
               Modal.confirm({
                 title: "提示",
-                content: `目录"${local}"为非空目录，可能不是主题目录，是否仍然继续使用此目录？`,
+                content: `目录"${projectRoot}"为非空目录，可能不是主题目录，是否仍然继续使用此目录？`,
                 onOk: () => {
                   resolve();
                 }
               });
             });
           }
-          if (!sourceConfigRef.current) {
+          if (!sourceConfig) {
             throw new Error("未选择配置模板");
-          }
-          if (!projectInfoRef.current) {
-            throw new Error("信息为空");
           }
           updateCreating(true);
           const brandInfo = new BrandInfo()
@@ -228,20 +249,14 @@ const CreateProject: React.FC<{
             .set("packageConfig", brandConf.packageConfig)
             .create();
           return apiCreateProject({
-            projectRoot: projectRootRef.current || "",
-            sourceConfigPath: path.join(
-              sourceConfigRef.current.root,
-              sourceConfigRef.current.config
-            ),
             brandInfo,
-            projectInfo: projectInfoRef.current
+            projectRoot: projectRoot,
+            projectInfo: form.getFieldsValue(),
+            sourceConfigPath: path.join(sourceConfig.root, sourceConfig.config)
           })
             .then(data => {
               console.log("创建工程：", data);
-              if (!projectInfoRef.current) {
-                throw new Error("工程信息为空");
-              }
-              props.onProjectCreated(projectInfoRef.current);
+              props.onProjectCreated(form.getFieldsValue());
             })
             .finally(() => {
               closeModal();
@@ -318,20 +333,27 @@ const CreateProject: React.FC<{
 
   return (
     <>
-      <Button type="primary" onClick={handleStartCreate}>
+      <Button
+        type="primary"
+        ref={r => (thisRef.current = r)}
+        onClick={handleStartCreate}
+      >
         新建主题
       </Button>
+
       <StyleModal
-        centered={true}
         width="700px"
+        centered={true}
         visible={modalVisible}
         title={`创建${brandConf.name}`}
         destroyOnClose={true}
         onCancel={closeModal}
         footer={modalFooter}
+        forceRender={true}
+        getContainer={thisRef.current}
       >
         <StyleSteps steps={steps.map(o => o.name)} current={curStep} />
-        <step.Component />
+        {step.Context}
       </StyleModal>
     </>
   );
@@ -362,9 +384,10 @@ const StyleFillInfo = styled.div`
   flex-direction: column;
   width: 100%;
   height: 100%;
-  .project-info-form {
-    width: 100%;
-  }
 `;
+
+// const StyleProjectInfoForm = styled(ProjectInfoForm)`
+//   width: 100%;
+// `;
 
 export default CreateProject;

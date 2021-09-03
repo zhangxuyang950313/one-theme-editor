@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Empty, Spin } from "antd";
 import { CheckCircleTwoTone } from "@ant-design/icons";
@@ -10,6 +10,9 @@ import SourceConfigCard from "./SourceConfigCard";
 const SourceConfigManager: React.FC<{
   onSelected: (config?: TypeSourceConfigInfo) => void;
 }> = props => {
+  useEffect(() => {
+    console.log(111);
+  }, []);
   // 模板列表
   const [sourceConfigList, isLoading] = useSourceDescriptionList();
   const [selectedConfKey, setSelectedConfKey] = useState("");
