@@ -246,11 +246,13 @@ const CreateProject: React.FC<{
           const brandInfo = new BrandInfo()
             .set("name", brandConf.name)
             .set("md5", brandConf.md5)
+            .set("infoTemplate", brandConf.infoTemplate)
             .set("packageConfig", brandConf.packageConfig)
+            .set("applyConfig", brandConf.applyConfig)
             .create();
           return apiCreateProject({
             brandInfo,
-            projectRoot: projectRoot,
+            projectRoot,
             projectInfo: form.getFieldsValue(),
             sourceConfigPath: path.join(sourceConfig.root, sourceConfig.config)
           })
