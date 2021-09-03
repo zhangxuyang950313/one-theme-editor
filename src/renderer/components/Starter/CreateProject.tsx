@@ -189,7 +189,7 @@ const CreateProject: React.FC<{
     },
     {
       name: "选择配置",
-      Component: <SourceConfigManager onSelected={setSourceConfig} />,
+      Context: <SourceConfigManager onSelected={setSourceConfig} />,
       prev: {
         disabled: isCreating,
         handlePrev: prevStep
@@ -207,7 +207,7 @@ const CreateProject: React.FC<{
     },
     {
       name: "选择模板",
-      Component: null,
+      Context: null,
       prev: {
         disabled: isCreating,
         handlePrev: prevStep

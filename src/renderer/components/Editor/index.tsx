@@ -42,7 +42,7 @@ const StyleEditorContainer = styled.div`
 const StylePageSelector = styled(StyleBorderRight)`
   flex: 1;
   min-width: 200px;
-  max-width: 250px;
+  max-width: 280px;
   overflow: auto;
 `;
 
@@ -63,7 +63,7 @@ const StyleImageSourceList = styled(StyleBorderRight)`
 `;
 
 const StyleXmlSourceList = styled.div`
-  flex-basis: 400px;
+  min-width: 400px;
   flex-shrink: 0;
   padding: 0 20px;
   overflow: auto;

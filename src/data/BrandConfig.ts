@@ -1,4 +1,5 @@
 import { TypeBrandConf, TypeBrandInfo, TypePackConf } from "src/types/source";
+import { TypeApplyConf } from "./../types/source";
 import { AbstractDataModel } from "./AbstractDataModel";
 
 export class PackageConfig extends AbstractDataModel<TypePackConf> {
@@ -10,11 +11,18 @@ export class PackageConfig extends AbstractDataModel<TypePackConf> {
     excludes: []
   };
 }
+
+export class ApplyConfig extends AbstractDataModel<TypeApplyConf> {
+  protected data: TypeApplyConf = {
+    steps: []
+  };
+}
 export class BrandInfo extends AbstractDataModel<TypeBrandInfo> {
   protected data: TypeBrandInfo = {
     name: "",
     md5: "",
-    packageConfig: new PackageConfig().create()
+    packageConfig: new PackageConfig().create(),
+    applyConfig: new ApplyConfig().create()
   };
 
   static default(): TypeBrandInfo {

@@ -2,6 +2,8 @@ import md5 from "md5";
 import { TypeBrandConf, TypePackConf } from "src/types/source";
 import { ELEMENT_TAG, PACK_TYPE } from "src/enum/index";
 import { BrandConf, PackageConfig } from "src/data/BrandConfig";
+import { ApplyConfig } from "./../../data/BrandConfig";
+import { TypeApplyConf } from "./../../types/source";
 import XmlTemplate from "./XmlTemplate";
 import XmlFileCompiler from "./XmlFileCompiler";
 import XMLNodeElement from "./XMLNodeElement";
@@ -13,16 +15,10 @@ export default class BrandConfig extends XmlTemplate {
     return new BrandConfig(element);
   }
 
-  getPackageConfigByBrandMd5(brandMd5: string): TypeBrandConf | null {
-    const brandConfList = this.getBrandConfList();
-    return brandConfList.find(item => item.md5 === brandMd5) || null;
-  }
-
   // 解析打包配置
   getPackageConfigByBrandNode(node: XMLNodeElement): TypePackConf {
-    const packageNode = node.getFirstChildNodeByTagname(ELEMENT_TAG.Package);
-    const packageConf = new PackageConfig();
-    const items: TypePackConf["items"] = packageNode
+    const pkgNode = node.getFirstChildNodeByTagname(ELEMENT_TAG.Package);
+    const items: TypePackConf["items"] = pkgNode
       .getChildrenNodesByTagname(ELEMENT_TAG.Item)
       .map(item => ({
         type: item.getAttributeOf<PACK_TYPE>("type"),
@@ -31,23 +27,36 @@ export default class BrandConfig extends XmlTemplate {
         // TODO 忘了这是干嘛的，留着以后想
         name: item.getAttributeOf("name")
       }));
-    const excludes: TypePackConf["excludes"] = packageNode
+    const excludes: TypePackConf["excludes"] = pkgNode
       .getChildrenNodesByTagname(ELEMENT_TAG.Exclude)
       .flatMap(item => {
         const regex = item.getAttributeOf("regex");
         return regex ? [regex] : [];
       });
-    packageConf.set("items", items);
-    packageConf.set("excludes", excludes);
-    packageConf.set("extname", packageNode.getAttributeOf("extname", "zip"));
-    packageConf.set("format", packageNode.getAttributeOf("format", "zip"));
-    packageConf.set(
-      "execute9patch",
-      packageNode.getAttributeOf("execute9patch", "true") === "true"
-    );
-    return packageConf.create();
+    const extname = pkgNode.getAttributeOf("extname", "zip");
+    const format = pkgNode.getAttributeOf("format", "zip");
+    const exec9pt = pkgNode.getAttributeOf("execute9patch", "true") === "true";
+    return new PackageConfig()
+      .set("items", items)
+      .set("excludes", excludes)
+      .set("extname", extname)
+      .set("format", format)
+      .set("execute9patch", exec9pt)
+      .create();
   }
 
+  getApplyConfigByBrandNode(node: XMLNodeElement): TypeApplyConf {
+    const applyNode = node.getFirstChildNodeByTagname(ELEMENT_TAG.Apply);
+    const steps: TypeApplyConf["steps"] = applyNode
+      .getChildrenNodesByTagname(ELEMENT_TAG.Step)
+      .map(item => ({
+        description: item.getAttributeOf("description"),
+        command: item.getAttributeOf("cmd")
+      }));
+    return new ApplyConfig().set("steps", steps).create();
+  }
+
+  // 获取厂商配置列表
   getBrandConfList(): TypeBrandConf[] {
     const brandNodeList = super
       .getRootNode()
@@ -58,12 +67,26 @@ export default class BrandConfig extends XmlTemplate {
         .map(configNode => configNode.getAttributeOf("src"));
       const name = brandNode.getAttributeOf("name");
       const packageConfig = this.getPackageConfigByBrandNode(brandNode);
+      const applyConfig = this.getApplyConfigByBrandNode(brandNode);
       return new BrandConf()
         .set("name", name)
         .set("md5", md5(name))
         .set("sourceConfigs", sourceConfigs)
         .set("packageConfig", packageConfig)
+        .set("applyConfig", applyConfig)
         .create();
     });
+  }
+
+  // 使用 brandName 的 md5 值查找打包配置
+  getPackageConfigByBrandMd5(md5: string): TypePackConf | null {
+    const brandConf = this.getBrandConfList().find(item => item.md5 === md5);
+    return brandConf ? brandConf.packageConfig : null;
+  }
+
+  // 使用 brandName 的 md5 值查找应用配置
+  getApplyConfigByBrandMd5(md5: string): TypeApplyConf | null {
+    const brandConf = this.getBrandConfList().find(item => item.md5 === md5);
+    return brandConf ? brandConf.applyConfig : null;
   }
 }

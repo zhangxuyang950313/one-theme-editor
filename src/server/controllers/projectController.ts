@@ -194,8 +194,7 @@ export default function projectController(service: Express): void {
     const { outputFile, uuid } = request.query;
     const { brandInfo, projectRoot } = await findProjectByUUID(uuid);
     const brandConfig = BrandConfig.from(pathUtil.SOURCE_CONFIG_FILE);
-    const packageConfig = brandConfig.getPackageConfigByBrandMd5(brandInfo.md5);
-    const packConfig = packageConfig?.packageConfig;
+    const packConfig = brandConfig.getPackageConfigByBrandMd5(brandInfo.md5);
     if (!packConfig) {
       response.send(result.fail("未配置打包规则"));
       return;

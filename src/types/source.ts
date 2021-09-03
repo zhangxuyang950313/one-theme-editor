@@ -10,16 +10,6 @@ import XMLNodeBase from "../server/compiler/XMLNodeElement";
 import { TypeImageData, TypeProjectUiVersion } from "./project";
 import { TypeImagePathLike } from "./index";
 
-export type TypeBrandInfo = {
-  md5: string;
-  name: string;
-  packageConfig: TypePackConf;
-};
-
-export type TypeBrandConf = TypeBrandInfo & {
-  sourceConfigs: string[];
-};
-
 // 资源配置信息
 export type TypeSourceConfigInfo = {
   key: string;
@@ -44,6 +34,24 @@ export type TypePackConf = {
   execute9patch: boolean;
   items: Array<{ type: PACK_TYPE; path: string }>;
   excludes: Array<string>;
+};
+
+// 应用配置
+export type TypeApplyConf = {
+  steps: Array<{ description: string; command: string }>;
+};
+
+// 厂商配置信息
+export type TypeBrandInfo = {
+  md5: string;
+  name: string;
+  packageConfig: TypePackConf;
+  applyConfig: TypeApplyConf;
+};
+
+// 厂商配置
+export type TypeBrandConf = TypeBrandInfo & {
+  sourceConfigs: string[];
 };
 
 // 素材类型定义数据

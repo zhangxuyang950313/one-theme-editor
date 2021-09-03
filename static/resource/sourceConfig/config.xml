@@ -5,6 +5,10 @@
     <!-- 打包配置 -->
     <Package extname="zip" execute9patch="true">
         <Exclude regex="^\..+"/>
+        <!-- 
+            type: dir | pack | file
+            path: parttern
+        -->
         <Item type="dir"  path="boots/**"/>
         <Item type="pack" path="clock_2x4/**"/>
         <Item type="pack" path="com.*/**"/>
@@ -18,8 +22,12 @@
 
     <!-- 应用步骤 -->
     <Apply>
-        <Step description="推送到手机..." cmd="push ${package_path} /sdcard/${project_package}"/>
-        <Step description="应用到主题..." cmd="shell am start -n com.android.thememanager/com.android.thememanager.ApplyThemeForScreenshot -e theme_file_path /sdcard/${project_package} -e api_called_from OneThemeEditor"/>
+        <!-- 
+            editor_package_file:  本地打包后的文件路径
+            phone_package_file:   放入手机目录的文件路径
+        -->
+        <Step description="推送到手机..." cmd="adb push ${editor_package_file} /sdcard/${phone_package_file}"/>
+        <Step description="应用到主题..." cmd="adb shell am start -n com.android.thememanager/com.android.thememanager.ApplyThemeForScreenshot -e theme_file_path /sdcard/${phone_package_file} -e api_called_from OneThemeEditor"/>
     </Apply>
   </Brand>
   <Brand name="华为主题">
