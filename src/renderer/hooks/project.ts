@@ -15,6 +15,7 @@ import {
   useSourceConfigRootWithNS
 } from "@/hooks/source";
 import {
+  ActionInitEditor,
   ActionPatchProjectSourceData,
   ActionSetProjectData
 } from "@/store/editor/action";
@@ -251,4 +252,14 @@ export function useProjectImageUrl(relativePath?: string): string {
   return projectRoot && relativePath
     ? prefix + path.join(projectRoot, relativePath)
     : "";
+}
+
+export function useInitEditor(): void {
+  usePatchPageSourceData();
+  const dispatch = useEditorDispatch();
+  useLayoutEffect(() => {
+    return () => {
+      dispatch(ActionInitEditor());
+    };
+  }, []);
 }

@@ -35,7 +35,7 @@ export type TypeEditorState = {
   projectFileDataMap: Record<string, TypeProjectFileData>;
 };
 
-const editorState: TypeEditorState = {
+const defaultState: TypeEditorState = {
   projectData: new ProjectData().create(),
   projectInfo: new ProjectInfo().create(),
   uuid: "",
@@ -50,11 +50,19 @@ const editorState: TypeEditorState = {
   projectFileDataMap: {}
 };
 
+const editorState: TypeEditorState = {
+  ...defaultState
+};
+
 export default function EditorReducer(
   state: TypeEditorState = editorState,
   action: TypeEditorActions
 ): TypeEditorState {
   switch (action.type) {
+    // 初始化数据
+    case ACTION_TYPES.INIT_EDITOR: {
+      return { ...defaultState };
+    }
     // 工程数据
     case ACTION_TYPES.SET_PROJECT_DATA: {
       document.title = action.payload.projectInfo.name || document.title;

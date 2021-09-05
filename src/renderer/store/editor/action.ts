@@ -11,6 +11,8 @@ import {
 } from "src/types/source";
 
 export enum ACTION_TYPES {
+  // 初始化
+  INIT_EDITOR = "INIT_EDITOR",
   // 设置资源配置
   SET_SOURCE_CONFIG = "SET_SOURCE_CONFIG",
   // 设置模块配置
@@ -27,6 +29,10 @@ export enum ACTION_TYPES {
   // 设置工程描述数据
   SET_PROJECT_INFO = "SET_PROJECT_INFO"
 }
+
+type TypeActionInitEditor = {
+  type: typeof ACTION_TYPES.INIT_EDITOR;
+};
 
 type TypeActionSetSourceConfig = {
   type: typeof ACTION_TYPES.SET_SOURCE_CONFIG;
@@ -71,6 +77,7 @@ type TypeActionPatchProjectSourceDataMap = {
 
 // main actions
 export type TypeEditorActions =
+  | TypeActionInitEditor
   | TypeActionSetSourceConfig
   | TypeActionSetModuleConf
   | TypeActionPatchPageDataMap
@@ -78,6 +85,10 @@ export type TypeEditorActions =
   | TypeActionSetProjectData
   | TypeActionSetProjectInfo
   | TypeActionPatchProjectSourceDataMap;
+
+export function ActionInitEditor(): TypeActionInitEditor {
+  return { type: ACTION_TYPES.INIT_EDITOR };
+}
 
 // 设置当前资源配置
 export function ActionSetSourceConfig(

@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { StyleBorderRight } from "@/style";
-import { usePatchPageSourceData } from "@/hooks/project";
+import { useInitEditor } from "@/hooks/project";
 import PageSelector from "@/components/Editor/PageSelector";
 import Previewer from "@/components/Editor/Previewer";
 import ImageSourceList from "@/components/Editor/ImageSourceList";
@@ -9,7 +9,7 @@ import XmlSourceList from "@/components/Editor/XmlSourceList";
 
 // 主编辑区域
 const EditorContainer: React.FC = () => {
-  usePatchPageSourceData();
+  useInitEditor();
   return (
     <StyleEditorContainer>
       {/* 页面选择器 */}
