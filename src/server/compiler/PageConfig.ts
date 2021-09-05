@@ -100,7 +100,6 @@ export default class PageConfig extends XMLNodeElement {
       this.sourceNamespace,
       path.dirname(this.configFile)
     );
-    console.log({ relative });
     return path.join(relative, pathname);
   }
 

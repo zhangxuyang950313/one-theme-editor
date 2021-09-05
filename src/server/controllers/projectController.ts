@@ -23,7 +23,7 @@ import {
 import { checkParamsKey, result } from "server/utils/requestUtil";
 import XmlTemplate from "server/compiler/XmlTemplate";
 import XmlFileCompiler from "server/compiler/XmlFileCompiler";
-import BrandConfig from "server/compiler/BrandConfig";
+import BrandOptions from "server/compiler/BrandOptions";
 
 export default function projectController(service: Express): void {
   // 添加工程
@@ -192,9 +192,10 @@ export default function projectController(service: Express): void {
   >(API.PACK_PROJECT.url, async (request, response) => {
     checkParamsKey(request.query, API.PACK_PROJECT.query);
     const { outputFile, uuid } = request.query;
-    const { brandOption, projectRoot } = await findProjectByUUID(uuid);
-    const brandConfig = BrandConfig.from(pathUtil.SOURCE_CONFIG_FILE);
-    const packConfig = brandConfig.getPackageConfigByBrandMd5(brandOption.md5);
+    const { brandConfig, projectRoot } = await findProjectByUUID(uuid);
+    const packConfig = BrandOptions.from(
+      pathUtil.SOURCE_CONFIG_FILE
+    ).getPackageConfigByBrandMd5(brandConfig.md5);
     if (!packConfig) {
       response.send(result.fail("未配置打包规则"));
       return;

@@ -4,19 +4,19 @@ import {
   TypeSourceModuleConf,
   TypeSourcePageData,
   TypeSourceConfigData,
-  TypeSourceConfigInfo,
+  TypeSourceConfigPreview,
   TypeBrandOption
 } from "src/types/source";
 import { TypeResponseFrame, UnionTupleToObjectKey } from "src/types/request";
 import { checkParamsKey, result } from "server/utils/requestUtil";
 import PageConfig from "server/compiler/PageConfig";
 import SourceConfig from "server/compiler/SourceConfig";
-import BrandOptions from "server/compiler/BrandOptions";
 import BrandConfig from "server/compiler/BrandConfig";
+import BrandOptions from "server/compiler/BrandOptions";
 
 export default function sourceController(service: Express): void {
   /**
-   * 获取厂商配置列表
+   * 获取品牌配置列表
    */
   service.get<never, TypeResponseFrame<TypeBrandOption[], string>>(
     API.GET_BRAND_OPTION_LIST.url,
@@ -31,12 +31,14 @@ export default function sourceController(service: Express): void {
    */
   service.get<
     never,
-    TypeResponseFrame<TypeSourceConfigInfo[], string>,
+    TypeResponseFrame<TypeSourceConfigPreview[], string>,
     never,
-    UnionTupleToObjectKey<typeof API.GET_SOURCE_CONF_LIST.query>
-  >(`${API.GET_SOURCE_CONF_LIST.url}`, (request, response) => {
-    checkParamsKey(request.query, API.GET_SOURCE_CONF_LIST.query);
-    const list = BrandConfig.from(request.query.src).getSourceConfigList();
+    UnionTupleToObjectKey<typeof API.GET_SOURCE_CONF_PREVIEW_LIST.query>
+  >(`${API.GET_SOURCE_CONF_PREVIEW_LIST.url}`, (request, response) => {
+    checkParamsKey(request.query, API.GET_SOURCE_CONF_PREVIEW_LIST.query);
+    const list = BrandConfig.from(
+      request.query.src
+    ).getSourceConfigPreviewList();
     response.send(result.success(list));
   });
 

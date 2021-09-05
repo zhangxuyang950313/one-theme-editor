@@ -11,7 +11,7 @@ import { TypeImageData, TypeProjectUiVersion } from "./project";
 import { TypeImagePathLike } from "./index";
 
 // 资源配置信息
-export type TypeSourceConfigInfo = {
+export type TypeSourceConfigPreview = {
   key: string;
   root: string;
   config: string;
@@ -22,7 +22,7 @@ export type TypeSourceConfigInfo = {
 };
 
 // 资源配置数据
-export type TypeSourceConfigData = TypeSourceConfigInfo & {
+export type TypeSourceConfigData = TypeSourceConfigPreview & {
   sourceTypeList: TypeSourceTypeConf[];
   sourceModuleList: TypeSourceModuleConf[];
 };
@@ -46,19 +46,18 @@ export type TypeApplyConf = {
   steps: Array<{ description: string; command: string }>;
 };
 
-// 品牌配置选项
-export type TypeBrandOption = {
+// 品牌配置数据
+export type TypeBrandConf = {
   name: string;
   md5: string;
-  src: string;
   infoTemplate: TypeInfoTempConf;
   packageConfig: TypePackConf;
   applyConfig: TypeApplyConf;
 };
 
-// 厂商配置
-export type TypeBrandConf = TypeBrandOption & {
-  sourceConfigs: string[];
+// 品牌配置选项
+export type TypeBrandOption = TypeBrandConf & {
+  src: string;
 };
 
 // 素材类型定义数据

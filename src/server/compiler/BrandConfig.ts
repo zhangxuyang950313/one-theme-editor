@@ -1,20 +1,17 @@
 import path from "path";
 import fse from "fs-extra";
-import md5 from "md5";
 import {
-  TypeBrandConf,
-  TypePackConf,
   TypeApplyConf,
   TypeInfoTempConf,
-  TypeSourceConfigInfo
+  TypePackConf,
+  TypeSourceConfigPreview
 } from "src/types/source";
 import { ELEMENT_TAG, PACK_TYPE } from "src/enum/index";
-import { ApplyConfig, BrandConf, PackageConfig } from "src/data/BrandConfig";
+import { ApplyConfig, PackageConfig } from "src/data/BrandConfig";
 import SourceConfig from "server/compiler/SourceConfig";
 import pathUtil from "server/utils/pathUtil";
 import XmlTemplate from "./XmlTemplate";
 import XmlFileCompiler from "./XmlFileCompiler";
-import XMLNodeElement from "./XMLNodeElement";
 
 export default class BrandConfig extends XmlTemplate {
   // 从文件创建实例
@@ -24,9 +21,22 @@ export default class BrandConfig extends XmlTemplate {
     return new BrandConfig(element);
   }
 
+  // 解析描述文件模板
+  getInfoTemplate(): TypeInfoTempConf {
+    const infoTempNode = super
+      .getRootNode()
+      .getFirstChildNodeByTagname(ELEMENT_TAG.InfoTemplate);
+    return {
+      file: infoTempNode.getAttributeOf("file"),
+      content: infoTempNode.buildXml()
+    };
+  }
+
   // 解析打包配置
-  getPackageConfigByBrandNode(node: XMLNodeElement): TypePackConf {
-    const pkgNode = node.getFirstChildNodeByTagname(ELEMENT_TAG.Package);
+  getPackageConfig(): TypePackConf {
+    const pkgNode = super
+      .getRootNode()
+      .getFirstChildNodeByTagname(ELEMENT_TAG.Package);
     const items: TypePackConf["items"] = pkgNode
       .getChildrenNodesByTagname(ELEMENT_TAG.Item)
       .map(item => ({
@@ -56,8 +66,10 @@ export default class BrandConfig extends XmlTemplate {
   }
 
   // 解析应用配置
-  getApplyConfigByBrandNode(node: XMLNodeElement): TypeApplyConf {
-    const applyNode = node.getFirstChildNodeByTagname(ELEMENT_TAG.Apply);
+  getApplyConfig(): TypeApplyConf {
+    const applyNode = super
+      .getRootNode()
+      .getFirstChildNodeByTagname(ELEMENT_TAG.Apply);
     const steps: TypeApplyConf["steps"] = applyNode
       .getChildrenNodesByTagname(ELEMENT_TAG.Step)
       .map(item => ({
@@ -67,53 +79,8 @@ export default class BrandConfig extends XmlTemplate {
     return new ApplyConfig().set("steps", steps).create();
   }
 
-  // 解析工程描述模板
-  getProjectInfoTemplateByBrandNode(node: XMLNodeElement): TypeInfoTempConf {
-    const infoTempNode = node.getFirstChildNodeByTagname(
-      ELEMENT_TAG.InfoTemplate
-    );
-    const file = infoTempNode.getAttributeOf("file");
-    const content = infoTempNode.buildXml();
-    return { file, content };
-  }
-
-  // 获取厂商配置列表
-  getBrandConfList(): TypeBrandConf[] {
-    const brandNodeList = super
-      .getRootNode()
-      .getChildrenNodesByTagname(ELEMENT_TAG.Brand);
-    return brandNodeList.map(brandNode => {
-      const sourceConfigs = brandNode
-        .getChildrenNodesByTagname(ELEMENT_TAG.Config)
-        .map(configNode => configNode.getAttributeOf("src"));
-      const name = brandNode.getAttributeOf("name");
-      const packageConfig = this.getPackageConfigByBrandNode(brandNode);
-      const applyConfig = this.getApplyConfigByBrandNode(brandNode);
-      const infoTemplate = this.getProjectInfoTemplateByBrandNode(brandNode);
-      return new BrandConf()
-        .set("name", name)
-        .set("md5", md5(name))
-        .set("sourceConfigs", sourceConfigs)
-        .set("infoTemplate", infoTemplate)
-        .set("packageConfig", packageConfig)
-        .set("applyConfig", applyConfig)
-        .create();
-    });
-  }
-
-  // 使用 brandName 的 md5 值查找打包配置
-  getPackageConfigByBrandMd5(md5: string): TypePackConf | null {
-    const brandConf = this.getBrandConfList().find(item => item.md5 === md5);
-    return brandConf ? brandConf.packageConfig : null;
-  }
-
-  // 使用 brandName 的 md5 值查找应用配置
-  getApplyConfigByBrandMd5(md5: string): TypeApplyConf | null {
-    const brandConf = this.getBrandConfList().find(item => item.md5 === md5);
-    return brandConf ? brandConf.applyConfig : null;
-  }
-
-  getSourceConfigList(): TypeSourceConfigInfo[] {
+  // 解析编辑器资源配置列表
+  getSourceConfigPreviewList(): TypeSourceConfigPreview[] {
     return super
       .getRootNode()
       .getChildrenNodesByTagname(ELEMENT_TAG.Config)
@@ -122,7 +89,7 @@ export default class BrandConfig extends XmlTemplate {
         const isExists = fse.pathExistsSync(
           path.join(pathUtil.SOURCE_CONFIG_DIR, src)
         );
-        return isExists ? [new SourceConfig(src).getInfo()] : [];
+        return isExists ? [new SourceConfig(src).getConfigPreview()] : [];
       });
   }
 }

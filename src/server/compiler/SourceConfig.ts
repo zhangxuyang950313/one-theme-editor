@@ -6,7 +6,7 @@ import {
   TypeSourceModuleConf,
   TypeSourcePageGroupConf,
   TypeSourcePageConf,
-  TypeSourceConfigInfo,
+  TypeSourceConfigPreview,
   TypeSourceTypeConf
 } from "src/types/source";
 import {
@@ -68,7 +68,7 @@ export default class SourceConfig extends XmlFileCompiler {
   }
 
   // 预览图
-  getPreview(): string {
+  getPreviewPic(): string {
     // TODO: 默认预览图
     return path.normalize(
       super.getRootFirstChildNodeOf(ELEMENT_TAG.Preview).getAttributeOf("src")
@@ -149,14 +149,14 @@ export default class SourceConfig extends XmlFileCompiler {
    * 解析配置配置的简略信息
    * 只解析 description.xml 不需要进一步解析页面
    */
-  getInfo(): TypeSourceConfigInfo {
+  getConfigPreview(): TypeSourceConfigPreview {
     return new SourceConfigInfo()
       .set("key", UUID())
       .set("root", this.namespace)
       .set("config", path.basename(this.getDescFile()))
       .set("name", this.getName())
       .set("version", this.getVersion())
-      .set("preview", this.getPreview())
+      .set("preview", this.getPreviewPic())
       .set("uiVersion", this.getUiVersion())
       .create();
   }
@@ -166,7 +166,7 @@ export default class SourceConfig extends XmlFileCompiler {
    */
   getConfig(): TypeSourceConfigData {
     return {
-      ...this.getInfo(),
+      ...this.getConfigPreview(),
       sourceTypeList: this.getSourceTypeList(),
       sourceModuleList: this.getModuleList()
     };

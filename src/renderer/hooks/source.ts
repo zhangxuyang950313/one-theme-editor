@@ -3,17 +3,17 @@ import { useEffect, useLayoutEffect, useState, useCallback } from "react";
 import { message, notification } from "antd";
 import {
   apiGetBrandOptionList,
-  apiGetSourceInfoList,
+  apiGetSourceConfigPreviewList,
   apiGetSourceConfig,
   apiGetSourcePageConfData
 } from "@/request/index";
 import { getSourceConfigDir } from "@/store/global/modules/base/selector";
 import {
   ActionSetBrandOptionList,
-  ActionSetSourceDescriptionList,
+  ActionSetSourceConfigPreviewList,
   ActionSetBrandOption
 } from "@/store/starter/action";
-import { getBrandOption } from "@/store/starter/selector";
+import { getBrandConfig } from "@/store/starter/selector";
 import {
   ActionSetCurrentModule,
   ActionSetCurrentPage,
@@ -35,8 +35,9 @@ import {
   selectSourcePageData
 } from "@/store/editor/selector";
 import {
+  TypeBrandOption,
   TypeSourceConfigData,
-  TypeSourceConfigInfo,
+  TypeSourceConfigPreview,
   TypeSourcePageGroupConf,
   TypeSourceModuleConf,
   TypeSourcePageConf,
@@ -47,8 +48,7 @@ import {
   TypeSourcePageData,
   TypeSourceDefine,
   TypeSourceDefineImage,
-  TypeSourceDefineValue,
-  TypeBrandOption
+  TypeSourceDefineValue
 } from "src/types/source";
 import {
   useStarterDispatch,
@@ -90,20 +90,20 @@ export function useSourceConfigRootWithNS(): string {
 }
 
 /**
- * 获取当前选择厂商信息
+ * 获取当前选择品牌信息
  * @returns
  */
-export function useBrandOption(): [
+export function useBrandConfig(): [
   TypeBrandOption,
-  (brandConf: TypeBrandOption) => void
+  (data: TypeBrandOption) => void
 ] {
   const dispatch = useStarterDispatch();
-  const brandOption = useStarterSelector(getBrandOption);
-  return [brandOption, data => dispatch(ActionSetBrandOption(data))];
+  const brandConfig = useStarterSelector(getBrandConfig);
+  return [brandConfig, data => dispatch(ActionSetBrandOption(data))];
 }
 
 /**
- * 获取配置的厂商列表
+ * 获取配置的品牌列表
  * @returns
  */
 export function useBrandOptionList(): TypeBrandOption[] {
@@ -130,18 +130,21 @@ export function useBrandOptionList(): TypeBrandOption[] {
  * 获取配置预览列表
  * @returns
  */
-export function useSourceDescriptionList(): [TypeSourceConfigInfo[], boolean] {
-  const [value, updateValue] = useState<TypeSourceConfigInfo[]>([]);
+export function useSourceConfigPreviewList(): [
+  TypeSourceConfigPreview[],
+  boolean
+] {
+  const [value, updateValue] = useState<TypeSourceConfigPreview[]>([]);
   const [loading, updateLoading] = useState(true);
-  const [brandOption] = useBrandOption();
+  const [brandConfig] = useBrandConfig();
   const dispatch = useStarterDispatch();
   useLayoutEffect(() => {
-    if (!brandOption.src) return;
-    apiGetSourceInfoList(brandOption.src)
+    if (!brandConfig.src) return;
+    apiGetSourceConfigPreviewList(brandConfig.src)
       .then(data => {
         console.log("配置预览列表：", data);
         updateValue(data);
-        dispatch(ActionSetSourceDescriptionList(data));
+        dispatch(ActionSetSourceConfigPreviewList(data));
       })
       .catch(err => {
         const content = ERR_CODE[3002];
@@ -151,7 +154,7 @@ export function useSourceDescriptionList(): [TypeSourceConfigInfo[], boolean] {
       .finally(() => {
         updateLoading(false);
       });
-  }, [brandOption, dispatch]);
+  }, [brandConfig, dispatch]);
   return [value, loading];
 }
 

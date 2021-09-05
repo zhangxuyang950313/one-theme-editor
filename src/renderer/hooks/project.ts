@@ -8,7 +8,7 @@ import {
 } from "@/request/index";
 import { useAxiosCanceler } from "@/hooks/index";
 import {
-  useBrandOption,
+  useBrandConfig,
   useFetchPageConfData,
   useFetchSourceConfig,
   useSourcePageData,
@@ -51,7 +51,7 @@ export function useProjectList(): [
   () => Promise<void>
 ] {
   // 使用机型隔离查询
-  const [brandConf] = useBrandOption();
+  const [brandConf] = useBrandConfig();
   const [value, updateValue] = useState<TypeProjectDataDoc[]>([]);
   const [loading, updateLoading] = useState<boolean>(true);
   const registerCancelToken = useAxiosCanceler();

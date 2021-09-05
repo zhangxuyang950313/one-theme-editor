@@ -1,11 +1,11 @@
+import BrandOption from "src/data/BrandOption";
 import { updateState } from "@/store/utils";
-import { BrandOption } from "src/data/BrandConfig";
-import { TypeBrandOption, TypeSourceConfigInfo } from "src/types/source";
+import { TypeBrandOption, TypeSourceConfigPreview } from "src/types/source";
 import { ACTION_TYPES, TypeStarterActions } from "./action";
 
 // main states
 export type TypeStarterState = {
-  sourceConfigInfoList: TypeSourceConfigInfo[];
+  sourceConfigInfoList: TypeSourceConfigPreview[];
   brandOptionList: TypeBrandOption[];
   brandOption: TypeBrandOption;
 };
@@ -26,8 +26,8 @@ export default function TemplateReducer(
   switch (action.type) {
     case ACTION_TYPES.SET_BRAND_OPTION_LIST: {
       return updateState(state, {
-        brandOption: action.brandOptionList[0],
-        brandOptionList: action.brandOptionList
+        brandOption: action.payload[0],
+        brandOptionList: action.payload
       });
     }
     case ACTION_TYPES.SET_BRAND_OPTION: {

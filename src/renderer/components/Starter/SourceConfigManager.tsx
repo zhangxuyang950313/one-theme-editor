@@ -1,20 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Empty, Spin } from "antd";
 import { CheckCircleTwoTone } from "@ant-design/icons";
-import { TypeSourceConfigInfo } from "src/types/source";
-import { useSourceDescriptionList } from "@/hooks/source";
+import { TypeSourceConfigPreview } from "src/types/source";
+import { useSourceConfigPreviewList } from "@/hooks/source";
 import SourceConfigCard from "./SourceConfigCard";
 
 // 配置管理
 const SourceConfigManager: React.FC<{
-  onSelected: (config?: TypeSourceConfigInfo) => void;
+  onSelected: (config?: TypeSourceConfigPreview) => void;
 }> = props => {
-  useEffect(() => {
-    console.log(111);
-  }, []);
   // 模板列表
-  const [sourceConfigList, isLoading] = useSourceDescriptionList();
+  const [sourceConfigList, isLoading] = useSourceConfigPreviewList();
   const [selectedConfKey, setSelectedConfKey] = useState("");
 
   if (isLoading) {

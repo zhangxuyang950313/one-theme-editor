@@ -1,6 +1,6 @@
 import { Element } from "xml-js";
 import { PROJECT_FILE_TYPE } from "../enum";
-import { TypeBrandOption } from "./source";
+import { TypeBrandConf } from "./source";
 import { TypeDatabase } from "./index";
 
 // 版本信息
@@ -19,7 +19,7 @@ export type TypeProjectInfo = {
 export type TypeCreateProjectPayload = {
   projectRoot: string;
   sourceConfigPath: string;
-  brandOption: TypeBrandOption;
+  brandConfig: TypeBrandConf;
   projectInfo: TypeProjectInfo;
 };
 
@@ -46,7 +46,7 @@ export type TypeXmlMapper = {
 // 打包所有信息
 export type TypeProjectData = {
   uuid: string;
-  brandOption: TypeBrandOption;
+  brandConfig: TypeBrandConf;
   projectRoot: string;
   projectInfo: TypeProjectInfo;
   uiVersion: TypeProjectUiVersion;

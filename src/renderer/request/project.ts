@@ -11,7 +11,7 @@ import {
   UnionTupleToObjectKey,
   TypeReleaseXmlTempPayload
 } from "src/types/request";
-import { TypeBrandOption } from "src/types/source";
+import { TypeBrandConf } from "src/types/source";
 import { createHttp } from "./axios";
 
 // 创建工程
@@ -25,12 +25,12 @@ export async function apiCreateProject(
 
 // 获取工程列表
 export async function apiGetProjectList(
-  brandOption: TypeBrandOption,
+  brandConfig: TypeBrandConf,
   canceler?: TypeGetCanceler
 ): Promise<TypeProjectDataDoc[]> {
   return createHttp(canceler)
     .get<TypeRequestResult<TypeProjectDataDoc[]>>(
-      `${API.GET_PROJECT_LIST.url}/${brandOption.md5}`
+      `${API.GET_PROJECT_LIST.url}/${brandConfig.md5}`
     )
     .then(data => data.data.data);
 }

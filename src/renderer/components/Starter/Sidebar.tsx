@@ -3,13 +3,13 @@ import styled from "styled-components";
 
 import { Menu } from "antd";
 
-import { useBrandOptionList, useBrandOption } from "@/hooks/source";
+import { useBrandOptionList, useBrandConfig } from "@/hooks/source";
 import TopInfo from "./TopInfo";
 
 // 欢迎页侧边栏
 const Sidebar: React.FC = () => {
   const brandConfList = useBrandOptionList();
-  const [brandConf, setBrandConf] = useBrandOption();
+  const [brandConf, setBrandConf] = useBrandConfig();
 
   const renderMenu = () => {
     if (!brandConfList || !brandConf) return null;
@@ -33,7 +33,7 @@ const Sidebar: React.FC = () => {
     <StyleSidebar>
       {/*  编辑器信息展示 */}
       <TopInfo />
-      {/* 厂商选择 */}
+      {/* 品牌选择 */}
       <StyleMenu>{renderMenu()}</StyleMenu>
     </StyleSidebar>
   );
@@ -48,7 +48,7 @@ const StyleSidebar = styled.div`
   background-color: ${({ theme }) => theme["@sidebar-color"]};
 `;
 
-// 厂商菜单
+// 品牌菜单
 const StyleMenu = styled.div`
   .ant-menu-inline,
   .ant-menu-vertical,

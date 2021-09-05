@@ -5,7 +5,7 @@ import {
   TypeProjectData,
   TypeProjectDataDoc
 } from "src/types/project";
-import { TypeBrandOption } from "src/types/source";
+import { TypeBrandConf } from "src/types/source";
 import { createNedb } from "server/utils/databaseUtil";
 import pathUtil from "server/utils/pathUtil";
 import SourceConfig from "server/compiler/SourceConfig";
@@ -19,12 +19,12 @@ const projectDB = createNedb(pathUtil.PROJECTS_DB);
 export async function createProject(
   data: TypeCreateProjectPayload
 ): Promise<TypeProjectDataDoc> {
-  const { brandOption, projectInfo, projectRoot, sourceConfigPath } = data;
+  const { brandConfig, projectInfo, projectRoot, sourceConfigPath } = data;
   const uiVersion = new SourceConfig(sourceConfigPath).getUiVersion();
   return projectDB.insert<TypeProjectData>({
     uuid: UUID(),
     projectInfo,
-    brandOption: brandOption,
+    brandConfig,
     uiVersion,
     sourceConfigPath,
     projectRoot
@@ -35,7 +35,7 @@ export async function createProject(
 export async function getProjectListOf(
   brandMd5: string
 ): Promise<TypeProjectDataDoc[]> {
-  const findKey: `brandOption.${keyof TypeBrandOption}` = "brandOption.md5";
+  const findKey: `brandConfig.${keyof TypeBrandConf}` = "brandConfig.md5";
   return projectDB
     .find<TypeProjectData>({ [findKey]: brandMd5 })
     .sort({ updatedAt: -1 });

@@ -5,15 +5,15 @@ import { remote } from "electron";
 
 import { isDev } from "@/core/constant";
 import { apiCreateProject } from "@/request";
-import { useBrandOption } from "@/hooks/source";
+import { useBrandConfig } from "@/hooks/source";
 import { TypeProjectInfo } from "src/types/project";
-import { TypeSourceConfigInfo } from "src/types/source";
+import { TypeSourceConfigPreview } from "src/types/source";
 
 import styled from "styled-components";
 import React, { useEffect, useRef, useState } from "react";
 import { Modal, Button, Form, Input, message } from "antd";
 import { FileAddOutlined } from "@ant-design/icons";
-import { BrandOption } from "src/data/BrandConfig";
+import BrandConfig from "src/data/BrandConfig";
 import Steps from "@/components/Steps";
 import ProjectInfoForm from "@/components/ProjectInfoForm";
 import SourceConfigManager from "./SourceConfigManager";
@@ -35,7 +35,7 @@ const CreateProject: React.FC<{
   onProjectCreated: (projectInfo: TypeProjectInfo) => Promise<void>;
 }> = props => {
   // 机型配置
-  const [selectedBrandOption] = useBrandOption();
+  const [selectedBrandOption] = useBrandConfig();
   // 弹框控制
   const [modalVisible, setModalVisible] = useState(false);
   // 当前步骤
@@ -45,7 +45,7 @@ const CreateProject: React.FC<{
   // 表单实例
   const [form] = Form.useForm<TypeProjectInfo>();
   // 选择的模板
-  const [sourceConfig, setSourceConfig] = useState<TypeSourceConfigInfo>();
+  const [sourceConfig, setSourceConfig] = useState<TypeSourceConfigPreview>();
   // 填写本地目录
   const [projectRoot, setProjectRoot] = useState(
     path.join(defaultPath, initialValues.name)
@@ -248,24 +248,22 @@ const CreateProject: React.FC<{
             throw new Error("未选择配置模板");
           }
           updateCreating(true);
-          const brandOption = new BrandOption()
+          const brandConfig = new BrandConfig()
             .set("name", selectedBrandOption.name)
             .set("md5", selectedBrandOption.md5)
-            .set("src", selectedBrandOption.src)
             .set("infoTemplate", selectedBrandOption.infoTemplate)
             .set("packageConfig", selectedBrandOption.packageConfig)
             .set("applyConfig", selectedBrandOption.applyConfig)
             .create();
-          const projectInfo = projectInfoRef.current;
           return apiCreateProject({
-            brandOption: brandOption,
+            brandConfig,
             projectRoot,
-            projectInfo,
+            projectInfo: projectInfoRef.current,
             sourceConfigPath: path.join(sourceConfig.root, sourceConfig.config)
           })
             .then(data => {
               console.log("创建工程：", data);
-              props.onProjectCreated(projectInfo);
+              props.onProjectCreated(projectInfoRef.current);
             })
             .finally(() => {
               closeModal();

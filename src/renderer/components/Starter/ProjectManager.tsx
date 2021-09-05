@@ -1,6 +1,6 @@
 import { useHistory } from "react-router";
 import { useProjectList } from "@/hooks/project";
-import { useBrandOption } from "@/hooks/source";
+import { useBrandConfig } from "@/hooks/source";
 
 import React from "react";
 import styled from "styled-components";
@@ -9,7 +9,7 @@ import ProjectCard from "./ProjectCard";
 import CreateProject from "./CreateProject";
 
 const ProjectManager: React.FC = () => {
-  const [brandOption] = useBrandOption();
+  const [brandConfig] = useBrandConfig();
   const [projects, isLoading, refreshList] = useProjectList();
   const history = useHistory();
 
@@ -58,7 +58,7 @@ const ProjectManager: React.FC = () => {
     <StyleProjectManager>
       <div className="top-container">
         <div className="title">
-          <h2>{brandOption?.name || ""}列表</h2>
+          <h2>{brandConfig?.name || ""}列表</h2>
           <p>新建{projects.length > 0 ? "或选择" : ""}一个主题开始创作</p>
         </div>
         <div className="button">
