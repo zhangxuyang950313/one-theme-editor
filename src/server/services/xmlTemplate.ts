@@ -7,7 +7,7 @@ import {
   TypeReleaseXmlTempPayload,
   UnionTupleToObjectKey
 } from "src/types/request";
-import { findProjectByUUID } from "server/db-handler/project";
+import { findProjectByQuery } from "server/db-handler/project";
 import XmlFileCompiler from "server/compiler/XmlFileCompiler";
 
 /**
@@ -18,7 +18,7 @@ export async function releaseXmlTemplate(
   uuid: string,
   data: TypeReleaseXmlTempPayload
 ): Promise<Record<string, string>> {
-  const project = await findProjectByUUID(uuid);
+  const project = await findProjectByQuery({ uuid });
   const { name, value, src } = data;
   const sourceRoot = path.join(
     pathUtil.SOURCE_CONFIG_DIR,

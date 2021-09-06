@@ -69,8 +69,8 @@ export function useServerHost(): string {
   return `http://localhost:${serverPort}`;
 }
 
-// 初始化编辑器
-export function useInitEditor(): boolean {
+// 初始化编辑器配置数据
+export function useInitEditorConfig(): boolean {
   const [loading, updateLoading] = useState(true);
   const dispatch = useGlobalDispatch();
   useLayoutEffect(() => {

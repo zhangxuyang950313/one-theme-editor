@@ -7,7 +7,7 @@ import "antd/dist/antd.css"; // antd 样式
 import zhCN from "antd/lib/locale/zh_CN"; // antd 中文
 
 import { ConfigProvider, Spin } from "antd";
-import { useInitEditor } from "./hooks";
+import { useInitEditorConfig } from "./hooks";
 import { GlobalStore } from "./store";
 import Router from "./router";
 import LightTheme from "./theme/light";
@@ -16,7 +16,7 @@ import LightTheme from "./theme/light";
 // console.log = (...args) => log(new Date(), ...args);
 
 function Index(): JSX.Element {
-  const loading = useInitEditor();
+  const loading = useInitEditorConfig();
   return loading ? (
     <Spin className="auto-margin" tip="初始化" spinning={loading} />
   ) : (

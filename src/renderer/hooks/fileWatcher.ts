@@ -11,6 +11,29 @@ const mapWatchers = (count: number, options?: WatchOptions) => {
 };
 
 /**
+ * 生成 fsWatcher 创建器
+ * @returns
+ */
+export function useFSWatcherCreator(): (options?: WatchOptions) => FSWatcher {
+  const [watcher, setWatcher] = useState<FSWatcher>();
+  useEffect(() => {
+    return () => {
+      if (!watcher) return;
+      const watcherList = watcher.getWatched();
+      watcher.close().then(() => {
+        console.log("关闭文件监听", watcherList);
+      });
+    };
+  }, []);
+  return (options?: WatchOptions) => {
+    if (watcher) return watcher;
+    const cWatcher = new FSWatcher(options);
+    setWatcher(cWatcher);
+    return cWatcher;
+  };
+}
+
+/**
  * 返回一个 chokidar 监听实例，自动在组件卸载时释放监听
  * @param options WatchOptions
  * @returns

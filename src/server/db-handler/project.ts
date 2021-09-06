@@ -31,8 +31,8 @@ export async function createProject(
   });
 }
 
-// brandType 筛选所有工程
-export async function getProjectListOf(
+// brandName md5 筛选所有工程
+export async function getProjectListByBrandMd5(
   brandMd5: string
 ): Promise<TypeProjectDataDoc[]> {
   const findKey: `brandConfig.${keyof TypeBrandConf}` = "brandConfig.md5";
@@ -42,10 +42,10 @@ export async function getProjectListOf(
 }
 
 // 查找工程
-export async function findProjectByUUID(
-  uuid: string
+export async function findProjectByQuery(
+  query: Partial<TypeProjectDataDoc>
 ): Promise<TypeProjectDataDoc> {
-  const project = await projectDB.findOne<TypeProjectData>({ uuid });
+  const project = await projectDB.findOne<TypeProjectData>(query);
   if (!project) throw new Error(ERR_CODE[2001]);
   return project;
 }
@@ -65,11 +65,16 @@ export async function updateProject<
     | { $set: O }
     | { $unset: O }
 ): Promise<TypeProjectDataDoc> {
-  const updated = await projectDB.update<TypeProjectData>({ uuid }, data, {
-    multi: true, // 更新所有匹配项目
-    upsert: true, // 不存在则创建
-    returnUpdatedDocs: true
-  });
-  if (updated[0]) return updated[0];
+  const updated = await projectDB.update<TypeProjectData>(
+    { uuid },
+    { projectInfo: data },
+    {
+      multi: false, // 更新所有匹配项目
+      upsert: false, // 不存在则创建
+      returnUpdatedDocs: true
+    }
+  );
+  console.log({ updated });
+  if (updated) return updated;
   else throw new Error(ERR_CODE[2004]);
 }

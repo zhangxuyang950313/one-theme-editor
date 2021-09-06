@@ -21,7 +21,7 @@ import {
   ActionPatchPageDataMap
 } from "@/store/editor/action";
 import {
-  selectSourceConfigUrl,
+  selectSourceConfigPath,
   selectSourceConfig,
   selectSourceModuleList,
   selectSourceModuleConf,
@@ -59,7 +59,7 @@ import {
 } from "@/store/index";
 import ERR_CODE from "src/common/errorCode";
 import { asyncQueue } from "src/utils/index";
-import { SOURCE_TYPES } from "src/enum/index";
+import { FETCH_STATUS, SOURCE_TYPES } from "src/enum/index";
 import { useImagePrefix } from "./image";
 import { useAsyncUpdater } from "./index";
 
@@ -84,16 +84,16 @@ export function useSourceConfigDir(): string {
  * @returns
  */
 export function useSourceConfigRootWithNS(): string {
-  const sourceConfigUrl = useSourceConfigUrl();
+  const sourceConfigPath = useSourceConfigPath();
   const sourceConfigDir = useGlobalSelector(getSourceConfigDir);
-  return path.join(sourceConfigDir, path.dirname(sourceConfigUrl));
+  return path.join(sourceConfigDir, path.dirname(sourceConfigPath));
 }
 
 /**
  * 获取当前选择品牌信息
  * @returns
  */
-export function useBrandConfig(): [
+export function useBrandOption(): [
   TypeBrandOption,
   (data: TypeBrandOption) => void
 ] {
@@ -136,7 +136,7 @@ export function useSourceConfigPreviewList(): [
 ] {
   const [value, updateValue] = useState<TypeSourceConfigPreview[]>([]);
   const [loading, updateLoading] = useState(true);
-  const [brandConfig] = useBrandConfig();
+  const [brandConfig] = useBrandOption();
   const dispatch = useStarterDispatch();
   useLayoutEffect(() => {
     if (!brandConfig.src) return;
@@ -164,36 +164,41 @@ export function useSourceConfigPreviewList(): [
  */
 export function useFetchSourceConfig(): [
   TypeSourceConfigData,
-  boolean,
+  FETCH_STATUS,
   () => Promise<void>
 ] {
-  const [loading, updateLoading] = useState(true);
+  const [status, setStatus] = useState<FETCH_STATUS>(FETCH_STATUS.INITIAL);
   const dispatch = useEditorDispatch();
-  const sourceConfigUrl = useSourceConfigUrl();
+  const sourceConfigPath = useSourceConfigPath();
   const sourceConfig = useSourceConfig();
   const doFetchData = useCallback(async () => {
-    if (!sourceConfigUrl) return;
-    updateLoading(true);
-    const data = await apiGetSourceConfig(sourceConfigUrl);
-    if (!data) throw new Error(ERR_CODE[3002]);
-    console.log(`加载资源配置: ${sourceConfigUrl}`, data);
-    dispatch(ActionSetSourceConfig(data));
-    updateLoading(false);
-  }, [sourceConfigUrl]);
+    if (!sourceConfigPath) return;
+    setStatus(FETCH_STATUS.LOADING);
+    apiGetSourceConfig(sourceConfigPath)
+      .then(data => {
+        if (!data) throw new Error(ERR_CODE[3002]);
+        console.log(`加载资源配置: ${sourceConfigPath}`, data);
+        dispatch(ActionSetSourceConfig(data));
+        setStatus(FETCH_STATUS.SUCCESS);
+      })
+      .catch(() => {
+        setStatus(FETCH_STATUS.FAIL);
+      });
+  }, [sourceConfigPath]);
   useEffect(() => {
     doFetchData().catch(err => {
       notification.error({ message: err.message });
     });
-  }, [sourceConfigUrl]);
-  return [sourceConfig, loading, doFetchData];
+  }, [sourceConfigPath]);
+  return [sourceConfig, status, doFetchData];
 }
 
 /**
  * 获取资源配置文件 url
  * @returns
  */
-export function useSourceConfigUrl(): string {
-  return useEditorSelector(selectSourceConfigUrl);
+export function useSourceConfigPath(): string {
+  return useEditorSelector(selectSourceConfigPath);
 }
 
 /**
@@ -245,65 +250,46 @@ export function useSourcePageData(): TypeSourcePageData | null {
  * 获取页面数据
  * @returns
  */
-export function useFetchPageConfData1(): [
-  TypeSourcePageData | null,
-  boolean,
+export function useFetchPageConfList(): [
+  TypeSourcePageData[],
+  FETCH_STATUS,
   () => Promise<void>
 ] {
-  const [loading, updateLoading] = useState(true);
-  const [value, updateValue] = useState<TypeSourcePageData | null>(null);
-  const dispatch = useEditorDispatch();
-  const pageConf = useSourcePageConf()[0];
-  const sourceConfigUrl = useSourceConfigUrl();
-  const fetchData = async () => {
-    if (!pageConf?.src) return;
-    updateLoading(true);
-    const data = await apiGetSourcePageConfData({
-      namespace: path.dirname(sourceConfigUrl),
-      config: pageConf.src
-    });
-    updateValue(data);
-    dispatch(ActionPatchPageDataMap(data));
-    updateLoading(false);
-  };
-  useEffect(() => {
-    fetchData().catch(err => {
-      updateValue(null);
-      notification.error({ message: err.message });
-    });
-  }, [pageConf?.src]);
-  return [value, loading, fetchData];
-}
-
-/**
- * 获取页面数据
- * @returns
- */
-export function useFetchPageConfData(): [TypeSourcePageData[], boolean] {
-  const [loading, updateLoading] = useState(true);
-  const [value, updateValue] = useState<TypeSourcePageData[]>([]);
+  const [status, setStatus] = useState<FETCH_STATUS>(FETCH_STATUS.INITIAL);
+  const [pageData, setPageData] = useState<TypeSourcePageData[]>([]);
   const dispatch = useEditorDispatch();
   const pageGroupList = useSourcePageGroupList();
-  const sourceConfigUrl = useSourceConfigUrl();
+  const sourceConfigPath = useSourceConfigPath();
 
-  useEffect(() => {
+  const handleFetch = async () => {
     const pageConfDataQueue = pageGroupList
       .flatMap(item => item.pageList)
       .map(item => async () => {
         const data = await apiGetSourcePageConfData({
-          namespace: path.dirname(sourceConfigUrl),
+          namespace: path.dirname(sourceConfigPath),
           config: item.src
         });
         dispatch(ActionPatchPageDataMap(data));
         return data;
       });
-    updateLoading(true);
-    asyncQueue(pageConfDataQueue)
-      .then(data => updateValue(data))
-      .catch(err => notification.error({ message: err.message }))
-      .finally(() => updateLoading(false));
+    setStatus(FETCH_STATUS.LOADING);
+    return asyncQueue(pageConfDataQueue)
+      .then(data => {
+        setPageData(data);
+        setStatus(FETCH_STATUS.SUCCESS);
+      })
+      .catch(err => {
+        notification.error({ message: err.message });
+        setStatus(FETCH_STATUS.FAIL);
+      });
+  };
+
+  useEffect(() => {
+    handleFetch().catch(err => {
+      notification.error({ message: err.message });
+    });
   }, [pageGroupList]);
-  return [value, loading];
+  return [pageData, status, handleFetch];
 }
 
 /**

@@ -3,6 +3,7 @@ import { TypeReleaseXmlTempPayload } from "src/types/request";
 import {
   TypeCreateProjectPayload,
   TypeProjectData,
+  TypeProjectDataDoc,
   TypeProjectInfo,
   TypeProjectUiVersion
 } from "src/types/project";
@@ -99,7 +100,7 @@ const API = {
   // 更新描述信息
   UPDATE_PROJECT_INFO: createApiConf({
     url: "/project/update/info",
-    params: ["uuid"],
+    query: ["uuid"],
     body: {} as TypeProjectInfo
   }),
   // 更新UI版本信息
@@ -114,9 +115,9 @@ const API = {
     params: ["brandMd5"]
   }),
   // 通过 id 获取工程信息
-  GET_PROJECT: createApiConf({
-    url: "/project/get",
-    params: ["uuid"]
+  GET_PROJECT_DATA: createApiConf({
+    url: "/project/data",
+    params: [] as Array<keyof TypeProjectDataDoc>
   }),
   // 获取页面配置的素材文件数据
   GET_PAGE_SOURCE_DATA: createApiConf({
@@ -127,8 +128,7 @@ const API = {
   // 获取一个文件的数据
   GET_SOURCE_FILE_DATA: createApiConf({
     url: "/project/file",
-    params: ["uuid"],
-    query: ["filepath"]
+    query: ["uuid", "filepath"]
   }),
 
   // 按行写入 xml

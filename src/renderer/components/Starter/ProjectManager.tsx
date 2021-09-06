@@ -1,6 +1,6 @@
 import { useHistory } from "react-router";
 import { useProjectList } from "@/hooks/project";
-import { useBrandConfig } from "@/hooks/source";
+import { useBrandOption } from "@/hooks/source";
 
 import React from "react";
 import styled from "styled-components";
@@ -9,7 +9,7 @@ import ProjectCard from "./ProjectCard";
 import CreateProject from "./CreateProject";
 
 const ProjectManager: React.FC = () => {
-  const [brandConfig] = useBrandConfig();
+  const [brandConfig] = useBrandOption();
   const [projects, isLoading, refreshList] = useProjectList();
   const history = useHistory();
 

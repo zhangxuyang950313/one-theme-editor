@@ -9,8 +9,8 @@ import {
 } from "src/types/project";
 import { TypeResponseFrame, UnionTupleToObjectKey } from "src/types/request";
 import {
-  findProjectByUUID,
-  getProjectListOf,
+  findProjectByQuery,
+  getProjectListByBrandMd5,
   createProject,
   updateProject
 } from "server/db-handler/project";
@@ -21,6 +21,7 @@ import {
   packProject
 } from "server/services/project";
 import { checkParamsKey, result } from "server/utils/requestUtil";
+import { unzipProject } from "server/utils/unpackUtil";
 import XmlTemplate from "server/compiler/XmlTemplate";
 import XmlFileCompiler from "server/compiler/XmlFileCompiler";
 import BrandOptions from "server/compiler/BrandOptions";
@@ -41,16 +42,18 @@ export default function projectController(service: Express): void {
     UnionTupleToObjectKey<typeof API.GET_PROJECT_LIST.params>, // reqParams
     TypeResponseFrame<TypeProjectDataDoc[], string>
   >(`${API.GET_PROJECT_LIST.url}/:brandMd5`, async (request, response) => {
-    const project = await getProjectListOf(request.params.brandMd5);
+    const project = await getProjectListByBrandMd5(request.params.brandMd5);
     response.send(result.success(project));
   });
 
   // 通过参数获取工程
   service.get<
-    UnionTupleToObjectKey<typeof API.GET_PROJECT.params>,
-    TypeResponseFrame<TypeProjectDataDoc>
-  >(`${API.GET_PROJECT.url}/:uuid`, async (request, response) => {
-    const project = await findProjectByUUID(request.params.uuid);
+    never,
+    TypeResponseFrame<TypeProjectDataDoc>,
+    never,
+    Partial<TypeProjectDataDoc>
+  >(API.GET_PROJECT_DATA.url, async (request, response) => {
+    const project = await findProjectByQuery(request.query);
     response.send(result.success(project));
   });
 
@@ -59,19 +62,21 @@ export default function projectController(service: Express): void {
     UnionTupleToObjectKey<typeof API.UPDATE_PROJECT.params>, // reqParams
     TypeResponseFrame<TypeProjectDataDoc, string>, // resBody
     typeof API.UPDATE_PROJECT.body // reqBody
-  >(`${API.UPDATE_PROJECT.url}/:uuid`, async (request, response) => {
+  >(API.UPDATE_PROJECT.url, async (request, response) => {
     const project = await updateProject(request.params.uuid, request.body);
     response.send(result.success(project));
   });
 
   // 更新工程描述信息
   service.post<
-    UnionTupleToObjectKey<typeof API.UPDATE_PROJECT_INFO.params>,
-    TypeResponseFrame<TypeProjectDataDoc, string>,
-    typeof API.UPDATE_PROJECT_INFO.body
+    never,
+    TypeResponseFrame<TypeProjectDataDoc, string>, // resBody
+    typeof API.UPDATE_PROJECT_INFO.body, // reqBody
+    UnionTupleToObjectKey<typeof API.UPDATE_PROJECT_INFO.query> // reqQuery
   >(API.UPDATE_PROJECT_INFO.url, async (request, response) => {
-    const { uuid } = request.params;
+    const { uuid } = request.query;
     const description = request.body;
+    console.log("更新工程描述信息", { uuid, description });
     const project = await updateProject(uuid, { description });
     response.send(result.success(project));
   });
@@ -124,7 +129,7 @@ export default function projectController(service: Express): void {
     const { query } = request;
     checkParamsKey(query, API.GET_XML_TEMP_VALUE.query);
     const { uuid, name, src } = query;
-    const project = await findProjectByUUID(uuid);
+    const project = await findProjectByQuery({ uuid });
     const releaseFile = path.join(project.projectRoot, src);
     const xmlElement = new XmlFileCompiler(releaseFile).getElement();
     const value = new XmlTemplate(xmlElement).getValueByName(name);
@@ -152,15 +157,14 @@ export default function projectController(service: Express): void {
    * 获取配置页面所有素材数据映射
    */
   service.get<
-    UnionTupleToObjectKey<typeof API.GET_PAGE_SOURCE_DATA.params>,
+    never,
     TypeResponseFrame<Record<string, TypeProjectFileData>>,
     never, // reqBody
     UnionTupleToObjectKey<typeof API.GET_PAGE_SOURCE_DATA.query>
-  >(`${API.GET_PAGE_SOURCE_DATA.url}/:uuid`, async (request, response) => {
-    const { params, query } = request;
-    checkParamsKey(params, API.GET_PAGE_SOURCE_DATA.params);
+  >(`${API.GET_PAGE_SOURCE_DATA.url}`, async (request, response) => {
+    const { query } = request;
     checkParamsKey(query, API.GET_PAGE_SOURCE_DATA.query);
-    const data = await getPageDefineSourceData(params.uuid, query.config);
+    const data = await getPageDefineSourceData(query.uuid, query.config);
     response.send(result.success(data));
   });
 
@@ -168,15 +172,14 @@ export default function projectController(service: Express): void {
    * 获取文件数据
    */
   service.get<
-    UnionTupleToObjectKey<typeof API.GET_SOURCE_FILE_DATA.params>,
+    never,
     TypeResponseFrame<TypeProjectFileData>,
     never,
     UnionTupleToObjectKey<typeof API.GET_SOURCE_FILE_DATA.query>
-  >(`${API.GET_SOURCE_FILE_DATA.url}/:uuid`, async (request, response) => {
-    const { params, query } = request;
-    checkParamsKey(params, API.GET_SOURCE_FILE_DATA.params);
+  >(`${API.GET_SOURCE_FILE_DATA.url}`, async (request, response) => {
+    const { query } = request;
     checkParamsKey(query, API.GET_SOURCE_FILE_DATA.query);
-    const { projectRoot } = await findProjectByUUID(params.uuid);
+    const { projectRoot } = await findProjectByQuery({ uuid: query.uuid });
     const data = getProjectFileData(projectRoot, query.filepath);
     response.send(result.success(data));
   });
@@ -192,7 +195,7 @@ export default function projectController(service: Express): void {
   >(API.PACK_PROJECT.url, async (request, response) => {
     checkParamsKey(request.query, API.PACK_PROJECT.query);
     const { outputFile, uuid } = request.query;
-    const { brandConfig, projectRoot } = await findProjectByUUID(uuid);
+    const { brandConfig, projectRoot } = await findProjectByQuery({ uuid });
     const packConfig = BrandOptions.from(
       pathUtil.SOURCE_CONFIG_FILE
     ).getPackageConfigByBrandMd5(brandConfig.md5);
@@ -202,5 +205,13 @@ export default function projectController(service: Express): void {
     }
     const files = await packProject({ projectRoot, packConfig, outputFile });
     response.send(result.success(files));
+  });
+
+  service.post(API.UNPACK_PROJECT.url, async (request, response) => {
+    response.send(
+      await unzipProject(
+        "/Users/zhangxuyang/Desktop/素白App（超级锁屏+简约不简单+返现）.mtz.zip"
+      )
+    );
   });
 }

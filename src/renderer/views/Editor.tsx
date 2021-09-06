@@ -3,60 +3,106 @@ import styled from "styled-components";
 import { useHistory } from "react-router";
 import { Button, Empty, Spin } from "antd";
 import { StyleBorderRight } from "@/style";
-import { useLoadProject, useProjectData } from "@/hooks/project";
+import { useInitProject } from "@/hooks/project";
 import ModuleSelector from "@/components/Editor/ModuleSelector";
 import EditorToolsBar from "@/components/Editor/ToolsBar";
 import EditorContainer from "@/components/Editor/index";
+import { FETCH_STATUS } from "src/enum";
 
 const Editor: React.FC = () => {
   const history = useHistory();
-  const isLoading = useLoadProject();
-  const projectData = useProjectData();
+  const [projectData, status] = useInitProject();
 
-  // 还未安装
-  if (isLoading) {
-    return (
-      <StyleEditorEmpty>
-        <Spin tip="加载中" />
-      </StyleEditorEmpty>
-    );
+  switch (status) {
+    case FETCH_STATUS.LOADING: {
+      return (
+        <StyleEditorEmpty>
+          <Spin tip="加载中" />
+        </StyleEditorEmpty>
+      );
+    }
+    case FETCH_STATUS.FAIL: {
+      const isEmpty = projectData === null;
+      return (
+        <StyleEditorEmpty>
+          <Empty
+            image={Empty.PRESENTED_IMAGE_SIMPLE}
+            description={isEmpty ? "暂无主题数据" : "加载失败"}
+          />
+          <Button
+            type="primary"
+            size="small"
+            onClick={() => history.replace("/")}
+          >
+            {isEmpty ? "重试" : "返回首页"}
+          </Button>
+        </StyleEditorEmpty>
+      );
+    }
+    default: {
+      // 进入编辑状态
+      return (
+        <StyleEditor>
+          {/* 模块选择器 */}
+          <StyleModuleSelector>
+            <ModuleSelector />
+          </StyleModuleSelector>
+          {/* 编辑区域 */}
+          <StyleEditorContent>
+            {/* 工具栏 */}
+            <EditorToolsBar />
+            {/* 主编辑区域 */}
+            <EditorContainer />
+          </StyleEditorContent>
+        </StyleEditor>
+      );
+    }
   }
 
-  // 空状态
-  if (projectData === null) {
-    return (
-      <StyleEditorEmpty>
-        <Empty
-          image={Empty.PRESENTED_IMAGE_SIMPLE}
-          description="暂无主题数据"
-        />
-        <Button
-          type="primary"
-          size="small"
-          onClick={() => history.replace("/")}
-        >
-          返回首页
-        </Button>
-      </StyleEditorEmpty>
-    );
-  }
+  // // 还未安装
+  // if (status === FETCH_STATUS.LOADING) {
+  //   return (
+  //     <StyleEditorEmpty>
+  //       <Spin tip="加载中" />
+  //     </StyleEditorEmpty>
+  //   );
+  // }
 
-  // 进入编辑状态
-  return (
-    <StyleEditor>
-      {/* 模块选择器 */}
-      <StyleModuleSelector>
-        <ModuleSelector />
-      </StyleModuleSelector>
-      {/* 编辑区域 */}
-      <StyleEditorContent>
-        {/* 工具栏 */}
-        <EditorToolsBar />
-        {/* 主编辑区域 */}
-        <EditorContainer />
-      </StyleEditorContent>
-    </StyleEditor>
-  );
+  // // 空状态
+  // if (projectData === null) {
+  //   return (
+  //     <StyleEditorEmpty>
+  //       <Empty
+  //         image={Empty.PRESENTED_IMAGE_SIMPLE}
+  //         description="暂无主题数据"
+  //       />
+  //       <Button
+  //         type="primary"
+  //         size="small"
+  //         onClick={() => history.replace("/")}
+  //       >
+  //         返回首页
+  //       </Button>
+  //     </StyleEditorEmpty>
+  //   );
+  // }
+
+  // // 进入编辑状态
+  // return (
+  //   <StyleEditor>
+  //     {/* 模块选择器 */}
+  //     <StyleModuleSelector>
+  //       <ModuleSelector />
+  //     </StyleModuleSelector>
+  //     {/* 编辑区域 */}
+  //     <StyleEditorContent>
+  //       {/* 工具栏 */}
+  //       <EditorToolsBar />
+  //       {/* 主编辑区域 */}
+  //       <EditorContainer />
+  //     </StyleEditorContent>
+  //   </StyleEditor>
+  // );
 };
 
 const StyleEditorEmpty = styled.div`

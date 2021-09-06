@@ -1,7 +1,7 @@
 import path from "path";
 import fse from "fs-extra";
 import { filenameIsImage, filenameIsXml, getImageData } from "src/utils/index";
-import { findProjectByUUID } from "server/db-handler/project";
+import { findProjectByQuery } from "server/db-handler/project";
 import { TypeProjectFileData } from "src/types/project";
 import { TypePackConf } from "src/types/source";
 import {
@@ -18,7 +18,7 @@ export async function getPageDefineSourceData(
   uuid: string,
   config: string
 ): Promise<Record<string, TypeProjectFileData>> {
-  const { projectRoot, sourceConfigPath } = await findProjectByUUID(uuid);
+  const { projectRoot, sourceConfigPath } = await findProjectByQuery({ uuid });
   const namespace = path.dirname(sourceConfigPath);
   const pageConfig = new PageConfig({ namespace, config });
   const sourcePathList = pageConfig.getSourceDefinePathList();

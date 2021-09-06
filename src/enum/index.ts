@@ -3,6 +3,14 @@ export enum PRESET_TITLE {
   default = "一个主题编辑器"
 }
 
+// 加载数据的状态
+export enum FETCH_STATUS {
+  INITIAL,
+  LOADING,
+  SUCCESS,
+  FAIL
+}
+
 export enum ELEMENT_TAG {
   Image = "Image",
   Text = "Text",

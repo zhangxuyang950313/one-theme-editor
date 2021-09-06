@@ -41,16 +41,16 @@ export const selectSourceConfig = createSelector(
   state => state.sourceConfig
 );
 
-export const selectSourceConfigUrl = createSelector(
+export const selectSourceConfigPath = createSelector(
   stateSelector,
-  state => state.sourceConfigUrl
+  state => state.sourceConfigPath
 );
 
 // 获取当前 sourceConfig namespace
 export const selectSourceConfigNS = createSelector(
-  selectSourceConfigUrl,
-  sourceConfigUrl => {
-    return sourceConfigUrl ? path.dirname(sourceConfigUrl) : "";
+  selectSourceConfigPath,
+  sourceConfigPath => {
+    return sourceConfigPath ? path.dirname(sourceConfigPath) : "";
   }
 );
 

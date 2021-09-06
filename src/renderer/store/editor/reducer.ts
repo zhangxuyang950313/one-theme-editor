@@ -25,7 +25,7 @@ export type TypeEditorState = {
   projectInfo: TypeProjectInfo;
   uuid: string;
   projectRoot: string;
-  sourceConfigUrl: string;
+  sourceConfigPath: string;
   sourceConfig: TypeSourceConfigData;
   sourceTypeList: TypeSourceTypeConf[];
   sourceModuleList: TypeSourceModuleConf[];
@@ -40,7 +40,7 @@ const defaultState: TypeEditorState = {
   projectInfo: new ProjectInfo().create(),
   uuid: "",
   projectRoot: "",
-  sourceConfigUrl: "",
+  sourceConfigPath: "",
   sourceConfig: new SourceConfigData().create(),
   sourceTypeList: [],
   sourceModuleList: [],
@@ -69,7 +69,7 @@ export default function EditorReducer(
       return updateState(state, {
         uuid: action.payload.uuid,
         projectRoot: action.payload.projectRoot,
-        sourceConfigUrl: action.payload.sourceConfigPath,
+        sourceConfigPath: action.payload.sourceConfigPath,
         projectInfo: action.payload.projectInfo,
         projectData: action.payload
       });

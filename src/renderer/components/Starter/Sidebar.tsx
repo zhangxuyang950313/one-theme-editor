@@ -3,26 +3,26 @@ import styled from "styled-components";
 
 import { Menu } from "antd";
 
-import { useBrandOptionList, useBrandConfig } from "@/hooks/source";
+import { useBrandOptionList, useBrandOption } from "@/hooks/source";
 import TopInfo from "./TopInfo";
 
 // 欢迎页侧边栏
 const Sidebar: React.FC = () => {
-  const brandConfList = useBrandOptionList();
-  const [brandConf, setBrandConf] = useBrandConfig();
+  const brandOptionList = useBrandOptionList();
+  const [brandOption, setBrandOption] = useBrandOption();
 
   const renderMenu = () => {
-    if (!brandConfList || !brandConf) return null;
+    if (!brandOptionList || !brandOption) return null;
     return (
       <Menu
         className="menu"
-        selectedKeys={[brandConf.md5]}
+        selectedKeys={[brandOption.md5]}
         onSelect={v => {
-          const brandOption = brandConfList.find(o => v.key === o.md5);
-          if (brandOption) setBrandConf(brandOption);
+          const brandOption = brandOptionList.find(o => v.key === o.md5);
+          if (brandOption) setBrandOption(brandOption);
         }}
       >
-        {brandConfList.map(item => (
+        {brandOptionList.map(item => (
           <Menu.Item key={item.md5}>{item.name}</Menu.Item>
         ))}
       </Menu>

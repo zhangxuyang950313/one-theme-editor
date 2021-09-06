@@ -41,9 +41,9 @@ export async function apiGetProjectByUUID(
   canceler?: TypeGetCanceler
 ): Promise<TypeProjectDataDoc> {
   return createHttp(canceler)
-    .get<TypeRequestResult<TypeProjectDataDoc>>(
-      `${API.GET_PROJECT.url}/${uuid}`
-    )
+    .get<TypeRequestResult<TypeProjectDataDoc>>(API.GET_PROJECT_DATA.url, {
+      params: { uuid }
+    })
     .then(data => data.data.data);
 }
 
@@ -52,10 +52,10 @@ export async function apiUpdateProject(
   data: TypeProjectData
 ): Promise<TypeProjectDataDoc> {
   return createHttp()
-    .post<TypeRequestResult<TypeProjectDataDoc>>(
-      `${API.UPDATE_PROJECT.url}/${data.uuid}`,
+    .post<TypeRequestResult<TypeProjectDataDoc>>(API.UPDATE_PROJECT.url, {
+      params: data.uuid,
       data
-    )
+    })
     .then(data => data.data.data);
 }
 
@@ -101,9 +101,8 @@ export async function apiGetProjectFileData(
   filepath: string
 ): Promise<TypeProjectFileData> {
   return createHttp()
-    .get<TypeRequestResult<TypeProjectFileData>>(
-      `${API.GET_SOURCE_FILE_DATA.url}/${uuid}`,
-      { params: { filepath } }
-    )
+    .get<TypeRequestResult<TypeProjectFileData>>(API.GET_SOURCE_FILE_DATA.url, {
+      params: { filepath, uuid }
+    })
     .then(data => data.data.data);
 }

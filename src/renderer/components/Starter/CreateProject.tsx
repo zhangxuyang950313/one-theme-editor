@@ -5,7 +5,7 @@ import { remote } from "electron";
 
 import { isDev } from "@/core/constant";
 import { apiCreateProject } from "@/request";
-import { useBrandConfig } from "@/hooks/source";
+import { useBrandOption } from "@/hooks/source";
 import { TypeProjectInfo } from "src/types/project";
 import { TypeSourceConfigPreview } from "src/types/source";
 
@@ -35,7 +35,7 @@ const CreateProject: React.FC<{
   onProjectCreated: (projectInfo: TypeProjectInfo) => Promise<void>;
 }> = props => {
   // 机型配置
-  const [selectedBrandOption] = useBrandConfig();
+  const [selectedBrandOption] = useBrandOption();
   // 弹框控制
   const [modalVisible, setModalVisible] = useState(false);
   // 当前步骤
