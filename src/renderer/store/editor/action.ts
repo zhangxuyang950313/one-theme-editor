@@ -4,7 +4,7 @@ import {
   TypeProjectFileData
 } from "src/types/project";
 import {
-  TypeSourceConfigData,
+  TypeSourceConfig,
   TypeSourceModuleConf,
   TypeSourcePageConf,
   TypeSourcePageData
@@ -36,7 +36,7 @@ type TypeActionInitEditor = {
 
 type TypeActionSetSourceConfig = {
   type: typeof ACTION_TYPES.SET_SOURCE_CONFIG;
-  payload: TypeSourceConfigData;
+  payload: TypeSourceConfig;
 };
 
 // 设置模块
@@ -92,7 +92,7 @@ export function ActionInitEditor(): TypeActionInitEditor {
 
 // 设置当前资源配置
 export function ActionSetSourceConfig(
-  payload: TypeSourceConfigData
+  payload: TypeSourceConfig
 ): TypeActionSetSourceConfig {
   return { type: ACTION_TYPES.SET_SOURCE_CONFIG, payload };
 }

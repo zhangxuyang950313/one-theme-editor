@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import logSymbols from "log-symbols";
 import { Tooltip } from "antd";
 import { useSourceModuleList, useSourceModuleConf } from "@/hooks/source";
 import { SourceImage } from "../ImageCollection";
@@ -10,12 +9,8 @@ const ModuleSelector: React.FC = () => {
   const sourceModuleList = useSourceModuleList();
   const [currentModule, setCurrentModule] = useSourceModuleConf();
 
+  if (sourceModuleList.length === 0) return null;
   if (!currentModule) return null;
-
-  if (sourceModuleList.length === 0) {
-    console.log(logSymbols.error, "modules 为空");
-    return null;
-  }
 
   return (
     <>

@@ -1,6 +1,6 @@
 import {
   TypeLayoutConf,
-  TypeSourceConfigData,
+  TypeSourceConfig,
   TypeSourceConfigPreview,
   TypeLayoutImageElement,
   TypeLayoutTextElement,
@@ -179,7 +179,7 @@ export class UiVersion extends AbstractDataModel<TypeProjectUiVersion> {
 export class SourceConfigInfo extends AbstractDataModel<TypeSourceConfigPreview> {
   protected data: TypeSourceConfigPreview = {
     key: "",
-    root: "",
+    namespace: "",
     config: "",
     name: "",
     preview: "",
@@ -191,13 +191,11 @@ export class SourceConfigInfo extends AbstractDataModel<TypeSourceConfigPreview>
   }
 }
 
-export class SourceConfigData extends AbstractDataModel<TypeSourceConfigData> {
-  protected data: TypeSourceConfigData = {
+export class SourceConfigData extends AbstractDataModel<TypeSourceConfig> {
+  protected data: TypeSourceConfig = {
     ...SourceConfigInfo.default(),
     sourceTypeList: [],
     sourceModuleList: []
   };
-  static default(): TypeSourceConfigData {
-    return new SourceConfigData().default();
-  }
+  static default = new SourceConfigData().create();
 }

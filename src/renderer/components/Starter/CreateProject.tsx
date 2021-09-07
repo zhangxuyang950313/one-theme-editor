@@ -255,11 +255,15 @@ const CreateProject: React.FC<{
             .set("packageConfig", selectedBrandOption.packageConfig)
             .set("applyConfig", selectedBrandOption.applyConfig)
             .create();
+          const sourceConfigPath = path.join(
+            sourceConfig.namespace,
+            sourceConfig.config
+          );
           return apiCreateProject({
             brandConfig,
             projectRoot,
             projectInfo: projectInfoRef.current,
-            sourceConfigPath: path.join(sourceConfig.root, sourceConfig.config)
+            sourceConfigPath
           })
             .then(data => {
               console.log("创建工程：", data);

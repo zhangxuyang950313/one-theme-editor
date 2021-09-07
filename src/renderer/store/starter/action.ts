@@ -1,24 +1,18 @@
-import { TypeBrandOption, TypeSourceConfigPreview } from "src/types/source";
+import { TypeProjectDataDoc } from "src/types/project";
+import { TypeBrandOption } from "src/types/source";
 
 export enum ACTION_TYPES {
   // 设置品牌列表
   SET_BRAND_OPTION_LIST = "SET_BRAND_OPTION_LIST",
   // 设置当前选择的品牌
   SET_BRAND_OPTION = "SET_BRAND_OPTION",
-  // 设置资源预览列表
-  SET_SOURCE_BRIEF_LIST = "SET_SOURCE_BRIEF_LIST"
+  SET_PROJECT_LIST = "SET_PROJECT_LIST"
 }
 
 // 设置品牌信息列表
-type TypeSetBrandOptionList = {
+type TypeActionSetBrandOptionList = {
   type: typeof ACTION_TYPES.SET_BRAND_OPTION_LIST;
   payload: TypeBrandOption[];
-};
-
-// 配置描述列表
-type TypeActionSetSourceDescriptionList = {
-  type: typeof ACTION_TYPES.SET_SOURCE_BRIEF_LIST;
-  payload: TypeSourceConfigPreview[];
 };
 
 // 设置品牌信息
@@ -27,29 +21,33 @@ type TypeActionSetBrandOption = {
   payload: TypeBrandOption;
 };
 
+type TypeActionSetProjectList = {
+  type: typeof ACTION_TYPES.SET_PROJECT_LIST;
+  payload: TypeProjectDataDoc[];
+};
+
 // main actions
 export type TypeStarterActions =
-  | TypeSetBrandOptionList
-  | TypeActionSetSourceDescriptionList
-  | TypeActionSetBrandOption;
+  | TypeActionSetBrandOptionList
+  | TypeActionSetBrandOption
+  | TypeActionSetProjectList;
 
 // 设置品牌信息列表
 export function ActionSetBrandOptionList(
   payload: TypeBrandOption[]
-): TypeSetBrandOptionList {
+): TypeActionSetBrandOptionList {
   return { type: ACTION_TYPES.SET_BRAND_OPTION_LIST, payload };
-}
-
-// 设置当前资源配置预览列表
-export function ActionSetSourceConfigPreviewList(
-  payload: TypeSourceConfigPreview[]
-): TypeActionSetSourceDescriptionList {
-  return { type: ACTION_TYPES.SET_SOURCE_BRIEF_LIST, payload };
 }
 
 // 设置选择的品牌信息
 export function ActionSetBrandOption(
-  brandOption: TypeBrandOption
+  payload: TypeBrandOption
 ): TypeActionSetBrandOption {
-  return { type: ACTION_TYPES.SET_BRAND_OPTION, payload: brandOption };
+  return { type: ACTION_TYPES.SET_BRAND_OPTION, payload };
+}
+
+export function ActionSetProjectList(
+  payload: TypeProjectDataDoc[]
+): TypeActionSetProjectList {
+  return { type: ACTION_TYPES.SET_PROJECT_LIST, payload };
 }

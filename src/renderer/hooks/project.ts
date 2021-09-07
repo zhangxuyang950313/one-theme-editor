@@ -18,19 +18,20 @@ import {
   ActionSetProjectData
 } from "@/store/editor/action";
 import {
-  selectProjectUUID,
-  selectProjectData,
-  selectProjectInfo,
-  selectProjectRoot,
   selectProjectFileDataMap,
   selectProjectXmlFileDataMap,
-  selectProjectImageFileDataMap
+  selectProjectImageFileDataMap,
+  selectProjectData
 } from "@/store/editor/selector";
-import { useEditorDispatch, useEditorSelector } from "@/store/index";
+import {
+  useEditorDispatch,
+  useEditorSelector,
+  useStarterSelector
+} from "@/store/index";
 import {
   TypeProjectDataDoc,
-  TypeProjectInfo,
-  TypeProjectFileData
+  TypeProjectFileData,
+  TypeProjectInfo
 } from "src/types/project";
 
 import ERR_CODE from "src/common/errorCode";
@@ -38,37 +39,86 @@ import XMLNodeElement from "src/server/compiler/XMLNodeElement";
 import { useLayoutEffect, useEffect, useState, useCallback } from "react";
 import { useParams } from "react-router";
 import { notification } from "antd";
-import { FETCH_STATUS, FILE_STATUS } from "src/enum";
-import { TypeSourceConfigData, TypeSourcePageData } from "src/types/source";
+import { LOAD_STATUS, FILE_STATUS } from "src/enum";
+import {
+  TypeBrandConf,
+  TypeSourceConfig,
+  TypeSourcePageData
+} from "src/types/source";
+import { selectProjectList } from "@/store/starter/selector";
+import { ActionSetProjectList } from "@/store/starter/action";
+import { sleep } from "src/utils";
 import { useImagePrefix } from "./image";
 import { useFSWatcherCreator } from "./fileWatcher";
+import { useStarterDispatch } from "./../store/index";
+
+export function useProjectList(): TypeProjectDataDoc[] {
+  return useStarterSelector(selectProjectList);
+}
+
+// 工程数据
+export function useProjectData(): TypeProjectDataDoc {
+  return useEditorSelector(selectProjectData);
+}
+
+// 工程 uuid
+export function useProjectUUID(): string {
+  const projectData = useProjectData();
+  return projectData.uuid;
+}
+
+// 工程本地路径
+export function useProjectRoot(): string {
+  const projectData = useProjectData();
+  return projectData.projectRoot;
+}
+
+// 工程品牌配置信息
+export function useProjectBrandConfig(): TypeBrandConf {
+  const projectData = useProjectData();
+  return projectData.brandConfig;
+}
+
+// 工程描述信息
+export function useProjectInfo(): TypeProjectInfo {
+  const projectData = useProjectData();
+  return projectData.projectInfo;
+}
 
 // 获取项目列表
-export function useProjectList(): [
-  TypeProjectDataDoc[],
-  FETCH_STATUS,
-  () => Promise<void>
-] {
+export function useFetchProjectList(): {
+  projectList: TypeProjectDataDoc[];
+  status: LOAD_STATUS;
+  fetch: () => Promise<void>;
+} {
   // 使用机型隔离查询
   const [brandOption] = useBrandOption();
-  const [value, updateValue] = useState<TypeProjectDataDoc[]>([]);
-  const [status, setStatus] = useState<FETCH_STATUS>(FETCH_STATUS.INITIAL);
+  const [projectList, setProjectList] = useState<TypeProjectDataDoc[]>([]);
+  const [status, setStatus] = useState<LOAD_STATUS>(LOAD_STATUS.INITIAL);
   const registerCancelToken = useAxiosCanceler();
+  const dispatch = useStarterDispatch();
 
-  const refresh = useCallback(async () => {
+  const fetch = useCallback(async () => {
     if (!brandOption.md5) return;
-    setStatus(FETCH_STATUS.LOADING);
-    apiGetProjectList(brandOption, registerCancelToken).then(projects => {
-      console.log("获取工程列表：", projects);
-      updateValue(projects);
-      setStatus(FETCH_STATUS.SUCCESS);
-    });
+    setStatus(LOAD_STATUS.LOADING);
+    setProjectList([]);
+    await sleep(300);
+    apiGetProjectList(brandOption, registerCancelToken)
+      .then(projects => {
+        console.log("获取工程列表：", projects);
+        setProjectList(projects);
+        dispatch(ActionSetProjectList(projects));
+        setStatus(LOAD_STATUS.SUCCESS);
+      })
+      .catch(() => {
+        setStatus(LOAD_STATUS.FAILED);
+      });
   }, [brandOption]);
 
   useLayoutEffect(() => {
-    if (brandOption) refresh();
-  }, [brandOption, refresh]);
-  return [value, status, refresh];
+    if (brandOption) fetch();
+  }, [brandOption]);
+  return { projectList, status, fetch };
 }
 
 /**
@@ -78,26 +128,26 @@ export function useProjectList(): [
  */
 export function useFetchProjectData(): [
   TypeProjectDataDoc,
-  FETCH_STATUS,
+  LOAD_STATUS,
   () => Promise<void>
 ] {
   // 从路由参数中获得工程 uuid
   const { uuid } = useParams<{ uuid: string }>();
   const dispatch = useEditorDispatch();
   const projectData = useProjectData();
-  const [status, setStatus] = useState<FETCH_STATUS>(FETCH_STATUS.INITIAL);
+  const [status, setStatus] = useState<LOAD_STATUS>(LOAD_STATUS.INITIAL);
   const handleFetch = async () => {
-    setStatus(FETCH_STATUS.LOADING);
+    setStatus(LOAD_STATUS.LOADING);
     return apiGetProjectByUUID(uuid)
       .then(project => {
         if (!project) throw new Error(ERR_CODE[2005]);
         console.log(`载入工程：: ${uuid}`);
         dispatch(ActionSetProjectData(project));
-        setStatus(FETCH_STATUS.SUCCESS);
+        setStatus(LOAD_STATUS.SUCCESS);
       })
       .catch(() => {
         dispatch(ActionInitEditor());
-        setStatus(FETCH_STATUS.FAIL);
+        setStatus(LOAD_STATUS.FAILED);
       });
   };
   useEffect(() => {
@@ -113,15 +163,15 @@ export function useFetchProjectData(): [
  * 注意如果非懒加载要在 hooks 返回 loading 状态
  * @returns
  */
-type TypeInitProjectData = {
+type TypeInitializedProjectData = {
   projectData: TypeProjectDataDoc;
-  sourceConfig: TypeSourceConfigData;
+  sourceConfig: TypeSourceConfig;
   pageConfigList: TypeSourcePageData[];
 };
 export function useInitProject(): [
-  TypeInitProjectData,
-  FETCH_STATUS,
-  () => Promise<TypeInitProjectData>
+  TypeInitializedProjectData,
+  LOAD_STATUS,
+  () => Promise<TypeInitializedProjectData>
 ] {
   const [projectData, step1Status, handleFetch1] = useFetchProjectData();
   const [sourceConfig, step2Status, handleFetch2] = useFetchSourceConfig();
@@ -135,13 +185,13 @@ export function useInitProject(): [
     };
   }, []);
   const statusList = [step1Status, step2Status, step3Status];
-  let status = FETCH_STATUS.INITIAL;
-  if (statusList.every(o => o === FETCH_STATUS.LOADING)) {
-    status = FETCH_STATUS.LOADING;
-  } else if (statusList.every(o => o === FETCH_STATUS.SUCCESS)) {
-    status = FETCH_STATUS.SUCCESS;
-  } else if (statusList.some(o => o === FETCH_STATUS.FAIL)) {
-    status = FETCH_STATUS.FAIL;
+  let status = LOAD_STATUS.INITIAL;
+  if (statusList.every(o => o === LOAD_STATUS.LOADING)) {
+    status = LOAD_STATUS.LOADING;
+  } else if (statusList.every(o => o === LOAD_STATUS.SUCCESS)) {
+    status = LOAD_STATUS.SUCCESS;
+  } else if (statusList.some(o => o === LOAD_STATUS.FAILED)) {
+    status = LOAD_STATUS.FAILED;
   }
   const result = { projectData, sourceConfig, pageConfigList };
   const fetchAll = async () => {
@@ -149,26 +199,6 @@ export function useInitProject(): [
     return result;
   };
   return [result, status, fetchAll];
-}
-
-// 获取工程数据
-export function useProjectData(): TypeProjectDataDoc {
-  return useEditorSelector(selectProjectData);
-}
-
-// 获取 工程描述信息
-export function useProjectInfo(): TypeProjectInfo {
-  return useEditorSelector(selectProjectInfo);
-}
-
-// 获取工程目录
-export function useProjectRoot(): string {
-  return useEditorSelector(selectProjectRoot);
-}
-
-// 工程 uuid
-export function useProjectUUID(): string {
-  return useEditorSelector(selectProjectUUID);
 }
 
 // 处理工程路径
@@ -227,6 +257,13 @@ export function usePatchPageSourceData(): void {
       .on(FILE_STATUS.CHANGE, file => listener(file, FILE_STATUS.CHANGE))
       .on(FILE_STATUS.UNLINK, file => listener(file, FILE_STATUS.UNLINK))
       .add(projectRoot);
+    return () => {
+      if (!watcher) return;
+      const watcherList = watcher.getWatched();
+      watcher.close().then(() => {
+        console.log("关闭文件监听", watcherList);
+      });
+    };
   }, [uuid, pageData, projectRoot]);
 
   // useProjectFileWatcher(Array.from(sourceFilepathSet), async file => {

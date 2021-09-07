@@ -13,7 +13,7 @@ import { TypeImagePathLike } from "./index";
 // 资源配置信息
 export type TypeSourceConfigPreview = {
   key: string;
-  root: string;
+  namespace: string;
   config: string;
   name: string;
   preview: TypeImagePathLike;
@@ -22,7 +22,7 @@ export type TypeSourceConfigPreview = {
 };
 
 // 资源配置数据
-export type TypeSourceConfigData = TypeSourceConfigPreview & {
+export type TypeSourceConfig = TypeSourceConfigPreview & {
   sourceTypeList: TypeSourceTypeConf[];
   sourceModuleList: TypeSourceModuleConf[];
 };

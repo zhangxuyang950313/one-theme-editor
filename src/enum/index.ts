@@ -3,12 +3,14 @@ export enum PRESET_TITLE {
   default = "一个主题编辑器"
 }
 
-// 加载数据的状态
-export enum FETCH_STATUS {
-  INITIAL,
-  LOADING,
-  SUCCESS,
-  FAIL
+// 加载状态
+export enum LOAD_STATUS {
+  INITIAL, // 初始
+  LOADING, // 加载中
+  SUCCESS, // 成功
+  FAILED, // 失败
+  TIMEOUT, // 超时
+  UNKNOWN // 未知
 }
 
 export enum ELEMENT_TAG {
@@ -98,7 +100,7 @@ export enum PACK_TYPE {
   FILE = "file"
 }
 
-// 扩展数据类型
-export enum EXTRA_DATA_TYPE {
+// 扩展数据字段
+export enum EXTRA_DATA_PROP {
   PATH_CONFIG = "pathConfig"
 }

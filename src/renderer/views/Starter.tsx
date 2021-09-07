@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import { useDocumentTitle } from "@/hooks/index";
+import { useFetchProjectList } from "@/hooks/project";
+import { useFetchBrandOptionList } from "@/hooks/source";
 import { PRESET_TITLE } from "src/enum";
 
 import Sidebar from "@/components/Starter/Sidebar";
@@ -11,20 +13,25 @@ const Starter: React.FC = () => {
   const [, setTitle] = useDocumentTitle();
   setTitle(PRESET_TITLE.default);
 
+  useFetchBrandOptionList();
+  const projectList = useFetchProjectList();
+
   return (
-    <StyleHome>
+    <StyleStarter>
       {/* 侧边栏 */}
       <Sidebar />
       {/* 工程管理 */}
-      <ProjectManager />
-    </StyleHome>
+      <ProjectManager
+        status={projectList.status}
+        onProjectCreated={projectList.fetch}
+      />
+    </StyleStarter>
   );
 };
 
-const StyleHome = styled.div`
+const StyleStarter = styled.div`
   width: 100%;
   height: 100%;
-
   display: flex;
 `;
 

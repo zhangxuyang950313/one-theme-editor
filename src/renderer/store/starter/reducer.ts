@@ -1,22 +1,22 @@
 import BrandOption from "src/data/BrandOption";
 import { updateState } from "@/store/utils";
-import { TypeBrandOption, TypeSourceConfigPreview } from "src/types/source";
+import { TypeBrandOption } from "src/types/source";
+import { TypeProjectDataDoc } from "src/types/project";
 import { ACTION_TYPES, TypeStarterActions } from "./action";
 
 // main states
 export type TypeStarterState = {
-  sourceConfigInfoList: TypeSourceConfigPreview[];
   brandOptionList: TypeBrandOption[];
   brandOption: TypeBrandOption;
+  projectList: TypeProjectDataDoc[];
 };
 
 // 通用的数据
 const starterState: TypeStarterState = {
-  // 配置预览列表
-  sourceConfigInfoList: [],
   // 品牌列表
   brandOptionList: [],
-  brandOption: new BrandOption().create()
+  brandOption: new BrandOption().create(),
+  projectList: []
 };
 
 export default function TemplateReducer(
@@ -35,9 +35,9 @@ export default function TemplateReducer(
         brandOption: action.payload
       });
     }
-    case ACTION_TYPES.SET_SOURCE_BRIEF_LIST: {
+    case ACTION_TYPES.SET_PROJECT_LIST: {
       return updateState(state, {
-        sourceConfigInfoList: action.payload
+        projectList: action.payload
       });
     }
     default:

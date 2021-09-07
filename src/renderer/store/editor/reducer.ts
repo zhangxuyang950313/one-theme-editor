@@ -9,7 +9,7 @@ import {
   TypeSourceModuleConf,
   TypeSourcePageConf,
   TypeSourcePageData,
-  TypeSourceConfigData
+  TypeSourceConfig
 } from "src/types/source";
 import {
   SourceConfigData,
@@ -26,7 +26,7 @@ export type TypeEditorState = {
   uuid: string;
   projectRoot: string;
   sourceConfigPath: string;
-  sourceConfig: TypeSourceConfigData;
+  sourceConfig: TypeSourceConfig;
   sourceTypeList: TypeSourceTypeConf[];
   sourceModuleList: TypeSourceModuleConf[];
   sourceModuleSelected: TypeSourceModuleConf;

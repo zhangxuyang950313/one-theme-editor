@@ -4,13 +4,14 @@ import { InputProps, message } from "antd";
 import { remote } from "electron";
 import { apiSwopPathConfig } from "@/request/extra";
 import {
-  getAppPath,
-  getServerPort
+  selectAppPath,
+  selectServerPort
 } from "@/store/global/modules/base/selector";
 import { ActionSetAppConfig } from "@/store/global/modules/base/action";
 import { useGlobalSelector, useGlobalDispatch } from "@/store/index";
 import { TypePathConfig } from "src/types/extraConfig";
 import { sleep } from "src/utils/index";
+import { LOAD_STATUS } from "src/enum";
 
 export function useDocumentTitle(): [string, typeof setTitleMethod] {
   const setTitleMethod = (title: string) => {
@@ -60,40 +61,58 @@ export function useAsyncUpdater(): (updater: () => void) => void {
 
 // 获取编辑器路径配置
 export function usePathConfig(): Partial<TypePathConfig> {
-  return useGlobalSelector(getAppPath);
+  return useGlobalSelector(selectAppPath);
 }
 
 // 生成当前服务域名
 export function useServerHost(): string {
-  const serverPort = useGlobalSelector(getServerPort);
+  const serverPort = useGlobalSelector(selectServerPort);
   return `http://localhost:${serverPort}`;
 }
 
 // 初始化编辑器配置数据
-export function useInitEditorConfig(): boolean {
-  const [loading, updateLoading] = useState(true);
+export function useInitEditorConfig(): [LOAD_STATUS, () => Promise<void>] {
+  const [status, setStatus] = useState(LOAD_STATUS.INITIAL);
   const dispatch = useGlobalDispatch();
-  useLayoutEffect(() => {
-    apiSwopPathConfig({
-      ELECTRON_LOCAL: remote.app.getLocale(),
-      ELECTRON_HOME: remote.app.getPath("home"),
-      ELECTRON_DESKTOP: remote.app.getPath("desktop"),
-      ELECTRON_CACHE: remote.app.getPath("cache"),
-      ELECTRON_APP_DATA: remote.app.getPath("appData"),
-      ELECTRON_DOCUMENTS: remote.app.getPath("documents"),
-      ELECTRON_DOWNLOADS: remote.app.getPath("downloads"),
-      ELECTRON_EXE: remote.app.getPath("exe"),
-      ELECTRON_LOGS: remote.app.getPath("logs"),
-      ELECTRON_APP_PATH: remote.app.getAppPath()
-    })
-      .then(async data => {
-        dispatch(ActionSetAppConfig(data));
-        await sleep(300);
-        updateLoading(false);
-      })
-      .catch(err => {
-        message.error({ content: err.message });
+  const fetch = async () => {
+    setStatus(LOAD_STATUS.LOADING);
+    try {
+      const data = await apiSwopPathConfig({
+        ELECTRON_LOCAL: remote.app.getLocale(),
+        ELECTRON_HOME: remote.app.getPath("home"),
+        ELECTRON_DESKTOP: remote.app.getPath("desktop"),
+        ELECTRON_CACHE: remote.app.getPath("cache"),
+        ELECTRON_APP_DATA: remote.app.getPath("appData"),
+        ELECTRON_DOCUMENTS: remote.app.getPath("documents"),
+        ELECTRON_DOWNLOADS: remote.app.getPath("downloads"),
+        ELECTRON_EXE: remote.app.getPath("exe"),
+        ELECTRON_LOGS: remote.app.getPath("logs"),
+        ELECTRON_APP_PATH: remote.app.getAppPath()
       });
+      dispatch(ActionSetAppConfig(data));
+      await sleep(300);
+      setStatus(LOAD_STATUS.SUCCESS);
+    } catch (err) {
+      message.error({ content: err.message });
+      setStatus(LOAD_STATUS.FAILED);
+    }
+  };
+  useLayoutEffect(() => {
+    fetch();
   }, []);
-  return loading;
+  return [status, fetch];
+}
+
+// 合并多个 status 状态
+export function useMergeLoadStatus(statusList: LOAD_STATUS[]): LOAD_STATUS {
+  console.log(statusList);
+  let status = LOAD_STATUS.INITIAL;
+  if (statusList.every(o => o === LOAD_STATUS.LOADING)) {
+    status = LOAD_STATUS.LOADING;
+  } else if (statusList.every(o => o === LOAD_STATUS.SUCCESS)) {
+    status = LOAD_STATUS.SUCCESS;
+  } else if (statusList.some(o => o === LOAD_STATUS.FAILED)) {
+    status = LOAD_STATUS.FAILED;
+  }
+  return status;
 }

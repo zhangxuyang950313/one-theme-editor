@@ -1,6 +1,8 @@
 import { useHistory } from "react-router";
-import { useProjectList } from "@/hooks/project";
 import { useBrandOption } from "@/hooks/source";
+import { useProjectList } from "@/hooks/project";
+import { TypeProjectInfo } from "src/types/project";
+import { LOAD_STATUS } from "src/enum";
 
 import React from "react";
 import styled from "styled-components";
@@ -8,50 +10,58 @@ import { Empty, Spin } from "antd";
 import ProjectCard from "./ProjectCard";
 import CreateProject from "./CreateProject";
 
-const ProjectManager: React.FC = () => {
+const ProjectManager: React.FC<{
+  status: LOAD_STATUS;
+  onProjectCreated: (data: TypeProjectInfo) => Promise<void>;
+}> = props => {
   const [brandConfig] = useBrandOption();
-  const [projects, isLoading, refreshList] = useProjectList();
+  const projectList = useProjectList();
   const history = useHistory();
 
   // 列表加载中、空、正常状态
-  const getProjectListContent = () => {
-    // 加载状态
-    if (isLoading) {
-      return (
-        <StyleCenterContainer>
-          <Spin className="auto-margin" tip="加载中..." spinning={isLoading} />
-        </StyleCenterContainer>
-      );
+  const ProjectListContent: React.FC = () => {
+    switch (props.status) {
+      // 加载状态
+      case LOAD_STATUS.INITIAL:
+      case LOAD_STATUS.LOADING: {
+        return (
+          <StyleCenterContainer>
+            <Spin className="auto-margin" tip="加载中..." spinning />
+          </StyleCenterContainer>
+        );
+      }
+      case LOAD_STATUS.SUCCESS: {
+        if (projectList.length > 0) {
+          return (
+            <StyleProjectList>
+              {projectList.map((item, key) => (
+                <div className="project-card" key={key}>
+                  <ProjectCard
+                    hoverable
+                    projectInfo={item?.projectInfo}
+                    onClick={() => {
+                      history.push(`/editor/${item.uuid}`);
+                    }}
+                  />
+                </div>
+              ))}
+            </StyleProjectList>
+          );
+        }
+        // 空项目
+        return (
+          <StyleCenterContainer>
+            <Empty
+              className="auto-margin"
+              image={Empty.PRESENTED_IMAGE_SIMPLE}
+              description="空空如也，快去创建一个主题吧"
+            />
+          </StyleCenterContainer>
+        );
+      }
+      default:
+        return null;
     }
-
-    if (projects.length > 0) {
-      return (
-        <StyleProjectList>
-          {projects.map((item, key) => (
-            <div className="project-card" key={key}>
-              <ProjectCard
-                hoverable
-                projectInfo={item?.projectInfo}
-                onClick={() => {
-                  history.push(`/editor/${item.uuid}`);
-                }}
-              />
-            </div>
-          ))}
-        </StyleProjectList>
-      );
-    }
-
-    // 空项目
-    return (
-      <StyleCenterContainer>
-        <Empty
-          className="auto-margin"
-          image={Empty.PRESENTED_IMAGE_SIMPLE}
-          description="空空如也，快去创建一个主题吧"
-        />
-      </StyleCenterContainer>
-    );
   };
 
   return (
@@ -59,15 +69,15 @@ const ProjectManager: React.FC = () => {
       <div className="top-container">
         <div className="title">
           <h2>{brandConfig?.name || ""}列表</h2>
-          <p>新建{projects.length > 0 ? "或选择" : ""}一个主题开始创作</p>
+          <p>新建{projectList.length > 0 ? "或选择" : ""}一个主题开始创作</p>
         </div>
         <div className="button">
           {/* 新建主题按钮 */}
-          <CreateProject onProjectCreated={refreshList} />
+          <CreateProject onProjectCreated={props.onProjectCreated} />
         </div>
       </div>
       {/* 工程列表 */}
-      {getProjectListContent()}
+      <ProjectListContent />
     </StyleProjectManager>
   );
 };

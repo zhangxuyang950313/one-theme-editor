@@ -50,9 +50,10 @@ import { previewFile } from "./utils";
 // `;
 
 const ImageController: React.FC<{
+  className: string;
   sourceDefine: TypeSourceDefineImage;
 }> = props => {
-  const { sourceDefine } = props;
+  const { sourceDefine, className } = props;
   const { sourceData, description, src } = sourceDefine;
   const sourceImageUrl = useSourceImageUrl(src);
   const projectImageUrl = useProjectImageUrlBySrc(src);
@@ -62,7 +63,7 @@ const ImageController: React.FC<{
   if (!sourceData) return null;
   const { width, height, size } = sourceData;
   return (
-    <StyleImageController>
+    <StyleImageController className={className}>
       {/* 图片名称 */}
       <div className="name">
         {description}

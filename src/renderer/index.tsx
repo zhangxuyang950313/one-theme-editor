@@ -7,22 +7,28 @@ import "antd/dist/antd.css"; // antd 样式
 import zhCN from "antd/lib/locale/zh_CN"; // antd 中文
 
 import { ConfigProvider, Spin } from "antd";
+import { LOAD_STATUS } from "src/enum";
 import { useInitEditorConfig } from "./hooks";
 import { GlobalStore } from "./store";
 import Router from "./router";
 import LightTheme from "./theme/light";
 
-// const log = console.log;
-// console.log = (...args) => log(new Date(), ...args);
-
-function Index(): JSX.Element {
-  const loading = useInitEditorConfig();
-  return loading ? (
-    <Spin className="auto-margin" tip="初始化" spinning={loading} />
-  ) : (
-    <Router />
-  );
-}
+const Index: React.FC = () => {
+  const [status] = useInitEditorConfig();
+  switch (status) {
+    case LOAD_STATUS.INITIAL:
+    case LOAD_STATUS.LOADING: {
+      return <Spin className="auto-margin" tip="初始化" spinning />;
+    }
+    // TODO
+    case LOAD_STATUS.FAILED: {
+      return <div>出错了</div>;
+    }
+    case LOAD_STATUS.SUCCESS:
+    default:
+      return <Router />;
+  }
+};
 
 function Root(): JSX.Element {
   return (

@@ -2,7 +2,7 @@ import path from "path";
 import { v4 as UUID } from "uuid";
 import { ELEMENT_TAG } from "src/enum";
 import {
-  TypeSourceConfigData,
+  TypeSourceConfig,
   TypeSourceModuleConf,
   TypeSourcePageGroupConf,
   TypeSourcePageConf,
@@ -152,7 +152,7 @@ export default class SourceConfig extends XmlFileCompiler {
   getConfigPreview(): TypeSourceConfigPreview {
     return new SourceConfigInfo()
       .set("key", UUID())
-      .set("root", this.namespace)
+      .set("namespace", this.namespace)
       .set("config", path.basename(this.getDescFile()))
       .set("name", this.getName())
       .set("version", this.getVersion())
@@ -164,7 +164,7 @@ export default class SourceConfig extends XmlFileCompiler {
   /**
    * 解析全部模块数据
    */
-  getConfig(): TypeSourceConfigData {
+  getConfig(): TypeSourceConfig {
     return {
       ...this.getConfigPreview(),
       sourceTypeList: this.getSourceTypeList(),

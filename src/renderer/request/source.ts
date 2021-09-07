@@ -1,6 +1,6 @@
 import API from "src/common/apiConf";
 import {
-  TypeSourceConfigData,
+  TypeSourceConfig,
   TypeSourceConfigPreview,
   TypeSourcePageData,
   TypeBrandOption
@@ -30,12 +30,11 @@ export async function apiGetSourceConfigPreviewList(
 // 获取配置数据
 export async function apiGetSourceConfig(
   config: string
-): Promise<TypeSourceConfigData> {
+): Promise<TypeSourceConfig> {
   return createHttp()
-    .get<TypeRequestResult<TypeSourceConfigData>>(
-      API.GET_SOURCE_CONF_DATA.url,
-      { params: { config } }
-    )
+    .get<TypeRequestResult<TypeSourceConfig>>(API.GET_SOURCE_CONF_DATA.url, {
+      params: { config }
+    })
     .then(data => data.data.data);
 }
 

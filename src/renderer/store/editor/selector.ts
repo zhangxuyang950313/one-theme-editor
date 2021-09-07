@@ -12,30 +12,6 @@ export const selectProjectData = createSelector(
   state => state.projectData
 );
 
-// 获取品牌信息
-export const selectProjectBrandInfo = createSelector(
-  selectProjectData,
-  state => state.brandConfig
-);
-
-export const selectProjectInfo = createSelector(
-  selectProjectData,
-  state => state.projectInfo
-);
-
-// 获取工程 uuid
-export const selectProjectUUID = createSelector(
-  stateSelector,
-  state => state.uuid
-);
-
-// 获取工程本地路径
-export const selectProjectRoot = createSelector(
-  selectProjectData,
-  state => state.projectRoot
-);
-
-// 获取当前资源配置信息
 export const selectSourceConfig = createSelector(
   stateSelector,
   state => state.sourceConfig
@@ -46,23 +22,13 @@ export const selectSourceConfigPath = createSelector(
   state => state.sourceConfigPath
 );
 
-// 获取当前 sourceConfig namespace
-export const selectSourceConfigNS = createSelector(
-  selectSourceConfigPath,
-  sourceConfigPath => {
-    return sourceConfigPath ? path.dirname(sourceConfigPath) : "";
-  }
-);
-
 // 获取当前资源配置根目录
-export const selectSourceConfigRoot = createSelector(
-  selectSourceConfigNS,
-  namespace => {
-    const dir = GlobalStore.store.getState().base.appPath?.SOURCE_CONFIG_DIR;
-    if (!dir || !namespace) return "";
-    return path.join(dir, namespace);
-  }
-);
+export const selectSourceConfigRoot = createSelector(stateSelector, state => {
+  const { namespace } = state.sourceConfig;
+  const dir = GlobalStore.store.getState().base.appPath?.SOURCE_CONFIG_DIR;
+  if (!dir || !namespace) return "";
+  return path.join(dir, namespace);
+});
 
 // 获取模块列表
 export const selectSourceModuleList = createSelector(

@@ -5,12 +5,12 @@ import { TypeGlobalState } from "@/store/index";
 const getState = (state: TypeGlobalState) => state.base;
 
 // 获取当前服务端口
-export const getServerPort = createSelector(getState, state => state.port);
+export const selectServerPort = createSelector(getState, state => state.port);
 
 // 获取路径配置信息
-export const getAppPath = createSelector(getState, state => state.appPath);
+export const selectAppPath = createSelector(getState, state => state.appPath);
 
-export const getSourceConfigDir = createSelector(
-  getAppPath,
+export const selectSourceConfigDir = createSelector(
+  selectAppPath,
   state => state.SOURCE_CONFIG_DIR || ""
 );

@@ -9,21 +9,21 @@ import { TypeSourceConfigPreview } from "src/types/source";
 import { LazyImage } from "../ImageCollection";
 
 type TypeProps = {
-  sourceDescription: TypeSourceConfigPreview;
+  sourceConfigPreview: TypeSourceConfigPreview;
 };
 
 // 配置卡片
 const SourceConfigCard: React.FC<TypeProps> = props => {
-  const { sourceDescription } = props;
-  const { root, preview } = sourceDescription;
+  const { sourceConfigPreview } = props;
+  const { namespace, preview } = sourceConfigPreview;
   const imgPrefix = useImagePrefix();
   const sourceDir = useSourceConfigDir();
-  const imgUrl = imgPrefix + path.join(sourceDir, root, preview);
+  const imgUrl = imgPrefix + path.join(sourceDir, namespace, preview);
   return (
     <StyleSourceConfigCard>
       <LazyImage style={{ width: "100%" }} src={imgUrl} />
-      <div>{sourceDescription.name}</div>
-      <div>{sourceDescription.uiVersion.name}</div>
+      <div>{sourceConfigPreview.name}</div>
+      <div>{sourceConfigPreview.uiVersion.name}</div>
     </StyleSourceConfigCard>
   );
 };

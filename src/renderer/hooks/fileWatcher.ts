@@ -21,12 +21,13 @@ export function useFSWatcherCreator(): (options?: WatchOptions) => FSWatcher {
       if (!watcher) return;
       const watcherList = watcher.getWatched();
       watcher.close().then(() => {
-        console.log("关闭文件监听", watcherList);
+        console.log("111关闭文件监听", watcherList);
       });
     };
   }, []);
   return (options?: WatchOptions) => {
     if (watcher) return watcher;
+    console.log("创建文件监听");
     const cWatcher = new FSWatcher(options);
     setWatcher(cWatcher);
     return cWatcher;

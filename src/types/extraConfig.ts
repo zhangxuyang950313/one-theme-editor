@@ -1,4 +1,4 @@
-import { EXTRA_DATA_TYPE } from "../enum/index";
+import { EXTRA_DATA_PROP } from "../enum/index";
 import { TypeDatabase } from "../types/index";
 
 export type TypeElectronPath = Readonly<{
@@ -33,5 +33,5 @@ export type TypeServerPath = Readonly<{
 export type TypePathConfig = Readonly<TypeElectronPath & TypeServerPath>;
 
 export type TypePathConfigInDoc = {
-  readonly type: EXTRA_DATA_TYPE.PATH_CONFIG;
+  readonly type: EXTRA_DATA_PROP.PATH_CONFIG;
 } & TypeDatabase<TypePathConfig>;

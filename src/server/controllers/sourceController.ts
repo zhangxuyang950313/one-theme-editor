@@ -3,7 +3,7 @@ import API from "src/common/apiConf";
 import {
   TypeSourceModuleConf,
   TypeSourcePageData,
-  TypeSourceConfigData,
+  TypeSourceConfig,
   TypeSourceConfigPreview,
   TypeBrandOption
 } from "src/types/source";
@@ -78,7 +78,7 @@ export default function sourceController(service: Express): void {
    */
   service.get<
     never, // reqParams
-    TypeResponseFrame<TypeSourceConfigData, string>, // resBody
+    TypeResponseFrame<TypeSourceConfig, string>, // resBody
     never, // reqBody
     UnionTupleToObjectKey<typeof API.GET_SOURCE_CONF_DATA.query> // reqQuery
   >(API.GET_SOURCE_CONF_DATA.url, async (request, response) => {

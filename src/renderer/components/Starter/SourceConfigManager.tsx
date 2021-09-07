@@ -50,7 +50,7 @@ const SourceConfigManager: React.FC<{
               setSelectedConfKey(isActive ? "" : item.key);
             }}
           >
-            <SourceConfigCard sourceDescription={item} />
+            <SourceConfigCard sourceConfigPreview={item} />
             <CheckCircleTwoTone className="check-icon" />
           </StyleCardContainer>
         );

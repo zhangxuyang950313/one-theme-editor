@@ -1,15 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import { RgbaObject } from "hex-rgb";
-
 import { Input, message, Tooltip } from "antd";
 import { RGBColor, SketchPicker } from "react-color";
-import ColorUtil, { HEX_FORMAT } from "src/utils/ColorUtil";
-
 import { RightCircleOutlined } from "@ant-design/icons";
 import { useProjectUUID } from "@/hooks/project";
 import { TypeSourceDefineValue } from "src/types/source";
 import { StyleGirdBackground } from "@/style";
+import { RgbaObject } from "hex-rgb";
+import ColorUtil, { HEX_FORMAT } from "src/utils/ColorUtil";
 import Wrapper from "./Wrapper";
 
 // 颜色小方块

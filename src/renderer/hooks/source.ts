@@ -7,13 +7,15 @@ import {
   apiGetSourceConfig,
   apiGetSourcePageConfData
 } from "@/request/index";
-import { getSourceConfigDir } from "@/store/global/modules/base/selector";
+import { selectSourceConfigDir } from "@/store/global/modules/base/selector";
 import {
   ActionSetBrandOptionList,
-  ActionSetSourceConfigPreviewList,
   ActionSetBrandOption
 } from "@/store/starter/action";
-import { getBrandConfig } from "@/store/starter/selector";
+import {
+  selectBrandConfig,
+  selectBrandOptionList
+} from "@/store/starter/selector";
 import {
   ActionSetCurrentModule,
   ActionSetCurrentPage,
@@ -36,7 +38,7 @@ import {
 } from "@/store/editor/selector";
 import {
   TypeBrandOption,
-  TypeSourceConfigData,
+  TypeSourceConfig,
   TypeSourceConfigPreview,
   TypeSourcePageGroupConf,
   TypeSourceModuleConf,
@@ -59,15 +61,20 @@ import {
 } from "@/store/index";
 import ERR_CODE from "src/common/errorCode";
 import { asyncQueue } from "src/utils/index";
-import { FETCH_STATUS, SOURCE_TYPES } from "src/enum/index";
+import { LOAD_STATUS, SOURCE_TYPES } from "src/enum/index";
+import { SourceConfigData } from "src/data/SourceConfig";
 import { useImagePrefix } from "./image";
 import { useAsyncUpdater } from "./index";
+
+export function useBrandOptionList(): TypeBrandOption[] {
+  return useStarterSelector(selectBrandOptionList);
+}
 
 /**
  * 获取当前资源配置数据
  * @returns
  */
-export function useSourceConfig(): TypeSourceConfigData {
+export function useSourceConfig(): TypeSourceConfig {
   return useEditorSelector(selectSourceConfig);
 }
 
@@ -76,7 +83,7 @@ export function useSourceConfig(): TypeSourceConfigData {
  * @returns
  */
 export function useSourceConfigDir(): string {
-  return useGlobalSelector(getSourceConfigDir);
+  return useGlobalSelector(selectSourceConfigDir);
 }
 
 /**
@@ -85,7 +92,7 @@ export function useSourceConfigDir(): string {
  */
 export function useSourceConfigRootWithNS(): string {
   const sourceConfigPath = useSourceConfigPath();
-  const sourceConfigDir = useGlobalSelector(getSourceConfigDir);
+  const sourceConfigDir = useSourceConfigDir();
   return path.join(sourceConfigDir, path.dirname(sourceConfigPath));
 }
 
@@ -98,7 +105,7 @@ export function useBrandOption(): [
   (data: TypeBrandOption) => void
 ] {
   const dispatch = useStarterDispatch();
-  const brandConfig = useStarterSelector(getBrandConfig);
+  const brandConfig = useStarterSelector(selectBrandConfig);
   return [brandConfig, data => dispatch(ActionSetBrandOption(data))];
 }
 
@@ -106,24 +113,37 @@ export function useBrandOption(): [
  * 获取配置的品牌列表
  * @returns
  */
-export function useBrandOptionList(): TypeBrandOption[] {
-  const [value, updateValue] = useState<TypeBrandOption[]>([]);
+export function useFetchBrandOptionList(): {
+  brandOptionList: TypeBrandOption[];
+  status: LOAD_STATUS;
+  fetch: () => Promise<void>;
+} {
+  const [status, setStatus] = useState(LOAD_STATUS.INITIAL);
+  const [brandOptionList, setBrandOptionList] = useState<TypeBrandOption[]>([]);
   const dispatch = useStarterDispatch();
   const registerUpdater = useAsyncUpdater();
-  useLayoutEffect(() => {
-    apiGetBrandOptionList().then(conf => {
+  const fetch = async () => {
+    try {
+      setStatus(LOAD_STATUS.LOADING);
+      const conf = await apiGetBrandOptionList();
       // 添加默认小米，去重
       const list = conf.reduce<TypeBrandOption[]>((t, o) => {
         if (!t.some(item => item.md5 === o.md5)) t.push(o);
         return t;
       }, []);
       registerUpdater(() => {
-        updateValue(list);
+        setBrandOptionList(list);
         dispatch(ActionSetBrandOptionList(list));
+        setStatus(LOAD_STATUS.SUCCESS);
       });
-    });
+    } catch (e) {
+      setStatus(LOAD_STATUS.FAILED);
+    }
+  };
+  useLayoutEffect(() => {
+    fetch();
   }, []);
-  return value;
+  return { brandOptionList, status, fetch };
 }
 
 /**
@@ -134,7 +154,7 @@ export function useSourceConfigPreviewList(): [
   TypeSourceConfigPreview[],
   boolean
 ] {
-  const [value, updateValue] = useState<TypeSourceConfigPreview[]>([]);
+  const [value, setValue] = useState<TypeSourceConfigPreview[]>([]);
   const [loading, updateLoading] = useState(true);
   const [brandConfig] = useBrandOption();
   const dispatch = useStarterDispatch();
@@ -143,8 +163,7 @@ export function useSourceConfigPreviewList(): [
     apiGetSourceConfigPreviewList(brandConfig.src)
       .then(data => {
         console.log("配置预览列表：", data);
-        updateValue(data);
-        dispatch(ActionSetSourceConfigPreviewList(data));
+        setValue(data);
       })
       .catch(err => {
         const content = ERR_CODE[3002];
@@ -163,26 +182,27 @@ export function useSourceConfigPreviewList(): [
  * @returns
  */
 export function useFetchSourceConfig(): [
-  TypeSourceConfigData,
-  FETCH_STATUS,
+  TypeSourceConfig,
+  LOAD_STATUS,
   () => Promise<void>
 ] {
-  const [status, setStatus] = useState<FETCH_STATUS>(FETCH_STATUS.INITIAL);
   const dispatch = useEditorDispatch();
   const sourceConfigPath = useSourceConfigPath();
-  const sourceConfig = useSourceConfig();
+  const [status, setStatus] = useState(LOAD_STATUS.INITIAL);
+  const [sourceConfig, setSourceConfig] = useState(SourceConfigData.default);
   const doFetchData = useCallback(async () => {
     if (!sourceConfigPath) return;
-    setStatus(FETCH_STATUS.LOADING);
+    setStatus(LOAD_STATUS.LOADING);
     apiGetSourceConfig(sourceConfigPath)
       .then(data => {
         if (!data) throw new Error(ERR_CODE[3002]);
         console.log(`加载资源配置: ${sourceConfigPath}`, data);
         dispatch(ActionSetSourceConfig(data));
-        setStatus(FETCH_STATUS.SUCCESS);
+        setSourceConfig(data);
+        setStatus(LOAD_STATUS.SUCCESS);
       })
       .catch(() => {
-        setStatus(FETCH_STATUS.FAIL);
+        setStatus(LOAD_STATUS.FAILED);
       });
   }, [sourceConfigPath]);
   useEffect(() => {
@@ -218,8 +238,8 @@ export function useSourceModuleConf(): [
   (data: TypeSourceModuleConf) => void
 ] {
   const dispatch = useEditorDispatch();
-  const moduleConf = useEditorSelector(selectSourceModuleConf);
-  return [moduleConf, data => dispatch(ActionSetCurrentModule(data))];
+  const sourceModuleConf = useEditorSelector(selectSourceModuleConf);
+  return [sourceModuleConf, data => dispatch(ActionSetCurrentModule(data))];
 }
 
 /**
@@ -252,16 +272,17 @@ export function useSourcePageData(): TypeSourcePageData | null {
  */
 export function useFetchPageConfList(): [
   TypeSourcePageData[],
-  FETCH_STATUS,
+  LOAD_STATUS,
   () => Promise<void>
 ] {
-  const [status, setStatus] = useState<FETCH_STATUS>(FETCH_STATUS.INITIAL);
+  const [status, setStatus] = useState(LOAD_STATUS.INITIAL);
   const [pageData, setPageData] = useState<TypeSourcePageData[]>([]);
   const dispatch = useEditorDispatch();
   const pageGroupList = useSourcePageGroupList();
   const sourceConfigPath = useSourceConfigPath();
 
   const handleFetch = async () => {
+    if (!sourceConfigPath) return;
     const pageConfDataQueue = pageGroupList
       .flatMap(item => item.pageList)
       .map(item => async () => {
@@ -272,15 +293,15 @@ export function useFetchPageConfList(): [
         dispatch(ActionPatchPageDataMap(data));
         return data;
       });
-    setStatus(FETCH_STATUS.LOADING);
+    setStatus(LOAD_STATUS.LOADING);
     return asyncQueue(pageConfDataQueue)
       .then(data => {
         setPageData(data);
-        setStatus(FETCH_STATUS.SUCCESS);
+        setStatus(LOAD_STATUS.SUCCESS);
       })
       .catch(err => {
         notification.error({ message: err.message });
-        setStatus(FETCH_STATUS.FAIL);
+        setStatus(LOAD_STATUS.FAILED);
       });
   };
 
