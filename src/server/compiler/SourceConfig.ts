@@ -6,11 +6,11 @@ import {
   TypeSourceModuleConf,
   TypeSourcePageGroupConf,
   TypeSourcePageConf,
-  TypeSourceConfigPreview,
+  TypeSourceOption,
   TypeSourceTypeConf
 } from "src/types/source";
 import {
-  SourceConfigInfo,
+  SourceOption,
   SourceModuleConf,
   SourcePageConf,
   SourcePageGroupConf,
@@ -146,11 +146,11 @@ export default class SourceConfig extends XmlFileCompiler {
   }
 
   /**
-   * 解析配置配置的简略信息
+   * 解析配置信息
    * 只解析 description.xml 不需要进一步解析页面
    */
-  getConfigPreview(): TypeSourceConfigPreview {
-    return new SourceConfigInfo()
+  getOption(): TypeSourceOption {
+    return new SourceOption()
       .set("key", UUID())
       .set("namespace", this.namespace)
       .set("config", path.basename(this.getDescFile()))
@@ -162,11 +162,11 @@ export default class SourceConfig extends XmlFileCompiler {
   }
 
   /**
-   * 解析全部模块数据
+   * 解析全部配置数据
    */
   getConfig(): TypeSourceConfig {
     return {
-      ...this.getConfigPreview(),
+      ...this.getOption(),
       sourceTypeList: this.getSourceTypeList(),
       sourceModuleList: this.getModuleList()
     };

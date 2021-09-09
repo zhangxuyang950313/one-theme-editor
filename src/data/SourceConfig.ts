@@ -1,7 +1,7 @@
 import {
   TypeLayoutConf,
   TypeSourceConfig,
-  TypeSourceConfigPreview,
+  TypeSourceOption,
   TypeLayoutImageElement,
   TypeLayoutTextElement,
   TypeSourceModuleConf,
@@ -31,9 +31,7 @@ export class SourcePageConf extends AbstractDataModel<TypeSourcePageConf> {
     src: ""
   };
 
-  static default(): TypeSourcePageConf {
-    return new SourcePageConf().default();
-  }
+  static default = new SourcePageConf().create();
 }
 
 export class DefineImageData extends AbstractDataModel<TypePageDefineImageData> {
@@ -44,6 +42,7 @@ export class DefineImageData extends AbstractDataModel<TypePageDefineImageData> 
     ninePatch: false,
     filename: ""
   };
+  static default = new DefineImageData().create();
 }
 
 export class DefineValueData extends AbstractDataModel<TypePageDefineValueData> {
@@ -74,9 +73,7 @@ export class ElementLayoutConf extends AbstractDataModel<TypeLayoutConf> {
     alignV: ALIGN_V_VALUES.TOP
   };
 
-  static default(): TypeLayoutConf {
-    return new ElementLayoutConf().default();
-  }
+  static default = new ElementLayoutConf().create();
 }
 
 export class SourceImageElement extends AbstractDataModel<TypeLayoutImageElement> {
@@ -85,7 +82,7 @@ export class SourceImageElement extends AbstractDataModel<TypeLayoutImageElement
     sourceType: SOURCE_TYPES.IMAGE,
     description: "",
     src: "",
-    sourceData: new DefineImageData().default(),
+    sourceData: new DefineImageData().create(),
     layout: {
       x: "0",
       y: "0",
@@ -136,9 +133,7 @@ export class SourcePageGroupConf extends AbstractDataModel<TypeSourcePageGroupCo
     pageList: []
   };
 
-  static default(): TypeSourcePageConf {
-    return new SourcePageConf().default();
-  }
+  static default = new SourcePageConf().create();
 }
 
 export class SourceModuleConf extends AbstractDataModel<TypeSourceModuleConf> {
@@ -149,9 +144,7 @@ export class SourceModuleConf extends AbstractDataModel<TypeSourceModuleConf> {
     groupList: []
   };
 
-  static default(): TypeSourceModuleConf {
-    return new SourceModuleConf().default();
-  }
+  static default = new SourceModuleConf().create();
 }
 
 export class SourceTypeConf extends AbstractDataModel<TypeSourceTypeConf> {
@@ -161,9 +154,7 @@ export class SourceTypeConf extends AbstractDataModel<TypeSourceTypeConf> {
     type: SOURCE_TYPES.STRING
   };
 
-  static default(): TypeSourceTypeConf {
-    return new SourceTypeConf().default();
-  }
+  static default = new SourceTypeConf().create();
 }
 
 export class UiVersion extends AbstractDataModel<TypeProjectUiVersion> {
@@ -171,31 +162,27 @@ export class UiVersion extends AbstractDataModel<TypeProjectUiVersion> {
     name: "",
     code: ""
   };
-  static default(): TypeProjectUiVersion {
-    return new UiVersion().default();
-  }
+  static default = new UiVersion().create();
 }
 
-export class SourceConfigInfo extends AbstractDataModel<TypeSourceConfigPreview> {
-  protected data: TypeSourceConfigPreview = {
+export class SourceOption extends AbstractDataModel<TypeSourceOption> {
+  protected data: TypeSourceOption = {
     key: "",
     namespace: "",
     config: "",
     name: "",
     preview: "",
     version: "",
-    uiVersion: UiVersion.default()
+    uiVersion: UiVersion.default
   };
-  static default(): TypeSourceConfigPreview {
-    return new SourceConfigInfo().default();
-  }
+  static default = new SourceOption().create();
 }
 
-export class SourceConfigData extends AbstractDataModel<TypeSourceConfig> {
+export default class SourceConfig extends AbstractDataModel<TypeSourceConfig> {
   protected data: TypeSourceConfig = {
-    ...SourceConfigInfo.default(),
+    ...SourceOption.default,
     sourceTypeList: [],
     sourceModuleList: []
   };
-  static default = new SourceConfigData().create();
+  static default = new SourceConfig().create();
 }

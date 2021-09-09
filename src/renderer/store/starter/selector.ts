@@ -11,9 +11,19 @@ export const selectBrandOptionList = createSelector(
 );
 
 // 获取前选择的品牌信息
-export const selectBrandConfig = createSelector(
+export const selectBrandOption = createSelector(
   selectStarterState,
-  state => state.brandOption
+  state => state.brandOptionSelected
+);
+
+export const selectSourceOptionList = createSelector(
+  selectStarterState,
+  state => state.sourceOptionList
+);
+
+export const selectSourceOption = createSelector(
+  selectStarterState,
+  state => state.sourceOptionSelected
 );
 
 export const selectProjectList = createSelector(

@@ -4,7 +4,7 @@ import {
   TypeSourceModuleConf,
   TypeSourcePageData,
   TypeSourceConfig,
-  TypeSourceConfigPreview,
+  TypeSourceOption,
   TypeBrandOption
 } from "src/types/source";
 import { TypeResponseFrame, UnionTupleToObjectKey } from "src/types/request";
@@ -31,7 +31,7 @@ export default function sourceController(service: Express): void {
    */
   service.get<
     never,
-    TypeResponseFrame<TypeSourceConfigPreview[], string>,
+    TypeResponseFrame<TypeSourceOption[], string>,
     never,
     UnionTupleToObjectKey<typeof API.GET_SOURCE_CONF_PREVIEW_LIST.query>
   >(`${API.GET_SOURCE_CONF_PREVIEW_LIST.url}`, (request, response) => {

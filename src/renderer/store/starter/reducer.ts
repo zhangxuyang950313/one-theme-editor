@@ -1,38 +1,51 @@
 import BrandOption from "src/data/BrandOption";
 import { updateState } from "@/store/utils";
-import { TypeBrandOption } from "src/types/source";
+import { TypeBrandOption, TypeSourceOption } from "src/types/source";
 import { TypeProjectDataDoc } from "src/types/project";
+import { SourceOption } from "src/data/SourceConfig";
 import { ACTION_TYPES, TypeStarterActions } from "./action";
 
-// main states
 export type TypeStarterState = {
   brandOptionList: TypeBrandOption[];
-  brandOption: TypeBrandOption;
+  brandOptionSelected: TypeBrandOption;
+  sourceOptionList: TypeSourceOption[];
+  sourceOptionSelected: TypeSourceOption;
   projectList: TypeProjectDataDoc[];
 };
 
-// 通用的数据
 const starterState: TypeStarterState = {
-  // 品牌列表
   brandOptionList: [],
-  brandOption: new BrandOption().create(),
+  brandOptionSelected: BrandOption.default,
+  sourceOptionList: [],
+  sourceOptionSelected: SourceOption.default,
   projectList: []
 };
 
-export default function TemplateReducer(
+export default function StarterReducer(
   state: TypeStarterState = starterState,
   action: TypeStarterActions
 ): TypeStarterState {
   switch (action.type) {
     case ACTION_TYPES.SET_BRAND_OPTION_LIST: {
       return updateState(state, {
-        brandOption: action.payload[0],
+        brandOptionSelected: action.payload[0],
         brandOptionList: action.payload
       });
     }
-    case ACTION_TYPES.SET_BRAND_OPTION: {
+    case ACTION_TYPES.SET_BRAND_OPTION_SELECTED: {
       return updateState(state, {
-        brandOption: action.payload
+        brandOptionSelected: action.payload
+      });
+    }
+    case ACTION_TYPES.SET_SOURCE_OPTION_LIST: {
+      return updateState(state, {
+        sourceOptionSelected: action.payload[0],
+        sourceOptionList: action.payload
+      });
+    }
+    case ACTION_TYPES.SET_SOURCE_OPTION_SELECTED: {
+      return updateState(state, {
+        sourceOptionSelected: action.payload
       });
     }
     case ACTION_TYPES.SET_PROJECT_LIST: {

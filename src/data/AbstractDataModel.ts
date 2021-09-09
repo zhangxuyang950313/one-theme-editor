@@ -29,9 +29,9 @@ export abstract class AbstractDataModel<T> {
     }
     return this;
   }
-  default(): T {
-    return this.defaultVal;
-  }
+  // default(): T {
+  //   return this.defaultVal;
+  // }
   create(): T {
     return this.data;
   }

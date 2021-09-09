@@ -4,7 +4,7 @@ import {
   TypeApplyConf,
   TypeInfoTempConf,
   TypePackConf,
-  TypeSourceConfigPreview
+  TypeSourceOption
 } from "src/types/source";
 import { ELEMENT_TAG, PACK_TYPE } from "src/enum/index";
 import { ApplyConfig, PackageConfig } from "src/data/BrandConfig";
@@ -80,7 +80,7 @@ export default class BrandConfig extends XmlTemplate {
   }
 
   // 解析编辑器资源配置列表
-  getSourceConfigPreviewList(): TypeSourceConfigPreview[] {
+  getSourceConfigPreviewList(): TypeSourceOption[] {
     return super
       .getRootNode()
       .getChildrenNodesByTagname(ELEMENT_TAG.Config)
@@ -89,7 +89,7 @@ export default class BrandConfig extends XmlTemplate {
         const isExists = fse.pathExistsSync(
           path.join(pathUtil.SOURCE_CONFIG_DIR, src)
         );
-        return isExists ? [new SourceConfig(src).getConfigPreview()] : [];
+        return isExists ? [new SourceConfig(src).getOption()] : [];
       });
   }
 }

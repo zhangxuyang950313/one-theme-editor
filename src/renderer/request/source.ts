@@ -1,7 +1,7 @@
 import API from "src/common/apiConf";
 import {
   TypeSourceConfig,
-  TypeSourceConfigPreview,
+  TypeSourceOption,
   TypeSourcePageData,
   TypeBrandOption
 } from "src/types/source";
@@ -15,12 +15,12 @@ export async function apiGetBrandOptionList(): Promise<TypeBrandOption[]> {
     .then(data => data.data.data);
 }
 
-// 获取品牌配置描述列表
-export async function apiGetSourceConfigPreviewList(
+// 获取资源配置列表
+export async function apiGetSourceOptionList(
   src: string
-): Promise<TypeSourceConfigPreview[]> {
+): Promise<TypeSourceOption[]> {
   return createHttp()
-    .get<TypeRequestResult<TypeSourceConfigPreview[]>>(
+    .get<TypeRequestResult<TypeSourceOption[]>>(
       `${API.GET_SOURCE_CONF_PREVIEW_LIST.url}`,
       { params: { src } }
     )

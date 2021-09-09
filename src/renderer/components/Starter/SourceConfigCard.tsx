@@ -5,11 +5,11 @@ import styled from "styled-components";
 import { useSourceConfigDir } from "@/hooks/source";
 import { useImagePrefix } from "@/hooks/image";
 
-import { TypeSourceConfigPreview } from "src/types/source";
+import { TypeSourceOption } from "src/types/source";
 import { LazyImage } from "../ImageCollection";
 
 type TypeProps = {
-  sourceConfigPreview: TypeSourceConfigPreview;
+  sourceConfigPreview: TypeSourceOption;
 };
 
 // 配置卡片

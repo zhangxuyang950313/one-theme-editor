@@ -6,9 +6,7 @@ import BrandConfig from "./BrandConfig";
 export class ProjectInfo extends AbstractDataModel<TypeProjectInfo> {
   protected data: TypeProjectInfo = {};
 
-  static default(): TypeProjectInfo {
-    return new ProjectInfo().default();
-  }
+  static default = new ProjectInfo().create();
 }
 
 export class ProjectData extends AbstractDataModel<TypeProjectDataDoc> {
@@ -16,15 +14,13 @@ export class ProjectData extends AbstractDataModel<TypeProjectDataDoc> {
     uuid: "",
     brandConfig: new BrandConfig().create(),
     projectRoot: "",
-    projectInfo: ProjectInfo.default(),
-    uiVersion: UiVersion.default(),
+    projectInfo: ProjectInfo.default,
+    uiVersion: UiVersion.default,
     sourceConfigPath: "",
     _id: "",
     createdAt: new Date(),
     updatedAt: new Date()
   };
 
-  static default(): TypeProjectDataDoc {
-    return new ProjectData().default();
-  }
+  static default = new ProjectData().create();
 }

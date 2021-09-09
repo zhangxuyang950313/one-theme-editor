@@ -2,7 +2,10 @@ import React from "react";
 import styled from "styled-components";
 import { useDocumentTitle } from "@/hooks/index";
 import { useFetchProjectList } from "@/hooks/project";
-import { useFetchBrandOptionList } from "@/hooks/source";
+import {
+  useFetchBrandOptionList,
+  useFetchSourceOptionList
+} from "@/hooks/source";
 import { PRESET_TITLE } from "src/enum";
 
 import Sidebar from "@/components/Starter/Sidebar";
@@ -14,6 +17,7 @@ const Starter: React.FC = () => {
   setTitle(PRESET_TITLE.default);
 
   useFetchBrandOptionList();
+  useFetchSourceOptionList();
   const projectList = useFetchProjectList();
 
   return (

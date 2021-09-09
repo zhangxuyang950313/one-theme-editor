@@ -3,18 +3,20 @@ import { useEffect, useLayoutEffect, useState, useCallback } from "react";
 import { message, notification } from "antd";
 import {
   apiGetBrandOptionList,
-  apiGetSourceConfigPreviewList,
+  apiGetSourceOptionList,
   apiGetSourceConfig,
   apiGetSourcePageConfData
 } from "@/request/index";
 import { selectSourceConfigDir } from "@/store/global/modules/base/selector";
 import {
   ActionSetBrandOptionList,
-  ActionSetBrandOption
+  ActionSetBrandOption,
+  ActionSetSourceOptionList
 } from "@/store/starter/action";
 import {
-  selectBrandConfig,
-  selectBrandOptionList
+  selectBrandOption,
+  selectBrandOptionList,
+  selectSourceOptionList
 } from "@/store/starter/selector";
 import {
   ActionSetCurrentModule,
@@ -39,7 +41,7 @@ import {
 import {
   TypeBrandOption,
   TypeSourceConfig,
-  TypeSourceConfigPreview,
+  TypeSourceOption,
   TypeSourcePageGroupConf,
   TypeSourceModuleConf,
   TypeSourcePageConf,
@@ -60,14 +62,18 @@ import {
   useGlobalSelector
 } from "@/store/index";
 import ERR_CODE from "src/common/errorCode";
-import { asyncQueue } from "src/utils/index";
+import SourceConfig from "src/data/SourceConfig";
+import { asyncQueue, sleep } from "src/utils/index";
 import { LOAD_STATUS, SOURCE_TYPES } from "src/enum/index";
-import { SourceConfigData } from "src/data/SourceConfig";
 import { useImagePrefix } from "./image";
 import { useAsyncUpdater } from "./index";
 
 export function useBrandOptionList(): TypeBrandOption[] {
   return useStarterSelector(selectBrandOptionList);
+}
+
+export function useSourceOptionList(): TypeSourceOption[] {
+  return useStarterSelector(selectSourceOptionList);
 }
 
 /**
@@ -105,7 +111,7 @@ export function useBrandOption(): [
   (data: TypeBrandOption) => void
 ] {
   const dispatch = useStarterDispatch();
-  const brandConfig = useStarterSelector(selectBrandConfig);
+  const brandConfig = useStarterSelector(selectBrandOption);
   return [brandConfig, data => dispatch(ActionSetBrandOption(data))];
 }
 
@@ -114,12 +120,12 @@ export function useBrandOption(): [
  * @returns
  */
 export function useFetchBrandOptionList(): {
-  brandOptionList: TypeBrandOption[];
+  state: TypeBrandOption[];
   status: LOAD_STATUS;
   fetch: () => Promise<void>;
 } {
   const [status, setStatus] = useState(LOAD_STATUS.INITIAL);
-  const [brandOptionList, setBrandOptionList] = useState<TypeBrandOption[]>([]);
+  const [state, setState] = useState<TypeBrandOption[]>([]);
   const dispatch = useStarterDispatch();
   const registerUpdater = useAsyncUpdater();
   const fetch = async () => {
@@ -132,7 +138,7 @@ export function useFetchBrandOptionList(): {
         return t;
       }, []);
       registerUpdater(() => {
-        setBrandOptionList(list);
+        setState(list);
         dispatch(ActionSetBrandOptionList(list));
         setStatus(LOAD_STATUS.SUCCESS);
       });
@@ -143,38 +149,44 @@ export function useFetchBrandOptionList(): {
   useLayoutEffect(() => {
     fetch();
   }, []);
-  return { brandOptionList, status, fetch };
+  return { state, status, fetch };
 }
 
 /**
  * 获取配置预览列表
  * @returns
  */
-export function useSourceConfigPreviewList(): [
-  TypeSourceConfigPreview[],
-  boolean
-] {
-  const [value, setValue] = useState<TypeSourceConfigPreview[]>([]);
-  const [loading, updateLoading] = useState(true);
+export function useFetchSourceOptionList(): {
+  state: TypeSourceOption[];
+  status: LOAD_STATUS;
+  fetch: () => Promise<void>;
+} {
+  const [state, setState] = useState<TypeSourceOption[]>([]);
+  const [status, setStatus] = useState(LOAD_STATUS.INITIAL);
   const [brandConfig] = useBrandOption();
   const dispatch = useStarterDispatch();
-  useLayoutEffect(() => {
+  const fetch = async () => {
     if (!brandConfig.src) return;
-    apiGetSourceConfigPreviewList(brandConfig.src)
+    setStatus(LOAD_STATUS.LOADING);
+    await sleep(300);
+    apiGetSourceOptionList(brandConfig.src)
       .then(data => {
         console.log("配置预览列表：", data);
-        setValue(data);
+        setState(data);
+        dispatch(ActionSetSourceOptionList(data));
+        setStatus(LOAD_STATUS.SUCCESS);
       })
       .catch(err => {
         const content = ERR_CODE[3002];
         message.error({ content });
         console.log(`${content}: ${err}`);
-      })
-      .finally(() => {
-        updateLoading(false);
+        setStatus(LOAD_STATUS.FAILED);
       });
-  }, [brandConfig, dispatch]);
-  return [value, loading];
+  };
+  useLayoutEffect(() => {
+    fetch();
+  }, [brandConfig]);
+  return { state, status, fetch };
 }
 
 /**
@@ -189,7 +201,7 @@ export function useFetchSourceConfig(): [
   const dispatch = useEditorDispatch();
   const sourceConfigPath = useSourceConfigPath();
   const [status, setStatus] = useState(LOAD_STATUS.INITIAL);
-  const [sourceConfig, setSourceConfig] = useState(SourceConfigData.default);
+  const [sourceConfig, setSourceConfig] = useState(SourceConfig.default);
   const doFetchData = useCallback(async () => {
     if (!sourceConfigPath) return;
     setStatus(LOAD_STATUS.LOADING);

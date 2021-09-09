@@ -71,10 +71,8 @@ const ProjectManager: React.FC<{
           <h2>{brandConfig?.name || ""}列表</h2>
           <p>新建{projectList.length > 0 ? "或选择" : ""}一个主题开始创作</p>
         </div>
-        <div className="button">
-          {/* 新建主题按钮 */}
-          <CreateProject onProjectCreated={props.onProjectCreated} />
-        </div>
+        {/* 新建主题按钮 */}
+        <CreateProject onProjectCreated={props.onProjectCreated} />
       </div>
       {/* 工程列表 */}
       <ProjectListContent />
@@ -104,9 +102,6 @@ const StyleProjectManager = styled.div`
         font-size: 14px;
         color: ${({ theme }) => theme["@text-color-secondary"]};
       }
-    }
-    .button {
-      display: flex;
     }
   }
 `;

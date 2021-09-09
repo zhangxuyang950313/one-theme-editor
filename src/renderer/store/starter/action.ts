@@ -1,12 +1,12 @@
 import { TypeProjectDataDoc } from "src/types/project";
-import { TypeBrandOption } from "src/types/source";
+import { TypeBrandOption, TypeSourceOption } from "src/types/source";
 
 export enum ACTION_TYPES {
-  // 设置品牌列表
-  SET_BRAND_OPTION_LIST = "SET_BRAND_OPTION_LIST",
-  // 设置当前选择的品牌
-  SET_BRAND_OPTION = "SET_BRAND_OPTION",
-  SET_PROJECT_LIST = "SET_PROJECT_LIST"
+  SET_BRAND_OPTION_LIST = "SET_BRAND_OPTION_LIST", // 品牌列表
+  SET_BRAND_OPTION_SELECTED = "SET_BRAND_OPTION_SELECTED", // 当前选择的品牌
+  SET_SOURCE_OPTION_LIST = "SET_SOURCE_OPTION_LIST", // 资源配置选项列表
+  SET_SOURCE_OPTION_SELECTED = "SET_SOURCE_OPTION_SELECTED", // 当前选择的资源配置选项
+  SET_PROJECT_LIST = "SET_PROJECT_LIST" // 工程列表
 }
 
 // 设置品牌信息列表
@@ -17,8 +17,18 @@ type TypeActionSetBrandOptionList = {
 
 // 设置品牌信息
 type TypeActionSetBrandOption = {
-  type: typeof ACTION_TYPES.SET_BRAND_OPTION;
+  type: typeof ACTION_TYPES.SET_BRAND_OPTION_SELECTED;
   payload: TypeBrandOption;
+};
+
+type TypeActionSetSourceOptionList = {
+  type: typeof ACTION_TYPES.SET_SOURCE_OPTION_LIST;
+  payload: TypeSourceOption[];
+};
+
+type TypeActionSetSourceOption = {
+  type: typeof ACTION_TYPES.SET_SOURCE_OPTION_SELECTED;
+  payload: TypeSourceOption;
 };
 
 type TypeActionSetProjectList = {
@@ -30,6 +40,8 @@ type TypeActionSetProjectList = {
 export type TypeStarterActions =
   | TypeActionSetBrandOptionList
   | TypeActionSetBrandOption
+  | TypeActionSetSourceOptionList
+  | TypeActionSetSourceOption
   | TypeActionSetProjectList;
 
 // 设置品牌信息列表
@@ -43,7 +55,19 @@ export function ActionSetBrandOptionList(
 export function ActionSetBrandOption(
   payload: TypeBrandOption
 ): TypeActionSetBrandOption {
-  return { type: ACTION_TYPES.SET_BRAND_OPTION, payload };
+  return { type: ACTION_TYPES.SET_BRAND_OPTION_SELECTED, payload };
+}
+
+export function ActionSetSourceOptionList(
+  payload: TypeSourceOption[]
+): TypeActionSetSourceOptionList {
+  return { type: ACTION_TYPES.SET_SOURCE_OPTION_LIST, payload };
+}
+
+export function ActionSetSourceOption(
+  payload: TypeSourceOption
+): TypeActionSetSourceOption {
+  return { type: ACTION_TYPES.SET_SOURCE_OPTION_SELECTED, payload };
 }
 
 export function ActionSetProjectList(

@@ -11,7 +11,7 @@ import { TypeImageData, TypeProjectUiVersion } from "./project";
 import { TypeImagePathLike } from "./index";
 
 // 资源配置信息
-export type TypeSourceConfigPreview = {
+export type TypeSourceOption = {
   key: string;
   namespace: string;
   config: string;
@@ -22,7 +22,7 @@ export type TypeSourceConfigPreview = {
 };
 
 // 资源配置数据
-export type TypeSourceConfig = TypeSourceConfigPreview & {
+export type TypeSourceConfig = TypeSourceOption & {
   sourceTypeList: TypeSourceTypeConf[];
   sourceModuleList: TypeSourceModuleConf[];
 };

@@ -4,7 +4,7 @@ import {
   apiGetProjectFileData,
   apiGetProjectList
 } from "@/request/index";
-import { useAxiosCanceler } from "@/hooks/index";
+import { useAxiosCanceler, useMergeLoadStatus } from "@/hooks/index";
 import {
   useBrandOption,
   useFetchPageConfList,
@@ -87,7 +87,7 @@ export function useProjectInfo(): TypeProjectInfo {
 
 // 获取项目列表
 export function useFetchProjectList(): {
-  projectList: TypeProjectDataDoc[];
+  data: TypeProjectDataDoc[];
   status: LOAD_STATUS;
   fetch: () => Promise<void>;
 } {
@@ -116,9 +116,9 @@ export function useFetchProjectList(): {
   }, [brandOption]);
 
   useLayoutEffect(() => {
-    if (brandOption) fetch();
-  }, [brandOption]);
-  return { projectList, status, fetch };
+    fetch();
+  }, [brandOption.md5]);
+  return { data: projectList, status, fetch };
 }
 
 /**
@@ -138,6 +138,7 @@ export function useFetchProjectData(): [
   const [status, setStatus] = useState<LOAD_STATUS>(LOAD_STATUS.INITIAL);
   const handleFetch = async () => {
     setStatus(LOAD_STATUS.LOADING);
+    await sleep(300);
     return apiGetProjectByUUID(uuid)
       .then(project => {
         if (!project) throw new Error(ERR_CODE[2005]);
@@ -145,15 +146,14 @@ export function useFetchProjectData(): [
         dispatch(ActionSetProjectData(project));
         setStatus(LOAD_STATUS.SUCCESS);
       })
-      .catch(() => {
+      .catch(err => {
+        notification.error({ message: err.message });
         dispatch(ActionInitEditor());
         setStatus(LOAD_STATUS.FAILED);
       });
   };
   useEffect(() => {
-    handleFetch().catch(err => {
-      notification.error({ message: err.message });
-    });
+    handleFetch();
   }, [uuid]);
   return [projectData, status, handleFetch];
 }
@@ -176,6 +176,7 @@ export function useInitProject(): [
   const [projectData, step1Status, handleFetch1] = useFetchProjectData();
   const [sourceConfig, step2Status, handleFetch2] = useFetchSourceConfig();
   const [pageConfigList, step3Status, handleFetch3] = useFetchPageConfList();
+  const status = useMergeLoadStatus([step1Status, step2Status, step3Status]);
   const dispatch = useEditorDispatch();
   usePatchPageSourceData();
   useLayoutEffect(() => {
@@ -184,15 +185,6 @@ export function useInitProject(): [
       dispatch(ActionInitEditor());
     };
   }, []);
-  const statusList = [step1Status, step2Status, step3Status];
-  let status = LOAD_STATUS.INITIAL;
-  if (statusList.every(o => o === LOAD_STATUS.LOADING)) {
-    status = LOAD_STATUS.LOADING;
-  } else if (statusList.every(o => o === LOAD_STATUS.SUCCESS)) {
-    status = LOAD_STATUS.SUCCESS;
-  } else if (statusList.some(o => o === LOAD_STATUS.FAILED)) {
-    status = LOAD_STATUS.FAILED;
-  }
   const result = { projectData, sourceConfig, pageConfigList };
   const fetchAll = async () => {
     await Promise.all([handleFetch1(), handleFetch2(), handleFetch3()]);

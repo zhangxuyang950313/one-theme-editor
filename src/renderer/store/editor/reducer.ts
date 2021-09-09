@@ -11,8 +11,7 @@ import {
   TypeSourcePageData,
   TypeSourceConfig
 } from "src/types/source";
-import {
-  SourceConfigData,
+import SourceConfig, {
   SourceModuleConf,
   SourcePageConf
 } from "src/data/SourceConfig";
@@ -36,16 +35,16 @@ export type TypeEditorState = {
 };
 
 const defaultState: TypeEditorState = {
-  projectData: new ProjectData().create(),
-  projectInfo: new ProjectInfo().create(),
+  projectData: ProjectData.default,
+  projectInfo: ProjectInfo.default,
   uuid: "",
   projectRoot: "",
   sourceConfigPath: "",
-  sourceConfig: new SourceConfigData().create(),
+  sourceConfig: SourceConfig.default,
   sourceTypeList: [],
   sourceModuleList: [],
-  sourceModuleSelected: new SourceModuleConf().create(),
-  sourcePageSelected: new SourcePageConf().create(),
+  sourceModuleSelected: SourceModuleConf.default,
+  sourcePageSelected: SourcePageConf.default,
   sourcePageDataMap: {},
   projectFileDataMap: {}
 };

@@ -7,7 +7,7 @@ import { isDev } from "@/core/constant";
 import { apiCreateProject } from "@/request";
 import { useBrandOption } from "@/hooks/source";
 import { TypeProjectInfo } from "src/types/project";
-import { TypeSourceConfigPreview } from "src/types/source";
+import { TypeSourceOption } from "src/types/source";
 
 import styled from "styled-components";
 import React, { useEffect, useRef, useState } from "react";
@@ -45,7 +45,7 @@ const CreateProject: React.FC<{
   // 表单实例
   const [form] = Form.useForm<TypeProjectInfo>();
   // 选择的模板
-  const [sourceConfig, setSourceConfig] = useState<TypeSourceConfigPreview>();
+  const [sourceConfig, setSourceConfig] = useState<TypeSourceOption>();
   // 填写本地目录
   const [projectRoot, setProjectRoot] = useState(
     path.join(defaultPath, initialValues.name)
@@ -194,7 +194,12 @@ const CreateProject: React.FC<{
     },
     {
       name: "选择配置",
-      Context: <SourceConfigManager onSelected={setSourceConfig} />,
+      Context: (
+        <SourceConfigManager
+          selectedKey={sourceConfig?.key || ""}
+          onSelected={setSourceConfig}
+        />
+      ),
       prev: {
         disabled: isCreating,
         handlePrev: prevStep
@@ -343,12 +348,8 @@ const CreateProject: React.FC<{
   ];
 
   return (
-    <>
-      <Button
-        type="primary"
-        ref={r => (thisRef.current = r)}
-        onClick={handleStartCreate}
-      >
+    <div ref={r => (thisRef.current = r)}>
+      <Button type="primary" onClick={handleStartCreate}>
         新建主题
       </Button>
 
@@ -366,7 +367,7 @@ const CreateProject: React.FC<{
         <StyleSteps steps={steps.map(o => o.name)} current={curStep} />
         {step.Context}
       </StyleModal>
-    </>
+    </div>
   );
 };
 

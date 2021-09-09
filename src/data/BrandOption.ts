@@ -8,4 +8,5 @@ export default class BrandOption extends AbstractDataModel<TypeBrandOption> {
     src: "",
     ...new BrandConfig().create()
   };
+  static default = new BrandOption().create();
 }
