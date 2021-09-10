@@ -105,14 +105,22 @@ export function useInitEditorConfig(): [LOAD_STATUS, () => Promise<void>] {
 
 // 合并多个 status 状态
 export function useMergeLoadStatus(statusList: LOAD_STATUS[]): LOAD_STATUS {
-  console.log(statusList);
   let status = LOAD_STATUS.INITIAL;
   if (statusList.every(o => o === LOAD_STATUS.LOADING)) {
+    // 都是加载状态为加载状态
     status = LOAD_STATUS.LOADING;
   } else if (statusList.every(o => o === LOAD_STATUS.SUCCESS)) {
+    // 都是成功状态为成功状态
     status = LOAD_STATUS.SUCCESS;
   } else if (statusList.some(o => o === LOAD_STATUS.FAILED)) {
+    // 有一个失败就是失败状态
     status = LOAD_STATUS.FAILED;
+  } else if (statusList.some(o => o === LOAD_STATUS.TIMEOUT)) {
+    // 有一个超时就是超时状态
+    status = LOAD_STATUS.TIMEOUT;
+  } else if (statusList.some(o => o === LOAD_STATUS.UNKNOWN)) {
+    // 有一个未知就是未知状态
+    status = LOAD_STATUS.UNKNOWN;
   }
   return status;
 }

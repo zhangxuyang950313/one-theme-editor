@@ -75,7 +75,7 @@ export async function zipProjectByRules(
     const files = getFilesByPattern(item.pattern, root);
     switch (item.type) {
       // 文件和目录
-      case PACK_TYPE.FILE:
+      case PACK_TYPE.FILEPATH:
       case PACK_TYPE.DIR: {
         zipFolderAndFile(zip, files, root, excludes);
         break;

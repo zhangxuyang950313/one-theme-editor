@@ -1,7 +1,7 @@
 <Configuration>
 
     <!-- 描述文件模板 -->
-    <InfoTemplate file="description.xml">
+    <InfoTemplate filepath="./description.xml">
         <?xml version="1.0" encoding="utf-8"?>
         <MIUI-Theme>
             <title>${project_name}</title>
@@ -32,7 +32,7 @@
             type: dir | pack | file     打包文件类型标识，dir 目录，pack 压缩，file 文件
             pattern:                    匹配模式
         -->
-        <Item type="dir"  pattern="boots/**"/>
+        <Item type="dir"  pattern="boots/**" extname=".zip"/>
         <Item type="pack" pattern="clock_2x4/**"/>
         <Item type="pack" pattern="com.*/**"/>
         <Item type="pack" pattern="framework.*/**"/>

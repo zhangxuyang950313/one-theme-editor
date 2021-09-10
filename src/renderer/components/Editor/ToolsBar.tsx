@@ -1,7 +1,7 @@
 /**
  * 工具栏
  */
-import React from "react";
+import React, { useRef, useState } from "react";
 import { useHistory } from "react-router";
 import styled from "styled-components";
 
@@ -14,6 +14,7 @@ import {
   FolderOutlined
 } from "@ant-design/icons";
 import IconButton from "@/components/IconButton";
+import ProjectInfoModal from "./ProjectInfoModal";
 
 const icons = {
   apply: { name: "应用", icon: <MobileOutlined /> },
@@ -30,6 +31,8 @@ type TypeIconsType = keyof typeof icons;
 
 export default function ToolsBar(): JSX.Element {
   const history = useHistory();
+  const thisRef = useRef<HTMLDivElement | null>();
+  const [projectInfoVisible, setProjectInfoVisible] = useState(false);
   const handleClick = (key: TypeIconsType) => {
     switch (key) {
       case "apply": {
@@ -49,6 +52,7 @@ export default function ToolsBar(): JSX.Element {
         break;
       }
       case "info": {
+        setProjectInfoVisible(true);
         break;
       }
       case "dark": {
@@ -60,7 +64,7 @@ export default function ToolsBar(): JSX.Element {
     }
   };
   return (
-    <StyleToolsBar>
+    <StyleToolsBar ref={r => (thisRef.current = r)}>
       <div className="btn-group">
         {(Object.keys(icons) as TypeIconsType[]).map(key => {
           const item = icons[key];
@@ -73,6 +77,16 @@ export default function ToolsBar(): JSX.Element {
           );
         })}
       </div>
+      <ProjectInfoModal
+        title="修改主题信息"
+        centered
+        destroyOnClose
+        getContainer={thisRef.current}
+        visible={projectInfoVisible}
+        onCancel={() => {
+          setProjectInfoVisible(false);
+        }}
+      />
     </StyleToolsBar>
   );
 }
@@ -82,6 +96,7 @@ const StyleToolsBar = styled.div`
   padding: 10px 10px 4px 10px;
   background: ${({ theme }) => theme["@background-color"]};
   display: flex;
+  flex-shrink: 0;
   /* justify-content: space-between; */
   box-sizing: border-box;
   border-bottom: 1px solid;

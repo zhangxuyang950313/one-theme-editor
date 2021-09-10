@@ -42,6 +42,7 @@ import { notification } from "antd";
 import { LOAD_STATUS, FILE_STATUS } from "src/enum";
 import {
   TypeBrandConf,
+  TypeInfoTempConf,
   TypeSourceConfig,
   TypeSourcePageData
 } from "src/types/source";
@@ -83,6 +84,11 @@ export function useProjectBrandConfig(): TypeBrandConf {
 export function useProjectInfo(): TypeProjectInfo {
   const projectData = useProjectData();
   return projectData.projectInfo;
+}
+
+export function useInfoTemplateConfig(): TypeInfoTempConf {
+  const projectData = useProjectData();
+  return projectData.brandConfig.infoTemplate;
 }
 
 // 获取项目列表

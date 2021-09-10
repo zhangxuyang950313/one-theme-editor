@@ -11,7 +11,7 @@ export class ProjectFileImageData extends AbstractDataModel<TypeProjectImageFile
     type: PROJECT_FILE_TYPE.IMAGE,
     src: "",
     url: "",
-    imageData: new ImageData().default()
+    imageData: ImageData.default
   };
 }
 

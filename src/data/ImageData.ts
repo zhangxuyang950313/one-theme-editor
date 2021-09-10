@@ -9,4 +9,5 @@ export default class ImageData extends AbstractDataModel<TypeImageData> {
     filename: "",
     ninePatch: false
   };
+  static default = new ImageData().create();
 }

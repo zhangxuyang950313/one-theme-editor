@@ -2,7 +2,6 @@ import path from "path";
 import querystring from "querystring";
 import fse from "fs-extra";
 import {
-  TypeSourceCopyConf,
   TypeLayoutElement,
   TypeSourcePageData,
   TypeLayoutImageElement,
@@ -157,24 +156,6 @@ export default class PageConfig extends XMLNodeElement {
       .getChildrenNodesByTagname(ELEMENT_TAG.Preview)
       .map(item => this.relativePagePath(item.getAttributeOf("src")));
   }
-
-  /**
-   * 拷贝文件的列表
-   * ```xml
-   * <copy from="theme_fallback.xml" to="wallpaper/theme_fallback.xml"/>
-   * <copy from="theme_fallback.xml" release="wallpaper/theme_fallback1.xml"/>
-   * ```
-   * @returns
-   */
-  getCopyConfList(): TypeSourceCopyConf[] {
-    return this.getRootChildrenNodesOf("copy").map<TypeSourceCopyConf>(
-      node => ({
-        from: node.getAttributeOf("from"),
-        release: node.getAttributeOf("source")
-      })
-    );
-  }
-
   /**
    * 从值的 query 字符串中获得对应的映射值
    * 以下表示获取“工程目录下 wallpaper/theme_values.xml 中 name=action_bar_title_text_color_light 的 text 值”
@@ -358,7 +339,6 @@ export default class PageConfig extends XMLNodeElement {
       .set("previewList", this.getPreviewList())
       .set("sourceDefineList", this.sourceDefineInstance.getSourceDefineList())
       .set("layoutElementList", this.getLayoutElementList())
-      .set("copyList", this.getCopyConfList())
       .create();
   }
 }

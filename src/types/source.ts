@@ -101,12 +101,6 @@ export type TypeSourceXmlTempConf = {
   release: string;
 };
 
-// 拷贝配置数据
-export type TypeSourceCopyConf = {
-  from: string;
-  release: string;
-};
-
 export type TypeLayoutConf = {
   x: string;
   y: string;
@@ -193,7 +187,6 @@ export type TypeSourcePageData = {
   previewList: string[];
   sourceDefineList: TypeSourceDefine[];
   layoutElementList: TypeLayoutElement[];
-  copyList: TypeSourceCopyConf[];
 };
 
 // 键值对映射 map

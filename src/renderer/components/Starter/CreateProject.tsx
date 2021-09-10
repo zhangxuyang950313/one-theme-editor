@@ -355,13 +355,13 @@ const CreateProject: React.FC<{
 
       <StyleModal
         width="700px"
-        centered={true}
+        centered
         visible={modalVisible}
         title={`创建${selectedBrandOption.name}`}
-        destroyOnClose={true}
+        destroyOnClose
         onCancel={closeModal}
         footer={modalFooter}
-        forceRender={true}
+        forceRender
         getContainer={thisRef.current}
       >
         <StyleSteps steps={steps.map(o => o.name)} current={curStep} />

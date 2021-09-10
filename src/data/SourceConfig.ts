@@ -122,8 +122,7 @@ export class SourcePageData extends AbstractDataModel<TypeSourcePageData> {
     screenWidth: "",
     previewList: [],
     sourceDefineList: [],
-    layoutElementList: [],
-    copyList: []
+    layoutElementList: []
   };
 }
 
