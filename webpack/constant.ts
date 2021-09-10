@@ -35,6 +35,7 @@ export const entryFile = {
     pro: path.resolve(rootDir, "src/main/index.ts")
   },
   server: path.resolve(rootDir, "src/server/index.ts"),
+  startServer: path.resolve(rootDir, "src/server/start.ts"),
   render: path.resolve(rootDir, "src/renderer/index.tsx")
 };
 
