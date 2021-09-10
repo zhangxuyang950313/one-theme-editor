@@ -19,7 +19,10 @@ const config: webpack.ConfigurationFactory = (env, args) => {
     },
     profile: false, // 选项捕获编译时每个步骤的时间信息，并且将这些信息包含在输出中
     stats: "errors-warnings", // 构建时控制台信息
-    entry: { index: entryFile.server },
+    entry: {
+      index: entryFile.server
+      // start: entryFile.startServer
+    },
     output: {
       path: outputDir.server,
       filename: "[name].js"
