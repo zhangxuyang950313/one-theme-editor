@@ -1,5 +1,4 @@
 import path from "path";
-import pathUtil from "server/utils/pathUtil";
 import { Express } from "express";
 import API from "src/common/apiConf";
 import {
@@ -18,10 +17,10 @@ import { releaseXmlTemplate } from "server/services/xmlTemplate";
 import {
   getPageDefineSourceData,
   getProjectFileData,
-  packProject
+  packProject,
+  unpackProject
 } from "server/services/project";
 import { checkParamsKey, result } from "server/utils/requestUtil";
-import { unzipProject } from "server/utils/unpackUtil";
 import XmlTemplate from "server/compiler/XmlTemplate";
 import XmlFileCompiler from "server/compiler/XmlFileCompiler";
 import BrandOptions from "server/compiler/BrandOptions";
@@ -194,24 +193,30 @@ export default function projectController(service: Express): void {
     UnionTupleToObjectKey<typeof API.PACK_PROJECT.query> // reqQuery
   >(API.PACK_PROJECT.url, async (request, response) => {
     checkParamsKey(request.query, API.PACK_PROJECT.query);
-    const { outputFile, uuid } = request.query;
-    const { brandConfig, projectRoot } = await findProjectByQuery({ uuid });
-    const packConfig = BrandOptions.from(
-      pathUtil.SOURCE_CONFIG_FILE
-    ).getPackageConfigByBrandMd5(brandConfig.md5);
+    const { brandMd5, packDir, outputFile } = request.query;
+    const packConfig = BrandOptions.def().getPackageConfigByBrandMd5(brandMd5);
     if (!packConfig) {
       response.send(result.fail("未配置打包规则"));
       return;
     }
-    const files = await packProject({ projectRoot, packConfig, outputFile });
+    const files = await packProject({ packDir, packConfig, outputFile });
     response.send(result.success(files));
   });
 
-  service.post(API.UNPACK_PROJECT.url, async (request, response) => {
-    response.send(
-      await unzipProject(
-        "/Users/zhangxuyang/Desktop/素白App（超级锁屏+简约不简单+返现）.mtz.zip"
-      )
-    );
+  service.post<
+    never, // reqParams
+    TypeResponseFrame<string[]>, // resBody
+    never, // reqBody
+    UnionTupleToObjectKey<typeof API.UNPACK_PROJECT.query> // reqQuery
+  >(API.UNPACK_PROJECT.url, async (request, response) => {
+    checkParamsKey(request.query, API.UNPACK_PROJECT.query);
+    const { brandMd5, unpackFile, outputDir } = request.query;
+    const packConfig = BrandOptions.def().getPackageConfigByBrandMd5(brandMd5);
+    if (!packConfig) {
+      response.send(result.fail("未配置打包规则"));
+      return;
+    }
+    const files = await unpackProject({ unpackFile, packConfig, outputDir });
+    response.send(result.success(files));
   });
 }

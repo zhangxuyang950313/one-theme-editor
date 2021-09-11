@@ -32,7 +32,7 @@
             type: dir | pack | file     打包文件类型标识，dir 目录，pack 压缩，file 文件
             pattern:                    匹配模式
         -->
-        <Item type="dir"  pattern="boots/**" extname=".zip"/>
+        <Item type="dir"  pattern="boots/**"/>
         <Item type="pack" pattern="clock_2x4/**"/>
         <Item type="pack" pattern="com.*/**"/>
         <Item type="pack" pattern="framework.*/**"/>

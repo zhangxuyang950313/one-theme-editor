@@ -162,11 +162,12 @@ const API = {
   // 工程打包
   PACK_PROJECT: createApiConf({
     url: "/project/pack",
-    query: ["uuid", "outputFile"]
+    query: ["brandMd5", "packDir", "outputFile"]
   }),
   // 工程解包
   UNPACK_PROJECT: createApiConf({
-    url: "/project/unpack"
+    url: "/project/unpack",
+    query: ["brandMd5", "unpackFile", "outputDir"]
   }),
   // 应用到手机
   APPLY_PROJECT: createApiConf({

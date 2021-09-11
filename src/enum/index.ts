@@ -97,7 +97,7 @@ export enum FILE_STATUS {
 export enum PACK_TYPE {
   DIR = "dir",
   PACK = "pack",
-  FILEPATH = "filepath"
+  FILE = "file"
 }
 
 // 扩展数据字段

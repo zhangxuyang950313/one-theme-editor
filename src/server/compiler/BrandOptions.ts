@@ -17,26 +17,28 @@ import BrandConfigCompiler from "./BrandConfig";
 import XMLNodeElement from "./XMLNodeElement";
 
 export default class BrandOptions extends XmlTemplate {
+  // 默认配置路径
+  static def(): BrandOptions {
+    return BrandOptions.from(pathUtil.SOURCE_CONFIG_FILE);
+  }
+
   // 从文件创建实例
   static from(file: string): BrandOptions {
+    if (!fse.existsSync(file)) {
+      throw new Error(ERR_CODE[4003]);
+    }
     const element = new XmlFileCompiler(file).getElement();
     return new BrandOptions(element);
   }
 
   // 读取品牌配置列表
   static readBrandOptions(): TypeBrandOption[] {
-    if (!fse.existsSync(pathUtil.SOURCE_CONFIG_FILE)) {
-      throw new Error(ERR_CODE[4003]);
-    }
-    return BrandOptions.from(pathUtil.SOURCE_CONFIG_FILE).getOptions();
+    return BrandOptions.def().getOptions();
   }
 
   // 读取品牌配置数据
   static readBrandConfList(): TypeBrandConf[] {
-    if (!fse.existsSync(pathUtil.SOURCE_CONFIG_FILE)) {
-      throw new Error(ERR_CODE[4003]);
-    }
-    return BrandOptions.from(pathUtil.SOURCE_CONFIG_FILE).getBrandConfList();
+    return BrandOptions.def().getBrandConfList();
   }
 
   private getBrandNodes(): XMLNodeElement[] {

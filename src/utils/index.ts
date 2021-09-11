@@ -59,6 +59,26 @@ export async function asyncMap<T, R>(
   return await Promise.all(list.map(async (...args) => callbackfn(...args)));
 }
 
+/**
+ * 异步队列
+ * @param list
+ */
+export async function asyncQueue<T>(
+  list: Array<() => Promise<T>>,
+  space = 0
+): Promise<T[]> {
+  const result: T[] = [];
+  const fail: string[] = [];
+  for (const fn of list.filter(item => item instanceof Function)) {
+    await fn()
+      ?.then(result.push.bind(result))
+      .catch(err => fail.push(err));
+    if (space) await sleep(space);
+  }
+  if (fail.length) throw new Error(String(fail));
+  return result;
+}
+
 // 去除字符串中空格、回车字符
 export function replaceUseless(str: string): string {
   return str.replace(/\r\n|\n|\s/g, "");
@@ -239,26 +259,6 @@ export function getDirAllFiles(dir: string): dirTree.DirectoryTree[] {
 // 两个数组的并集
 export function union(arr1: string[], arr2: string[]): string[] {
   return Array.from(new Set([...arr1, ...arr2]));
-}
-
-/**
- * 异步队列
- * @param list
- */
-export async function asyncQueue<T>(
-  list: Array<() => Promise<T>>,
-  delay = 0
-): Promise<T[]> {
-  const result: T[] = [];
-  const fail: string[] = [];
-  for (const item of list.filter(item => item instanceof Function)) {
-    await item()
-      ?.then(result.push.bind(result))
-      .catch(err => fail.push(err));
-    if (delay) await new Promise(resolve => setTimeout(resolve, delay));
-  }
-  if (fail.length) throw new Error(String(fail));
-  return result;
 }
 
 /**

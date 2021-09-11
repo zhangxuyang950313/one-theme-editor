@@ -69,7 +69,10 @@ const ProjectManager: React.FC<{
       <div className="top-container">
         <div className="title">
           <h2>{brandConfig?.name || ""}列表</h2>
-          <p>新建{projectList.length > 0 ? "或选择" : ""}一个主题开始创作</p>
+          <p>
+            新建{projectList.length > 0 ? "或选择" : ""}一个{brandConfig.name}
+            开始创作
+          </p>
         </div>
         {/* 新建主题按钮 */}
         <CreateProject onProjectCreated={props.onProjectCreated} />
