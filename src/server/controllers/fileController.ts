@@ -1,7 +1,7 @@
 import fse from "fs-extra";
 import { Express } from "express";
 
-import API from "src/common/apiConf";
+import apiConfig from "src/common/apiConf";
 import ERR_CODE from "src/common/errorCode";
 import { checkParamsKey, result } from "server/utils/requestUtil";
 import { TypeResponseFrame, UnionTupleToObjectKey } from "src/types/request";
@@ -11,9 +11,9 @@ export default function fileController(service: Express): void {
   service.post<
     never, // reqParams
     TypeResponseFrame<null, string>, // resBody
-    UnionTupleToObjectKey<typeof API.COPY_FILE.bodyKeys> // reqBody
-  >(API.COPY_FILE.url, (request, response) => {
-    checkParamsKey(request.body, API.COPY_FILE.bodyKeys);
+    UnionTupleToObjectKey<typeof apiConfig.COPY_FILE.bodyKeys> // reqBody
+  >(apiConfig.COPY_FILE.path, (request, response) => {
+    checkParamsKey(request.body, apiConfig.COPY_FILE.bodyKeys);
     const { from, to } = request.body;
     if (!fse.existsSync(from)) {
       response.status(400).send(result.fail(ERR_CODE[4003]));
@@ -28,9 +28,9 @@ export default function fileController(service: Express): void {
   service.post<
     never,
     TypeResponseFrame<null, string>,
-    UnionTupleToObjectKey<typeof API.DELETE_FILE.bodyKeys>
-  >(API.DELETE_FILE.url, (request, response) => {
-    checkParamsKey(request.body, API.DELETE_FILE.bodyKeys);
+    UnionTupleToObjectKey<typeof apiConfig.DELETE_FILE.bodyKeys>
+  >(apiConfig.DELETE_FILE.path, (request, response) => {
+    checkParamsKey(request.body, apiConfig.DELETE_FILE.bodyKeys);
     const { file } = request.body;
     if (!fse.existsSync(file)) {
       response.status(400).send(result.fail(ERR_CODE[4003]));

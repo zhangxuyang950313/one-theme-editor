@@ -1,6 +1,6 @@
 import path from "path";
 import { Express } from "express";
-import API from "src/common/apiConf";
+import apiConfig from "src/common/apiConf";
 import {
   TypeCreateProjectPayload,
   TypeProjectDataDoc,
@@ -31,19 +31,22 @@ export default function projectController(service: Express): void {
     never,
     TypeResponseFrame<TypeProjectDataDoc, string>,
     TypeCreateProjectPayload // reqBody
-  >(API.CREATE_PROJECT.url, async (request, response) => {
+  >(apiConfig.CREATE_PROJECT.path, async (request, response) => {
     const project = await createProject(request.body);
     response.send(result.success(project));
   });
 
   // 获取工程列表
   service.get<
-    UnionTupleToObjectKey<typeof API.GET_PROJECT_LIST.params>, // reqParams
+    UnionTupleToObjectKey<typeof apiConfig.GET_PROJECT_LIST.params>, // reqParams
     TypeResponseFrame<TypeProjectDataDoc[], string>
-  >(`${API.GET_PROJECT_LIST.url}/:brandMd5`, async (request, response) => {
-    const project = await getProjectListByBrandMd5(request.params.brandMd5);
-    response.send(result.success(project));
-  });
+  >(
+    `${apiConfig.GET_PROJECT_LIST.path}/:brandMd5`,
+    async (request, response) => {
+      const project = await getProjectListByBrandMd5(request.params.brandMd5);
+      response.send(result.success(project));
+    }
+  );
 
   // 通过参数获取工程
   service.get<
@@ -51,17 +54,17 @@ export default function projectController(service: Express): void {
     TypeResponseFrame<TypeProjectDataDoc>,
     never,
     Partial<TypeProjectDataDoc>
-  >(API.GET_PROJECT_DATA.url, async (request, response) => {
+  >(apiConfig.GET_PROJECT_DATA.path, async (request, response) => {
     const project = await findProjectByQuery(request.query);
     response.send(result.success(project));
   });
 
   // 更新数据
   service.post<
-    UnionTupleToObjectKey<typeof API.UPDATE_PROJECT.params>, // reqParams
+    UnionTupleToObjectKey<typeof apiConfig.UPDATE_PROJECT.params>, // reqParams
     TypeResponseFrame<TypeProjectDataDoc, string>, // resBody
-    typeof API.UPDATE_PROJECT.body // reqBody
-  >(API.UPDATE_PROJECT.url, async (request, response) => {
+    typeof apiConfig.UPDATE_PROJECT.body // reqBody
+  >(apiConfig.UPDATE_PROJECT.path, async (request, response) => {
     const project = await updateProject(request.params.uuid, request.body);
     response.send(result.success(project));
   });
@@ -70,9 +73,9 @@ export default function projectController(service: Express): void {
   service.post<
     never,
     TypeResponseFrame<TypeProjectDataDoc, string>, // resBody
-    typeof API.UPDATE_PROJECT_INFO.body, // reqBody
-    UnionTupleToObjectKey<typeof API.UPDATE_PROJECT_INFO.query> // reqQuery
-  >(API.UPDATE_PROJECT_INFO.url, async (request, response) => {
+    typeof apiConfig.UPDATE_PROJECT_INFO.body, // reqBody
+    UnionTupleToObjectKey<typeof apiConfig.UPDATE_PROJECT_INFO.query> // reqQuery
+  >(apiConfig.UPDATE_PROJECT_INFO.path, async (request, response) => {
     const { uuid } = request.query;
     const description = request.body;
     console.log("更新工程描述信息", { uuid, description });
@@ -82,10 +85,10 @@ export default function projectController(service: Express): void {
 
   // 更新工程ui版本
   service.post<
-    UnionTupleToObjectKey<typeof API.UPDATE_UI_VERSION.params>,
+    UnionTupleToObjectKey<typeof apiConfig.UPDATE_UI_VERSION.params>,
     TypeResponseFrame<TypeProjectDataDoc, string>,
-    typeof API.UPDATE_UI_VERSION.body
-  >(`${API.UPDATE_UI_VERSION.url}/:uuid`, async (request, response) => {
+    typeof apiConfig.UPDATE_UI_VERSION.body
+  >(`${apiConfig.UPDATE_UI_VERSION.path}/:uuid`, async (request, response) => {
     const { uuid } = request.params;
     const uiVersion = request.body;
     const project = await updateProject(uuid, { uiVersion });
@@ -123,10 +126,10 @@ export default function projectController(service: Express): void {
     never,
     TypeResponseFrame<{ value: string }, string>,
     never,
-    UnionTupleToObjectKey<typeof API.GET_XML_TEMP_VALUE.query>
-  >(API.GET_XML_TEMP_VALUE.url, async (request, response) => {
+    UnionTupleToObjectKey<typeof apiConfig.GET_XML_TEMP_VALUE.query>
+  >(apiConfig.GET_XML_TEMP_VALUE.path, async (request, response) => {
     const { query } = request;
-    checkParamsKey(query, API.GET_XML_TEMP_VALUE.query);
+    checkParamsKey(query, apiConfig.GET_XML_TEMP_VALUE.query);
     const { uuid, name, src } = query;
     const project = await findProjectByQuery({ uuid });
     const releaseFile = path.join(project.projectRoot, src);
@@ -141,12 +144,12 @@ export default function projectController(service: Express): void {
   service.post<
     never, // reqParams
     TypeResponseFrame<Record<string, string>>, // resBody
-    typeof API.XML_TEMPLATE_WRITE.body, // reqBody
-    UnionTupleToObjectKey<typeof API.XML_TEMPLATE_WRITE.query> // reqQuery
-  >(API.XML_TEMPLATE_WRITE.url, async (request, response) => {
+    typeof apiConfig.XML_TEMPLATE_WRITE.body, // reqBody
+    UnionTupleToObjectKey<typeof apiConfig.XML_TEMPLATE_WRITE.query> // reqQuery
+  >(apiConfig.XML_TEMPLATE_WRITE.path, async (request, response) => {
     const { body, query } = request;
-    checkParamsKey(query, API.XML_TEMPLATE_WRITE.query);
-    checkParamsKey(body, API.XML_TEMPLATE_WRITE.bodyKeys);
+    checkParamsKey(query, apiConfig.XML_TEMPLATE_WRITE.query);
+    checkParamsKey(body, apiConfig.XML_TEMPLATE_WRITE.bodyKeys);
     const data = await releaseXmlTemplate(query.uuid, body);
     response.send(result.success(data));
   });
@@ -159,10 +162,10 @@ export default function projectController(service: Express): void {
     never,
     TypeResponseFrame<Record<string, TypeProjectFileData>>,
     never, // reqBody
-    UnionTupleToObjectKey<typeof API.GET_PAGE_SOURCE_DATA.query>
-  >(`${API.GET_PAGE_SOURCE_DATA.url}`, async (request, response) => {
+    UnionTupleToObjectKey<typeof apiConfig.GET_PAGE_SOURCE_DATA.query>
+  >(`${apiConfig.GET_PAGE_SOURCE_DATA.path}`, async (request, response) => {
     const { query } = request;
-    checkParamsKey(query, API.GET_PAGE_SOURCE_DATA.query);
+    checkParamsKey(query, apiConfig.GET_PAGE_SOURCE_DATA.query);
     const data = await getPageDefineSourceData(query.uuid, query.config);
     response.send(result.success(data));
   });
@@ -174,10 +177,10 @@ export default function projectController(service: Express): void {
     never,
     TypeResponseFrame<TypeProjectFileData>,
     never,
-    UnionTupleToObjectKey<typeof API.GET_SOURCE_FILE_DATA.query>
-  >(`${API.GET_SOURCE_FILE_DATA.url}`, async (request, response) => {
+    UnionTupleToObjectKey<typeof apiConfig.GET_SOURCE_FILE_DATA.query>
+  >(`${apiConfig.GET_SOURCE_FILE_DATA.path}`, async (request, response) => {
     const { query } = request;
-    checkParamsKey(query, API.GET_SOURCE_FILE_DATA.query);
+    checkParamsKey(query, apiConfig.GET_SOURCE_FILE_DATA.query);
     const { projectRoot } = await findProjectByQuery({ uuid: query.uuid });
     const data = getProjectFileData(projectRoot, query.filepath);
     response.send(result.success(data));
@@ -189,10 +192,10 @@ export default function projectController(service: Express): void {
   service.post<
     never, // reqParams
     TypeResponseFrame<string[]>, // resBody
-    typeof API.PACK_PROJECT.body, // reqBody
-    UnionTupleToObjectKey<typeof API.PACK_PROJECT.query> // reqQuery
-  >(API.PACK_PROJECT.url, async (request, response) => {
-    checkParamsKey(request.query, API.PACK_PROJECT.query);
+    typeof apiConfig.PACK_PROJECT.body, // reqBody
+    UnionTupleToObjectKey<typeof apiConfig.PACK_PROJECT.query> // reqQuery
+  >(apiConfig.PACK_PROJECT.path, async (request, response) => {
+    checkParamsKey(request.query, apiConfig.PACK_PROJECT.query);
     const { brandMd5, packDir, outputFile } = request.query;
     const packConfig = BrandOptions.def().getPackageConfigByBrandMd5(brandMd5);
     if (!packConfig) {
@@ -207,9 +210,9 @@ export default function projectController(service: Express): void {
     never, // reqParams
     TypeResponseFrame<string[]>, // resBody
     never, // reqBody
-    UnionTupleToObjectKey<typeof API.UNPACK_PROJECT.query> // reqQuery
-  >(API.UNPACK_PROJECT.url, async (request, response) => {
-    checkParamsKey(request.query, API.UNPACK_PROJECT.query);
+    UnionTupleToObjectKey<typeof apiConfig.UNPACK_PROJECT.query> // reqQuery
+  >(apiConfig.UNPACK_PROJECT.path, async (request, response) => {
+    checkParamsKey(request.query, apiConfig.UNPACK_PROJECT.query);
     const { brandMd5, unpackFile, outputDir } = request.query;
     const packConfig = BrandOptions.def().getPackageConfigByBrandMd5(brandMd5);
     if (!packConfig) {

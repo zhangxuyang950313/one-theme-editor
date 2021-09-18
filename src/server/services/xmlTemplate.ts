@@ -1,6 +1,6 @@
 import path from "path";
 import fse from "fs-extra";
-import API from "src/common/apiConf";
+import apiConfig from "src/common/apiConf";
 import pathUtil from "server/utils/pathUtil";
 import XmlTemplate from "server/compiler/XmlTemplate";
 import {
@@ -73,7 +73,7 @@ export async function releaseXmlTemplate(
  * @returns
  */
 export function getXmlTempValueByNameAttrVal(
-  data: UnionTupleToObjectKey<typeof API.GET_XML_TEMP_VALUE.query>
+  data: UnionTupleToObjectKey<typeof apiConfig.GET_XML_TEMP_VALUE.query>
 ): string {
   const xmlElement = new XmlFileCompiler(data.src).getElement();
   return new XmlTemplate(xmlElement).getValueByName(data.name);

@@ -1,4 +1,4 @@
-import API from "src/common/apiConf";
+import apiConfig from "src/common/apiConf";
 import { TypeElectronPath, TypePathConfig } from "src/types/extraConfig";
 import { TypeRequestResult } from "src/types/request";
 import { createHttp } from "./axios";
@@ -6,7 +6,7 @@ import { createHttp } from "./axios";
 // 获取后端路径信息
 export async function apiGetPathConfig(): Promise<TypePathConfig> {
   return createHttp()
-    .get<TypeRequestResult<TypePathConfig>>(API.GET_PATH_CONFIG.url)
+    .get<TypeRequestResult<TypePathConfig>>(apiConfig.GET_PATH_CONFIG.path)
     .then(data => data.data.data);
 }
 
@@ -15,6 +15,9 @@ export async function apiSwopPathConfig(
   config: TypeElectronPath
 ): Promise<TypePathConfig> {
   return createHttp()
-    .post<TypeRequestResult<TypePathConfig>>(API.SWOP_PATH_CONFIG.url, config)
+    .post<TypeRequestResult<TypePathConfig>>(
+      apiConfig.SWOP_PATH_CONFIG.path,
+      config
+    )
     .then(data => data.data.data);
 }

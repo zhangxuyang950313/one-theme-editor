@@ -1,7 +1,7 @@
 import fse from "fs-extra";
 import FileType from "file-type";
 import { Express } from "express";
-import API from "src/common/apiConf";
+import apiConfig from "src/common/apiConf";
 import ERR_CODE from "src/common/errorCode";
 import { UnionTupleToObjectKey } from "src/types/request";
 import { checkParamsKey } from "server/utils/requestUtil";
@@ -15,9 +15,9 @@ export default function imageController(service: Express): void {
     never, // reqParams
     Buffer, // resBody
     never, // reqBody
-    UnionTupleToObjectKey<typeof API.IMAGE.query> // reqQuery
-  >(API.IMAGE.url, async (req, res) => {
-    checkParamsKey(req.query, API.IMAGE.query);
+    UnionTupleToObjectKey<typeof apiConfig.IMAGE.query> // reqQuery
+  >(apiConfig.IMAGE.path, async (req, res) => {
+    checkParamsKey(req.query, apiConfig.IMAGE.query);
     async function getImgBuffAndFileType(file: string) {
       if (!fse.existsSync(file)) {
         throw new Error(ERR_CODE[4003]);
@@ -32,7 +32,7 @@ export default function imageController(service: Express): void {
     try {
       const { filepath } = req.query;
       const { buff, fileType } = await getImgBuffAndFileType(filepath).catch(
-        async () => {
+        () => {
           // const errImg = path.join(pathUtil.ASSETS_DIR, "img-err.png");
           // return getImgBuffAndFileType(errImg);
           return { buff: Buffer.from(""), fileType: { mime: "image/png" } };
@@ -41,7 +41,6 @@ export default function imageController(service: Express): void {
       res.set({ "Content-Type": fileType.mime });
       res.send(buff);
     } catch (err) {
-      console.warn("图片加载异常", err.message);
       res.status(400).send();
     }
   });

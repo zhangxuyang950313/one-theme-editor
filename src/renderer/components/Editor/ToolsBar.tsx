@@ -14,6 +14,7 @@ import {
   FolderOutlined
 } from "@ant-design/icons";
 import IconButton from "@/components/IconButton";
+import { usePackProject } from "@/hooks/socket";
 import ProjectInfoModal from "./ProjectInfoModal";
 
 const icons = {
@@ -33,12 +34,23 @@ export default function ToolsBar(): JSX.Element {
   const history = useHistory();
   const thisRef = useRef<HTMLDivElement | null>();
   const [projectInfoVisible, setProjectInfoVisible] = useState(false);
+  const packProject = usePackProject();
   const handleClick = (key: TypeIconsType) => {
     switch (key) {
       case "apply": {
         break;
       }
       case "save": {
+        packProject(
+          {
+            brandMd5: "2993f7d72871c927e60a3899ed9d565d",
+            packDir: "/Users/zhangxuyang/Desktop/test",
+            outputFile: "/Users/zhangxuyang/Desktop/test/test.zip"
+          },
+          d => {
+            console.log(d);
+          }
+        );
         break;
       }
       case "new": {

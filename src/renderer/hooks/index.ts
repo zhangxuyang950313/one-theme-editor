@@ -93,7 +93,7 @@ export function useInitEditorConfig(): [LOAD_STATUS, () => Promise<void>] {
       await sleep(300);
       setStatus(LOAD_STATUS.SUCCESS);
     } catch (err) {
-      message.error({ content: err.message });
+      message.error({ content: err });
       setStatus(LOAD_STATUS.FAILED);
     }
   };

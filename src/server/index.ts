@@ -3,7 +3,7 @@ import logSymbols from "log-symbols";
 import express from "express";
 import { PORT, HOST } from "src/common/config";
 import registerServiceController from "./controllers/index";
-import registerSocket from "./socket";
+import registerSocket from "./sockets/index";
 
 require("express-async-errors");
 
@@ -18,8 +18,5 @@ registerServiceController(service);
 registerSocket(server);
 
 server.listen(PORT, function () {
-  console.log(
-    logSymbols.success,
-    `应用实例，访问地址为 http://${HOST}:${PORT}`
-  );
+  console.log(logSymbols.success, `服务启动 http://${HOST}:${PORT}`);
 });

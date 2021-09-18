@@ -1,5 +1,5 @@
 import { Express } from "express";
-import API from "src/common/apiConf";
+import apiConfig from "src/common/apiConf";
 import {
   TypeSourceModuleConf,
   TypeSourcePageData,
@@ -19,7 +19,7 @@ export default function sourceController(service: Express): void {
    * 获取品牌配置列表
    */
   service.get<never, TypeResponseFrame<TypeBrandOption[], string>>(
-    API.GET_BRAND_OPTION_LIST.url,
+    apiConfig.GET_BRAND_OPTION_LIST.path,
     (request, response) => {
       const brandOptionList = BrandOptions.readBrandOptions();
       response.send(result.success(brandOptionList));
@@ -33,9 +33,9 @@ export default function sourceController(service: Express): void {
     never,
     TypeResponseFrame<TypeSourceOption[], string>,
     never,
-    UnionTupleToObjectKey<typeof API.GET_SOURCE_CONF_PREVIEW_LIST.query>
-  >(`${API.GET_SOURCE_CONF_PREVIEW_LIST.url}`, (request, response) => {
-    checkParamsKey(request.query, API.GET_SOURCE_CONF_PREVIEW_LIST.query);
+    UnionTupleToObjectKey<typeof apiConfig.GET_SOURCE_CONF_PREVIEW_LIST.query>
+  >(`${apiConfig.GET_SOURCE_CONF_PREVIEW_LIST.path}`, (request, response) => {
+    checkParamsKey(request.query, apiConfig.GET_SOURCE_CONF_PREVIEW_LIST.query);
     const list = BrandConfig.from(
       request.query.src
     ).getSourceConfigPreviewList();
@@ -49,9 +49,9 @@ export default function sourceController(service: Express): void {
     never, // reqParams
     TypeResponseFrame<TypeSourceModuleConf[], string>, // resBody
     never, // reqBody
-    UnionTupleToObjectKey<typeof API.GET_SOURCE_CONF_MODULE_LIST.query> // reqQuery
-  >(API.GET_SOURCE_CONF_MODULE_LIST.url, (request, response) => {
-    checkParamsKey(request.query, API.GET_SOURCE_CONF_MODULE_LIST.query);
+    UnionTupleToObjectKey<typeof apiConfig.GET_SOURCE_CONF_MODULE_LIST.query> // reqQuery
+  >(apiConfig.GET_SOURCE_CONF_MODULE_LIST.path, (request, response) => {
+    checkParamsKey(request.query, apiConfig.GET_SOURCE_CONF_MODULE_LIST.query);
     const list = new SourceConfig(request.query.config).getModuleList();
     response.send(result.success(list));
   });
@@ -64,9 +64,9 @@ export default function sourceController(service: Express): void {
     never, // reqParams
     TypeResponseFrame<TypeSourcePageData, string>, // resBody
     never, // reqBody
-    UnionTupleToObjectKey<typeof API.GET_SOURCE_CONF_PAGE_DATA.query> // reqQuery
-  >(API.GET_SOURCE_CONF_PAGE_DATA.url, async (request, response) => {
-    checkParamsKey(request.query, API.GET_SOURCE_CONF_PAGE_DATA.query);
+    UnionTupleToObjectKey<typeof apiConfig.GET_SOURCE_CONF_PAGE_DATA.query> // reqQuery
+  >(apiConfig.GET_SOURCE_CONF_PAGE_DATA.path, async (request, response) => {
+    checkParamsKey(request.query, apiConfig.GET_SOURCE_CONF_PAGE_DATA.query);
     const { namespace, config } = request.query;
     const data = new PageConfig({ namespace, config }).getData();
     response.send(result.success(data));
@@ -80,9 +80,9 @@ export default function sourceController(service: Express): void {
     never, // reqParams
     TypeResponseFrame<TypeSourceConfig, string>, // resBody
     never, // reqBody
-    UnionTupleToObjectKey<typeof API.GET_SOURCE_CONF_DATA.query> // reqQuery
-  >(API.GET_SOURCE_CONF_DATA.url, async (request, response) => {
-    checkParamsKey(request.query, API.GET_SOURCE_CONF_DATA.query);
+    UnionTupleToObjectKey<typeof apiConfig.GET_SOURCE_CONF_DATA.query> // reqQuery
+  >(apiConfig.GET_SOURCE_CONF_DATA.path, async (request, response) => {
+    checkParamsKey(request.query, apiConfig.GET_SOURCE_CONF_DATA.query);
     const data = new SourceConfig(request.query.config).getConfig();
     response.send(result.success(data));
   });

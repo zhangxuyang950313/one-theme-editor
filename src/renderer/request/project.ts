@@ -1,4 +1,4 @@
-import API from "src/common/apiConf";
+import apiConfig from "src/common/apiConf";
 import {
   TypeCreateProjectPayload,
   TypeProjectData,
@@ -19,7 +19,10 @@ export async function apiCreateProject(
   data: TypeCreateProjectPayload
 ): Promise<TypeProjectData> {
   return createHttp()
-    .post<TypeRequestResult<TypeProjectData>>(API.CREATE_PROJECT.url, data)
+    .post<TypeRequestResult<TypeProjectData>>(
+      apiConfig.CREATE_PROJECT.path,
+      data
+    )
     .then(data => data.data.data);
 }
 
@@ -30,7 +33,7 @@ export async function apiGetProjectList(
 ): Promise<TypeProjectDataDoc[]> {
   return createHttp(canceler)
     .get<TypeRequestResult<TypeProjectDataDoc[]>>(
-      `${API.GET_PROJECT_LIST.url}/${brandConfig.md5}`
+      `${apiConfig.GET_PROJECT_LIST.path}/${brandConfig.md5}`
     )
     .then(data => data.data.data);
 }
@@ -41,9 +44,12 @@ export async function apiGetProjectByUUID(
   canceler?: TypeGetCanceler
 ): Promise<TypeProjectDataDoc> {
   return createHttp(canceler)
-    .get<TypeRequestResult<TypeProjectDataDoc>>(API.GET_PROJECT_DATA.url, {
-      params: { uuid }
-    })
+    .get<TypeRequestResult<TypeProjectDataDoc>>(
+      apiConfig.GET_PROJECT_DATA.path,
+      {
+        params: { uuid }
+      }
+    )
     .then(data => data.data.data);
 }
 
@@ -52,10 +58,13 @@ export async function apiUpdateProject(
   data: TypeProjectData
 ): Promise<TypeProjectDataDoc> {
   return createHttp()
-    .post<TypeRequestResult<TypeProjectDataDoc>>(API.UPDATE_PROJECT.url, {
-      params: data.uuid,
-      data
-    })
+    .post<TypeRequestResult<TypeProjectDataDoc>>(
+      apiConfig.UPDATE_PROJECT.path,
+      {
+        params: data.uuid,
+        data
+      }
+    )
     .then(data => data.data.data);
 }
 
@@ -65,12 +74,15 @@ export async function apiUpdateProject(
  * @returns
  */
 export async function apiGetTempValueByName(
-  data: UnionTupleToObjectKey<typeof API.GET_XML_TEMP_VALUE.query>
+  data: UnionTupleToObjectKey<typeof apiConfig.GET_XML_TEMP_VALUE.query>
 ): Promise<string> {
   return createHttp()
-    .get<TypeRequestResult<{ value: string }>>(API.GET_XML_TEMP_VALUE.url, {
-      params: data
-    })
+    .get<TypeRequestResult<{ value: string }>>(
+      apiConfig.GET_XML_TEMP_VALUE.path,
+      {
+        params: data
+      }
+    )
     .then(data => data.data.data.value);
 }
 
@@ -84,7 +96,7 @@ export async function apiWriteXmlTemplate(
   data: TypeReleaseXmlTempPayload
 ): Promise<void | null> {
   return createHttp()
-    .post<TypeRequestResult<null>>(API.XML_TEMPLATE_WRITE.url, data, {
+    .post<TypeRequestResult<null>>(apiConfig.XML_TEMPLATE_WRITE.path, data, {
       params: { uuid }
     })
     .then(data => data.data.data);
@@ -101,8 +113,11 @@ export async function apiGetProjectFileData(
   filepath: string
 ): Promise<TypeProjectFileData> {
   return createHttp()
-    .get<TypeRequestResult<TypeProjectFileData>>(API.GET_SOURCE_FILE_DATA.url, {
-      params: { filepath, uuid }
-    })
+    .get<TypeRequestResult<TypeProjectFileData>>(
+      apiConfig.GET_SOURCE_FILE_DATA.path,
+      {
+        params: { filepath, uuid }
+      }
+    )
     .then(data => data.data.data);
 }

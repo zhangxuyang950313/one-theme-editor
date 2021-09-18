@@ -1,44 +1,32 @@
 import http from "http";
-import { Server, Socket } from "socket.io";
-import { SOCKET_EVENT } from "src/common/socketConf";
+import { Server } from "socket.io";
+import socketConfig from "src/common/socketConf";
 
-// 快速将 socket event 建立通讯通道
-class SocketConnecter {
-  private socket: Socket;
-  constructor(socket: Socket) {
-    this.socket = socket;
-  }
-  // 快速注册 socket 的通讯协议
-  connect<P, R, T>(
-    event: SOCKET_EVENT,
-    method: (data: P, cb: (d: R) => void) => Promise<T> | T
-  ) {
-    this.socket.on(event, (data: P) => {
-      method(data, data => {
-        this.socket.emit(event, data);
-      });
-    });
-  }
-}
-
-export default function registerSocket(server: http.Server): void {
+export default function projectSocket(server: http.Server): void {
+  const { namespace, pack } = socketConfig.project;
   // 创建 io 实例
-  const io = new Server(server, { cors: { origin: "*" } });
+  const io = new Server(server, {
+    cors: { origin: "*" }
+    // path: socketConfig.project.path
+  });
 
   io.on("connection", socket => {
-    console.log("socket 已被链接");
+    console.log(`socket 已被连接 ${namespace}`);
     socket.emit("hello", "服务已收到你的连接...");
     socket.on("disconnect", () => console.log("断开连接"));
 
     // 创建调用实例
     // const connecter = new SocketConnecter(socket);
-    // 同步监听的文件数据
-    socket.on(SOCKET_EVENT.WATCH_PROJECT_FILE, (data: string) => {
-      console.log(data);
-      setTimeout(() => {
-        socket.emit(SOCKET_EVENT.WATCH_PROJECT_FILE, data);
-      }, 1000);
-    });
+    // 打包工程
+    socket.on(
+      pack.event,
+      (param: { brandMd5: string; unpackFile: string; outputDir: string }) => {
+        console.log(param);
+        setTimeout(() => {
+          socket.emit(pack.event, param);
+        }, 1000);
+      }
+    );
     // 同步工程数据
 
     // connecter.connect(SOCKET_EVENT.PROJECT, (uuid: string) => {
