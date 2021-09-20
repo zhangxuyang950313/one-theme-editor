@@ -16,13 +16,16 @@ export enum LOAD_STATUS {
 export enum ELEMENT_TAG {
   Image = "Image",
   Text = "Text",
-  Page = "Page",
-  Module = "Module",
-  Package = "Package",
+  // 打包配置
+  PackConfig = "PackConfig",
   Item = "Item",
-  Apply = "Apply",
+  // 应用配置
+  ApplyConfig = "ApplyConfig",
   Step = "Step",
   Exclude = "Exclude",
+  // 资源配置
+  Module = "Module",
+  Page = "Page",
   Group = "Group",
   Source = "Source",
   Previews = "Previews",
@@ -34,7 +37,7 @@ export enum ELEMENT_TAG {
   Value = "Value",
   Color = "Color",
   Scenario = "Scenario",
-  Config = "Config",
+  SourceConfig = "SourceConfig",
   InfoTemplate = "InfoTemplate"
 }
 

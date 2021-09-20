@@ -197,12 +197,16 @@ export default function projectController(service: Express): void {
   >(apiConfig.PACK_PROJECT.path, async (request, response) => {
     checkParamsKey(request.query, apiConfig.PACK_PROJECT.query);
     const { scenarioMd5, packDir, outputFile } = request.query;
-    const packConfig = ScenarioOptions.def().getPackageConfigByMd5(scenarioMd5);
+    const packConfig = ScenarioOptions.def.getPackConfigByMd5(scenarioMd5);
     if (!packConfig) {
       response.send(result.fail("未配置打包规则"));
       return;
     }
-    const files = await packProject({ packDir, packConfig, outputFile });
+    const files = await packProject({
+      packDir,
+      packConfig,
+      outputFile
+    });
     response.send(result.success(files));
   });
 
@@ -214,7 +218,7 @@ export default function projectController(service: Express): void {
   >(apiConfig.UNPACK_PROJECT.path, async (request, response) => {
     checkParamsKey(request.query, apiConfig.UNPACK_PROJECT.query);
     const { scenarioMd5, unpackFile, outputDir } = request.query;
-    const packConfig = ScenarioOptions.def().getPackageConfigByMd5(scenarioMd5);
+    const packConfig = ScenarioOptions.def.getPackConfigByMd5(scenarioMd5);
     if (!packConfig) {
       response.send(result.fail("未配置打包规则"));
       return;

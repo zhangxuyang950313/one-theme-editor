@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import styled, { createGlobalStyle, ThemeProvider } from "styled-components";
@@ -12,8 +12,15 @@ import { useInitEditorConfig } from "./hooks";
 import { GlobalStore } from "./store";
 import Router from "./router";
 import LightTheme from "./theme/light";
+import useSocket from "./hooks/socket/useSocket";
 
 const Index: React.FC = () => {
+  useEffect(() => {
+    localStorage.debug = "socket.io-client:socket";
+    // localStorage.debug = "*.io-client:socket";
+    // localStorage.debug = "*";
+  }, []);
+  // const socket = useSocket();
   const [status] = useInitEditorConfig();
   switch (status) {
     case LOAD_STATUS.INITIAL:

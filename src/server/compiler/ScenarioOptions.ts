@@ -17,7 +17,7 @@ import XMLNodeElement from "./XMLNodeElement";
 
 export default class ScenarioOptions extends XmlTemplate {
   // 默认配置路径
-  static def(): ScenarioOptions {
+  static get def(): ScenarioOptions {
     return ScenarioOptions.from(pathUtil.SOURCE_CONFIG_FILE);
   }
 
@@ -32,12 +32,12 @@ export default class ScenarioOptions extends XmlTemplate {
 
   // 读取场景配置列表
   static readScenarioOptionList(): TypeScenarioOption[] {
-    return ScenarioOptions.def().getOptionList();
+    return ScenarioOptions.def.getOptionList();
   }
 
   // 读取场景配置数据
   static readScenarioConfList(): TypeScenarioConf[] {
-    return ScenarioOptions.def().getScenarioConfList();
+    return ScenarioOptions.def.getScenarioConfList();
   }
 
   private getScenarioNodes(): XMLNodeElement[] {
@@ -58,7 +58,7 @@ export default class ScenarioOptions extends XmlTemplate {
   }
 
   // 使用 md5 值查找打包配置
-  getPackageConfigByMd5(md5: string): TypePackConf | null {
+  getPackConfigByMd5(md5: string): TypePackConf | null {
     const conf = this.getScenarioConfList().find(item => item.md5 === md5);
     return conf ? conf.packageConfig : null;
   }

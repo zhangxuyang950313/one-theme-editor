@@ -36,7 +36,7 @@ export default class ScenarioConfig extends XmlTemplate {
   getPackageConfig(): TypePackConf {
     const pkgNode = super
       .getRootNode()
-      .getFirstChildNodeByTagname(ELEMENT_TAG.Package);
+      .getFirstChildNodeByTagname(ELEMENT_TAG.PackConfig);
     const items: TypePackConf["items"] = pkgNode
       .getChildrenNodesByTagname(ELEMENT_TAG.Item)
       .map(item => ({
@@ -69,7 +69,7 @@ export default class ScenarioConfig extends XmlTemplate {
   getApplyConfig(): TypeApplyConf {
     const applyNode = super
       .getRootNode()
-      .getFirstChildNodeByTagname(ELEMENT_TAG.Apply);
+      .getFirstChildNodeByTagname(ELEMENT_TAG.ApplyConfig);
     const steps: TypeApplyConf["steps"] = applyNode
       .getChildrenNodesByTagname(ELEMENT_TAG.Step)
       .map(item => ({
@@ -83,7 +83,7 @@ export default class ScenarioConfig extends XmlTemplate {
   getSourceConfigPreviewList(): TypeSourceOption[] {
     return super
       .getRootNode()
-      .getChildrenNodesByTagname(ELEMENT_TAG.Config)
+      .getChildrenNodesByTagname(ELEMENT_TAG.SourceConfig)
       .flatMap(node => {
         const src = node.getAttributeOf("src");
         const isExists = fse.pathExistsSync(

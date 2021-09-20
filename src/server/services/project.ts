@@ -3,15 +3,13 @@ import fse from "fs-extra";
 import { filenameIsImage, filenameIsXml, getImageData } from "src/utils/index";
 import { findProjectByQuery } from "server/db-handler/project";
 import { TypeProjectFileData } from "src/types/project";
-import { TypePackConf } from "src/types/source";
 import {
   ProjectFileImageData,
   ProjectFileXmlData
 } from "src/data/ProjectFileData";
 import XmlFileCompiler from "server/compiler/XmlFileCompiler";
 import PageConfig from "server/compiler/PageConfig";
-import PackUtil from "server/utils/PackUtil";
-import UnpackUtil from "server/utils/UnpackUtil";
+import PackageUtil from "server/utils/PackageUtil";
 
 export async function getPageDefineSourceData(
   uuid: string,
@@ -66,19 +64,7 @@ export function getProjectFileData(
 }
 
 // 打包工程
-export async function packProject(data: {
-  packDir: string;
-  outputFile: string;
-  packConfig: TypePackConf;
-}): Promise<string[]> {
-  return PackUtil.pack(data.packDir, data.packConfig, data.outputFile);
-}
+export const packProject = PackageUtil.pack;
 
 // 解包工程
-export async function unpackProject(data: {
-  unpackFile: string;
-  outputDir: string;
-  packConfig: TypePackConf;
-}): Promise<string[]> {
-  return UnpackUtil.unpack(data.unpackFile, data.packConfig, data.outputDir);
-}
+export const unpackProject = PackageUtil.unpack;

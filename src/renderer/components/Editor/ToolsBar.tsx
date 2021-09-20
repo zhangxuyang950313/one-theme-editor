@@ -14,7 +14,7 @@ import {
   FolderOutlined
 } from "@ant-design/icons";
 import IconButton from "@/components/IconButton";
-import { usePackProject } from "@/hooks/socket";
+import usePackProject from "@/hooks/socket/usePackProject";
 import ProjectInfoModal from "./ProjectInfoModal";
 
 const icons = {
@@ -47,9 +47,7 @@ export default function ToolsBar(): JSX.Element {
             packDir: "/Users/zhangxuyang/Desktop/test",
             outputFile: "/Users/zhangxuyang/Desktop/test/test.zip"
           },
-          d => {
-            console.log(d);
-          }
+          c => console.log(c)
         );
         break;
       }

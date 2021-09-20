@@ -24,7 +24,7 @@ export function updateState<T>(oldState: T, newState: Partial<T>): T {
     // 赋值类型不同警告，但不会拦截
     if (oldState[key] !== null && typeNew !== typeOld) {
       console.warn(
-        `[store] ${key}类型不符
+        `[store] ${key} 类型不符
          [old]: ${typeOld}
          [new]: ${typeNew}`
       );
