@@ -33,7 +33,7 @@ export enum ELEMENT_TAG {
   Template = "Template",
   Value = "Value",
   Color = "Color",
-  Brand = "Brand",
+  Scenario = "Scenario",
   Config = "Config",
   InfoTemplate = "InfoTemplate"
 }

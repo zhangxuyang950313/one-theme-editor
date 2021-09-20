@@ -5,7 +5,7 @@ import { remote } from "electron";
 
 import { isDev } from "@/core/constant";
 import { apiCreateProject } from "@/request";
-import { useBrandOption } from "@/hooks/source";
+import { useScenarioOption } from "@/hooks/source";
 import { TypeProjectInfo } from "src/types/project";
 import { TypeSourceOption } from "src/types/source";
 
@@ -13,7 +13,7 @@ import styled from "styled-components";
 import React, { useEffect, useRef, useState } from "react";
 import { Modal, Button, Form, Input, message } from "antd";
 import { FileAddOutlined } from "@ant-design/icons";
-import BrandConfig from "src/data/BrandConfig";
+import ScenarioConfig from "src/data/ScenarioConfig";
 import Steps from "@/components/Steps";
 import ProjectInfoForm from "@/components/ProjectInfoForm";
 import SourceConfigManager from "./SourceConfigManager";
@@ -35,7 +35,7 @@ const CreateProject: React.FC<{
   onProjectCreated: (projectInfo: TypeProjectInfo) => Promise<void>;
 }> = props => {
   // 机型配置
-  const [selectedBrandOption] = useBrandOption();
+  const [currentScenarioOption] = useScenarioOption();
   // 弹框控制
   const [modalVisible, setModalVisible] = useState(false);
   // 当前步骤
@@ -253,19 +253,19 @@ const CreateProject: React.FC<{
             throw new Error("未选择配置模板");
           }
           updateCreating(true);
-          const brandConfig = new BrandConfig()
-            .set("name", selectedBrandOption.name)
-            .set("md5", selectedBrandOption.md5)
-            .set("infoTemplate", selectedBrandOption.infoTemplate)
-            .set("packageConfig", selectedBrandOption.packageConfig)
-            .set("applyConfig", selectedBrandOption.applyConfig)
+          const scenarioConfig = new ScenarioConfig()
+            .set("name", currentScenarioOption.name)
+            .set("md5", currentScenarioOption.md5)
+            .set("infoTemplate", currentScenarioOption.infoTemplate)
+            .set("packageConfig", currentScenarioOption.packageConfig)
+            .set("applyConfig", currentScenarioOption.applyConfig)
             .create();
           const sourceConfigPath = path.join(
             sourceConfig.namespace,
             sourceConfig.config
           );
           return apiCreateProject({
-            brandConfig,
+            scenarioConfig,
             projectRoot,
             projectInfo: projectInfoRef.current,
             sourceConfigPath
@@ -357,7 +357,7 @@ const CreateProject: React.FC<{
         width="700px"
         centered
         visible={modalVisible}
-        title={`创建${selectedBrandOption.name}`}
+        title={`创建${currentScenarioOption.name}`}
         destroyOnClose
         onCancel={closeModal}
         footer={modalFooter}

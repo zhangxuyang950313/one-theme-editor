@@ -2,14 +2,15 @@ import {
   TypePackConf,
   TypeApplyConf,
   TypeInfoTempConf,
-  TypeBrandConf
+  TypeScenarioConf,
+  TypeScenarioOption
 } from "src/types/source";
 import { AbstractDataModel } from "./AbstractDataModel";
 
 // 描述信息模板数据
 export class InfoTemplate extends AbstractDataModel<TypeInfoTempConf> {
   protected data: TypeInfoTempConf = {
-    file: "",
+    output: "",
     content: ""
   };
   static default = new InfoTemplate().create();
@@ -35,14 +36,23 @@ export class ApplyConfig extends AbstractDataModel<TypeApplyConf> {
   static default = new ApplyConfig().create();
 }
 
-// 品牌选项列表配置
-export default class BrandConf extends AbstractDataModel<TypeBrandConf> {
-  protected data: TypeBrandConf = {
+// 场景选项列表配置
+export default class ScenarioConfig extends AbstractDataModel<TypeScenarioConf> {
+  protected data: TypeScenarioConf = {
     name: "",
     md5: "",
     infoTemplate: InfoTemplate.default,
     packageConfig: PackageConfig.default,
     applyConfig: ApplyConfig.default
   };
-  static default = new BrandConf().create();
+  static default = new ScenarioConfig().create();
+}
+
+// 场景配置
+export class ScenarioOption extends AbstractDataModel<TypeScenarioOption> {
+  protected data: TypeScenarioOption = {
+    src: "",
+    ...ScenarioConfig.default
+  };
+  static default = new ScenarioOption().create();
 }

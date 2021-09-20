@@ -31,13 +31,13 @@ export function registerSocketOf<R, T>(
 
 export function socketPackProject(
   param: {
-    brandMd5: string;
+    scenarioMd5: string;
     packFile: string;
     outputDir: string;
   },
   callback: (x: string[]) => void
 ): (x: {
-  brandMd5: string;
+  scenarioMd5: string;
   packFile: string;
   outputDir: string;
 }) => typeof project {

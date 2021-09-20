@@ -4,16 +4,16 @@ import { TypeStarterState } from "@/store/index";
 // 数据
 const selectStarterState = (state: TypeStarterState) => state;
 
-// 获取品牌列表
-export const selectBrandOptionList = createSelector(
+// 获取场景列表
+export const selectScenarioOptionList = createSelector(
   selectStarterState,
-  state => state.brandOptionList
+  state => state.scenarioOptionList
 );
 
-// 获取前选择的品牌信息
-export const selectBrandOption = createSelector(
+// 获取前选择的场景信息
+export const selectScenarioOption = createSelector(
   selectStarterState,
-  state => state.brandOptionSelected
+  state => state.scenarioOptionSelected
 );
 
 export const selectSourceOptionList = createSelector(

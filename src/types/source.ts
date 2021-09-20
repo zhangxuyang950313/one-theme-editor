@@ -28,7 +28,7 @@ export type TypeSourceConfig = TypeSourceOption & {
 };
 
 export type TypeInfoTempConf = {
-  file: string;
+  output: string;
   content: string;
 };
 
@@ -46,8 +46,8 @@ export type TypeApplyConf = {
   steps: Array<{ description: string; command: string }>;
 };
 
-// 品牌配置数据
-export type TypeBrandConf = {
+// 场景配置数据
+export type TypeScenarioConf = {
   name: string;
   md5: string;
   infoTemplate: TypeInfoTempConf;
@@ -55,8 +55,8 @@ export type TypeBrandConf = {
   applyConfig: TypeApplyConf;
 };
 
-// 品牌配置选项
-export type TypeBrandOption = TypeBrandConf & {
+// 场景配置选项
+export type TypeScenarioOption = TypeScenarioConf & {
   src: string;
 };
 

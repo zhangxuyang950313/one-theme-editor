@@ -9,7 +9,7 @@ import {
 import { TypeResponseFrame, UnionTupleToObjectKey } from "src/types/request";
 import {
   findProjectByQuery,
-  getProjectListByBrandMd5,
+  getProjectListByMd5,
   createProject,
   updateProject
 } from "server/db-handler/project";
@@ -23,7 +23,7 @@ import {
 import { checkParamsKey, result } from "server/utils/requestUtil";
 import XmlTemplate from "server/compiler/XmlTemplate";
 import XmlFileCompiler from "server/compiler/XmlFileCompiler";
-import BrandOptions from "server/compiler/BrandOptions";
+import ScenarioOptions from "server/compiler/ScenarioOptions";
 
 export default function projectController(service: Express): void {
   // 添加工程
@@ -41,9 +41,9 @@ export default function projectController(service: Express): void {
     UnionTupleToObjectKey<typeof apiConfig.GET_PROJECT_LIST.params>, // reqParams
     TypeResponseFrame<TypeProjectDataDoc[], string>
   >(
-    `${apiConfig.GET_PROJECT_LIST.path}/:brandMd5`,
+    `${apiConfig.GET_PROJECT_LIST.path}/:scenarioMd5`,
     async (request, response) => {
-      const project = await getProjectListByBrandMd5(request.params.brandMd5);
+      const project = await getProjectListByMd5(request.params.scenarioMd5);
       response.send(result.success(project));
     }
   );
@@ -196,8 +196,8 @@ export default function projectController(service: Express): void {
     UnionTupleToObjectKey<typeof apiConfig.PACK_PROJECT.query> // reqQuery
   >(apiConfig.PACK_PROJECT.path, async (request, response) => {
     checkParamsKey(request.query, apiConfig.PACK_PROJECT.query);
-    const { brandMd5, packDir, outputFile } = request.query;
-    const packConfig = BrandOptions.def().getPackageConfigByBrandMd5(brandMd5);
+    const { scenarioMd5, packDir, outputFile } = request.query;
+    const packConfig = ScenarioOptions.def().getPackageConfigByMd5(scenarioMd5);
     if (!packConfig) {
       response.send(result.fail("未配置打包规则"));
       return;
@@ -213,8 +213,8 @@ export default function projectController(service: Express): void {
     UnionTupleToObjectKey<typeof apiConfig.UNPACK_PROJECT.query> // reqQuery
   >(apiConfig.UNPACK_PROJECT.path, async (request, response) => {
     checkParamsKey(request.query, apiConfig.UNPACK_PROJECT.query);
-    const { brandMd5, unpackFile, outputDir } = request.query;
-    const packConfig = BrandOptions.def().getPackageConfigByBrandMd5(brandMd5);
+    const { scenarioMd5, unpackFile, outputDir } = request.query;
+    const packConfig = ScenarioOptions.def().getPackageConfigByMd5(scenarioMd5);
     if (!packConfig) {
       response.send(result.fail("未配置打包规则"));
       return;

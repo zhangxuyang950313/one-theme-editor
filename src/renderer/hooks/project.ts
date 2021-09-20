@@ -6,7 +6,7 @@ import {
 } from "@/request/index";
 import { useAxiosCanceler, useMergeLoadStatus } from "@/hooks/index";
 import {
-  useBrandOption,
+  useScenarioOption,
   useFetchPageConfList,
   useFetchSourceConfig,
   useSourcePageData,
@@ -41,7 +41,7 @@ import { useParams } from "react-router";
 import { notification } from "antd";
 import { LOAD_STATUS, FILE_STATUS } from "src/enum";
 import {
-  TypeBrandConf,
+  TypeScenarioConf,
   TypeInfoTempConf,
   TypeSourceConfig,
   TypeSourcePageData
@@ -74,10 +74,10 @@ export function useProjectRoot(): string {
   return projectData.projectRoot;
 }
 
-// 工程品牌配置信息
-export function useProjectBrandConfig(): TypeBrandConf {
+// 工程场景配置信息
+export function useProjectScenarioConfig(): TypeScenarioConf {
   const projectData = useProjectData();
-  return projectData.brandConfig;
+  return projectData.scenarioConfig;
 }
 
 // 工程描述信息
@@ -88,7 +88,7 @@ export function useProjectInfo(): TypeProjectInfo {
 
 export function useInfoTemplateConfig(): TypeInfoTempConf {
   const projectData = useProjectData();
-  return projectData.brandConfig.infoTemplate;
+  return projectData.scenarioConfig.infoTemplate;
 }
 
 // 获取项目列表
@@ -98,18 +98,18 @@ export function useFetchProjectList(): {
   fetch: () => Promise<void>;
 } {
   // 使用机型隔离查询
-  const [brandOption] = useBrandOption();
+  const [scenarioOption] = useScenarioOption();
   const [projectList, setProjectList] = useState<TypeProjectDataDoc[]>([]);
   const [status, setStatus] = useState<LOAD_STATUS>(LOAD_STATUS.INITIAL);
   const registerCancelToken = useAxiosCanceler();
   const dispatch = useStarterDispatch();
 
   const fetch = useCallback(async () => {
-    if (!brandOption.md5) return;
+    if (!scenarioOption.md5) return;
     setStatus(LOAD_STATUS.LOADING);
     setProjectList([]);
     await sleep(300);
-    apiGetProjectList(brandOption, registerCancelToken)
+    apiGetProjectList(scenarioOption, registerCancelToken)
       .then(projects => {
         console.log("获取工程列表：", projects);
         setProjectList(projects);
@@ -119,11 +119,11 @@ export function useFetchProjectList(): {
       .catch(() => {
         setStatus(LOAD_STATUS.FAILED);
       });
-  }, [brandOption]);
+  }, [scenarioOption]);
 
   useLayoutEffect(() => {
     fetch();
-  }, [brandOption.md5]);
+  }, [scenarioOption.md5]);
   return { data: projectList, status, fetch };
 }
 

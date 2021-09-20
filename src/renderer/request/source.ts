@@ -3,16 +3,18 @@ import {
   TypeSourceConfig,
   TypeSourceOption,
   TypeSourcePageData,
-  TypeBrandOption
+  TypeScenarioOption
 } from "src/types/source";
 import { TypeRequestResult, UnionTupleToObjectKey } from "src/types/request";
 import { createHttp } from "./axios";
 
-// 获取品牌列表
-export async function apiGetBrandOptionList(): Promise<TypeBrandOption[]> {
+// 获取场景列表
+export async function apiGetScenarioOptionList(): Promise<
+  TypeScenarioOption[]
+> {
   return createHttp()
-    .get<TypeRequestResult<TypeBrandOption[]>>(
-      apiConfig.GET_BRAND_OPTION_LIST.path
+    .get<TypeRequestResult<TypeScenarioOption[]>>(
+      apiConfig.GET_SCENARIO_OPTION_LIST.path
     )
     .then(data => data.data.data);
 }

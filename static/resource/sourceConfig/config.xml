@@ -1,6 +1,6 @@
-<Root>
-    <Brand name="小米主题" src="./xiaomi.xml"/>
-    <Brand name="小米AOD" src="./xiaomi.xml"/>
-    <Brand name="小米小部件" src="./xiaomi.xml"/>
-    <Brand name="华为主题" src="./huawei.xml"/>
-</Root>
+<Scenarios>
+    <Scenario name="小米主题" 	src="./xiaomi.xml"/>
+    <Scenario name="小米AOD" 	src="./xiaomi.xml"/>
+    <Scenario name="小米小部件"	src="./xiaomi.xml"/>
+    <Scenario name="华为主题"  	src="./huawei.xml"/>
+</Scenarios>

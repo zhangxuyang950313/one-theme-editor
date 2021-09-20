@@ -43,7 +43,7 @@ export default function ToolsBar(): JSX.Element {
       case "save": {
         packProject(
           {
-            brandMd5: "2993f7d72871c927e60a3899ed9d565d",
+            scenarioMd5: "2993f7d72871c927e60a3899ed9d565d",
             packDir: "/Users/zhangxuyang/Desktop/test",
             outputFile: "/Users/zhangxuyang/Desktop/test/test.zip"
           },

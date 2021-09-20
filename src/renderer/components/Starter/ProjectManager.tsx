@@ -1,5 +1,5 @@
 import { useHistory } from "react-router";
-import { useBrandOption } from "@/hooks/source";
+import { useScenarioOption } from "@/hooks/source";
 import { useProjectList } from "@/hooks/project";
 import { TypeProjectInfo } from "src/types/project";
 import { LOAD_STATUS } from "src/enum";
@@ -14,7 +14,7 @@ const ProjectManager: React.FC<{
   status: LOAD_STATUS;
   onProjectCreated: (data: TypeProjectInfo) => Promise<void>;
 }> = props => {
-  const [brandConfig] = useBrandOption();
+  const [currentScenarioOption] = useScenarioOption();
   const projectList = useProjectList();
   const history = useHistory();
 
@@ -68,9 +68,10 @@ const ProjectManager: React.FC<{
     <StyleProjectManager>
       <div className="top-container">
         <div className="title">
-          <h2>{brandConfig?.name || ""}列表</h2>
+          <h2>{currentScenarioOption?.name || ""}列表</h2>
           <p>
-            新建{projectList.length > 0 ? "或选择" : ""}一个{brandConfig.name}
+            新建{projectList.length > 0 ? "或选择" : ""}一个
+            {currentScenarioOption.name}
             开始创作
           </p>
         </div>

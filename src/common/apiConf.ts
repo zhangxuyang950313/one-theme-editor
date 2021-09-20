@@ -61,9 +61,9 @@ const apiConfig = {
   /**
    * 获取资源配置数据
    */
-  // 获取厂商配置列表
-  GET_BRAND_OPTION_LIST: createApiConf({
-    path: "/brand/option/list"
+  // 获取场景配置列表
+  GET_SCENARIO_OPTION_LIST: createApiConf({
+    path: "/scenario/option/list"
   }),
   // 获取配置信息列表
   GET_SOURCE_CONF_PREVIEW_LIST: createApiConf({
@@ -112,7 +112,7 @@ const apiConfig = {
   // 获取工程列表
   GET_PROJECT_LIST: createApiConf({
     path: "/project/list",
-    params: ["brandMd5"]
+    params: ["scenarioMd5"]
   }),
   // 通过 id 获取工程信息
   GET_PROJECT_DATA: createApiConf({
@@ -162,12 +162,12 @@ const apiConfig = {
   // 工程打包
   PACK_PROJECT: createApiConf({
     path: "/project/pack",
-    query: ["brandMd5", "packDir", "outputFile"]
+    query: ["scenarioMd5", "packDir", "outputFile"]
   }),
   // 工程解包
   UNPACK_PROJECT: createApiConf({
     path: "/project/unpack",
-    query: ["brandMd5", "unpackFile", "outputDir"]
+    query: ["scenarioMd5", "unpackFile", "outputDir"]
   }),
   // 应用到手机
   APPLY_PROJECT: createApiConf({

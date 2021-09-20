@@ -2,20 +2,20 @@ import path from "path";
 import { useEffect, useLayoutEffect, useState, useCallback } from "react";
 import { message, notification } from "antd";
 import {
-  apiGetBrandOptionList,
+  apiGetScenarioOptionList,
   apiGetSourceOptionList,
   apiGetSourceConfig,
   apiGetSourcePageConfData
 } from "@/request/index";
 import { selectSourceConfigDir } from "@/store/global/modules/base/selector";
 import {
-  ActionSetBrandOptionList,
-  ActionSetBrandOption,
+  ActionSetScenarioOptionList,
+  ActionSetScenarioOption,
   ActionSetSourceOptionList
 } from "@/store/starter/action";
 import {
-  selectBrandOption,
-  selectBrandOptionList,
+  selectScenarioOption,
+  selectScenarioOptionList,
   selectSourceOptionList
 } from "@/store/starter/selector";
 import {
@@ -39,7 +39,7 @@ import {
   selectSourcePageData
 } from "@/store/editor/selector";
 import {
-  TypeBrandOption,
+  TypeScenarioOption,
   TypeSourceConfig,
   TypeSourceOption,
   TypeSourcePageGroupConf,
@@ -68,8 +68,8 @@ import { LOAD_STATUS, SOURCE_TYPES } from "src/enum/index";
 import { useImagePrefix } from "./image";
 import { useAsyncUpdater } from "./index";
 
-export function useBrandOptionList(): TypeBrandOption[] {
-  return useStarterSelector(selectBrandOptionList);
+export function useScenarioOptionList(): TypeScenarioOption[] {
+  return useStarterSelector(selectScenarioOptionList);
 }
 
 export function useSourceOptionList(): TypeSourceOption[] {
@@ -103,43 +103,44 @@ export function useSourceConfigRootWithNS(): string {
 }
 
 /**
- * 获取当前选择品牌信息
+ * 获取当前选择场景信息
  * @returns
  */
-export function useBrandOption(): [
-  TypeBrandOption,
-  (data: TypeBrandOption) => void
+export function useScenarioOption(): [
+  TypeScenarioOption,
+  (data: TypeScenarioOption) => void
 ] {
   const dispatch = useStarterDispatch();
-  const brandConfig = useStarterSelector(selectBrandOption);
-  return [brandConfig, data => dispatch(ActionSetBrandOption(data))];
+  const currentOption = useStarterSelector(selectScenarioOption);
+  return [currentOption, data => dispatch(ActionSetScenarioOption(data))];
 }
 
 /**
- * 获取配置的品牌列表
+ * 获取配置的场景列表
  * @returns
  */
-export function useFetchBrandOptionList(): {
-  state: TypeBrandOption[];
+export function useFetchScenarioOptionList(): {
+  state: TypeScenarioOption[];
   status: LOAD_STATUS;
   fetch: () => Promise<void>;
 } {
   const [status, setStatus] = useState(LOAD_STATUS.INITIAL);
-  const [state, setState] = useState<TypeBrandOption[]>([]);
+  const [state, setState] = useState<TypeScenarioOption[]>([]);
   const dispatch = useStarterDispatch();
   const registerUpdater = useAsyncUpdater();
   const fetch = async () => {
     try {
       setStatus(LOAD_STATUS.LOADING);
-      const conf = await apiGetBrandOptionList();
-      // 添加默认小米，去重
-      const list = conf.reduce<TypeBrandOption[]>((t, o) => {
+      const optList = await apiGetScenarioOptionList();
+      // 去重
+      const list = optList.reduce<TypeScenarioOption[]>((t, o) => {
         if (!t.some(item => item.md5 === o.md5)) t.push(o);
         return t;
       }, []);
+      console.log("工程类型列表", list);
       registerUpdater(() => {
         setState(list);
-        dispatch(ActionSetBrandOptionList(list));
+        dispatch(ActionSetScenarioOptionList(list));
         setStatus(LOAD_STATUS.SUCCESS);
       });
     } catch (e) {
@@ -153,7 +154,7 @@ export function useFetchBrandOptionList(): {
 }
 
 /**
- * 获取配置预览列表
+ * 获取编辑器列表
  * @returns
  */
 export function useFetchSourceOptionList(): {
@@ -163,15 +164,15 @@ export function useFetchSourceOptionList(): {
 } {
   const [state, setState] = useState<TypeSourceOption[]>([]);
   const [status, setStatus] = useState(LOAD_STATUS.INITIAL);
-  const [brandConfig] = useBrandOption();
+  const [currentScenarioOption] = useScenarioOption();
   const dispatch = useStarterDispatch();
   const fetch = async () => {
-    if (!brandConfig.src) return;
+    if (!currentScenarioOption.src) return;
     setStatus(LOAD_STATUS.LOADING);
     await sleep(300);
-    apiGetSourceOptionList(brandConfig.src)
+    apiGetSourceOptionList(currentScenarioOption.src)
       .then(data => {
-        console.log("配置预览列表：", data);
+        console.log("配置列表：", data);
         setState(data);
         dispatch(ActionSetSourceOptionList(data));
         setStatus(LOAD_STATUS.SUCCESS);
@@ -185,7 +186,7 @@ export function useFetchSourceOptionList(): {
   };
   useLayoutEffect(() => {
     fetch();
-  }, [brandConfig]);
+  }, [currentScenarioOption]);
   return { state, status, fetch };
 }
 

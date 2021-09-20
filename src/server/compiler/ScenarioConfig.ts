@@ -7,18 +7,18 @@ import {
   TypeSourceOption
 } from "src/types/source";
 import { ELEMENT_TAG, PACK_TYPE } from "src/enum/index";
-import { ApplyConfig, PackageConfig } from "src/data/BrandConfig";
+import { ApplyConfig, PackageConfig } from "src/data/ScenarioConfig";
 import SourceConfig from "server/compiler/SourceConfig";
 import pathUtil from "server/utils/pathUtil";
 import XmlTemplate from "./XmlTemplate";
 import XmlFileCompiler from "./XmlFileCompiler";
 
-export default class BrandConfig extends XmlTemplate {
+export default class ScenarioConfig extends XmlTemplate {
   // 从文件创建实例
-  static from(src: string): BrandConfig {
+  static from(src: string): ScenarioConfig {
     const file = path.join(pathUtil.SOURCE_CONFIG_DIR, src);
     const element = new XmlFileCompiler(file).getElement();
-    return new BrandConfig(element);
+    return new ScenarioConfig(element);
   }
 
   // 解析描述文件模板
@@ -27,7 +27,7 @@ export default class BrandConfig extends XmlTemplate {
       .getRootNode()
       .getFirstChildNodeByTagname(ELEMENT_TAG.InfoTemplate);
     return {
-      file: infoTempNode.getAttributeOf("file"),
+      output: infoTempNode.getAttributeOf("output"),
       content: infoTempNode.buildXml()
     };
   }
@@ -84,8 +84,8 @@ export default class BrandConfig extends XmlTemplate {
     return super
       .getRootNode()
       .getChildrenNodesByTagname(ELEMENT_TAG.Config)
-      .flatMap(brandNode => {
-        const src = brandNode.getAttributeOf("src");
+      .flatMap(node => {
+        const src = node.getAttributeOf("src");
         const isExists = fse.pathExistsSync(
           path.join(pathUtil.SOURCE_CONFIG_DIR, src)
         );

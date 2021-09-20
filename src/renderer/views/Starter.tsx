@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useDocumentTitle } from "@/hooks/index";
 import { useFetchProjectList } from "@/hooks/project";
 import {
-  useFetchBrandOptionList,
+  useFetchScenarioOptionList,
   useFetchSourceOptionList
 } from "@/hooks/source";
 import { PRESET_TITLE } from "src/enum";
@@ -16,7 +16,7 @@ const Starter: React.FC = () => {
   const [, setTitle] = useDocumentTitle();
   setTitle(PRESET_TITLE.default);
 
-  useFetchBrandOptionList();
+  useFetchScenarioOptionList();
   useFetchSourceOptionList();
   const projectList = useFetchProjectList();
 

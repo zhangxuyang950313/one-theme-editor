@@ -20,7 +20,11 @@ export default function projectSocket(server: http.Server): void {
     // 打包工程
     socket.on(
       pack.event,
-      (param: { brandMd5: string; unpackFile: string; outputDir: string }) => {
+      (param: {
+        scenarioMd5: string;
+        unpackFile: string;
+        outputDir: string;
+      }) => {
         console.log(param);
         setTimeout(() => {
           socket.emit(pack.event, param);

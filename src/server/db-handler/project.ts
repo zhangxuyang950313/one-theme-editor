@@ -5,7 +5,7 @@ import {
   TypeProjectData,
   TypeProjectDataDoc
 } from "src/types/project";
-import { TypeBrandConf } from "src/types/source";
+import { TypeScenarioConf } from "src/types/source";
 import { createNedb } from "server/utils/databaseUtil";
 import pathUtil from "server/utils/pathUtil";
 import SourceConfig from "server/compiler/SourceConfig";
@@ -19,25 +19,26 @@ const projectDB = createNedb(pathUtil.PROJECTS_DB);
 export async function createProject(
   data: TypeCreateProjectPayload
 ): Promise<TypeProjectDataDoc> {
-  const { brandConfig, projectInfo, projectRoot, sourceConfigPath } = data;
+  const { scenarioConfig, projectInfo, projectRoot, sourceConfigPath } = data;
   const uiVersion = new SourceConfig(sourceConfigPath).getUiVersion();
   return projectDB.insert<TypeProjectData>({
     uuid: UUID(),
     projectInfo,
-    brandConfig,
+    scenarioConfig,
     uiVersion,
     sourceConfigPath,
     projectRoot
   });
 }
 
-// brandName md5 筛选所有工程
-export async function getProjectListByBrandMd5(
-  brandMd5: string
+// md5 筛选所有工程
+export async function getProjectListByMd5(
+  md5: string
 ): Promise<TypeProjectDataDoc[]> {
-  const findKey: `brandConfig.${keyof TypeBrandConf}` = "brandConfig.md5";
+  const findKey: `scenarioConfig.${keyof TypeScenarioConf}` =
+    "scenarioConfig.md5";
   return projectDB
-    .find<TypeProjectData>({ [findKey]: brandMd5 })
+    .find<TypeProjectData>({ [findKey]: md5 })
     .sort({ updatedAt: -1 });
 }
 

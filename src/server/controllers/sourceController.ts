@@ -5,24 +5,24 @@ import {
   TypeSourcePageData,
   TypeSourceConfig,
   TypeSourceOption,
-  TypeBrandOption
+  TypeScenarioOption
 } from "src/types/source";
 import { TypeResponseFrame, UnionTupleToObjectKey } from "src/types/request";
 import { checkParamsKey, result } from "server/utils/requestUtil";
 import PageConfig from "server/compiler/PageConfig";
 import SourceConfig from "server/compiler/SourceConfig";
-import BrandConfig from "server/compiler/BrandConfig";
-import BrandOptions from "server/compiler/BrandOptions";
+import ScenarioConfig from "server/compiler/ScenarioConfig";
+import ScenarioOptions from "server/compiler/ScenarioOptions";
 
 export default function sourceController(service: Express): void {
   /**
-   * 获取品牌配置列表
+   * 获取场景配置列表
    */
-  service.get<never, TypeResponseFrame<TypeBrandOption[], string>>(
-    apiConfig.GET_BRAND_OPTION_LIST.path,
+  service.get<never, TypeResponseFrame<TypeScenarioOption[], string>>(
+    apiConfig.GET_SCENARIO_OPTION_LIST.path,
     (request, response) => {
-      const brandOptionList = BrandOptions.readBrandOptions();
-      response.send(result.success(brandOptionList));
+      const optionList = ScenarioOptions.readScenarioOptionList();
+      response.send(result.success(optionList));
     }
   );
 
@@ -36,7 +36,7 @@ export default function sourceController(service: Express): void {
     UnionTupleToObjectKey<typeof apiConfig.GET_SOURCE_CONF_PREVIEW_LIST.query>
   >(`${apiConfig.GET_SOURCE_CONF_PREVIEW_LIST.path}`, (request, response) => {
     checkParamsKey(request.query, apiConfig.GET_SOURCE_CONF_PREVIEW_LIST.query);
-    const list = BrandConfig.from(
+    const list = ScenarioConfig.from(
       request.query.src
     ).getSourceConfigPreviewList();
     response.send(result.success(list));

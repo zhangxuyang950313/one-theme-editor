@@ -3,26 +3,26 @@ import styled from "styled-components";
 
 import { Menu } from "antd";
 
-import { useBrandOption, useBrandOptionList } from "@/hooks/source";
+import { useScenarioOption, useScenarioOptionList } from "@/hooks/source";
 import TopInfo from "./TopInfo";
 
 // 欢迎页侧边栏
 const Sidebar: React.FC = () => {
-  const brandOptionList = useBrandOptionList();
-  const [brandOptionSelected, setBrandOption] = useBrandOption();
+  const scenarioOptionList = useScenarioOptionList();
+  const [currentScenarioOption, setScenarioOption] = useScenarioOption();
 
-  const BrandMenu: React.FC = () => {
-    if (!brandOptionList || !brandOptionSelected) return null;
+  const ScenarioMenu: React.FC = () => {
+    if (!scenarioOptionList || !currentScenarioOption) return null;
     return (
       <Menu
         className="menu"
-        selectedKeys={[brandOptionSelected.md5]}
+        selectedKeys={[currentScenarioOption.md5]}
         onSelect={v => {
-          const brandOption = brandOptionList.find(o => v.key === o.md5);
-          if (brandOption) setBrandOption(brandOption);
+          const scenarioOption = scenarioOptionList.find(o => v.key === o.md5);
+          if (scenarioOption) setScenarioOption(scenarioOption);
         }}
       >
-        {brandOptionList.map(item => (
+        {scenarioOptionList.map(item => (
           <Menu.Item key={item.md5}>{item.name}</Menu.Item>
         ))}
       </Menu>
@@ -33,9 +33,9 @@ const Sidebar: React.FC = () => {
     <StyleSidebar>
       {/*  编辑器信息展示 */}
       <TopInfo />
-      {/* 品牌选择 */}
+      {/* 场景选择 */}
       <StyleMenu>
-        <BrandMenu />
+        <ScenarioMenu />
       </StyleMenu>
     </StyleSidebar>
   );
@@ -50,7 +50,7 @@ const StyleSidebar = styled.div`
   background-color: ${({ theme }) => theme["@sidebar-color"]};
 `;
 
-// 品牌菜单
+// 场景菜单
 const StyleMenu = styled.div`
   .ant-menu-inline,
   .ant-menu-vertical,

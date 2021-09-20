@@ -1,24 +1,24 @@
 import { TypeProjectDataDoc } from "src/types/project";
-import { TypeBrandOption, TypeSourceOption } from "src/types/source";
+import { TypeScenarioOption, TypeSourceOption } from "src/types/source";
 
 export enum ACTION_TYPES {
-  SET_BRAND_OPTION_LIST = "SET_BRAND_OPTION_LIST", // 品牌列表
-  SET_BRAND_OPTION_SELECTED = "SET_BRAND_OPTION_SELECTED", // 当前选择的品牌
+  SET_SCENARIO_OPTION_LIST = "SET_SCENARIO_OPTION_LIST", // 场景列表
+  SET_SCENARIO_OPTION_SELECTED = "SET_SCENARIO_OPTION_SELECTED", // 当前选择的场景
   SET_SOURCE_OPTION_LIST = "SET_SOURCE_OPTION_LIST", // 资源配置选项列表
   SET_SOURCE_OPTION_SELECTED = "SET_SOURCE_OPTION_SELECTED", // 当前选择的资源配置选项
   SET_PROJECT_LIST = "SET_PROJECT_LIST" // 工程列表
 }
 
-// 设置品牌信息列表
-type TypeActionSetBrandOptionList = {
-  type: typeof ACTION_TYPES.SET_BRAND_OPTION_LIST;
-  payload: TypeBrandOption[];
+// 设置场景信息列表
+type TypeActionSetScenarioOptionList = {
+  type: typeof ACTION_TYPES.SET_SCENARIO_OPTION_LIST;
+  payload: TypeScenarioOption[];
 };
 
-// 设置品牌信息
-type TypeActionSetBrandOption = {
-  type: typeof ACTION_TYPES.SET_BRAND_OPTION_SELECTED;
-  payload: TypeBrandOption;
+// 设置场景信息
+type TypeActionSetScenarioOption = {
+  type: typeof ACTION_TYPES.SET_SCENARIO_OPTION_SELECTED;
+  payload: TypeScenarioOption;
 };
 
 type TypeActionSetSourceOptionList = {
@@ -38,24 +38,24 @@ type TypeActionSetProjectList = {
 
 // main actions
 export type TypeStarterActions =
-  | TypeActionSetBrandOptionList
-  | TypeActionSetBrandOption
+  | TypeActionSetScenarioOptionList
+  | TypeActionSetScenarioOption
   | TypeActionSetSourceOptionList
   | TypeActionSetSourceOption
   | TypeActionSetProjectList;
 
-// 设置品牌信息列表
-export function ActionSetBrandOptionList(
-  payload: TypeBrandOption[]
-): TypeActionSetBrandOptionList {
-  return { type: ACTION_TYPES.SET_BRAND_OPTION_LIST, payload };
+// 设置场景信息列表
+export function ActionSetScenarioOptionList(
+  payload: TypeScenarioOption[]
+): TypeActionSetScenarioOptionList {
+  return { type: ACTION_TYPES.SET_SCENARIO_OPTION_LIST, payload };
 }
 
-// 设置选择的品牌信息
-export function ActionSetBrandOption(
-  payload: TypeBrandOption
-): TypeActionSetBrandOption {
-  return { type: ACTION_TYPES.SET_BRAND_OPTION_SELECTED, payload };
+// 设置选择的场景信息
+export function ActionSetScenarioOption(
+  payload: TypeScenarioOption
+): TypeActionSetScenarioOption {
+  return { type: ACTION_TYPES.SET_SCENARIO_OPTION_SELECTED, payload };
 }
 
 export function ActionSetSourceOptionList(
