@@ -3,7 +3,7 @@ import fse from "fs-extra";
 import logSymbols from "log-symbols";
 import { WatchOptions, FSWatcher } from "chokidar";
 import { useEffect, useState } from "react";
-import { useProjectRoot } from "@/hooks/project";
+import { useProjectRoot } from "@/hooks/project/index";
 import { FILE_STATUS } from "src/enum/index";
 
 const mapWatchers = (count: number, options?: WatchOptions) => {

@@ -1,7 +1,8 @@
 import React from "react";
 import { Tabs } from "antd";
 import { SOURCE_TYPES } from "src/enum";
-import { useSourceTypeList, useSourceDefineValueList } from "@/hooks/source";
+import { useSourceTypeList } from "@/hooks/source/index";
+import useSourceDefineValueList from "@/hooks/source/useSourceDefineValueList";
 import XmlController from "../XmlController";
 
 const XmlSourceList: React.FC = () => {

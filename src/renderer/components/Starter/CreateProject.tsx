@@ -5,7 +5,7 @@ import { remote } from "electron";
 
 import { isDev } from "@/core/constant";
 import { apiCreateProject } from "@/request";
-import { useScenarioOption } from "@/hooks/source";
+import { useScenarioOption } from "@/hooks/source/index";
 import { TypeProjectInfo } from "src/types/project";
 import { TypeSourceOption } from "src/types/source";
 

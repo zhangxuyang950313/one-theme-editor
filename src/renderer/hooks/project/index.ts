@@ -1,22 +1,7 @@
 import path from "path";
-import {
-  apiGetProjectByUUID,
-  apiGetProjectFileData,
-  apiGetProjectList
-} from "@/request/index";
-import { useAxiosCanceler, useMergeLoadStatus } from "@/hooks/index";
-import {
-  useScenarioOption,
-  useFetchPageConfList,
-  useFetchSourceConfig,
-  useSourcePageData,
-  useSourceConfigRootWithNS
-} from "@/hooks/source";
-import {
-  ActionInitEditor,
-  ActionPatchProjectSourceData,
-  ActionSetProjectData
-} from "@/store/editor/action";
+import { useMergeLoadStatus } from "@/hooks/index";
+import { useSourceConfigRootWithNS } from "@/hooks/source/index";
+import { ActionInitEditor } from "@/store/editor/action";
 import {
   selectProjectFileDataMap,
   selectProjectXmlFileDataMap,
@@ -34,12 +19,9 @@ import {
   TypeProjectInfo
 } from "src/types/project";
 
-import ERR_CODE from "src/common/errorCode";
 import XMLNodeElement from "src/server/compiler/XMLNodeElement";
-import { useLayoutEffect, useEffect, useState, useCallback } from "react";
-import { useParams } from "react-router";
-import { notification } from "antd";
-import { LOAD_STATUS, FILE_STATUS } from "src/enum";
+import { useLayoutEffect, useEffect, useState } from "react";
+import { LOAD_STATUS } from "src/enum";
 import {
   TypeScenarioConf,
   TypeInfoTempConf,
@@ -47,11 +29,11 @@ import {
   TypeSourcePageData
 } from "src/types/source";
 import { selectProjectList } from "@/store/starter/selector";
-import { ActionSetProjectList } from "@/store/starter/action";
-import { sleep } from "src/utils";
-import { useImagePrefix } from "./image";
-import { useFSWatcherCreator } from "./fileWatcher";
-import { useStarterDispatch } from "./../store/index";
+import { useImagePrefix } from "../image";
+import useFetchProjectData from "../project/useFetchProjectData";
+import usePatchPageSourceData from "../project/usePatchPageSourceData";
+import useFetchSourceConfig from "../source/useFetchSourceConfig";
+import useFetchPageConfList from "../source/useFetchPageConfList";
 
 export function useProjectList(): TypeProjectDataDoc[] {
   return useStarterSelector(selectProjectList);
@@ -89,79 +71,6 @@ export function useProjectInfo(): TypeProjectInfo {
 export function useInfoTemplateConfig(): TypeInfoTempConf {
   const projectData = useProjectData();
   return projectData.scenarioConfig.infoTemplate;
-}
-
-// 获取项目列表
-export function useFetchProjectList(): {
-  data: TypeProjectDataDoc[];
-  status: LOAD_STATUS;
-  fetch: () => Promise<void>;
-} {
-  // 使用机型隔离查询
-  const [scenarioOption] = useScenarioOption();
-  const [projectList, setProjectList] = useState<TypeProjectDataDoc[]>([]);
-  const [status, setStatus] = useState<LOAD_STATUS>(LOAD_STATUS.INITIAL);
-  const registerCancelToken = useAxiosCanceler();
-  const dispatch = useStarterDispatch();
-
-  const fetch = useCallback(async () => {
-    if (!scenarioOption.md5) return;
-    setStatus(LOAD_STATUS.LOADING);
-    setProjectList([]);
-    await sleep(300);
-    apiGetProjectList(scenarioOption, registerCancelToken)
-      .then(projects => {
-        console.log("获取工程列表：", projects);
-        setProjectList(projects);
-        dispatch(ActionSetProjectList(projects));
-        setStatus(LOAD_STATUS.SUCCESS);
-      })
-      .catch(() => {
-        setStatus(LOAD_STATUS.FAILED);
-      });
-  }, [scenarioOption]);
-
-  useLayoutEffect(() => {
-    fetch();
-  }, [scenarioOption.md5]);
-  return { data: projectList, status, fetch };
-}
-
-/**
- * 加载工程
- * @param uuid
- * @returns
- */
-export function useFetchProjectData(): [
-  TypeProjectDataDoc,
-  LOAD_STATUS,
-  () => Promise<void>
-] {
-  // 从路由参数中获得工程 uuid
-  const { uuid } = useParams<{ uuid: string }>();
-  const dispatch = useEditorDispatch();
-  const projectData = useProjectData();
-  const [status, setStatus] = useState<LOAD_STATUS>(LOAD_STATUS.INITIAL);
-  const handleFetch = async () => {
-    setStatus(LOAD_STATUS.LOADING);
-    await sleep(300);
-    return apiGetProjectByUUID(uuid)
-      .then(project => {
-        if (!project) throw new Error(ERR_CODE[2005]);
-        console.log(`载入工程：: ${uuid}`);
-        dispatch(ActionSetProjectData(project));
-        setStatus(LOAD_STATUS.SUCCESS);
-      })
-      .catch(err => {
-        notification.error({ message: err.message });
-        dispatch(ActionInitEditor());
-        setStatus(LOAD_STATUS.FAILED);
-      });
-  };
-  useEffect(() => {
-    handleFetch();
-  }, [uuid]);
-  return [projectData, status, handleFetch];
 }
 
 /**
@@ -223,51 +132,6 @@ export function useResolveSourcePath(relativePath: string): string {
   }, [relativePath]);
 
   return sourcePath;
-}
-
-/**
- * 监听当前页面所有素材
- */
-export function usePatchPageSourceData(): void {
-  const uuid = useProjectUUID();
-  const projectRoot = useProjectRoot();
-  const pageData = useSourcePageData();
-  const dispatch = useEditorDispatch();
-  const createWatcher = useFSWatcherCreator();
-  useEffect(() => {
-    if (!pageData || !uuid || !projectRoot) return;
-    const watcher = createWatcher({ cwd: projectRoot });
-    const sourceSrcSet = new Set(pageData.sourceDefineList.map(o => o.src));
-    const listener = async (file: string, event: FILE_STATUS) => {
-      if (!sourceSrcSet.has(file)) return;
-      console.log(`监听文件变动（${event}） '${file}' `);
-      switch (event) {
-        case FILE_STATUS.ADD:
-        case FILE_STATUS.UNLINK:
-        case FILE_STATUS.CHANGE: {
-          const fileData = await apiGetProjectFileData(uuid, file);
-          dispatch(ActionPatchProjectSourceData(fileData));
-        }
-      }
-    };
-    watcher
-      .on(FILE_STATUS.ADD, file => listener(file, FILE_STATUS.ADD))
-      .on(FILE_STATUS.CHANGE, file => listener(file, FILE_STATUS.CHANGE))
-      .on(FILE_STATUS.UNLINK, file => listener(file, FILE_STATUS.UNLINK))
-      .add(projectRoot);
-    return () => {
-      if (!watcher) return;
-      const watcherList = watcher.getWatched();
-      watcher.close().then(() => {
-        console.log("关闭文件监听", watcherList);
-      });
-    };
-  }, [uuid, pageData, projectRoot]);
-
-  // useProjectFileWatcher(Array.from(sourceFilepathSet), async file => {
-  //   const fileData = await apiGetProjectFileData(uuid, file);
-  //   dispatch(ActionPatchProjectSourceData(fileData));
-  // });
 }
 
 export function useProjectFileDataMap(): Map<string, TypeProjectFileData> {

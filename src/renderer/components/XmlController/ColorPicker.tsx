@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Input, message, Tooltip } from "antd";
 import { RGBColor, SketchPicker } from "react-color";
 import { RightCircleOutlined } from "@ant-design/icons";
-import { useProjectUUID } from "@/hooks/project";
+import { useProjectUUID } from "@/hooks/project/index";
 import { TypeSourceDefineValue } from "src/types/source";
 import { StyleGirdBackground } from "@/style";
 import { RgbaObject } from "hex-rgb";

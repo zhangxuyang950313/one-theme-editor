@@ -5,7 +5,7 @@ import {
   useSourcePageConf,
   useSourcePageGroupList,
   useSourceImageUrl
-} from "@/hooks/source";
+} from "@/hooks/source/index";
 import { PreloadImage } from "@/components/ImageCollection";
 import { TypeSourcePageConf } from "src/types/source";
 

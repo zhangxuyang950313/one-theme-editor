@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Tooltip } from "antd";
-import { useSourceModuleList, useSourceModuleConf } from "@/hooks/source";
+import { useSourceModuleList, useSourceModuleConf } from "@/hooks/source/index";
 import { SourceImage } from "../ImageCollection";
 
 // 模块选择器

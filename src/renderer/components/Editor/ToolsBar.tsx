@@ -14,7 +14,7 @@ import {
   FolderOutlined
 } from "@ant-design/icons";
 import IconButton from "@/components/IconButton";
-import usePackProject from "@/hooks/socket/usePackProject";
+import usePackProject from "@/hooks/project/usePackProject";
 import ProjectInfoModal from "./ProjectInfoModal";
 
 const icons = {

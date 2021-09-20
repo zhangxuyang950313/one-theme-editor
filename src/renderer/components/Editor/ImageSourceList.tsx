@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 
-import { useSourceDefineImageList } from "@/hooks/source";
 import ImageController from "@/components/ImageController/index";
+import useSourceDefineImageList from "@/hooks/source/useSourceDefineImageList";
 
 const ImageSourceList: React.FC = () => {
   const sourceDefineList = useSourceDefineImageList();

@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import { useSourcePageConf, useSourceImageUrl } from "@/hooks/source";
+import { useSourcePageConf, useSourceImageUrl } from "@/hooks/source/index";
 import { PreloadImage } from "../ImageCollection";
 
 const Preview: React.FC = () => {

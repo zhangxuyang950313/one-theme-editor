@@ -21,7 +21,7 @@ import useSocket from "./useSocket";
  * })
  * ```
  */
-export default function useSocketEvent<Send, Receive>(
+export default function useSocketInvoker<Send, Receive>(
   event: SOCKET_EVENT
 ): {
   emit: (data: Send, cb?: (data: Receive) => void) => void;

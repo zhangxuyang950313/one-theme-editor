@@ -4,8 +4,8 @@ import {
   useLoadImageByPath,
   useLoadImage
 } from "@/hooks/image";
-import { useSourceImageUrl } from "@/hooks/source";
-import { useProjectImageUrl } from "@/hooks/project";
+import { useSourceImageUrl } from "@/hooks/source/index";
+import { useProjectImageUrl } from "@/hooks/project/index";
 
 type TypeReactImageElement = React.FC<JSX.IntrinsicElements["img"]>;
 

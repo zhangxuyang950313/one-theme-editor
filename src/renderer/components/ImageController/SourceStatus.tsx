@@ -4,7 +4,10 @@ import React from "react";
 import styled from "styled-components";
 import { remote } from "electron";
 import { Tooltip } from "antd";
-import { useProjectRoot, useAbsolutePathInProject } from "@/hooks/project";
+import {
+  useProjectRoot,
+  useAbsolutePathInProject
+} from "@/hooks/project/index";
 
 const SourceStatus: React.FC<{ src: string }> = props => {
   const { src } = props;

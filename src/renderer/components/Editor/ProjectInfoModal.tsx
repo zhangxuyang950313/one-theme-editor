@@ -1,8 +1,8 @@
-import { useInfoTemplateConfig, useProjectInfo } from "@/hooks/project";
-import { Form, Modal, ModalProps } from "antd";
 import React from "react";
-import { TypeProjectInfo } from "src/types/project";
 import styled from "styled-components";
+import { Form, Modal, ModalProps } from "antd";
+import { useInfoTemplateConfig, useProjectInfo } from "@/hooks/project/index";
+import { TypeProjectInfo } from "src/types/project";
 import ProjectInfoForm from "../ProjectInfoForm";
 
 const ProjectInfoModal: React.FC<ModalProps> = props => {

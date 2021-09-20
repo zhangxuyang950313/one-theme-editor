@@ -6,7 +6,7 @@ import { remote } from "electron";
 import { notification } from "antd";
 import { DeleteOutlined, ImportOutlined } from "@ant-design/icons";
 import { apiCopyFile, apiDeleteFile } from "@/request/file";
-import { useProjectRoot } from "@/hooks/project";
+import { useProjectRoot } from "@/hooks/project/index";
 
 // 图片操作区
 const ImageHandler: React.FC<{

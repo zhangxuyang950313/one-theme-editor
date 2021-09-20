@@ -2,7 +2,7 @@ import path from "path";
 
 import React from "react";
 import styled from "styled-components";
-import { useSourceConfigDir } from "@/hooks/source";
+import { useSourceConfigDir } from "@/hooks/source/index";
 import { useImagePrefix } from "@/hooks/image";
 
 import { TypeSourceOption } from "src/types/source";

@@ -7,8 +7,8 @@ import { apiCopyFile } from "@/request";
 import {
   useAbsolutePathInProject,
   useProjectImageUrlBySrc
-} from "@/hooks/project";
-import { useAbsolutePathInSource, useSourceImageUrl } from "@/hooks/source";
+} from "@/hooks/project/index";
+import { useAbsolutePathInSource, useSourceImageUrl } from "@/hooks/source/index";
 import { TypeSourceDefineImage } from "src/types/source";
 
 import SourceStatus from "./SourceStatus";
