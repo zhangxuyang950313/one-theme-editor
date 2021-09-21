@@ -1,6 +1,6 @@
 // 主题描述信息配置
 const labelMap = {
-  name: "主题名称",
+  name: "名称",
   designer: "设计师",
   author: "制作者",
   version: "版本号",

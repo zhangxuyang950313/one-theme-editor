@@ -24,7 +24,7 @@ export default function useFetchPageConfList(): [
   const pageGroupList = useSourcePageGroupList();
   const sourceConfigPath = useSourceConfigPath();
 
-  const handleFetch = async () => {
+  const handleFetch = async (changeStatus = true) => {
     if (!sourceConfigPath) return;
     const pageConfDataQueue = pageGroupList
       .flatMap(item => item.pageList)
@@ -36,7 +36,7 @@ export default function useFetchPageConfList(): [
         dispatch(ActionPatchPageDataMap(data));
         return data;
       });
-    setStatus(LOAD_STATUS.LOADING);
+    changeStatus && setStatus(LOAD_STATUS.LOADING);
     return asyncQueue(pageConfDataQueue)
       .then(data => {
         setPageData(data);
@@ -49,7 +49,7 @@ export default function useFetchPageConfList(): [
   };
 
   useEffect(() => {
-    handleFetch().catch(err => {
+    handleFetch(false).catch(err => {
       notification.error({ message: err.message });
     });
   }, [pageGroupList]);
