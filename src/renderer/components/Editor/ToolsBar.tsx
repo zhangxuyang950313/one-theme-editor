@@ -9,31 +9,33 @@ import styled from "styled-components";
 import {
   PlusOutlined,
   ExportOutlined,
-  CloudUploadOutlined,
   InfoCircleOutlined,
   MobileOutlined,
-  FolderOutlined
+  FolderOutlined,
+  FolderOpenOutlined
 } from "@ant-design/icons";
 import IconButton from "@/components/IconButton";
 import usePackProject from "@/hooks/project/usePackProject";
 import { remote } from "electron";
 import { useProjectData } from "@/hooks/project";
-import { message } from "antd";
+import { message, notification } from "antd";
+import { TOOLS_BAR_BUTTON } from "src/enum";
 import ProjectInfoModal from "./ProjectInfoModal";
 
-const icons = {
-  apply: { name: "应用", icon: <MobileOutlined /> },
-  save: { name: "保存", icon: <FolderOutlined /> },
-  export: { name: "导出", icon: <ExportOutlined /> },
-  exportTo: { name: "导出为", icon: <ExportOutlined /> },
-  upload: { name: "上传", icon: <CloudUploadOutlined /> },
-  info: { name: "资料", icon: <InfoCircleOutlined /> },
-  dark: { name: "深色", icon: <InfoCircleOutlined /> },
-  light: { name: "浅色", icon: <InfoCircleOutlined /> },
-  new: { name: "新建", icon: <PlusOutlined /> }
-};
-
-type TypeIconsType = keyof typeof icons;
+const buttons = [
+  { name: TOOLS_BAR_BUTTON.CREATE, icon: <PlusOutlined /> },
+  { name: TOOLS_BAR_BUTTON.OPEN, icon: <FolderOpenOutlined /> },
+  { name: TOOLS_BAR_BUTTON.PLACEHOLDER, icon: <div /> },
+  { name: TOOLS_BAR_BUTTON.PLACEHOLDER, icon: <div /> },
+  { name: TOOLS_BAR_BUTTON.PLACEHOLDER, icon: <div /> },
+  { name: TOOLS_BAR_BUTTON.APPLY, icon: <MobileOutlined /> },
+  { name: TOOLS_BAR_BUTTON.SAVE, icon: <FolderOutlined /> },
+  { name: TOOLS_BAR_BUTTON.EXPORT, icon: <ExportOutlined /> },
+  { name: TOOLS_BAR_BUTTON.PLACEHOLDER, icon: <div /> },
+  { name: TOOLS_BAR_BUTTON.INFO, icon: <InfoCircleOutlined /> },
+  { name: TOOLS_BAR_BUTTON.DARK, icon: <InfoCircleOutlined /> },
+  { name: TOOLS_BAR_BUTTON.LIGHT, icon: <InfoCircleOutlined /> }
+];
 
 const ToolsBar: React.FC = () => {
   const history = useHistory();
@@ -41,19 +43,19 @@ const ToolsBar: React.FC = () => {
   const [projectInfoVisible, setProjectInfoVisible] = useState(false);
   const projectData = useProjectData();
   const packProject = usePackProject();
-  const handleClick = (key: TypeIconsType) => {
-    switch (key) {
-      case "apply": {
+  const handleClick = (name: TOOLS_BAR_BUTTON) => {
+    switch (name) {
+      case TOOLS_BAR_BUTTON.APPLY: {
         break;
       }
-      case "save": {
+      case TOOLS_BAR_BUTTON.SAVE: {
         break;
       }
-      case "new": {
+      case TOOLS_BAR_BUTTON.CREATE: {
         history.push("/");
         break;
       }
-      case "exportTo": {
+      case TOOLS_BAR_BUTTON.EXPORT: {
         const { projectInfo, projectRoot, scenarioConfig } = projectData;
         const { extname } = scenarioConfig.packageConfig;
         const defaultPath = path.join(
@@ -79,22 +81,24 @@ const ToolsBar: React.FC = () => {
                 packDir: projectRoot,
                 outputFile: result.filePath
               },
-              c => console.log(c)
+              data => {
+                notification.info({
+                  message: data.msg,
+                  description: data.data
+                });
+              }
             );
           });
         break;
       }
-      case "upload": {
-        break;
-      }
-      case "info": {
+      case TOOLS_BAR_BUTTON.INFO: {
         setProjectInfoVisible(true);
         break;
       }
-      case "dark": {
+      case TOOLS_BAR_BUTTON.DARK: {
         break;
       }
-      case "light": {
+      case TOOLS_BAR_BUTTON.LIGHT: {
         break;
       }
     }
@@ -102,16 +106,18 @@ const ToolsBar: React.FC = () => {
   return (
     <StyleToolsBar ref={r => (thisRef.current = r)}>
       <div className="btn-group">
-        {(Object.keys(icons) as TypeIconsType[]).map(key => {
-          const item = icons[key];
-          return (
-            <div className="btn-item" key={item.name}>
-              <IconButton text={item.name} onClick={() => handleClick(key)}>
-                {item.icon}
+        {buttons.map((button, key) => (
+          <div className="btn-item" key={key}>
+            {button.name !== TOOLS_BAR_BUTTON.PLACEHOLDER && (
+              <IconButton
+                text={button.name}
+                onClick={() => handleClick(button.name)}
+              >
+                {button.icon}
               </IconButton>
-            </div>
-          );
-        })}
+            )}
+          </div>
+        ))}
       </div>
       <ProjectInfoModal
         title="修改主题信息"
@@ -132,6 +138,7 @@ const StyleToolsBar = styled.div`
   padding: 10px 10px 4px 10px;
   background: ${({ theme }) => theme["@background-color"]};
   display: flex;
+  justify-content: space-between;
   flex-shrink: 0;
   /* justify-content: space-between; */
   box-sizing: border-box;
@@ -140,6 +147,7 @@ const StyleToolsBar = styled.div`
   .btn-group {
     display: flex;
     .btn-item {
+      width: 50px;
       margin: 0 10px;
     }
   }

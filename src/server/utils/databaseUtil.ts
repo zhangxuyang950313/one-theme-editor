@@ -1,4 +1,3 @@
-import path from "path";
 import fse from "fs-extra";
 import Nedb from "nedb-promises";
 
@@ -6,7 +5,6 @@ export function createNedb(
   filename: string,
   config?: ConstructorParameters<typeof Nedb>[0]
 ): Nedb {
-  fse.ensureDirSync(path.dirname(filename));
   fse.ensureFileSync(filename);
   const db = new Nedb({
     filename,

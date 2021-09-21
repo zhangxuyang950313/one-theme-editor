@@ -1,6 +1,7 @@
 // 设置页面标题
 export enum PRESET_TITLE {
-  default = "一个主题编辑器"
+  default = "一个主题编辑器",
+  welcome = "欢迎使用一个主题编辑器"
 }
 
 // 加载状态
@@ -106,4 +107,17 @@ export enum PACK_TYPE {
 // 扩展数据字段
 export enum EXTRA_DATA_PROP {
   PATH_CONFIG = "pathConfig"
+}
+
+// 工具栏按钮
+export enum TOOLS_BAR_BUTTON {
+  CREATE = "新建",
+  OPEN = "打开",
+  APPLY = "应用",
+  SAVE = "保存",
+  EXPORT = "导出",
+  INFO = "资料",
+  DARK = "深色",
+  LIGHT = "浅色",
+  PLACEHOLDER = ""
 }

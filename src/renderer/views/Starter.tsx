@@ -12,7 +12,7 @@ import ProjectManager from "@/components/Starter/ProjectManager";
 // 开始页面
 const Starter: React.FC = () => {
   const [, setTitle] = useDocumentTitle();
-  setTitle(PRESET_TITLE.default);
+  setTitle(PRESET_TITLE.welcome);
 
   useFetchScenarioOptionList();
   useFetchSourceOptionList();

@@ -1,4 +1,8 @@
-import { TypePackSendPayload, TypeUnpackSendPayload } from "src/types/socket";
+import {
+  TypePackProcess,
+  TypePackSendPayload,
+  TypeUnpackSendPayload
+} from "src/types/socket";
 
 // socket 事件枚举
 export enum SOCKET_EVENT {
@@ -19,13 +23,13 @@ class SocketConfig {
   static pack = {
     event: SOCKET_EVENT.PACK,
     sendData: {} as TypePackSendPayload,
-    receiveData: [] as string[]
+    receiveData: {} as TypePackProcess
   };
   // 解包
   static unpack = {
     event: SOCKET_EVENT.UNPACK,
     sendData: {} as TypeUnpackSendPayload,
-    receiveData: [] as string[]
+    receiveData: {} as TypePackProcess
   };
 }
 
