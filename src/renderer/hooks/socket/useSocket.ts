@@ -4,7 +4,7 @@ import { useServerHost } from "../index";
 
 let socket: Socket;
 function createSocket(url: string) {
-  return socket || io(url);
+  return socket || (socket = io(url));
 }
 
 // 获取 socket 实例

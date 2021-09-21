@@ -190,12 +190,13 @@ export class PackUtil {
     console.timeEnd("压缩耗时");
     // 确保输出目录存在
     fse.ensureDirSync(path.dirname(outputFile));
-    // 变更扩展名
-    const pathObj = path.parse(outputFile);
-    pathObj.ext = this.packConfig.extname;
-    pathObj.base = `${pathObj.name}.${this.packConfig.extname}`;
+    // // 变更扩展名
+    // const pathObj = path.parse(outputDir);
+    // pathObj.ext = this.packConfig.extname;
+    // pathObj.base = `${pathObj.name}.${this.packConfig.extname}`;
+    // const file = path.join(outputDir, `${filename}.${this.packConfig.extname}`);
     // 写入文件
-    fse.outputFileSync(path.format(pathObj), content);
+    fse.outputFileSync(outputFile, content);
     fse.remove(temporaryPath).then(() => {
       console.log("删除临时目录");
     });

@@ -85,6 +85,7 @@
     "archiver": "^5.3.0",
     "axios": "^0.21.1",
     "babel-loader": "^8.2.2",
+    "babel-plugin-const-enum": "^1.1.0",
     "babel-plugin-import": "^1.13.3",
     "babel-plugin-react-scoped-css": "^1.1.1",
     "babel-plugin-styled-components": "^1.12.0",

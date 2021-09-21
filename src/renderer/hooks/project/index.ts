@@ -68,6 +68,7 @@ export function useProjectInfo(): TypeProjectInfo {
   return projectData.projectInfo;
 }
 
+// 工程信息模板配置
 export function useInfoTemplateConfig(): TypeInfoTempConf {
   const projectData = useProjectData();
   return projectData.scenarioConfig.infoTemplate;

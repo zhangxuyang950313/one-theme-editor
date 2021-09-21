@@ -15,6 +15,7 @@ export default function packProject(socket: Socket): void {
   new SocketInvoker<TypePackProcess, typeof pack.sendData>(socket)
     .event(pack.event)
     .on(async (data, emit) => {
+      console.log("打包参数", data);
       const { scenarioMd5, packDir, outputFile } = data;
       const packConfig = ScenarioOptions.def.getPackConfigByMd5(scenarioMd5);
       if (!packConfig) {

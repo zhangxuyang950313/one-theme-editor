@@ -21,7 +21,7 @@
         extname:        打包后扩展名 (默认 zip)
         execute9patch:  处理.9信息 (默认 true)
     -->
-    <PackConfig extname="zip" execute9patch="true">
+    <PackConfig extname="mtz" execute9patch="true">
         <!-- 
             匹配不打包的规则 
             regex:      正则表达式

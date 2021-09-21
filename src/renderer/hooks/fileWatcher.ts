@@ -27,7 +27,7 @@ export function useFSWatcherCreator(): (options?: WatchOptions) => FSWatcher {
   }, []);
   return (options?: WatchOptions) => {
     if (watcher) return watcher;
-    console.log("创建文件监听");
+    console.log("创建文件监听", options);
     const cWatcher = new FSWatcher(options);
     setWatcher(cWatcher);
     return cWatcher;

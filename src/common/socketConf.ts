@@ -11,7 +11,7 @@ export enum SOCKET_EVENT {
   // 监听资源文件
   IMAGE_MAPPER_LIST = "IMAGE_MAPPER_LIST",
   // 监听文件变化
-  WATCH_PROJECT_FILE = "WATCH_FILE"
+  WATCH_PROJECT_FILE = "WATCH_PROJECT_FILE"
 }
 
 class SocketConfig {

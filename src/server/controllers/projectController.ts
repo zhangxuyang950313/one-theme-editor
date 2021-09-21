@@ -205,7 +205,7 @@ export default function projectController(service: Express): void {
     const files = await packProject({
       packDir,
       packConfig,
-      outputFile
+      outputFile: outputFile
     });
     response.send(result.success(files));
   });

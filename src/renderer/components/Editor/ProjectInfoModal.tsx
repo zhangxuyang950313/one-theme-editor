@@ -9,12 +9,15 @@ const ProjectInfoModal: React.FC<ModalProps> = props => {
   const [form] = Form.useForm<TypeProjectInfo>();
   const projectInfo = useProjectInfo();
   const infoTemplate = useInfoTemplateConfig();
-  console.log(infoTemplate);
   return (
     <StyleProjectInfoModal
       {...props}
-      onOk={() => {
+      onOk={e => {
         // TODO 写入 infoTemplate.content
+        console.log(infoTemplate);
+        if (props.onCancel) {
+          props.onCancel(e);
+        }
       }}
     >
       <ProjectInfoForm

@@ -1,6 +1,7 @@
 /**
  * 工具栏
  */
+import path from "path";
 import React, { useRef, useState } from "react";
 import { useHistory } from "react-router";
 import styled from "styled-components";
@@ -15,12 +16,16 @@ import {
 } from "@ant-design/icons";
 import IconButton from "@/components/IconButton";
 import usePackProject from "@/hooks/project/usePackProject";
+import { remote } from "electron";
+import { useProjectData } from "@/hooks/project";
+import { message } from "antd";
 import ProjectInfoModal from "./ProjectInfoModal";
 
 const icons = {
   apply: { name: "应用", icon: <MobileOutlined /> },
   save: { name: "保存", icon: <FolderOutlined /> },
   export: { name: "导出", icon: <ExportOutlined /> },
+  exportTo: { name: "导出为", icon: <ExportOutlined /> },
   upload: { name: "上传", icon: <CloudUploadOutlined /> },
   info: { name: "资料", icon: <InfoCircleOutlined /> },
   dark: { name: "深色", icon: <InfoCircleOutlined /> },
@@ -30,10 +35,11 @@ const icons = {
 
 type TypeIconsType = keyof typeof icons;
 
-export default function ToolsBar(): JSX.Element {
+const ToolsBar: React.FC = () => {
   const history = useHistory();
   const thisRef = useRef<HTMLDivElement | null>();
   const [projectInfoVisible, setProjectInfoVisible] = useState(false);
+  const projectData = useProjectData();
   const packProject = usePackProject();
   const handleClick = (key: TypeIconsType) => {
     switch (key) {
@@ -41,21 +47,41 @@ export default function ToolsBar(): JSX.Element {
         break;
       }
       case "save": {
-        packProject(
-          {
-            scenarioMd5: "2993f7d72871c927e60a3899ed9d565d",
-            packDir: "/Users/zhangxuyang/Desktop/test",
-            outputFile: "/Users/zhangxuyang/Desktop/test/test.zip"
-          },
-          c => console.log(c)
-        );
         break;
       }
       case "new": {
         history.push("/");
         break;
       }
-      case "export": {
+      case "exportTo": {
+        const { projectInfo, projectRoot, scenarioConfig } = projectData;
+        const { extname } = scenarioConfig.packageConfig;
+        const defaultPath = path.join(
+          path.dirname(projectData.projectRoot),
+          `${projectInfo.name}.${extname}`
+        );
+        remote.dialog
+          // https://www.electronjs.org/docs/api/dialog#dialogshowopendialogsyncbrowserwindow-options
+          .showSaveDialog({
+            properties: ["createDirectory"],
+            defaultPath,
+            filters: [{ name: extname, extensions: [extname] }]
+          })
+          .then(result => {
+            if (result.canceled) return;
+            if (!result.filePath) {
+              message.info("未指定任何文件");
+              return;
+            }
+            packProject(
+              {
+                scenarioMd5: scenarioConfig.md5,
+                packDir: projectRoot,
+                outputFile: result.filePath
+              },
+              c => console.log(c)
+            );
+          });
         break;
       }
       case "upload": {
@@ -99,7 +125,7 @@ export default function ToolsBar(): JSX.Element {
       />
     </StyleToolsBar>
   );
-}
+};
 
 const StyleToolsBar = styled.div`
   width: 100%;
@@ -118,3 +144,4 @@ const StyleToolsBar = styled.div`
     }
   }
 `;
+export default ToolsBar;
