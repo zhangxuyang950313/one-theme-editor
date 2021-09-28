@@ -41,31 +41,32 @@ export default function fileController(service: Express): void {
   });
 
   // // 写入本地文件
-  // service.post<any, any, { fileData: TypeFileData; to: string }>(
-  //   API.WRITE_FILE,
-  //   async (req, res) => {
-  //     try {
-  //       const { fileData, to } = req.body;
-  //       const { url, base64 } = fileData;
-  //       let md5 = fileData.md5;
-  //       // base64 直接写入
-  //       if (base64) {
-  //         await base64ToLocalFile(to, base64).then(rw => rw && rw());
-  //       }
-
-  //       // md5 去查数据库获得 base64 再写入
-  //       if (!md5 && url) md5 = path.basename(url);
-  //       if (!md5) throw new Error("md5 为空");
-
-  //       const imageData = await findImageData(md5);
-  //       if (imageData.base64) {
-  //         await base64ToLocalFile(to, imageData.base64).then(rw => rw && rw());
-  //         return res.send(result.success());
-  //       } else throw new Error(`图片数据库获取${md5}失败`);
-  //     } catch (err) {
-  //       // console.error(err);
-  //       res.status(400).send(result.fail(`${ERR_CODE[4002]}, ${err}`));
+  // service.post<
+  //   never,
+  //   TypeResponseFrame<null, string>,
+  //   { fileData: TypeFileData; to: string }
+  // >(apiConfig.WRITE_FILE.path, async (req, res) => {
+  //   try {
+  //     const { fileData, to } = req.body;
+  //     const { url, base64 } = fileData;
+  //     let md5 = fileData.md5;
+  //     // base64 直接写入
+  //     if (base64) {
+  //       await base64ToLocalFile(to, base64).then(rw => rw && rw());
   //     }
+
+  //     // md5 去查数据库获得 base64 再写入
+  //     if (!md5 && url) md5 = path.basename(url);
+  //     if (!md5) throw new Error("md5 为空");
+
+  //     const imageData = await findImageData(md5);
+  //     if (imageData.base64) {
+  //       await base64ToLocalFile(to, imageData.base64).then(rw => rw && rw());
+  //       return res.send(result.success());
+  //     } else throw new Error(`图片数据库获取${md5}失败`);
+  //   } catch (err) {
+  //     // console.error(err);
+  //     res.status(400).send(result.fail(`${ERR_CODE[4002]}, ${err}`));
   //   }
-  // );
+  // });
 }

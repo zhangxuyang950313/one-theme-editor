@@ -9,7 +9,7 @@ export class ProjectInfo extends AbstractDataModel<TypeProjectInfo> {
   static default = new ProjectInfo().create();
 }
 
-export class ProjectData extends AbstractDataModel<TypeProjectDataDoc> {
+export default class ProjectData extends AbstractDataModel<TypeProjectDataDoc> {
   protected data: TypeProjectDataDoc = {
     uuid: "",
     scenarioConfig: new ScenarioConfig().create(),

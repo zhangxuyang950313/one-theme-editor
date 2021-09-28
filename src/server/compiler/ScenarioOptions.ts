@@ -50,7 +50,7 @@ export default class ScenarioOptions extends XmlTemplate {
       new ScenarioConfig()
         .set("name", option.name)
         .set("md5", option.md5)
-        .set("infoTemplate", option.infoTemplate)
+        .set("projectInfoConfig", option.projectInfoConfig)
         .set("packageConfig", option.packageConfig)
         .set("applyConfig", option.applyConfig)
         .create()
@@ -76,14 +76,14 @@ export default class ScenarioOptions extends XmlTemplate {
       const scenarioConfig = ScenarioConfigCompiler.from(src);
       const packageConfig = scenarioConfig.getPackageConfig();
       const applyConfig = scenarioConfig.getApplyConfig();
-      const infoTemplate = scenarioConfig.getInfoTemplate();
+      const projectInfoConfig = scenarioConfig.getProjectInfoConfig();
       return new ScenarioOption()
         .set("src", src)
         .set("name", name)
         .set("md5", md5(name))
         .set("packageConfig", packageConfig)
         .set("applyConfig", applyConfig)
-        .set("infoTemplate", infoTemplate)
+        .set("projectInfoConfig", projectInfoConfig)
         .create();
     });
   }

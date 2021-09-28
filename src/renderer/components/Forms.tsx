@@ -58,6 +58,14 @@ function getSelectForm(
   );
 }
 
+//
+export function ProjectInput(
+  props: { label: string; name: string } & InputProps
+): JSX.Element {
+  const { label, name } = props;
+  return getInputForm({ label, name }, props);
+}
+
 // 主题名称
 export function ProjectName(inputProps: InputProps): JSX.Element {
   const { name: label, key: name } = projectInfoConfig.name;

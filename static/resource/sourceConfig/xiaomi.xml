@@ -1,16 +1,25 @@
 <Configuration>
 
     <!-- 描述文件模板 -->
-    <InfoTemplate output="./description.xml">
-        <?xml version="1.0" encoding="utf-8"?>
-        <MIUI-Theme>
-            <title>${project_name}</title>
-            <designer>${project_designer}</designer>
-            <author>${project_author}</author>
-            <version>${project_version}</version>
-            <uiVersion>${project_ui_version}</uiVersion>
-        </MIUI-Theme>
-    </InfoTemplate>
+    <ProjectInfoConfig output="./description.xml">
+        <PropsMapper>
+            <Item prop="name"       description="名称"/>
+            <Item prop="designer"   description="设计师"/>
+            <Item prop="author"     description="制作者"/>
+            <Item prop="version"    description="版本号"/>
+            <Item prop="uiVersion"  description="UI版本" disabled="true" visible="true"/>
+        </PropsMapper>
+        <Template>
+            <?xml version="1.0" encoding="utf-8"?>
+            <MIUI-Theme>
+                <title>${name}</title>
+                <designer>${designer}</designer>
+                <author>${author}</author>
+                <version>${version}</version>
+                <uiVersion>${uiVersion}</uiVersion>
+            </MIUI-Theme>
+        </Template>
+    </ProjectInfoConfig>
 
     <!-- 编辑器资源配置 -->
     <SourceConfig src="xiaomi/miui12/description.xml"/>

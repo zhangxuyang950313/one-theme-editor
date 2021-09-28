@@ -46,24 +46,19 @@ export async function apiGetProjectByUUID(
   return createHttp(canceler)
     .get<TypeRequestResult<TypeProjectDataDoc>>(
       apiConfig.GET_PROJECT_DATA.path,
-      {
-        params: { uuid }
-      }
+      { params: { uuid } }
     )
     .then(data => data.data.data);
 }
 
 // 更新工程
 export async function apiUpdateProject(
-  data: TypeProjectData
+  data: Partial<TypeProjectData>
 ): Promise<TypeProjectDataDoc> {
   return createHttp()
     .post<TypeRequestResult<TypeProjectDataDoc>>(
       apiConfig.UPDATE_PROJECT.path,
-      {
-        params: data.uuid,
-        data
-      }
+      { params: data.uuid, data }
     )
     .then(data => data.data.data);
 }
@@ -79,9 +74,7 @@ export async function apiGetTempValueByName(
   return createHttp()
     .get<TypeRequestResult<{ value: string }>>(
       apiConfig.GET_XML_TEMP_VALUE.path,
-      {
-        params: data
-      }
+      { params: data }
     )
     .then(data => data.data.data.value);
 }
@@ -115,9 +108,7 @@ export async function apiGetProjectFileData(
   return createHttp()
     .get<TypeRequestResult<TypeProjectFileData>>(
       apiConfig.GET_SOURCE_FILE_DATA.path,
-      {
-        params: { filepath, uuid }
-      }
+      { params: { filepath, uuid } }
     )
     .then(data => data.data.data);
 }

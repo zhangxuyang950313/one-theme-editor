@@ -2,17 +2,22 @@ import path from "path";
 import fse from "fs-extra";
 import {
   TypeApplyConf,
-  TypeInfoTempConf,
+  TypeProjectInfoConf,
   TypePackConf,
   TypeSourceOption
 } from "src/types/source";
 import { ELEMENT_TAG, PACK_TYPE } from "src/enum/index";
-import { ApplyConfig, PackageConfig } from "src/data/ScenarioConfig";
+import {
+  ApplyConfig,
+  PackageConfig,
+  ProjectInfoConfig
+} from "src/data/ScenarioConfig";
 import SourceConfig from "server/compiler/SourceConfig";
 import pathUtil from "server/utils/pathUtil";
 import XmlTemplate from "./XmlTemplate";
 import XmlFileCompiler from "./XmlFileCompiler";
 
+// 解析场景配置
 export default class ScenarioConfig extends XmlTemplate {
   // 从文件创建实例
   static from(src: string): ScenarioConfig {
@@ -21,15 +26,30 @@ export default class ScenarioConfig extends XmlTemplate {
     return new ScenarioConfig(element);
   }
 
-  // 解析描述文件模板
-  getInfoTemplate(): TypeInfoTempConf {
-    const infoTempNode = super
+  // 解析描述文件配置
+  getProjectInfoConfig(): TypeProjectInfoConf {
+    const projectInfoConfigNode = super
       .getRootNode()
-      .getFirstChildNodeByTagname(ELEMENT_TAG.InfoTemplate);
-    return {
-      output: infoTempNode.getAttributeOf("output"),
-      content: infoTempNode.buildXml()
-    };
+      .getFirstChildNodeByTagname(ELEMENT_TAG.ProjectInfoConfig);
+    const propsMapNode = projectInfoConfigNode.getFirstChildNodeByTagname(
+      ELEMENT_TAG.PropsMapper
+    );
+    const templateNode = projectInfoConfigNode.getFirstChildNodeByTagname(
+      ELEMENT_TAG.Template
+    );
+    const propsMapper = propsMapNode
+      .getChildrenNodesByTagname(ELEMENT_TAG.Item)
+      .map(item => ({
+        prop: item.getAttributeOf("prop"),
+        description: item.getAttributeOf("description"),
+        disabled: item.getAttributeOf("disabled") === "true",
+        visible: item.getAttributeOf("visible") !== "false"
+      }));
+    return new ProjectInfoConfig()
+      .set("output", projectInfoConfigNode.getAttributeOf("output"))
+      .set("propsMapper", propsMapper)
+      .set("template", templateNode.buildXml())
+      .create();
   }
 
   // 解析打包配置

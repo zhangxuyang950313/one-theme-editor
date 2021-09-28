@@ -5,6 +5,9 @@ export const urlRegexp =
 // xml 模板占位符
 export const placeholderRegexp = /^\${(.+?)}/;
 
+// 模板字符串
+export const tempStrRegexp = /\${(.+?)}/g;
+
 // 占位符工程目录开头
 export const projectPrefixRegexp = /^\$\{project\}/;
 

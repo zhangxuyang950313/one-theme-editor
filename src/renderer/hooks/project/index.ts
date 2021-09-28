@@ -24,7 +24,7 @@ import { useLayoutEffect, useEffect, useState } from "react";
 import { LOAD_STATUS } from "src/enum";
 import {
   TypeScenarioConf,
-  TypeInfoTempConf,
+  TypeProjectInfoConf,
   TypeSourceConfig,
   TypeSourcePageData
 } from "src/types/source";
@@ -34,6 +34,8 @@ import useFetchProjectData from "../project/useFetchProjectData";
 import usePatchPageSourceData from "../project/usePatchPageSourceData";
 import useFetchSourceConfig from "../source/useFetchSourceConfig";
 import useFetchPageConfList from "../source/useFetchPageConfList";
+import useSyncFileContent from "./useSyncFileContent";
+import usePatchProjectInfoData from "./usePatchProjectInfoData";
 
 export function useProjectList(): TypeProjectDataDoc[] {
   return useStarterSelector(selectProjectList);
@@ -69,9 +71,9 @@ export function useProjectInfo(): TypeProjectInfo {
 }
 
 // 工程信息模板配置
-export function useInfoTemplateConfig(): TypeInfoTempConf {
+export function useProjectInfoConfig(): TypeProjectInfoConf {
   const projectData = useProjectData();
-  return projectData.scenarioConfig.infoTemplate;
+  return projectData.scenarioConfig.projectInfoConfig;
 }
 
 /**
@@ -95,6 +97,8 @@ export function useInitProject(): [
   const status = useMergeLoadStatus([step1Status, step2Status, step3Status]);
   const dispatch = useEditorDispatch();
   usePatchPageSourceData();
+  usePatchProjectInfoData();
+  // useSyncFileContent();
   useLayoutEffect(() => {
     // 退出退出当前组件后初始化数据
     return () => {

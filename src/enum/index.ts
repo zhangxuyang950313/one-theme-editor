@@ -39,7 +39,8 @@ export enum ELEMENT_TAG {
   Color = "Color",
   Scenario = "Scenario",
   SourceConfig = "SourceConfig",
-  InfoTemplate = "InfoTemplate"
+  ProjectInfoConfig = "ProjectInfoConfig",
+  PropsMapper = "PropsMapper"
 }
 
 // 元素类型
@@ -113,6 +114,7 @@ export enum EXTRA_DATA_PROP {
 export enum TOOLS_BAR_BUTTON {
   CREATE = "新建",
   OPEN = "打开",
+  JUMP = "跳转",
   APPLY = "应用",
   SAVE = "保存",
   EXPORT = "导出",

@@ -7,10 +7,6 @@ import { SocketInvoker } from "./util";
 
 // 打包工程
 export default function packProject(socket: Socket): void {
-  console.log(`socket 已被连接`);
-  socket.emit("hello", "服务已收到你的连接...");
-  socket.on("disconnect", () => console.log("断开连接"));
-
   const { pack } = SocketConfig;
   new SocketInvoker<TypePackProcess, typeof pack.sendData>(socket)
     .event(pack.event)

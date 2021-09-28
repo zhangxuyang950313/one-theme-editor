@@ -77,9 +77,9 @@ export default function projectController(service: Express): void {
     UnionTupleToObjectKey<typeof apiConfig.UPDATE_PROJECT_INFO.query> // reqQuery
   >(apiConfig.UPDATE_PROJECT_INFO.path, async (request, response) => {
     const { uuid } = request.query;
-    const description = request.body;
-    console.log("更新工程描述信息", { uuid, description });
-    const project = await updateProject(uuid, { description });
+    const projectInfo = request.body;
+    console.log("更新工程描述信息", { uuid, projectInfo });
+    const project = await updateProject(uuid, { projectInfo });
     response.send(result.success(project));
   });
 

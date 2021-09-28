@@ -1,25 +1,22 @@
 import React, { forwardRef, useImperativeHandle } from "react";
 import { Form, FormInstance, FormProps } from "antd";
 import { TypeProjectInfo } from "src/types/project";
-import {
-  ProjectAuthor,
-  ProjectDesigner,
-  ProjectName,
-  ProjectVersion
-} from "./Forms";
+import { TypeProjectInfoConf } from "src/types/source";
+import { ProjectInput } from "./Forms";
 
 type TypeProps = {
   className?: string;
   // 初始化数据
   initialValues: TypeProjectInfo | undefined;
   form: FormInstance<TypeProjectInfo>;
+  projectInfoConfig: TypeProjectInfoConf;
 } & FormProps;
 
 type TypeRef = FormInstance<TypeProjectInfo>;
 
 // 主题信息表单
 function ProjectInfoForm(props: TypeProps, ref: React.ForwardedRef<TypeRef>) {
-  const { form, initialValues, className } = props;
+  const { form, initialValues, className, projectInfoConfig } = props;
 
   useImperativeHandle(ref, () => form);
 
@@ -44,10 +41,19 @@ function ProjectInfoForm(props: TypeProps, ref: React.ForwardedRef<TypeRef>) {
       form={form}
       initialValues={initialValues}
     >
-      <ProjectName onChange={onInputChange("name")} />
-      <ProjectDesigner onChange={onInputChange("designer")} />
-      <ProjectAuthor onChange={onInputChange("author")} />
-      <ProjectVersion onChange={onInputChange("version")} />
+      {projectInfoConfig.propsMapper.map(item => {
+        return (
+          item.visible && (
+            <ProjectInput
+              key={item.prop}
+              label={item.description}
+              name={item.prop}
+              disabled={item.disabled}
+              onChange={onInputChange(item.prop)}
+            />
+          )
+        );
+      })}
     </Form>
   );
 }

@@ -27,9 +27,15 @@ export type TypeSourceConfig = TypeSourceOption & {
   sourceModuleList: TypeSourceModuleConf[];
 };
 
-export type TypeInfoTempConf = {
+export type TypeProjectInfoConf = {
   output: string;
-  content: string;
+  propsMapper: Array<{
+    prop: string;
+    description: string;
+    disabled: boolean;
+    visible: boolean;
+  }>;
+  template: string;
 };
 
 // 打包配置
@@ -50,7 +56,7 @@ export type TypeApplyConf = {
 export type TypeScenarioConf = {
   name: string;
   md5: string;
-  infoTemplate: TypeInfoTempConf;
+  projectInfoConfig: TypeProjectInfoConf;
   packageConfig: TypePackConf;
   applyConfig: TypeApplyConf;
 };

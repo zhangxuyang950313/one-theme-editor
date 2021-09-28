@@ -142,6 +142,7 @@
     "node-loader": "^2.0.0",
     "nodemon": "^2.0.11",
     "pm2": "^5.1.1",
+    "portfinder": "^1.0.28",
     "postcss-loader": "4.3.0",
     "postcss-preset-env": "^6.7.0",
     "prettier": "^2.3.2",

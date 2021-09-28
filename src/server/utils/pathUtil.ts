@@ -67,7 +67,7 @@ const paths: TypeServerPath = {
     if (!ns) return null;
     return path.resolve(this.BINARY_DIR, ns);
   }
-};
+} as const;
 export default paths;
 
 export function resolveSourcePath(relative: string): string {

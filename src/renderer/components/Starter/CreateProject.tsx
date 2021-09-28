@@ -117,6 +117,7 @@ const CreateProject: React.FC<{
             // 需要设置 <Form preserve={false} />
             preserve={false}
             initialValues={initialValues}
+            projectInfoConfig={currentScenarioOption.projectInfoConfig}
             onValuesChange={(changedValue: TypeProjectInfo) => {
               const projectName = changedValue.name;
               if (!projectName) return;
@@ -151,7 +152,7 @@ const CreateProject: React.FC<{
                 allowClear
                 value={projectRoot}
                 onChange={e => {
-                  form.setFieldsValue({ projectRoot: e.target.value });
+                  // form.setFieldsValue({ projectRoot: e.target.value });
                   setProjectRoot(e.target.value);
                 }}
               />
@@ -256,7 +257,7 @@ const CreateProject: React.FC<{
           const scenarioConfig = new ScenarioConfig()
             .set("name", currentScenarioOption.name)
             .set("md5", currentScenarioOption.md5)
-            .set("infoTemplate", currentScenarioOption.infoTemplate)
+            .set("projectInfoConfig", currentScenarioOption.projectInfoConfig)
             .set("packageConfig", currentScenarioOption.packageConfig)
             .set("applyConfig", currentScenarioOption.applyConfig)
             .create();
@@ -353,7 +354,7 @@ const CreateProject: React.FC<{
         新建主题
       </Button>
 
-      <StyleModal
+      <StyleCreateModal
         width="700px"
         centered
         visible={modalVisible}
@@ -362,20 +363,21 @@ const CreateProject: React.FC<{
         onCancel={closeModal}
         footer={modalFooter}
         forceRender
+        maskClosable={false}
         getContainer={thisRef.current}
       >
         <StyleSteps steps={steps.map(o => o.name)} current={curStep} />
         {step.Context}
-      </StyleModal>
+      </StyleCreateModal>
     </div>
   );
 };
 
-const StyleModal = styled(Modal)`
+const StyleCreateModal = styled(Modal)`
   .ant-modal-body {
     display: flex;
     flex-direction: column;
-    height: 450px;
+    /* height: 450px; */
   }
 `;
 

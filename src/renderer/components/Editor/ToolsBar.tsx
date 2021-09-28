@@ -25,6 +25,7 @@ import ProjectInfoModal from "./ProjectInfoModal";
 const buttons = [
   { name: TOOLS_BAR_BUTTON.CREATE, icon: <PlusOutlined /> },
   { name: TOOLS_BAR_BUTTON.OPEN, icon: <FolderOpenOutlined /> },
+  { name: TOOLS_BAR_BUTTON.JUMP, icon: <FolderOpenOutlined /> },
   { name: TOOLS_BAR_BUTTON.PLACEHOLDER, icon: <div /> },
   { name: TOOLS_BAR_BUTTON.PLACEHOLDER, icon: <div /> },
   { name: TOOLS_BAR_BUTTON.PLACEHOLDER, icon: <div /> },
@@ -49,6 +50,10 @@ const ToolsBar: React.FC = () => {
         break;
       }
       case TOOLS_BAR_BUTTON.SAVE: {
+        break;
+      }
+      case TOOLS_BAR_BUTTON.JUMP: {
+        remote.shell.showItemInFolder(projectData.projectRoot);
         break;
       }
       case TOOLS_BAR_BUTTON.CREATE: {
@@ -125,9 +130,8 @@ const ToolsBar: React.FC = () => {
         destroyOnClose
         getContainer={thisRef.current}
         visible={projectInfoVisible}
-        onCancel={() => {
-          setProjectInfoVisible(false);
-        }}
+        onCancel={() => setProjectInfoVisible(false)}
+        onOk={() => setProjectInfoVisible(false)}
       />
     </StyleToolsBar>
   );

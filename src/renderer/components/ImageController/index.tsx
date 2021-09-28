@@ -8,7 +8,10 @@ import {
   useAbsolutePathInProject,
   useProjectImageUrlBySrc
 } from "@/hooks/project/index";
-import { useAbsolutePathInSource, useSourceImageUrl } from "@/hooks/source/index";
+import {
+  useAbsolutePathInSource,
+  useSourceImageUrl
+} from "@/hooks/source/index";
 import { TypeSourceDefineImage } from "src/types/source";
 
 import SourceStatus from "./SourceStatus";

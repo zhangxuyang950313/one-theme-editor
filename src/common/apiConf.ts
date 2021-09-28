@@ -151,7 +151,8 @@ const apiConfig = {
   }),
   // 写入本地文件
   WRITE_FILE: createApiConf({
-    path: "/file/write"
+    path: "/file/write",
+    bodyKeys: []
   }),
   // 删除本地文件
   DELETE_FILE: createApiConf({

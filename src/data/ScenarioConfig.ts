@@ -1,19 +1,20 @@
 import {
   TypePackConf,
   TypeApplyConf,
-  TypeInfoTempConf,
+  TypeProjectInfoConf,
   TypeScenarioConf,
   TypeScenarioOption
 } from "src/types/source";
 import { AbstractDataModel } from "./AbstractDataModel";
 
 // 描述信息模板数据
-export class InfoTemplate extends AbstractDataModel<TypeInfoTempConf> {
-  protected data: TypeInfoTempConf = {
+export class ProjectInfoConfig extends AbstractDataModel<TypeProjectInfoConf> {
+  protected data: TypeProjectInfoConf = {
     output: "",
-    content: ""
+    propsMapper: [],
+    template: ""
   };
-  static default = new InfoTemplate().create();
+  static default = new ProjectInfoConfig().create();
 }
 
 // 打包配置数据
@@ -41,7 +42,7 @@ export default class ScenarioConfig extends AbstractDataModel<TypeScenarioConf> 
   protected data: TypeScenarioConf = {
     name: "",
     md5: "",
-    infoTemplate: InfoTemplate.default,
+    projectInfoConfig: ProjectInfoConfig.default,
     packageConfig: PackageConfig.default,
     applyConfig: ApplyConfig.default
   };
