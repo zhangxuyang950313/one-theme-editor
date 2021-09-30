@@ -1,5 +1,6 @@
 import http from "http";
 import { Server } from "socket.io";
+import logSymbols from "log-symbols";
 import packProject from "./packProject";
 import { watchFiles } from "./fileWatcher";
 
@@ -11,9 +12,9 @@ export default function registerSocket(server: http.Server): void {
   });
 
   io.on("connection", socket => {
-    console.log(`socket 已被连接`);
+    console.log(logSymbols.success, `socket 已被连接`, socket.id);
     socket.on("disconnect", () => {
-      console.log("socket 断开连接");
+      console.log(logSymbols.info, "socket 断开连接");
     });
     // 打包工程
     packProject(socket);

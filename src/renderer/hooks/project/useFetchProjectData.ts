@@ -31,7 +31,7 @@ export default function useFetchProjectData(): [
     return apiGetProjectByUUID(uuid)
       .then(project => {
         if (!project) throw new Error(ERR_CODE[2005]);
-        console.log(`载入工程：: ${uuid}`);
+        console.log(`载入工程: ${uuid}`, project);
         dispatch(ActionSetProjectData(project));
         setStatus(LOAD_STATUS.SUCCESS);
       })

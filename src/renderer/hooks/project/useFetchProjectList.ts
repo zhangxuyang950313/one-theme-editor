@@ -28,7 +28,7 @@ export default function useFetchProjectList(): {
     await sleep(300);
     apiGetProjectList(scenarioOption, registerCancelToken)
       .then(projects => {
-        console.log("获取工程列表：", projects);
+        console.log({ projects });
         setProjectList(projects);
         dispatch(ActionSetProjectList(projects));
         setStatus(LOAD_STATUS.SUCCESS);
