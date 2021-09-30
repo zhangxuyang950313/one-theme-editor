@@ -12,7 +12,7 @@ export class ProjectInfo extends AbstractDataModel<TypeProjectInfo> {
 export default class ProjectData extends AbstractDataModel<TypeProjectDataDoc> {
   protected data: TypeProjectDataDoc = {
     uuid: "",
-    scenarioConfig: new ScenarioConfig().create(),
+    scenarioConfig: ScenarioConfig.default,
     projectRoot: "",
     projectInfo: ProjectInfo.default,
     uiVersion: UiVersion.default,

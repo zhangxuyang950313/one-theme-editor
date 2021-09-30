@@ -8,16 +8,15 @@ import { LOAD_STATUS } from "src/enum";
 import ModuleSelector from "@/components/Editor/ModuleSelector";
 import EditorToolsBar from "@/components/Editor/ToolsBar";
 import EditorContainer from "@/components/Editor/index";
-import usePatchPageSourceData from "@/hooks/project/usePatchPageSourceData";
-import usePatchProjectInfoData from "@/hooks/project/usePatchProjectInfoData";
-import useWatchFiles from "@/hooks/project/useWatchFiles";
 import useWatchProjectFiles from "@/hooks/project/useWatchProjectFiles";
-import portfinder from "portfinder";
+// import usePatchPageSourceData from "@/hooks/project/usePatchPageSourceData";
+// import usePatchProjectInfoData from "@/hooks/project/usePatchProjectInfoData";
+// import useWatchFiles from "@/hooks/project/useWatchFiles";
 
 const Editor: React.FC = () => {
   const history = useHistory();
   const [projectData, status, handleFetch] = useInitProject();
-  const handleWatchFiles = useWatchFiles();
+  // const handleWatchFiles = useWatchFiles();
   // usePatchPageSourceData();
   // usePatchProjectInfoData();
   useWatchProjectFiles();

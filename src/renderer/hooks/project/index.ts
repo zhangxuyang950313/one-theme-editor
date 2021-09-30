@@ -3,12 +3,6 @@ import { useMergeLoadStatus } from "@/hooks/index";
 import { useSourceConfigRootWithNS } from "@/hooks/source/index";
 import { ActionInitEditor } from "@/store/editor/action";
 import {
-  selectProjectFileDataMap,
-  selectProjectXmlFileDataMap,
-  selectProjectImageFileDataMap,
-  selectProjectData
-} from "@/store/editor/selector";
-import {
   useEditorDispatch,
   useEditorSelector,
   useStarterSelector
@@ -21,26 +15,25 @@ import {
 
 import XMLNodeElement from "src/server/compiler/XMLNodeElement";
 import { useLayoutEffect, useEffect, useState } from "react";
-import { LOAD_STATUS } from "src/enum";
+import { LOAD_STATUS, PROJECT_FILE_TYPE } from "src/enum";
 import {
   TypeScenarioConf,
   TypeProjectInfoConf,
   TypeSourceConfig,
   TypeSourcePageData
 } from "src/types/source";
-import { selectProjectList } from "@/store/starter/selector";
 import { useImagePrefix } from "../image";
 import useFetchProjectData from "../project/useFetchProjectData";
 import useFetchSourceConfig from "../source/useFetchSourceConfig";
 import useFetchPageConfList from "../source/useFetchPageConfList";
 
 export function useProjectList(): TypeProjectDataDoc[] {
-  return useStarterSelector(selectProjectList);
+  return useStarterSelector(state => state.projectList);
 }
 
 // 工程数据
 export function useProjectData(): TypeProjectDataDoc {
-  return useEditorSelector(selectProjectData);
+  return useEditorSelector(state => state.projectData);
 }
 
 // 工程 uuid
@@ -135,7 +128,9 @@ export function useResolveSourcePath(relativePath: string): string {
 }
 
 export function useProjectFileDataMap(): Map<string, TypeProjectFileData> {
-  const projectFileDataMap = useEditorSelector(selectProjectFileDataMap);
+  const projectFileDataMap = useEditorSelector(
+    state => state.projectFileDataMap
+  );
   return new Map(Object.entries(projectFileDataMap));
 }
 
@@ -143,7 +138,16 @@ export function useProjectFileDataMap(): Map<string, TypeProjectFileData> {
  * @returns 工程图片文件数据map
  */
 export function useProjectImageUrlBySrc(src: string): string {
-  const imageFileDataMap = useEditorSelector(selectProjectImageFileDataMap);
+  const imageFileDataMap = useEditorSelector(state => {
+    const entries = Object.entries(state.projectFileDataMap).flatMap(
+      ([key, val]) => {
+        return val.type === PROJECT_FILE_TYPE.IMAGE
+          ? [[key, val] as [string, typeof val]]
+          : [];
+      }
+    );
+    return new Map(entries);
+  });
   const imageData = imageFileDataMap.get(src);
   return imageData?.url || "";
 }
@@ -152,7 +156,16 @@ export function useProjectImageUrlBySrc(src: string): string {
  * @returns 工程中 xml 文件数据map
  */
 export function useProjectXmlValueBySrc(name: string, src: string): string {
-  const xmlFileDataMap = useEditorSelector(selectProjectXmlFileDataMap);
+  const xmlFileDataMap = useEditorSelector(state => {
+    const entries = Object.entries(state.projectFileDataMap).flatMap(
+      ([key, val]) => {
+        return val.type === PROJECT_FILE_TYPE.XML
+          ? [[key, val] as [string, typeof val]]
+          : [];
+      }
+    );
+    return new Map(entries);
+  });
   const xmlData = xmlFileDataMap.get(src);
   if (!xmlData?.element) return "";
   return new XMLNodeElement(xmlData.element)

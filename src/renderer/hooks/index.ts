@@ -6,7 +6,6 @@ import {
   ActionSetAppConfig,
   ActionSetServerPort
 } from "@/store/global/modules/base/action";
-import { selectAppPath } from "@/store/global/modules/base/selector";
 import { useGlobalSelector, useGlobalDispatch } from "@/store/index";
 import { TypePathConfig } from "src/types/extraConfig";
 import { sleep } from "src/utils/index";
@@ -61,7 +60,7 @@ export function useAsyncUpdater(): (updater: () => void) => void {
 
 // 获取编辑器路径配置
 export function usePathConfig(): Partial<TypePathConfig> {
-  return useGlobalSelector(selectAppPath);
+  return useGlobalSelector(state => state.base.appPath);
 }
 
 // 初始化编辑器配置数据
@@ -84,7 +83,7 @@ export function useInitEditorConfig(): [LOAD_STATUS, () => Promise<void>] {
       ELECTRON_APP_PATH: remote.app.getAppPath()
     };
     electronStore.set("pathConfig", pathConfig);
-    dispatch(ActionSetServerPort(electronStore.get("hostname")));
+    dispatch(ActionSetServerPort(electronStore.get("serverPort")));
     dispatch(ActionSetAppConfig(pathConfig));
     await sleep(300);
     setStatus(LOAD_STATUS.SUCCESS);

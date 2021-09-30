@@ -1,16 +1,14 @@
 import { useEffect } from "react";
-import { apiGetProjectFileData, apiUpdateProject } from "@/request";
+import { apiGetProjectFileData } from "@/request";
 import { useEditorDispatch } from "@/store";
 import { ActionPatchProjectSourceData } from "@/store/editor/action";
 import { FILE_EVENT } from "src/enum";
-import { ProjectInfo } from "src/data/ProjectData";
 import { useFSWatcherCreator } from "../fileWatcher";
 import {
   useProjectInfoConfig,
   useProjectRoot,
   useProjectUUID
 } from "../project";
-import useWatchProjectFile from "./useWatchProjectFile";
 
 /**
  * 监听当前 infoTemplate 目标文件
@@ -22,9 +20,6 @@ export default function usePatchProjectInfoData(): void {
   const projectUUID = useProjectUUID();
   const dispatch = useEditorDispatch();
   const createWatcher = useFSWatcherCreator();
-  useWatchProjectFile((file, status) => {
-    console.log({ file, status });
-  });
   useEffect(() => {
     if (!uuid || !projectRoot) return;
     const watcher = createWatcher({ cwd: projectRoot });

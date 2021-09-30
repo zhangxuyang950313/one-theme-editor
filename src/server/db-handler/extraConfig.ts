@@ -39,8 +39,6 @@ export async function getServerConfig(): Promise<TypeServerConfig> {
   const serverConfig = await extraData.findOne<TypeServerConfig>({
     type: EXTRA_DATA_TYPE.PATH_CONFIG
   });
-  const all = await extraData.find({});
-  console.log({ serverConfig }, all);
   return new ServerConfig().setBatch(serverConfig).create();
 }
 

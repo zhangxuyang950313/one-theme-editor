@@ -1,29 +1,9 @@
 import path from "path";
-import { selectSourceConfigDir } from "@/store/global/modules/base/selector";
 import { ActionSetScenarioOption } from "@/store/starter/action";
-import {
-  selectScenarioOption,
-  selectScenarioOptionList,
-  selectSourceOptionList
-} from "@/store/starter/selector";
 import {
   ActionSetCurrentModule,
   ActionSetCurrentPage
 } from "@/store/editor/action";
-import {
-  selectSourceConfigPath,
-  selectSourceConfig,
-  selectSourceModuleList,
-  selectSourceModuleConf,
-  selectSourcePageGroupList,
-  selectSourcePageConf,
-  selectSourceTypeList,
-  selectLayoutSourceList,
-  selectLayoutImageList,
-  selectLayoutTextList,
-  selectSourceDefineList,
-  selectSourcePageData
-} from "@/store/editor/selector";
 import {
   TypeScenarioOption,
   TypeSourceConfig,
@@ -45,14 +25,15 @@ import {
   useEditorSelector,
   useGlobalSelector
 } from "@/store/index";
+import { ELEMENT_TAG } from "src/enum";
 import { useImagePrefix } from "../image";
 
 export function useScenarioOptionList(): TypeScenarioOption[] {
-  return useStarterSelector(selectScenarioOptionList);
+  return useStarterSelector(state => state.scenarioOptionList);
 }
 
 export function useSourceOptionList(): TypeSourceOption[] {
-  return useStarterSelector(selectSourceOptionList);
+  return useStarterSelector(state => state.sourceOptionList);
 }
 
 /**
@@ -60,7 +41,7 @@ export function useSourceOptionList(): TypeSourceOption[] {
  * @returns
  */
 export function useSourceConfig(): TypeSourceConfig {
-  return useEditorSelector(selectSourceConfig);
+  return useEditorSelector(state => state.sourceConfig);
 }
 
 /**
@@ -68,7 +49,7 @@ export function useSourceConfig(): TypeSourceConfig {
  * @returns
  */
 export function useSourceConfigDir(): string {
-  return useGlobalSelector(selectSourceConfigDir);
+  return useGlobalSelector(state => state.base.appPath.SOURCE_CONFIG_DIR || "");
 }
 
 /**
@@ -90,7 +71,9 @@ export function useScenarioOption(): [
   (data: TypeScenarioOption) => void
 ] {
   const dispatch = useStarterDispatch();
-  const currentOption = useStarterSelector(selectScenarioOption);
+  const currentOption = useStarterSelector(
+    state => state.scenarioOptionSelected
+  );
   return [currentOption, data => dispatch(ActionSetScenarioOption(data))];
 }
 
@@ -99,7 +82,7 @@ export function useScenarioOption(): [
  * @returns
  */
 export function useSourceConfigPath(): string {
-  return useEditorSelector(selectSourceConfigPath);
+  return useEditorSelector(state => state.sourceConfigPath);
 }
 
 /**
@@ -107,7 +90,7 @@ export function useSourceConfigPath(): string {
  * @returns
  */
 export function useSourceModuleList(): TypeSourceModuleConf[] {
-  return useEditorSelector(selectSourceModuleList);
+  return useEditorSelector(state => state.sourceModuleList);
 }
 
 /**
@@ -119,7 +102,9 @@ export function useSourceModuleConf(): [
   (data: TypeSourceModuleConf) => void
 ] {
   const dispatch = useEditorDispatch();
-  const sourceModuleConf = useEditorSelector(selectSourceModuleConf);
+  const sourceModuleConf = useEditorSelector(
+    state => state.sourceModuleSelected
+  );
   return [sourceModuleConf, data => dispatch(ActionSetCurrentModule(data))];
 }
 
@@ -127,7 +112,7 @@ export function useSourceModuleConf(): [
  * 当前当前模块页面组列表
  */
 export function useSourcePageGroupList(): TypeSourcePageGroupConf[] {
-  return useEditorSelector(selectSourcePageGroupList);
+  return useEditorSelector(state => state.sourceModuleSelected.groupList || []);
 }
 
 /**
@@ -139,47 +124,61 @@ export function useSourcePageConf(): [
   (data: TypeSourcePageConf) => void
 ] {
   const dispatch = useEditorDispatch();
-  const pageConf = useEditorSelector(selectSourcePageConf);
+  const pageConf = useEditorSelector(state => state.sourcePageSelected);
   return [pageConf, data => dispatch(ActionSetCurrentPage(data))];
 }
 
 export function useSourcePageData(): TypeSourcePageData | null {
-  return useEditorSelector(selectSourcePageData);
+  return useEditorSelector(state => {
+    const pageConfSrc = state.sourcePageSelected.src;
+    return state.sourcePageDataMap[pageConfSrc] || null;
+  });
 }
 
 /**
  * 获取当前元素类型配置
  */
 export function useSourceTypeList(): TypeSourceTypeConf[] {
-  return useEditorSelector(selectSourceTypeList);
+  return useEditorSelector(state => state.sourceTypeList);
 }
 
 /**
  * 获取素材定义数据列表
  */
 export function useSourceDefineList(): TypeSourceDefine[] {
-  return useEditorSelector(selectSourceDefineList);
+  const sourcePageSelected = useSourcePageData();
+  return sourcePageSelected?.sourceDefineList || [];
 }
 
 /**
  * 获取当前所有元素列表
  */
 export function useLayoutElementList(): TypeLayoutElement[] {
-  return useEditorSelector(selectLayoutSourceList);
+  return useEditorSelector(state => {
+    const pageConfSrc = state.sourcePageSelected.src;
+    if (!pageConfSrc) return [];
+    return state.sourcePageDataMap[pageConfSrc]?.layoutElementList || [];
+  });
 }
 
 /**
  * 获取图片类型元素列表
  */
 export function useLayoutImageList(): TypeLayoutImageElement[] {
-  return useEditorSelector(selectLayoutImageList);
+  const layoutElementList = useLayoutElementList();
+  return layoutElementList.flatMap(item =>
+    item.sourceTag === ELEMENT_TAG.Image ? [item] : []
+  );
 }
 
 /**
  * 获取 xml 类型元素列表
  */
 export function useTextSourceList(): TypeLayoutTextElement[] {
-  return useEditorSelector(selectLayoutTextList);
+  const layoutElementList = useLayoutElementList();
+  return layoutElementList.flatMap(item =>
+    item.sourceTag === ELEMENT_TAG.Text ? [item] : []
+  );
 }
 
 /**
