@@ -1,4 +1,6 @@
+import path from "path";
 import {
+  app,
   Menu,
   BrowserWindow,
   BrowserWindowConstructorOptions,
@@ -6,6 +8,8 @@ import {
 } from "electron";
 import { isDev } from "./constant";
 import menuTemplate from "./menu";
+
+const preload = path.resolve(app.getAppPath(), "../release.server/index");
 
 const windowNormalizeOptions: BrowserWindowConstructorOptions = {
   webPreferences: {
@@ -15,7 +19,8 @@ const windowNormalizeOptions: BrowserWindowConstructorOptions = {
     nodeIntegrationInWorker: true,
     enableRemoteModule: true,
     contextIsolation: false,
-    devTools: isDev || true
+    devTools: isDev || true,
+    preload
     // maximize: true
   },
   // frame: process.platform === "darwin",

@@ -1,4 +1,4 @@
-import { ElectronPathCollection } from "src/data/AppPath";
+import { ElectronPathCollection } from "src/data/PathCollection";
 import { TypeReleaseXmlTempPayload } from "src/types/request";
 import {
   TypeCreateProjectPayload,

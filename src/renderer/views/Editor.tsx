@@ -20,9 +20,6 @@ const Editor: React.FC = () => {
   const handleWatchFiles = useWatchFiles();
   // usePatchPageSourceData();
   // usePatchProjectInfoData();
-  portfinder.getPortPromise().then(port => {
-    console.log(port);
-  });
   useWatchProjectFiles();
   switch (status) {
     case LOAD_STATUS.INITIAL:

@@ -1,10 +1,8 @@
 import io from "socket.io-client";
-import { HOST, PORT } from "src/common/config";
-import socketConfig, { SOCKET_EVENT } from "src/common/socketConf";
+import electronStore from "src/common/electronStore";
+import { SOCKET_EVENT } from "src/common/socketConf";
 
-const URL = `http://${HOST}:${PORT}`;
-
-const project = io(`${URL}`);
+const project = io(electronStore.get("hostname"));
 
 project.on("disconnect", () => {
   console.log("断开连接，重连");

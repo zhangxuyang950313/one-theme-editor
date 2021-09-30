@@ -3,7 +3,7 @@ import webpack, { DefinePlugin } from "webpack";
 import WebpackBar from "webpackbar";
 import DotEnvPlugin from "dotenv-webpack";
 import { CleanWebpackPlugin } from "clean-webpack-plugin";
-import { extensions, entryFile, outputDir } from "./constant";
+import { extensions, entryFile, outputDir, alias, rootDir } from "./constant";
 
 const config: webpack.ConfigurationFactory = (env, args) => {
   const isDev = args.mode !== "production";
@@ -25,7 +25,11 @@ const config: webpack.ConfigurationFactory = (env, args) => {
       minimize: !isDev
     },
     resolve: {
-      extensions
+      extensions,
+      alias: {
+        ...alias,
+        "@": path.resolve(rootDir, "src/server")
+      }
     },
     module: {
       rules: [

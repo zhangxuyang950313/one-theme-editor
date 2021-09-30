@@ -107,8 +107,9 @@ export enum PACK_TYPE {
 }
 
 // 扩展数据字段
-export enum EXTRA_DATA_PROP {
-  PATH_CONFIG = "pathConfig"
+export enum EXTRA_DATA_TYPE {
+  PATH_CONFIG = "pathConfig",
+  SERVER_CONFIG = "server"
 }
 
 // 工具栏按钮

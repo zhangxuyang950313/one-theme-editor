@@ -1,7 +1,7 @@
 import ACTION_TYPES from "@/store/global/actionType";
 import { updateState } from "@/store/utils";
 import { TypePathConfig } from "src/types/extraConfig";
-import AppPath from "src/data/AppPath";
+import PathCollection from "src/data/PathCollection";
 import { TypeActions } from "./action";
 
 type TypeBaseState = {
@@ -10,8 +10,8 @@ type TypeBaseState = {
 };
 
 const baseState: Required<TypeBaseState> = {
-  port: 30000,
-  appPath: new AppPath().create()
+  port: 0,
+  appPath: PathCollection.default
 };
 
 export default function BaseReducer(
@@ -20,7 +20,7 @@ export default function BaseReducer(
 ): TypeBaseState {
   switch (action.type) {
     case ACTION_TYPES.SET_SERVER_PORT: {
-      return updateState(state, { port: Number(action.payload) ?? 30000 });
+      return updateState(state, { port: Number(action.payload) ?? 0 });
     }
     case ACTION_TYPES.SET_APP_PATH: {
       return updateState(state, { appPath: action.payload });

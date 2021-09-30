@@ -1,26 +1,46 @@
-import Store from "electron-store";
+import ElectronStore from "electron-store";
+import PathCollection from "src/data/PathCollection";
+import { TypePathConfig } from "src/types/extraConfig";
 
-const store = new Store();
-export const initStore = (): void => {
-  store.set("source", 10005);
+type TypeElectronStore = {
+  serverPort: number;
+  hostname: string;
+  pathConfig: TypePathConfig;
 };
-export const getStoreInstance = (): Store<Record<string, unknown>> => {
-  return store;
+const defaultState: TypeElectronStore = {
+  serverPort: 0,
+  hostname: "127.0.0.1:0",
+  pathConfig: PathCollection.default
 };
-export const clearStore = (): void => {
-  if (store) {
-    store.clear();
+
+// class Store {
+//   private store: ElectronStore<TypeElectronStore>;
+//   constructor(options: ElectronStore.Options<TypeElectronStore>) {
+//     this.store = new ElectronStore<TypeElectronStore>(options);
+//   }
+
+//   getInstance() {
+//     return this.store;
+//   }
+
+//   get(key: keyof TypeElectronStore) {
+//     return this.store.get(key);
+//   }
+
+//   set<K extends keyof TypeElectronStore>(key: K, data: TypeElectronStore[K]) {
+//     this.store.set(key, data);
+//   }
+//   clear() {
+//     store.clear();
+//   }
+// }
+
+const electronStore = new ElectronStore<TypeElectronStore>();
+
+for (const key in defaultState) {
+  if (!defaultState[key as keyof TypeElectronStore]) {
+    electronStore.set(key, defaultState[key as keyof TypeElectronStore]);
   }
-};
-export const setStore = <T>(key: string, mes: T): void => {
-  if (store) {
-    store.set(key, mes);
-  }
-};
-export const getStore = (key: string): unknown => {
-  if (store) {
-    return store.get(key);
-  } else {
-    return null;
-  }
-};
+}
+
+export default electronStore;

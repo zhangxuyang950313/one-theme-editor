@@ -1,17 +1,17 @@
 import { Canceler } from "axios";
 import { useLayoutEffect, useEffect, useState } from "react";
-import { InputProps, message } from "antd";
+import { InputProps } from "antd";
 import { remote } from "electron";
-import { apiSwopPathConfig } from "@/request/extra";
 import {
-  selectAppPath,
-  selectServerPort
-} from "@/store/global/modules/base/selector";
-import { ActionSetAppConfig } from "@/store/global/modules/base/action";
+  ActionSetAppConfig,
+  ActionSetServerPort
+} from "@/store/global/modules/base/action";
+import { selectAppPath } from "@/store/global/modules/base/selector";
 import { useGlobalSelector, useGlobalDispatch } from "@/store/index";
 import { TypePathConfig } from "src/types/extraConfig";
 import { sleep } from "src/utils/index";
 import { LOAD_STATUS } from "src/enum";
+import electronStore from "src/common/electronStore";
 
 export function useDocumentTitle(): [string, typeof setTitleMethod] {
   const setTitleMethod = (title: string) => {
@@ -64,38 +64,30 @@ export function usePathConfig(): Partial<TypePathConfig> {
   return useGlobalSelector(selectAppPath);
 }
 
-// 生成当前服务域名
-export function useServerHost(): string {
-  const serverPort = useGlobalSelector(selectServerPort);
-  return `http://localhost:${serverPort}`;
-}
-
 // 初始化编辑器配置数据
 export function useInitEditorConfig(): [LOAD_STATUS, () => Promise<void>] {
   const [status, setStatus] = useState(LOAD_STATUS.INITIAL);
   const dispatch = useGlobalDispatch();
   const fetch = async () => {
     setStatus(LOAD_STATUS.LOADING);
-    try {
-      const data = await apiSwopPathConfig({
-        ELECTRON_LOCAL: remote.app.getLocale(),
-        ELECTRON_HOME: remote.app.getPath("home"),
-        ELECTRON_DESKTOP: remote.app.getPath("desktop"),
-        ELECTRON_CACHE: remote.app.getPath("cache"),
-        ELECTRON_APP_DATA: remote.app.getPath("appData"),
-        ELECTRON_DOCUMENTS: remote.app.getPath("documents"),
-        ELECTRON_DOWNLOADS: remote.app.getPath("downloads"),
-        ELECTRON_EXE: remote.app.getPath("exe"),
-        ELECTRON_LOGS: remote.app.getPath("logs"),
-        ELECTRON_APP_PATH: remote.app.getAppPath()
-      });
-      dispatch(ActionSetAppConfig(data));
-      await sleep(300);
-      setStatus(LOAD_STATUS.SUCCESS);
-    } catch (err) {
-      message.error({ content: String(err) });
-      setStatus(LOAD_STATUS.FAILED);
-    }
+    const pathConfig = {
+      ...electronStore.get("pathConfig"),
+      ELECTRON_LOCAL: remote.app.getLocale(),
+      ELECTRON_HOME: remote.app.getPath("home"),
+      ELECTRON_DESKTOP: remote.app.getPath("desktop"),
+      ELECTRON_CACHE: remote.app.getPath("cache"),
+      ELECTRON_APP_DATA: remote.app.getPath("appData"),
+      ELECTRON_DOCUMENTS: remote.app.getPath("documents"),
+      ELECTRON_DOWNLOADS: remote.app.getPath("downloads"),
+      ELECTRON_EXE: remote.app.getPath("exe"),
+      ELECTRON_LOGS: remote.app.getPath("logs"),
+      ELECTRON_APP_PATH: remote.app.getAppPath()
+    };
+    electronStore.set("pathConfig", pathConfig);
+    dispatch(ActionSetServerPort(electronStore.get("hostname")));
+    dispatch(ActionSetAppConfig(pathConfig));
+    await sleep(300);
+    setStatus(LOAD_STATUS.SUCCESS);
   };
   useLayoutEffect(() => {
     fetch();

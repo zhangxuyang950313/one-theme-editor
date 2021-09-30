@@ -15,6 +15,8 @@ async function setupDevTools() {
 app.allowRendererProcessReuse = true;
 
 app.on("ready", () => {
+  console.log(`主进程进程号 ${process.pid}`);
+
   const win = mainWindow();
   // win.loadFile(htmlFile);
   win.loadURL(localUrl);

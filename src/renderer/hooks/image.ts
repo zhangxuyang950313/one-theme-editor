@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef } from "react";
-import { useServerHost } from "@/hooks/index";
+import electronStore from "src/common/electronStore";
 
 // 返回图片前缀
 export function useImagePrefix(): string {
-  const host = useServerHost();
-  return `${host}/image?filepath=`;
+  const hostname = electronStore.get("hostname");
+  return `http://${hostname}/image?filepath=`;
 }
 
 /**

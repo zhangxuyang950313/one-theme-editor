@@ -1,10 +1,10 @@
 import axios, { AxiosInstance } from "axios";
-import { HOST, PORT } from "src/common/config";
+import electronStore from "src/common/electronStore";
 import { TypeGetCanceler } from "src/types/request";
 
 export const createHttp = (getCanceler?: TypeGetCanceler): AxiosInstance => {
   const http = axios.create({
-    baseURL: `http://${HOST}:${PORT}`,
+    baseURL: `http://${electronStore.get("hostname")}`,
     cancelToken: getCanceler && new axios.CancelToken(getCanceler),
     validateStatus: status => [200, 400].includes(status)
   });

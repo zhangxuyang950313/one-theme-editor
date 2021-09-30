@@ -11,6 +11,7 @@ import {
 import XmlFileCompiler from "server/compiler/XmlFileCompiler";
 import PageConfig from "server/compiler/PageConfig";
 import PackageUtil from "server/utils/PackageUtil";
+import electronStore from "src/common/electronStore";
 
 export async function getPageDefineSourceData(
   uuid: string,
@@ -43,8 +44,8 @@ export function getProjectFileData(
   const absPath = path.join(projectRoot, src);
   const fileExists = fse.pathExistsSync(absPath);
   if (filenameIsImage(src)) {
-    // TODO host
-    const url = `http://localhost:30000/image?filepath=${absPath}&time=${Date.now()}`;
+    const hostname = electronStore.get("hostname");
+    const url = `http://${hostname}/image?filepath=${absPath}&time=${Date.now()}`;
     const data = new ProjectFileImageData();
     data.set("src", src);
     data.set("url", url);

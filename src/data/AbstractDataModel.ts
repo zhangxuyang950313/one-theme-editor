@@ -14,9 +14,8 @@
  *  .create()
  * ```
  */
-export abstract class AbstractDataModel<T> {
+export abstract class AbstractDataModel<T extends Record<string, unknown>> {
   protected abstract data: T;
-  protected defaultVal = { ...this.create() };
   has<K extends keyof T>(k: K): boolean {
     return k in this.data;
   }
@@ -29,9 +28,12 @@ export abstract class AbstractDataModel<T> {
     }
     return this;
   }
-  // default(): T {
-  //   return this.defaultVal;
-  // }
+  setBatch(data: T): this {
+    for (const key in data) {
+      this.set(key, data[key]);
+    }
+    return this;
+  }
   create(): T {
     return this.data;
   }
