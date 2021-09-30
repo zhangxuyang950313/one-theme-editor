@@ -28,11 +28,14 @@ export type TypePackProcess = {
   data: any;
 };
 
-// 创建文件监视器
-export type TypeCreateFileWatcherPayload = WatchOptions;
+// 添加监听文件参数
+export type TypeWatchFilesPayload = {
+  options: WatchOptions;
+  files: string | ReadonlyArray<string>;
+};
 
-// 添加监听文件参数，同 watcher.add(x: string | ReadonlyArray<string>)
-export type TypeWatchFilePayload = string | ReadonlyArray<string>;
+// 取消监听文件参数
+export type TypeUnWatchFilesPayload = TypeWatchFilesPayload["files"];
 
 // 同步文件内容
 export type TypeSyncFileContent = {
