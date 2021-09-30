@@ -31,11 +31,8 @@ import {
 import { selectProjectList } from "@/store/starter/selector";
 import { useImagePrefix } from "../image";
 import useFetchProjectData from "../project/useFetchProjectData";
-import usePatchPageSourceData from "../project/usePatchPageSourceData";
 import useFetchSourceConfig from "../source/useFetchSourceConfig";
 import useFetchPageConfList from "../source/useFetchPageConfList";
-import useSyncFileContent from "./useSyncFileContent";
-import usePatchProjectInfoData from "./usePatchProjectInfoData";
 
 export function useProjectList(): TypeProjectDataDoc[] {
   return useStarterSelector(selectProjectList);
@@ -96,8 +93,6 @@ export function useInitProject(): [
   const [pageConfigList, step3Status, handleFetch3] = useFetchPageConfList();
   const status = useMergeLoadStatus([step1Status, step2Status, step3Status]);
   const dispatch = useEditorDispatch();
-  usePatchPageSourceData();
-  usePatchProjectInfoData();
   // useSyncFileContent();
   useLayoutEffect(() => {
     // 退出退出当前组件后初始化数据

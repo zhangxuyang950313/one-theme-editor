@@ -1,6 +1,6 @@
 import http from "http";
-import logSymbols from "log-symbols";
 import express from "express";
+import logSymbols from "log-symbols";
 import { PORT, HOST } from "src/common/config";
 import registerServiceController from "./controllers/index";
 import registerSocket from "./sockets/index";

@@ -8,10 +8,22 @@ import { LOAD_STATUS } from "src/enum";
 import ModuleSelector from "@/components/Editor/ModuleSelector";
 import EditorToolsBar from "@/components/Editor/ToolsBar";
 import EditorContainer from "@/components/Editor/index";
+import usePatchPageSourceData from "@/hooks/project/usePatchPageSourceData";
+import usePatchProjectInfoData from "@/hooks/project/usePatchProjectInfoData";
+import useWatchFiles from "@/hooks/project/useWatchFiles";
+import useWatchProjectFiles from "@/hooks/project/useWatchProjectFiles";
+import portfinder from "portfinder";
 
 const Editor: React.FC = () => {
   const history = useHistory();
   const [projectData, status, handleFetch] = useInitProject();
+  const handleWatchFiles = useWatchFiles();
+  // usePatchPageSourceData();
+  // usePatchProjectInfoData();
+  portfinder.getPortPromise().then(port => {
+    console.log(port);
+  });
+  useWatchProjectFiles();
   switch (status) {
     case LOAD_STATUS.INITIAL:
     case LOAD_STATUS.LOADING: {

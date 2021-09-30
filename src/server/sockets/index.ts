@@ -1,7 +1,7 @@
 import http from "http";
 import { Server } from "socket.io";
 import packProject from "./packProject";
-import syncFileData, { cancelSyncFileData } from "./syncFileData";
+import { watchFileData } from "./fileWatcher";
 
 export default function registerSocket(server: http.Server): void {
   // 创建 io 实例
@@ -18,8 +18,8 @@ export default function registerSocket(server: http.Server): void {
     // 打包工程
     packProject(socket);
     // 同步文件数据
-    syncFileData(socket);
+    watchFileData(socket);
     // 取消同步文件数据
-    cancelSyncFileData(socket);
+    // unwatchFileData(socket);
   });
 }

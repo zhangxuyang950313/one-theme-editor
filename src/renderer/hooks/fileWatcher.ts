@@ -4,7 +4,7 @@ import logSymbols from "log-symbols";
 import { WatchOptions, FSWatcher } from "chokidar";
 import { useEffect, useState } from "react";
 import { useProjectRoot } from "@/hooks/project/index";
-import { FILE_STATUS } from "src/enum/index";
+import { FILE_EVENT } from "src/enum/index";
 
 const mapWatchers = (count: number, options?: WatchOptions) => {
   return new Array(count).fill(0).map(() => new FSWatcher(options));
@@ -21,10 +21,10 @@ export function useFSWatcherCreator(): (options?: WatchOptions) => FSWatcher {
       if (!watcher) return;
       const watcherList = watcher.getWatched();
       watcher.close().then(() => {
-        console.log("111关闭文件监听", watcherList);
+        console.log("关闭文件监听", watcherList);
       });
     };
-  }, []);
+  }, [watcher]);
   return (options?: WatchOptions) => {
     if (watcher) return watcher;
     console.log("创建文件监听", options);
@@ -98,9 +98,9 @@ export function useProjectFileWatcher(
     watchers.forEach((watcher, index) => {
       watcher.unwatch(paths[index]);
       watcher
-        .on(FILE_STATUS.ADD, listener)
-        .on(FILE_STATUS.CHANGE, listener)
-        .on(FILE_STATUS.UNLINK, listener)
+        .on(FILE_EVENT.ADD, listener)
+        .on(FILE_EVENT.CHANGE, listener)
+        .on(FILE_EVENT.UNLINK, listener)
         .add(paths[index]);
     });
     console.debug("开始监听", paths);
@@ -144,20 +144,20 @@ export function useReleaseListWatcher(releaseList: string[]): string[] {
       watcher.setMaxListeners(10);
       watcher
         // 增加/重命名
-        .on(FILE_STATUS.ADD, relative => {
-          console.log(FILE_STATUS.ADD, relative);
+        .on(FILE_EVENT.ADD, relative => {
+          console.log(FILE_EVENT.ADD, relative);
           set.add(relative);
           updateList();
         })
         // 变更
-        .on(FILE_STATUS.CHANGE, relative => {
-          console.log(FILE_STATUS.CHANGE, relative);
+        .on(FILE_EVENT.CHANGE, relative => {
+          console.log(FILE_EVENT.CHANGE, relative);
           set.add(relative);
           updateList();
         })
         // 删除/移动/重命名
-        .on(FILE_STATUS.UNLINK, relative => {
-          console.log(FILE_STATUS.UNLINK, relative);
+        .on(FILE_EVENT.UNLINK, relative => {
+          console.log(FILE_EVENT.UNLINK, relative);
           set.delete(relative);
           updateList();
         })

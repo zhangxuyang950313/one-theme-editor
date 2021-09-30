@@ -71,6 +71,12 @@ export type TypeProjectXmlFileData = {
   element: Element;
 };
 
+export type TypeProjectUnknownFileData = {
+  readonly type: PROJECT_FILE_TYPE.UNKNOWN;
+  src: string;
+};
+
 export type TypeProjectFileData =
+  | TypeProjectUnknownFileData
   | TypeProjectImageFileData
   | TypeProjectXmlFileData;

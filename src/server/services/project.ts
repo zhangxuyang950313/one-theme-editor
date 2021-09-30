@@ -5,6 +5,7 @@ import { findProjectByQuery } from "server/db-handler/project";
 import { TypeProjectFileData } from "src/types/project";
 import {
   ProjectFileImageData,
+  ProjectFileUnknown,
   ProjectFileXmlData
 } from "src/data/ProjectFileData";
 import XmlFileCompiler from "server/compiler/XmlFileCompiler";
@@ -60,7 +61,8 @@ export function getProjectFileData(
     }
     return data.create();
   }
-  throw new Error("不支持的文件类型");
+  // throw new Error(`不支持的文件类型"${src}"`);
+  return new ProjectFileUnknown().set("src", src).create();
 }
 
 // 打包工程

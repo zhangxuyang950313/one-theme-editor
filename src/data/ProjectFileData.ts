@@ -1,6 +1,7 @@
 import { PROJECT_FILE_TYPE } from "src/enum/index";
 import {
   TypeProjectImageFileData,
+  TypeProjectUnknownFileData,
   TypeProjectXmlFileData
 } from "src/types/project";
 import { AbstractDataModel } from "./AbstractDataModel";
@@ -21,4 +22,12 @@ export class ProjectFileXmlData extends AbstractDataModel<TypeProjectXmlFileData
     src: "",
     element: {}
   };
+}
+
+export class ProjectFileUnknown extends AbstractDataModel<TypeProjectUnknownFileData> {
+  protected data: TypeProjectUnknownFileData = {
+    type: PROJECT_FILE_TYPE.UNKNOWN,
+    src: ""
+  };
+  static default = new ProjectFileUnknown().create();
 }

@@ -117,7 +117,6 @@ const CreateProject: React.FC<{
             // 需要设置 <Form preserve={false} />
             preserve={false}
             initialValues={initialValues}
-            projectInfoConfig={currentScenarioOption.projectInfoConfig}
             onValuesChange={(changedValue: TypeProjectInfo) => {
               const projectName = changedValue.name;
               if (!projectName) return;

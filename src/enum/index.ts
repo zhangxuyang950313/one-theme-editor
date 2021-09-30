@@ -87,12 +87,13 @@ export enum PLACEHOLDER {
 
 // 工程文件类型
 export enum PROJECT_FILE_TYPE {
+  UNKNOWN = "unknown",
   XML = "xml",
   IMAGE = "image"
 }
 
 // 文件变动类型
-export enum FILE_STATUS {
+export enum FILE_EVENT {
   ADD = "add", // 增加
   CHANGE = "change", // 内容变更
   UNLINK = "unlink" // 删除

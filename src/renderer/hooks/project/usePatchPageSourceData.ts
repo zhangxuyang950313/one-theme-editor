@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { apiGetProjectFileData } from "@/request";
 import { useEditorDispatch } from "@/store";
 import { ActionPatchProjectSourceData } from "@/store/editor/action";
-import { FILE_STATUS } from "src/enum";
+import { FILE_EVENT } from "src/enum";
 import { useFSWatcherCreator } from "../fileWatcher";
 import { useProjectRoot, useProjectUUID } from "../project";
 import { useSourcePageData } from "../source";
@@ -20,30 +20,23 @@ export default function usePatchPageSourceData(): void {
     if (!pageData || !uuid || !projectRoot) return;
     const watcher = createWatcher({ cwd: projectRoot });
     const sourceSrcSet = new Set(pageData.sourceDefineList.map(o => o.src));
-    const listener = async (file: string, event: FILE_STATUS) => {
+    const listener = async (file: string, event: FILE_EVENT) => {
       if (!sourceSrcSet.has(file)) return;
       console.log(`监听文件变动（${event}） '${file}' `);
       switch (event) {
-        case FILE_STATUS.ADD:
-        case FILE_STATUS.UNLINK:
-        case FILE_STATUS.CHANGE: {
+        case FILE_EVENT.ADD:
+        case FILE_EVENT.UNLINK:
+        case FILE_EVENT.CHANGE: {
           const fileData = await apiGetProjectFileData(uuid, file);
           dispatch(ActionPatchProjectSourceData(fileData));
         }
       }
     };
     watcher
-      .on(FILE_STATUS.ADD, file => listener(file, FILE_STATUS.ADD))
-      .on(FILE_STATUS.CHANGE, file => listener(file, FILE_STATUS.CHANGE))
-      .on(FILE_STATUS.UNLINK, file => listener(file, FILE_STATUS.UNLINK))
+      .on(FILE_EVENT.ADD, file => listener(file, FILE_EVENT.ADD))
+      .on(FILE_EVENT.CHANGE, file => listener(file, FILE_EVENT.CHANGE))
+      .on(FILE_EVENT.UNLINK, file => listener(file, FILE_EVENT.UNLINK))
       .add(projectRoot);
-    return () => {
-      if (!watcher) return;
-      const watcherList = watcher.getWatched();
-      watcher.close().then(() => {
-        console.log("关闭文件监听", watcherList);
-      });
-    };
   }, [uuid, pageData, projectRoot]);
 
   // useProjectFileWatcher(Array.from(sourceFilepathSet), async file => {

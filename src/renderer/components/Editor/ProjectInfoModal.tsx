@@ -11,12 +11,18 @@ import {
 import { TypeProjectInfo } from "src/types/project";
 import TempStringUtil from "src/utils/TempStringUtil";
 import ProjectInfoForm from "../ProjectInfoForm";
+import { ProjectInput } from "../Forms";
 
 const ProjectInfoModal: React.FC<ModalProps> = props => {
   const [form] = Form.useForm<TypeProjectInfo>();
   const projectInfo = useProjectInfo();
   const projectRoot = useProjectRoot();
   const projectInfoConfig = useProjectInfoConfig();
+  const onInputChange = (field: keyof TypeProjectInfo) => {
+    return (event: React.ChangeEvent<HTMLInputElement>) => {
+      form.setFieldsValue({ [field]: event.target.value });
+    };
+  };
   return (
     <StyleProjectInfoModal
       {...props}
@@ -44,12 +50,21 @@ const ProjectInfoModal: React.FC<ModalProps> = props => {
         }
       }}
     >
-      <ProjectInfoForm
-        form={form}
-        preserve={false}
-        initialValues={projectInfo}
-        projectInfoConfig={projectInfoConfig}
-      />
+      <ProjectInfoForm form={form} preserve={false} initialValues={projectInfo}>
+        {projectInfoConfig.propsMapper.map(item => {
+          return (
+            item.visible && (
+              <ProjectInput
+                key={item.prop}
+                label={item.description}
+                name={item.prop}
+                disabled={item.disabled}
+                onChange={onInputChange(item.prop)}
+              />
+            )
+          );
+        })}
+      </ProjectInfoForm>
     </StyleProjectInfoModal>
   );
 };
