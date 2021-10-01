@@ -162,8 +162,8 @@ const CreateProject: React.FC<{
                   prop.visible && (
                     <ProjectInput
                       key={prop.name}
-                      label={prop.description}
                       name={prop.name}
+                      label={prop.description}
                       disabled={prop.disabled}
                       onChange={event => {
                         form.setFieldsValue({
@@ -177,7 +177,7 @@ const CreateProject: React.FC<{
             </Form>
           )}
           <StyleSetLocalPath>
-            <p>选择本地目录</p>
+            <p>本地目录</p>
             <div className="input-area">
               <Input
                 placeholder="输入或选择目录"

@@ -64,7 +64,6 @@ export function useProjectInfo(): TypeProjectInfo {
 // 工程信息模板配置
 export function useProjectInfoConfig(): TypeFileTemplateConf {
   const projectData = useProjectData();
-  console.log(projectData.scenarioConfig);
   return (
     projectData.scenarioConfig.fileTempList.find(
       item => item.type === FILE_TEMPLATE_TYPE.INFO
@@ -92,7 +91,6 @@ export function useInitProject(): [
   const [pageConfigList, step3Status, handleFetch3] = useFetchPageConfList();
   const status = useMergeLoadStatus([step1Status, step2Status, step3Status]);
   const dispatch = useEditorDispatch();
-  // useSyncFileContent();
   useLayoutEffect(() => {
     // 退出退出当前组件后初始化数据
     return () => {

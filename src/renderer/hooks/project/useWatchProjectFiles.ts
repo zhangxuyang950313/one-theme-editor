@@ -7,6 +7,7 @@ import { useSourceDefineList } from "../source";
 import useSocket from "../socket/useSocket";
 import { useProjectRoot } from "./index";
 
+// 监听当前页面文件
 export default function useWatchProjectFile(): void {
   const socket = useSocket();
   const projectRoot = useProjectRoot();
@@ -18,7 +19,7 @@ export default function useWatchProjectFile(): void {
       dispatch(ActionPatchProjectSourceData(data.data));
     });
     socket.emit(SOCKET_EVENT.WATCH_FILES, {
-      options: { cwd: projectRoot },
+      options: { cwd: projectRoot, persistent: true },
       files: Array.from(new Set(sourceDefineList.map(item => item.src)))
     });
   }, [projectRoot, sourceDefineList]);

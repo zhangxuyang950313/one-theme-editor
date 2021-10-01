@@ -9,7 +9,6 @@ import {
 } from "@/hooks/project/index";
 import { TypeProjectInfo } from "src/types/project";
 import TempStringUtil from "src/utils/TempStringUtil";
-import ProjectInfoForm from "../ProjectInfoForm";
 import { ProjectInput } from "../Forms";
 
 const ProjectInfoModal: React.FC<ModalProps> = props => {
@@ -44,7 +43,14 @@ const ProjectInfoModal: React.FC<ModalProps> = props => {
         }
       }}
     >
-      <ProjectInfoForm form={form} preserve={false} initialValues={projectInfo}>
+      <Form
+        form={form}
+        colon={false}
+        labelAlign="right"
+        labelCol={{ span: 4 }}
+        preserve={false}
+        initialValues={projectInfo}
+      >
         {projectInfoConfig.items.map(item => {
           return (
             item.visible && (
@@ -60,7 +66,7 @@ const ProjectInfoModal: React.FC<ModalProps> = props => {
             )
           );
         })}
-      </ProjectInfoForm>
+      </Form>
     </Modal>
   );
 };

@@ -15,7 +15,6 @@ export enum SOCKET_EVENT {
 
   ERROR = "ERROR", // 错误
 
-  CLOSE_FILE_WATCHER = "CLOSE_FILE_WATCHER", // 关闭文件监视器
   WATCH_FILES = "WATCH_FILES", // 监听文件
   UNWATCH_FILES = "UNWATCH_FILES", // 取消监听文件
   FILE_CHANGE = "FILE_CHANGE" // 文件变动
@@ -34,11 +33,6 @@ class SocketConfig {
   };
   static watchFiles = {
     event: SOCKET_EVENT.WATCH_FILES,
-    sendData: {} as TypeWatchFilesPayload,
-    receiveData: null
-  };
-  static unwatchFiles = {
-    event: SOCKET_EVENT.UNWATCH_FILES,
     sendData: {} as TypeWatchFilesPayload,
     receiveData: null
   };

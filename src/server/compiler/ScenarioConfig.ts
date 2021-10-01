@@ -40,12 +40,14 @@ export default class ScenarioConfig extends XmlTemplate {
       );
       const itemNodes: TypeFileTemplateConf["items"] = itemsNode
         .getChildrenNodesByTagname(ELEMENT_TAG.Item)
-        .map(item => ({
-          name: item.getAttributeOf("name"),
-          description: item.getAttributeOf("description"),
-          disabled: item.getAttributeOf("disabled") === "true",
-          visible: item.getAttributeOf("visible") !== "false"
-        }));
+        .map(item => {
+          return {
+            name: item.getAttributeOf("name"),
+            description: item.getAttributeOf("description"),
+            disabled: item.getAttributeOf("disabled") === "true",
+            visible: item.getAttributeOf("visible") !== "false"
+          };
+        });
       return new FileTemplate()
         .set("output", fileTempNode.getAttributeOf("output"))
         .set("type", fileTempNode.getAttributeOf("type"))

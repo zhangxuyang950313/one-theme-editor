@@ -2,7 +2,7 @@ import http from "http";
 import { Server } from "socket.io";
 import logSymbols from "log-symbols";
 import packProject from "./packProject";
-import { watchFiles } from "./fileWatcher";
+import { unwatchFileAndCloseWatcher, watchFiles } from "./fileWatcher";
 
 export default function registerSocket(server: http.Server): void {
   // 创建 io 实例
@@ -18,9 +18,9 @@ export default function registerSocket(server: http.Server): void {
     });
     // 打包工程
     packProject(socket);
-    // 同步文件数据
+    // 监听文件
     watchFiles(socket);
-    // 取消同步文件数据
-    // unwatchFileData(socket);
+    // 取消监听并关闭
+    unwatchFileAndCloseWatcher(socket);
   });
 }

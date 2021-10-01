@@ -1,10 +1,10 @@
 import React from "react";
 import styled from "styled-components";
+import { PRESET_TITLE } from "src/enum";
 import { useDocumentTitle } from "@/hooks/index";
 import useFetchProjectList from "@/hooks/project/useFetchProjectList";
 import useFetchScenarioOptionList from "@/hooks/source/useFetchScenarioOptionList";
 import useFetchSourceOptionList from "@/hooks/source/useFetchSourceOptionList";
-import { PRESET_TITLE } from "src/enum";
 
 import Sidebar from "@/components/Starter/Sidebar";
 import ProjectManager from "@/components/Starter/ProjectManager";

@@ -31,7 +31,7 @@ export type TypePackProcess = {
 // 添加监听文件参数
 export type TypeWatchFilesPayload = {
   options: WatchOptions;
-  files: string | ReadonlyArray<string>;
+  files: ReadonlyArray<string>;
 };
 
 // 取消监听文件参数

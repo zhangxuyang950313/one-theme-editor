@@ -2,6 +2,9 @@ import React, { forwardRef, useImperativeHandle } from "react";
 import { Form, FormInstance, FormProps } from "antd";
 import { TypeProjectInfo } from "src/types/project";
 
+/**
+ * @deprecated
+ */
 type TypeProps = {
   className?: string;
   // 初始化数据
