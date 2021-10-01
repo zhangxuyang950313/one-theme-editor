@@ -14,9 +14,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { Modal, Button, Form, Input, message } from "antd";
 import { FieldError } from "rc-field-form/lib/interface";
 import { FileAddOutlined } from "@ant-design/icons";
-import ScenarioConfig from "src/data/ScenarioConfig";
 import Steps from "@/components/Steps";
-import { useStarterSelector } from "@/store";
+import { useEditorSelector, useStarterSelector } from "@/store";
 import { FILE_TEMPLATE_TYPE } from "src/enum";
 import { ProjectInput } from "../Forms";
 import ResourceConfigManager from "./ResourceConfigManager";
@@ -38,7 +37,7 @@ const CreateProject: React.FC<{
   onProjectCreated: (projectInfo: TypeProjectInfo) => Promise<void>;
 }> = props => {
   // 机型配置
-  const [currentScenarioOption] = useScenarioOption();
+  const [currentScenario] = useScenarioOption();
   // 弹框控制
   const [modalVisible, setModalVisible] = useState(false);
   // 当前步骤
@@ -286,22 +285,16 @@ const CreateProject: React.FC<{
             throw new Error("未选择配置模板");
           }
           updateCreating(true);
-          const scenarioConfig = new ScenarioConfig()
-            .set("name", currentScenarioOption.name)
-            .set("md5", currentScenarioOption.md5)
-            .set("fileTempList", currentScenarioOption.fileTempList)
-            .set("packageConfig", currentScenarioOption.packageConfig)
-            .set("applyConfig", currentScenarioOption.applyConfig)
-            .create();
           const resourceConfigPath = path.join(
             resourceConfig.namespace,
             resourceConfig.config
           );
           return apiCreateProject({
-            scenarioConfig,
-            projectRoot,
-            projectInfo: projectInfoRef.current,
-            resourceConfigPath
+            root: projectRoot,
+            description: projectInfoRef.current,
+            scenarioMd5: currentScenario.md5,
+            scenarioSrc: currentScenario.src,
+            resourceSrc: resourceConfigPath
           })
             .then(data => {
               console.log("创建工程：", data);
@@ -390,7 +383,7 @@ const CreateProject: React.FC<{
         width="700px"
         centered
         visible={modalVisible}
-        title={`创建${currentScenarioOption.name}`}
+        title={`创建${currentScenario.name}`}
         destroyOnClose
         onCancel={closeModal}
         footer={modalFooter}

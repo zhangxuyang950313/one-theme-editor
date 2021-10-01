@@ -1,5 +1,5 @@
 import { useEditorDispatch } from "@/store";
-import { ActionPatchProjectSourceData } from "@/store/editor/action";
+import { ActionPatchProjectFileData } from "@/store/editor/action";
 import { useEffect } from "react";
 import { SOCKET_EVENT } from "src/common/socketConf";
 import { TypeSyncFileContent } from "src/types/socket";
@@ -16,7 +16,7 @@ export default function useWatchProjectFile(): void {
   useEffect(() => {
     if (!projectRoot || resourceDefinitionList.length === 0) return;
     socket.on(SOCKET_EVENT.FILE_CHANGE, (data: TypeSyncFileContent) => {
-      dispatch(ActionPatchProjectSourceData(data.data));
+      dispatch(ActionPatchProjectFileData(data.data));
     });
     socket.emit(SOCKET_EVENT.WATCH_FILES, {
       options: { cwd: projectRoot, persistent: true },

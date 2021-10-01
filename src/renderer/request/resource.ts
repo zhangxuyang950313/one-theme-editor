@@ -3,6 +3,7 @@ import {
   TypeResourceConfig,
   TypeResourceOption,
   TypeResourcePageConf,
+  TypeScenarioConfig,
   TypeScenarioOption
 } from "src/types/resource";
 import { TypeRequestResult, UnionTupleToObjectKey } from "src/types/request";
@@ -20,7 +21,7 @@ export async function apiGetScenarioOptionList(): Promise<
 }
 
 // 获取资源配置列表
-export async function apiGetSourceOptionList(
+export async function apiGetResourceOptionList(
   src: string
 ): Promise<TypeResourceOption[]> {
   return createHttp()
@@ -32,21 +33,31 @@ export async function apiGetSourceOptionList(
 }
 
 // 获取配置数据
-export async function apiGetSourceConfig(
+export async function apiGetResourceConfig(
   config: string
 ): Promise<TypeResourceConfig> {
   return createHttp()
     .get<TypeRequestResult<TypeResourceConfig>>(
       apiConfig.GET_RESOURCE_CONF_DATA.path,
-      {
-        params: { config }
-      }
+      { params: { config } }
+    )
+    .then(data => data.data.data);
+}
+
+// 获取场景配置
+export async function apiGetScenarioConfig(
+  config: string
+): Promise<TypeScenarioConfig> {
+  return createHttp()
+    .get<TypeRequestResult<TypeScenarioConfig>>(
+      apiConfig.GET_SCENARIO_CONFIG_DATA.path,
+      { params: { config } }
     )
     .then(data => data.data.data);
 }
 
 // 获取页面配置数据
-export async function apiGetSourcePageConfData(
+export async function apiGetResourcePageConfData(
   params: UnionTupleToObjectKey<
     typeof apiConfig.GET_RESOURCE_CONF_PAGE_DATA.query
   >

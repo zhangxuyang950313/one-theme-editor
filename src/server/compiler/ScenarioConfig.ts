@@ -4,10 +4,11 @@ import {
   TypeApplyConf,
   TypeFileTemplateConf,
   TypePackConf,
-  TypeResourceOption
+  TypeResourceOption,
+  TypeScenarioConfig
 } from "src/types/resource";
 import { ELEMENT_TAG, PACK_TYPE } from "src/enum/index";
-import {
+import ScenarioConfigData, {
   ApplyConfig,
   PackageConfig,
   FileTemplate
@@ -105,7 +106,7 @@ export default class ScenarioConfig extends XmlTemplate {
   }
 
   // 解析编辑器资源配置列表
-  getSourceConfigPreviewList(): TypeResourceOption[] {
+  getResourceOptionList(): TypeResourceOption[] {
     return super
       .getRootNode()
       .getChildrenNodesByTagname(ELEMENT_TAG.ResourceConfig)
@@ -116,5 +117,13 @@ export default class ScenarioConfig extends XmlTemplate {
         );
         return isExists ? [new ResourceConfig(src).getOption()] : [];
       });
+  }
+
+  getConfig(): TypeScenarioConfig {
+    return new ScenarioConfigData()
+      .set("applyConfig", this.getApplyConfig())
+      .set("fileTempList", this.getFileTempList())
+      .set("packageConfig", this.getPackageConfig())
+      .create();
   }
 }

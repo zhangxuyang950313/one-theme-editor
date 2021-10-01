@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { apiGetProjectFileData } from "@/request";
 import { useEditorDispatch } from "@/store";
-import { ActionPatchProjectSourceData } from "@/store/editor/action";
+import { ActionPatchProjectFileData } from "@/store/editor/action";
 import { FILE_EVENT } from "src/enum";
 import { useFSWatcherCreator } from "../fileWatcher";
 import {
@@ -30,7 +30,7 @@ export default function usePatchProjectInfoData(): void {
         case FILE_EVENT.UNLINK:
         case FILE_EVENT.CHANGE: {
           const fileData = await apiGetProjectFileData(uuid, file);
-          dispatch(ActionPatchProjectSourceData(fileData));
+          dispatch(ActionPatchProjectFileData(fileData));
           // const projectInfo = new ProjectInfo().set("name");
           // apiUpdateProject({ uuid: projectUUID, projectInfo });
         }

@@ -14,7 +14,7 @@ const ProjectManager: React.FC<{
   status: LOAD_STATUS;
   onProjectCreated: (data: TypeProjectInfo) => Promise<void>;
 }> = props => {
-  const [currentScenarioOption] = useScenarioOption();
+  const [currentScenario] = useScenarioOption();
   const projectList = useProjectList();
   const history = useHistory();
 
@@ -38,7 +38,7 @@ const ProjectManager: React.FC<{
                 <div className="project-card" key={key}>
                   <ProjectCard
                     hoverable
-                    projectInfo={item?.projectInfo}
+                    projectInfo={item?.description}
                     onClick={() => {
                       history.push(`/editor/${item.uuid}`);
                     }}
@@ -68,10 +68,10 @@ const ProjectManager: React.FC<{
     <StyleProjectManager>
       <div className="top-container">
         <div className="title">
-          <h2>{currentScenarioOption?.name || ""}列表</h2>
+          <h2>{currentScenario?.name || ""}列表</h2>
           <p>
             新建{projectList.length > 0 ? "或选择" : ""}一个
-            {currentScenarioOption.name}
+            {currentScenario.name}
             开始创作
           </p>
         </div>

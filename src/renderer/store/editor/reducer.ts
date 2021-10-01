@@ -1,33 +1,25 @@
 import { updateState } from "@/store/utils";
+import { TypeProjectDataDoc, TypeProjectFileData } from "src/types/project";
 import {
-  TypeProjectDataDoc,
-  TypeProjectInfo,
-  TypeProjectFileData
-} from "src/types/project";
-import {
-  TypeResourceTypeConf,
   TypeResourceModuleConf,
   TypeResourcePageOption,
   TypeResourcePageConf,
-  TypeResourceConfig
+  TypeResourceConfig,
+  TypeScenarioConfig
 } from "src/types/resource";
-import ResourceConfig, {
+import ResourceConfigData, {
   ResourceModuleConf,
   ResourcePageOption
 } from "src/data/ResourceConfig";
-import ProjectData, { ProjectInfo } from "src/data/ProjectData";
+import ProjectData from "src/data/ProjectData";
+import ScenarioConfigData from "src/data/ScenarioConfig";
 import { ACTION_TYPES, TypeEditorActions } from "./action";
 
 // main states
 export type TypeEditorState = {
   projectData: TypeProjectDataDoc;
-  projectInfo: TypeProjectInfo;
-  uuid: string;
-  projectRoot: string;
-  resourceConfigPath: string;
+  scenarioConfig: TypeScenarioConfig;
   resourceConfig: TypeResourceConfig;
-  resourceTypeList: TypeResourceTypeConf[];
-  resourceModuleList: TypeResourceModuleConf[];
   resourceModuleSelected: TypeResourceModuleConf;
   resourcePageSelected: TypeResourcePageOption;
   resourcePageConfigMap: Record<string, TypeResourcePageConf>;
@@ -36,13 +28,8 @@ export type TypeEditorState = {
 
 const defaultState: TypeEditorState = {
   projectData: ProjectData.default,
-  projectInfo: ProjectInfo.default,
-  uuid: "",
-  projectRoot: "",
-  resourceConfigPath: "",
-  resourceConfig: ResourceConfig.default,
-  resourceTypeList: [],
-  resourceModuleList: [],
+  scenarioConfig: ScenarioConfigData.default,
+  resourceConfig: ResourceConfigData.default,
   resourceModuleSelected: ResourceModuleConf.default,
   resourcePageSelected: ResourcePageOption.default,
   resourcePageConfigMap: {},
@@ -64,13 +51,15 @@ export default function EditorReducer(
     }
     // 工程数据
     case ACTION_TYPES.SET_PROJECT_DATA: {
-      document.title = action.payload.projectInfo.name || document.title;
+      document.title = action.payload.description.name || document.title;
       return updateState(state, {
-        uuid: action.payload.uuid,
-        projectRoot: action.payload.projectRoot,
-        resourceConfigPath: action.payload.resourceConfigPath,
-        projectInfo: action.payload.projectInfo,
         projectData: action.payload
+      });
+    }
+    // 场景数据
+    case ACTION_TYPES.SET_SCENARIO_CONFIG: {
+      return updateState(state, {
+        scenarioConfig: action.payload
       });
     }
     // 配置数据
@@ -78,8 +67,6 @@ export default function EditorReducer(
       const { resourceModuleList } = action.payload;
       return updateState(state, {
         resourceConfig: action.payload,
-        resourceTypeList: action.payload.resourceTypeList,
-        resourceModuleList: resourceModuleList,
         resourceModuleSelected: resourceModuleList[0],
         resourcePageSelected:
           resourceModuleList[0]?.groupList?.[0].pageList?.[0]

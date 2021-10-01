@@ -5,7 +5,8 @@ import {
   TypeResourcePageConf,
   TypeResourceConfig,
   TypeResourceOption,
-  TypeScenarioOption
+  TypeScenarioOption,
+  TypeScenarioConfig
 } from "src/types/resource";
 import { TypeResponseFrame, UnionTupleToObjectKey } from "src/types/request";
 import { checkParamsKey, result } from "server/utils/requestUtil";
@@ -27,6 +28,21 @@ export default function sourceController(service: Express): void {
   );
 
   /**
+   * 获取场景配置数据
+   */
+  service.get<
+    never, // reqParams
+    TypeResponseFrame<TypeScenarioConfig, string>, // resBody
+    never, // reqBody
+    UnionTupleToObjectKey<typeof apiConfig.GET_SCENARIO_CONFIG_DATA.query>
+  >(apiConfig.GET_SCENARIO_CONFIG_DATA.path, (request, response) => {
+    const scenarioConfig = ScenarioConfig.from(
+      request.query.config
+    ).getConfig();
+    response.send(result.success(scenarioConfig));
+  });
+
+  /**
    * 获取配置信息列表
    */
   service.get<
@@ -39,9 +55,7 @@ export default function sourceController(service: Express): void {
       request.query,
       apiConfig.GET_RESOURCE_CONF_PREVIEW_LIST.query
     );
-    const list = ScenarioConfig.from(
-      request.query.src
-    ).getSourceConfigPreviewList();
+    const list = ScenarioConfig.from(request.query.src).getResourceOptionList();
     response.send(result.success(list));
   });
 

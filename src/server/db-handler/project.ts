@@ -5,7 +5,6 @@ import {
   TypeProjectData,
   TypeProjectDataDoc
 } from "src/types/project";
-import { TypeScenarioConf } from "src/types/resource";
 import { createNedb } from "server/utils/databaseUtil";
 import pathUtil from "server/utils/pathUtil";
 import ResourceConfig from "server/compiler/ResourceConfig";
@@ -19,15 +18,16 @@ const projectDB = createNedb(pathUtil.PROJECTS_DB);
 export async function createProject(
   data: TypeCreateProjectPayload
 ): Promise<TypeProjectDataDoc> {
-  const { scenarioConfig, projectInfo, projectRoot, resourceConfigPath } = data;
-  const uiVersion = new ResourceConfig(resourceConfigPath).getUiVersion();
+  const { description, root, scenarioMd5, scenarioSrc, resourceSrc } = data;
+  const uiVersion = new ResourceConfig(resourceSrc).getUiVersion();
   return projectDB.insert<TypeProjectData>({
     uuid: UUID(),
-    projectInfo,
-    scenarioConfig,
+    root,
+    description,
     uiVersion,
-    resourceConfigPath: resourceConfigPath,
-    projectRoot
+    scenarioMd5,
+    scenarioSrc,
+    resourceSrc
   });
 }
 
@@ -35,10 +35,8 @@ export async function createProject(
 export async function getProjectListByMd5(
   md5: string
 ): Promise<TypeProjectDataDoc[]> {
-  const findKey: `scenarioConfig.${keyof TypeScenarioConf}` =
-    "scenarioConfig.md5";
   return projectDB
-    .find<TypeProjectData>({ [findKey]: md5 })
+    .find<TypeProjectData>({ scenarioMd5: md5 })
     .sort({ updatedAt: -1 });
 }
 

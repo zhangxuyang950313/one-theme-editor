@@ -177,11 +177,11 @@ export class ResourceOption extends AbstractDataModel<TypeResourceOption> {
   static default = new ResourceOption().create();
 }
 
-export default class ResourceConfig extends AbstractDataModel<TypeResourceConfig> {
+export default class ResourceConfigData extends AbstractDataModel<TypeResourceConfig> {
   protected data: TypeResourceConfig = {
     ...ResourceOption.default,
     resourceTypeList: [],
     resourceModuleList: []
   };
-  static default = new ResourceConfig().create();
+  static default = new ResourceConfigData().create();
 }

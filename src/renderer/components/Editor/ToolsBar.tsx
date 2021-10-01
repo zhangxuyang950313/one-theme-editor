@@ -20,6 +20,7 @@ import { remote } from "electron";
 import { useProjectData } from "@/hooks/project";
 import { message, notification } from "antd";
 import { TOOLS_BAR_BUTTON } from "src/enum";
+import { useEditorSelector } from "@/store";
 import ProjectInfoModal from "./ProjectInfoModal";
 
 const buttons = [
@@ -44,6 +45,9 @@ const ToolsBar: React.FC = () => {
   const [projectInfoVisible, setProjectInfoVisible] = useState(false);
   const projectData = useProjectData();
   const packProject = usePackProject();
+  const packageConfig = useEditorSelector(
+    state => state.scenarioConfig.packageConfig
+  );
   const handleClick = (name: TOOLS_BAR_BUTTON) => {
     switch (name) {
       case TOOLS_BAR_BUTTON.APPLY: {
@@ -53,7 +57,7 @@ const ToolsBar: React.FC = () => {
         break;
       }
       case TOOLS_BAR_BUTTON.JUMP: {
-        remote.shell.showItemInFolder(projectData.projectRoot);
+        remote.shell.showItemInFolder(projectData.root);
         break;
       }
       case TOOLS_BAR_BUTTON.CREATE: {
@@ -61,11 +65,15 @@ const ToolsBar: React.FC = () => {
         break;
       }
       case TOOLS_BAR_BUTTON.EXPORT: {
-        const { projectInfo, projectRoot, scenarioConfig } = projectData;
-        const { extname } = scenarioConfig.packageConfig;
+        const {
+          root,
+          description,
+          scenarioSrc: scenarioConfigPath
+        } = projectData;
+        const { extname } = packageConfig;
         const defaultPath = path.join(
-          path.dirname(projectData.projectRoot),
-          `${projectInfo.name}.${extname}`
+          path.dirname(projectData.root),
+          `${description.name}.${extname}`
         );
         remote.dialog
           // https://www.electronjs.org/docs/api/dialog#dialogshowopendialogsyncbrowserwindow-options
@@ -82,8 +90,8 @@ const ToolsBar: React.FC = () => {
             }
             packProject(
               {
-                scenarioMd5: scenarioConfig.md5,
-                packDir: projectRoot,
+                scenarioSrc: scenarioConfigPath,
+                packDir: root,
                 outputFile: result.filePath
               },
               data => {

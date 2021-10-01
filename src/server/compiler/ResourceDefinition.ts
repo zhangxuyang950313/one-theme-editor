@@ -63,7 +63,7 @@ export default class ResourceDefinition {
    * @param node
    * @returns
    */
-  private getResourceData(node: XMLNodeElement): TypeResourceDefinition {
+  private getResourceDefinition(node: XMLNodeElement): TypeResourceDefinition {
     const value = node.getAttributeOf("value");
     const description = node.getAttributeOf("description");
     const { src, searchParams } = this.getUrlData(value);
@@ -111,7 +111,7 @@ export default class ResourceDefinition {
         const name = item.getAttributeOf("name");
         const value = item.getAttributeOf("value");
         if (name && value) {
-          const resourceData = this.getResourceData(item);
+          const resourceData = this.getResourceDefinition(item);
           this.resourceMap.set(name, resourceData);
         }
       });

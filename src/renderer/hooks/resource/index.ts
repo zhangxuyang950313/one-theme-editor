@@ -84,7 +84,7 @@ export function useScenarioOption(): [
  * @returns
  */
 export function useResourceConfigPath(): string {
-  return useEditorSelector(state => state.resourceConfigPath);
+  return useEditorSelector(state => state.projectData.resourceSrc);
 }
 
 /**
@@ -92,7 +92,7 @@ export function useResourceConfigPath(): string {
  * @returns
  */
 export function useResourceModuleList(): TypeResourceModuleConf[] {
-  return useEditorSelector(state => state.resourceModuleList);
+  return useEditorSelector(state => state.resourceConfig.resourceModuleList);
 }
 
 /**
@@ -143,7 +143,7 @@ export function useResourcePageConfig(): TypeResourcePageConf | null {
  * 获取当前元素类型配置
  */
 export function useResourceTypeList(): TypeResourceTypeConf[] {
-  return useEditorSelector(state => state.resourceTypeList);
+  return useEditorSelector(state => state.resourceConfig.resourceTypeList);
 }
 
 /**

@@ -2,17 +2,17 @@ import md5 from "md5";
 import fse from "fs-extra";
 import {
   TypeApplyConf,
-  TypeScenarioConf,
+  TypeScenarioConfig,
   TypeScenarioOption,
   TypePackConf
 } from "src/types/resource";
 import { ELEMENT_TAG } from "src/enum/index";
-import ScenarioConfig, { ScenarioOption } from "src/data/ScenarioConfig";
+import ScenarioConfigData, { ScenarioOption } from "src/data/ScenarioConfig";
+import ScenarioConfig from "server/compiler/ScenarioConfig";
 import XmlTemplate from "server/compiler/XmlTemplate";
 import XmlFileCompiler from "server/compiler/XmlFileCompiler";
 import pathUtil from "server/utils/pathUtil";
 import ERR_CODE from "src/common/errorCode";
-import ScenarioConfigCompiler from "./ScenarioConfig";
 import XMLNodeElement from "./XMLNodeElement";
 
 export default class ScenarioOptions extends XmlTemplate {
@@ -36,7 +36,7 @@ export default class ScenarioOptions extends XmlTemplate {
   }
 
   // 读取场景配置数据
-  static readScenarioConfList(): TypeScenarioConf[] {
+  static readScenarioConfList(): TypeScenarioConfig[] {
     return ScenarioOptions.def.getScenarioConfList();
   }
 
@@ -45,35 +45,40 @@ export default class ScenarioOptions extends XmlTemplate {
   }
 
   // 获取场景配置列表
-  getScenarioConfList(): TypeScenarioConf[] {
-    return this.getOptionList().map(option =>
-      new ScenarioConfig()
-        .set("name", option.name)
-        .set("md5", option.md5)
-        .set("fileTempList", option.fileTempList)
-        .set("packageConfig", option.packageConfig)
-        .set("applyConfig", option.applyConfig)
-        .create()
-    );
+  getScenarioConfList(): TypeScenarioConfig[] {
+    return this.getOptionList().map(option => {
+      const scenarioConfig = ScenarioConfig.from(option.src).getConfig();
+      return new ScenarioConfigData()
+        .set("fileTempList", scenarioConfig.fileTempList)
+        .set("packageConfig", scenarioConfig.packageConfig)
+        .set("applyConfig", scenarioConfig.applyConfig)
+        .create();
+    });
   }
 
   // 使用 md5 值查找打包配置
   getPackConfigByMd5(md5: string): TypePackConf | null {
-    const conf = this.getScenarioConfList().find(item => item.md5 === md5);
-    return conf ? conf.packageConfig : null;
+    const conf = this.getOptionList().find(item => item.md5 === md5);
+    return conf ? ScenarioConfig.from(conf.src).getPackageConfig() : null;
+  }
+
+  // 使用 src 查找打包配置
+  getPackConfigBySrc(src: string): TypePackConf | null {
+    const conf = this.getOptionList().find(item => item.src === src);
+    return conf ? ScenarioConfig.from(conf.src).getPackageConfig() : null;
   }
 
   // 使用 md5 值查找应用配置
   getApplyConfigByMd5(md5: string): TypeApplyConf | null {
-    const conf = this.getScenarioConfList().find(item => item.md5 === md5);
-    return conf ? conf.applyConfig : null;
+    const conf = this.getOptionList().find(item => item.md5 === md5);
+    return conf ? ScenarioConfig.from(conf.src).getApplyConfig() : null;
   }
 
   getOptionList(): TypeScenarioOption[] {
     return this.getScenarioNodes().map(item => {
       const name = item.getAttributeOf("name");
       const src = item.getAttributeOf("src");
-      const scenarioConfig = ScenarioConfigCompiler.from(src);
+      const scenarioConfig = ScenarioConfig.from(src);
       const packageConfig = scenarioConfig.getPackageConfig();
       const applyConfig = scenarioConfig.getApplyConfig();
       const fileTemp = scenarioConfig.getFileTempList();

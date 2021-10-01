@@ -54,18 +54,18 @@ export type TypeApplyConf = {
   steps: Array<{ description: string; command: string }>;
 };
 
-// 场景配置数据
-export type TypeScenarioConf = {
+// 场景配置选项
+export type TypeScenarioOption = {
   name: string;
   md5: string;
+  src: string;
+} & TypeScenarioConfig;
+
+// 场景配置数据
+export type TypeScenarioConfig = {
   fileTempList: TypeFileTemplateConf[];
   packageConfig: TypePackConf;
   applyConfig: TypeApplyConf;
-};
-
-// 场景配置选项
-export type TypeScenarioOption = TypeScenarioConf & {
-  src: string;
 };
 
 // 素材类型定义数据

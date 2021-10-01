@@ -1,19 +1,19 @@
 import { notification } from "antd";
 import { useState, useCallback, useEffect } from "react";
-import { apiGetSourceConfig } from "@/request";
+import { apiGetResourceConfig } from "@/request";
 import { useEditorDispatch } from "@/store";
-import { ActionSetSourceConfig } from "@/store/editor/action";
+import { ActionSetResourceConfig } from "@/store/editor/action";
 import { LOAD_STATUS } from "src/enum";
 import { TypeResourceConfig } from "src/types/resource";
-import ResourceConfig from "src/data/ResourceConfig";
+import ResourceConfigData from "src/data/ResourceConfig";
 import ERR_CODE from "src/common/errorCode";
-import { useResourceConfigPath } from ".";
+import { useResourceConfigPath } from "./index";
 
 /**
  * 获取当前工程资源配置(projectData.resourceConfigPath)
  * @returns
  */
-export default function useFetchSourceConfig(): [
+export default function useFetchResourceConfig(): [
   TypeResourceConfig,
   LOAD_STATUS,
   () => Promise<void>
@@ -21,15 +21,17 @@ export default function useFetchSourceConfig(): [
   const dispatch = useEditorDispatch();
   const resourceConfigPath = useResourceConfigPath();
   const [status, setStatus] = useState(LOAD_STATUS.INITIAL);
-  const [resourceConfig, setResourceConfig] = useState(ResourceConfig.default);
+  const [resourceConfig, setResourceConfig] = useState(
+    ResourceConfigData.default
+  );
   const doFetchData = useCallback(async () => {
     if (!resourceConfigPath) return;
     setStatus(LOAD_STATUS.LOADING);
-    apiGetSourceConfig(resourceConfigPath)
+    apiGetResourceConfig(resourceConfigPath)
       .then(data => {
         if (!data) throw new Error(ERR_CODE[3002]);
         console.log(`加载资源配置: ${resourceConfigPath}`, data);
-        dispatch(ActionSetSourceConfig(data));
+        dispatch(ActionSetResourceConfig(data));
         setResourceConfig(data);
         setStatus(LOAD_STATUS.SUCCESS);
       })

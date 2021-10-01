@@ -22,10 +22,10 @@ export async function releaseXmlTemplate(
   const { name, value, src } = data;
   const resourceRoot = path.join(
     pathUtil.RESOURCE_CONFIG_DIR,
-    path.dirname(project.resourceConfigPath)
+    path.dirname(project.resourceSrc)
   );
   const templateXml = path.join(resourceRoot, src);
-  const releaseXml = path.join(project.projectRoot, src);
+  const releaseXml = path.join(project.root, src);
   const releaseFileIsExists = fse.pathExistsSync(releaseXml);
 
   // 节点操作

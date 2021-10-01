@@ -7,7 +7,8 @@ import {
   TypeResourceConfig,
   TypeResourceModuleConf,
   TypeResourcePageOption,
-  TypeResourcePageConf
+  TypeResourcePageConf,
+  TypeScenarioConfig
 } from "src/types/resource";
 
 export enum ACTION_TYPES {
@@ -15,6 +16,8 @@ export enum ACTION_TYPES {
   INIT_EDITOR = "INIT_EDITOR",
   // 设置资源配置
   SET_RESOURCE_CONFIG = "SET_RESOURCE_CONFIG",
+  // 设置场景配置
+  SET_SCENARIO_CONFIG = "SET_SCENARIO_CONFIG",
   // 设置模块配置
   SET_MODULE_CONFIG = "SET_MODULE_CONFIG",
   // 设置页面配置
@@ -34,9 +37,14 @@ type TypeActionInitEditor = {
   type: typeof ACTION_TYPES.INIT_EDITOR;
 };
 
-type TypeActionSetSourceConfig = {
+type TypeActionSetResourceConfig = {
   type: typeof ACTION_TYPES.SET_RESOURCE_CONFIG;
   payload: TypeResourceConfig;
+};
+
+type TypeActionSetScenarioConfig = {
+  type: typeof ACTION_TYPES.SET_SCENARIO_CONFIG;
+  payload: TypeScenarioConfig;
 };
 
 // 设置模块
@@ -70,7 +78,7 @@ type TypeActionSetProjectInfo = {
 };
 
 // 更新工程文件数据表
-type TypeActionPatchProjectSourceDataMap = {
+type TypeActionPatchProjectFileDataMap = {
   type: typeof ACTION_TYPES.PATCH_PROJECT_RESOURCE;
   payload: TypeProjectFileData;
 };
@@ -78,23 +86,31 @@ type TypeActionPatchProjectSourceDataMap = {
 // main actions
 export type TypeEditorActions =
   | TypeActionInitEditor
-  | TypeActionSetSourceConfig
+  | TypeActionSetScenarioConfig
+  | TypeActionSetResourceConfig
   | TypeActionSetModuleConf
   | TypeActionPatchPageConfMap
   | TypeActionSetPageConf
   | TypeActionSetProjectData
   | TypeActionSetProjectInfo
-  | TypeActionPatchProjectSourceDataMap;
+  | TypeActionPatchProjectFileDataMap;
 
 export function ActionInitEditor(): TypeActionInitEditor {
   return { type: ACTION_TYPES.INIT_EDITOR };
 }
 
 // 设置当前资源配置
-export function ActionSetSourceConfig(
+export function ActionSetResourceConfig(
   payload: TypeResourceConfig
-): TypeActionSetSourceConfig {
+): TypeActionSetResourceConfig {
   return { type: ACTION_TYPES.SET_RESOURCE_CONFIG, payload };
+}
+
+// 设置当前场景配置
+export function ActionSetScenarioConfig(
+  payload: TypeScenarioConfig
+): TypeActionSetScenarioConfig {
+  return { type: ACTION_TYPES.SET_SCENARIO_CONFIG, payload };
 }
 
 // 设置当前模块配置
@@ -132,8 +148,8 @@ export function ActionSetDescription(
   return { type: ACTION_TYPES.SET_PROJECT_INFO, payload };
 }
 
-export function ActionPatchProjectSourceData(
+export function ActionPatchProjectFileData(
   payload: TypeProjectFileData
-): TypeActionPatchProjectSourceDataMap {
+): TypeActionPatchProjectFileDataMap {
   return { type: ACTION_TYPES.PATCH_PROJECT_RESOURCE, payload };
 }

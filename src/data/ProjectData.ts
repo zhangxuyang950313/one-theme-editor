@@ -1,7 +1,6 @@
 import { TypeProjectDataDoc, TypeProjectInfo } from "src/types/project";
 import { AbstractDataModel } from "./AbstractDataModel";
 import { UiVersion } from "./ResourceConfig";
-import ScenarioConfig from "./ScenarioConfig";
 
 export class ProjectInfo extends AbstractDataModel<TypeProjectInfo> {
   protected data: TypeProjectInfo = {};
@@ -12,11 +11,12 @@ export class ProjectInfo extends AbstractDataModel<TypeProjectInfo> {
 export default class ProjectData extends AbstractDataModel<TypeProjectDataDoc> {
   protected data: TypeProjectDataDoc = {
     uuid: "",
-    scenarioConfig: ScenarioConfig.default,
-    projectRoot: "",
-    projectInfo: ProjectInfo.default,
+    root: "",
+    description: ProjectInfo.default,
     uiVersion: UiVersion.default,
-    resourceConfigPath: "",
+    scenarioMd5: "",
+    scenarioSrc: "",
+    resourceSrc: "",
     _id: "",
     createdAt: new Date(),
     updatedAt: new Date()

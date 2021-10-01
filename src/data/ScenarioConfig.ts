@@ -2,7 +2,7 @@ import {
   TypePackConf,
   TypeApplyConf,
   TypeFileTemplateConf,
-  TypeScenarioConf,
+  TypeScenarioConfig,
   TypeScenarioOption
 } from "src/types/resource";
 import { FILE_TEMPLATE_TYPE } from "src/enum";
@@ -40,22 +40,22 @@ export class ApplyConfig extends AbstractDataModel<TypeApplyConf> {
 }
 
 // 场景选项列表配置
-export default class ScenarioConfig extends AbstractDataModel<TypeScenarioConf> {
-  protected data: TypeScenarioConf = {
-    name: "",
-    md5: "",
+export default class ScenarioConfigData extends AbstractDataModel<TypeScenarioConfig> {
+  protected data: TypeScenarioConfig = {
     fileTempList: [],
     packageConfig: PackageConfig.default,
     applyConfig: ApplyConfig.default
   };
-  static default = new ScenarioConfig().create();
+  static default = new ScenarioConfigData().create();
 }
 
 // 场景配置
 export class ScenarioOption extends AbstractDataModel<TypeScenarioOption> {
   protected data: TypeScenarioOption = {
+    name: "",
+    md5: "",
     src: "",
-    ...ScenarioConfig.default
+    ...ScenarioConfigData.default
   };
   static default = new ScenarioOption().create();
 }

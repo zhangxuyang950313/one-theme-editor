@@ -11,7 +11,7 @@ import {
   UnionTupleToObjectKey,
   TypeReleaseXmlTempPayload
 } from "src/types/request";
-import { TypeScenarioConf } from "src/types/resource";
+import { TypeScenarioOption } from "src/types/resource";
 import { createHttp } from "./axios";
 
 // 创建工程
@@ -28,12 +28,12 @@ export async function apiCreateProject(
 
 // 获取工程列表
 export async function apiGetProjectList(
-  scenarioConfig: TypeScenarioConf,
+  scenarioOption: TypeScenarioOption,
   canceler?: TypeGetCanceler
 ): Promise<TypeProjectDataDoc[]> {
   return createHttp(canceler)
     .get<TypeRequestResult<TypeProjectDataDoc[]>>(
-      `${apiConfig.GET_PROJECT_LIST.path}/${scenarioConfig.md5}`
+      `${apiConfig.GET_PROJECT_LIST.path}/${scenarioOption.md5}`
     )
     .then(data => data.data.data);
 }

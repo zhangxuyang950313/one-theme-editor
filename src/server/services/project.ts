@@ -17,15 +17,13 @@ export async function getPageResourceData(
   uuid: string,
   config: string
 ): Promise<Record<string, TypeProjectFileData>> {
-  const { projectRoot, resourceConfigPath } = await findProjectByQuery({
-    uuid
-  });
-  const namespace = path.dirname(resourceConfigPath);
+  const { root, resourceSrc } = await findProjectByQuery({ uuid });
+  const namespace = path.dirname(resourceSrc);
   const pageConfig = new PageConfig({ namespace, config });
   const resourcePathList = pageConfig.getResourcePathList();
   return resourcePathList.reduce<Record<string, TypeProjectFileData>>(
     (record, src) => {
-      record[src] = getProjectFileData(projectRoot, src);
+      record[src] = getProjectFileData(root, src);
       return record;
     },
     {}

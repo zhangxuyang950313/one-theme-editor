@@ -10,7 +10,7 @@ export type TypeErrorData = {
 
 // 打包参数
 export type TypePackPayload = {
-  scenarioMd5: string;
+  scenarioSrc: string;
   packDir: string;
   outputFile: string;
 };

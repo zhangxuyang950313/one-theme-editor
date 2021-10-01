@@ -17,16 +17,17 @@ import XMLNodeElement from "src/server/compiler/XMLNodeElement";
 import { useLayoutEffect, useEffect, useState } from "react";
 import { FILE_TEMPLATE_TYPE, LOAD_STATUS, PROJECT_FILE_TYPE } from "src/enum";
 import {
-  TypeScenarioConf,
   TypeFileTemplateConf,
   TypeResourceConfig,
-  TypeResourcePageConf
+  TypeResourcePageConf,
+  TypeScenarioConfig
 } from "src/types/resource";
 import { FileTemplate } from "src/data/ScenarioConfig";
 import { useImagePrefix } from "../image";
 import useFetchProjectData from "../project/useFetchProjectData";
-import useFetchSourceConfig from "../resource/useFetchSourceConfig";
+import useFetchResourceConfig from "../resource/useFetchResourceConfig";
 import useFetchPageConfList from "../resource/useFetchPageConfList";
+import useFetchScenarioConfig from "../resource/useFetchScenarioConfig";
 
 export function useProjectList(): TypeProjectDataDoc[] {
   return useStarterSelector(state => state.projectList);
@@ -46,28 +47,23 @@ export function useProjectUUID(): string {
 // 工程本地路径
 export function useProjectRoot(): string {
   const projectData = useProjectData();
-  return projectData.projectRoot;
-}
-
-// 工程场景配置信息
-export function useProjectScenarioConfig(): TypeScenarioConf {
-  const projectData = useProjectData();
-  return projectData.scenarioConfig;
+  return projectData.root;
 }
 
 // 工程描述信息
 export function useProjectInfo(): TypeProjectInfo {
   const projectData = useProjectData();
-  return projectData.projectInfo;
+  return projectData.description;
 }
 
 // 工程信息模板配置
 export function useProjectInfoConfig(): TypeFileTemplateConf {
-  const projectData = useProjectData();
+  const fileTempList = useEditorSelector(
+    state => state.scenarioConfig.fileTempList
+  );
   return (
-    projectData.scenarioConfig.fileTempList.find(
-      item => item.type === FILE_TEMPLATE_TYPE.INFO
-    ) || FileTemplate.default
+    fileTempList.find(item => item.type === FILE_TEMPLATE_TYPE.INFO) ||
+    FileTemplate.default
   );
 }
 
@@ -78,6 +74,7 @@ export function useProjectInfoConfig(): TypeFileTemplateConf {
  */
 type TypeInitializedProjectData = {
   projectData: TypeProjectDataDoc;
+  scenarioConfig: TypeScenarioConfig;
   resourceConfig: TypeResourceConfig;
   pageConfigList: TypeResourcePageConf[];
 };
@@ -87,9 +84,15 @@ export function useInitProject(): [
   () => Promise<TypeInitializedProjectData>
 ] {
   const [projectData, step1Status, handleFetch1] = useFetchProjectData();
-  const [resourceConfig, step2Status, handleFetch2] = useFetchSourceConfig();
-  const [pageConfigList, step3Status, handleFetch3] = useFetchPageConfList();
-  const status = useMergeLoadStatus([step1Status, step2Status, step3Status]);
+  const [scenarioConfig, step2Status, handleFetch2] = useFetchScenarioConfig();
+  const [resourceConfig, step3Status, handleFetch3] = useFetchResourceConfig();
+  const [pageConfigList, step4Status, handleFetch4] = useFetchPageConfList();
+  const status = useMergeLoadStatus([
+    step1Status,
+    step2Status,
+    step3Status,
+    step4Status
+  ]);
   const dispatch = useEditorDispatch();
   useLayoutEffect(() => {
     // 退出退出当前组件后初始化数据
@@ -97,9 +100,19 @@ export function useInitProject(): [
       dispatch(ActionInitEditor());
     };
   }, []);
-  const result = { projectData, resourceConfig, pageConfigList };
+  const result: TypeInitializedProjectData = {
+    projectData,
+    scenarioConfig,
+    resourceConfig,
+    pageConfigList
+  };
   const fetchAll = async () => {
-    await Promise.all([handleFetch1(), handleFetch2(), handleFetch3()]);
+    await Promise.all([
+      handleFetch1(),
+      handleFetch2(),
+      handleFetch3(),
+      handleFetch4()
+    ]);
     return result;
   };
   return [result, status, fetchAll];

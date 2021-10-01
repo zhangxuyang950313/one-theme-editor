@@ -1,6 +1,5 @@
 import { Element } from "xml-js";
 import { PROJECT_FILE_TYPE } from "../enum";
-import { TypeScenarioConf } from "./resource";
 import { TypeDatabase } from "./index";
 
 // 版本信息
@@ -16,10 +15,11 @@ export type TypeProjectInfo = {
 
 // 创建工程载荷
 export type TypeCreateProjectPayload = {
-  projectRoot: string;
-  resourceConfigPath: string;
-  scenarioConfig: TypeScenarioConf;
-  projectInfo: TypeProjectInfo;
+  root: string;
+  description: TypeProjectInfo;
+  scenarioMd5: string;
+  scenarioSrc: string;
+  resourceSrc: string;
 };
 
 // 图片数据
@@ -43,13 +43,9 @@ export type TypeXmlMapper = {
 };
 
 // 打包所有信息
-export type TypeProjectData = {
+export type TypeProjectData = TypeCreateProjectPayload & {
   uuid: string;
-  scenarioConfig: TypeScenarioConf;
-  projectRoot: string;
-  projectInfo: TypeProjectInfo;
   uiVersion: TypeProjectUiVersion;
-  resourceConfigPath: string;
 };
 
 // 在数据库中的图片数据

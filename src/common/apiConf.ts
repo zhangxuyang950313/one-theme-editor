@@ -65,6 +65,11 @@ const apiConfig = {
   GET_SCENARIO_OPTION_LIST: createApiConf({
     path: "/scenario/option/list"
   }),
+  // 获取场景配置
+  GET_SCENARIO_CONFIG_DATA: createApiConf({
+    path: "/scenario/config/data",
+    query: ["config"]
+  }),
   // 获取配置信息列表
   GET_RESOURCE_CONF_PREVIEW_LIST: createApiConf({
     path: "/resource/config/preview/list",

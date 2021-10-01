@@ -1,7 +1,7 @@
 import path from "path";
 import { useState, useEffect } from "react";
 import { notification } from "antd";
-import { apiGetSourcePageConfData } from "@/request";
+import { apiGetResourcePageConfData } from "@/request";
 import { useEditorDispatch } from "@/store";
 import { ActionPatchPageDataMap } from "@/store/editor/action";
 import { TypeResourcePageConf } from "src/types/resource";
@@ -29,7 +29,7 @@ export default function useFetchPageConfList(): [
     const pageConfDataQueue = pageGroupList
       .flatMap(item => item.pageList)
       .map(item => async () => {
-        const data = await apiGetSourcePageConfData({
+        const data = await apiGetResourcePageConfData({
           namespace: path.dirname(resourceConfigPath),
           config: item.src
         });

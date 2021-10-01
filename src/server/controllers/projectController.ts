@@ -132,7 +132,7 @@ export default function projectController(service: Express): void {
     checkParamsKey(query, apiConfig.GET_XML_TEMP_VALUE.query);
     const { uuid, name, src } = query;
     const project = await findProjectByQuery({ uuid });
-    const releaseFile = path.join(project.projectRoot, src);
+    const releaseFile = path.join(project.root, src);
     const xmlElement = new XmlFileCompiler(releaseFile).getElement();
     const value = new XmlTemplate(xmlElement).getValueByName(name);
     response.send(result.success({ value }));
@@ -181,7 +181,9 @@ export default function projectController(service: Express): void {
   >(`${apiConfig.GET_RESOURCE_FILE_DATA.path}`, async (request, response) => {
     const { query } = request;
     checkParamsKey(query, apiConfig.GET_RESOURCE_FILE_DATA.query);
-    const { projectRoot } = await findProjectByQuery({ uuid: query.uuid });
+    const { root: projectRoot } = await findProjectByQuery({
+      uuid: query.uuid
+    });
     const data = getProjectFileData(projectRoot, query.filepath);
     response.send(result.success(data));
   });
