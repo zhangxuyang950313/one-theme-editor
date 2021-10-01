@@ -2,12 +2,12 @@ import path from "path";
 import { URL, URLSearchParams } from "url";
 import fse from "fs-extra";
 import {
-  DefineImageData,
-  DefineValueData,
-  SourceDefineData
+  DefinedImageData,
+  DefinedValueData,
+  SourceDefinedData
 } from "src/data/SourceConfig";
 import { filenameIsImage, filenameIsXml, getImageData } from "src/utils/index";
-import { TypeSourceDefine } from "src/types/source";
+import { TypeSourceDefined } from "src/types/source";
 import XMLNodeElement from "server/compiler/XMLNodeElement";
 import XmlTemplate from "./XmlTemplate";
 import XmlFileCompiler from "./XmlFileCompiler";
@@ -18,7 +18,7 @@ import XmlFileCompiler from "./XmlFileCompiler";
 export default class SourceDefine {
   private node: XMLNodeElement;
   private sourceRoot: string;
-  private sourceDefineMap: Map<string, TypeSourceDefine> = new Map();
+  private sourceDefineMap: Map<string, TypeSourceDefined> = new Map();
   constructor(node: XMLNodeElement, sourceRoot: string) {
     this.node = node;
     this.sourceRoot = sourceRoot;
@@ -34,7 +34,7 @@ export default class SourceDefine {
   }
 
   // 生成当前配置中相对路径路径的绝对路径
-  private resolveRootSourcePath(pathname: string): string {
+  private resolveSourceRootPath(pathname: string): string {
     return path.join(this.sourceRoot, pathname);
   }
 
@@ -63,19 +63,20 @@ export default class SourceDefine {
    * @param node
    * @returns
    */
-  private getSourceDefineData(node: XMLNodeElement): TypeSourceDefine {
+  private getSourceDefineData(node: XMLNodeElement): TypeSourceDefined {
     const value = node.getAttributeOf("value");
     const description = node.getAttributeOf("description");
     const { src, searchParams } = this.getUrlData(value);
-    const sourceDefineData = new SourceDefineData()
+    const sourceDefineData = new SourceDefinedData()
       .set("tagName", node.getTagname())
       .set("name", node.getAttributeOf("name"))
       .set("description", description);
     // 图片素材
     if (filenameIsImage(src)) {
-      const sourceData = new DefineImageData();
-      if (fse.existsSync(src)) {
-        const imageData = getImageData(this.resolveRootSourcePath(src));
+      const sourceData = new DefinedImageData();
+      const file = this.resolveSourceRootPath(src);
+      if (fse.existsSync(file)) {
+        const imageData = getImageData(file);
         sourceData
           .set("width", imageData.width)
           .set("height", imageData.height)
@@ -91,9 +92,9 @@ export default class SourceDefine {
       // TODO： 先固定使用 name，后续看需求是否需要自定义其他属性去 xml 中查找
       const valueName = searchParams.get("name") || "";
       const defaultValue = new XmlTemplate(
-        new XmlFileCompiler(this.resolveRootSourcePath(src)).getElement()
+        new XmlFileCompiler(this.resolveSourceRootPath(src)).getElement()
       ).getTextByAttrName(valueName);
-      const valueData = new DefineValueData()
+      const valueData = new DefinedValueData()
         .set("valueName", valueName)
         .set("defaultValue", defaultValue)
         .create();
@@ -102,7 +103,7 @@ export default class SourceDefine {
     return sourceDefineData.create();
   }
 
-  getSourceDefineMap(): Map<string, TypeSourceDefine> {
+  getSourceDefineMap(): Map<string, TypeSourceDefined> {
     if (this.sourceDefineMap.size === 0) {
       this.node.getChildrenNodes().forEach(item => {
         const name = item.getAttributeOf("name");
@@ -116,13 +117,13 @@ export default class SourceDefine {
     return this.sourceDefineMap;
   }
 
-  getSourceDefineList(): TypeSourceDefine[] {
-    const result: TypeSourceDefine[] = [];
+  getSourceDefineList(): TypeSourceDefined[] {
+    const result: TypeSourceDefined[] = [];
     this.getSourceDefineMap().forEach(item => result.push(item));
     return result;
   }
 
-  getSourceDefineByName(name: string): TypeSourceDefine | null {
+  getSourceDefineByName(name: string): TypeSourceDefined | null {
     return this.getSourceDefineMap().get(name) || null;
   }
 }

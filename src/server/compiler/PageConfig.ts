@@ -3,16 +3,16 @@ import querystring from "querystring";
 import fse from "fs-extra";
 import {
   TypeLayoutElement,
-  TypeSourcePageData,
+  TypeSourcePageConf,
   TypeLayoutImageElement,
   TypeLayoutTextElement,
-  TypeSourceDefine
+  TypeSourceDefined
 } from "src/types/source";
 import {
   ElementLayoutConf,
-  DefineImageData,
+  DefinedImageData,
   SourceImageElement,
-  SourcePageData,
+  SourcePageConfig,
   SourceTextElement
 } from "src/data/SourceConfig";
 import { getImageData } from "src/utils/index";
@@ -183,7 +183,7 @@ export default class PageConfig extends XMLNodeElement {
   }
 
   // 获取定义的资源配置数据
-  private getSourceDefineByName(srcVal: string): TypeSourceDefine | null {
+  private getSourceDefineByName(srcVal: string): TypeSourceDefined | null {
     const pName = this.getPlaceholderName(srcVal);
     return this.sourceDefineInstance.getSourceDefineByName(pName);
   }
@@ -229,7 +229,7 @@ export default class PageConfig extends XMLNodeElement {
       // 直接定义，用于显示一些静态图片
       src = this.sourceDefineInstance.getUrlData(srcVal).src;
     }
-    const sourceImageData = new DefineImageData();
+    const sourceImageData = new DefinedImageData();
     const sourceImageElement = new SourceImageElement();
     const sourcePath = this.resolveRootSourcePath(src);
     if (fse.existsSync(sourcePath)) {
@@ -320,7 +320,7 @@ export default class PageConfig extends XMLNodeElement {
       });
   }
 
-  getSourceDefineList(): TypeSourceDefine[] {
+  getSourceDefineList(): TypeSourceDefined[] {
     return this.sourceDefineInstance.getSourceDefineList();
   }
 
@@ -330,8 +330,8 @@ export default class PageConfig extends XMLNodeElement {
       .filter(Boolean);
   }
 
-  getData(): TypeSourcePageData {
-    return new SourcePageData()
+  getData(): TypeSourcePageConf {
+    return new SourcePageConfig()
       .set("config", this.pageConfig)
       .set("version", this.getVersion())
       .set("description", this.getDescription())

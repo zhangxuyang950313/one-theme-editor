@@ -86,7 +86,7 @@ export type TypeSourceModuleConf = {
 // 预览页面组
 export type TypeSourcePageGroupConf = {
   name: string;
-  pageList: TypeSourcePageConf[];
+  pageList: TypeSourcePageOption[];
 };
 
 // 键值对配置数据
@@ -124,7 +124,7 @@ export type TypeLayoutImageElement = {
   readonly sourceType: SOURCE_TYPES.IMAGE;
   description: string;
   src: string;
-  sourceData: TypePageDefineImageData;
+  sourceData: TypePageDefinedImageData;
   layout: {
     x: string;
     y: string;
@@ -142,7 +142,7 @@ export type TypeLayoutTextElement = {
   name: string;
   text: string;
   src: string;
-  valueData: TypePageDefineValueData | null;
+  valueData: TypePageDefinedValueData | null;
   layout: {
     x: string;
     y: string;
@@ -151,49 +151,49 @@ export type TypeLayoutTextElement = {
   };
 };
 
-export type TypePageDefineValueData = {
+export type TypePageDefinedValueData = {
   defaultValue: string;
   valueName: string;
 };
 
-export type TypePageDefineImageData = TypeImageData;
+export type TypePageDefinedImageData = TypeImageData;
 
 // 素材定义
-export type TypeSourceDefineImage = {
+export type TypeSourceImageDefined = {
   tagName: string;
   name: string;
   description: string;
   src: string;
-  sourceData: TypePageDefineImageData | null;
+  sourceData: TypePageDefinedImageData | null;
   valueData: null;
 };
-export type TypeSourceDefineValue = {
+export type TypeSourceValueDefined = {
   tagName: string;
   name: string;
   description: string;
   src: string;
   sourceData: null;
-  valueData: TypePageDefineValueData | null;
+  valueData: TypePageDefinedValueData | null;
 };
-export type TypeSourceDefine = TypeSourceDefineImage | TypeSourceDefineValue;
+export type TypeSourceDefined = TypeSourceImageDefined | TypeSourceValueDefined;
 
 // 预览元素数据
 export type TypeLayoutElement = TypeLayoutImageElement | TypeLayoutTextElement;
 
 // 预览单个页面配置
-export type TypeSourcePageConf = {
+export type TypeSourcePageOption = {
   key: string;
   name: string;
   preview: string;
   src: string;
 };
-export type TypeSourcePageData = {
+export type TypeSourcePageConf = {
   config: string;
   version: string;
   description: string;
   screenWidth: string;
   previewList: string[];
-  sourceDefineList: TypeSourceDefine[];
+  sourceDefineList: TypeSourceDefined[];
   layoutElementList: TypeLayoutElement[];
 };
 

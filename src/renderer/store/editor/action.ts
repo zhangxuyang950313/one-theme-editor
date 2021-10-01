@@ -6,8 +6,8 @@ import {
 import {
   TypeSourceConfig,
   TypeSourceModuleConf,
-  TypeSourcePageConf,
-  TypeSourcePageData
+  TypeSourcePageOption,
+  TypeSourcePageConf
 } from "src/types/source";
 
 export enum ACTION_TYPES {
@@ -20,7 +20,7 @@ export enum ACTION_TYPES {
   // 设置页面配置
   SET_PAGE_CONFIG = "SET_PAGE_CONFIG",
   // 添加页面配置数据映射
-  PATCH_PAGE_DATA = "PATCH_PAGE_DATA",
+  PATCH_PAGE_CONFIG = "PATCH_PAGE_CONFIG",
   // 添加工程文件数据映射
   PATCH_PROJECT_SOURCE_DATA = "PATCH_PROJECT_SOURCE_DATA",
 
@@ -46,15 +46,15 @@ type TypeActionSetModuleConf = {
 };
 
 // 更新页面配置表
-type TypeActionPatchPageDataMap = {
-  type: typeof ACTION_TYPES.PATCH_PAGE_DATA;
-  payload: TypeSourcePageData;
+type TypeActionPatchPageConfMap = {
+  type: typeof ACTION_TYPES.PATCH_PAGE_CONFIG;
+  payload: TypeSourcePageConf;
 };
 
 // 设置页面
 type TypeActionSetPageConf = {
   type: typeof ACTION_TYPES.SET_PAGE_CONFIG;
-  payload: TypeSourcePageConf;
+  payload: TypeSourcePageOption;
 };
 
 // 设置工程数据
@@ -80,7 +80,7 @@ export type TypeEditorActions =
   | TypeActionInitEditor
   | TypeActionSetSourceConfig
   | TypeActionSetModuleConf
-  | TypeActionPatchPageDataMap
+  | TypeActionPatchPageConfMap
   | TypeActionSetPageConf
   | TypeActionSetProjectData
   | TypeActionSetProjectInfo
@@ -106,14 +106,14 @@ export function ActionSetCurrentModule(
 
 // 更新页面数据表
 export function ActionPatchPageDataMap(
-  payload: TypeSourcePageData
-): TypeActionPatchPageDataMap {
-  return { type: ACTION_TYPES.PATCH_PAGE_DATA, payload };
+  payload: TypeSourcePageConf
+): TypeActionPatchPageConfMap {
+  return { type: ACTION_TYPES.PATCH_PAGE_CONFIG, payload };
 }
 
 // 设置当前页面配置
 export function ActionSetCurrentPage(
-  payload: TypeSourcePageConf
+  payload: TypeSourcePageOption
 ): TypeActionSetPageConf {
   return { type: ACTION_TYPES.SET_PAGE_CONFIG, payload };
 }

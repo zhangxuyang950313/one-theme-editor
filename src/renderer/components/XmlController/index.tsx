@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { TypeSourceDefineValue } from "src/types/source";
+import { TypeSourceValueDefined } from "src/types/source";
 import { apiWriteXmlTemplate } from "@/request";
 import { useProjectUUID, useProjectXmlValueBySrc } from "@/hooks/project/index";
 import { SOURCE_TYPES } from "src/enum/index";
@@ -12,7 +12,7 @@ import StringInput from "./StringInput";
 
 const XmlController: React.FC<{
   sourceType: SOURCE_TYPES;
-  sourceDefineValue: TypeSourceDefineValue;
+  sourceDefineValue: TypeSourceValueDefined;
 }> = props => {
   const { sourceType, sourceDefineValue } = props;
   const { valueData, src } = sourceDefineValue;

@@ -1,11 +1,11 @@
 import { SOURCE_TYPES } from "src/enum";
-import { TypeSourceDefineImage } from "src/types/source";
+import { TypeSourceImageDefined } from "src/types/source";
 import { useSourceTypeList, useSourceDefineList } from ".";
 
 /**
  * 图片类型素材定义列表
  */
-export default function useSourceDefineImageList(): TypeSourceDefineImage[] {
+export default function useSourceImageDefinedList(): TypeSourceImageDefined[] {
   const sourceTypeList = useSourceTypeList();
   const sourceDefineList = useSourceDefineList();
   const imageSourceTags = sourceTypeList
@@ -13,5 +13,5 @@ export default function useSourceDefineImageList(): TypeSourceDefineImage[] {
     .map(item => item.tag);
   return sourceDefineList.flatMap(item =>
     imageSourceTags.includes(item.tagName) ? [item] : []
-  ) as TypeSourceDefineImage[];
+  ) as TypeSourceImageDefined[];
 }

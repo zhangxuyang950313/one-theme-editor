@@ -7,13 +7,13 @@ import {
 import {
   TypeSourceTypeConf,
   TypeSourceModuleConf,
+  TypeSourcePageOption,
   TypeSourcePageConf,
-  TypeSourcePageData,
   TypeSourceConfig
 } from "src/types/source";
 import SourceConfig, {
   SourceModuleConf,
-  SourcePageConf
+  SourcePageOption
 } from "src/data/SourceConfig";
 import ProjectData, { ProjectInfo } from "src/data/ProjectData";
 import { ACTION_TYPES, TypeEditorActions } from "./action";
@@ -29,8 +29,8 @@ export type TypeEditorState = {
   sourceTypeList: TypeSourceTypeConf[];
   sourceModuleList: TypeSourceModuleConf[];
   sourceModuleSelected: TypeSourceModuleConf;
-  sourcePageSelected: TypeSourcePageConf;
-  sourcePageDataMap: Record<string, TypeSourcePageData>;
+  sourcePageSelected: TypeSourcePageOption;
+  sourcePageConfigMap: Record<string, TypeSourcePageConf>;
   projectFileDataMap: Record<string, TypeProjectFileData>;
 };
 
@@ -44,8 +44,8 @@ const defaultState: TypeEditorState = {
   sourceTypeList: [],
   sourceModuleList: [],
   sourceModuleSelected: SourceModuleConf.default,
-  sourcePageSelected: SourcePageConf.default,
-  sourcePageDataMap: {},
+  sourcePageSelected: SourcePageOption.default,
+  sourcePageConfigMap: {},
   projectFileDataMap: {}
 };
 
@@ -97,10 +97,10 @@ export default function EditorReducer(
       });
     }
     // 页面数据
-    case ACTION_TYPES.PATCH_PAGE_DATA: {
+    case ACTION_TYPES.PATCH_PAGE_CONFIG: {
       return updateState(state, {
-        sourcePageDataMap: {
-          ...state.sourcePageDataMap,
+        sourcePageConfigMap: {
+          ...state.sourcePageConfigMap,
           [action.payload.config]: action.payload
         }
       });

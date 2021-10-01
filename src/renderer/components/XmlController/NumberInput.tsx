@@ -2,12 +2,12 @@ import React from "react";
 import styled from "styled-components";
 import { InputNumber } from "antd";
 import { RightCircleOutlined } from "@ant-design/icons";
-import { TypeSourceDefineValue } from "src/types/source";
+import { TypeSourceValueDefined } from "src/types/source";
 import Wrapper from "./Wrapper";
 
 const NumberInput: React.FC<{
   value: string;
-  sourceDefine: TypeSourceDefineValue;
+  sourceDefine: TypeSourceValueDefined;
   onChange: (e: string) => void;
 }> = props => {
   const { value, sourceDefine, onChange } = props;

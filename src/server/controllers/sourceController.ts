@@ -2,7 +2,7 @@ import { Express } from "express";
 import apiConfig from "src/common/apiConf";
 import {
   TypeSourceModuleConf,
-  TypeSourcePageData,
+  TypeSourcePageConf,
   TypeSourceConfig,
   TypeSourceOption,
   TypeScenarioOption
@@ -62,7 +62,7 @@ export default function sourceController(service: Express): void {
    */
   service.get<
     never, // reqParams
-    TypeResponseFrame<TypeSourcePageData, string>, // resBody
+    TypeResponseFrame<TypeSourcePageConf, string>, // resBody
     never, // reqBody
     UnionTupleToObjectKey<typeof apiConfig.GET_SOURCE_CONF_PAGE_DATA.query> // reqQuery
   >(apiConfig.GET_SOURCE_CONF_PAGE_DATA.path, async (request, response) => {

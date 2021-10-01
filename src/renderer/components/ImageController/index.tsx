@@ -12,7 +12,7 @@ import {
   useAbsolutePathInSource,
   useSourceImageUrl
 } from "@/hooks/source/index";
-import { TypeSourceDefineImage } from "src/types/source";
+import { TypeSourceImageDefine } from "src/types/source";
 
 import SourceStatus from "./SourceStatus";
 import ImageDisplay from "./ImageDisplay";
@@ -54,7 +54,7 @@ import { previewFile } from "./utils";
 
 const ImageController: React.FC<{
   className: string;
-  sourceDefine: TypeSourceDefineImage;
+  sourceDefine: TypeSourceImageDefine;
 }> = props => {
   const { sourceDefine, className } = props;
   const { sourceData, description, src } = sourceDefine;

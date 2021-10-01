@@ -2,17 +2,17 @@ import React from "react";
 import styled from "styled-components";
 import { Collapse } from "antd";
 import {
-  useSourcePageConf,
+  useSourcePageOption,
   useSourcePageGroupList,
   useSourceImageUrl
 } from "@/hooks/source/index";
 import { PreloadImage } from "@/components/ImageCollection";
-import { TypeSourcePageConf } from "src/types/source";
+import { TypeSourcePageOption } from "src/types/source";
 
-const PagePreview: React.FC<{ pageData: TypeSourcePageConf }> = props => {
+const PagePreview: React.FC<{ pageData: TypeSourcePageOption }> = props => {
   const { pageData } = props;
   const sourceImageURL = useSourceImageUrl(pageData.preview);
-  const [pageConf, setPageConf] = useSourcePageConf();
+  const [pageConf, setPageConf] = useSourcePageOption();
 
   return (
     <StylePreviewImage data-active={String(pageConf.key === pageData.key)}>

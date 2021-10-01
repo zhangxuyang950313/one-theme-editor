@@ -2,7 +2,7 @@ import apiConfig from "src/common/apiConf";
 import {
   TypeSourceConfig,
   TypeSourceOption,
-  TypeSourcePageData,
+  TypeSourcePageConf,
   TypeScenarioOption
 } from "src/types/source";
 import { TypeRequestResult, UnionTupleToObjectKey } from "src/types/request";
@@ -50,9 +50,9 @@ export async function apiGetSourcePageConfData(
   params: UnionTupleToObjectKey<
     typeof apiConfig.GET_SOURCE_CONF_PAGE_DATA.query
   >
-): Promise<TypeSourcePageData> {
+): Promise<TypeSourcePageConf> {
   return createHttp()
-    .get<TypeRequestResult<TypeSourcePageData>>(
+    .get<TypeRequestResult<TypeSourcePageConf>>(
       apiConfig.GET_SOURCE_CONF_PAGE_DATA.path,
       { params }
     )

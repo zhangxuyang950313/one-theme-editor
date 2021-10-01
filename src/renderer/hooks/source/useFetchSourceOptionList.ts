@@ -10,7 +10,7 @@ import ERR_CODE from "src/common/errorCode";
 import { useScenarioOption } from ".";
 
 /**
- * 获取编辑器列表
+ * 获取编辑器资源选项列表列表
  * @returns
  */
 export default function useFetchSourceOptionList(): {

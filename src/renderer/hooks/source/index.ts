@@ -10,13 +10,13 @@ import {
   TypeSourceOption,
   TypeSourcePageGroupConf,
   TypeSourceModuleConf,
-  TypeSourcePageConf,
+  TypeSourcePageOption,
   TypeSourceTypeConf,
   TypeLayoutElement,
   TypeLayoutImageElement,
   TypeLayoutTextElement,
-  TypeSourcePageData,
-  TypeSourceDefine
+  TypeSourcePageConf,
+  TypeSourceDefined
 } from "src/types/source";
 import {
   useStarterDispatch,
@@ -119,19 +119,19 @@ export function useSourcePageGroupList(): TypeSourcePageGroupConf[] {
  * 获取当前选择的页面配置
  * @returns
  */
-export function useSourcePageConf(): [
-  TypeSourcePageConf,
-  (data: TypeSourcePageConf) => void
+export function useSourcePageOption(): [
+  TypeSourcePageOption,
+  (data: TypeSourcePageOption) => void
 ] {
   const dispatch = useEditorDispatch();
   const pageConf = useEditorSelector(state => state.sourcePageSelected);
   return [pageConf, data => dispatch(ActionSetCurrentPage(data))];
 }
 
-export function useSourcePageData(): TypeSourcePageData | null {
+export function useSourcePageConfig(): TypeSourcePageConf | null {
   return useEditorSelector(state => {
     const pageConfSrc = state.sourcePageSelected.src;
-    return state.sourcePageDataMap[pageConfSrc] || null;
+    return state.sourcePageConfigMap[pageConfSrc] || null;
   });
 }
 
@@ -145,8 +145,8 @@ export function useSourceTypeList(): TypeSourceTypeConf[] {
 /**
  * 获取素材定义数据列表
  */
-export function useSourceDefineList(): TypeSourceDefine[] {
-  const sourcePageSelected = useSourcePageData();
+export function useSourceDefineList(): TypeSourceDefined[] {
+  const sourcePageSelected = useSourcePageConfig();
   return sourcePageSelected?.sourceDefineList || [];
 }
 
@@ -157,7 +157,7 @@ export function useLayoutElementList(): TypeLayoutElement[] {
   return useEditorSelector(state => {
     const pageConfSrc = state.sourcePageSelected.src;
     if (!pageConfSrc) return [];
-    return state.sourcePageDataMap[pageConfSrc]?.layoutElementList || [];
+    return state.sourcePageConfigMap[pageConfSrc]?.layoutElementList || [];
   });
 }
 

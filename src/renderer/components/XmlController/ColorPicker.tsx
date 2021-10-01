@@ -4,7 +4,7 @@ import { Input, message, Tooltip } from "antd";
 import { RGBColor, SketchPicker } from "react-color";
 import { RightCircleOutlined } from "@ant-design/icons";
 import { useProjectUUID } from "@/hooks/project/index";
-import { TypeSourceDefineValue } from "src/types/source";
+import { TypeSourceValueDefined } from "src/types/source";
 import { StyleGirdBackground } from "@/style";
 import { RgbaObject } from "hex-rgb";
 import ColorUtil, { HEX_FORMAT } from "src/utils/ColorUtil";
@@ -169,7 +169,7 @@ const StyleColorPick = styled.div`
 // 颜色值选择器
 const ColorPicker: React.FC<{
   value: string;
-  sourceDefine: TypeSourceDefineValue;
+  sourceDefine: TypeSourceValueDefined;
   onChange: (x: string) => void;
 }> = props => {
   const { value, sourceDefine, onChange } = props;

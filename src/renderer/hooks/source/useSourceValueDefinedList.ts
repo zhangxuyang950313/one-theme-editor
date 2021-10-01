@@ -1,15 +1,11 @@
 import { SOURCE_TYPES } from "src/enum";
-import { TypeSourceDefineValue } from "src/types/source";
+import { TypeSourceValueDefined } from "src/types/source";
 import { useSourceTypeList, useSourceDefineList } from ".";
 
 /**
- * 值类型素材定义 map tag -> list
- * @deprecated
+ * 值类型素材定义列表
  */
-export default function useSourceDefineValueMap(): Map<
-  string,
-  TypeSourceDefineValue[]
-> {
+export default function useSourceValueDefinedList(): TypeSourceValueDefined[] {
   const XML_VALUE_TYPE = new Set([
     SOURCE_TYPES.COLOR,
     SOURCE_TYPES.BOOLEAN,
@@ -21,10 +17,7 @@ export default function useSourceDefineValueMap(): Map<
   const valueSourceTags = sourceTypeList
     .filter(item => XML_VALUE_TYPE.has(item.type))
     .map(item => item.tag);
-  return sourceDefineList.reduce((t, o) => {
-    if (valueSourceTags.includes(o.tagName)) {
-      t.set(o.tagName, [...(t.get(o.tagName) || []), o]);
-    }
-    return t;
-  }, new Map());
+  return sourceDefineList.flatMap(item =>
+    valueSourceTags.includes(item.tagName) ? [item] : []
+  ) as TypeSourceValueDefined[];
 }

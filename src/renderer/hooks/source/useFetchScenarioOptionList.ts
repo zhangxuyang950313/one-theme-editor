@@ -7,7 +7,7 @@ import { LOAD_STATUS } from "src/enum";
 import { useAsyncUpdater } from "..";
 
 /**
- * 获取配置的场景列表
+ * 获取配置的场景选项列表
  * @returns
  */
 export default function useFetchScenarioOptionList(): {

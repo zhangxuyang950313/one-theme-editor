@@ -5,14 +5,14 @@ import {
   TypeLayoutImageElement,
   TypeLayoutTextElement,
   TypeSourceModuleConf,
+  TypeSourcePageOption,
   TypeSourcePageConf,
-  TypeSourcePageData,
   TypeSourcePageGroupConf,
   TypeSourceTypeConf,
-  TypeSourceDefine,
-  TypePageDefineImageData,
-  TypePageDefineValueData,
-  TypeSourceDefineImage
+  TypeSourceDefined,
+  TypePageDefinedImageData,
+  TypePageDefinedValueData,
+  TypeSourceImageDefined
 } from "../types/source";
 import { TypeProjectUiVersion } from "../types/project";
 import {
@@ -23,37 +23,37 @@ import {
 } from "../enum/index";
 import { AbstractDataModel } from "./AbstractDataModel";
 
-export class SourcePageConf extends AbstractDataModel<TypeSourcePageConf> {
-  protected data: TypeSourcePageConf = {
+export class SourcePageOption extends AbstractDataModel<TypeSourcePageOption> {
+  protected data: TypeSourcePageOption = {
     key: "",
     name: "",
     preview: "",
     src: ""
   };
 
-  static default = new SourcePageConf().create();
+  static default = new SourcePageOption().create();
 }
 
-export class DefineImageData extends AbstractDataModel<TypePageDefineImageData> {
-  protected data: TypePageDefineImageData = {
+export class DefinedImageData extends AbstractDataModel<TypePageDefinedImageData> {
+  protected data: TypePageDefinedImageData = {
     width: 0,
     height: 0,
     size: 0,
     ninePatch: false,
     filename: ""
   };
-  static default = new DefineImageData().create();
+  static default = new DefinedImageData().create();
 }
 
-export class DefineValueData extends AbstractDataModel<TypePageDefineValueData> {
-  protected data: TypePageDefineValueData = {
+export class DefinedValueData extends AbstractDataModel<TypePageDefinedValueData> {
+  protected data: TypePageDefinedValueData = {
     defaultValue: "",
     valueName: ""
   };
 }
 
-export class SourceDefineData extends AbstractDataModel<TypeSourceDefine> {
-  protected data: TypeSourceDefineImage = {
+export class SourceDefinedData extends AbstractDataModel<TypeSourceDefined> {
+  protected data: TypeSourceImageDefined = {
     tagName: "",
     name: "",
     description: "",
@@ -82,7 +82,7 @@ export class SourceImageElement extends AbstractDataModel<TypeLayoutImageElement
     sourceType: SOURCE_TYPES.IMAGE,
     description: "",
     src: "",
-    sourceData: new DefineImageData().create(),
+    sourceData: new DefinedImageData().create(),
     layout: {
       x: "0",
       y: "0",
@@ -114,8 +114,8 @@ export class SourceTextElement extends AbstractDataModel<TypeLayoutTextElement> 
   };
 }
 
-export class SourcePageData extends AbstractDataModel<TypeSourcePageData> {
-  protected data: TypeSourcePageData = {
+export class SourcePageConfig extends AbstractDataModel<TypeSourcePageConf> {
+  protected data: TypeSourcePageConf = {
     config: "",
     version: "",
     description: "",
@@ -132,7 +132,7 @@ export class SourcePageGroupConf extends AbstractDataModel<TypeSourcePageGroupCo
     pageList: []
   };
 
-  static default = new SourcePageConf().create();
+  static default = new SourcePageOption().create();
 }
 
 export class SourceModuleConf extends AbstractDataModel<TypeSourceModuleConf> {

@@ -4,22 +4,22 @@ import { notification } from "antd";
 import { apiGetSourcePageConfData } from "@/request";
 import { useEditorDispatch } from "@/store";
 import { ActionPatchPageDataMap } from "@/store/editor/action";
-import { TypeSourcePageData } from "src/types/source";
+import { TypeSourcePageConf } from "src/types/source";
 import { LOAD_STATUS } from "src/enum";
 import { asyncQueue } from "src/utils";
 import { useSourcePageGroupList, useSourceConfigPath } from ".";
 
 /**
- * 获取页面数据
+ * 获取当前工程当前模块的页面列表
  * @returns
  */
 export default function useFetchPageConfList(): [
-  TypeSourcePageData[],
+  TypeSourcePageConf[],
   LOAD_STATUS,
   () => Promise<void>
 ] {
   const [status, setStatus] = useState(LOAD_STATUS.INITIAL);
-  const [pageData, setPageData] = useState<TypeSourcePageData[]>([]);
+  const [pageData, setPageData] = useState<TypeSourcePageConf[]>([]);
   const dispatch = useEditorDispatch();
   const pageGroupList = useSourcePageGroupList();
   const sourceConfigPath = useSourceConfigPath();

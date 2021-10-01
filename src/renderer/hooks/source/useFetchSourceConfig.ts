@@ -10,7 +10,7 @@ import ERR_CODE from "src/common/errorCode";
 import { useSourceConfigPath } from ".";
 
 /**
- * 获取资源配置
+ * 获取当前工程资源配置(projectData.sourceConfigPath)
  * @returns
  */
 export default function useFetchSourceConfig(): [

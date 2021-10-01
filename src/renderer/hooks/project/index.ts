@@ -20,7 +20,7 @@ import {
   TypeScenarioConf,
   TypeFileTemplateConf,
   TypeSourceConfig,
-  TypeSourcePageData
+  TypeSourcePageConf
 } from "src/types/source";
 import { FileTemplate } from "src/data/ScenarioConfig";
 import { useImagePrefix } from "../image";
@@ -79,7 +79,7 @@ export function useProjectInfoConfig(): TypeFileTemplateConf {
 type TypeInitializedProjectData = {
   projectData: TypeProjectDataDoc;
   sourceConfig: TypeSourceConfig;
-  pageConfigList: TypeSourcePageData[];
+  pageConfigList: TypeSourcePageConf[];
 };
 export function useInitProject(): [
   TypeInitializedProjectData,

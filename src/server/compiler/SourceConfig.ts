@@ -5,14 +5,14 @@ import {
   TypeSourceConfig,
   TypeSourceModuleConf,
   TypeSourcePageGroupConf,
-  TypeSourcePageConf,
+  TypeSourcePageOption,
   TypeSourceOption,
   TypeSourceTypeConf
 } from "src/types/source";
 import {
   SourceOption,
   SourceModuleConf,
-  SourcePageConf,
+  SourcePageOption,
   SourcePageGroupConf,
   SourceTypeConf,
   UiVersion
@@ -98,7 +98,7 @@ export default class SourceConfig extends XmlFileCompiler {
   }
 
   // 页面配置列表
-  getPageList(pageNodeList: XMLNodeBase[]): TypeSourcePageConf[] {
+  getPageList(pageNodeList: XMLNodeBase[]): TypeSourcePageOption[] {
     // 这里是在选择模板版本后得到的目标模块目录
     return pageNodeList.map(node => {
       const src = node.getAttributeOf("src");
@@ -106,7 +106,7 @@ export default class SourceConfig extends XmlFileCompiler {
         namespace: this.namespace,
         config: src
       }).getPreviewList();
-      return new SourcePageConf()
+      return new SourcePageOption()
         .set("key", UUID())
         .set("name", node.getAttributeOf("name"))
         .set("preview", previewList[0] || "")
