@@ -3,6 +3,7 @@ import {
   ALIGN_VALUES,
   ALIGN_V_VALUES,
   ELEMENT_TAG,
+  FILE_TEMPLATE_TYPE,
   PACK_TYPE,
   SOURCE_TYPES
 } from "../enum";
@@ -27,10 +28,11 @@ export type TypeSourceConfig = TypeSourceOption & {
   sourceModuleList: TypeSourceModuleConf[];
 };
 
-export type TypeProjectInfoConf = {
+export type TypeFileTemplateConf = {
   output: string;
-  propsMapper: Array<{
-    prop: string;
+  type: FILE_TEMPLATE_TYPE;
+  items: Array<{
+    name: string;
     description: string;
     disabled: boolean;
     visible: boolean;
@@ -56,7 +58,7 @@ export type TypeApplyConf = {
 export type TypeScenarioConf = {
   name: string;
   md5: string;
-  projectInfoConfig: TypeProjectInfoConf;
+  fileTempList: TypeFileTemplateConf[];
   packageConfig: TypePackConf;
   applyConfig: TypeApplyConf;
 };

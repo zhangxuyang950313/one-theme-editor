@@ -1,14 +1,10 @@
 <Configuration>
 
-    <!-- 描述文件模板 -->
-    <ProjectInfoConfig output="./description.xml">
-        <PropsMapper>
-            <Item prop="name"       description="名称"/>
-            <Item prop="designer"   description="设计师"/>
-            <Item prop="author"     description="制作者"/>
-            <Item prop="version"    description="版本号"/>
-            <Item prop="uiVersion"  description="UI版本" disabled="true" visible="true"/>
-        </PropsMapper>
+    <!-- 
+        文件模板 
+        type: 指定的编辑器，  info (工程信息编辑器)
+    -->
+    <FileTemplate output="./description.xml" type="info">
         <Template>
             <?xml version="1.0" encoding="utf-8"?>
             <MIUI-Theme>
@@ -19,7 +15,14 @@
                 <uiVersion>${uiVersion}</uiVersion>
             </MIUI-Theme>
         </Template>
-    </ProjectInfoConfig>
+        <Items>
+            <Item name="name"       description="名称" type=""/>
+            <Item name="designer"   description="设计师"/>
+            <Item name="author"     description="制作者"/>
+            <Item name="version"    description="版本号"/>
+            <Item name="uiVersion"  description="UI版本" disabled="true" visible="true"/>
+        </Items>
+    </FileTemplate>
 
     <!-- 编辑器资源配置 -->
     <SourceConfig src="xiaomi/miui12/description.xml"/>
@@ -56,16 +59,15 @@
     <ApplyConfig>
         <!-- 
             编辑器打包时包含环境变量：
-            editor_package_file:  本地打包后的文件路径
-            phone_package_file:   放入手机目录的文件路径
+            packaged:  本地打包后的文件路径(固定写法，用于编辑器指定)
         -->
         <Step 
             description="推送到手机..." 
-            cmd="adb push ${editor_package_file} /sdcard/${phone_package_file}"
+            cmd="adb push ${packaged} /sdcard/mi-theme.mtz"
         />
         <Step 
             description="应用到主题..." 
-            cmd="adb shell am start -n com.android.thememanager/com.android.thememanager.ApplyThemeForScreenshot -e theme_file_path /sdcard/${phone_package_file} -e api_called_from OneThemeEditor"
+            cmd="adb shell am start -n com.android.thememanager/com.android.thememanager.ApplyThemeForScreenshot -e theme_file_path /sdcard/mi-theme.mtz -e api_called_from OneThemeEditor"
         />
     </ApplyConfig>
 </Configuration>

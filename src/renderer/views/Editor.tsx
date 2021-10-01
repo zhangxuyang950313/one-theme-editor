@@ -38,26 +38,25 @@ const Editor: React.FC = () => {
             image={Empty.PRESENTED_IMAGE_SIMPLE}
             description={isEmpty ? "暂无主题数据" : "加载失败"}
           />
-          <Button
-            type="primary"
-            size="small"
-            onClick={() => {
-              handleFetch();
-            }}
-          >
-            重试
-          </Button>
-          {isEmpty && (
+          <div>
             <Button
               type="primary"
-              size="small"
               onClick={() => {
                 history.replace("/");
               }}
             >
               返回首页
             </Button>
-          )}
+            <span style={{ margin: "0 10px" }} />
+            <Button
+              type="primary"
+              onClick={() => {
+                handleFetch();
+              }}
+            >
+              重试
+            </Button>
+          </div>
         </StyleEditorEmpty>
       );
     }

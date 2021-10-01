@@ -39,8 +39,8 @@ export enum ELEMENT_TAG {
   Color = "Color",
   Scenario = "Scenario",
   SourceConfig = "SourceConfig",
-  ProjectInfoConfig = "ProjectInfoConfig",
-  PropsMapper = "PropsMapper"
+  FileTemplate = "FileTemplate",
+  Items = "Items"
 }
 
 // 元素类型
@@ -124,4 +124,10 @@ export enum TOOLS_BAR_BUTTON {
   DARK = "深色",
   LIGHT = "浅色",
   PLACEHOLDER = ""
+}
+
+// 文件模板类型
+export enum FILE_TEMPLATE_TYPE {
+  UNKNOWN = "unknown",
+  INFO = "info"
 }

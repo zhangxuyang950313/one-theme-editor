@@ -12,10 +12,13 @@ import { TypeSourceOption } from "src/types/source";
 import styled from "styled-components";
 import React, { useEffect, useRef, useState } from "react";
 import { Modal, Button, Form, Input, message } from "antd";
+import { FieldError } from "rc-field-form/lib/interface";
 import { FileAddOutlined } from "@ant-design/icons";
 import ScenarioConfig from "src/data/ScenarioConfig";
 import Steps from "@/components/Steps";
-import ProjectInfoForm from "@/components/ProjectInfoForm";
+import { useStarterSelector } from "@/store";
+import { FILE_TEMPLATE_TYPE } from "src/enum";
+import { ProjectInput } from "../Forms";
 import SourceConfigManager from "./SourceConfigManager";
 
 // 表单默认值
@@ -51,7 +54,14 @@ const CreateProject: React.FC<{
     path.join(defaultPath, initialValues.name)
   );
   // 表单错误列表
-  const [fieldsError, setFieldsError] = useState(form.getFieldsError());
+  const [fieldsError, setFieldsError] = useState<FieldError[]>([]);
+
+  // 工程信息配置
+  const projectInfoConfig = useStarterSelector(state =>
+    state.scenarioOptionSelected.fileTempList.find(
+      item => item.type === FILE_TEMPLATE_TYPE.INFO
+    )
+  );
 
   // 当前按钮组件
   const thisRef = useRef<HTMLElement | null>(null);
@@ -110,39 +120,62 @@ const CreateProject: React.FC<{
       Context: (
         <StyleFillInfo>
           {/* 填写信息 */}
-          <ProjectInfoForm
-            form={form}
-            // <Modal /> 和 Form 一起配合使用时，
-            // 设置 destroyOnClose 也不会在 Modal 关闭时销毁表单字段数据，
-            // 需要设置 <Form preserve={false} />
-            preserve={false}
-            initialValues={initialValues}
-            onValuesChange={(changedValue: TypeProjectInfo) => {
-              const projectName = changedValue.name;
-              if (!projectName) return;
-              if (path.basename(projectRoot) === projectName) return;
-              // 非绝对路径使用默认路径
-              if (!path.isAbsolute(projectRoot)) {
-                setProjectRoot(path.join(defaultPath, projectName));
-                return;
-              }
-              // 路径存在视为目标根路径，向后追加工程名称
-              if (fse.pathExistsSync(projectRoot)) {
-                setProjectRoot(path.join(projectRoot, projectName));
-                return;
-              }
-              // 当前路径不存在且向上一级路径存在视为当前的目标路径，替换最后一级路径
-              const dirname = path.dirname(projectRoot);
-              if (fse.pathExistsSync(dirname)) {
-                setProjectRoot(path.join(dirname, projectName));
-                return;
-              }
-            }}
-            onFieldsChange={() => {
-              setFieldsError(form.getFieldsError());
-              projectInfoRef.current = form.getFieldsValue();
-            }}
-          />
+          {projectInfoConfig && (
+            <Form
+              form={form}
+              colon={false}
+              labelAlign="right"
+              labelCol={{ span: 4 }}
+              // <Modal /> 和 Form 一起配合使用时，
+              // 设置 destroyOnClose 也不会在 Modal 关闭时销毁表单字段数据，
+              // 需要设置 <Form preserve={false} />
+              preserve={false}
+              initialValues={initialValues}
+              onValuesChange={(changedValue: TypeProjectInfo) => {
+                const projectName = changedValue.name;
+                if (!projectName) return;
+                if (path.basename(projectRoot) === projectName) return;
+                // 非绝对路径使用默认路径
+                if (!path.isAbsolute(projectRoot)) {
+                  setProjectRoot(path.join(defaultPath, projectName));
+                  return;
+                }
+                // 路径存在视为目标根路径，向后追加工程名称
+                if (fse.pathExistsSync(projectRoot)) {
+                  setProjectRoot(path.join(projectRoot, projectName));
+                  return;
+                }
+                // 当前路径不存在且向上一级路径存在视为当前的目标路径，替换最后一级路径
+                const dirname = path.dirname(projectRoot);
+                if (fse.pathExistsSync(dirname)) {
+                  setProjectRoot(path.join(dirname, projectName));
+                  return;
+                }
+              }}
+              onFieldsChange={() => {
+                setFieldsError(form.getFieldsError());
+                projectInfoRef.current = form.getFieldsValue();
+              }}
+            >
+              {projectInfoConfig.items.map(prop => {
+                return (
+                  prop.visible && (
+                    <ProjectInput
+                      key={prop.name}
+                      label={prop.description}
+                      name={prop.name}
+                      disabled={prop.disabled}
+                      onChange={event => {
+                        form.setFieldsValue({
+                          [prop.name]: event.target.value
+                        });
+                      }}
+                    />
+                  )
+                );
+              })}
+            </Form>
+          )}
           <StyleSetLocalPath>
             <p>选择本地目录</p>
             <div className="input-area">
@@ -256,7 +289,7 @@ const CreateProject: React.FC<{
           const scenarioConfig = new ScenarioConfig()
             .set("name", currentScenarioOption.name)
             .set("md5", currentScenarioOption.md5)
-            .set("projectInfoConfig", currentScenarioOption.projectInfoConfig)
+            .set("fileTempList", currentScenarioOption.fileTempList)
             .set("packageConfig", currentScenarioOption.packageConfig)
             .set("applyConfig", currentScenarioOption.applyConfig)
             .create();

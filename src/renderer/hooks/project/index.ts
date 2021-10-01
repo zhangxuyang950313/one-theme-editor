@@ -15,13 +15,14 @@ import {
 
 import XMLNodeElement from "src/server/compiler/XMLNodeElement";
 import { useLayoutEffect, useEffect, useState } from "react";
-import { LOAD_STATUS, PROJECT_FILE_TYPE } from "src/enum";
+import { FILE_TEMPLATE_TYPE, LOAD_STATUS, PROJECT_FILE_TYPE } from "src/enum";
 import {
   TypeScenarioConf,
-  TypeProjectInfoConf,
+  TypeFileTemplateConf,
   TypeSourceConfig,
   TypeSourcePageData
 } from "src/types/source";
+import { FileTemplate } from "src/data/ScenarioConfig";
 import { useImagePrefix } from "../image";
 import useFetchProjectData from "../project/useFetchProjectData";
 import useFetchSourceConfig from "../source/useFetchSourceConfig";
@@ -61,9 +62,14 @@ export function useProjectInfo(): TypeProjectInfo {
 }
 
 // 工程信息模板配置
-export function useProjectInfoConfig(): TypeProjectInfoConf {
+export function useProjectInfoConfig(): TypeFileTemplateConf {
   const projectData = useProjectData();
-  return projectData.scenarioConfig.projectInfoConfig;
+  console.log(projectData.scenarioConfig);
+  return (
+    projectData.scenarioConfig.fileTempList.find(
+      item => item.type === FILE_TEMPLATE_TYPE.INFO
+    ) || FileTemplate.default
+  );
 }
 
 /**

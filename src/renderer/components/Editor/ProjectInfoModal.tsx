@@ -1,7 +1,6 @@
 import path from "path";
 import fse from "fs-extra";
 import React from "react";
-import styled from "styled-components";
 import { Form, Modal, ModalProps } from "antd";
 import {
   useProjectInfoConfig,
@@ -18,13 +17,8 @@ const ProjectInfoModal: React.FC<ModalProps> = props => {
   const projectInfo = useProjectInfo();
   const projectRoot = useProjectRoot();
   const projectInfoConfig = useProjectInfoConfig();
-  const onInputChange = (field: keyof TypeProjectInfo) => {
-    return (event: React.ChangeEvent<HTMLInputElement>) => {
-      form.setFieldsValue({ [field]: event.target.value });
-    };
-  };
   return (
-    <StyleProjectInfoModal
+    <Modal
       {...props}
       onOk={async e => {
         const data = form.getFieldsValue();
@@ -51,24 +45,24 @@ const ProjectInfoModal: React.FC<ModalProps> = props => {
       }}
     >
       <ProjectInfoForm form={form} preserve={false} initialValues={projectInfo}>
-        {projectInfoConfig.propsMapper.map(item => {
+        {projectInfoConfig.items.map(item => {
           return (
             item.visible && (
               <ProjectInput
-                key={item.prop}
+                key={item.name}
+                name={item.name}
                 label={item.description}
-                name={item.prop}
                 disabled={item.disabled}
-                onChange={onInputChange(item.prop)}
+                onChange={event => {
+                  form.setFieldsValue({ [item.name]: event.target.value });
+                }}
               />
             )
           );
         })}
       </ProjectInfoForm>
-    </StyleProjectInfoModal>
+    </Modal>
   );
 };
-
-const StyleProjectInfoModal = styled(Modal)``;
 
 export default ProjectInfoModal;

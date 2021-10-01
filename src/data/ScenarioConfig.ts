@@ -1,20 +1,22 @@
 import {
   TypePackConf,
   TypeApplyConf,
-  TypeProjectInfoConf,
+  TypeFileTemplateConf,
   TypeScenarioConf,
   TypeScenarioOption
 } from "src/types/source";
+import { FILE_TEMPLATE_TYPE } from "src/enum";
 import { AbstractDataModel } from "./AbstractDataModel";
 
-// 描述信息模板数据
-export class ProjectInfoConfig extends AbstractDataModel<TypeProjectInfoConf> {
-  protected data: TypeProjectInfoConf = {
+// 文件模板模板数据
+export class FileTemplate extends AbstractDataModel<TypeFileTemplateConf> {
+  protected data: TypeFileTemplateConf = {
     output: "",
-    propsMapper: [],
+    type: FILE_TEMPLATE_TYPE.UNKNOWN,
+    items: [],
     template: ""
   };
-  static default = new ProjectInfoConfig().create();
+  static default = new FileTemplate().create();
 }
 
 // 打包配置数据
@@ -42,7 +44,7 @@ export default class ScenarioConfig extends AbstractDataModel<TypeScenarioConf> 
   protected data: TypeScenarioConf = {
     name: "",
     md5: "",
-    projectInfoConfig: ProjectInfoConfig.default,
+    fileTempList: [],
     packageConfig: PackageConfig.default,
     applyConfig: ApplyConfig.default
   };

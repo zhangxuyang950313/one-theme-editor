@@ -28,7 +28,7 @@ export default function useFetchSourceOptionList(): {
     await sleep(300);
     apiGetSourceOptionList(currentScenarioOption.src)
       .then(data => {
-        console.log("配置列表：", data);
+        console.log("配置列表", data);
         setState(data);
         dispatch(ActionSetSourceOptionList(data));
         setStatus(LOAD_STATUS.SUCCESS);

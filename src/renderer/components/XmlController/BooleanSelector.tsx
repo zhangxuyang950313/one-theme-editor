@@ -18,7 +18,7 @@ const BooleanSelector: React.FC<{
     <Wrapper name={name} description={description}>
       <StyleBooleanSelector>
         <Radio.Group value={value} onChange={e => onChange(e.target.value)}>
-          <Radio value="">跟随系统</Radio>
+          <Radio value="">缺省</Radio>
           <Radio value="true">true</Radio>
           <Radio value="false">false</Radio>
         </Radio.Group>

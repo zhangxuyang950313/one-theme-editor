@@ -2,7 +2,7 @@ import path from "path";
 import fse from "fs-extra";
 import {
   TypeApplyConf,
-  TypeProjectInfoConf,
+  TypeFileTemplateConf,
   TypePackConf,
   TypeSourceOption
 } from "src/types/source";
@@ -10,7 +10,7 @@ import { ELEMENT_TAG, PACK_TYPE } from "src/enum/index";
 import {
   ApplyConfig,
   PackageConfig,
-  ProjectInfoConfig
+  FileTemplate
 } from "src/data/ScenarioConfig";
 import SourceConfig from "server/compiler/SourceConfig";
 import pathUtil from "server/utils/pathUtil";
@@ -27,29 +27,32 @@ export default class ScenarioConfig extends XmlTemplate {
   }
 
   // 解析描述文件配置
-  getProjectInfoConfig(): TypeProjectInfoConf {
-    const projectInfoConfigNode = super
+  getFileTempList(): TypeFileTemplateConf[] {
+    const fileTempNodes = super
       .getRootNode()
-      .getFirstChildNodeByTagname(ELEMENT_TAG.ProjectInfoConfig);
-    const propsMapNode = projectInfoConfigNode.getFirstChildNodeByTagname(
-      ELEMENT_TAG.PropsMapper
-    );
-    const templateNode = projectInfoConfigNode.getFirstChildNodeByTagname(
-      ELEMENT_TAG.Template
-    );
-    const propsMapper = propsMapNode
-      .getChildrenNodesByTagname(ELEMENT_TAG.Item)
-      .map(item => ({
-        prop: item.getAttributeOf("prop"),
-        description: item.getAttributeOf("description"),
-        disabled: item.getAttributeOf("disabled") === "true",
-        visible: item.getAttributeOf("visible") !== "false"
-      }));
-    return new ProjectInfoConfig()
-      .set("output", projectInfoConfigNode.getAttributeOf("output"))
-      .set("propsMapper", propsMapper)
-      .set("template", templateNode.buildXml())
-      .create();
+      .getChildrenNodesByTagname(ELEMENT_TAG.FileTemplate);
+    return fileTempNodes.map(fileTempNode => {
+      const itemsNode = fileTempNode.getFirstChildNodeByTagname(
+        ELEMENT_TAG.Items
+      );
+      const templateNode = fileTempNode.getFirstChildNodeByTagname(
+        ELEMENT_TAG.Template
+      );
+      const itemNodes: TypeFileTemplateConf["items"] = itemsNode
+        .getChildrenNodesByTagname(ELEMENT_TAG.Item)
+        .map(item => ({
+          name: item.getAttributeOf("name"),
+          description: item.getAttributeOf("description"),
+          disabled: item.getAttributeOf("disabled") === "true",
+          visible: item.getAttributeOf("visible") !== "false"
+        }));
+      return new FileTemplate()
+        .set("output", fileTempNode.getAttributeOf("output"))
+        .set("type", fileTempNode.getAttributeOf("type"))
+        .set("items", itemNodes)
+        .set("template", templateNode.buildXml())
+        .create();
+    });
   }
 
   // 解析打包配置
