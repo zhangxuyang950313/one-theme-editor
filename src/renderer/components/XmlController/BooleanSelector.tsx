@@ -2,18 +2,18 @@ import React from "react";
 import styled from "styled-components";
 
 import { Radio } from "antd";
-import { TypeResourceValueDefinition } from "src/types/resource";
+import { TypeValueDefinition } from "src/types/resource";
 import Wrapper from "./Wrapper";
 
 const BooleanSelector: React.FC<{
   value: string;
-  valueDefinition: TypeResourceValueDefinition;
+  valueDefinition: TypeValueDefinition;
   onChange: (s: string) => void;
 }> = props => {
   const { value, valueDefinition, onChange } = props;
-  const { name, description, valueData } = valueDefinition;
+  const { name, description, data } = valueDefinition;
 
-  if (!valueData) return null;
+  if (!data) return null;
   return (
     <Wrapper name={name} description={description}>
       <StyleBooleanSelector>

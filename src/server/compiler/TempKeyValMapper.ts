@@ -1,13 +1,13 @@
 import { TypeKeyValue } from "src/types/index";
 import {
-  TypeResourceXmlKeyValConf,
-  TypeResourceXmlKeyValMapperMap,
+  TypeXmlKeyValConfig,
+  TypeXmlKeyValMapperMap,
   TypeXmlTempKeyValMap
 } from "src/types/resource";
 import XmlFileCompiler from "./XmlFileCompiler";
 
 export default class TempKeyValMapper extends XmlFileCompiler {
-  private keyValMapData?: TypeResourceXmlKeyValMapperMap;
+  private keyValMapData?: TypeXmlKeyValMapperMap;
 
   /**
    * 获取 key value 列表
@@ -24,7 +24,7 @@ export default class TempKeyValMapper extends XmlFileCompiler {
    * 获取数据列表
    * @returns
    */
-  getDataList(): TypeResourceXmlKeyValConf[] {
+  getDataList(): TypeXmlKeyValConfig[] {
     return super.getRootChildrenNodes().map(item => ({
       name: item.getAttributeOf("name"),
       value: item.getAttributeOf("value") || item.getFirstTextChildValue(),
@@ -54,10 +54,10 @@ export default class TempKeyValMapper extends XmlFileCompiler {
    * 获取以 name 为 key 的 map
    * @returns
    */
-  getDataMap(): TypeResourceXmlKeyValMapperMap {
+  getDataMap(): TypeXmlKeyValMapperMap {
     if (this.keyValMapData) return this.keyValMapData;
     const rootNodes = super.getRootChildrenNodes();
-    const map: TypeResourceXmlKeyValMapperMap = new Map();
+    const map: TypeXmlKeyValMapperMap = new Map();
     rootNodes.forEach(item => {
       map.set(item.getAttributeOf("name"), item);
     });

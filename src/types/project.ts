@@ -3,7 +3,7 @@ import { PROJECT_FILE_TYPE } from "../enum";
 import { TypeDatabase } from "./index";
 
 // 版本信息
-export type TypeProjectUiVersion = {
+export type TypeUiVersion = {
   name: string;
   code: string;
 };
@@ -45,7 +45,7 @@ export type TypeXmlMapper = {
 // 打包所有信息
 export type TypeProjectData = TypeCreateProjectPayload & {
   uuid: string;
-  uiVersion: TypeProjectUiVersion;
+  uiVersion: TypeUiVersion;
 };
 
 // 在数据库中的图片数据
@@ -54,25 +54,25 @@ export type TypeImageDataDoc = TypeDatabase<TypeImageData>;
 // 在数据库中的工程信息
 export type TypeProjectDataDoc = TypeDatabase<TypeProjectData>;
 
-export type TypeProjectImageFileData = {
+export type TypeImageFileData = {
   readonly type: PROJECT_FILE_TYPE.IMAGE;
   src: string;
   url: string;
   imageData: TypeImageData;
 };
 
-export type TypeProjectXmlFileData = {
+export type TypeXmlFileData = {
   readonly type: PROJECT_FILE_TYPE.XML;
   src: string;
   element: Element;
 };
 
-export type TypeProjectUnknownFileData = {
+export type TypeUnknownFileData = {
   readonly type: PROJECT_FILE_TYPE.UNKNOWN;
   src: string;
 };
 
-export type TypeProjectFileData =
-  | TypeProjectUnknownFileData
-  | TypeProjectImageFileData
-  | TypeProjectXmlFileData;
+export type TypeFileData =
+  | TypeUnknownFileData
+  | TypeImageFileData
+  | TypeXmlFileData;

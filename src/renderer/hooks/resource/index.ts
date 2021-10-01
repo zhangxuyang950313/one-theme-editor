@@ -6,14 +6,14 @@ import {
 } from "@/store/editor/action";
 import {
   TypeScenarioOption,
-  TypeResourceModuleConf,
-  TypeResourcePageOption,
-  TypeResourceTypeConf,
+  TypeResModule,
+  TypeResPageOption,
+  TypeResType,
   TypeLayoutElement,
   TypeLayoutImageElement,
   TypeLayoutTextElement,
-  TypeResourcePageConf,
-  TypeResourceDefinition
+  TypeResPageConfig,
+  TypeResDefinition
 } from "src/types/resource";
 import {
   useStarterDispatch,
@@ -63,13 +63,11 @@ export function useScenarioOption(): [
  * @returns
  */
 export function useResourceModuleConf(): [
-  TypeResourceModuleConf,
-  (data: TypeResourceModuleConf) => void
+  TypeResModule,
+  (data: TypeResModule) => void
 ] {
   const dispatch = useEditorDispatch();
-  const resourceModuleConf = useEditorSelector(
-    state => state.currentModuleConfig
-  );
+  const resourceModuleConf = useEditorSelector(state => state.moduleConfig);
   return [resourceModuleConf, data => dispatch(ActionSetCurrentModule(data))];
 }
 
@@ -78,17 +76,17 @@ export function useResourceModuleConf(): [
  * @returns
  */
 export function useResourcePageOption(): [
-  TypeResourcePageOption,
-  (data: TypeResourcePageOption) => void
+  TypeResPageOption,
+  (data: TypeResPageOption) => void
 ] {
   const dispatch = useEditorDispatch();
-  const pageConf = useEditorSelector(state => state.currentPageOption);
+  const pageConf = useEditorSelector(state => state.pageOption);
   return [pageConf, data => dispatch(ActionSetCurrentPage(data))];
 }
 
-export function useResourcePageConfig(): TypeResourcePageConf | null {
+export function useResourcePageConfig(): TypeResPageConfig | null {
   return useEditorSelector(state => {
-    const pageConfSrc = state.currentPageOption.src;
+    const pageConfSrc = state.pageOption.src;
     return state.pageConfigMap[pageConfSrc] || null;
   });
 }
@@ -96,16 +94,16 @@ export function useResourcePageConfig(): TypeResourcePageConf | null {
 /**
  * 获取当前元素类型配置
  */
-export function useResourceTypeList(): TypeResourceTypeConf[] {
-  return useEditorSelector(state => state.resourceConfig.resourceTypeList);
+export function useResourceTypeList(): TypeResType[] {
+  return useEditorSelector(state => state.resourceConfig.typeList);
 }
 
 /**
  * 获取素材定义数据列表
  */
-export function useResourceDefinitionList(): TypeResourceDefinition[] {
+export function useResourceList(): TypeResDefinition[] {
   const resourcePageSelected = useResourcePageConfig();
-  return resourcePageSelected?.resourceDefinitionList || [];
+  return resourcePageSelected?.resourceList || [];
 }
 
 /**
@@ -113,7 +111,7 @@ export function useResourceDefinitionList(): TypeResourceDefinition[] {
  */
 export function useLayoutElementList(): TypeLayoutElement[] {
   return useEditorSelector(state => {
-    const pageConfSrc = state.currentPageOption.src;
+    const pageConfSrc = state.pageOption.src;
     if (!pageConfSrc) return [];
     return state.pageConfigMap[pageConfSrc]?.layoutElementList || [];
   });
@@ -125,7 +123,7 @@ export function useLayoutElementList(): TypeLayoutElement[] {
 export function useLayoutImageList(): TypeLayoutImageElement[] {
   const layoutElementList = useLayoutElementList();
   return layoutElementList.flatMap(item =>
-    item.resourceTag === ELEMENT_TAG.Image ? [item] : []
+    item.tag === ELEMENT_TAG.Image ? [item] : []
   );
 }
 
@@ -135,7 +133,7 @@ export function useLayoutImageList(): TypeLayoutImageElement[] {
 export function useTextSourceList(): TypeLayoutTextElement[] {
   const layoutElementList = useLayoutElementList();
   return layoutElementList.flatMap(item =>
-    item.resourceTag === ELEMENT_TAG.Text ? [item] : []
+    item.tag === ELEMENT_TAG.Text ? [item] : []
   );
 }
 

@@ -3,21 +3,26 @@ import querystring from "querystring";
 import fse from "fs-extra";
 import {
   TypeLayoutElement,
-  TypeResourcePageConf,
+  TypeResPageConfig,
   TypeLayoutImageElement,
   TypeLayoutTextElement,
-  TypeResourceDefinition
+  TypeResDefinition
 } from "src/types/resource";
 import {
   ElementLayoutConf,
-  DefinitionImageData,
+  ResImageData,
   LayoutImageElement,
   ResourcePageConfig,
   LayoutTextElement
 } from "src/data/ResourceConfig";
 import { getImageData } from "src/utils/index";
 import { placeholderRegexp } from "src/common/regexp";
-import { ELEMENT_TAG, ALIGN_VALUES, ALIGN_V_VALUES } from "src/enum/index";
+import {
+  ELEMENT_TAG,
+  ALIGN_VALUES,
+  ALIGN_V_VALUES,
+  IMAGE_RESOURCE_TYPES
+} from "src/enum/index";
 import pathUtil from "server/utils/pathUtil";
 import XMLNodeElement from "server/compiler/XMLNodeElement";
 import XmlFileCompiler from "./XmlFileCompiler";
@@ -29,7 +34,7 @@ export default class PageConfig extends XMLNodeElement {
   private pageNamespace: string;
   private pageConfig: string;
   private resourceRootAbsolute: string;
-  private resourceDefinitionInstance: ResourceDefinition;
+  private resDefinitionInstance: ResourceDefinition;
   constructor(data: { namespace: string; config: string }) {
     const file = path.join(
       pathUtil.RESOURCE_CONFIG_DIR,
@@ -45,7 +50,7 @@ export default class PageConfig extends XMLNodeElement {
       pathUtil.RESOURCE_CONFIG_DIR,
       data.namespace
     );
-    this.resourceDefinitionInstance = new ResourceDefinition(
+    this.resDefinitionInstance = new ResourceDefinition(
       this.getRootFirstChildNodeOf(ELEMENT_TAG.Resource),
       this.resourceRootAbsolute
     );
@@ -183,11 +188,9 @@ export default class PageConfig extends XMLNodeElement {
   }
 
   // 获取定义的资源配置数据
-  private getResourceDefinitionByName(
-    srcVal: string
-  ): TypeResourceDefinition | null {
-    const pName = this.getPlaceholderName(srcVal);
-    return this.resourceDefinitionInstance.getResourceByName(pName);
+  private getResDefinitionByName(srcVal: string): TypeResDefinition | null {
+    const placeholder = this.getPlaceholderName(srcVal);
+    return this.resDefinitionInstance.getResByName(placeholder);
   }
 
   /**
@@ -220,22 +223,22 @@ export default class PageConfig extends XMLNodeElement {
    */
   private imageElement(node: XMLNodeElement): TypeLayoutImageElement {
     const srcVal = node.getAttributeOf("src");
-    const valueDefinition = this.getResourceDefinitionByName(srcVal);
+    const valueDefinition = this.getResDefinitionByName(srcVal);
     let src = srcVal;
     let description = node.getAttributeOf("description");
     // 定义的数据，尝试解析 ${placeholder}
-    if (valueDefinition && valueDefinition.resourceData) {
+    if (valueDefinition && valueDefinition.data) {
       src = valueDefinition.src;
       description = valueDefinition.description;
     } else {
       try {
         // 直接定义，用于显示一些静态图片
-        src = this.resourceDefinitionInstance.getUrlData(srcVal).src;
+        src = this.resDefinitionInstance.getUrlData(srcVal).src;
       } catch (err) {
         console.log(`layout url ${srcVal} 解析失败`);
       }
     }
-    const definitionImageData = new DefinitionImageData();
+    const definitionImageData = new ResImageData();
     const imageElement = new LayoutImageElement();
     const resourcePath = this.resolvePath(src);
     if (fse.existsSync(resourcePath)) {
@@ -284,7 +287,7 @@ export default class PageConfig extends XMLNodeElement {
     const layout = this.layoutConf(node);
     const text = node.getAttributeOf("text");
     const colorVal = node.getAttributeOf("color");
-    const valueDefinition = this.getResourceDefinitionByName(colorVal);
+    const valueDefinition = this.getResDefinitionByName(colorVal);
     const textElementData = new LayoutTextElement();
     textElementData.set("text", text);
     textElementData.set("name", text);
@@ -295,9 +298,11 @@ export default class PageConfig extends XMLNodeElement {
       alignV: layout.alignV
     });
     if (valueDefinition) {
-      const { description, valueData, src } = valueDefinition;
+      const { description, src } = valueDefinition;
       textElementData.set("name", description);
-      textElementData.set("valueData", valueData);
+      if (valueDefinition.type !== IMAGE_RESOURCE_TYPES.IMAGE) {
+        textElementData.set("valueData", valueDefinition.data);
+      }
       textElementData.set("src", src);
     }
     return textElementData.create();
@@ -326,27 +331,24 @@ export default class PageConfig extends XMLNodeElement {
       });
   }
 
-  getResourceList(): TypeResourceDefinition[] {
-    return this.resourceDefinitionInstance.getResourceList();
+  getResList(): TypeResDefinition[] {
+    return this.resDefinitionInstance.getResList();
   }
 
-  getResourcePathList(): string[] {
-    return this.getResourceList()
+  getResPathList(): string[] {
+    return this.getResList()
       .map(item => item.src)
       .filter(Boolean);
   }
 
-  getData(): TypeResourcePageConf {
+  getData(): TypeResPageConfig {
     return new ResourcePageConfig()
       .set("config", this.pageConfig)
       .set("version", this.getVersion())
       .set("description", this.getDescription())
       .set("screenWidth", this.getScreenWidth())
       .set("previewList", this.getPreviewList())
-      .set(
-        "resourceDefinitionList",
-        this.resourceDefinitionInstance.getResourceList()
-      )
+      .set("resourceList", this.resDefinitionInstance.getResList())
       .set("layoutElementList", this.getLayoutElementList())
       .create();
   }

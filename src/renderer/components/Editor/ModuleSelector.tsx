@@ -8,7 +8,7 @@ import { SourceImage } from "../ImageCollection";
 // 模块选择器
 const ModuleSelector: React.FC = () => {
   const resourceModuleList = useEditorSelector(
-    state => state.resourceConfig.resourceModuleList
+    state => state.resourceConfig.moduleList
   );
   const [currentModule, setCurrentModule] = useResourceModuleConf();
 

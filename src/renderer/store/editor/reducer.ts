@@ -1,9 +1,9 @@
 import { updateState } from "@/store/utils";
-import { TypeProjectDataDoc, TypeProjectFileData } from "src/types/project";
+import { TypeProjectDataDoc, TypeFileData } from "src/types/project";
 import {
-  TypeResourceModuleConf,
-  TypeResourcePageOption,
-  TypeResourcePageConf,
+  TypeResModule,
+  TypeResPageOption,
+  TypeResPageConfig,
   TypeResourceConfig,
   TypeScenarioConfig
 } from "src/types/resource";
@@ -20,20 +20,20 @@ export type TypeEditorState = {
   projectData: TypeProjectDataDoc;
   scenarioConfig: TypeScenarioConfig;
   resourceConfig: TypeResourceConfig;
-  currentModuleConfig: TypeResourceModuleConf;
-  currentPageOption: TypeResourcePageOption;
-  pageConfigMap: Record<string, TypeResourcePageConf>;
-  projectFileDataMap: Record<string, TypeProjectFileData>;
+  moduleConfig: TypeResModule;
+  pageOption: TypeResPageOption;
+  pageConfigMap: Record<string, TypeResPageConfig>;
+  fileDataMap: Record<string, TypeFileData>;
 };
 
 const defaultState: TypeEditorState = {
   projectData: ProjectData.default,
   scenarioConfig: ScenarioConfigData.default,
   resourceConfig: ResourceConfigData.default,
-  currentModuleConfig: ResourceModuleConf.default,
-  currentPageOption: ResourcePageOption.default,
+  moduleConfig: ResourceModuleConf.default,
+  pageOption: ResourcePageOption.default,
   pageConfigMap: {},
-  projectFileDataMap: {}
+  fileDataMap: {}
 };
 
 const editorState: TypeEditorState = {
@@ -64,23 +64,23 @@ export default function EditorReducer(
     }
     // 配置数据
     case ACTION_TYPES.SET_RESOURCE_CONFIG: {
-      const { resourceModuleList } = action.payload;
+      const { moduleList: resourceModuleList } = action.payload;
       return updateState(state, {
         resourceConfig: action.payload,
-        currentModuleConfig: resourceModuleList[0],
-        currentPageOption: resourceModuleList[0]?.groupList?.[0].pageList?.[0]
+        moduleConfig: resourceModuleList[0],
+        pageOption: resourceModuleList[0]?.groupList?.[0].pageList?.[0]
       });
     }
     // 模块配置
     case ACTION_TYPES.SET_MODULE_CONFIG: {
       return updateState(state, {
-        currentModuleConfig: action.payload
+        moduleConfig: action.payload
       });
     }
     // 页面配置
     case ACTION_TYPES.SET_PAGE_OPTION: {
       return updateState(state, {
-        currentPageOption: action.payload
+        pageOption: action.payload
       });
     }
     // 页面数据
@@ -94,8 +94,8 @@ export default function EditorReducer(
     }
     case ACTION_TYPES.PATCH_PROJECT_RESOURCE: {
       return updateState(state, {
-        projectFileDataMap: {
-          ...state.projectFileDataMap,
+        fileDataMap: {
+          ...state.fileDataMap,
           [action.payload.src]: action.payload
         }
       });

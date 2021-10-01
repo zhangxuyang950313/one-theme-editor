@@ -19,9 +19,7 @@ export default function usePatchPageSourceData(): void {
   useEffect(() => {
     if (!pageData || !uuid || !projectRoot) return;
     const watcher = createWatcher({ cwd: projectRoot });
-    const resourceSrcSet = new Set(
-      pageData.resourceDefinitionList.map(o => o.src)
-    );
+    const resourceSrcSet = new Set(pageData.resourceList.map(o => o.src));
     const listener = async (file: string, event: FILE_EVENT) => {
       if (!resourceSrcSet.has(file)) return;
       console.log(`监听文件变动（${event}） '${file}' `);

@@ -1,19 +1,20 @@
 import React from "react";
 import { Tabs } from "antd";
-import { RESOURCE_TYPES } from "src/enum";
+import { IMAGE_RESOURCE_TYPES } from "src/enum";
 import { useResourceTypeList } from "@/hooks/resource/index";
 import useValueDefinitionList from "@/hooks/resource/useValueDefinitionList";
 import XmlController from "../XmlController";
 
-const XmlSourceList: React.FC = () => {
-  const resourceTypeList = useResourceTypeList();
+const ResXmlValList: React.FC = () => {
+  const resTypeList = useResourceTypeList();
   const valueDefinitionList = useValueDefinitionList();
+  console.log({ resTypeList });
   return (
     <Tabs>
-      {resourceTypeList
+      {resTypeList.map((item, index) => {
         // 过滤非图片素材
-        .flatMap(item => (item.type === RESOURCE_TYPES.IMAGE ? [] : [item]))
-        .map((item, index) => (
+        if (item.type === IMAGE_RESOURCE_TYPES.IMAGE) return null;
+        return (
           <Tabs.TabPane key={index} tab={item.name}>
             {valueDefinitionList
               .filter(o => o.tagName === item.tag)
@@ -31,9 +32,10 @@ const XmlSourceList: React.FC = () => {
                 return null;
               })}
           </Tabs.TabPane>
-        ))}
+        );
+      })}
     </Tabs>
   );
 };
 
-export default XmlSourceList;
+export default ResXmlValList;

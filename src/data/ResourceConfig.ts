@@ -1,30 +1,29 @@
 import {
-  TypeLayoutConf,
+  TypeLayoutConfig,
   TypeResourceConfig,
   TypeResourceOption,
   TypeLayoutImageElement,
   TypeLayoutTextElement,
-  TypeResourceModuleConf,
-  TypeResourcePageOption,
-  TypeResourcePageConf,
-  TypeResourcePageGroupConf,
-  TypeResourceTypeConf,
-  TypeResourceDefinition,
-  TypeResourceImageData,
-  TypeResourceValueData,
-  TypeResourceImageDefinition
+  TypeResModule,
+  TypeResPageOption,
+  TypeResPageConfig,
+  TypeResPageGroup,
+  TypeResType,
+  TypeResDefinition,
+  TypeResValueData
 } from "../types/resource";
-import { TypeProjectUiVersion } from "../types/project";
+import { TypeImageData, TypeUiVersion } from "../types/project";
 import {
   ALIGN_VALUES,
   ALIGN_V_VALUES,
   ELEMENT_TAG,
-  RESOURCE_TYPES
+  IMAGE_RESOURCE_TYPES,
+  VALUE_RESOURCE_TYPES
 } from "../enum/index";
 import { AbstractDataModel } from "./AbstractDataModel";
 
-export class ResourcePageOption extends AbstractDataModel<TypeResourcePageOption> {
-  protected data: TypeResourcePageOption = {
+export class ResourcePageOption extends AbstractDataModel<TypeResPageOption> {
+  protected data: TypeResPageOption = {
     key: "",
     name: "",
     preview: "",
@@ -34,37 +33,37 @@ export class ResourcePageOption extends AbstractDataModel<TypeResourcePageOption
   static default = new ResourcePageOption().create();
 }
 
-export class DefinitionImageData extends AbstractDataModel<TypeResourceImageData> {
-  protected data: TypeResourceImageData = {
+export class ResImageData extends AbstractDataModel<TypeImageData> {
+  protected data: TypeImageData = {
     width: 0,
     height: 0,
     size: 0,
     ninePatch: false,
     filename: ""
   };
-  static default = new DefinitionImageData().create();
+  static default = new ResImageData().create();
 }
 
-export class DefinitionValueData extends AbstractDataModel<TypeResourceValueData> {
-  protected data: TypeResourceValueData = {
+export class ResValueData extends AbstractDataModel<TypeResValueData> {
+  protected data: TypeResValueData = {
     defaultValue: "",
     valueName: ""
   };
 }
 
-export class SourceDefinitionData extends AbstractDataModel<TypeResourceDefinition> {
-  protected data: TypeResourceImageDefinition = {
+export class ResourceDefinitionData extends AbstractDataModel<TypeResDefinition> {
+  protected data: TypeResDefinition = {
+    type: IMAGE_RESOURCE_TYPES.IMAGE,
     tagName: "",
     name: "",
     description: "",
     src: "",
-    resourceData: null,
-    valueData: null
+    data: null
   };
 }
 
-export class ElementLayoutConf extends AbstractDataModel<TypeLayoutConf> {
-  protected data: TypeLayoutConf = {
+export class ElementLayoutConf extends AbstractDataModel<TypeLayoutConfig> {
+  protected data: TypeLayoutConfig = {
     x: "",
     y: "",
     w: "",
@@ -78,11 +77,11 @@ export class ElementLayoutConf extends AbstractDataModel<TypeLayoutConf> {
 
 export class LayoutImageElement extends AbstractDataModel<TypeLayoutImageElement> {
   protected data: TypeLayoutImageElement = {
-    resourceTag: ELEMENT_TAG.Image,
-    resourceType: RESOURCE_TYPES.IMAGE,
+    tag: ELEMENT_TAG.Image,
+    type: IMAGE_RESOURCE_TYPES.IMAGE,
     description: "",
     src: "",
-    resourceData: new DefinitionImageData().create(),
+    resourceData: new ResImageData().create(),
     layout: {
       x: "0",
       y: "0",
@@ -96,8 +95,8 @@ export class LayoutImageElement extends AbstractDataModel<TypeLayoutImageElement
 
 export class LayoutTextElement extends AbstractDataModel<TypeLayoutTextElement> {
   protected data: TypeLayoutTextElement = {
-    resourceTag: ELEMENT_TAG.Text,
-    resourceType: RESOURCE_TYPES.COLOR,
+    tag: ELEMENT_TAG.Text,
+    type: VALUE_RESOURCE_TYPES.COLOR,
     name: "",
     text: "",
     src: "",
@@ -114,20 +113,20 @@ export class LayoutTextElement extends AbstractDataModel<TypeLayoutTextElement> 
   };
 }
 
-export class ResourcePageConfig extends AbstractDataModel<TypeResourcePageConf> {
-  protected data: TypeResourcePageConf = {
+export class ResourcePageConfig extends AbstractDataModel<TypeResPageConfig> {
+  protected data: TypeResPageConfig = {
     config: "",
     version: "",
     description: "",
     screenWidth: "",
     previewList: [],
-    resourceDefinitionList: [],
+    resourceList: [],
     layoutElementList: []
   };
 }
 
-export class ResourcePageGroupConf extends AbstractDataModel<TypeResourcePageGroupConf> {
-  protected data: TypeResourcePageGroupConf = {
+export class ResourcePageGroupConf extends AbstractDataModel<TypeResPageGroup> {
+  protected data: TypeResPageGroup = {
     name: "",
     pageList: []
   };
@@ -135,8 +134,8 @@ export class ResourcePageGroupConf extends AbstractDataModel<TypeResourcePageGro
   static default = new ResourcePageOption().create();
 }
 
-export class ResourceModuleConf extends AbstractDataModel<TypeResourceModuleConf> {
-  protected data: TypeResourceModuleConf = {
+export class ResourceModuleConf extends AbstractDataModel<TypeResModule> {
+  protected data: TypeResModule = {
     index: 0,
     name: "",
     icon: "",
@@ -146,18 +145,18 @@ export class ResourceModuleConf extends AbstractDataModel<TypeResourceModuleConf
   static default = new ResourceModuleConf().create();
 }
 
-export class ResourceTypeConf extends AbstractDataModel<TypeResourceTypeConf> {
-  protected data: TypeResourceTypeConf = {
+export class ResourceTypeConf extends AbstractDataModel<TypeResType> {
+  protected data: TypeResType = {
+    type: VALUE_RESOURCE_TYPES.STRING,
     name: "",
-    tag: "",
-    type: RESOURCE_TYPES.STRING
+    tag: ""
   };
 
   static default = new ResourceTypeConf().create();
 }
 
-export class UiVersion extends AbstractDataModel<TypeProjectUiVersion> {
-  protected data: TypeProjectUiVersion = {
+export class UiVersion extends AbstractDataModel<TypeUiVersion> {
+  protected data: TypeUiVersion = {
     name: "",
     code: ""
   };
@@ -180,8 +179,8 @@ export class ResourceOption extends AbstractDataModel<TypeResourceOption> {
 export default class ResourceConfigData extends AbstractDataModel<TypeResourceConfig> {
   protected data: TypeResourceConfig = {
     ...ResourceOption.default,
-    resourceTypeList: [],
-    resourceModuleList: []
+    typeList: [],
+    moduleList: []
   };
   static default = new ResourceConfigData().create();
 }

@@ -5,10 +5,11 @@ import {
   ELEMENT_TAG,
   FILE_TEMPLATE_TYPE,
   PACK_TYPE,
-  RESOURCE_TYPES
+  IMAGE_RESOURCE_TYPES,
+  VALUE_RESOURCE_TYPES
 } from "../enum";
 import XMLNodeBase from "../server/compiler/XMLNodeElement";
-import { TypeImageData, TypeProjectUiVersion } from "./project";
+import { TypeImageData, TypeUiVersion } from "./project";
 import { TypeImagePathLike } from "./index";
 
 // 资源配置信息
@@ -19,13 +20,13 @@ export type TypeResourceOption = {
   name: string;
   preview: TypeImagePathLike;
   version: string;
-  uiVersion: TypeProjectUiVersion;
+  uiVersion: TypeUiVersion;
 };
 
 // 资源配置数据
 export type TypeResourceConfig = TypeResourceOption & {
-  resourceTypeList: TypeResourceTypeConf[];
-  resourceModuleList: TypeResourceModuleConf[];
+  typeList: TypeResType[];
+  moduleList: TypeResModule[];
 };
 
 export type TypeFileTemplateConf = {
@@ -41,7 +42,7 @@ export type TypeFileTemplateConf = {
 };
 
 // 打包配置
-export type TypePackConf = {
+export type TypePackConfig = {
   extname: string;
   format: archiver.Format;
   execute9patch: boolean;
@@ -50,7 +51,7 @@ export type TypePackConf = {
 };
 
 // 应用配置
-export type TypeApplyConf = {
+export type TypeApplyConfig = {
   steps: Array<{ description: string; command: string }>;
 };
 
@@ -64,29 +65,34 @@ export type TypeScenarioOption = {
 // 场景配置数据
 export type TypeScenarioConfig = {
   fileTempList: TypeFileTemplateConf[];
-  packageConfig: TypePackConf;
-  applyConfig: TypeApplyConf;
+  packageConfig: TypePackConfig;
+  applyConfig: TypeApplyConfig;
 };
 
 // 素材类型定义数据
-export type TypeResourceTypeConf = {
-  type: RESOURCE_TYPES;
+export type TypeResImageType = {
+  type: IMAGE_RESOURCE_TYPES;
   name: string;
   tag: string;
 };
-
+export type TypeResValueType = {
+  type: VALUE_RESOURCE_TYPES;
+  name: string;
+  tag: string;
+};
+export type TypeResType = TypeResImageType | TypeResValueType;
 // 预览模块
-export type TypeResourceModuleConf = {
+export type TypeResModule = {
   index: number;
   name: string;
   icon: string;
-  groupList: TypeResourcePageGroupConf[];
+  groupList: TypeResPageGroup[];
 };
 
 // 预览页面组
-export type TypeResourcePageGroupConf = {
+export type TypeResPageGroup = {
   name: string;
-  pageList: TypeResourcePageOption[];
+  pageList: TypeResPageOption[];
 };
 
 // 键值对配置数据
@@ -96,20 +102,20 @@ export type TypeXmlTempKeyValMap = Map<
 >;
 
 // 键值对映射配置
-export type TypeResourceXmlKeyValConf = {
+export type TypeXmlKeyValConfig = {
   name: string;
   value: string;
   description: string;
 };
 
 // 配置模板原始配置
-export type TypeResourceXmlTempConf = {
+export type TypeXmlTempConfig = {
   template: string;
   values: string;
   release: string;
 };
 
-export type TypeLayoutConf = {
+export type TypeLayoutConfig = {
   x: string;
   y: string;
   w: string;
@@ -120,11 +126,11 @@ export type TypeLayoutConf = {
 
 // 图片元素数据
 export type TypeLayoutImageElement = {
-  readonly resourceTag: ELEMENT_TAG.Image;
-  readonly resourceType: RESOURCE_TYPES.IMAGE;
+  readonly tag: ELEMENT_TAG.Image;
+  readonly type: IMAGE_RESOURCE_TYPES.IMAGE;
   description: string;
   src: string;
-  resourceData: TypeResourceImageData;
+  resourceData: TypeResImageData;
   layout: {
     x: string;
     y: string;
@@ -137,12 +143,12 @@ export type TypeLayoutImageElement = {
 
 // 颜色元素数据
 export type TypeLayoutTextElement = {
-  readonly resourceTag: ELEMENT_TAG.Text;
-  readonly resourceType: RESOURCE_TYPES;
+  readonly tag: ELEMENT_TAG.Text;
+  readonly type: VALUE_RESOURCE_TYPES;
   name: string;
   text: string;
   src: string;
-  valueData: TypeResourceValueData | null;
+  valueData: TypeResValueData | null;
   layout: {
     x: string;
     y: string;
@@ -151,53 +157,51 @@ export type TypeLayoutTextElement = {
   };
 };
 
-export type TypeResourceValueData = {
+export type TypeResValueData = {
   defaultValue: string;
   valueName: string;
 };
 
-export type TypeResourceImageData = TypeImageData;
+export type TypeResImageData = TypeImageData;
 
 // 素材定义
-export type TypeResourceImageDefinition = {
+export type TypeResImageDefinition = {
+  type: IMAGE_RESOURCE_TYPES;
   tagName: string;
   name: string;
   description: string;
   src: string;
-  resourceData: TypeResourceImageData | null;
-  valueData: null;
+  data: TypeResImageData | null;
 };
-export type TypeResourceValueDefinition = {
+export type TypeValueDefinition = {
+  type: VALUE_RESOURCE_TYPES;
   tagName: string;
   name: string;
   description: string;
   src: string;
-  resourceData: null;
-  valueData: TypeResourceValueData | null;
+  data: TypeResValueData | null;
 };
-export type TypeResourceDefinition =
-  | TypeResourceImageDefinition
-  | TypeResourceValueDefinition;
+export type TypeResDefinition = TypeResImageDefinition | TypeValueDefinition;
 
 // 预览元素数据
 export type TypeLayoutElement = TypeLayoutImageElement | TypeLayoutTextElement;
 
 // 预览单个页面配置
-export type TypeResourcePageOption = {
+export type TypeResPageOption = {
   key: string;
   name: string;
   preview: string;
   src: string;
 };
-export type TypeResourcePageConf = {
+export type TypeResPageConfig = {
   config: string;
   version: string;
   description: string;
   screenWidth: string;
   previewList: string[];
-  resourceDefinitionList: TypeResourceDefinition[];
+  resourceList: TypeResDefinition[];
   layoutElementList: TypeLayoutElement[];
 };
 
 // 键值对映射 map
-export type TypeResourceXmlKeyValMapperMap = Map<string, XMLNodeBase>;
+export type TypeXmlKeyValMapperMap = Map<string, XMLNodeBase>;

@@ -2,7 +2,7 @@ import apiConfig from "src/common/apiConf";
 import {
   TypeResourceConfig,
   TypeResourceOption,
-  TypeResourcePageConf,
+  TypeResPageConfig,
   TypeScenarioConfig,
   TypeScenarioOption
 } from "src/types/resource";
@@ -61,9 +61,9 @@ export async function apiGetResourcePageConfData(
   params: UnionTupleToObjectKey<
     typeof apiConfig.GET_RESOURCE_CONF_PAGE_CONFIG.query
   >
-): Promise<TypeResourcePageConf> {
+): Promise<TypeResPageConfig> {
   return createHttp()
-    .get<TypeRequestResult<TypeResourcePageConf>>(
+    .get<TypeRequestResult<TypeResPageConfig>>(
       apiConfig.GET_RESOURCE_CONF_PAGE_CONFIG.path,
       { params }
     )

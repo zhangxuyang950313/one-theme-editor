@@ -1,13 +1,13 @@
 import {
   TypeProjectDataDoc,
   TypeProjectInfo,
-  TypeProjectFileData
+  TypeFileData
 } from "src/types/project";
 import {
   TypeResourceConfig,
-  TypeResourceModuleConf,
-  TypeResourcePageOption,
-  TypeResourcePageConf,
+  TypeResModule,
+  TypeResPageOption,
+  TypeResPageConfig,
   TypeScenarioConfig
 } from "src/types/resource";
 
@@ -50,13 +50,13 @@ type TypeActionSetScenarioConfig = {
 // 设置模块
 type TypeActionSetModuleConf = {
   type: typeof ACTION_TYPES.SET_MODULE_CONFIG;
-  payload: TypeResourceModuleConf;
+  payload: TypeResModule;
 };
 
 // 设置页面
 type TypeActionSetPageConf = {
   type: typeof ACTION_TYPES.SET_PAGE_OPTION;
-  payload: TypeResourcePageOption;
+  payload: TypeResPageOption;
 };
 
 // 设置工程数据
@@ -74,13 +74,13 @@ type TypeActionSetProjectInfo = {
 // 更新页面配置表
 type TypeActionPatchPageConfMap = {
   type: typeof ACTION_TYPES.PATCH_PAGE_CONFIG;
-  payload: TypeResourcePageConf;
+  payload: TypeResPageConfig;
 };
 
 // 更新工程文件数据表
 type TypeActionPatchProjectFileDataMap = {
   type: typeof ACTION_TYPES.PATCH_PROJECT_RESOURCE;
-  payload: TypeProjectFileData;
+  payload: TypeFileData;
 };
 
 // main actions
@@ -115,14 +115,14 @@ export function ActionSetResourceConfig(
 
 // 设置当前模块配置
 export function ActionSetCurrentModule(
-  payload: TypeResourceModuleConf
+  payload: TypeResModule
 ): TypeActionSetModuleConf {
   return { type: ACTION_TYPES.SET_MODULE_CONFIG, payload };
 }
 
 // 设置当前页面配置
 export function ActionSetCurrentPage(
-  payload: TypeResourcePageOption
+  payload: TypeResPageOption
 ): TypeActionSetPageConf {
   return { type: ACTION_TYPES.SET_PAGE_OPTION, payload };
 }
@@ -143,13 +143,13 @@ export function ActionSetDescription(
 
 // 更新页面数据表
 export function ActionPatchPageConfMap(
-  payload: TypeResourcePageConf
+  payload: TypeResPageConfig
 ): TypeActionPatchPageConfMap {
   return { type: ACTION_TYPES.PATCH_PAGE_CONFIG, payload };
 }
 
 export function ActionPatchProjectFileData(
-  payload: TypeProjectFileData
+  payload: TypeFileData
 ): TypeActionPatchProjectFileDataMap {
   return { type: ACTION_TYPES.PATCH_PROJECT_RESOURCE, payload };
 }

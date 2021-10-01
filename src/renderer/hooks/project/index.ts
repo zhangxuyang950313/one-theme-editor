@@ -4,12 +4,12 @@ import { useMergeLoadStatus } from "@/hooks/index";
 import { useResourceConfigRootWithNS } from "@/hooks/resource/index";
 import { ActionInitEditor } from "@/store/editor/action";
 import { useEditorDispatch, useEditorSelector } from "@/store/index";
-import { TypeProjectDataDoc, TypeProjectFileData } from "src/types/project";
+import { TypeProjectDataDoc, TypeFileData } from "src/types/project";
 import { FILE_TEMPLATE_TYPE, LOAD_STATUS, PROJECT_FILE_TYPE } from "src/enum";
 import {
   TypeFileTemplateConf,
   TypeResourceConfig,
-  TypeResourcePageConf,
+  TypeResPageConfig,
   TypeScenarioConfig
 } from "src/types/resource";
 import { FileTemplate } from "src/data/ScenarioConfig";
@@ -50,7 +50,7 @@ type TypeInitializedProjectData = {
   projectData: TypeProjectDataDoc;
   scenarioConfig: TypeScenarioConfig;
   resourceConfig: TypeResourceConfig;
-  pageConfigList: TypeResourcePageConf[];
+  pageConfigList: TypeResPageConfig[];
 };
 export function useInitProject(): [
   TypeInitializedProjectData,
@@ -118,11 +118,9 @@ export function useResolveSourcePath(relativePath: string): string {
   return resourcePath;
 }
 
-export function useProjectFileDataMap(): Map<string, TypeProjectFileData> {
-  const projectFileDataMap = useEditorSelector(
-    state => state.projectFileDataMap
-  );
-  return new Map(Object.entries(projectFileDataMap));
+export function useProjectFileDataMap(): Map<string, TypeFileData> {
+  const fileDataMap = useEditorSelector(state => state.fileDataMap);
+  return new Map(Object.entries(fileDataMap));
 }
 
 /**
@@ -130,13 +128,11 @@ export function useProjectFileDataMap(): Map<string, TypeProjectFileData> {
  */
 export function useProjectImageUrlBySrc(src: string): string {
   const imageFileDataMap = useEditorSelector(state => {
-    const entries = Object.entries(state.projectFileDataMap).flatMap(
-      ([key, val]) => {
-        return val.type === PROJECT_FILE_TYPE.IMAGE
-          ? [[key, val] as [string, typeof val]]
-          : [];
-      }
-    );
+    const entries = Object.entries(state.fileDataMap).flatMap(([key, val]) => {
+      return val.type === PROJECT_FILE_TYPE.IMAGE
+        ? [[key, val] as [string, typeof val]]
+        : [];
+    });
     return new Map(entries);
   });
   const imageData = imageFileDataMap.get(src);
@@ -148,13 +144,11 @@ export function useProjectImageUrlBySrc(src: string): string {
  */
 export function useProjectXmlValueBySrc(name: string, src: string): string {
   const xmlFileDataMap = useEditorSelector(state => {
-    const entries = Object.entries(state.projectFileDataMap).flatMap(
-      ([key, val]) => {
-        return val.type === PROJECT_FILE_TYPE.XML
-          ? [[key, val] as [string, typeof val]]
-          : [];
-      }
-    );
+    const entries = Object.entries(state.fileDataMap).flatMap(([key, val]) => {
+      return val.type === PROJECT_FILE_TYPE.XML
+        ? [[key, val] as [string, typeof val]]
+        : [];
+    });
     return new Map(entries);
   });
   const xmlData = xmlFileDataMap.get(src);

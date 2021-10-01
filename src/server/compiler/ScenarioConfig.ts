@@ -1,9 +1,9 @@
 import path from "path";
 import fse from "fs-extra";
 import {
-  TypeApplyConf,
+  TypeApplyConfig,
   TypeFileTemplateConf,
-  TypePackConf,
+  TypePackConfig,
   TypeResourceOption,
   TypeScenarioConfig
 } from "src/types/resource";
@@ -59,11 +59,11 @@ export default class ScenarioConfig extends XmlTemplate {
   }
 
   // 解析打包配置
-  getPackageConfig(): TypePackConf {
+  getPackageConfig(): TypePackConfig {
     const pkgNode = super
       .getRootNode()
       .getFirstChildNodeByTagname(ELEMENT_TAG.PackConfig);
-    const items: TypePackConf["items"] = pkgNode
+    const items: TypePackConfig["items"] = pkgNode
       .getChildrenNodesByTagname(ELEMENT_TAG.Item)
       .map(item => ({
         type: item.getAttributeOf<PACK_TYPE>("type"),
@@ -73,7 +73,7 @@ export default class ScenarioConfig extends XmlTemplate {
         // TODO 忘了这是干嘛的，留着以后想
         name: item.getAttributeOf("name")
       }));
-    const excludes: TypePackConf["excludes"] = pkgNode
+    const excludes: TypePackConfig["excludes"] = pkgNode
       .getChildrenNodesByTagname(ELEMENT_TAG.Exclude)
       .map(item => ({
         regex: item.getAttributeOf("regex"),
@@ -92,11 +92,11 @@ export default class ScenarioConfig extends XmlTemplate {
   }
 
   // 解析应用配置
-  getApplyConfig(): TypeApplyConf {
+  getApplyConfig(): TypeApplyConfig {
     const applyNode = super
       .getRootNode()
       .getFirstChildNodeByTagname(ELEMENT_TAG.ApplyConfig);
-    const steps: TypeApplyConf["steps"] = applyNode
+    const steps: TypeApplyConfig["steps"] = applyNode
       .getChildrenNodesByTagname(ELEMENT_TAG.Step)
       .map(item => ({
         description: item.getAttributeOf("description"),

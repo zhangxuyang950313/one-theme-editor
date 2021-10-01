@@ -1,10 +1,10 @@
 import md5 from "md5";
 import fse from "fs-extra";
 import {
-  TypeApplyConf,
+  TypeApplyConfig,
   TypeScenarioConfig,
   TypeScenarioOption,
-  TypePackConf
+  TypePackConfig
 } from "src/types/resource";
 import { ELEMENT_TAG } from "src/enum/index";
 import ScenarioConfigData, { ScenarioOption } from "src/data/ScenarioConfig";
@@ -57,19 +57,19 @@ export default class ScenarioOptions extends XmlTemplate {
   }
 
   // 使用 md5 值查找打包配置
-  getPackConfigByMd5(md5: string): TypePackConf | null {
+  getPackConfigByMd5(md5: string): TypePackConfig | null {
     const conf = this.getOptionList().find(item => item.md5 === md5);
     return conf ? ScenarioConfig.from(conf.src).getPackageConfig() : null;
   }
 
   // 使用 src 查找打包配置
-  getPackConfigBySrc(src: string): TypePackConf | null {
+  getPackConfigBySrc(src: string): TypePackConfig | null {
     const conf = this.getOptionList().find(item => item.src === src);
     return conf ? ScenarioConfig.from(conf.src).getPackageConfig() : null;
   }
 
   // 使用 md5 值查找应用配置
-  getApplyConfigByMd5(md5: string): TypeApplyConf | null {
+  getApplyConfigByMd5(md5: string): TypeApplyConfig | null {
     const conf = this.getOptionList().find(item => item.md5 === md5);
     return conf ? ScenarioConfig.from(conf.src).getApplyConfig() : null;
   }

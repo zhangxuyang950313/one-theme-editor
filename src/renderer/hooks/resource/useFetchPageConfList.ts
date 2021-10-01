@@ -4,7 +4,7 @@ import { notification } from "antd";
 import { apiGetResourcePageConfData } from "@/request";
 import { useEditorDispatch, useEditorSelector } from "@/store";
 import { ActionPatchPageConfMap } from "@/store/editor/action";
-import { TypeResourcePageConf } from "src/types/resource";
+import { TypeResPageConfig } from "src/types/resource";
 import { LOAD_STATUS } from "src/enum";
 import { asyncQueue } from "src/utils";
 
@@ -13,16 +13,16 @@ import { asyncQueue } from "src/utils";
  * @returns
  */
 export default function useFetchPageConfList(): [
-  TypeResourcePageConf[],
+  TypeResPageConfig[],
   LOAD_STATUS,
   () => Promise<void>
 ] {
   const [status, setStatus] = useState(LOAD_STATUS.INITIAL);
-  const [pageData, setPageData] = useState<TypeResourcePageConf[]>([]);
+  const [pageData, setPageData] = useState<TypeResPageConfig[]>([]);
   const dispatch = useEditorDispatch();
   const resourceSrc = useEditorSelector(state => state.projectData.resourceSrc);
   const groupList = useEditorSelector(
-    state => state.currentModuleConfig.groupList || []
+    state => state.moduleConfig.groupList || []
   );
 
   const handleFetch = async (changeStatus = true) => {

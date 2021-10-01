@@ -3,8 +3,8 @@ import styled from "styled-components";
 import { StyleBorderRight } from "@/style";
 import PageSelector from "@/components/Editor/PageSelector";
 import Previewer from "@/components/Editor/Previewer";
-import ImageSourceList from "@/components/Editor/ImageSourceList";
-import XmlSourceList from "@/components/Editor/XmlSourceList";
+import ResImageList from "@/components/Editor/ResImageList";
+import ResXmlValList from "@/components/Editor/ResXmlValList";
 
 // 主编辑区域
 const EditorContainer: React.FC = () => {
@@ -19,12 +19,12 @@ const EditorContainer: React.FC = () => {
         <Previewer />
       </StylePreviewer>
       {/* 素材编辑区 */}
-      <StyleImageSourceList>
-        <ImageSourceList />
-      </StyleImageSourceList>
-      <StyleXmlSourceList>
-        <XmlSourceList />
-      </StyleXmlSourceList>
+      <StyleResImageList>
+        <ResImageList />
+      </StyleResImageList>
+      <StyleResXmlValList>
+        <ResXmlValList />
+      </StyleResXmlValList>
     </StyleEditorContainer>
   );
 };
@@ -53,14 +53,14 @@ const StylePreviewer = styled(StyleBorderRight)`
   overflow: auto;
 `;
 
-const StyleImageSourceList = styled(StyleBorderRight)`
+const StyleResImageList = styled(StyleBorderRight)`
   flex-basis: 320px;
   flex-shrink: 0;
   padding: 20px;
   overflow: auto;
 `;
 
-const StyleXmlSourceList = styled.div`
+const StyleResXmlValList = styled.div`
   min-width: 400px;
   flex-shrink: 0;
   padding: 0 20px;

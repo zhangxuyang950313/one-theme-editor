@@ -3,7 +3,7 @@ import {
   TypeCreateProjectPayload,
   TypeProjectData,
   TypeProjectDataDoc,
-  TypeProjectFileData
+  TypeFileData
 } from "src/types/project";
 import {
   TypeRequestResult,
@@ -104,11 +104,10 @@ export async function apiWriteXmlTemplate(
 export async function apiGetProjectFileData(
   uuid: string,
   filepath: string
-): Promise<TypeProjectFileData> {
+): Promise<TypeFileData> {
   return createHttp()
-    .get<TypeRequestResult<TypeProjectFileData>>(
-      apiConfig.GET_RESOURCE_FILE.path,
-      { params: { filepath, uuid } }
-    )
+    .get<TypeRequestResult<TypeFileData>>(apiConfig.GET_RESOURCE_FILE.path, {
+      params: { filepath, uuid }
+    })
     .then(data => data.data.data);
 }

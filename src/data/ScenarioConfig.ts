@@ -1,6 +1,6 @@
 import {
-  TypePackConf,
-  TypeApplyConf,
+  TypePackConfig,
+  TypeApplyConfig,
   TypeFileTemplateConf,
   TypeScenarioConfig,
   TypeScenarioOption
@@ -20,8 +20,8 @@ export class FileTemplate extends AbstractDataModel<TypeFileTemplateConf> {
 }
 
 // 打包配置数据
-export class PackageConfig extends AbstractDataModel<TypePackConf> {
-  protected data: TypePackConf = {
+export class PackageConfig extends AbstractDataModel<TypePackConfig> {
+  protected data: TypePackConfig = {
     extname: "",
     format: "zip",
     execute9patch: true,
@@ -32,8 +32,8 @@ export class PackageConfig extends AbstractDataModel<TypePackConf> {
 }
 
 // 应用配置数据
-export class ApplyConfig extends AbstractDataModel<TypeApplyConf> {
-  protected data: TypeApplyConf = {
+export class ApplyConfig extends AbstractDataModel<TypeApplyConfig> {
+  protected data: TypeApplyConfig = {
     steps: []
   };
   static default = new ApplyConfig().create();

@@ -2,19 +2,19 @@ import React from "react";
 import styled from "styled-components";
 import { InputNumber } from "antd";
 import { RightCircleOutlined } from "@ant-design/icons";
-import { TypeResourceValueDefinition } from "src/types/resource";
+import { TypeValueDefinition } from "src/types/resource";
 import Wrapper from "./Wrapper";
 
 const NumberInput: React.FC<{
   value: string;
-  valueDefinition: TypeResourceValueDefinition;
+  valueDefinition: TypeValueDefinition;
   onChange: (e: string) => void;
 }> = props => {
   const { value, valueDefinition, onChange } = props;
-  const { name, description, valueData } = valueDefinition;
+  const { name, description, data } = valueDefinition;
 
-  if (!valueData) return null;
-  const { defaultValue } = valueData;
+  if (!data) return null;
+  const { defaultValue } = data;
 
   return (
     <Wrapper name={name} description={description}>

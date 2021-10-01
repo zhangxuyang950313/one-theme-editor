@@ -1,7 +1,7 @@
 import { WatchOptions } from "chokidar";
 import { SOCKET_EVENT } from "src/common/socketConf";
 import { FILE_EVENT } from "src/enum";
-import { TypeProjectFileData } from "./project";
+import { TypeFileData } from "./project";
 
 export type TypeErrorData = {
   event: SOCKET_EVENT;
@@ -41,5 +41,5 @@ export type TypeUnWatchFilesPayload = TypeWatchFilesPayload["files"];
 export type TypeSyncFileContent = {
   file: string;
   event: FILE_EVENT;
-  data: TypeProjectFileData;
+  data: TypeFileData;
 };

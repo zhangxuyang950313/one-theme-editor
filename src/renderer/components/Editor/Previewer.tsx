@@ -4,13 +4,13 @@ import styled from "styled-components";
 import {
   useResourcePageOption,
   useResourceImageUrl,
-  useResourceDefinitionList
+  useResourceList
 } from "@/hooks/resource/index";
 import { PreloadImage } from "../ImageCollection";
 
 const Previewer: React.FC = () => {
   const [currentPage] = useResourcePageOption();
-  const resourceDefineList = useResourceDefinitionList();
+  const resourceDefineList = useResourceList();
   const imageUrl = useResourceImageUrl(currentPage.preview || "");
 
   return (

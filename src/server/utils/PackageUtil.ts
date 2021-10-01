@@ -4,7 +4,7 @@ import fse from "fs-extra";
 import JsZip from "jszip";
 import micromatch from "micromatch";
 import pathUtil from "server/utils/pathUtil";
-import { TypePackConf } from "src/types/resource";
+import { TypePackConfig } from "src/types/resource";
 import { PACK_TYPE } from "src/enum";
 import { asyncQueue } from "src/utils";
 import { TypePackProcess } from "src/types/socket";
@@ -12,15 +12,15 @@ import { compactNinePatch } from "./NinePatchUtil";
 
 export class PackUtil {
   private packDir: string;
-  private packConfig: TypePackConf;
-  constructor(packDir: string, packConfig: TypePackConf) {
+  private packConfig: TypePackConfig;
+  constructor(packDir: string, packConfig: TypePackConfig) {
     this.packDir = packDir;
     this.packConfig = packConfig;
   }
 
   static pack(data: {
     packDir: string;
-    packConfig: TypePackConf;
+    packConfig: TypePackConfig;
     outputFile: string;
     onProcess?: (x: { msg: string; data: any }) => void;
   }): Promise<string[]> {
@@ -61,7 +61,7 @@ export class PackUtil {
     zipInstance: JsZip,
     files: string[],
     cwd: string,
-    excludes: TypePackConf["excludes"] = []
+    excludes: TypePackConfig["excludes"] = []
   ): void {
     files.forEach(item => {
       // 命中正则排除
@@ -89,8 +89,8 @@ export class PackUtil {
   // 按照压缩配置项对目录压缩打包
   static async zipByRules(
     root: string,
-    items: TypePackConf["items"],
-    excludes: TypePackConf["excludes"] = []
+    items: TypePackConfig["items"],
+    excludes: TypePackConfig["excludes"] = []
   ): Promise<Buffer> {
     const zipOpt: JsZip.JSZipGeneratorOptions<"nodebuffer"> = {
       type: "nodebuffer",
@@ -207,9 +207,9 @@ export class PackUtil {
 
 export class UnpackUtil {
   private file: string;
-  private config: TypePackConf;
+  private config: TypePackConfig;
   private files: JsZip.JSZipObject[];
-  constructor(file: string, config: TypePackConf) {
+  constructor(file: string, config: TypePackConfig) {
     this.file = file;
     this.config = config;
     this.files = [];
@@ -217,7 +217,7 @@ export class UnpackUtil {
 
   static async unpack(data: {
     unpackFile: string;
-    packConfig: TypePackConf;
+    packConfig: TypePackConfig;
     outputDir: string;
     onProcess?: (x: TypePackProcess) => void;
   }): Promise<string[]> {

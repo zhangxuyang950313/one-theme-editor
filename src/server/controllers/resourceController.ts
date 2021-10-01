@@ -1,8 +1,8 @@
 import { Express } from "express";
 import apiConfig from "src/common/apiConf";
 import {
-  TypeResourceModuleConf,
-  TypeResourcePageConf,
+  TypeResModule,
+  TypeResPageConfig,
   TypeResourceConfig,
   TypeResourceOption,
   TypeScenarioOption,
@@ -64,7 +64,7 @@ export default function sourceController(service: Express): void {
    */
   service.get<
     never, // reqParams
-    TypeResponseFrame<TypeResourceModuleConf[], string>, // resBody
+    TypeResponseFrame<TypeResModule[], string>, // resBody
     never, // reqBody
     UnionTupleToObjectKey<typeof apiConfig.GET_RESOURCE_CONF_MODULE_LIST.query> // reqQuery
   >(apiConfig.GET_RESOURCE_CONF_MODULE_LIST.path, (request, response) => {
@@ -82,7 +82,7 @@ export default function sourceController(service: Express): void {
    */
   service.get<
     never, // reqParams
-    TypeResponseFrame<TypeResourcePageConf, string>, // resBody
+    TypeResponseFrame<TypeResPageConfig, string>, // resBody
     never, // reqBody
     UnionTupleToObjectKey<typeof apiConfig.GET_RESOURCE_CONF_PAGE_CONFIG.query> // reqQuery
   >(apiConfig.GET_RESOURCE_CONF_PAGE_CONFIG.path, async (request, response) => {

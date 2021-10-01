@@ -4,7 +4,7 @@ import apiConfig from "src/common/apiConf";
 import {
   TypeCreateProjectPayload,
   TypeProjectDataDoc,
-  TypeProjectFileData
+  TypeFileData
 } from "src/types/project";
 import { TypeResponseFrame, UnionTupleToObjectKey } from "src/types/request";
 import {
@@ -160,7 +160,7 @@ export default function projectController(service: Express): void {
    */
   service.get<
     never,
-    TypeResponseFrame<Record<string, TypeProjectFileData>>,
+    TypeResponseFrame<Record<string, TypeFileData>>,
     never, // reqBody
     UnionTupleToObjectKey<typeof apiConfig.GET_PAGE_RESOURCE.query>
   >(`${apiConfig.GET_PAGE_RESOURCE.path}`, async (request, response) => {
@@ -175,7 +175,7 @@ export default function projectController(service: Express): void {
    */
   service.get<
     never,
-    TypeResponseFrame<TypeProjectFileData>,
+    TypeResponseFrame<TypeFileData>,
     never,
     UnionTupleToObjectKey<typeof apiConfig.GET_RESOURCE_FILE.query>
   >(`${apiConfig.GET_RESOURCE_FILE.path}`, async (request, response) => {

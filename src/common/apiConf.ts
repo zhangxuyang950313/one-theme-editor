@@ -5,7 +5,7 @@ import {
   TypeProjectData,
   TypeProjectDataDoc,
   TypeProjectInfo,
-  TypeProjectUiVersion
+  TypeUiVersion
 } from "src/types/project";
 import { TypePathConfig } from "src/types/extraConfig";
 
@@ -112,7 +112,7 @@ const apiConfig = {
   UPDATE_UI_VERSION: createApiConf({
     path: "/project/update/ui-version",
     params: ["uuid"],
-    body: {} as TypeProjectUiVersion
+    body: {} as TypeUiVersion
   }),
   // 获取工程列表
   GET_PROJECT_LIST: createApiConf({

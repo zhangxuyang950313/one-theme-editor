@@ -3,11 +3,11 @@ import { v4 as UUID } from "uuid";
 import { ELEMENT_TAG } from "src/enum";
 import {
   TypeResourceConfig,
-  TypeResourceModuleConf,
-  TypeResourcePageGroupConf,
-  TypeResourcePageOption,
+  TypeResModule,
+  TypeResPageGroup,
+  TypeResPageOption,
   TypeResourceOption,
-  TypeResourceTypeConf
+  TypeResType
 } from "src/types/resource";
 import {
   ResourceOption,
@@ -17,7 +17,7 @@ import {
   ResourceTypeConf,
   UiVersion
 } from "src/data/ResourceConfig";
-import { TypeProjectUiVersion } from "src/types/project";
+import { TypeUiVersion } from "src/types/project";
 import pathUtil from "server/utils/pathUtil";
 import PageConfig from "./PageConfig";
 import XMLNodeBase from "./XMLNodeElement";
@@ -76,7 +76,7 @@ export default class ResourceConfig extends XmlFileCompiler {
   }
 
   // UI信息
-  getUiVersion(): TypeProjectUiVersion {
+  getUiVersion(): TypeUiVersion {
     const uiVersionNode = super.getRootFirstChildNodeOf(ELEMENT_TAG.UiVersion);
     return new UiVersion()
       .set("name", uiVersionNode.getAttributeOf("name"))
@@ -85,20 +85,20 @@ export default class ResourceConfig extends XmlFileCompiler {
   }
 
   // 素材类型定义列表
-  getResourceTypeList(): TypeResourceTypeConf[] {
+  getResTypeList(): TypeResType[] {
     return super
       .getRootChildrenNodesOf(ELEMENT_TAG.Resource)
       .map(item =>
         new ResourceTypeConf()
+          .set("type", item.getAttributeOf("type"))
           .set("tag", item.getAttributeOf("tag"))
           .set("name", item.getAttributeOf("name"))
-          .set("type", item.getAttributeOf("type"))
           .create()
       );
   }
 
   // 页面配置列表
-  getPageList(pageNodeList: XMLNodeBase[]): TypeResourcePageOption[] {
+  getPageList(pageNodeList: XMLNodeBase[]): TypeResPageOption[] {
     // 这里是在选择模板版本后得到的目标模块目录
     return pageNodeList.map(node => {
       const src = node.getAttributeOf("src");
@@ -116,7 +116,7 @@ export default class ResourceConfig extends XmlFileCompiler {
   }
 
   // 页面分组数据
-  getPageGroupList(groupNodeList: XMLNodeBase[]): TypeResourcePageGroupConf[] {
+  getPageGroupList(groupNodeList: XMLNodeBase[]): TypeResPageGroup[] {
     return groupNodeList.map(groupNode => {
       const pageList = this.getPageList(
         groupNode.getChildrenNodesByTagname(ELEMENT_TAG.Page)
@@ -129,7 +129,7 @@ export default class ResourceConfig extends XmlFileCompiler {
   }
 
   // 模块配置数据
-  getModuleList(): TypeResourceModuleConf[] {
+  getModuleList(): TypeResModule[] {
     return super
       .getRootChildrenNodesOf(ELEMENT_TAG.Module)
       .map((moduleNode, index) => {
@@ -167,8 +167,8 @@ export default class ResourceConfig extends XmlFileCompiler {
   getConfig(): TypeResourceConfig {
     return {
       ...this.getOption(),
-      resourceTypeList: this.getResourceTypeList(),
-      resourceModuleList: this.getModuleList()
+      typeList: this.getResTypeList(),
+      moduleList: this.getModuleList()
     };
   }
 }

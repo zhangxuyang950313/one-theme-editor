@@ -2,7 +2,7 @@ import path from "path";
 import fse from "fs-extra";
 import { filenameIsImage, filenameIsXml, getImageData } from "src/utils/index";
 import { findProjectByQuery } from "server/db-handler/project";
-import { TypeProjectFileData } from "src/types/project";
+import { TypeFileData } from "src/types/project";
 import {
   ProjectFileImageData,
   ProjectFileUnknown,
@@ -16,12 +16,12 @@ import electronStore from "src/common/electronStore";
 export async function getPageResourceData(
   uuid: string,
   config: string
-): Promise<Record<string, TypeProjectFileData>> {
+): Promise<Record<string, TypeFileData>> {
   const { root, resourceSrc } = await findProjectByQuery({ uuid });
   const namespace = path.dirname(resourceSrc);
   const pageConfig = new PageConfig({ namespace, config });
-  const resourcePathList = pageConfig.getResourcePathList();
-  return resourcePathList.reduce<Record<string, TypeProjectFileData>>(
+  const resourcePathList = pageConfig.getResPathList();
+  return resourcePathList.reduce<Record<string, TypeFileData>>(
     (record, src) => {
       record[src] = getProjectFileData(root, src);
       return record;
@@ -40,7 +40,7 @@ export async function getPageResourceData(
 export function getProjectFileData(
   projectRoot: string,
   src: string
-): TypeProjectFileData {
+): TypeFileData {
   const absPath = path.join(projectRoot, src);
   const fileExists = fse.pathExistsSync(absPath);
   if (filenameIsImage(src)) {

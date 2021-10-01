@@ -2,12 +2,12 @@ import path from "path";
 import { URL, URLSearchParams } from "url";
 import fse from "fs-extra";
 import {
-  DefinitionImageData,
-  DefinitionValueData,
-  SourceDefinitionData
+  ResImageData,
+  ResValueData,
+  ResourceDefinitionData
 } from "src/data/ResourceConfig";
 import { filenameIsImage, filenameIsXml, getImageData } from "src/utils/index";
-import { TypeResourceDefinition } from "src/types/resource";
+import { TypeResDefinition } from "src/types/resource";
 import XMLNodeElement from "server/compiler/XMLNodeElement";
 import XmlTemplate from "./XmlTemplate";
 import XmlFileCompiler from "./XmlFileCompiler";
@@ -18,7 +18,7 @@ import XmlFileCompiler from "./XmlFileCompiler";
 export default class ResourceDefinition {
   private node: XMLNodeElement;
   private resourceRoot: string;
-  private resourceMap: Map<string, TypeResourceDefinition> = new Map();
+  private resourceMap: Map<string, TypeResDefinition> = new Map();
   constructor(node: XMLNodeElement, resourceRoot: string) {
     this.node = node;
     this.resourceRoot = resourceRoot;
@@ -63,30 +63,29 @@ export default class ResourceDefinition {
    * @param node
    * @returns
    */
-  private getResourceDefinition(node: XMLNodeElement): TypeResourceDefinition {
+  private getResDefinition(node: XMLNodeElement): TypeResDefinition {
     const value = node.getAttributeOf("value");
     const description = node.getAttributeOf("description");
     const { src, searchParams } = this.getUrlData(value);
-    const resourceData = new SourceDefinitionData()
+    const resourceData = new ResourceDefinitionData()
       .set("tagName", node.getTagname())
       .set("name", node.getAttributeOf("name"))
       .set("description", description);
     // 图片素材
     if (filenameIsImage(src)) {
-      const definitionImageData = new DefinitionImageData();
+      const resImageData = new ResImageData();
       const file = this.resolvePath(src);
       if (fse.existsSync(file)) {
         const imageData = getImageData(file);
-        definitionImageData
+        resImageData
           .set("width", imageData.width)
           .set("height", imageData.height)
           .set("size", imageData.size)
           .set("ninePatch", imageData.ninePatch)
           .set("filename", imageData.filename);
       }
-      resourceData
-        .set("resourceData", definitionImageData.create())
-        .set("src", src);
+      resourceData.set("data", resImageData.create());
+      resourceData.set("src", src);
     }
     // xml 素材
     if (filenameIsXml(src)) {
@@ -96,22 +95,22 @@ export default class ResourceDefinition {
       const defaultValue = new XmlTemplate(
         new XmlFileCompiler(this.resolvePath(src)).getElement()
       ).getTextByAttrName(valueName);
-      const valueData = new DefinitionValueData()
+      const valueData = new ResValueData()
         .set("valueName", valueName)
         .set("defaultValue", defaultValue)
         .create();
-      resourceData.set("valueData", valueData).set("src", src);
+      resourceData.set("data", valueData).set("src", src);
     }
     return resourceData.create();
   }
 
-  getResourceMap(): Map<string, TypeResourceDefinition> {
+  getResMap(): Map<string, TypeResDefinition> {
     if (this.resourceMap.size === 0) {
       this.node.getChildrenNodes().forEach(item => {
         const name = item.getAttributeOf("name");
         const value = item.getAttributeOf("value");
         if (name && value) {
-          const resourceData = this.getResourceDefinition(item);
+          const resourceData = this.getResDefinition(item);
           this.resourceMap.set(name, resourceData);
         }
       });
@@ -119,13 +118,13 @@ export default class ResourceDefinition {
     return this.resourceMap;
   }
 
-  getResourceList(): TypeResourceDefinition[] {
-    const result: TypeResourceDefinition[] = [];
-    this.getResourceMap().forEach(item => result.push(item));
+  getResList(): TypeResDefinition[] {
+    const result: TypeResDefinition[] = [];
+    this.getResMap().forEach(item => result.push(item));
     return result;
   }
 
-  getResourceByName(name: string): TypeResourceDefinition | null {
-    return this.getResourceMap().get(name) || null;
+  getResByName(name: string): TypeResDefinition | null {
+    return this.getResMap().get(name) || null;
   }
 }

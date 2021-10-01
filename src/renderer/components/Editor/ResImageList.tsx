@@ -4,7 +4,7 @@ import styled from "styled-components";
 import ImageController from "@/components/ImageController/index";
 import useImageDefinitionList from "@/hooks/resource/useImageDefinitionList";
 
-const ImageSourceList: React.FC = () => {
+const ResImageList: React.FC = () => {
   const imageDefinitionList = useImageDefinitionList();
   return (
     <StyleImageController>
@@ -21,4 +21,4 @@ const StyleImageController = styled.div`
   }
 `;
 
-export default ImageSourceList;
+export default ResImageList;

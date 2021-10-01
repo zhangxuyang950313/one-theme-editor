@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import { TypeResourceValueDefinition } from "src/types/resource";
+import { TypeValueDefinition } from "src/types/resource";
 import { apiWriteXmlTemplate } from "@/request";
 import { useProjectUUID, useProjectXmlValueBySrc } from "@/hooks/project/index";
-import { RESOURCE_TYPES } from "src/enum/index";
+import { VALUE_RESOURCE_TYPES } from "src/enum/index";
 
 import ColorPicker from "./ColorPicker";
 import BooleanSelector from "./BooleanSelector";
@@ -11,25 +11,25 @@ import NumberInput from "./NumberInput";
 import StringInput from "./StringInput";
 
 const XmlController: React.FC<{
-  resourceType: RESOURCE_TYPES;
-  valueDefinition: TypeResourceValueDefinition;
+  resourceType: VALUE_RESOURCE_TYPES;
+  valueDefinition: TypeValueDefinition;
 }> = props => {
   const { resourceType, valueDefinition } = props;
-  const { valueData, src } = valueDefinition;
+  const { data, src } = valueDefinition;
   const uuid = useProjectUUID();
   const value = useProjectXmlValueBySrc(valueDefinition.name, src);
 
-  if (!valueData) return null;
+  if (!data) return null;
 
   const Controllers = () => {
     // 写入 xml
     const writeXml = (value: string) => {
-      const name = valueData.valueName;
+      const name = data.valueName;
       apiWriteXmlTemplate(uuid, { name, value, src });
     };
     switch (resourceType) {
       // 颜色选择器
-      case RESOURCE_TYPES.COLOR: {
+      case VALUE_RESOURCE_TYPES.COLOR: {
         return (
           <ColorPicker
             value={value}
@@ -39,7 +39,7 @@ const XmlController: React.FC<{
         );
       }
       // 布尔选择器
-      case RESOURCE_TYPES.BOOLEAN: {
+      case VALUE_RESOURCE_TYPES.BOOLEAN: {
         return (
           <BooleanSelector
             value={value}
@@ -49,7 +49,7 @@ const XmlController: React.FC<{
         );
       }
       // 数字输入器
-      case RESOURCE_TYPES.NUMBER: {
+      case VALUE_RESOURCE_TYPES.NUMBER: {
         return (
           <NumberInput
             value={value}
@@ -59,7 +59,7 @@ const XmlController: React.FC<{
         );
       }
       // 未注明的都使用通用的字符串输入器
-      case RESOURCE_TYPES.STRING:
+      case VALUE_RESOURCE_TYPES.STRING:
       default: {
         return (
           <StringInput

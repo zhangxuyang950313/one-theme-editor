@@ -6,10 +6,10 @@ import {
   useResourceImageUrl
 } from "@/hooks/resource/index";
 import { PreloadImage } from "@/components/ImageCollection";
-import { TypeResourcePageOption } from "src/types/resource";
+import { TypeResPageOption } from "src/types/resource";
 import { useEditorSelector } from "@/store";
 
-const PagePreview: React.FC<{ pageData: TypeResourcePageOption }> = props => {
+const PagePreview: React.FC<{ pageData: TypeResPageOption }> = props => {
   const { pageData } = props;
   const resourceImageURL = useResourceImageUrl(pageData.preview);
   const [pageConf, setPageConf] = useResourcePageOption();
@@ -50,9 +50,7 @@ const StylePreviewImage = styled.span`
 
 // 页面选择器
 const PageSelector: React.FC = () => {
-  const groupList = useEditorSelector(
-    state => state.currentModuleConfig.groupList
-  );
+  const groupList = useEditorSelector(state => state.moduleConfig.groupList);
 
   if (groupList.length === 0) return null;
 

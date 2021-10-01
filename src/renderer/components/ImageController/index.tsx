@@ -12,7 +12,7 @@ import {
   useAbsolutePathInSource,
   useResourceImageUrl
 } from "@/hooks/resource/index";
-import { TypeResourceImageDefinition } from "src/types/resource";
+import { TypeResImageDefinition } from "src/types/resource";
 
 import SourceStatus from "./SourceStatus";
 import ImageDisplay from "./ImageDisplay";
@@ -54,10 +54,10 @@ import { previewFile } from "./utils";
 
 const ImageController: React.FC<{
   className: string;
-  imageDefinition: TypeResourceImageDefinition;
+  imageDefinition: TypeResImageDefinition;
 }> = props => {
   const { imageDefinition, className } = props;
-  const { resourceData, description, src } = imageDefinition;
+  const { data: resourceData, description, src } = imageDefinition;
   const resourceImageUrl = useResourceImageUrl(src);
   const projectImageUrl = useProjectImageUrlBySrc(src);
   const absPathInSource = useAbsolutePathInSource(src);

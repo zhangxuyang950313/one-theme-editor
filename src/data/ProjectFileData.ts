@@ -1,14 +1,14 @@
 import { PROJECT_FILE_TYPE } from "src/enum/index";
 import {
-  TypeProjectImageFileData,
-  TypeProjectUnknownFileData,
-  TypeProjectXmlFileData
+  TypeImageFileData,
+  TypeUnknownFileData,
+  TypeXmlFileData
 } from "src/types/project";
 import { AbstractDataModel } from "./AbstractDataModel";
 import ImageData from "./ImageData";
 
-export class ProjectFileImageData extends AbstractDataModel<TypeProjectImageFileData> {
-  protected data: TypeProjectImageFileData = {
+export class ProjectFileImageData extends AbstractDataModel<TypeImageFileData> {
+  protected data: TypeImageFileData = {
     type: PROJECT_FILE_TYPE.IMAGE,
     src: "",
     url: "",
@@ -16,16 +16,16 @@ export class ProjectFileImageData extends AbstractDataModel<TypeProjectImageFile
   };
 }
 
-export class ProjectFileXmlData extends AbstractDataModel<TypeProjectXmlFileData> {
-  protected data: TypeProjectXmlFileData = {
+export class ProjectFileXmlData extends AbstractDataModel<TypeXmlFileData> {
+  protected data: TypeXmlFileData = {
     type: PROJECT_FILE_TYPE.XML,
     src: "",
     element: {}
   };
 }
 
-export class ProjectFileUnknown extends AbstractDataModel<TypeProjectUnknownFileData> {
-  protected data: TypeProjectUnknownFileData = {
+export class ProjectFileUnknown extends AbstractDataModel<TypeUnknownFileData> {
+  protected data: TypeUnknownFileData = {
     type: PROJECT_FILE_TYPE.UNKNOWN,
     src: ""
   };
