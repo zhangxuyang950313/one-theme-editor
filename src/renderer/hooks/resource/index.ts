@@ -6,9 +6,6 @@ import {
 } from "@/store/editor/action";
 import {
   TypeScenarioOption,
-  TypeResourceConfig,
-  TypeResourceOption,
-  TypeResourcePageGroupConf,
   TypeResourceModuleConf,
   TypeResourcePageOption,
   TypeResourceTypeConf,
@@ -28,22 +25,6 @@ import {
 import { ELEMENT_TAG } from "src/enum";
 import { useImagePrefix } from "../image";
 
-export function useScenarioOptionList(): TypeScenarioOption[] {
-  return useStarterSelector(state => state.scenarioOptionList);
-}
-
-export function useResourceOptionList(): TypeResourceOption[] {
-  return useStarterSelector(state => state.resourceOptionList);
-}
-
-/**
- * 获取当前资源配置数据
- * @returns
- */
-export function useResourceConfig(): TypeResourceConfig {
-  return useEditorSelector(state => state.resourceConfig);
-}
-
 /**
  * 获取资源配置根目录
  * @returns
@@ -59,9 +40,9 @@ export function useResourceConfigDir(): string {
  * @returns
  */
 export function useResourceConfigRootWithNS(): string {
-  const resourceConfigPath = useResourceConfigPath();
+  const resourceSrc = useEditorSelector(state => state.projectData.resourceSrc);
   const resourceConfigDir = useResourceConfigDir();
-  return path.join(resourceConfigDir, path.dirname(resourceConfigPath));
+  return path.join(resourceConfigDir, path.dirname(resourceSrc));
 }
 
 /**
@@ -73,26 +54,8 @@ export function useScenarioOption(): [
   (data: TypeScenarioOption) => void
 ] {
   const dispatch = useStarterDispatch();
-  const currentOption = useStarterSelector(
-    state => state.scenarioOptionSelected
-  );
+  const currentOption = useStarterSelector(state => state.scenarioSelected);
   return [currentOption, data => dispatch(ActionSetScenarioOption(data))];
-}
-
-/**
- * 获取资源配置文件 url
- * @returns
- */
-export function useResourceConfigPath(): string {
-  return useEditorSelector(state => state.projectData.resourceSrc);
-}
-
-/**
- * 获取当前配置模块列表
- * @returns
- */
-export function useResourceModuleList(): TypeResourceModuleConf[] {
-  return useEditorSelector(state => state.resourceConfig.resourceModuleList);
 }
 
 /**
@@ -105,18 +68,9 @@ export function useResourceModuleConf(): [
 ] {
   const dispatch = useEditorDispatch();
   const resourceModuleConf = useEditorSelector(
-    state => state.resourceModuleSelected
+    state => state.currentModuleConfig
   );
   return [resourceModuleConf, data => dispatch(ActionSetCurrentModule(data))];
-}
-
-/**
- * 当前当前模块页面组列表
- */
-export function useResourcePageGroupList(): TypeResourcePageGroupConf[] {
-  return useEditorSelector(
-    state => state.resourceModuleSelected.groupList || []
-  );
 }
 
 /**
@@ -128,14 +82,14 @@ export function useResourcePageOption(): [
   (data: TypeResourcePageOption) => void
 ] {
   const dispatch = useEditorDispatch();
-  const pageConf = useEditorSelector(state => state.resourcePageSelected);
+  const pageConf = useEditorSelector(state => state.currentPageOption);
   return [pageConf, data => dispatch(ActionSetCurrentPage(data))];
 }
 
 export function useResourcePageConfig(): TypeResourcePageConf | null {
   return useEditorSelector(state => {
-    const pageConfSrc = state.resourcePageSelected.src;
-    return state.resourcePageConfigMap[pageConfSrc] || null;
+    const pageConfSrc = state.currentPageOption.src;
+    return state.pageConfigMap[pageConfSrc] || null;
   });
 }
 
@@ -159,9 +113,9 @@ export function useResourceDefinitionList(): TypeResourceDefinition[] {
  */
 export function useLayoutElementList(): TypeLayoutElement[] {
   return useEditorSelector(state => {
-    const pageConfSrc = state.resourcePageSelected.src;
+    const pageConfSrc = state.currentPageOption.src;
     if (!pageConfSrc) return [];
-    return state.resourcePageConfigMap[pageConfSrc]?.layoutElementList || [];
+    return state.pageConfigMap[pageConfSrc]?.layoutElementList || [];
   });
 }
 

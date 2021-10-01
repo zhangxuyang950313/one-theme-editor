@@ -2,19 +2,16 @@ import path from "path";
 import fse from "fs-extra";
 import React from "react";
 import { Form, Modal, ModalProps } from "antd";
-import {
-  useProjectInfoConfig,
-  useProjectInfo,
-  useProjectRoot
-} from "@/hooks/project/index";
+import { useProjectInfoConfig } from "@/hooks/project/index";
 import { TypeProjectInfo } from "src/types/project";
 import TempStringUtil from "src/utils/TempStringUtil";
+import { useEditorSelector } from "@/store";
 import { ProjectInput } from "../Forms";
 
 const ProjectInfoModal: React.FC<ModalProps> = props => {
   const [form] = Form.useForm<TypeProjectInfo>();
-  const projectInfo = useProjectInfo();
-  const projectRoot = useProjectRoot();
+  const projectInfo = useEditorSelector(state => state.projectData.description);
+  const projectRoot = useEditorSelector(state => state.projectData.root);
   const projectInfoConfig = useProjectInfoConfig();
   return (
     <Modal

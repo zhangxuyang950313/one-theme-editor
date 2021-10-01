@@ -2,32 +2,32 @@ import { TypeProjectDataDoc } from "src/types/project";
 import { TypeScenarioOption, TypeResourceOption } from "src/types/resource";
 
 export enum ACTION_TYPES {
-  SET_SCENARIO_OPTION_LIST = "SET_SCENARIO_OPTION_LIST", // 场景列表
-  SET_SCENARIO_OPTION_SELECTED = "SET_SCENARIO_OPTION_SELECTED", // 当前选择的场景
-  SET_SOURCE_OPTION_LIST = "SET_SOURCE_OPTION_LIST", // 资源配置选项列表
-  SET_SOURCE_OPTION_SELECTED = "SET_SOURCE_OPTION_SELECTED", // 当前选择的资源配置选项
+  SET_SCENARIO_LIST = "SET_SCENARIO_LIST", // 场景列表
+  SET_SCENARIO_SELECTED = "SET_SCENARIO_SELECTED", // 当前选择的场景
+  SET_RESOURCE_LIST = "SET_RESOURCE_LIST", // 资源配置列表
+  SET_RESOURCE_SELECTED = "SET_RESOURCE_SELECTED", // 当前选择的资源配置
   SET_PROJECT_LIST = "SET_PROJECT_LIST" // 工程列表
 }
 
 // 设置场景信息列表
-type TypeActionSetScenarioOptionList = {
-  type: typeof ACTION_TYPES.SET_SCENARIO_OPTION_LIST;
+type TypeActionSetScenarioList = {
+  type: typeof ACTION_TYPES.SET_SCENARIO_LIST;
   payload: TypeScenarioOption[];
 };
 
 // 设置场景信息
-type TypeActionSetScenarioOption = {
-  type: typeof ACTION_TYPES.SET_SCENARIO_OPTION_SELECTED;
+type TypeActionSetScenario = {
+  type: typeof ACTION_TYPES.SET_SCENARIO_SELECTED;
   payload: TypeScenarioOption;
 };
 
-type TypeActionSetSourceOptionList = {
-  type: typeof ACTION_TYPES.SET_SOURCE_OPTION_LIST;
+type TypeActionSetResourceList = {
+  type: typeof ACTION_TYPES.SET_RESOURCE_LIST;
   payload: TypeResourceOption[];
 };
 
-type TypeActionSetSourceOption = {
-  type: typeof ACTION_TYPES.SET_SOURCE_OPTION_SELECTED;
+type TypeActionSetResource = {
+  type: typeof ACTION_TYPES.SET_RESOURCE_SELECTED;
   payload: TypeResourceOption;
 };
 
@@ -38,36 +38,36 @@ type TypeActionSetProjectList = {
 
 // main actions
 export type TypeStarterActions =
-  | TypeActionSetScenarioOptionList
-  | TypeActionSetScenarioOption
-  | TypeActionSetSourceOptionList
-  | TypeActionSetSourceOption
+  | TypeActionSetScenarioList
+  | TypeActionSetScenario
+  | TypeActionSetResourceList
+  | TypeActionSetResource
   | TypeActionSetProjectList;
 
 // 设置场景信息列表
 export function ActionSetScenarioOptionList(
   payload: TypeScenarioOption[]
-): TypeActionSetScenarioOptionList {
-  return { type: ACTION_TYPES.SET_SCENARIO_OPTION_LIST, payload };
+): TypeActionSetScenarioList {
+  return { type: ACTION_TYPES.SET_SCENARIO_LIST, payload };
 }
 
 // 设置选择的场景信息
 export function ActionSetScenarioOption(
   payload: TypeScenarioOption
-): TypeActionSetScenarioOption {
-  return { type: ACTION_TYPES.SET_SCENARIO_OPTION_SELECTED, payload };
+): TypeActionSetScenario {
+  return { type: ACTION_TYPES.SET_SCENARIO_SELECTED, payload };
 }
 
 export function ActionSetSourceOptionList(
   payload: TypeResourceOption[]
-): TypeActionSetSourceOptionList {
-  return { type: ACTION_TYPES.SET_SOURCE_OPTION_LIST, payload };
+): TypeActionSetResourceList {
+  return { type: ACTION_TYPES.SET_RESOURCE_LIST, payload };
 }
 
 export function ActionSetSourceOption(
   payload: TypeResourceOption
-): TypeActionSetSourceOption {
-  return { type: ACTION_TYPES.SET_SOURCE_OPTION_SELECTED, payload };
+): TypeActionSetResource {
+  return { type: ACTION_TYPES.SET_RESOURCE_SELECTED, payload };
 }
 
 export function ActionSetProjectList(

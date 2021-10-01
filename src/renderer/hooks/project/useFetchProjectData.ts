@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { notification } from "antd";
-import { useEditorDispatch } from "@/store";
+import { useEditorDispatch, useEditorSelector } from "@/store";
 import { LOAD_STATUS } from "src/enum";
 import { TypeProjectDataDoc } from "src/types/project";
 import { sleep } from "src/utils";
 import { apiGetProjectByUUID } from "@/request";
 import { ActionInitEditor, ActionSetProjectData } from "@/store/editor/action";
 import ERR_CODE from "src/common/errorCode";
-import { useProjectData } from "../project";
 
 /**
  * 加载工程
@@ -23,7 +22,7 @@ export default function useFetchProjectData(): [
   // 从路由参数中获得工程 uuid
   const { uuid } = useParams<{ uuid: string }>();
   const dispatch = useEditorDispatch();
-  const projectData = useProjectData();
+  const projectData = useEditorSelector(state => state.projectData);
   const [status, setStatus] = useState<LOAD_STATUS>(LOAD_STATUS.INITIAL);
   const handleFetch = async () => {
     setStatus(LOAD_STATUS.LOADING);

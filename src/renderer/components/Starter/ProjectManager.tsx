@@ -1,12 +1,12 @@
 import { useHistory } from "react-router";
 import { useScenarioOption } from "@/hooks/resource/index";
-import { useProjectList } from "@/hooks/project/index";
 import { TypeProjectInfo } from "src/types/project";
 import { LOAD_STATUS } from "src/enum";
 
 import React from "react";
 import styled from "styled-components";
 import { Empty, Spin } from "antd";
+import { useStarterSelector } from "@/store";
 import ProjectCard from "./ProjectCard";
 import CreateProject from "./CreateProject";
 
@@ -15,7 +15,7 @@ const ProjectManager: React.FC<{
   onProjectCreated: (data: TypeProjectInfo) => Promise<void>;
 }> = props => {
   const [currentScenario] = useScenarioOption();
-  const projectList = useProjectList();
+  const projectList = useStarterSelector(state => state.projectList);
   const history = useHistory();
 
   // 列表加载中、空、正常状态

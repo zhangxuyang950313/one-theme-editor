@@ -57,7 +57,7 @@ const CreateProject: React.FC<{
 
   // 工程信息配置
   const projectInfoConfig = useStarterSelector(state =>
-    state.scenarioOptionSelected.fileTempList.find(
+    state.scenarioSelected.fileTempList.find(
       item => item.type === FILE_TEMPLATE_TYPE.INFO
     )
   );

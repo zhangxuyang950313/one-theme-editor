@@ -66,8 +66,8 @@ const apiConfig = {
     path: "/scenario/option/list"
   }),
   // 获取场景配置
-  GET_SCENARIO_CONFIG_DATA: createApiConf({
-    path: "/scenario/config/data",
+  GET_SCENARIO_CONFIG: createApiConf({
+    path: "/scenario/config",
     query: ["config"]
   }),
   // 获取配置信息列表
@@ -76,8 +76,8 @@ const apiConfig = {
     query: ["src"]
   }),
   // 获取模板配置数据
-  GET_RESOURCE_CONF_DATA: createApiConf({
-    path: "/resource/config/data",
+  GET_RESOURCE_CONFIG: createApiConf({
+    path: "/resource/config",
     query: ["config"]
   }),
   // 获取配置模块列表
@@ -86,8 +86,8 @@ const apiConfig = {
     query: ["config"]
   }),
   // 获取配置页面数据
-  GET_RESOURCE_CONF_PAGE_DATA: createApiConf({
-    path: "/resource/config/page/data",
+  GET_RESOURCE_CONF_PAGE_CONFIG: createApiConf({
+    path: "/resource/config/page",
     query: ["namespace", "config"]
   }),
 
@@ -121,17 +121,17 @@ const apiConfig = {
   }),
   // 通过 id 获取工程信息
   GET_PROJECT_DATA: createApiConf({
-    path: "/project/data",
+    path: "/project",
     params: [] as Array<keyof TypeProjectDataDoc>
   }),
   // 获取页面配置的素材文件数据
-  GET_PAGE_SOURCE_DATA: createApiConf({
+  GET_PAGE_RESOURCE: createApiConf({
     path: "/project/resource",
     params: ["uuid"],
     query: ["config"]
   }),
   // 获取一个文件的数据
-  GET_RESOURCE_FILE_DATA: createApiConf({
+  GET_RESOURCE_FILE: createApiConf({
     path: "/project/file",
     query: ["uuid", "filepath"]
   }),

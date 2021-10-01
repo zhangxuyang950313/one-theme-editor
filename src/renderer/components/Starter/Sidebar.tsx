@@ -3,23 +3,21 @@ import styled from "styled-components";
 
 import { Menu } from "antd";
 
-import {
-  useScenarioOption,
-  useScenarioOptionList
-} from "@/hooks/resource/index";
+import { useScenarioOption } from "@/hooks/resource/index";
+import { useStarterSelector } from "@/store";
 import TopInfo from "./TopInfo";
 
 // 欢迎页侧边栏
 const Sidebar: React.FC = () => {
-  const scenarioOptionList = useScenarioOptionList();
-  const [currentScenarioOption, setScenarioOption] = useScenarioOption();
+  const scenarioOptionList = useStarterSelector(state => state.scenarioList);
+  const [scenarioOption, setScenarioOption] = useScenarioOption();
 
   const ScenarioMenu: React.FC = () => {
-    if (!scenarioOptionList || !currentScenarioOption) return null;
+    if (!scenarioOption) return null;
     return (
       <Menu
         className="menu"
-        selectedKeys={[currentScenarioOption.md5]}
+        selectedKeys={[scenarioOption.md5]}
         onSelect={v => {
           const scenarioOption = scenarioOptionList.find(o => v.key === o.md5);
           if (scenarioOption) setScenarioOption(scenarioOption);

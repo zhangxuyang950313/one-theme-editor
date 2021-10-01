@@ -22,7 +22,7 @@ export default function BaseReducer(
     case ACTION_TYPES.SET_SERVER_PORT: {
       return updateState(state, { port: Number(action.payload) ?? 0 });
     }
-    case ACTION_TYPES.SET_APP_PATH: {
+    case ACTION_TYPES.SET_PATH_CONFIG: {
       return updateState(state, { appPath: action.payload });
     }
     default:

@@ -38,7 +38,7 @@ export async function apiGetResourceConfig(
 ): Promise<TypeResourceConfig> {
   return createHttp()
     .get<TypeRequestResult<TypeResourceConfig>>(
-      apiConfig.GET_RESOURCE_CONF_DATA.path,
+      apiConfig.GET_RESOURCE_CONFIG.path,
       { params: { config } }
     )
     .then(data => data.data.data);
@@ -50,7 +50,7 @@ export async function apiGetScenarioConfig(
 ): Promise<TypeScenarioConfig> {
   return createHttp()
     .get<TypeRequestResult<TypeScenarioConfig>>(
-      apiConfig.GET_SCENARIO_CONFIG_DATA.path,
+      apiConfig.GET_SCENARIO_CONFIG.path,
       { params: { config } }
     )
     .then(data => data.data.data);
@@ -59,12 +59,12 @@ export async function apiGetScenarioConfig(
 // 获取页面配置数据
 export async function apiGetResourcePageConfData(
   params: UnionTupleToObjectKey<
-    typeof apiConfig.GET_RESOURCE_CONF_PAGE_DATA.query
+    typeof apiConfig.GET_RESOURCE_CONF_PAGE_CONFIG.query
   >
 ): Promise<TypeResourcePageConf> {
   return createHttp()
     .get<TypeRequestResult<TypeResourcePageConf>>(
-      apiConfig.GET_RESOURCE_CONF_PAGE_DATA.path,
+      apiConfig.GET_RESOURCE_CONF_PAGE_CONFIG.path,
       { params }
     )
     .then(data => data.data.data);

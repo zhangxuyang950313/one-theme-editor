@@ -3,11 +3,11 @@ import styled from "styled-components";
 import { Collapse } from "antd";
 import {
   useResourcePageOption,
-  useResourcePageGroupList,
   useResourceImageUrl
 } from "@/hooks/resource/index";
 import { PreloadImage } from "@/components/ImageCollection";
 import { TypeResourcePageOption } from "src/types/resource";
+import { useEditorSelector } from "@/store";
 
 const PagePreview: React.FC<{ pageData: TypeResourcePageOption }> = props => {
   const { pageData } = props;
@@ -50,13 +50,15 @@ const StylePreviewImage = styled.span`
 
 // 页面选择器
 const PageSelector: React.FC = () => {
-  const pageGroupList = useResourcePageGroupList();
+  const groupList = useEditorSelector(
+    state => state.currentModuleConfig.groupList
+  );
 
-  if (pageGroupList.length === 0) return null;
+  if (groupList.length === 0) return null;
 
   return (
-    <Collapse bordered={false} defaultActiveKey={Object.keys(pageGroupList)}>
-      {pageGroupList.map(
+    <Collapse bordered={false} defaultActiveKey={Object.keys(groupList)}>
+      {groupList.map(
         (group, key) =>
           group.pageList.length && (
             <Collapse.Panel header={group.name} key={key}>

@@ -20,9 +20,9 @@ export type TypeEditorState = {
   projectData: TypeProjectDataDoc;
   scenarioConfig: TypeScenarioConfig;
   resourceConfig: TypeResourceConfig;
-  resourceModuleSelected: TypeResourceModuleConf;
-  resourcePageSelected: TypeResourcePageOption;
-  resourcePageConfigMap: Record<string, TypeResourcePageConf>;
+  currentModuleConfig: TypeResourceModuleConf;
+  currentPageOption: TypeResourcePageOption;
+  pageConfigMap: Record<string, TypeResourcePageConf>;
   projectFileDataMap: Record<string, TypeProjectFileData>;
 };
 
@@ -30,9 +30,9 @@ const defaultState: TypeEditorState = {
   projectData: ProjectData.default,
   scenarioConfig: ScenarioConfigData.default,
   resourceConfig: ResourceConfigData.default,
-  resourceModuleSelected: ResourceModuleConf.default,
-  resourcePageSelected: ResourcePageOption.default,
-  resourcePageConfigMap: {},
+  currentModuleConfig: ResourceModuleConf.default,
+  currentPageOption: ResourcePageOption.default,
+  pageConfigMap: {},
   projectFileDataMap: {}
 };
 
@@ -67,28 +67,27 @@ export default function EditorReducer(
       const { resourceModuleList } = action.payload;
       return updateState(state, {
         resourceConfig: action.payload,
-        resourceModuleSelected: resourceModuleList[0],
-        resourcePageSelected:
-          resourceModuleList[0]?.groupList?.[0].pageList?.[0]
+        currentModuleConfig: resourceModuleList[0],
+        currentPageOption: resourceModuleList[0]?.groupList?.[0].pageList?.[0]
       });
     }
     // 模块配置
     case ACTION_TYPES.SET_MODULE_CONFIG: {
       return updateState(state, {
-        resourceModuleSelected: action.payload
+        currentModuleConfig: action.payload
       });
     }
     // 页面配置
-    case ACTION_TYPES.SET_PAGE_CONFIG: {
+    case ACTION_TYPES.SET_PAGE_OPTION: {
       return updateState(state, {
-        resourcePageSelected: action.payload
+        currentPageOption: action.payload
       });
     }
     // 页面数据
     case ACTION_TYPES.PATCH_PAGE_CONFIG: {
       return updateState(state, {
-        resourcePageConfigMap: {
-          ...state.resourcePageConfigMap,
+        pageConfigMap: {
+          ...state.pageConfigMap,
           [action.payload.config]: action.payload
         }
       });

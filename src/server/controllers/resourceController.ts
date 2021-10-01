@@ -34,8 +34,8 @@ export default function sourceController(service: Express): void {
     never, // reqParams
     TypeResponseFrame<TypeScenarioConfig, string>, // resBody
     never, // reqBody
-    UnionTupleToObjectKey<typeof apiConfig.GET_SCENARIO_CONFIG_DATA.query>
-  >(apiConfig.GET_SCENARIO_CONFIG_DATA.path, (request, response) => {
+    UnionTupleToObjectKey<typeof apiConfig.GET_SCENARIO_CONFIG.query>
+  >(apiConfig.GET_SCENARIO_CONFIG.path, (request, response) => {
     const scenarioConfig = ScenarioConfig.from(
       request.query.config
     ).getConfig();
@@ -84,9 +84,12 @@ export default function sourceController(service: Express): void {
     never, // reqParams
     TypeResponseFrame<TypeResourcePageConf, string>, // resBody
     never, // reqBody
-    UnionTupleToObjectKey<typeof apiConfig.GET_RESOURCE_CONF_PAGE_DATA.query> // reqQuery
-  >(apiConfig.GET_RESOURCE_CONF_PAGE_DATA.path, async (request, response) => {
-    checkParamsKey(request.query, apiConfig.GET_RESOURCE_CONF_PAGE_DATA.query);
+    UnionTupleToObjectKey<typeof apiConfig.GET_RESOURCE_CONF_PAGE_CONFIG.query> // reqQuery
+  >(apiConfig.GET_RESOURCE_CONF_PAGE_CONFIG.path, async (request, response) => {
+    checkParamsKey(
+      request.query,
+      apiConfig.GET_RESOURCE_CONF_PAGE_CONFIG.query
+    );
     const { namespace, config } = request.query;
     const data = new PageConfig({ namespace, config }).getData();
     response.send(result.success(data));
@@ -100,9 +103,9 @@ export default function sourceController(service: Express): void {
     never, // reqParams
     TypeResponseFrame<TypeResourceConfig, string>, // resBody
     never, // reqBody
-    UnionTupleToObjectKey<typeof apiConfig.GET_RESOURCE_CONF_DATA.query> // reqQuery
-  >(apiConfig.GET_RESOURCE_CONF_DATA.path, async (request, response) => {
-    checkParamsKey(request.query, apiConfig.GET_RESOURCE_CONF_DATA.query);
+    UnionTupleToObjectKey<typeof apiConfig.GET_RESOURCE_CONFIG.query> // reqQuery
+  >(apiConfig.GET_RESOURCE_CONFIG.path, async (request, response) => {
+    checkParamsKey(request.query, apiConfig.GET_RESOURCE_CONFIG.query);
     const data = new ResourceConfig(request.query.config).getConfig();
     response.send(result.success(data));
   });

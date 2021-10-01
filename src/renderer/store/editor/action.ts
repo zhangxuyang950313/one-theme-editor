@@ -21,7 +21,7 @@ export enum ACTION_TYPES {
   // 设置模块配置
   SET_MODULE_CONFIG = "SET_MODULE_CONFIG",
   // 设置页面配置
-  SET_PAGE_CONFIG = "SET_PAGE_CONFIG",
+  SET_PAGE_OPTION = "SET_PAGE_OPTION",
   // 添加页面配置数据映射
   PATCH_PAGE_CONFIG = "PATCH_PAGE_CONFIG",
   // 添加工程文件数据映射
@@ -53,15 +53,9 @@ type TypeActionSetModuleConf = {
   payload: TypeResourceModuleConf;
 };
 
-// 更新页面配置表
-type TypeActionPatchPageConfMap = {
-  type: typeof ACTION_TYPES.PATCH_PAGE_CONFIG;
-  payload: TypeResourcePageConf;
-};
-
 // 设置页面
 type TypeActionSetPageConf = {
-  type: typeof ACTION_TYPES.SET_PAGE_CONFIG;
+  type: typeof ACTION_TYPES.SET_PAGE_OPTION;
   payload: TypeResourcePageOption;
 };
 
@@ -77,6 +71,12 @@ type TypeActionSetProjectInfo = {
   payload: TypeProjectInfo;
 };
 
+// 更新页面配置表
+type TypeActionPatchPageConfMap = {
+  type: typeof ACTION_TYPES.PATCH_PAGE_CONFIG;
+  payload: TypeResourcePageConf;
+};
+
 // 更新工程文件数据表
 type TypeActionPatchProjectFileDataMap = {
   type: typeof ACTION_TYPES.PATCH_PROJECT_RESOURCE;
@@ -89,21 +89,14 @@ export type TypeEditorActions =
   | TypeActionSetScenarioConfig
   | TypeActionSetResourceConfig
   | TypeActionSetModuleConf
-  | TypeActionPatchPageConfMap
   | TypeActionSetPageConf
   | TypeActionSetProjectData
   | TypeActionSetProjectInfo
+  | TypeActionPatchPageConfMap
   | TypeActionPatchProjectFileDataMap;
 
 export function ActionInitEditor(): TypeActionInitEditor {
   return { type: ACTION_TYPES.INIT_EDITOR };
-}
-
-// 设置当前资源配置
-export function ActionSetResourceConfig(
-  payload: TypeResourceConfig
-): TypeActionSetResourceConfig {
-  return { type: ACTION_TYPES.SET_RESOURCE_CONFIG, payload };
 }
 
 // 设置当前场景配置
@@ -113,6 +106,13 @@ export function ActionSetScenarioConfig(
   return { type: ACTION_TYPES.SET_SCENARIO_CONFIG, payload };
 }
 
+// 设置当前资源配置
+export function ActionSetResourceConfig(
+  payload: TypeResourceConfig
+): TypeActionSetResourceConfig {
+  return { type: ACTION_TYPES.SET_RESOURCE_CONFIG, payload };
+}
+
 // 设置当前模块配置
 export function ActionSetCurrentModule(
   payload: TypeResourceModuleConf
@@ -120,18 +120,11 @@ export function ActionSetCurrentModule(
   return { type: ACTION_TYPES.SET_MODULE_CONFIG, payload };
 }
 
-// 更新页面数据表
-export function ActionPatchPageDataMap(
-  payload: TypeResourcePageConf
-): TypeActionPatchPageConfMap {
-  return { type: ACTION_TYPES.PATCH_PAGE_CONFIG, payload };
-}
-
 // 设置当前页面配置
 export function ActionSetCurrentPage(
   payload: TypeResourcePageOption
 ): TypeActionSetPageConf {
-  return { type: ACTION_TYPES.SET_PAGE_CONFIG, payload };
+  return { type: ACTION_TYPES.SET_PAGE_OPTION, payload };
 }
 
 // 设置工程数据
@@ -146,6 +139,13 @@ export function ActionSetDescription(
   payload: TypeProjectInfo
 ): TypeActionSetProjectInfo {
   return { type: ACTION_TYPES.SET_PROJECT_INFO, payload };
+}
+
+// 更新页面数据表
+export function ActionPatchPageConfMap(
+  payload: TypeResourcePageConf
+): TypeActionPatchPageConfMap {
+  return { type: ACTION_TYPES.PATCH_PAGE_CONFIG, payload };
 }
 
 export function ActionPatchProjectFileData(

@@ -1,15 +1,15 @@
 import React from "react";
 import styled from "styled-components";
 import { Tooltip } from "antd";
-import {
-  useResourceModuleList,
-  useResourceModuleConf
-} from "@/hooks/resource/index";
+import { useResourceModuleConf } from "@/hooks/resource/index";
+import { useEditorSelector } from "@/store";
 import { SourceImage } from "../ImageCollection";
 
 // 模块选择器
 const ModuleSelector: React.FC = () => {
-  const resourceModuleList = useResourceModuleList();
+  const resourceModuleList = useEditorSelector(
+    state => state.resourceConfig.resourceModuleList
+  );
   const [currentModule, setCurrentModule] = useResourceModuleConf();
 
   if (resourceModuleList.length === 0) return null;

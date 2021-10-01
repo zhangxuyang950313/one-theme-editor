@@ -1,20 +1,10 @@
 import path from "path";
+import { useLayoutEffect, useEffect, useState } from "react";
 import { useMergeLoadStatus } from "@/hooks/index";
 import { useResourceConfigRootWithNS } from "@/hooks/resource/index";
 import { ActionInitEditor } from "@/store/editor/action";
-import {
-  useEditorDispatch,
-  useEditorSelector,
-  useStarterSelector
-} from "@/store/index";
-import {
-  TypeProjectDataDoc,
-  TypeProjectFileData,
-  TypeProjectInfo
-} from "src/types/project";
-
-import XMLNodeElement from "src/server/compiler/XMLNodeElement";
-import { useLayoutEffect, useEffect, useState } from "react";
+import { useEditorDispatch, useEditorSelector } from "@/store/index";
+import { TypeProjectDataDoc, TypeProjectFileData } from "src/types/project";
 import { FILE_TEMPLATE_TYPE, LOAD_STATUS, PROJECT_FILE_TYPE } from "src/enum";
 import {
   TypeFileTemplateConf,
@@ -23,37 +13,21 @@ import {
   TypeScenarioConfig
 } from "src/types/resource";
 import { FileTemplate } from "src/data/ScenarioConfig";
+import XMLNodeElement from "src/server/compiler/XMLNodeElement";
 import { useImagePrefix } from "../image";
 import useFetchProjectData from "../project/useFetchProjectData";
 import useFetchResourceConfig from "../resource/useFetchResourceConfig";
 import useFetchPageConfList from "../resource/useFetchPageConfList";
 import useFetchScenarioConfig from "../resource/useFetchScenarioConfig";
 
-export function useProjectList(): TypeProjectDataDoc[] {
-  return useStarterSelector(state => state.projectList);
-}
-
-// 工程数据
-export function useProjectData(): TypeProjectDataDoc {
-  return useEditorSelector(state => state.projectData);
-}
-
 // 工程 uuid
 export function useProjectUUID(): string {
-  const projectData = useProjectData();
-  return projectData.uuid;
+  return useEditorSelector(state => state.projectData.uuid);
 }
 
 // 工程本地路径
 export function useProjectRoot(): string {
-  const projectData = useProjectData();
-  return projectData.root;
-}
-
-// 工程描述信息
-export function useProjectInfo(): TypeProjectInfo {
-  const projectData = useProjectData();
-  return projectData.description;
+  return useEditorSelector(state => state.projectData.root);
 }
 
 // 工程信息模板配置

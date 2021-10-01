@@ -17,7 +17,6 @@ import {
 import IconButton from "@/components/IconButton";
 import usePackProject from "@/hooks/project/usePackProject";
 import { remote } from "electron";
-import { useProjectData } from "@/hooks/project";
 import { message, notification } from "antd";
 import { TOOLS_BAR_BUTTON } from "src/enum";
 import { useEditorSelector } from "@/store";
@@ -43,11 +42,11 @@ const ToolsBar: React.FC = () => {
   const history = useHistory();
   const thisRef = useRef<HTMLDivElement | null>();
   const [projectInfoVisible, setProjectInfoVisible] = useState(false);
-  const projectData = useProjectData();
-  const packProject = usePackProject();
+  const projectData = useEditorSelector(state => state.projectData);
   const packageConfig = useEditorSelector(
     state => state.scenarioConfig.packageConfig
   );
+  const packProject = usePackProject();
   const handleClick = (name: TOOLS_BAR_BUTTON) => {
     switch (name) {
       case TOOLS_BAR_BUTTON.APPLY: {

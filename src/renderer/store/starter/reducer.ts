@@ -6,18 +6,18 @@ import { ScenarioOption } from "src/data/ScenarioConfig";
 import { ACTION_TYPES, TypeStarterActions } from "./action";
 
 export type TypeStarterState = {
-  scenarioOptionList: TypeScenarioOption[];
-  scenarioOptionSelected: TypeScenarioOption;
-  resourceOptionList: TypeResourceOption[];
-  resourceOptionSelected: TypeResourceOption;
+  scenarioList: TypeScenarioOption[];
+  scenarioSelected: TypeScenarioOption;
+  resourceList: TypeResourceOption[];
+  resourceSelected: TypeResourceOption;
   projectList: TypeProjectDataDoc[];
 };
 
 const starterState: TypeStarterState = {
-  scenarioOptionList: [],
-  scenarioOptionSelected: ScenarioOption.default,
-  resourceOptionList: [],
-  resourceOptionSelected: ResourceOption.default,
+  scenarioList: [],
+  scenarioSelected: ScenarioOption.default,
+  resourceList: [],
+  resourceSelected: ResourceOption.default,
   projectList: []
 };
 
@@ -26,26 +26,26 @@ export default function StarterReducer(
   action: TypeStarterActions
 ): TypeStarterState {
   switch (action.type) {
-    case ACTION_TYPES.SET_SCENARIO_OPTION_LIST: {
+    case ACTION_TYPES.SET_SCENARIO_LIST: {
       return updateState(state, {
-        scenarioOptionSelected: action.payload[0],
-        scenarioOptionList: action.payload
+        scenarioSelected: action.payload[0],
+        scenarioList: action.payload
       });
     }
-    case ACTION_TYPES.SET_SCENARIO_OPTION_SELECTED: {
+    case ACTION_TYPES.SET_SCENARIO_SELECTED: {
       return updateState(state, {
-        scenarioOptionSelected: action.payload
+        scenarioSelected: action.payload
       });
     }
-    case ACTION_TYPES.SET_SOURCE_OPTION_LIST: {
+    case ACTION_TYPES.SET_RESOURCE_LIST: {
       return updateState(state, {
-        resourceOptionList: action.payload,
-        resourceOptionSelected: action.payload[0]
+        resourceList: action.payload,
+        resourceSelected: action.payload[0]
       });
     }
-    case ACTION_TYPES.SET_SOURCE_OPTION_SELECTED: {
+    case ACTION_TYPES.SET_RESOURCE_SELECTED: {
       return updateState(state, {
-        resourceOptionSelected: action.payload
+        resourceSelected: action.payload
       });
     }
     case ACTION_TYPES.SET_PROJECT_LIST: {

@@ -7,7 +7,7 @@ type TypeActionSetServerPort = {
 };
 
 type TypeActionSetAppPath = {
-  type: typeof ACTION_TYPES.SET_APP_PATH;
+  type: typeof ACTION_TYPES.SET_PATH_CONFIG;
   payload: TypePathConfig;
 };
 
@@ -24,5 +24,5 @@ export function ActionSetServerPort(
 export function ActionSetAppConfig(
   payload: TypePathConfig
 ): TypeActionSetAppPath {
-  return { type: ACTION_TYPES.SET_APP_PATH, payload };
+  return { type: ACTION_TYPES.SET_PATH_CONFIG, payload };
 }

@@ -162,10 +162,10 @@ export default function projectController(service: Express): void {
     never,
     TypeResponseFrame<Record<string, TypeProjectFileData>>,
     never, // reqBody
-    UnionTupleToObjectKey<typeof apiConfig.GET_PAGE_SOURCE_DATA.query>
-  >(`${apiConfig.GET_PAGE_SOURCE_DATA.path}`, async (request, response) => {
+    UnionTupleToObjectKey<typeof apiConfig.GET_PAGE_RESOURCE.query>
+  >(`${apiConfig.GET_PAGE_RESOURCE.path}`, async (request, response) => {
     const { query } = request;
-    checkParamsKey(query, apiConfig.GET_PAGE_SOURCE_DATA.query);
+    checkParamsKey(query, apiConfig.GET_PAGE_RESOURCE.query);
     const data = await getPageResourceData(query.uuid, query.config);
     response.send(result.success(data));
   });
@@ -177,10 +177,10 @@ export default function projectController(service: Express): void {
     never,
     TypeResponseFrame<TypeProjectFileData>,
     never,
-    UnionTupleToObjectKey<typeof apiConfig.GET_RESOURCE_FILE_DATA.query>
-  >(`${apiConfig.GET_RESOURCE_FILE_DATA.path}`, async (request, response) => {
+    UnionTupleToObjectKey<typeof apiConfig.GET_RESOURCE_FILE.query>
+  >(`${apiConfig.GET_RESOURCE_FILE.path}`, async (request, response) => {
     const { query } = request;
-    checkParamsKey(query, apiConfig.GET_RESOURCE_FILE_DATA.query);
+    checkParamsKey(query, apiConfig.GET_RESOURCE_FILE.query);
     const { root: projectRoot } = await findProjectByQuery({
       uuid: query.uuid
     });
