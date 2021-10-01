@@ -1,6 +1,6 @@
 import { Element } from "xml-js";
 import { PROJECT_FILE_TYPE } from "../enum";
-import { TypeScenarioConf } from "./source";
+import { TypeScenarioConf } from "./resource";
 import { TypeDatabase } from "./index";
 
 // 版本信息
@@ -17,7 +17,7 @@ export type TypeProjectInfo = {
 // 创建工程载荷
 export type TypeCreateProjectPayload = {
   projectRoot: string;
-  sourceConfigPath: string;
+  resourceConfigPath: string;
   scenarioConfig: TypeScenarioConf;
   projectInfo: TypeProjectInfo;
 };
@@ -49,7 +49,7 @@ export type TypeProjectData = {
   projectRoot: string;
   projectInfo: TypeProjectInfo;
   uiVersion: TypeProjectUiVersion;
-  sourceConfigPath: string;
+  resourceConfigPath: string;
 };
 
 // 在数据库中的图片数据

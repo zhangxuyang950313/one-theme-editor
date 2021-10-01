@@ -42,12 +42,12 @@ const paths: TypeServerPath = {
     return path.resolve(this.CLIENT_STATIC, "binary");
   },
   // 配置目录
-  get SOURCE_CONFIG_DIR(): string {
-    return path.resolve(this.RESOURCE_DIR, "sourceConfig");
+  get RESOURCE_CONFIG_DIR(): string {
+    return path.resolve(this.RESOURCE_DIR, "config");
   },
   // 模板总配置文件
-  get SOURCE_CONFIG_FILE(): string {
-    return path.resolve(this.SOURCE_CONFIG_DIR, "config.xml");
+  get RESOURCE_CONFIG_FILE(): string {
+    return path.resolve(this.RESOURCE_CONFIG_DIR, "config.xml");
   },
   // aapt 工具
   get AAPT_TOOL(): string | null {
@@ -73,9 +73,9 @@ const paths: TypeServerPath = {
 export default paths;
 
 export function resolveSourcePath(relative: string): string {
-  return path.join(paths.SOURCE_CONFIG_DIR, relative);
+  return path.join(paths.RESOURCE_CONFIG_DIR, relative);
 }
 
 export function getSCDescriptionByNamespace(namespace: string): string {
-  return path.join(paths.SOURCE_CONFIG_DIR, namespace, "description.xml");
+  return path.join(paths.RESOURCE_CONFIG_DIR, namespace, "description.xml");
 }

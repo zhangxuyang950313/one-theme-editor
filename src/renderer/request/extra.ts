@@ -3,7 +3,11 @@ import { TypeElectronPath, TypePathConfig } from "src/types/extraConfig";
 import { TypeRequestResult } from "src/types/request";
 import { createHttp } from "./axios";
 
-// 获取后端路径信息
+/**
+ * @deprecated
+ * 获取后端路径信息
+ * @returns
+ */
 export async function apiGetPathConfig(): Promise<TypePathConfig> {
   return createHttp()
     .get<TypeRequestResult<TypePathConfig>>(apiConfig.GET_PATH_CONFIG.path)

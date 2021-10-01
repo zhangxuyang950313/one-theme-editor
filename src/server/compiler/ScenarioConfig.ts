@@ -4,15 +4,15 @@ import {
   TypeApplyConf,
   TypeFileTemplateConf,
   TypePackConf,
-  TypeSourceOption
-} from "src/types/source";
+  TypeResourceOption
+} from "src/types/resource";
 import { ELEMENT_TAG, PACK_TYPE } from "src/enum/index";
 import {
   ApplyConfig,
   PackageConfig,
   FileTemplate
 } from "src/data/ScenarioConfig";
-import SourceConfig from "server/compiler/SourceConfig";
+import ResourceConfig from "server/compiler/ResourceConfig";
 import pathUtil from "server/utils/pathUtil";
 import XmlTemplate from "./XmlTemplate";
 import XmlFileCompiler from "./XmlFileCompiler";
@@ -21,7 +21,7 @@ import XmlFileCompiler from "./XmlFileCompiler";
 export default class ScenarioConfig extends XmlTemplate {
   // 从文件创建实例
   static from(src: string): ScenarioConfig {
-    const file = path.join(pathUtil.SOURCE_CONFIG_DIR, src);
+    const file = path.join(pathUtil.RESOURCE_CONFIG_DIR, src);
     const element = new XmlFileCompiler(file).getElement();
     return new ScenarioConfig(element);
   }
@@ -105,16 +105,16 @@ export default class ScenarioConfig extends XmlTemplate {
   }
 
   // 解析编辑器资源配置列表
-  getSourceConfigPreviewList(): TypeSourceOption[] {
+  getSourceConfigPreviewList(): TypeResourceOption[] {
     return super
       .getRootNode()
-      .getChildrenNodesByTagname(ELEMENT_TAG.SourceConfig)
+      .getChildrenNodesByTagname(ELEMENT_TAG.ResourceConfig)
       .flatMap(node => {
         const src = node.getAttributeOf("src");
         const isExists = fse.pathExistsSync(
-          path.join(pathUtil.SOURCE_CONFIG_DIR, src)
+          path.join(pathUtil.RESOURCE_CONFIG_DIR, src)
         );
-        return isExists ? [new SourceConfig(src).getOption()] : [];
+        return isExists ? [new ResourceConfig(src).getOption()] : [];
       });
   }
 }

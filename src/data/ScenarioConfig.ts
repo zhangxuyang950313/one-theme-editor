@@ -4,7 +4,7 @@ import {
   TypeFileTemplateConf,
   TypeScenarioConf,
   TypeScenarioOption
-} from "src/types/source";
+} from "src/types/resource";
 import { FILE_TEMPLATE_TYPE } from "src/enum";
 import { AbstractDataModel } from "./AbstractDataModel";
 

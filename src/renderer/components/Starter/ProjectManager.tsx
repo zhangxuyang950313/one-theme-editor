@@ -1,5 +1,5 @@
 import { useHistory } from "react-router";
-import { useScenarioOption } from "@/hooks/source/index";
+import { useScenarioOption } from "@/hooks/resource/index";
 import { useProjectList } from "@/hooks/project/index";
 import { TypeProjectInfo } from "src/types/project";
 import { LOAD_STATUS } from "src/enum";

@@ -4,7 +4,7 @@ import {
   useLoadImageByPath,
   useLoadImage
 } from "@/hooks/image";
-import { useSourceImageUrl } from "@/hooks/source/index";
+import { useResourceImageUrl } from "@/hooks/resource/index";
 import { useProjectImageUrl } from "@/hooks/project/index";
 
 type TypeReactImageElement = React.FC<JSX.IntrinsicElements["img"]>;
@@ -54,6 +54,6 @@ export const ProjectImage: TypeReactImageElement = props => {
  * @param props 和 img 标签具有相同的属性
  */
 export const SourceImage: TypeReactImageElement = props => {
-  const imageUrl = useSourceImageUrl(props.src || "");
+  const imageUrl = useResourceImageUrl(props.src || "");
   return <LazyImage {...props} src={imageUrl} alt="" />;
 };

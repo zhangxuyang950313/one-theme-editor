@@ -1,37 +1,37 @@
 import {
   TypeLayoutConf,
-  TypeSourceConfig,
-  TypeSourceOption,
+  TypeResourceConfig,
+  TypeResourceOption,
   TypeLayoutImageElement,
   TypeLayoutTextElement,
-  TypeSourceModuleConf,
-  TypeSourcePageOption,
-  TypeSourcePageConf,
-  TypeSourcePageGroupConf,
-  TypeSourceTypeConf,
-  TypeSourceDefined,
+  TypeResourceModuleConf,
+  TypeResourcePageOption,
+  TypeResourcePageConf,
+  TypeResourcePageGroupConf,
+  TypeResourceTypeConf,
+  TypeResourceDefined,
   TypePageDefinedImageData,
   TypePageDefinedValueData,
-  TypeSourceImageDefined
-} from "../types/source";
+  TypeResourceImageDefined
+} from "../types/resource";
 import { TypeProjectUiVersion } from "../types/project";
 import {
   ALIGN_VALUES,
   ALIGN_V_VALUES,
   ELEMENT_TAG,
-  SOURCE_TYPES
+  RESOURCE_TYPES
 } from "../enum/index";
 import { AbstractDataModel } from "./AbstractDataModel";
 
-export class SourcePageOption extends AbstractDataModel<TypeSourcePageOption> {
-  protected data: TypeSourcePageOption = {
+export class ResourcePageOption extends AbstractDataModel<TypeResourcePageOption> {
+  protected data: TypeResourcePageOption = {
     key: "",
     name: "",
     preview: "",
     src: ""
   };
 
-  static default = new SourcePageOption().create();
+  static default = new ResourcePageOption().create();
 }
 
 export class DefinedImageData extends AbstractDataModel<TypePageDefinedImageData> {
@@ -52,13 +52,13 @@ export class DefinedValueData extends AbstractDataModel<TypePageDefinedValueData
   };
 }
 
-export class SourceDefinedData extends AbstractDataModel<TypeSourceDefined> {
-  protected data: TypeSourceImageDefined = {
+export class SourceDefinedData extends AbstractDataModel<TypeResourceDefined> {
+  protected data: TypeResourceImageDefined = {
     tagName: "",
     name: "",
     description: "",
     src: "",
-    sourceData: null,
+    resourceData: null,
     valueData: null
   };
 }
@@ -76,13 +76,13 @@ export class ElementLayoutConf extends AbstractDataModel<TypeLayoutConf> {
   static default = new ElementLayoutConf().create();
 }
 
-export class SourceImageElement extends AbstractDataModel<TypeLayoutImageElement> {
+export class LayoutImageElement extends AbstractDataModel<TypeLayoutImageElement> {
   protected data: TypeLayoutImageElement = {
-    sourceTag: ELEMENT_TAG.Image,
-    sourceType: SOURCE_TYPES.IMAGE,
+    resourceTag: ELEMENT_TAG.Image,
+    resourceType: RESOURCE_TYPES.IMAGE,
     description: "",
     src: "",
-    sourceData: new DefinedImageData().create(),
+    resourceData: new DefinedImageData().create(),
     layout: {
       x: "0",
       y: "0",
@@ -94,10 +94,10 @@ export class SourceImageElement extends AbstractDataModel<TypeLayoutImageElement
   };
 }
 
-export class SourceTextElement extends AbstractDataModel<TypeLayoutTextElement> {
+export class LayoutTextElement extends AbstractDataModel<TypeLayoutTextElement> {
   protected data: TypeLayoutTextElement = {
-    sourceTag: ELEMENT_TAG.Text,
-    sourceType: SOURCE_TYPES.COLOR,
+    resourceTag: ELEMENT_TAG.Text,
+    resourceType: RESOURCE_TYPES.COLOR,
     name: "",
     text: "",
     src: "",
@@ -114,46 +114,46 @@ export class SourceTextElement extends AbstractDataModel<TypeLayoutTextElement> 
   };
 }
 
-export class SourcePageConfig extends AbstractDataModel<TypeSourcePageConf> {
-  protected data: TypeSourcePageConf = {
+export class ResourcePageConfig extends AbstractDataModel<TypeResourcePageConf> {
+  protected data: TypeResourcePageConf = {
     config: "",
     version: "",
     description: "",
     screenWidth: "",
     previewList: [],
-    sourceDefineList: [],
+    resourceDefineList: [],
     layoutElementList: []
   };
 }
 
-export class SourcePageGroupConf extends AbstractDataModel<TypeSourcePageGroupConf> {
-  protected data: TypeSourcePageGroupConf = {
+export class ResourcePageGroupConf extends AbstractDataModel<TypeResourcePageGroupConf> {
+  protected data: TypeResourcePageGroupConf = {
     name: "",
     pageList: []
   };
 
-  static default = new SourcePageOption().create();
+  static default = new ResourcePageOption().create();
 }
 
-export class SourceModuleConf extends AbstractDataModel<TypeSourceModuleConf> {
-  protected data: TypeSourceModuleConf = {
+export class ResourceModuleConf extends AbstractDataModel<TypeResourceModuleConf> {
+  protected data: TypeResourceModuleConf = {
     index: 0,
     name: "",
     icon: "",
     groupList: []
   };
 
-  static default = new SourceModuleConf().create();
+  static default = new ResourceModuleConf().create();
 }
 
-export class SourceTypeConf extends AbstractDataModel<TypeSourceTypeConf> {
-  protected data: TypeSourceTypeConf = {
+export class ResourceTypeConf extends AbstractDataModel<TypeResourceTypeConf> {
+  protected data: TypeResourceTypeConf = {
     name: "",
     tag: "",
-    type: SOURCE_TYPES.STRING
+    type: RESOURCE_TYPES.STRING
   };
 
-  static default = new SourceTypeConf().create();
+  static default = new ResourceTypeConf().create();
 }
 
 export class UiVersion extends AbstractDataModel<TypeProjectUiVersion> {
@@ -164,8 +164,8 @@ export class UiVersion extends AbstractDataModel<TypeProjectUiVersion> {
   static default = new UiVersion().create();
 }
 
-export class SourceOption extends AbstractDataModel<TypeSourceOption> {
-  protected data: TypeSourceOption = {
+export class ResourceOption extends AbstractDataModel<TypeResourceOption> {
+  protected data: TypeResourceOption = {
     key: "",
     namespace: "",
     config: "",
@@ -174,14 +174,14 @@ export class SourceOption extends AbstractDataModel<TypeSourceOption> {
     version: "",
     uiVersion: UiVersion.default
   };
-  static default = new SourceOption().create();
+  static default = new ResourceOption().create();
 }
 
-export default class SourceConfig extends AbstractDataModel<TypeSourceConfig> {
-  protected data: TypeSourceConfig = {
-    ...SourceOption.default,
-    sourceTypeList: [],
-    sourceModuleList: []
+export default class ResourceConfig extends AbstractDataModel<TypeResourceConfig> {
+  protected data: TypeResourceConfig = {
+    ...ResourceOption.default,
+    resourceTypeList: [],
+    resourceModuleList: []
   };
-  static default = new SourceConfig().create();
+  static default = new ResourceConfig().create();
 }

@@ -2,28 +2,28 @@ import path from "path";
 
 import React from "react";
 import styled from "styled-components";
-import { useSourceConfigDir } from "@/hooks/source/index";
+import { useResourceConfigDir } from "@/hooks/resource/index";
 import { useImagePrefix } from "@/hooks/image";
 
-import { TypeSourceOption } from "src/types/source";
+import { TypeResourceOption } from "src/types/resource";
 import { LazyImage } from "../ImageCollection";
 
 type TypeProps = {
-  sourceConfigPreview: TypeSourceOption;
+  resourceOption: TypeResourceOption;
 };
 
 // 配置卡片
 const SourceConfigCard: React.FC<TypeProps> = props => {
-  const { sourceConfigPreview } = props;
-  const { namespace, preview } = sourceConfigPreview;
+  const { resourceOption } = props;
+  const { namespace, preview } = resourceOption;
   const imgPrefix = useImagePrefix();
-  const sourceDir = useSourceConfigDir();
-  const imgUrl = imgPrefix + path.join(sourceDir, namespace, preview);
+  const resourceDir = useResourceConfigDir();
+  const imgUrl = imgPrefix + path.join(resourceDir, namespace, preview);
   return (
     <StyleSourceConfigCard>
       <LazyImage style={{ width: "100%" }} src={imgUrl} />
-      <div>{sourceConfigPreview.name}</div>
-      <div>{sourceConfigPreview.uiVersion.name}</div>
+      <div>{resourceOption.name}</div>
+      <div>{resourceOption.uiVersion.name}</div>
     </StyleSourceConfigCard>
   );
 };

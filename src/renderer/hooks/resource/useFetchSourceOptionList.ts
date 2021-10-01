@@ -4,7 +4,7 @@ import { apiGetSourceOptionList } from "@/request";
 import { useStarterDispatch } from "@/store";
 import { ActionSetSourceOptionList } from "@/store/starter/action";
 import { LOAD_STATUS } from "src/enum";
-import { TypeSourceOption } from "src/types/source";
+import { TypeResourceOption } from "src/types/resource";
 import { sleep } from "src/utils";
 import ERR_CODE from "src/common/errorCode";
 import { useScenarioOption } from ".";
@@ -14,11 +14,11 @@ import { useScenarioOption } from ".";
  * @returns
  */
 export default function useFetchSourceOptionList(): {
-  state: TypeSourceOption[];
+  state: TypeResourceOption[];
   status: LOAD_STATUS;
   fetch: () => Promise<void>;
 } {
-  const [state, setState] = useState<TypeSourceOption[]>([]);
+  const [state, setState] = useState<TypeResourceOption[]>([]);
   const [status, setStatus] = useState(LOAD_STATUS.INITIAL);
   const [currentScenarioOption] = useScenarioOption();
   const dispatch = useStarterDispatch();

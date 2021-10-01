@@ -5,7 +5,7 @@ import { PLACEHOLDER } from "src/enum/index";
 
 export default class PathResolver {
   // 格式化模板字符串
-  // ${source}/path/to/xxx -> path.join(this.sourceRoot, 'path/to/xxx')
+  // ${resource}/path/to/xxx -> path.join(this.sourceRoot, 'path/to/xxx')
   static parse(
     data: Partial<Record<PLACEHOLDER | string, string>>,
     pathname: string

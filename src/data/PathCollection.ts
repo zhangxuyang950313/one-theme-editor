@@ -31,8 +31,8 @@ export class ServerPathCollection extends AbstractDataModel<TypeServerPath> {
     RESOURCE_DIR: "",
     ASSETS_DIR: "",
     BINARY_DIR: "",
-    SOURCE_CONFIG_DIR: "",
-    SOURCE_CONFIG_FILE: "",
+    RESOURCE_CONFIG_DIR: "",
+    RESOURCE_CONFIG_FILE: "",
     AAPT_TOOL: "",
     ADB_TOOL: "",
     PACK_TEMPORARY: ""

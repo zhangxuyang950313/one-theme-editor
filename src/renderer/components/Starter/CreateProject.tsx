@@ -5,9 +5,9 @@ import { remote } from "electron";
 
 import { isDev } from "@/core/constant";
 import { apiCreateProject } from "@/request";
-import { useScenarioOption } from "@/hooks/source/index";
+import { useScenarioOption } from "@/hooks/resource/index";
 import { TypeProjectInfo } from "src/types/project";
-import { TypeSourceOption } from "src/types/source";
+import { TypeResourceOption } from "src/types/resource";
 
 import styled from "styled-components";
 import React, { useEffect, useRef, useState } from "react";
@@ -48,7 +48,7 @@ const CreateProject: React.FC<{
   // 表单实例
   const [form] = Form.useForm<TypeProjectInfo>();
   // 选择的模板
-  const [sourceConfig, setSourceConfig] = useState<TypeSourceOption>();
+  const [resourceConfig, setResourceConfig] = useState<TypeResourceOption>();
   // 填写本地目录
   const [projectRoot, setProjectRoot] = useState(
     path.join(defaultPath, initialValues.name)
@@ -88,7 +88,7 @@ const CreateProject: React.FC<{
   // 复位
   const init = () => {
     jumpStep(0);
-    setSourceConfig(undefined);
+    setResourceConfig(undefined);
     form.resetFields();
   };
 
@@ -229,8 +229,8 @@ const CreateProject: React.FC<{
       name: "选择配置",
       Context: (
         <SourceConfigManager
-          selectedKey={sourceConfig?.key || ""}
-          onSelected={setSourceConfig}
+          selectedKey={resourceConfig?.key || ""}
+          onSelected={setResourceConfig}
         />
       ),
       prev: {
@@ -238,9 +238,9 @@ const CreateProject: React.FC<{
         handlePrev: prevStep
       },
       next: {
-        disabled: !sourceConfig,
+        disabled: !resourceConfig,
         async handleNext() {
-          if (!sourceConfig) {
+          if (!resourceConfig) {
             message.warn("请选择配置模板");
           } else {
             nextStep();
@@ -282,7 +282,7 @@ const CreateProject: React.FC<{
               });
             });
           }
-          if (!sourceConfig) {
+          if (!resourceConfig) {
             throw new Error("未选择配置模板");
           }
           updateCreating(true);
@@ -293,15 +293,15 @@ const CreateProject: React.FC<{
             .set("packageConfig", currentScenarioOption.packageConfig)
             .set("applyConfig", currentScenarioOption.applyConfig)
             .create();
-          const sourceConfigPath = path.join(
-            sourceConfig.namespace,
-            sourceConfig.config
+          const resourceConfigPath = path.join(
+            resourceConfig.namespace,
+            resourceConfig.config
           );
           return apiCreateProject({
             scenarioConfig,
             projectRoot,
             projectInfo: projectInfoRef.current,
-            sourceConfigPath
+            resourceConfigPath
           })
             .then(data => {
               console.log("创建工程：", data);

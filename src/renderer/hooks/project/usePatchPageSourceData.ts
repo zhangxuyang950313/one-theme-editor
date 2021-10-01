@@ -5,7 +5,7 @@ import { ActionPatchProjectSourceData } from "@/store/editor/action";
 import { FILE_EVENT } from "src/enum";
 import { useFSWatcherCreator } from "../fileWatcher";
 import { useProjectRoot, useProjectUUID } from "../project";
-import { useSourcePageConfig } from "../source";
+import { useResourcePageConfig } from "../resource";
 
 /**
  * 监听当前页面所有素材
@@ -13,15 +13,15 @@ import { useSourcePageConfig } from "../source";
 export default function usePatchPageSourceData(): void {
   const uuid = useProjectUUID();
   const projectRoot = useProjectRoot();
-  const pageData = useSourcePageConfig();
+  const pageData = useResourcePageConfig();
   const dispatch = useEditorDispatch();
   const createWatcher = useFSWatcherCreator();
   useEffect(() => {
     if (!pageData || !uuid || !projectRoot) return;
     const watcher = createWatcher({ cwd: projectRoot });
-    const sourceSrcSet = new Set(pageData.sourceDefineList.map(o => o.src));
+    const resourceSrcSet = new Set(pageData.resourceDefineList.map(o => o.src));
     const listener = async (file: string, event: FILE_EVENT) => {
-      if (!sourceSrcSet.has(file)) return;
+      if (!resourceSrcSet.has(file)) return;
       console.log(`监听文件变动（${event}） '${file}' `);
       switch (event) {
         case FILE_EVENT.ADD:
@@ -39,7 +39,7 @@ export default function usePatchPageSourceData(): void {
       .add(projectRoot);
   }, [uuid, pageData, projectRoot]);
 
-  // useProjectFileWatcher(Array.from(sourceFilepathSet), async file => {
+  // useProjectFileWatcher(Array.from(resourceFilepathSet), async file => {
   //   const fileData = await apiGetProjectFileData(uuid, file);
   //   dispatch(ActionPatchProjectSourceData(fileData));
   // });

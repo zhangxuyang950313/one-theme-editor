@@ -3,51 +3,51 @@ import querystring from "querystring";
 import fse from "fs-extra";
 import {
   TypeLayoutElement,
-  TypeSourcePageConf,
+  TypeResourcePageConf,
   TypeLayoutImageElement,
   TypeLayoutTextElement,
-  TypeSourceDefined
-} from "src/types/source";
+  TypeResourceDefined
+} from "src/types/resource";
 import {
   ElementLayoutConf,
   DefinedImageData,
-  SourceImageElement,
-  SourcePageConfig,
-  SourceTextElement
-} from "src/data/SourceConfig";
+  LayoutImageElement,
+  ResourcePageConfig,
+  LayoutTextElement
+} from "src/data/ResourceConfig";
 import { getImageData } from "src/utils/index";
 import { placeholderRegexp } from "src/common/regexp";
 import { ELEMENT_TAG, ALIGN_VALUES, ALIGN_V_VALUES } from "src/enum/index";
 import pathUtil from "server/utils/pathUtil";
 import XMLNodeElement from "server/compiler/XMLNodeElement";
 import XmlFileCompiler from "./XmlFileCompiler";
-import SourceDefine from "./SourceDefine";
+import ResourceDefine from "./ResourceDefine";
 
 export default class PageConfig extends XMLNodeElement {
   private configFile: string;
-  private sourceNamespace: string;
+  private resourceNamespace: string;
   private pageNamespace: string;
   private pageConfig: string;
-  private sourceRootAbsolute: string;
-  private sourceDefineInstance: SourceDefine;
+  private resourceRootAbsolute: string;
+  private resourceDefineInstance: ResourceDefine;
   constructor(data: { namespace: string; config: string }) {
     const file = path.join(
-      pathUtil.SOURCE_CONFIG_DIR,
+      pathUtil.RESOURCE_CONFIG_DIR,
       data.namespace,
       data.config
     );
     super(new XmlFileCompiler(file).getElement());
     this.configFile = file;
-    this.sourceNamespace = path.normalize(data.namespace);
+    this.resourceNamespace = path.normalize(data.namespace);
     this.pageNamespace = path.dirname(data.config);
     this.pageConfig = path.normalize(data.config);
-    this.sourceRootAbsolute = path.join(
-      pathUtil.SOURCE_CONFIG_DIR,
+    this.resourceRootAbsolute = path.join(
+      pathUtil.RESOURCE_CONFIG_DIR,
       data.namespace
     );
-    this.sourceDefineInstance = new SourceDefine(
-      this.getRootFirstChildNodeOf(ELEMENT_TAG.Source),
-      this.sourceRootAbsolute
+    this.resourceDefineInstance = new ResourceDefine(
+      this.getRootFirstChildNodeOf(ELEMENT_TAG.Resource),
+      this.resourceRootAbsolute
     );
   }
 
@@ -69,16 +69,16 @@ export default class PageConfig extends XMLNodeElement {
     return this.getFirstChildNode().getChildrenNodesByTagname(tagname);
   }
 
-  // ${root}/path/to/somewhere -> absolute/source/root/to/somewhere
-  private resolveRootSourcePath(pathname: string): string {
-    // return PathResolver.parse({ root: this.sourceRootAbsolute }, pathname);
-    return path.join(this.sourceRootAbsolute, pathname);
+  // ${root}/path/to/somewhere -> absolute/resource/root/to/somewhere
+  private resolvePath(pathname: string): string {
+    // return PathResolver.parse({ root: this.resourceRootAbsolute }, pathname);
+    return path.join(this.resourceRootAbsolute, pathname);
   }
 
   // 处理当前页面资源的相对路径
   private relativePath(pathname: string): string {
     const relative = path.relative(
-      pathUtil.SOURCE_CONFIG_DIR,
+      pathUtil.RESOURCE_CONFIG_DIR,
       path.dirname(this.configFile)
     );
     return path.join(relative, pathname);
@@ -96,7 +96,7 @@ export default class PageConfig extends XMLNodeElement {
 
   private resolveRelativePath(pathname: string): string {
     const relative = path.relative(
-      this.sourceNamespace,
+      this.resourceNamespace,
       path.dirname(this.configFile)
     );
     return path.join(relative, pathname);
@@ -183,9 +183,9 @@ export default class PageConfig extends XMLNodeElement {
   }
 
   // 获取定义的资源配置数据
-  private getSourceDefineByName(srcVal: string): TypeSourceDefined | null {
+  private getResourceDefineByName(srcVal: string): TypeResourceDefined | null {
     const pName = this.getPlaceholderName(srcVal);
-    return this.sourceDefineInstance.getSourceDefineByName(pName);
+    return this.resourceDefineInstance.getResourceDefineByName(pName);
   }
 
   /**
@@ -218,35 +218,44 @@ export default class PageConfig extends XMLNodeElement {
    */
   private imageElement(node: XMLNodeElement): TypeLayoutImageElement {
     const srcVal = node.getAttributeOf("src");
-    const valueDefine = this.getSourceDefineByName(srcVal);
+    const valueDefined = this.getResourceDefineByName(srcVal);
+    console.log({
+      srcVal,
+      valueDefined,
+      resourceMap: this.resourceDefineInstance.getResourceDefineMap()
+    });
     let src = srcVal;
     let description = node.getAttributeOf("description");
     // 定义的数据，尝试解析 ${placeholder}
-    if (valueDefine && valueDefine.sourceData) {
-      src = valueDefine.src;
-      description = valueDefine.description;
+    if (valueDefined && valueDefined.resourceData) {
+      src = valueDefined.src;
+      description = valueDefined.description;
     } else {
-      // 直接定义，用于显示一些静态图片
-      src = this.sourceDefineInstance.getUrlData(srcVal).src;
+      try {
+        // 直接定义，用于显示一些静态图片
+        src = this.resourceDefineInstance.getUrlData(srcVal).src;
+      } catch (err) {
+        console.log(`layout url ${srcVal} 解析失败`);
+      }
     }
-    const sourceImageData = new DefinedImageData();
-    const sourceImageElement = new SourceImageElement();
-    const sourcePath = this.resolveRootSourcePath(src);
-    if (fse.existsSync(sourcePath)) {
-      const imageData = getImageData(this.resolveRootSourcePath(src));
-      sourceImageData
+    const definedImageData = new DefinedImageData();
+    const imageElement = new LayoutImageElement();
+    const resourcePath = this.resolvePath(src);
+    if (fse.existsSync(resourcePath)) {
+      const imageData = getImageData(this.resolvePath(src));
+      definedImageData
         .set("width", imageData.width)
         .set("height", imageData.height)
         .set("filename", imageData.filename)
         .set("ninePatch", imageData.ninePatch)
         .set("size", imageData.size);
-      sourceImageElement
+      imageElement
         .set("description", description)
-        .set("sourceData", sourceImageData.create())
+        .set("resourceData", definedImageData.create())
         .set("layout", this.layoutConf(node))
         .set("src", src);
     }
-    return sourceImageElement.create();
+    return imageElement.create();
   }
 
   /**
@@ -278,8 +287,8 @@ export default class PageConfig extends XMLNodeElement {
     const layout = this.layoutConf(node);
     const text = node.getAttributeOf("text");
     const colorVal = node.getAttributeOf("color");
-    const valueDefine = this.getSourceDefineByName(colorVal);
-    const textElementData = new SourceTextElement();
+    const valueDefine = this.getResourceDefineByName(colorVal);
+    const textElementData = new LayoutTextElement();
     textElementData.set("text", text);
     textElementData.set("name", text);
     textElementData.set("layout", {
@@ -320,24 +329,27 @@ export default class PageConfig extends XMLNodeElement {
       });
   }
 
-  getSourceDefineList(): TypeSourceDefined[] {
-    return this.sourceDefineInstance.getSourceDefineList();
+  getResourceDefineList(): TypeResourceDefined[] {
+    return this.resourceDefineInstance.getResourceDefineList();
   }
 
-  getSourceDefinePathList(): string[] {
-    return this.getSourceDefineList()
+  getResourceDefinePathList(): string[] {
+    return this.getResourceDefineList()
       .map(item => item.src)
       .filter(Boolean);
   }
 
-  getData(): TypeSourcePageConf {
-    return new SourcePageConfig()
+  getData(): TypeResourcePageConf {
+    return new ResourcePageConfig()
       .set("config", this.pageConfig)
       .set("version", this.getVersion())
       .set("description", this.getDescription())
       .set("screenWidth", this.getScreenWidth())
       .set("previewList", this.getPreviewList())
-      .set("sourceDefineList", this.sourceDefineInstance.getSourceDefineList())
+      .set(
+        "resourceDefineList",
+        this.resourceDefineInstance.getResourceDefineList()
+      )
       .set("layoutElementList", this.getLayoutElementList())
       .create();
   }

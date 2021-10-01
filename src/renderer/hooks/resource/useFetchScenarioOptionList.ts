@@ -2,7 +2,7 @@ import { useState, useLayoutEffect } from "react";
 import { apiGetScenarioOptionList } from "@/request";
 import { useStarterDispatch } from "@/store";
 import { ActionSetScenarioOptionList } from "@/store/starter/action";
-import { TypeScenarioOption } from "src/types/source";
+import { TypeScenarioOption } from "src/types/resource";
 import { LOAD_STATUS } from "src/enum";
 import { useAsyncUpdater } from "..";
 

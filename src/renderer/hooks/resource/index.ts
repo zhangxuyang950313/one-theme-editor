@@ -6,18 +6,18 @@ import {
 } from "@/store/editor/action";
 import {
   TypeScenarioOption,
-  TypeSourceConfig,
-  TypeSourceOption,
-  TypeSourcePageGroupConf,
-  TypeSourceModuleConf,
-  TypeSourcePageOption,
-  TypeSourceTypeConf,
+  TypeResourceConfig,
+  TypeResourceOption,
+  TypeResourcePageGroupConf,
+  TypeResourceModuleConf,
+  TypeResourcePageOption,
+  TypeResourceTypeConf,
   TypeLayoutElement,
   TypeLayoutImageElement,
   TypeLayoutTextElement,
-  TypeSourcePageConf,
-  TypeSourceDefined
-} from "src/types/source";
+  TypeResourcePageConf,
+  TypeResourceDefined
+} from "src/types/resource";
 import {
   useStarterDispatch,
   useEditorDispatch,
@@ -32,34 +32,36 @@ export function useScenarioOptionList(): TypeScenarioOption[] {
   return useStarterSelector(state => state.scenarioOptionList);
 }
 
-export function useSourceOptionList(): TypeSourceOption[] {
-  return useStarterSelector(state => state.sourceOptionList);
+export function useResourceOptionList(): TypeResourceOption[] {
+  return useStarterSelector(state => state.resourceOptionList);
 }
 
 /**
  * 获取当前资源配置数据
  * @returns
  */
-export function useSourceConfig(): TypeSourceConfig {
-  return useEditorSelector(state => state.sourceConfig);
+export function useResourceConfig(): TypeResourceConfig {
+  return useEditorSelector(state => state.resourceConfig);
 }
 
 /**
  * 获取资源配置根目录
  * @returns
  */
-export function useSourceConfigDir(): string {
-  return useGlobalSelector(state => state.base.appPath.SOURCE_CONFIG_DIR || "");
+export function useResourceConfigDir(): string {
+  return useGlobalSelector(
+    state => state.base.appPath.RESOURCE_CONFIG_DIR || ""
+  );
 }
 
 /**
  * 获取当前资源配置目录
  * @returns
  */
-export function useSourceConfigRootWithNS(): string {
-  const sourceConfigPath = useSourceConfigPath();
-  const sourceConfigDir = useSourceConfigDir();
-  return path.join(sourceConfigDir, path.dirname(sourceConfigPath));
+export function useResourceConfigRootWithNS(): string {
+  const resourceConfigPath = useResourceConfigPath();
+  const resourceConfigDir = useResourceConfigDir();
+  return path.join(resourceConfigDir, path.dirname(resourceConfigPath));
 }
 
 /**
@@ -81,73 +83,75 @@ export function useScenarioOption(): [
  * 获取资源配置文件 url
  * @returns
  */
-export function useSourceConfigPath(): string {
-  return useEditorSelector(state => state.sourceConfigPath);
+export function useResourceConfigPath(): string {
+  return useEditorSelector(state => state.resourceConfigPath);
 }
 
 /**
  * 获取当前配置模块列表
  * @returns
  */
-export function useSourceModuleList(): TypeSourceModuleConf[] {
-  return useEditorSelector(state => state.sourceModuleList);
+export function useResourceModuleList(): TypeResourceModuleConf[] {
+  return useEditorSelector(state => state.resourceModuleList);
 }
 
 /**
  * 获取当前选择的模块配置
  * @returns
  */
-export function useSourceModuleConf(): [
-  TypeSourceModuleConf,
-  (data: TypeSourceModuleConf) => void
+export function useResourceModuleConf(): [
+  TypeResourceModuleConf,
+  (data: TypeResourceModuleConf) => void
 ] {
   const dispatch = useEditorDispatch();
-  const sourceModuleConf = useEditorSelector(
-    state => state.sourceModuleSelected
+  const resourceModuleConf = useEditorSelector(
+    state => state.resourceModuleSelected
   );
-  return [sourceModuleConf, data => dispatch(ActionSetCurrentModule(data))];
+  return [resourceModuleConf, data => dispatch(ActionSetCurrentModule(data))];
 }
 
 /**
  * 当前当前模块页面组列表
  */
-export function useSourcePageGroupList(): TypeSourcePageGroupConf[] {
-  return useEditorSelector(state => state.sourceModuleSelected.groupList || []);
+export function useResourcePageGroupList(): TypeResourcePageGroupConf[] {
+  return useEditorSelector(
+    state => state.resourceModuleSelected.groupList || []
+  );
 }
 
 /**
  * 获取当前选择的页面配置
  * @returns
  */
-export function useSourcePageOption(): [
-  TypeSourcePageOption,
-  (data: TypeSourcePageOption) => void
+export function useResourcePageOption(): [
+  TypeResourcePageOption,
+  (data: TypeResourcePageOption) => void
 ] {
   const dispatch = useEditorDispatch();
-  const pageConf = useEditorSelector(state => state.sourcePageSelected);
+  const pageConf = useEditorSelector(state => state.resourcePageSelected);
   return [pageConf, data => dispatch(ActionSetCurrentPage(data))];
 }
 
-export function useSourcePageConfig(): TypeSourcePageConf | null {
+export function useResourcePageConfig(): TypeResourcePageConf | null {
   return useEditorSelector(state => {
-    const pageConfSrc = state.sourcePageSelected.src;
-    return state.sourcePageConfigMap[pageConfSrc] || null;
+    const pageConfSrc = state.resourcePageSelected.src;
+    return state.resourcePageConfigMap[pageConfSrc] || null;
   });
 }
 
 /**
  * 获取当前元素类型配置
  */
-export function useSourceTypeList(): TypeSourceTypeConf[] {
-  return useEditorSelector(state => state.sourceTypeList);
+export function useResourceTypeList(): TypeResourceTypeConf[] {
+  return useEditorSelector(state => state.resourceTypeList);
 }
 
 /**
  * 获取素材定义数据列表
  */
-export function useSourceDefineList(): TypeSourceDefined[] {
-  const sourcePageSelected = useSourcePageConfig();
-  return sourcePageSelected?.sourceDefineList || [];
+export function useResourceDefineList(): TypeResourceDefined[] {
+  const resourcePageSelected = useResourcePageConfig();
+  return resourcePageSelected?.resourceDefineList || [];
 }
 
 /**
@@ -155,9 +159,9 @@ export function useSourceDefineList(): TypeSourceDefined[] {
  */
 export function useLayoutElementList(): TypeLayoutElement[] {
   return useEditorSelector(state => {
-    const pageConfSrc = state.sourcePageSelected.src;
+    const pageConfSrc = state.resourcePageSelected.src;
     if (!pageConfSrc) return [];
-    return state.sourcePageConfigMap[pageConfSrc]?.layoutElementList || [];
+    return state.resourcePageConfigMap[pageConfSrc]?.layoutElementList || [];
   });
 }
 
@@ -167,7 +171,7 @@ export function useLayoutElementList(): TypeLayoutElement[] {
 export function useLayoutImageList(): TypeLayoutImageElement[] {
   const layoutElementList = useLayoutElementList();
   return layoutElementList.flatMap(item =>
-    item.sourceTag === ELEMENT_TAG.Image ? [item] : []
+    item.resourceTag === ELEMENT_TAG.Image ? [item] : []
   );
 }
 
@@ -177,7 +181,7 @@ export function useLayoutImageList(): TypeLayoutImageElement[] {
 export function useTextSourceList(): TypeLayoutTextElement[] {
   const layoutElementList = useLayoutElementList();
   return layoutElementList.flatMap(item =>
-    item.sourceTag === ELEMENT_TAG.Text ? [item] : []
+    item.resourceTag === ELEMENT_TAG.Text ? [item] : []
   );
 }
 
@@ -187,8 +191,8 @@ export function useTextSourceList(): TypeLayoutTextElement[] {
  * @returns
  */
 export function useAbsolutePathInSource(relativePath: string): string {
-  const sourceConfigRoot = useSourceConfigRootWithNS();
-  return path.join(sourceConfigRoot, relativePath);
+  const resourceConfigRoot = useResourceConfigRootWithNS();
+  return path.join(resourceConfigRoot, relativePath);
 }
 
 /**
@@ -196,7 +200,7 @@ export function useAbsolutePathInSource(relativePath: string): string {
  * @param relativePath
  * @returns
  */
-export function useSourceImageUrl(relativePath: string): string {
+export function useResourceImageUrl(relativePath: string): string {
   const prefix = useImagePrefix();
   const absolute = useAbsolutePathInSource(relativePath);
   return prefix + absolute;

@@ -3,7 +3,7 @@ import { result } from "server/utils/requestUtil";
 import express, { ErrorRequestHandler, Express, RequestHandler } from "express";
 import cookieParser from "cookie-parser";
 import imageController from "./imageController";
-import sourceController from "./sourceController";
+import resourceController from "./resourceController";
 import projectController from "./projectController";
 import fileController from "./fileController";
 import extraController from "./extraController";
@@ -41,7 +41,7 @@ export default function registerServiceController(service: Express): void {
   imageController(service);
 
   // 资源服务
-  sourceController(service);
+  resourceController(service);
 
   // 工程服务
   projectController(service);

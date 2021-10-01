@@ -28,7 +28,7 @@ export enum ELEMENT_TAG {
   Module = "Module",
   Page = "Page",
   Group = "Group",
-  Source = "Source",
+  Resource = "Resource",
   Previews = "Previews",
   Preview = "Preview",
   UiVersion = "UiVersion",
@@ -38,7 +38,7 @@ export enum ELEMENT_TAG {
   Value = "Value",
   Color = "Color",
   Scenario = "Scenario",
-  SourceConfig = "SourceConfig",
+  ResourceConfig = "ResourceConfig",
   FileTemplate = "FileTemplate",
   Items = "Items"
 }
@@ -50,7 +50,7 @@ export enum ELEMENT_TYPE {
 }
 
 // 资源类型
-export enum SOURCE_TYPES {
+export enum RESOURCE_TYPES {
   IMAGE = "image",
   COLOR = "color",
   BOOLEAN = "boolean",
@@ -80,7 +80,7 @@ export enum HEX_FORMAT {
 export enum PLACEHOLDER {
   ROOT = "root",
   PROJECT = "project",
-  SOURCE = "source",
+  RESOURCE = "resource",
   MODULE = "module",
   NAMESPACE = "namespace"
 }

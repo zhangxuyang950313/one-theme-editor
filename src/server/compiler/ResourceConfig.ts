@@ -2,41 +2,41 @@ import path from "path";
 import { v4 as UUID } from "uuid";
 import { ELEMENT_TAG } from "src/enum";
 import {
-  TypeSourceConfig,
-  TypeSourceModuleConf,
-  TypeSourcePageGroupConf,
-  TypeSourcePageOption,
-  TypeSourceOption,
-  TypeSourceTypeConf
-} from "src/types/source";
+  TypeResourceConfig,
+  TypeResourceModuleConf,
+  TypeResourcePageGroupConf,
+  TypeResourcePageOption,
+  TypeResourceOption,
+  TypeResourceTypeConf
+} from "src/types/resource";
 import {
-  SourceOption,
-  SourceModuleConf,
-  SourcePageOption,
-  SourcePageGroupConf,
-  SourceTypeConf,
+  ResourceOption,
+  ResourceModuleConf,
+  ResourcePageOption,
+  ResourcePageGroupConf,
+  ResourceTypeConf,
   UiVersion
-} from "src/data/SourceConfig";
+} from "src/data/ResourceConfig";
 import { TypeProjectUiVersion } from "src/types/project";
 import pathUtil from "server/utils/pathUtil";
 import PageConfig from "./PageConfig";
 import XMLNodeBase from "./XMLNodeElement";
 import XmlFileCompiler from "./XmlFileCompiler";
 
-// 解析 sourceConfig xml 配置文件
-export default class SourceConfig extends XmlFileCompiler {
+// 解析 resourceConfig xml 配置文件
+export default class ResourceConfig extends XmlFileCompiler {
   // xiaomi/miui12
   private namespace: string;
   constructor(pathname: string) {
-    super(path.join(pathUtil.SOURCE_CONFIG_DIR, pathname));
+    super(path.join(pathUtil.RESOURCE_CONFIG_DIR, pathname));
     this.namespace = path.relative(
-      pathUtil.SOURCE_CONFIG_DIR,
+      pathUtil.RESOURCE_CONFIG_DIR,
       path.dirname(this.getDescFile())
     );
   }
 
   // 处理成模板根目录
-  private resolveSourcePath(src: string): string {
+  private resolvePath(src: string): string {
     return path.join(this.getAbsRootDir(), src);
   }
 
@@ -85,11 +85,11 @@ export default class SourceConfig extends XmlFileCompiler {
   }
 
   // 素材类型定义列表
-  getSourceTypeList(): TypeSourceTypeConf[] {
+  getResourceTypeList(): TypeResourceTypeConf[] {
     return super
-      .getRootChildrenNodesOf(ELEMENT_TAG.Source)
+      .getRootChildrenNodesOf(ELEMENT_TAG.Resource)
       .map(item =>
-        new SourceTypeConf()
+        new ResourceTypeConf()
           .set("tag", item.getAttributeOf("tag"))
           .set("name", item.getAttributeOf("name"))
           .set("type", item.getAttributeOf("type"))
@@ -98,7 +98,7 @@ export default class SourceConfig extends XmlFileCompiler {
   }
 
   // 页面配置列表
-  getPageList(pageNodeList: XMLNodeBase[]): TypeSourcePageOption[] {
+  getPageList(pageNodeList: XMLNodeBase[]): TypeResourcePageOption[] {
     // 这里是在选择模板版本后得到的目标模块目录
     return pageNodeList.map(node => {
       const src = node.getAttributeOf("src");
@@ -106,7 +106,7 @@ export default class SourceConfig extends XmlFileCompiler {
         namespace: this.namespace,
         config: src
       }).getPreviewList();
-      return new SourcePageOption()
+      return new ResourcePageOption()
         .set("key", UUID())
         .set("name", node.getAttributeOf("name"))
         .set("preview", previewList[0] || "")
@@ -116,12 +116,12 @@ export default class SourceConfig extends XmlFileCompiler {
   }
 
   // 页面分组数据
-  getPageGroupList(groupNodeList: XMLNodeBase[]): TypeSourcePageGroupConf[] {
+  getPageGroupList(groupNodeList: XMLNodeBase[]): TypeResourcePageGroupConf[] {
     return groupNodeList.map(groupNode => {
       const pageList = this.getPageList(
         groupNode.getChildrenNodesByTagname(ELEMENT_TAG.Page)
       );
-      return new SourcePageGroupConf()
+      return new ResourcePageGroupConf()
         .set("name", groupNode.getAttributeOf("name"))
         .set("pageList", pageList)
         .create();
@@ -129,14 +129,14 @@ export default class SourceConfig extends XmlFileCompiler {
   }
 
   // 模块配置数据
-  getModuleList(): TypeSourceModuleConf[] {
+  getModuleList(): TypeResourceModuleConf[] {
     return super
       .getRootChildrenNodesOf(ELEMENT_TAG.Module)
       .map((moduleNode, index) => {
         const groupList = this.getPageGroupList(
           moduleNode.getChildrenNodesByTagname(ELEMENT_TAG.Group)
         );
-        return new SourceModuleConf()
+        return new ResourceModuleConf()
           .set("index", index)
           .set("name", moduleNode.getAttributeOf("name"))
           .set("icon", path.normalize(moduleNode.getAttributeOf("icon")))
@@ -149,8 +149,8 @@ export default class SourceConfig extends XmlFileCompiler {
    * 解析配置信息
    * 只解析 description.xml 不需要进一步解析页面
    */
-  getOption(): TypeSourceOption {
-    return new SourceOption()
+  getOption(): TypeResourceOption {
+    return new ResourceOption()
       .set("key", UUID())
       .set("namespace", this.namespace)
       .set("config", path.basename(this.getDescFile()))
@@ -164,11 +164,11 @@ export default class SourceConfig extends XmlFileCompiler {
   /**
    * 解析全部配置数据
    */
-  getConfig(): TypeSourceConfig {
+  getConfig(): TypeResourceConfig {
     return {
       ...this.getOption(),
-      sourceTypeList: this.getSourceTypeList(),
-      sourceModuleList: this.getModuleList()
+      resourceTypeList: this.getResourceTypeList(),
+      resourceModuleList: this.getModuleList()
     };
   }
 }

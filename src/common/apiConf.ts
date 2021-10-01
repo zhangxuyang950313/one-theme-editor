@@ -42,7 +42,7 @@ const apiConfig = {
 
   /**
    * @deprecated
-   * 获取 sourceConfig 路径
+   * 获取 resourceConfig 路径
    */
   GET_PATH_CONFIG: createApiConf({
     path: "/path/config"
@@ -67,22 +67,22 @@ const apiConfig = {
   }),
   // 获取配置信息列表
   GET_SOURCE_CONF_PREVIEW_LIST: createApiConf({
-    path: "/source/config/preview/list",
+    path: "/resource/config/preview/list",
     query: ["src"]
   }),
   // 获取模板配置数据
   GET_SOURCE_CONF_DATA: createApiConf({
-    path: "/source/config/data",
+    path: "/resource/config/data",
     query: ["config"]
   }),
   // 获取配置模块列表
   GET_SOURCE_CONF_MODULE_LIST: createApiConf({
-    path: "/source/config/module/list",
+    path: "/resource/config/module/list",
     query: ["config"]
   }),
   // 获取配置页面数据
   GET_SOURCE_CONF_PAGE_DATA: createApiConf({
-    path: "/source/config/page/data",
+    path: "/resource/config/page/data",
     query: ["namespace", "config"]
   }),
 
@@ -121,7 +121,7 @@ const apiConfig = {
   }),
   // 获取页面配置的素材文件数据
   GET_PAGE_SOURCE_DATA: createApiConf({
-    path: "/project/source",
+    path: "/project/resource",
     params: ["uuid"],
     query: ["config"]
   }),

@@ -5,7 +5,7 @@ import {
   TypeScenarioConf,
   TypeScenarioOption,
   TypePackConf
-} from "src/types/source";
+} from "src/types/resource";
 import { ELEMENT_TAG } from "src/enum/index";
 import ScenarioConfig, { ScenarioOption } from "src/data/ScenarioConfig";
 import XmlTemplate from "server/compiler/XmlTemplate";
@@ -18,7 +18,7 @@ import XMLNodeElement from "./XMLNodeElement";
 export default class ScenarioOptions extends XmlTemplate {
   // 默认配置路径
   static get def(): ScenarioOptions {
-    return ScenarioOptions.from(pathUtil.SOURCE_CONFIG_FILE);
+    return ScenarioOptions.from(pathUtil.RESOURCE_CONFIG_FILE);
   }
 
   // 从文件创建实例

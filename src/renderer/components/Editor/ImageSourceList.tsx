@@ -2,18 +2,14 @@ import React from "react";
 import styled from "styled-components";
 
 import ImageController from "@/components/ImageController/index";
-import useSourceImageDefinedList from "@/hooks/source/useSourceImageDefinedList";
+import useImageDefinedList from "@/hooks/resource/useImageDefinedList";
 
 const ImageSourceList: React.FC = () => {
-  const imageDefineList = useSourceImageDefinedList();
+  const imageDefinedList = useImageDefinedList();
   return (
     <StyleImageController>
-      {imageDefineList.map((sourceDefine, key) => (
-        <ImageController
-          key={key}
-          className="item"
-          sourceDefine={sourceDefine}
-        />
+      {imageDefinedList.map((item, key) => (
+        <ImageController key={key} className="item" imageDefine={item} />
       ))}
     </StyleImageController>
   );

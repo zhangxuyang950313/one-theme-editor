@@ -1,3 +1,3 @@
 export * from "./project";
-export * from "./source";
+export * from "./resource";
 export * from "./file";

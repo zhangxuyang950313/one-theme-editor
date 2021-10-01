@@ -2,19 +2,19 @@ import React from "react";
 import styled from "styled-components";
 import { Empty } from "antd";
 import { CheckCircleTwoTone } from "@ant-design/icons";
-import { TypeSourceOption } from "src/types/source";
-import { useSourceOptionList } from "@/hooks/source/index";
+import { TypeResourceOption } from "src/types/resource";
+import { useResourceOptionList } from "@/hooks/resource/index";
 import SourceConfigCard from "./SourceConfigCard";
 
 // 配置管理
 const SourceConfigManager: React.FC<{
   selectedKey: string;
-  onSelected: (config?: TypeSourceOption) => void;
+  onSelected: (config?: TypeResourceOption) => void;
 }> = props => {
   // 模板列表
-  const sourceOptionList = useSourceOptionList();
+  const resourceOptionList = useResourceOptionList();
 
-  if (sourceOptionList.length === 0) {
+  if (resourceOptionList.length === 0) {
     return (
       <StyleSourceConfigManager>
         <Empty
@@ -28,7 +28,7 @@ const SourceConfigManager: React.FC<{
 
   return (
     <StyleSourceConfigManager>
-      {sourceOptionList.map((item, key) => {
+      {resourceOptionList.map((item, key) => {
         const isActive = props.selectedKey === item.key;
         const isInit = !props.selectedKey;
         return (
@@ -41,7 +41,7 @@ const SourceConfigManager: React.FC<{
               props.onSelected(isActive ? undefined : item);
             }}
           >
-            <SourceConfigCard sourceConfigPreview={item} />
+            <SourceConfigCard resourceOption={item} />
             <CheckCircleTwoTone className="check-icon" />
           </StyleCardContainer>
         );

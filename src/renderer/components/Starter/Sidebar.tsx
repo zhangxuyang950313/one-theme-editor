@@ -3,7 +3,10 @@ import styled from "styled-components";
 
 import { Menu } from "antd";
 
-import { useScenarioOption, useScenarioOptionList } from "@/hooks/source/index";
+import {
+  useScenarioOption,
+  useScenarioOptionList
+} from "@/hooks/resource/index";
 import TopInfo from "./TopInfo";
 
 // 欢迎页侧边栏

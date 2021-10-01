@@ -4,7 +4,7 @@ import fse from "fs-extra";
 import JsZip from "jszip";
 import micromatch from "micromatch";
 import pathUtil from "server/utils/pathUtil";
-import { TypePackConf } from "src/types/source";
+import { TypePackConf } from "src/types/resource";
 import { PACK_TYPE } from "src/enum";
 import { asyncQueue } from "src/utils";
 import { TypePackProcess } from "src/types/socket";

@@ -20,11 +20,11 @@ export async function releaseXmlTemplate(
 ): Promise<Record<string, string>> {
   const project = await findProjectByQuery({ uuid });
   const { name, value, src } = data;
-  const sourceRoot = path.join(
-    pathUtil.SOURCE_CONFIG_DIR,
-    path.dirname(project.sourceConfigPath)
+  const resourceRoot = path.join(
+    pathUtil.RESOURCE_CONFIG_DIR,
+    path.dirname(project.resourceConfigPath)
   );
-  const templateXml = path.join(sourceRoot, src);
+  const templateXml = path.join(resourceRoot, src);
   const releaseXml = path.join(project.projectRoot, src);
   const releaseFileIsExists = fse.pathExistsSync(releaseXml);
 

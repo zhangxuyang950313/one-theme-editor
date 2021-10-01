@@ -1,20 +1,23 @@
 import React from "react";
 import styled from "styled-components";
 import { Tooltip } from "antd";
-import { useSourceModuleList, useSourceModuleConf } from "@/hooks/source/index";
+import {
+  useResourceModuleList,
+  useResourceModuleConf
+} from "@/hooks/resource/index";
 import { SourceImage } from "../ImageCollection";
 
 // 模块选择器
 const ModuleSelector: React.FC = () => {
-  const sourceModuleList = useSourceModuleList();
-  const [currentModule, setCurrentModule] = useSourceModuleConf();
+  const resourceModuleList = useResourceModuleList();
+  const [currentModule, setCurrentModule] = useResourceModuleConf();
 
-  if (sourceModuleList.length === 0) return null;
+  if (resourceModuleList.length === 0) return null;
   if (!currentModule) return null;
 
   return (
     <>
-      {sourceModuleList.map((item, key) => (
+      {resourceModuleList.map((item, key) => (
         <Tooltip key={key} title={item.name} placement="right">
           <StyleIcon onClick={() => setCurrentModule(item)}>
             {/* <img

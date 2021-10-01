@@ -17,11 +17,13 @@ export async function getPageDefineSourceData(
   uuid: string,
   config: string
 ): Promise<Record<string, TypeProjectFileData>> {
-  const { projectRoot, sourceConfigPath } = await findProjectByQuery({ uuid });
-  const namespace = path.dirname(sourceConfigPath);
+  const { projectRoot, resourceConfigPath } = await findProjectByQuery({
+    uuid
+  });
+  const namespace = path.dirname(resourceConfigPath);
   const pageConfig = new PageConfig({ namespace, config });
-  const sourcePathList = pageConfig.getSourceDefinePathList();
-  return sourcePathList.reduce<Record<string, TypeProjectFileData>>(
+  const resourcePathList = pageConfig.getResourceDefinePathList();
+  return resourcePathList.reduce<Record<string, TypeProjectFileData>>(
     (record, src) => {
       record[src] = getProjectFileData(projectRoot, src);
       return record;

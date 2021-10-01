@@ -11,7 +11,7 @@ import {
   UnionTupleToObjectKey,
   TypeReleaseXmlTempPayload
 } from "src/types/request";
-import { TypeScenarioConf } from "src/types/source";
+import { TypeScenarioConf } from "src/types/resource";
 import { createHttp } from "./axios";
 
 // 创建工程

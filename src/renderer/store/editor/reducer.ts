@@ -5,16 +5,16 @@ import {
   TypeProjectFileData
 } from "src/types/project";
 import {
-  TypeSourceTypeConf,
-  TypeSourceModuleConf,
-  TypeSourcePageOption,
-  TypeSourcePageConf,
-  TypeSourceConfig
-} from "src/types/source";
-import SourceConfig, {
-  SourceModuleConf,
-  SourcePageOption
-} from "src/data/SourceConfig";
+  TypeResourceTypeConf,
+  TypeResourceModuleConf,
+  TypeResourcePageOption,
+  TypeResourcePageConf,
+  TypeResourceConfig
+} from "src/types/resource";
+import ResourceConfig, {
+  ResourceModuleConf,
+  ResourcePageOption
+} from "src/data/ResourceConfig";
 import ProjectData, { ProjectInfo } from "src/data/ProjectData";
 import { ACTION_TYPES, TypeEditorActions } from "./action";
 
@@ -24,13 +24,13 @@ export type TypeEditorState = {
   projectInfo: TypeProjectInfo;
   uuid: string;
   projectRoot: string;
-  sourceConfigPath: string;
-  sourceConfig: TypeSourceConfig;
-  sourceTypeList: TypeSourceTypeConf[];
-  sourceModuleList: TypeSourceModuleConf[];
-  sourceModuleSelected: TypeSourceModuleConf;
-  sourcePageSelected: TypeSourcePageOption;
-  sourcePageConfigMap: Record<string, TypeSourcePageConf>;
+  resourceConfigPath: string;
+  resourceConfig: TypeResourceConfig;
+  resourceTypeList: TypeResourceTypeConf[];
+  resourceModuleList: TypeResourceModuleConf[];
+  resourceModuleSelected: TypeResourceModuleConf;
+  resourcePageSelected: TypeResourcePageOption;
+  resourcePageConfigMap: Record<string, TypeResourcePageConf>;
   projectFileDataMap: Record<string, TypeProjectFileData>;
 };
 
@@ -39,13 +39,13 @@ const defaultState: TypeEditorState = {
   projectInfo: ProjectInfo.default,
   uuid: "",
   projectRoot: "",
-  sourceConfigPath: "",
-  sourceConfig: SourceConfig.default,
-  sourceTypeList: [],
-  sourceModuleList: [],
-  sourceModuleSelected: SourceModuleConf.default,
-  sourcePageSelected: SourcePageOption.default,
-  sourcePageConfigMap: {},
+  resourceConfigPath: "",
+  resourceConfig: ResourceConfig.default,
+  resourceTypeList: [],
+  resourceModuleList: [],
+  resourceModuleSelected: ResourceModuleConf.default,
+  resourcePageSelected: ResourcePageOption.default,
+  resourcePageConfigMap: {},
   projectFileDataMap: {}
 };
 
@@ -68,44 +68,45 @@ export default function EditorReducer(
       return updateState(state, {
         uuid: action.payload.uuid,
         projectRoot: action.payload.projectRoot,
-        sourceConfigPath: action.payload.sourceConfigPath,
+        resourceConfigPath: action.payload.resourceConfigPath,
         projectInfo: action.payload.projectInfo,
         projectData: action.payload
       });
     }
     // 配置数据
-    case ACTION_TYPES.SET_SOURCE_CONFIG: {
-      const { sourceModuleList } = action.payload;
+    case ACTION_TYPES.SET_RESOURCE_CONFIG: {
+      const { resourceModuleList } = action.payload;
       return updateState(state, {
-        sourceConfig: action.payload,
-        sourceTypeList: action.payload.sourceTypeList,
-        sourceModuleList: sourceModuleList,
-        sourceModuleSelected: sourceModuleList[0],
-        sourcePageSelected: sourceModuleList[0]?.groupList?.[0].pageList?.[0]
+        resourceConfig: action.payload,
+        resourceTypeList: action.payload.resourceTypeList,
+        resourceModuleList: resourceModuleList,
+        resourceModuleSelected: resourceModuleList[0],
+        resourcePageSelected:
+          resourceModuleList[0]?.groupList?.[0].pageList?.[0]
       });
     }
     // 模块配置
     case ACTION_TYPES.SET_MODULE_CONFIG: {
       return updateState(state, {
-        sourceModuleSelected: action.payload
+        resourceModuleSelected: action.payload
       });
     }
     // 页面配置
     case ACTION_TYPES.SET_PAGE_CONFIG: {
       return updateState(state, {
-        sourcePageSelected: action.payload
+        resourcePageSelected: action.payload
       });
     }
     // 页面数据
     case ACTION_TYPES.PATCH_PAGE_CONFIG: {
       return updateState(state, {
-        sourcePageConfigMap: {
-          ...state.sourcePageConfigMap,
+        resourcePageConfigMap: {
+          ...state.resourcePageConfigMap,
           [action.payload.config]: action.payload
         }
       });
     }
-    case ACTION_TYPES.PATCH_PROJECT_SOURCE_DATA: {
+    case ACTION_TYPES.PATCH_PROJECT_RESOURCE: {
       return updateState(state, {
         projectFileDataMap: {
           ...state.projectFileDataMap,

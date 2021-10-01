@@ -10,9 +10,9 @@ import {
 } from "@/hooks/project/index";
 import {
   useAbsolutePathInSource,
-  useSourceImageUrl
-} from "@/hooks/source/index";
-import { TypeSourceImageDefine } from "src/types/source";
+  useResourceImageUrl
+} from "@/hooks/resource/index";
+import { TypeResourceImageDefined } from "src/types/resource";
 
 import SourceStatus from "./SourceStatus";
 import ImageDisplay from "./ImageDisplay";
@@ -54,17 +54,17 @@ import { previewFile } from "./utils";
 
 const ImageController: React.FC<{
   className: string;
-  sourceDefine: TypeSourceImageDefine;
+  imageDefine: TypeResourceImageDefined;
 }> = props => {
-  const { sourceDefine, className } = props;
-  const { sourceData, description, src } = sourceDefine;
-  const sourceImageUrl = useSourceImageUrl(src);
+  const { imageDefine, className } = props;
+  const { resourceData, description, src } = imageDefine;
+  const resourceImageUrl = useResourceImageUrl(src);
   const projectImageUrl = useProjectImageUrlBySrc(src);
   const absPathInSource = useAbsolutePathInSource(src);
   const absPathInProject = useAbsolutePathInProject(src);
 
-  if (!sourceData) return null;
-  const { width, height, size } = sourceData;
+  if (!resourceData) return null;
+  const { width, height, size } = resourceData;
   return (
     <StyleImageController className={className}>
       {/* 图片名称 */}
@@ -82,7 +82,7 @@ const ImageController: React.FC<{
       <div className="edit-wrapper">
         {/* 默认素材展示 */}
         <ImageDisplay
-          imageUrl={sourceImageUrl}
+          imageUrl={resourceImageUrl}
           onClick={() => {
             // 预览图片
             // mac 打开图片预览器，其他平台跳转目录

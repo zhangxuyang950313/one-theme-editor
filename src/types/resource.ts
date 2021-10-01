@@ -5,14 +5,14 @@ import {
   ELEMENT_TAG,
   FILE_TEMPLATE_TYPE,
   PACK_TYPE,
-  SOURCE_TYPES
+  RESOURCE_TYPES
 } from "../enum";
 import XMLNodeBase from "../server/compiler/XMLNodeElement";
 import { TypeImageData, TypeProjectUiVersion } from "./project";
 import { TypeImagePathLike } from "./index";
 
 // 资源配置信息
-export type TypeSourceOption = {
+export type TypeResourceOption = {
   key: string;
   namespace: string;
   config: string;
@@ -23,9 +23,9 @@ export type TypeSourceOption = {
 };
 
 // 资源配置数据
-export type TypeSourceConfig = TypeSourceOption & {
-  sourceTypeList: TypeSourceTypeConf[];
-  sourceModuleList: TypeSourceModuleConf[];
+export type TypeResourceConfig = TypeResourceOption & {
+  resourceTypeList: TypeResourceTypeConf[];
+  resourceModuleList: TypeResourceModuleConf[];
 };
 
 export type TypeFileTemplateConf = {
@@ -69,24 +69,24 @@ export type TypeScenarioOption = TypeScenarioConf & {
 };
 
 // 素材类型定义数据
-export type TypeSourceTypeConf = {
-  type: SOURCE_TYPES;
+export type TypeResourceTypeConf = {
+  type: RESOURCE_TYPES;
   name: string;
   tag: string;
 };
 
 // 预览模块
-export type TypeSourceModuleConf = {
+export type TypeResourceModuleConf = {
   index: number;
   name: string;
   icon: string;
-  groupList: TypeSourcePageGroupConf[];
+  groupList: TypeResourcePageGroupConf[];
 };
 
 // 预览页面组
-export type TypeSourcePageGroupConf = {
+export type TypeResourcePageGroupConf = {
   name: string;
-  pageList: TypeSourcePageOption[];
+  pageList: TypeResourcePageOption[];
 };
 
 // 键值对配置数据
@@ -96,14 +96,14 @@ export type TypeXmlTempKeyValMap = Map<
 >;
 
 // 键值对映射配置
-export type TypeSourceXmlKeyValConf = {
+export type TypeResourceXmlKeyValConf = {
   name: string;
   value: string;
   description: string;
 };
 
 // 配置模板原始配置
-export type TypeSourceXmlTempConf = {
+export type TypeResourceXmlTempConf = {
   template: string;
   values: string;
   release: string;
@@ -120,11 +120,11 @@ export type TypeLayoutConf = {
 
 // 图片元素数据
 export type TypeLayoutImageElement = {
-  readonly sourceTag: ELEMENT_TAG.Image;
-  readonly sourceType: SOURCE_TYPES.IMAGE;
+  readonly resourceTag: ELEMENT_TAG.Image;
+  readonly resourceType: RESOURCE_TYPES.IMAGE;
   description: string;
   src: string;
-  sourceData: TypePageDefinedImageData;
+  resourceData: TypePageDefinedImageData;
   layout: {
     x: string;
     y: string;
@@ -137,8 +137,8 @@ export type TypeLayoutImageElement = {
 
 // 颜色元素数据
 export type TypeLayoutTextElement = {
-  readonly sourceTag: ELEMENT_TAG.Text;
-  readonly sourceType: SOURCE_TYPES;
+  readonly resourceTag: ELEMENT_TAG.Text;
+  readonly resourceType: RESOURCE_TYPES;
   name: string;
   text: string;
   src: string;
@@ -159,43 +159,45 @@ export type TypePageDefinedValueData = {
 export type TypePageDefinedImageData = TypeImageData;
 
 // 素材定义
-export type TypeSourceImageDefined = {
+export type TypeResourceImageDefined = {
   tagName: string;
   name: string;
   description: string;
   src: string;
-  sourceData: TypePageDefinedImageData | null;
+  resourceData: TypePageDefinedImageData | null;
   valueData: null;
 };
-export type TypeSourceValueDefined = {
+export type TypeResourceValueDefined = {
   tagName: string;
   name: string;
   description: string;
   src: string;
-  sourceData: null;
+  resourceData: null;
   valueData: TypePageDefinedValueData | null;
 };
-export type TypeSourceDefined = TypeSourceImageDefined | TypeSourceValueDefined;
+export type TypeResourceDefined =
+  | TypeResourceImageDefined
+  | TypeResourceValueDefined;
 
 // 预览元素数据
 export type TypeLayoutElement = TypeLayoutImageElement | TypeLayoutTextElement;
 
 // 预览单个页面配置
-export type TypeSourcePageOption = {
+export type TypeResourcePageOption = {
   key: string;
   name: string;
   preview: string;
   src: string;
 };
-export type TypeSourcePageConf = {
+export type TypeResourcePageConf = {
   config: string;
   version: string;
   description: string;
   screenWidth: string;
   previewList: string[];
-  sourceDefineList: TypeSourceDefined[];
+  resourceDefineList: TypeResourceDefined[];
   layoutElementList: TypeLayoutElement[];
 };
 
 // 键值对映射 map
-export type TypeSourceXmlKeyValMapperMap = Map<string, XMLNodeBase>;
+export type TypeResourceXmlKeyValMapperMap = Map<string, XMLNodeBase>;

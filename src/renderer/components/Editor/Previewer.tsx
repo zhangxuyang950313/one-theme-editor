@@ -2,16 +2,16 @@ import React from "react";
 import styled from "styled-components";
 
 import {
-  useSourcePageOption,
-  useSourceImageUrl,
-  useSourceDefineList
-} from "@/hooks/source/index";
+  useResourcePageOption,
+  useResourceImageUrl,
+  useResourceDefineList
+} from "@/hooks/resource/index";
 import { PreloadImage } from "../ImageCollection";
 
 const Previewer: React.FC = () => {
-  const [currentPage] = useSourcePageOption();
-  const sourceDefineList = useSourceDefineList();
-  const imageUrl = useSourceImageUrl(currentPage.preview || "");
+  const [currentPage] = useResourcePageOption();
+  const resourceDefineList = useResourceDefineList();
+  const imageUrl = useResourceImageUrl(currentPage.preview || "");
 
   return (
     <StylePreviewer>

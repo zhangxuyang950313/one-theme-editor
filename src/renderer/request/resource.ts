@@ -1,10 +1,10 @@
 import apiConfig from "src/common/apiConf";
 import {
-  TypeSourceConfig,
-  TypeSourceOption,
-  TypeSourcePageConf,
+  TypeResourceConfig,
+  TypeResourceOption,
+  TypeResourcePageConf,
   TypeScenarioOption
-} from "src/types/source";
+} from "src/types/resource";
 import { TypeRequestResult, UnionTupleToObjectKey } from "src/types/request";
 import { createHttp } from "./axios";
 
@@ -22,9 +22,9 @@ export async function apiGetScenarioOptionList(): Promise<
 // 获取资源配置列表
 export async function apiGetSourceOptionList(
   src: string
-): Promise<TypeSourceOption[]> {
+): Promise<TypeResourceOption[]> {
   return createHttp()
-    .get<TypeRequestResult<TypeSourceOption[]>>(
+    .get<TypeRequestResult<TypeResourceOption[]>>(
       `${apiConfig.GET_SOURCE_CONF_PREVIEW_LIST.path}`,
       { params: { src } }
     )
@@ -34,9 +34,9 @@ export async function apiGetSourceOptionList(
 // 获取配置数据
 export async function apiGetSourceConfig(
   config: string
-): Promise<TypeSourceConfig> {
+): Promise<TypeResourceConfig> {
   return createHttp()
-    .get<TypeRequestResult<TypeSourceConfig>>(
+    .get<TypeRequestResult<TypeResourceConfig>>(
       apiConfig.GET_SOURCE_CONF_DATA.path,
       {
         params: { config }
@@ -50,9 +50,9 @@ export async function apiGetSourcePageConfData(
   params: UnionTupleToObjectKey<
     typeof apiConfig.GET_SOURCE_CONF_PAGE_DATA.query
   >
-): Promise<TypeSourcePageConf> {
+): Promise<TypeResourcePageConf> {
   return createHttp()
-    .get<TypeRequestResult<TypeSourcePageConf>>(
+    .get<TypeRequestResult<TypeResourcePageConf>>(
       apiConfig.GET_SOURCE_CONF_PAGE_DATA.path,
       { params }
     )

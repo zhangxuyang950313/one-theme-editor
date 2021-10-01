@@ -24,8 +24,8 @@ export type TypeServerPath = Readonly<{
   RESOURCE_DIR: string;
   ASSETS_DIR: string;
   BINARY_DIR: string;
-  SOURCE_CONFIG_DIR: string;
-  SOURCE_CONFIG_FILE: string;
+  RESOURCE_CONFIG_DIR: string;
+  RESOURCE_CONFIG_FILE: string;
   AAPT_TOOL: string | null;
   ADB_TOOL: string | null;
 }>;

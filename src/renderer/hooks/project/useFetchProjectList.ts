@@ -6,7 +6,7 @@ import { TypeProjectDataDoc } from "src/types/project";
 import { LOAD_STATUS } from "src/enum";
 import { sleep } from "src/utils";
 import { useAxiosCanceler } from "..";
-import { useScenarioOption } from "../source";
+import { useScenarioOption } from "../resource";
 
 // 获取项目列表
 export default function useFetchProjectList(): {

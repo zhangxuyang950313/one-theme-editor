@@ -1,6 +1,6 @@
 import path from "path";
 import { useMergeLoadStatus } from "@/hooks/index";
-import { useSourceConfigRootWithNS } from "@/hooks/source/index";
+import { useResourceConfigRootWithNS } from "@/hooks/resource/index";
 import { ActionInitEditor } from "@/store/editor/action";
 import {
   useEditorDispatch,
@@ -19,14 +19,14 @@ import { FILE_TEMPLATE_TYPE, LOAD_STATUS, PROJECT_FILE_TYPE } from "src/enum";
 import {
   TypeScenarioConf,
   TypeFileTemplateConf,
-  TypeSourceConfig,
-  TypeSourcePageConf
-} from "src/types/source";
+  TypeResourceConfig,
+  TypeResourcePageConf
+} from "src/types/resource";
 import { FileTemplate } from "src/data/ScenarioConfig";
 import { useImagePrefix } from "../image";
 import useFetchProjectData from "../project/useFetchProjectData";
-import useFetchSourceConfig from "../source/useFetchSourceConfig";
-import useFetchPageConfList from "../source/useFetchPageConfList";
+import useFetchSourceConfig from "../resource/useFetchSourceConfig";
+import useFetchPageConfList from "../resource/useFetchPageConfList";
 
 export function useProjectList(): TypeProjectDataDoc[] {
   return useStarterSelector(state => state.projectList);
@@ -78,8 +78,8 @@ export function useProjectInfoConfig(): TypeFileTemplateConf {
  */
 type TypeInitializedProjectData = {
   projectData: TypeProjectDataDoc;
-  sourceConfig: TypeSourceConfig;
-  pageConfigList: TypeSourcePageConf[];
+  resourceConfig: TypeResourceConfig;
+  pageConfigList: TypeResourcePageConf[];
 };
 export function useInitProject(): [
   TypeInitializedProjectData,
@@ -87,7 +87,7 @@ export function useInitProject(): [
   () => Promise<TypeInitializedProjectData>
 ] {
   const [projectData, step1Status, handleFetch1] = useFetchProjectData();
-  const [sourceConfig, step2Status, handleFetch2] = useFetchSourceConfig();
+  const [resourceConfig, step2Status, handleFetch2] = useFetchSourceConfig();
   const [pageConfigList, step3Status, handleFetch3] = useFetchPageConfList();
   const status = useMergeLoadStatus([step1Status, step2Status, step3Status]);
   const dispatch = useEditorDispatch();
@@ -97,7 +97,7 @@ export function useInitProject(): [
       dispatch(ActionInitEditor());
     };
   }, []);
-  const result = { projectData, sourceConfig, pageConfigList };
+  const result = { projectData, resourceConfig, pageConfigList };
   const fetchAll = async () => {
     await Promise.all([handleFetch1(), handleFetch2(), handleFetch3()]);
     return result;
@@ -120,15 +120,15 @@ export function useResolveProjectPath(relativePath = ""): string {
 
 // 处理素材路径
 export function useResolveSourcePath(relativePath: string): string {
-  const sourceRoot = useSourceConfigRootWithNS();
-  const [sourcePath, setSourcePath] = useState("");
+  const resourceRoot = useResourceConfigRootWithNS();
+  const [resourcePath, setResourcePath] = useState("");
 
   useEffect(() => {
-    if (!sourceRoot || !relativePath) return;
-    setSourcePath(path.join(sourceRoot, relativePath));
+    if (!resourceRoot || !relativePath) return;
+    setResourcePath(path.join(resourceRoot, relativePath));
   }, [relativePath]);
 
-  return sourcePath;
+  return resourcePath;
 }
 
 export function useProjectFileDataMap(): Map<string, TypeProjectFileData> {
