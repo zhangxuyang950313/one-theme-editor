@@ -6,11 +6,11 @@ import {
   TypeResourcePageConf,
   TypeLayoutImageElement,
   TypeLayoutTextElement,
-  TypeResourceDefined
+  TypeResourceDefinition
 } from "src/types/resource";
 import {
   ElementLayoutConf,
-  DefinedImageData,
+  DefinitionImageData,
   LayoutImageElement,
   ResourcePageConfig,
   LayoutTextElement
@@ -21,7 +21,7 @@ import { ELEMENT_TAG, ALIGN_VALUES, ALIGN_V_VALUES } from "src/enum/index";
 import pathUtil from "server/utils/pathUtil";
 import XMLNodeElement from "server/compiler/XMLNodeElement";
 import XmlFileCompiler from "./XmlFileCompiler";
-import ResourceDefine from "./ResourceDefine";
+import ResourceDefinition from "./ResourceDefinition";
 
 export default class PageConfig extends XMLNodeElement {
   private configFile: string;
@@ -29,7 +29,7 @@ export default class PageConfig extends XMLNodeElement {
   private pageNamespace: string;
   private pageConfig: string;
   private resourceRootAbsolute: string;
-  private resourceDefineInstance: ResourceDefine;
+  private resourceDefinitionInstance: ResourceDefinition;
   constructor(data: { namespace: string; config: string }) {
     const file = path.join(
       pathUtil.RESOURCE_CONFIG_DIR,
@@ -45,7 +45,7 @@ export default class PageConfig extends XMLNodeElement {
       pathUtil.RESOURCE_CONFIG_DIR,
       data.namespace
     );
-    this.resourceDefineInstance = new ResourceDefine(
+    this.resourceDefinitionInstance = new ResourceDefinition(
       this.getRootFirstChildNodeOf(ELEMENT_TAG.Resource),
       this.resourceRootAbsolute
     );
@@ -183,9 +183,11 @@ export default class PageConfig extends XMLNodeElement {
   }
 
   // 获取定义的资源配置数据
-  private getResourceDefineByName(srcVal: string): TypeResourceDefined | null {
+  private getResourceDefinitionByName(
+    srcVal: string
+  ): TypeResourceDefinition | null {
     const pName = this.getPlaceholderName(srcVal);
-    return this.resourceDefineInstance.getResourceDefineByName(pName);
+    return this.resourceDefinitionInstance.getResourceByName(pName);
   }
 
   /**
@@ -218,32 +220,27 @@ export default class PageConfig extends XMLNodeElement {
    */
   private imageElement(node: XMLNodeElement): TypeLayoutImageElement {
     const srcVal = node.getAttributeOf("src");
-    const valueDefined = this.getResourceDefineByName(srcVal);
-    console.log({
-      srcVal,
-      valueDefined,
-      resourceMap: this.resourceDefineInstance.getResourceDefineMap()
-    });
+    const valueDefinition = this.getResourceDefinitionByName(srcVal);
     let src = srcVal;
     let description = node.getAttributeOf("description");
     // 定义的数据，尝试解析 ${placeholder}
-    if (valueDefined && valueDefined.resourceData) {
-      src = valueDefined.src;
-      description = valueDefined.description;
+    if (valueDefinition && valueDefinition.resourceData) {
+      src = valueDefinition.src;
+      description = valueDefinition.description;
     } else {
       try {
         // 直接定义，用于显示一些静态图片
-        src = this.resourceDefineInstance.getUrlData(srcVal).src;
+        src = this.resourceDefinitionInstance.getUrlData(srcVal).src;
       } catch (err) {
         console.log(`layout url ${srcVal} 解析失败`);
       }
     }
-    const definedImageData = new DefinedImageData();
+    const definitionImageData = new DefinitionImageData();
     const imageElement = new LayoutImageElement();
     const resourcePath = this.resolvePath(src);
     if (fse.existsSync(resourcePath)) {
       const imageData = getImageData(this.resolvePath(src));
-      definedImageData
+      definitionImageData
         .set("width", imageData.width)
         .set("height", imageData.height)
         .set("filename", imageData.filename)
@@ -251,7 +248,7 @@ export default class PageConfig extends XMLNodeElement {
         .set("size", imageData.size);
       imageElement
         .set("description", description)
-        .set("resourceData", definedImageData.create())
+        .set("resourceData", definitionImageData.create())
         .set("layout", this.layoutConf(node))
         .set("src", src);
     }
@@ -287,7 +284,7 @@ export default class PageConfig extends XMLNodeElement {
     const layout = this.layoutConf(node);
     const text = node.getAttributeOf("text");
     const colorVal = node.getAttributeOf("color");
-    const valueDefine = this.getResourceDefineByName(colorVal);
+    const valueDefinition = this.getResourceDefinitionByName(colorVal);
     const textElementData = new LayoutTextElement();
     textElementData.set("text", text);
     textElementData.set("name", text);
@@ -297,8 +294,8 @@ export default class PageConfig extends XMLNodeElement {
       align: layout.align,
       alignV: layout.alignV
     });
-    if (valueDefine) {
-      const { description, valueData, src } = valueDefine;
+    if (valueDefinition) {
+      const { description, valueData, src } = valueDefinition;
       textElementData.set("name", description);
       textElementData.set("valueData", valueData);
       textElementData.set("src", src);
@@ -329,12 +326,12 @@ export default class PageConfig extends XMLNodeElement {
       });
   }
 
-  getResourceDefineList(): TypeResourceDefined[] {
-    return this.resourceDefineInstance.getResourceDefineList();
+  getResourceList(): TypeResourceDefinition[] {
+    return this.resourceDefinitionInstance.getResourceList();
   }
 
-  getResourceDefinePathList(): string[] {
-    return this.getResourceDefineList()
+  getResourcePathList(): string[] {
+    return this.getResourceList()
       .map(item => item.src)
       .filter(Boolean);
   }
@@ -347,8 +344,8 @@ export default class PageConfig extends XMLNodeElement {
       .set("screenWidth", this.getScreenWidth())
       .set("previewList", this.getPreviewList())
       .set(
-        "resourceDefineList",
-        this.resourceDefineInstance.getResourceDefineList()
+        "resourceDefinitionList",
+        this.resourceDefinitionInstance.getResourceList()
       )
       .set("layoutElementList", this.getLayoutElementList())
       .create();

@@ -1,11 +1,11 @@
 import { RESOURCE_TYPES } from "src/enum";
-import { TypeResourceValueDefined } from "src/types/resource";
-import { useResourceTypeList, useResourceDefineList } from ".";
+import { TypeResourceValueDefinition } from "src/types/resource";
+import { useResourceTypeList, useResourceDefinitionList } from ".";
 
 /**
  * 值类型素材定义列表
  */
-export default function useValueDefinedList(): TypeResourceValueDefined[] {
+export default function useValueDefinitionList(): TypeResourceValueDefinition[] {
   const XML_VALUE_TYPE = new Set([
     RESOURCE_TYPES.COLOR,
     RESOURCE_TYPES.BOOLEAN,
@@ -13,11 +13,11 @@ export default function useValueDefinedList(): TypeResourceValueDefined[] {
     RESOURCE_TYPES.NUMBER
   ]);
   const resourceTypeList = useResourceTypeList();
-  const resourceDefineList = useResourceDefineList();
+  const resourceDefinitionList = useResourceDefinitionList();
   const valueSourceTags = resourceTypeList
     .filter(item => XML_VALUE_TYPE.has(item.type))
     .map(item => item.tag);
-  return resourceDefineList.flatMap(item =>
+  return resourceDefinitionList.flatMap(item =>
     valueSourceTags.includes(item.tagName) ? [item] : []
-  ) as TypeResourceValueDefined[];
+  ) as TypeResourceValueDefinition[];
 }

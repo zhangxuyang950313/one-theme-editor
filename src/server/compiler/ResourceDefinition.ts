@@ -2,12 +2,12 @@ import path from "path";
 import { URL, URLSearchParams } from "url";
 import fse from "fs-extra";
 import {
-  DefinedImageData,
-  DefinedValueData,
-  SourceDefinedData
+  DefinitionImageData,
+  DefinitionValueData,
+  SourceDefinitionData
 } from "src/data/ResourceConfig";
 import { filenameIsImage, filenameIsXml, getImageData } from "src/utils/index";
-import { TypeResourceDefined } from "src/types/resource";
+import { TypeResourceDefinition } from "src/types/resource";
 import XMLNodeElement from "server/compiler/XMLNodeElement";
 import XmlTemplate from "./XmlTemplate";
 import XmlFileCompiler from "./XmlFileCompiler";
@@ -15,10 +15,10 @@ import XmlFileCompiler from "./XmlFileCompiler";
 /**
  * 解析素材定义数据
  */
-export default class ResourceDefine {
+export default class ResourceDefinition {
   private node: XMLNodeElement;
   private resourceRoot: string;
-  private resourceDefineMap: Map<string, TypeResourceDefined> = new Map();
+  private resourceMap: Map<string, TypeResourceDefinition> = new Map();
   constructor(node: XMLNodeElement, resourceRoot: string) {
     this.node = node;
     this.resourceRoot = resourceRoot;
@@ -34,7 +34,7 @@ export default class ResourceDefine {
   }
 
   // 生成当前配置中相对路径路径的绝对路径
-  private resolveRootPath(pathname: string): string {
+  private resolvePath(pathname: string): string {
     return path.join(this.resourceRoot, pathname);
   }
 
@@ -63,29 +63,29 @@ export default class ResourceDefine {
    * @param node
    * @returns
    */
-  private getResourceDefineData(node: XMLNodeElement): TypeResourceDefined {
+  private getResourceData(node: XMLNodeElement): TypeResourceDefinition {
     const value = node.getAttributeOf("value");
     const description = node.getAttributeOf("description");
     const { src, searchParams } = this.getUrlData(value);
-    const resourceDefineData = new SourceDefinedData()
+    const resourceData = new SourceDefinitionData()
       .set("tagName", node.getTagname())
       .set("name", node.getAttributeOf("name"))
       .set("description", description);
     // 图片素材
     if (filenameIsImage(src)) {
-      const definedImageData = new DefinedImageData();
-      const file = this.resolveRootPath(src);
+      const definitionImageData = new DefinitionImageData();
+      const file = this.resolvePath(src);
       if (fse.existsSync(file)) {
         const imageData = getImageData(file);
-        definedImageData
+        definitionImageData
           .set("width", imageData.width)
           .set("height", imageData.height)
           .set("size", imageData.size)
           .set("ninePatch", imageData.ninePatch)
           .set("filename", imageData.filename);
       }
-      resourceDefineData
-        .set("resourceData", definedImageData.create())
+      resourceData
+        .set("resourceData", definitionImageData.create())
         .set("src", src);
     }
     // xml 素材
@@ -94,38 +94,38 @@ export default class ResourceDefine {
       // TODO： 先固定使用 name，后续看需求是否需要自定义其他属性去 xml 中查找
       const valueName = searchParams.get("name") || "";
       const defaultValue = new XmlTemplate(
-        new XmlFileCompiler(this.resolveRootPath(src)).getElement()
+        new XmlFileCompiler(this.resolvePath(src)).getElement()
       ).getTextByAttrName(valueName);
-      const valueData = new DefinedValueData()
+      const valueData = new DefinitionValueData()
         .set("valueName", valueName)
         .set("defaultValue", defaultValue)
         .create();
-      resourceDefineData.set("valueData", valueData).set("src", src);
+      resourceData.set("valueData", valueData).set("src", src);
     }
-    return resourceDefineData.create();
+    return resourceData.create();
   }
 
-  getResourceDefineMap(): Map<string, TypeResourceDefined> {
-    if (this.resourceDefineMap.size === 0) {
+  getResourceMap(): Map<string, TypeResourceDefinition> {
+    if (this.resourceMap.size === 0) {
       this.node.getChildrenNodes().forEach(item => {
         const name = item.getAttributeOf("name");
         const value = item.getAttributeOf("value");
         if (name && value) {
-          const resourceDefineData = this.getResourceDefineData(item);
-          this.resourceDefineMap.set(name, resourceDefineData);
+          const resourceData = this.getResourceData(item);
+          this.resourceMap.set(name, resourceData);
         }
       });
     }
-    return this.resourceDefineMap;
+    return this.resourceMap;
   }
 
-  getResourceDefineList(): TypeResourceDefined[] {
-    const result: TypeResourceDefined[] = [];
-    this.getResourceDefineMap().forEach(item => result.push(item));
+  getResourceList(): TypeResourceDefinition[] {
+    const result: TypeResourceDefinition[] = [];
+    this.getResourceMap().forEach(item => result.push(item));
     return result;
   }
 
-  getResourceDefineByName(name: string): TypeResourceDefined | null {
-    return this.getResourceDefineMap().get(name) || null;
+  getResourceByName(name: string): TypeResourceDefinition | null {
+    return this.getResourceMap().get(name) || null;
   }
 }

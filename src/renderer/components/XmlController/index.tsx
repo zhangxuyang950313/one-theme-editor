@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { TypeResourceValueDefined } from "src/types/resource";
+import { TypeResourceValueDefinition } from "src/types/resource";
 import { apiWriteXmlTemplate } from "@/request";
 import { useProjectUUID, useProjectXmlValueBySrc } from "@/hooks/project/index";
 import { RESOURCE_TYPES } from "src/enum/index";
@@ -12,12 +12,12 @@ import StringInput from "./StringInput";
 
 const XmlController: React.FC<{
   resourceType: RESOURCE_TYPES;
-  valueDefined: TypeResourceValueDefined;
+  valueDefinition: TypeResourceValueDefinition;
 }> = props => {
-  const { resourceType, valueDefined } = props;
-  const { valueData, src } = valueDefined;
+  const { resourceType, valueDefinition } = props;
+  const { valueData, src } = valueDefinition;
   const uuid = useProjectUUID();
-  const value = useProjectXmlValueBySrc(valueDefined.name, src);
+  const value = useProjectXmlValueBySrc(valueDefinition.name, src);
 
   if (!valueData) return null;
 
@@ -33,7 +33,7 @@ const XmlController: React.FC<{
         return (
           <ColorPicker
             value={value}
-            valueDefined={valueDefined}
+            valueDefinition={valueDefinition}
             onChange={writeXml}
           />
         );
@@ -43,7 +43,7 @@ const XmlController: React.FC<{
         return (
           <BooleanSelector
             value={value}
-            valueDefined={valueDefined}
+            valueDefinition={valueDefinition}
             onChange={writeXml}
           />
         );
@@ -53,7 +53,7 @@ const XmlController: React.FC<{
         return (
           <NumberInput
             value={value}
-            valueDefined={valueDefined}
+            valueDefinition={valueDefinition}
             onChange={writeXml}
           />
         );
@@ -64,7 +64,7 @@ const XmlController: React.FC<{
         return (
           <StringInput
             value={value}
-            valueDefined={valueDefined}
+            valueDefinition={valueDefinition}
             onChange={writeXml}
           />
         );

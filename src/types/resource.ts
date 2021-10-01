@@ -124,7 +124,7 @@ export type TypeLayoutImageElement = {
   readonly resourceType: RESOURCE_TYPES.IMAGE;
   description: string;
   src: string;
-  resourceData: TypePageDefinedImageData;
+  resourceData: TypeResourceImageData;
   layout: {
     x: string;
     y: string;
@@ -142,7 +142,7 @@ export type TypeLayoutTextElement = {
   name: string;
   text: string;
   src: string;
-  valueData: TypePageDefinedValueData | null;
+  valueData: TypeResourceValueData | null;
   layout: {
     x: string;
     y: string;
@@ -151,33 +151,33 @@ export type TypeLayoutTextElement = {
   };
 };
 
-export type TypePageDefinedValueData = {
+export type TypeResourceValueData = {
   defaultValue: string;
   valueName: string;
 };
 
-export type TypePageDefinedImageData = TypeImageData;
+export type TypeResourceImageData = TypeImageData;
 
 // 素材定义
-export type TypeResourceImageDefined = {
+export type TypeResourceImageDefinition = {
   tagName: string;
   name: string;
   description: string;
   src: string;
-  resourceData: TypePageDefinedImageData | null;
+  resourceData: TypeResourceImageData | null;
   valueData: null;
 };
-export type TypeResourceValueDefined = {
+export type TypeResourceValueDefinition = {
   tagName: string;
   name: string;
   description: string;
   src: string;
   resourceData: null;
-  valueData: TypePageDefinedValueData | null;
+  valueData: TypeResourceValueData | null;
 };
-export type TypeResourceDefined =
-  | TypeResourceImageDefined
-  | TypeResourceValueDefined;
+export type TypeResourceDefinition =
+  | TypeResourceImageDefinition
+  | TypeResourceValueDefinition;
 
 // 预览元素数据
 export type TypeLayoutElement = TypeLayoutImageElement | TypeLayoutTextElement;
@@ -195,7 +195,7 @@ export type TypeResourcePageConf = {
   description: string;
   screenWidth: string;
   previewList: string[];
-  resourceDefineList: TypeResourceDefined[];
+  resourceDefinitionList: TypeResourceDefinition[];
   layoutElementList: TypeLayoutElement[];
 };
 

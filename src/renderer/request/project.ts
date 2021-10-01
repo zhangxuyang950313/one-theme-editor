@@ -107,7 +107,7 @@ export async function apiGetProjectFileData(
 ): Promise<TypeProjectFileData> {
   return createHttp()
     .get<TypeRequestResult<TypeProjectFileData>>(
-      apiConfig.GET_SOURCE_FILE_DATA.path,
+      apiConfig.GET_RESOURCE_FILE_DATA.path,
       { params: { filepath, uuid } }
     )
     .then(data => data.data.data);

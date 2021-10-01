@@ -2,16 +2,16 @@ import React from "react";
 import styled from "styled-components";
 import { Input } from "antd";
 import { RightCircleOutlined } from "@ant-design/icons";
-import { TypeResourceValueDefined } from "src/types/resource";
+import { TypeResourceValueDefinition } from "src/types/resource";
 import Wrapper from "./Wrapper";
 
 const StringInput: React.FC<{
   value: string;
-  valueDefined: TypeResourceValueDefined;
+  valueDefinition: TypeResourceValueDefinition;
   onChange: (e: string) => void;
 }> = props => {
-  const { value, valueDefined, onChange } = props;
-  const { name, description, valueData } = valueDefined;
+  const { value, valueDefinition, onChange } = props;
+  const { name, description, valueData } = valueDefinition;
 
   if (!valueData) return null;
   const { defaultValue } = valueData;

@@ -66,22 +66,22 @@ const apiConfig = {
     path: "/scenario/option/list"
   }),
   // 获取配置信息列表
-  GET_SOURCE_CONF_PREVIEW_LIST: createApiConf({
+  GET_RESOURCE_CONF_PREVIEW_LIST: createApiConf({
     path: "/resource/config/preview/list",
     query: ["src"]
   }),
   // 获取模板配置数据
-  GET_SOURCE_CONF_DATA: createApiConf({
+  GET_RESOURCE_CONF_DATA: createApiConf({
     path: "/resource/config/data",
     query: ["config"]
   }),
   // 获取配置模块列表
-  GET_SOURCE_CONF_MODULE_LIST: createApiConf({
+  GET_RESOURCE_CONF_MODULE_LIST: createApiConf({
     path: "/resource/config/module/list",
     query: ["config"]
   }),
   // 获取配置页面数据
-  GET_SOURCE_CONF_PAGE_DATA: createApiConf({
+  GET_RESOURCE_CONF_PAGE_DATA: createApiConf({
     path: "/resource/config/page/data",
     query: ["namespace", "config"]
   }),
@@ -126,7 +126,7 @@ const apiConfig = {
     query: ["config"]
   }),
   // 获取一个文件的数据
-  GET_SOURCE_FILE_DATA: createApiConf({
+  GET_RESOURCE_FILE_DATA: createApiConf({
     path: "/project/file",
     query: ["uuid", "filepath"]
   }),

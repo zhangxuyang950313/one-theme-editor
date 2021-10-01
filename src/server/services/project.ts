@@ -13,7 +13,7 @@ import PageConfig from "server/compiler/PageConfig";
 import PackageUtil from "server/utils/PackageUtil";
 import electronStore from "src/common/electronStore";
 
-export async function getPageDefineSourceData(
+export async function getPageResourceData(
   uuid: string,
   config: string
 ): Promise<Record<string, TypeProjectFileData>> {
@@ -22,7 +22,7 @@ export async function getPageDefineSourceData(
   });
   const namespace = path.dirname(resourceConfigPath);
   const pageConfig = new PageConfig({ namespace, config });
-  const resourcePathList = pageConfig.getResourceDefinePathList();
+  const resourcePathList = pageConfig.getResourcePathList();
   return resourcePathList.reduce<Record<string, TypeProjectFileData>>(
     (record, src) => {
       record[src] = getProjectFileData(projectRoot, src);

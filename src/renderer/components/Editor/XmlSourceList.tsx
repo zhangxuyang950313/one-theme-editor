@@ -2,12 +2,12 @@ import React from "react";
 import { Tabs } from "antd";
 import { RESOURCE_TYPES } from "src/enum";
 import { useResourceTypeList } from "@/hooks/resource/index";
-import useValueDefinedList from "@/hooks/resource/useValueDefinedList";
+import useValueDefinitionList from "@/hooks/resource/useValueDefinitionList";
 import XmlController from "../XmlController";
 
 const XmlSourceList: React.FC = () => {
   const resourceTypeList = useResourceTypeList();
-  const valueDefineList = useValueDefinedList();
+  const valueDefinitionList = useValueDefinitionList();
   return (
     <Tabs>
       {resourceTypeList
@@ -15,16 +15,16 @@ const XmlSourceList: React.FC = () => {
         .flatMap(item => (item.type === RESOURCE_TYPES.IMAGE ? [] : [item]))
         .map((item, index) => (
           <Tabs.TabPane key={index} tab={item.name}>
-            {valueDefineList
+            {valueDefinitionList
               .filter(o => o.tagName === item.tag)
-              .map((valueDefined, key) => {
+              .map((valueDefinition, key) => {
                 // 和定义的 tag 相同会被展示
-                if (valueDefined.tagName === item.tag) {
+                if (valueDefinition.tagName === item.tag) {
                   return (
                     <XmlController
                       key={key}
                       resourceType={item.type}
-                      valueDefined={valueDefined}
+                      valueDefinition={valueDefinition}
                     />
                   );
                 }

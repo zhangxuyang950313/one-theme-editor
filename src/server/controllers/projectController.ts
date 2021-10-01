@@ -15,7 +15,7 @@ import {
 } from "server/db-handler/project";
 import { releaseXmlTemplate } from "server/services/xmlTemplate";
 import {
-  getPageDefineSourceData,
+  getPageResourceData,
   getProjectFileData,
   packProject,
   unpackProject
@@ -166,7 +166,7 @@ export default function projectController(service: Express): void {
   >(`${apiConfig.GET_PAGE_SOURCE_DATA.path}`, async (request, response) => {
     const { query } = request;
     checkParamsKey(query, apiConfig.GET_PAGE_SOURCE_DATA.query);
-    const data = await getPageDefineSourceData(query.uuid, query.config);
+    const data = await getPageResourceData(query.uuid, query.config);
     response.send(result.success(data));
   });
 
@@ -177,10 +177,10 @@ export default function projectController(service: Express): void {
     never,
     TypeResponseFrame<TypeProjectFileData>,
     never,
-    UnionTupleToObjectKey<typeof apiConfig.GET_SOURCE_FILE_DATA.query>
-  >(`${apiConfig.GET_SOURCE_FILE_DATA.path}`, async (request, response) => {
+    UnionTupleToObjectKey<typeof apiConfig.GET_RESOURCE_FILE_DATA.query>
+  >(`${apiConfig.GET_RESOURCE_FILE_DATA.path}`, async (request, response) => {
     const { query } = request;
-    checkParamsKey(query, apiConfig.GET_SOURCE_FILE_DATA.query);
+    checkParamsKey(query, apiConfig.GET_RESOURCE_FILE_DATA.query);
     const { projectRoot } = await findProjectByQuery({ uuid: query.uuid });
     const data = getProjectFileData(projectRoot, query.filepath);
     response.send(result.success(data));

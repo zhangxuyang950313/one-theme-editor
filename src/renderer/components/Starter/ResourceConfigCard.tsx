@@ -13,23 +13,23 @@ type TypeProps = {
 };
 
 // 配置卡片
-const SourceConfigCard: React.FC<TypeProps> = props => {
+const ResourceConfigCard: React.FC<TypeProps> = props => {
   const { resourceOption } = props;
   const { namespace, preview } = resourceOption;
   const imgPrefix = useImagePrefix();
   const resourceDir = useResourceConfigDir();
   const imgUrl = imgPrefix + path.join(resourceDir, namespace, preview);
   return (
-    <StyleSourceConfigCard>
+    <StyleResourceConfigCard>
       <LazyImage style={{ width: "100%" }} src={imgUrl} />
       <div>{resourceOption.name}</div>
       <div>{resourceOption.uiVersion.name}</div>
-    </StyleSourceConfigCard>
+    </StyleResourceConfigCard>
   );
 };
 
-const StyleSourceConfigCard = styled.div`
+const StyleResourceConfigCard = styled.div`
   cursor: pointer;
 `;
 
-export default SourceConfigCard;
+export default ResourceConfigCard;

@@ -16,7 +16,7 @@ import {
   TypeLayoutImageElement,
   TypeLayoutTextElement,
   TypeResourcePageConf,
-  TypeResourceDefined
+  TypeResourceDefinition
 } from "src/types/resource";
 import {
   useStarterDispatch,
@@ -149,9 +149,9 @@ export function useResourceTypeList(): TypeResourceTypeConf[] {
 /**
  * 获取素材定义数据列表
  */
-export function useResourceDefineList(): TypeResourceDefined[] {
+export function useResourceDefinitionList(): TypeResourceDefinition[] {
   const resourcePageSelected = useResourcePageConfig();
-  return resourcePageSelected?.resourceDefineList || [];
+  return resourcePageSelected?.resourceDefinitionList || [];
 }
 
 /**

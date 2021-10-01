@@ -9,10 +9,10 @@ import {
   TypeResourcePageConf,
   TypeResourcePageGroupConf,
   TypeResourceTypeConf,
-  TypeResourceDefined,
-  TypePageDefinedImageData,
-  TypePageDefinedValueData,
-  TypeResourceImageDefined
+  TypeResourceDefinition,
+  TypeResourceImageData,
+  TypeResourceValueData,
+  TypeResourceImageDefinition
 } from "../types/resource";
 import { TypeProjectUiVersion } from "../types/project";
 import {
@@ -34,26 +34,26 @@ export class ResourcePageOption extends AbstractDataModel<TypeResourcePageOption
   static default = new ResourcePageOption().create();
 }
 
-export class DefinedImageData extends AbstractDataModel<TypePageDefinedImageData> {
-  protected data: TypePageDefinedImageData = {
+export class DefinitionImageData extends AbstractDataModel<TypeResourceImageData> {
+  protected data: TypeResourceImageData = {
     width: 0,
     height: 0,
     size: 0,
     ninePatch: false,
     filename: ""
   };
-  static default = new DefinedImageData().create();
+  static default = new DefinitionImageData().create();
 }
 
-export class DefinedValueData extends AbstractDataModel<TypePageDefinedValueData> {
-  protected data: TypePageDefinedValueData = {
+export class DefinitionValueData extends AbstractDataModel<TypeResourceValueData> {
+  protected data: TypeResourceValueData = {
     defaultValue: "",
     valueName: ""
   };
 }
 
-export class SourceDefinedData extends AbstractDataModel<TypeResourceDefined> {
-  protected data: TypeResourceImageDefined = {
+export class SourceDefinitionData extends AbstractDataModel<TypeResourceDefinition> {
+  protected data: TypeResourceImageDefinition = {
     tagName: "",
     name: "",
     description: "",
@@ -82,7 +82,7 @@ export class LayoutImageElement extends AbstractDataModel<TypeLayoutImageElement
     resourceType: RESOURCE_TYPES.IMAGE,
     description: "",
     src: "",
-    resourceData: new DefinedImageData().create(),
+    resourceData: new DefinitionImageData().create(),
     layout: {
       x: "0",
       y: "0",
@@ -121,7 +121,7 @@ export class ResourcePageConfig extends AbstractDataModel<TypeResourcePageConf> 
     description: "",
     screenWidth: "",
     previewList: [],
-    resourceDefineList: [],
+    resourceDefinitionList: [],
     layoutElementList: []
   };
 }

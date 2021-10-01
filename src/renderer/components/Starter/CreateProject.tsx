@@ -19,7 +19,7 @@ import Steps from "@/components/Steps";
 import { useStarterSelector } from "@/store";
 import { FILE_TEMPLATE_TYPE } from "src/enum";
 import { ProjectInput } from "../Forms";
-import SourceConfigManager from "./SourceConfigManager";
+import ResourceConfigManager from "./ResourceConfigManager";
 
 // 表单默认值
 const txt = `测试${UUID()}`;
@@ -228,7 +228,7 @@ const CreateProject: React.FC<{
     {
       name: "选择配置",
       Context: (
-        <SourceConfigManager
+        <ResourceConfigManager
           selectedKey={resourceConfig?.key || ""}
           onSelected={setResourceConfig}
         />

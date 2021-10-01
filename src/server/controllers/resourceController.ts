@@ -33,9 +33,12 @@ export default function sourceController(service: Express): void {
     never,
     TypeResponseFrame<TypeResourceOption[], string>,
     never,
-    UnionTupleToObjectKey<typeof apiConfig.GET_SOURCE_CONF_PREVIEW_LIST.query>
-  >(`${apiConfig.GET_SOURCE_CONF_PREVIEW_LIST.path}`, (request, response) => {
-    checkParamsKey(request.query, apiConfig.GET_SOURCE_CONF_PREVIEW_LIST.query);
+    UnionTupleToObjectKey<typeof apiConfig.GET_RESOURCE_CONF_PREVIEW_LIST.query>
+  >(`${apiConfig.GET_RESOURCE_CONF_PREVIEW_LIST.path}`, (request, response) => {
+    checkParamsKey(
+      request.query,
+      apiConfig.GET_RESOURCE_CONF_PREVIEW_LIST.query
+    );
     const list = ScenarioConfig.from(
       request.query.src
     ).getSourceConfigPreviewList();
@@ -49,9 +52,12 @@ export default function sourceController(service: Express): void {
     never, // reqParams
     TypeResponseFrame<TypeResourceModuleConf[], string>, // resBody
     never, // reqBody
-    UnionTupleToObjectKey<typeof apiConfig.GET_SOURCE_CONF_MODULE_LIST.query> // reqQuery
-  >(apiConfig.GET_SOURCE_CONF_MODULE_LIST.path, (request, response) => {
-    checkParamsKey(request.query, apiConfig.GET_SOURCE_CONF_MODULE_LIST.query);
+    UnionTupleToObjectKey<typeof apiConfig.GET_RESOURCE_CONF_MODULE_LIST.query> // reqQuery
+  >(apiConfig.GET_RESOURCE_CONF_MODULE_LIST.path, (request, response) => {
+    checkParamsKey(
+      request.query,
+      apiConfig.GET_RESOURCE_CONF_MODULE_LIST.query
+    );
     const list = new ResourceConfig(request.query.config).getModuleList();
     response.send(result.success(list));
   });
@@ -64,9 +70,9 @@ export default function sourceController(service: Express): void {
     never, // reqParams
     TypeResponseFrame<TypeResourcePageConf, string>, // resBody
     never, // reqBody
-    UnionTupleToObjectKey<typeof apiConfig.GET_SOURCE_CONF_PAGE_DATA.query> // reqQuery
-  >(apiConfig.GET_SOURCE_CONF_PAGE_DATA.path, async (request, response) => {
-    checkParamsKey(request.query, apiConfig.GET_SOURCE_CONF_PAGE_DATA.query);
+    UnionTupleToObjectKey<typeof apiConfig.GET_RESOURCE_CONF_PAGE_DATA.query> // reqQuery
+  >(apiConfig.GET_RESOURCE_CONF_PAGE_DATA.path, async (request, response) => {
+    checkParamsKey(request.query, apiConfig.GET_RESOURCE_CONF_PAGE_DATA.query);
     const { namespace, config } = request.query;
     const data = new PageConfig({ namespace, config }).getData();
     response.send(result.success(data));
@@ -80,9 +86,9 @@ export default function sourceController(service: Express): void {
     never, // reqParams
     TypeResponseFrame<TypeResourceConfig, string>, // resBody
     never, // reqBody
-    UnionTupleToObjectKey<typeof apiConfig.GET_SOURCE_CONF_DATA.query> // reqQuery
-  >(apiConfig.GET_SOURCE_CONF_DATA.path, async (request, response) => {
-    checkParamsKey(request.query, apiConfig.GET_SOURCE_CONF_DATA.query);
+    UnionTupleToObjectKey<typeof apiConfig.GET_RESOURCE_CONF_DATA.query> // reqQuery
+  >(apiConfig.GET_RESOURCE_CONF_DATA.path, async (request, response) => {
+    checkParamsKey(request.query, apiConfig.GET_RESOURCE_CONF_DATA.query);
     const data = new ResourceConfig(request.query.config).getConfig();
     response.send(result.success(data));
   });

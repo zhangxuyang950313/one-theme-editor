@@ -4,10 +4,10 @@ import { Empty } from "antd";
 import { CheckCircleTwoTone } from "@ant-design/icons";
 import { TypeResourceOption } from "src/types/resource";
 import { useResourceOptionList } from "@/hooks/resource/index";
-import SourceConfigCard from "./SourceConfigCard";
+import ResourceConfigCard from "./ResourceConfigCard";
 
 // 配置管理
-const SourceConfigManager: React.FC<{
+const ResourceConfigManager: React.FC<{
   selectedKey: string;
   onSelected: (config?: TypeResourceOption) => void;
 }> = props => {
@@ -16,18 +16,18 @@ const SourceConfigManager: React.FC<{
 
   if (resourceOptionList.length === 0) {
     return (
-      <StyleSourceConfigManager>
+      <StyleResourceConfigManager>
         <Empty
           className="center"
           image={Empty.PRESENTED_IMAGE_SIMPLE}
           description={`暂无模板`}
         />
-      </StyleSourceConfigManager>
+      </StyleResourceConfigManager>
     );
   }
 
   return (
-    <StyleSourceConfigManager>
+    <StyleResourceConfigManager>
       {resourceOptionList.map((item, key) => {
         const isActive = props.selectedKey === item.key;
         const isInit = !props.selectedKey;
@@ -41,16 +41,16 @@ const SourceConfigManager: React.FC<{
               props.onSelected(isActive ? undefined : item);
             }}
           >
-            <SourceConfigCard resourceOption={item} />
+            <ResourceConfigCard resourceOption={item} />
             <CheckCircleTwoTone className="check-icon" />
           </StyleCardContainer>
         );
       })}
-    </StyleSourceConfigManager>
+    </StyleResourceConfigManager>
   );
 };
 
-const StyleSourceConfigManager = styled.div`
+const StyleResourceConfigManager = styled.div`
   display: flex;
   flex-wrap: wrap;
   width: 100%;
@@ -81,4 +81,4 @@ const StyleCardContainer = styled.div<TypeCardContainerProps>`
   }
 `;
 
-export default SourceConfigManager;
+export default ResourceConfigManager;

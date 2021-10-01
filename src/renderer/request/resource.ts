@@ -25,7 +25,7 @@ export async function apiGetSourceOptionList(
 ): Promise<TypeResourceOption[]> {
   return createHttp()
     .get<TypeRequestResult<TypeResourceOption[]>>(
-      `${apiConfig.GET_SOURCE_CONF_PREVIEW_LIST.path}`,
+      `${apiConfig.GET_RESOURCE_CONF_PREVIEW_LIST.path}`,
       { params: { src } }
     )
     .then(data => data.data.data);
@@ -37,7 +37,7 @@ export async function apiGetSourceConfig(
 ): Promise<TypeResourceConfig> {
   return createHttp()
     .get<TypeRequestResult<TypeResourceConfig>>(
-      apiConfig.GET_SOURCE_CONF_DATA.path,
+      apiConfig.GET_RESOURCE_CONF_DATA.path,
       {
         params: { config }
       }
@@ -48,12 +48,12 @@ export async function apiGetSourceConfig(
 // 获取页面配置数据
 export async function apiGetSourcePageConfData(
   params: UnionTupleToObjectKey<
-    typeof apiConfig.GET_SOURCE_CONF_PAGE_DATA.query
+    typeof apiConfig.GET_RESOURCE_CONF_PAGE_DATA.query
   >
 ): Promise<TypeResourcePageConf> {
   return createHttp()
     .get<TypeRequestResult<TypeResourcePageConf>>(
-      apiConfig.GET_SOURCE_CONF_PAGE_DATA.path,
+      apiConfig.GET_RESOURCE_CONF_PAGE_DATA.path,
       { params }
     )
     .then(data => data.data.data);
