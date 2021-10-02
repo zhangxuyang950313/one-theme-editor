@@ -1,5 +1,5 @@
 import { Express } from "express";
-import apiConfig from "src/common/apiConf";
+import apiConfig from "src/constant/apiConf";
 import {
   TypeResModule,
   TypeResPageConfig,
@@ -10,9 +10,9 @@ import {
 } from "src/types/resource";
 import { TypeResponseFrame, UnionTupleToObjectKey } from "src/types/request";
 import { checkParamsKey, result } from "server/utils/requestUtil";
-import PageConfig from "server/compiler/PageConfig";
-import ResourceConfig from "server/compiler/ResourceConfig";
-import ScenarioConfig from "server/compiler/ScenarioConfig";
+import PageConfigCompiler from "server/compiler/PageConfig";
+import ResourceConfigCompiler from "server/compiler/ResourceConfig";
+import ScenarioConfigCompiler from "server/compiler/ScenarioConfig";
 import ScenarioOptions from "server/compiler/ScenarioOptions";
 
 export default function sourceController(service: Express): void {
@@ -36,7 +36,7 @@ export default function sourceController(service: Express): void {
     never, // reqBody
     UnionTupleToObjectKey<typeof apiConfig.GET_SCENARIO_CONFIG.query>
   >(apiConfig.GET_SCENARIO_CONFIG.path, (request, response) => {
-    const scenarioConfig = ScenarioConfig.from(
+    const scenarioConfig = ScenarioConfigCompiler.from(
       request.query.config
     ).getConfig();
     response.send(result.success(scenarioConfig));
@@ -49,15 +49,22 @@ export default function sourceController(service: Express): void {
     never,
     TypeResponseFrame<TypeResourceOption[], string>,
     never,
-    UnionTupleToObjectKey<typeof apiConfig.GET_RESOURCE_CONF_PREVIEW_LIST.query>
-  >(`${apiConfig.GET_RESOURCE_CONF_PREVIEW_LIST.path}`, (request, response) => {
-    checkParamsKey(
-      request.query,
-      apiConfig.GET_RESOURCE_CONF_PREVIEW_LIST.query
-    );
-    const list = ScenarioConfig.from(request.query.src).getResourceOptionList();
-    response.send(result.success(list));
-  });
+    UnionTupleToObjectKey<
+      typeof apiConfig.GET_RESOURCE_CONFIG_PREVIEW_LIST.query
+    >
+  >(
+    `${apiConfig.GET_RESOURCE_CONFIG_PREVIEW_LIST.path}`,
+    (request, response) => {
+      checkParamsKey(
+        request.query,
+        apiConfig.GET_RESOURCE_CONFIG_PREVIEW_LIST.query
+      );
+      const list = ScenarioConfigCompiler.from(
+        request.query.src
+      ).getResourceOptionList();
+      response.send(result.success(list));
+    }
+  );
 
   /**
    * 获取模块列表
@@ -66,13 +73,17 @@ export default function sourceController(service: Express): void {
     never, // reqParams
     TypeResponseFrame<TypeResModule[], string>, // resBody
     never, // reqBody
-    UnionTupleToObjectKey<typeof apiConfig.GET_RESOURCE_CONF_MODULE_LIST.query> // reqQuery
-  >(apiConfig.GET_RESOURCE_CONF_MODULE_LIST.path, (request, response) => {
+    UnionTupleToObjectKey<
+      typeof apiConfig.GET_RESOURCE_CONFIG_MODULE_LIST.query
+    > // reqQuery
+  >(apiConfig.GET_RESOURCE_CONFIG_MODULE_LIST.path, (request, response) => {
     checkParamsKey(
       request.query,
-      apiConfig.GET_RESOURCE_CONF_MODULE_LIST.query
+      apiConfig.GET_RESOURCE_CONFIG_MODULE_LIST.query
     );
-    const list = new ResourceConfig(request.query.config).getModuleList();
+    const list = ResourceConfigCompiler.from(
+      request.query.config
+    ).getModuleList();
     response.send(result.success(list));
   });
 
@@ -84,16 +95,21 @@ export default function sourceController(service: Express): void {
     never, // reqParams
     TypeResponseFrame<TypeResPageConfig, string>, // resBody
     never, // reqBody
-    UnionTupleToObjectKey<typeof apiConfig.GET_RESOURCE_CONF_PAGE_CONFIG.query> // reqQuery
-  >(apiConfig.GET_RESOURCE_CONF_PAGE_CONFIG.path, async (request, response) => {
-    checkParamsKey(
-      request.query,
-      apiConfig.GET_RESOURCE_CONF_PAGE_CONFIG.query
-    );
-    const { namespace, config } = request.query;
-    const data = new PageConfig({ namespace, config }).getData();
-    response.send(result.success(data));
-  });
+    UnionTupleToObjectKey<
+      typeof apiConfig.GET_RESOURCE_CONFIG_PAGE_CONFIG.query
+    > // reqQuery
+  >(
+    apiConfig.GET_RESOURCE_CONFIG_PAGE_CONFIG.path,
+    async (request, response) => {
+      checkParamsKey(
+        request.query,
+        apiConfig.GET_RESOURCE_CONFIG_PAGE_CONFIG.query
+      );
+      const { namespace, config } = request.query;
+      const data = new PageConfigCompiler({ namespace, config }).getData();
+      response.send(result.success(data));
+    }
+  );
 
   /**
    * 获取配置信息
@@ -106,7 +122,7 @@ export default function sourceController(service: Express): void {
     UnionTupleToObjectKey<typeof apiConfig.GET_RESOURCE_CONFIG.query> // reqQuery
   >(apiConfig.GET_RESOURCE_CONFIG.path, async (request, response) => {
     checkParamsKey(request.query, apiConfig.GET_RESOURCE_CONFIG.query);
-    const data = new ResourceConfig(request.query.config).getConfig();
+    const data = new ResourceConfigCompiler(request.query.config).getConfig();
     response.send(result.success(data));
   });
 }

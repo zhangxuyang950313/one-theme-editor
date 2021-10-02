@@ -1,5 +1,5 @@
 import pathUtil from "server/utils/pathUtil";
-import { updatePathConfig } from "server/db-handler/extraConfig";
+import { updatePathConfig } from "server/dbHandler/extraConfig";
 import { TypeElectronPath, TypePathConfig } from "src/types/extraConfig";
 
 // 交换前后端路径数据

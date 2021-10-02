@@ -1,6 +1,6 @@
 import path from "path";
 import { Express } from "express";
-import apiConfig from "src/common/apiConf";
+import apiConfig from "src/constant/apiConf";
 import {
   TypeCreateProjectPayload,
   TypeProjectDataDoc,
@@ -12,7 +12,7 @@ import {
   getProjectListByMd5,
   createProject,
   updateProject
-} from "server/db-handler/project";
+} from "server/dbHandler/project";
 import { releaseXmlTemplate } from "server/services/xmlTemplate";
 import {
   getPageResourceData,

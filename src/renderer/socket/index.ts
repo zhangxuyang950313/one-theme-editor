@@ -1,6 +1,6 @@
 // import io from "socket.io-client";
 // import { HOST, PORT } from "src/common/config";
-// import socketConfig, { SOCKET_EVENT } from "src/common/socketConf";
+// import socketConfig, { SOCKET_EVENT } from "src/constant/socketConf";
 // import {
 //   TypeImageMapper,
 //   TypeProjectDataDoc,

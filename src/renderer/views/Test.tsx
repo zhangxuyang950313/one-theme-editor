@@ -2,10 +2,10 @@
 
 import React, { useLayoutEffect } from "react";
 import { Button } from "antd";
-import PageConfig from "server/compiler/PageConfig";
+import PageConfigCompiler from "server/compiler/PageConfig";
 import XmlTemplate from "server/compiler/XmlTemplate";
 import TempKeyValMapper from "server/compiler/TempKeyValMapper";
-import ResourceConfig from "server/compiler/ResourceConfig";
+import ResourceConfigCompiler from "server/compiler/ResourceConfig";
 
 const pageFile =
   "/Users/zhangxuyang/mine/one-theme-editor/static/resource/sourceConfig/xiaomi/miui12/wallpaper/desktop.xml";
@@ -36,7 +36,7 @@ const Test: React.FC = () => {
     // xmlTemplateValue.getDataList().then(console.log);
     console.log(xmlTemplateValue.getDataMap());
 
-    console.log(new ResourceConfig(configFile).getConfig());
+    console.log(new ResourceConfigCompiler(configFile).getConfig());
   }, []);
   return (
     <div>

@@ -1,13 +1,13 @@
 import path from "path";
 import { useLayoutEffect, useEffect, useState } from "react";
 import { useMergeLoadStatus } from "@/hooks/index";
-import { useResourceConfigRootWithNS } from "@/hooks/resource/index";
+import { useResConfigRootWithNS } from "@/hooks/resource/index";
 import { ActionInitEditor } from "@/store/editor/action";
 import { useEditorDispatch, useEditorSelector } from "@/store/index";
 import { TypeProjectDataDoc, TypeFileData } from "src/types/project";
 import { FILE_TEMPLATE_TYPE, LOAD_STATUS, PROJECT_FILE_TYPE } from "src/enum";
 import {
-  TypeFileTemplateConf,
+  TypeFileTemplateConfig,
   TypeResourceConfig,
   TypeResPageConfig,
   TypeScenarioConfig
@@ -31,7 +31,7 @@ export function useProjectRoot(): string {
 }
 
 // 工程信息模板配置
-export function useProjectInfoConfig(): TypeFileTemplateConf {
+export function useProjectInfoConfig(): TypeFileTemplateConfig {
   const fileTempList = useEditorSelector(
     state => state.scenarioConfig.fileTempList
   );
@@ -107,7 +107,7 @@ export function useResolveProjectPath(relativePath = ""): string {
 
 // 处理素材路径
 export function useResolveSourcePath(relativePath: string): string {
-  const resourceRoot = useResourceConfigRootWithNS();
+  const resourceRoot = useResConfigRootWithNS();
   const [resourcePath, setResourcePath] = useState("");
 
   useEffect(() => {

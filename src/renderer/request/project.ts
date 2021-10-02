@@ -1,4 +1,4 @@
-import apiConfig from "src/common/apiConf";
+import apiConfig from "src/constant/apiConf";
 import {
   TypeCreateProjectPayload,
   TypeProjectData,

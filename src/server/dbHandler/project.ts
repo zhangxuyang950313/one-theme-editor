@@ -6,9 +6,9 @@ import {
   TypeProjectDataDoc
 } from "src/types/project";
 import { createNedb } from "server/utils/databaseUtil";
+import ResourceConfigCompiler from "server/compiler/ResourceConfig";
 import pathUtil from "server/utils/pathUtil";
-import ResourceConfig from "server/compiler/ResourceConfig";
-import ERR_CODE from "src/common/errorCode";
+import ERR_CODE from "src/constant/errorCode";
 
 // 频繁修改工程数据，常驻内存
 console.debug(logSymbols.info, "工程数据库文件：", pathUtil.PROJECTS_DB);
@@ -19,7 +19,7 @@ export async function createProject(
   data: TypeCreateProjectPayload
 ): Promise<TypeProjectDataDoc> {
   const { description, root, scenarioMd5, scenarioSrc, resourceSrc } = data;
-  const uiVersion = new ResourceConfig(resourceSrc).getUiVersion();
+  const uiVersion = ResourceConfigCompiler.from(resourceSrc).getUiVersion();
   return projectDB.insert<TypeProjectData>({
     uuid: UUID(),
     root,

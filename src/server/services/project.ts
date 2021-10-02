@@ -1,7 +1,7 @@
 import path from "path";
 import fse from "fs-extra";
 import { filenameIsImage, filenameIsXml, getImageData } from "src/utils/index";
-import { findProjectByQuery } from "server/db-handler/project";
+import { findProjectByQuery } from "server/dbHandler/project";
 import { TypeFileData } from "src/types/project";
 import {
   ProjectFileImageData,
@@ -9,7 +9,7 @@ import {
   ProjectFileXmlData
 } from "src/data/ProjectFileData";
 import XmlFileCompiler from "server/compiler/XmlFileCompiler";
-import PageConfig from "server/compiler/PageConfig";
+import PageConfigCompiler from "server/compiler/PageConfig";
 import PackageUtil from "server/utils/PackageUtil";
 import electronStore from "src/common/electronStore";
 
@@ -19,7 +19,7 @@ export async function getPageResourceData(
 ): Promise<Record<string, TypeFileData>> {
   const { root, resourceSrc } = await findProjectByQuery({ uuid });
   const namespace = path.dirname(resourceSrc);
-  const pageConfig = new PageConfig({ namespace, config });
+  const pageConfig = new PageConfigCompiler({ namespace, config });
   const resourcePathList = pageConfig.getResPathList();
   return resourcePathList.reduce<Record<string, TypeFileData>>(
     (record, src) => {
@@ -46,6 +46,7 @@ export function getProjectFileData(
   if (filenameIsImage(src)) {
     const hostname = electronStore.get("hostname");
     const url = `http://${hostname}/image?filepath=${absPath}&time=${Date.now()}`;
+    // const url = `one://${absPath}?t=${Date.now()}`;
     const data = new ProjectFileImageData();
     data.set("src", src);
     data.set("url", url);

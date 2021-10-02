@@ -1,7 +1,7 @@
 import { Socket } from "socket.io";
 import chokidar, { FSWatcher } from "chokidar";
 import logSymbols from "log-symbols";
-import { SOCKET_EVENT } from "src/common/socketConf";
+import { SOCKET_EVENT } from "src/constant/socketConf";
 import { getProjectFileData } from "server/services/project";
 import { TypeErrorData, TypeWatchFilesPayload } from "src/types/socket";
 import { FILE_EVENT } from "src/enum";
@@ -32,7 +32,6 @@ export function watchFiles(socket: Socket): void {
     data.files.forEach(file => {
       // 已存在监听器不再创建实例
       if (watcherMap.has(file)) return;
-
       const listener = async (file: string, event: FILE_EVENT) => {
         if (!data.options.cwd) {
           socket.emit(SOCKET_EVENT.ERROR, {
@@ -61,10 +60,13 @@ export function unwatchFileAndCloseWatcher(socket: Socket): void {
   socket.on(
     SOCKET_EVENT.UNWATCH_FILES,
     async (files: TypeWatchFilesPayload["files"]) => {
+      console.log("取消监听文件变化", files);
       await Promise.all(
         files.map(async file => {
-          await watcherMap.get(file)?.close();
+          // close 为异步操作，先缓存一份，相同的文件才能保证 hooks 先删掉再监听
+          const watcher = watcherMap.get(file);
           watcherMap.delete(file);
+          await watcher?.close();
         })
       );
       socket.emit(SOCKET_EVENT.UNWATCH_FILES, null);

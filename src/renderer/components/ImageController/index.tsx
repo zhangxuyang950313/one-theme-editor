@@ -82,7 +82,7 @@ const ImageController: React.FC<{
       <div className="edit-wrapper">
         {/* 默认素材展示 */}
         <ImageDisplay
-          imageUrl={resourceImageUrl}
+          src={resourceImageUrl}
           onClick={() => {
             // 预览图片
             // mac 打开图片预览器，其他平台跳转目录
@@ -100,7 +100,7 @@ const ImageController: React.FC<{
         />
         {/* 工程素材展示 */}
         <ImageDisplay
-          imageUrl={projectImageUrl}
+          src={projectImageUrl}
           onClick={() => remote.shell.showItemInFolder(absPathInProject)}
         />
         <ImageHandler src={src} />

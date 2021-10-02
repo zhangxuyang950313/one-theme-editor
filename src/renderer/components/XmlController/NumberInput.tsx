@@ -27,6 +27,7 @@ const NumberInput: React.FC<{
         <InputNumber
           keyboard
           className="input"
+          placeholder="缺省"
           value={value}
           onChange={onChange}
         />

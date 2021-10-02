@@ -1,7 +1,7 @@
 import rgb2hex from "rgb-hex";
 import hex2rgb, { RgbaObject } from "hex-rgb";
 import { HEX_FORMAT } from "src/enum/index";
-import { hexRegexp, hex6Regexp, hex8Regexp } from "src/common/regexp";
+import RegexpUtil from "src/utils/RegexpUtil";
 
 export { HEX_FORMAT };
 
@@ -22,15 +22,15 @@ class ColorUtil {
   }
 
   static isUnit6Hex(str: string): boolean {
-    return hex6Regexp.test(str);
+    return RegexpUtil.hex6Regexp.test(str);
   }
 
   static isUnit8Hex(str: string): boolean {
-    return hex8Regexp.test(str);
+    return RegexpUtil.hex8Regexp.test(str);
   }
 
   static isHex(str: string): boolean {
-    return hexRegexp.test(str);
+    return RegexpUtil.hexRegexp.test(str);
   }
 
   /**

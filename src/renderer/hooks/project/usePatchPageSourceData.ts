@@ -5,7 +5,7 @@ import { ActionPatchProjectFileData } from "@/store/editor/action";
 import { FILE_EVENT } from "src/enum";
 import { useFSWatcherCreator } from "../fileWatcher";
 import { useProjectRoot, useProjectUUID } from "../project";
-import { useResourcePageConfig } from "../resource";
+import { useCurrentResPageConfig } from "../resource";
 
 /**
  * 监听当前页面所有素材
@@ -13,7 +13,7 @@ import { useResourcePageConfig } from "../resource";
 export default function usePatchPageSourceData(): void {
   const uuid = useProjectUUID();
   const projectRoot = useProjectRoot();
-  const pageData = useResourcePageConfig();
+  const pageData = useCurrentResPageConfig();
   const dispatch = useEditorDispatch();
   const createWatcher = useFSWatcherCreator();
   useEffect(() => {

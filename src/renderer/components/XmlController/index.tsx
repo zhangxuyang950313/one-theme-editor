@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { TypeResXmlDefinition } from "src/types/resource";
 import { apiWriteXmlTemplate } from "@/request";
 import { useProjectUUID, useProjectXmlValueBySrc } from "@/hooks/project/index";
-import { VALUE_RESOURCE_TYPES } from "src/enum/index";
+import { RESOURCE_TYPES } from "src/enum/index";
 
 import ColorPicker from "./ColorPicker";
 import BooleanSelector from "./BooleanSelector";
@@ -11,7 +11,7 @@ import NumberInput from "./NumberInput";
 import StringInput from "./StringInput";
 
 const XmlController: React.FC<{
-  resourceType: VALUE_RESOURCE_TYPES;
+  resourceType: RESOURCE_TYPES;
   valueDefinition: TypeResXmlDefinition;
 }> = props => {
   const { resourceType, valueDefinition } = props;
@@ -29,7 +29,7 @@ const XmlController: React.FC<{
     };
     switch (resourceType) {
       // 颜色选择器
-      case VALUE_RESOURCE_TYPES.COLOR: {
+      case RESOURCE_TYPES.COLOR: {
         return (
           <ColorPicker
             value={value}
@@ -39,7 +39,7 @@ const XmlController: React.FC<{
         );
       }
       // 布尔选择器
-      case VALUE_RESOURCE_TYPES.BOOLEAN: {
+      case RESOURCE_TYPES.BOOLEAN: {
         return (
           <BooleanSelector
             value={value}
@@ -49,7 +49,7 @@ const XmlController: React.FC<{
         );
       }
       // 数字输入器
-      case VALUE_RESOURCE_TYPES.NUMBER: {
+      case RESOURCE_TYPES.NUMBER: {
         return (
           <NumberInput
             value={value}
@@ -59,7 +59,7 @@ const XmlController: React.FC<{
         );
       }
       // 未注明的都使用通用的字符串输入器
-      case VALUE_RESOURCE_TYPES.STRING:
+      case RESOURCE_TYPES.STRING:
       default: {
         return (
           <StringInput

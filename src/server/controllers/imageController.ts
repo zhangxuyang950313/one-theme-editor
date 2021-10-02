@@ -1,8 +1,8 @@
 import fse from "fs-extra";
 import FileType from "file-type";
 import { Express } from "express";
-import apiConfig from "src/common/apiConf";
-import ERR_CODE from "src/common/errorCode";
+import apiConfig from "src/constant/apiConf";
+import ERR_CODE from "src/constant/errorCode";
 import { UnionTupleToObjectKey } from "src/types/request";
 import { checkParamsKey } from "server/utils/requestUtil";
 

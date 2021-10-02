@@ -1,5 +1,5 @@
 import { WatchOptions } from "chokidar";
-import { SOCKET_EVENT } from "src/common/socketConf";
+import { SOCKET_EVENT } from "src/constant/socketConf";
 import { FILE_EVENT } from "src/enum";
 import { TypeFileData } from "./project";
 

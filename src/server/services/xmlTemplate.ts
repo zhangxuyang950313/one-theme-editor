@@ -1,13 +1,13 @@
 import path from "path";
 import fse from "fs-extra";
-import apiConfig from "src/common/apiConf";
+import apiConfig from "src/constant/apiConf";
 import pathUtil from "server/utils/pathUtil";
 import XmlTemplate from "server/compiler/XmlTemplate";
 import {
   TypeReleaseXmlTempPayload,
   UnionTupleToObjectKey
 } from "src/types/request";
-import { findProjectByQuery } from "server/db-handler/project";
+import { findProjectByQuery } from "server/dbHandler/project";
 import XmlFileCompiler from "server/compiler/XmlFileCompiler";
 
 /**

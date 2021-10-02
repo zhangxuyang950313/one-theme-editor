@@ -1,13 +1,13 @@
-import { VALUE_RESOURCE_TYPES } from "src/enum";
+import { RESOURCE_TYPES } from "src/enum";
 import { TypeResXmlDefinition } from "src/types/resource";
-import { useResourceList } from ".";
+import { useResDefinitionList } from ".";
 
 /**
  * 值类型素材定义列表
  */
 export default function useValueDefinitionList(): TypeResXmlDefinition[] {
-  const resourceList = useResourceList();
+  const resourceList = useResDefinitionList();
   return resourceList.filter(
-    item => item.tag !== VALUE_RESOURCE_TYPES.IMAGE
+    item => item.tag !== RESOURCE_TYPES.IMAGE
   ) as TypeResXmlDefinition[];
 }

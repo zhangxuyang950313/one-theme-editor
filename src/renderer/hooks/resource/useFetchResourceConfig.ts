@@ -6,7 +6,7 @@ import { ActionSetResourceConfig } from "@/store/editor/action";
 import { LOAD_STATUS } from "src/enum";
 import { TypeResourceConfig } from "src/types/resource";
 import ResourceConfigData from "src/data/ResourceConfig";
-import ERR_CODE from "src/common/errorCode";
+import ERR_CODE from "src/constant/errorCode";
 
 /**
  * 获取当前工程资源配置(projectData.resourceSrc)

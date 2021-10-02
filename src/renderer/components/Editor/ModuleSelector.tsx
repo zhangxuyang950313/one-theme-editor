@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Tooltip } from "antd";
-import { useResourceModuleConf } from "@/hooks/resource/index";
+import { useCurrentResModule } from "@/hooks/resource/index";
 import { useEditorSelector } from "@/store";
 import { SourceImage } from "../ImageCollection";
 
@@ -10,7 +10,7 @@ const ModuleSelector: React.FC = () => {
   const resourceModuleList = useEditorSelector(
     state => state.resourceConfig.moduleList
   );
-  const [currentModule, setCurrentModule] = useResourceModuleConf();
+  const [currentModule, setCurrentModule] = useCurrentResModule();
 
   if (resourceModuleList.length === 0) return null;
   if (!currentModule) return null;

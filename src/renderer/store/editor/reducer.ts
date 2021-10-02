@@ -8,8 +8,8 @@ import {
   TypeScenarioConfig
 } from "src/types/resource";
 import ResourceConfigData, {
-  ResourceModuleConf,
-  ResourcePageOption
+  ResModuleConfig,
+  ResPageOption
 } from "src/data/ResourceConfig";
 import ProjectData from "src/data/ProjectData";
 import ScenarioConfigData from "src/data/ScenarioConfig";
@@ -20,8 +20,8 @@ export type TypeEditorState = {
   projectData: TypeProjectDataDoc;
   scenarioConfig: TypeScenarioConfig;
   resourceConfig: TypeResourceConfig;
-  moduleConfig: TypeResModule;
-  pageOption: TypeResPageOption;
+  currentModule: TypeResModule;
+  currentPage: TypeResPageOption;
   pageConfigMap: Record<string, TypeResPageConfig>;
   fileDataMap: Record<string, TypeFileData>;
 };
@@ -30,8 +30,8 @@ const defaultState: TypeEditorState = {
   projectData: ProjectData.default,
   scenarioConfig: ScenarioConfigData.default,
   resourceConfig: ResourceConfigData.default,
-  moduleConfig: ResourceModuleConf.default,
-  pageOption: ResourcePageOption.default,
+  currentModule: ResModuleConfig.default,
+  currentPage: ResPageOption.default,
   pageConfigMap: {},
   fileDataMap: {}
 };
@@ -67,20 +67,20 @@ export default function EditorReducer(
       const { moduleList: resourceModuleList } = action.payload;
       return updateState(state, {
         resourceConfig: action.payload,
-        moduleConfig: resourceModuleList[0],
-        pageOption: resourceModuleList[0]?.groupList?.[0].pageList?.[0]
+        currentModule: resourceModuleList[0],
+        currentPage: resourceModuleList[0]?.pageGroupList?.[0].pageList?.[0]
       });
     }
     // 模块配置
     case ACTION_TYPES.SET_MODULE_CONFIG: {
       return updateState(state, {
-        moduleConfig: action.payload
+        currentModule: action.payload
       });
     }
     // 页面配置
     case ACTION_TYPES.SET_PAGE_OPTION: {
       return updateState(state, {
-        pageOption: action.payload
+        currentPage: action.payload
       });
     }
     // 页面数据

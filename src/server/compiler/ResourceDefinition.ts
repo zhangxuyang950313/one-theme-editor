@@ -4,7 +4,7 @@ import fse from "fs-extra";
 import {
   ResImageData,
   ResValueData,
-  ResDefinitionData
+  ResDefinition
 } from "src/data/ResourceConfig";
 import { filenameIsImage, filenameIsXml, getImageData } from "src/utils/index";
 import { TypeResDefinition } from "src/types/resource";
@@ -16,7 +16,7 @@ import XmlFileCompiler from "./XmlFileCompiler";
 /**
  * 解析素材定义数据
  */
-export default class ResourceDefinition {
+export default class ResourceDefinitionCompiler {
   private node: XMLNodeElement;
   private resourceRoot: string;
   private resourceMap: Map<string, TypeResDefinition> = new Map();
@@ -68,7 +68,7 @@ export default class ResourceDefinition {
     const value = node.getAttributeOf("value");
     const description = node.getAttributeOf("description");
     const { src, searchParams } = this.getUrlData(value);
-    const resDefinitionData = new ResDefinitionData()
+    const resDefinition = new ResDefinition()
       .set("tag", node.getTagname())
       .set("name", node.getAttributeOf("name"))
       .set("desc", description);
@@ -79,9 +79,9 @@ export default class ResourceDefinition {
       if (fse.existsSync(file)) {
         resImageData.setBatch(getImageData(file));
       }
-      resDefinitionData.set("type", RESOURCE_CATEGORY.IMAGE);
-      resDefinitionData.set("data", resImageData.create());
-      resDefinitionData.set("src", src);
+      resDefinition.set("type", RESOURCE_CATEGORY.IMAGE);
+      resDefinition.set("data", resImageData.create());
+      resDefinition.set("src", src);
     }
     // xml 素材
     if (filenameIsXml(src)) {
@@ -95,11 +95,11 @@ export default class ResourceDefinition {
         .set("valueName", valueName)
         .set("defaultValue", defaultValue)
         .create();
-      resDefinitionData.set("type", RESOURCE_CATEGORY.XML);
-      resDefinitionData.set("data", resValueData);
-      resDefinitionData.set("src", src);
+      resDefinition.set("type", RESOURCE_CATEGORY.XML);
+      resDefinition.set("data", resValueData);
+      resDefinition.set("src", src);
     }
-    return resDefinitionData.create();
+    return resDefinition.create();
   }
 
   getResMap(): Map<string, TypeResDefinition> {

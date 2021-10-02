@@ -2,7 +2,7 @@ import path from "path";
 import fse from "fs-extra";
 import {
   TypeApplyConfig,
-  TypeFileTemplateConf,
+  TypeFileTemplateConfig,
   TypePackConfig,
   TypeResourceOption,
   TypeScenarioConfig
@@ -13,22 +13,22 @@ import ScenarioConfigData, {
   PackageConfig,
   FileTemplate
 } from "src/data/ScenarioConfig";
-import ResourceConfig from "server/compiler/ResourceConfig";
+import ResourceConfigCompiler from "server/compiler/ResourceConfig";
 import pathUtil from "server/utils/pathUtil";
 import XmlTemplate from "./XmlTemplate";
 import XmlFileCompiler from "./XmlFileCompiler";
 
 // 解析场景配置
-export default class ScenarioConfig extends XmlTemplate {
+export default class ScenarioConfigCompiler extends XmlTemplate {
   // 从文件创建实例
-  static from(src: string): ScenarioConfig {
+  static from(src: string): ScenarioConfigCompiler {
     const file = path.join(pathUtil.RESOURCE_CONFIG_DIR, src);
     const element = new XmlFileCompiler(file).getElement();
-    return new ScenarioConfig(element);
+    return new ScenarioConfigCompiler(element);
   }
 
   // 解析描述文件配置
-  getFileTempList(): TypeFileTemplateConf[] {
+  getFileTempList(): TypeFileTemplateConfig[] {
     const fileTempNodes = super
       .getRootNode()
       .getChildrenNodesByTagname(ELEMENT_TAG.FileTemplate);
@@ -39,7 +39,7 @@ export default class ScenarioConfig extends XmlTemplate {
       const templateNode = fileTempNode.getFirstChildNodeByTagname(
         ELEMENT_TAG.Template
       );
-      const itemNodes: TypeFileTemplateConf["items"] = itemsNode
+      const itemNodes: TypeFileTemplateConfig["items"] = itemsNode
         .getChildrenNodesByTagname(ELEMENT_TAG.Item)
         .map(item => {
           return {
@@ -115,7 +115,7 @@ export default class ScenarioConfig extends XmlTemplate {
         const isExists = fse.pathExistsSync(
           path.join(pathUtil.RESOURCE_CONFIG_DIR, src)
         );
-        return isExists ? [new ResourceConfig(src).getOption()] : [];
+        return isExists ? [ResourceConfigCompiler.from(src).getOption()] : [];
       });
   }
 

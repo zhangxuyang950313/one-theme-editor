@@ -25,10 +25,9 @@ const StringInput: React.FC<{
         />
         <Input
           className="input"
+          placeholder="缺省"
           value={value}
-          onChange={e => {
-            onChange(e.target.value);
-          }}
+          onChange={e => onChange(e.target.value)}
         />
       </StyleNumberInput>
     </Wrapper>

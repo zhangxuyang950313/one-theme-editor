@@ -4,19 +4,19 @@ import fse from "fs-extra";
 import {
   TypeLayoutElement,
   TypeResPageConfig,
-  TypeLayoutImageElement,
-  TypeLayoutTextElement,
+  TypeLayoutImage,
+  TypeLayoutText,
   TypeResDefinition
 } from "src/types/resource";
 import {
-  ElementLayoutConf,
+  ElementLayoutConfig,
   ResImageData,
   LayoutImageElement,
-  ResourcePageConfig,
+  ResPageConfig,
   LayoutTextElement
 } from "src/data/ResourceConfig";
 import { getImageData } from "src/utils/index";
-import { placeholderRegexp } from "src/common/regexp";
+import RegexpUtil from "src/utils/RegexpUtil";
 import {
   ELEMENT_TAG,
   ALIGN_VALUES,
@@ -26,15 +26,15 @@ import {
 import pathUtil from "server/utils/pathUtil";
 import XMLNodeElement from "server/compiler/XMLNodeElement";
 import XmlFileCompiler from "./XmlFileCompiler";
-import ResourceDefinition from "./ResourceDefinition";
+import ResourceDefinitionCompiler from "./ResourceDefinition";
 
-export default class PageConfig extends XMLNodeElement {
+export default class PageConfigCompiler extends XMLNodeElement {
   private configFile: string;
   private resourceNamespace: string;
   private pageNamespace: string;
   private pageConfig: string;
   private resourceRootAbsolute: string;
-  private resDefinitionInstance: ResourceDefinition;
+  private resDefinitionInstance: ResourceDefinitionCompiler;
   constructor(data: { namespace: string; config: string }) {
     const file = path.join(
       pathUtil.RESOURCE_CONFIG_DIR,
@@ -50,7 +50,7 @@ export default class PageConfig extends XMLNodeElement {
       pathUtil.RESOURCE_CONFIG_DIR,
       data.namespace
     );
-    this.resDefinitionInstance = new ResourceDefinition(
+    this.resDefinitionInstance = new ResourceDefinitionCompiler(
       this.getRootFirstChildNodeOf(ELEMENT_TAG.Resource),
       this.resourceRootAbsolute
     );
@@ -113,7 +113,7 @@ export default class PageConfig extends XMLNodeElement {
    * @returns
    */
   private getPlaceholderName(str: string): string {
-    const execResult = placeholderRegexp.exec(str);
+    const execResult = RegexpUtil.placeholderRegexp.exec(str);
     return execResult?.[1] || "";
   }
 
@@ -199,7 +199,7 @@ export default class PageConfig extends XMLNodeElement {
    * @returns
    */
   private layoutConf(node: XMLNodeElement) {
-    return new ElementLayoutConf()
+    return new ElementLayoutConfig()
       .set("x", node.getAttributeOf("x"))
       .set("y", node.getAttributeOf("y"))
       .set("w", node.getAttributeOf("w"))
@@ -221,7 +221,7 @@ export default class PageConfig extends XMLNodeElement {
    * @param node
    * @returns
    */
-  private imageElement(node: XMLNodeElement): TypeLayoutImageElement {
+  private imageElement(node: XMLNodeElement): TypeLayoutImage {
     const srcVal = node.getAttributeOf("src");
     const valueDefinition = this.getResDefinitionByName(srcVal);
     let src = srcVal;
@@ -279,7 +279,7 @@ export default class PageConfig extends XMLNodeElement {
    * @param node
    * @returns
    */
-  private textElement(node: XMLNodeElement): TypeLayoutTextElement {
+  private textElement(node: XMLNodeElement): TypeLayoutText {
     const layout = this.layoutConf(node);
     const text = node.getAttributeOf("text");
     const colorVal = node.getAttributeOf("color");
@@ -333,7 +333,7 @@ export default class PageConfig extends XMLNodeElement {
   }
 
   getData(): TypeResPageConfig {
-    return new ResourcePageConfig()
+    return new ResPageConfig()
       .set("config", this.pageConfig)
       .set("version", this.getVersion())
       .set("description", this.getDescription())

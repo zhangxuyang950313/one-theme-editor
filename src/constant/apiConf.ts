@@ -71,7 +71,7 @@ const apiConfig = {
     query: ["config"]
   }),
   // 获取配置信息列表
-  GET_RESOURCE_CONF_PREVIEW_LIST: createApiConf({
+  GET_RESOURCE_CONFIG_PREVIEW_LIST: createApiConf({
     path: "/resource/config/preview/list",
     query: ["src"]
   }),
@@ -81,12 +81,12 @@ const apiConfig = {
     query: ["config"]
   }),
   // 获取配置模块列表
-  GET_RESOURCE_CONF_MODULE_LIST: createApiConf({
+  GET_RESOURCE_CONFIG_MODULE_LIST: createApiConf({
     path: "/resource/config/module/list",
     query: ["config"]
   }),
   // 获取配置页面数据
-  GET_RESOURCE_CONF_PAGE_CONFIG: createApiConf({
+  GET_RESOURCE_CONFIG_PAGE_CONFIG: createApiConf({
     path: "/resource/config/page",
     query: ["namespace", "config"]
   }),

@@ -1,4 +1,4 @@
-import SocketConfig from "src/common/socketConf";
+import SocketConfig from "src/constant/socketConf";
 import useSocketInvoker from "../socket/useSocketInvoker";
 
 const { sendData, receiveData, event } = SocketConfig.pack;

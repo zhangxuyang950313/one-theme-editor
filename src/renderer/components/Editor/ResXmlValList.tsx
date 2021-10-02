@@ -1,18 +1,18 @@
 import React from "react";
 import { Tabs } from "antd";
-import { VALUE_RESOURCE_TYPES } from "src/enum";
-import { useResourceTypeList } from "@/hooks/resource/index";
+import { RESOURCE_TYPES } from "src/enum";
+import { useResTypeList } from "@/hooks/resource/index";
 import useValueDefinitionList from "@/hooks/resource/useValueDefinitionList";
 import XmlController from "../XmlController";
 
 const ResXmlValList: React.FC = () => {
-  const resTypeList = useResourceTypeList();
+  const resTypeList = useResTypeList();
   const valueDefinitionList = useValueDefinitionList();
   return (
     <Tabs>
       {resTypeList.map((item, index) => {
         // 过滤非图片素材
-        if (item.type === VALUE_RESOURCE_TYPES.IMAGE) return null;
+        if (item.type === RESOURCE_TYPES.IMAGE) return null;
         return (
           <Tabs.TabPane key={index} tab={item.name}>
             {valueDefinitionList

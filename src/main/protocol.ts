@@ -6,7 +6,7 @@ import FileType from "file-type";
 export default function registerProtocol(): void {
   protocol.registerBufferProtocol("one", async (request, callback) => {
     const { pathname } = new URL(request.url);
-    const data = fse.readFileSync(pathname);
+    const data = fse.readFileSync(decodeURIComponent(pathname));
     const mimeType = (await FileType.fromBuffer(data))?.mime || "image/png";
     callback({ mimeType, data });
   });

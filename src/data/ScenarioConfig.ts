@@ -1,7 +1,7 @@
 import {
   TypePackConfig,
   TypeApplyConfig,
-  TypeFileTemplateConf,
+  TypeFileTemplateConfig,
   TypeScenarioConfig,
   TypeScenarioOption
 } from "src/types/resource";
@@ -9,8 +9,8 @@ import { FILE_TEMPLATE_TYPE } from "src/enum";
 import { AbstractDataModel } from "./AbstractDataModel";
 
 // 文件模板模板数据
-export class FileTemplate extends AbstractDataModel<TypeFileTemplateConf> {
-  protected data: TypeFileTemplateConf = {
+export class FileTemplate extends AbstractDataModel<TypeFileTemplateConfig> {
+  protected data: TypeFileTemplateConfig = {
     output: "",
     type: FILE_TEMPLATE_TYPE.UNKNOWN,
     items: [],

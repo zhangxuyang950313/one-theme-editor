@@ -1,7 +1,7 @@
 import archiver from "archiver";
 import {
   RESOURCE_CATEGORY,
-  VALUE_RESOURCE_TYPES,
+  RESOURCE_TYPES,
   FILE_TEMPLATE_TYPE,
   ELEMENT_TAG,
   ALIGN_VALUES,
@@ -10,7 +10,6 @@ import {
 } from "../enum";
 import XMLNodeBase from "../server/compiler/XMLNodeElement";
 import { TypeImageData, TypeUiVersion } from "./project";
-import { TypeImagePathLike } from "./index";
 
 // 资源配置信息
 export type TypeResourceOption = {
@@ -18,7 +17,7 @@ export type TypeResourceOption = {
   namespace: string;
   config: string;
   name: string;
-  preview: TypeImagePathLike;
+  preview: string;
   version: string;
   uiVersion: TypeUiVersion;
 };
@@ -29,7 +28,7 @@ export type TypeResourceConfig = TypeResourceOption & {
   moduleList: TypeResModule[];
 };
 
-export type TypeFileTemplateConf = {
+export type TypeFileTemplateConfig = {
   output: string;
   type: FILE_TEMPLATE_TYPE;
   items: Array<{
@@ -64,14 +63,14 @@ export type TypeScenarioOption = {
 
 // 场景配置数据
 export type TypeScenarioConfig = {
-  fileTempList: TypeFileTemplateConf[];
+  fileTempList: TypeFileTemplateConfig[];
   packageConfig: TypePackConfig;
   applyConfig: TypeApplyConfig;
 };
 
 // 素材类型定义数据
 export type TypeResTypeData = {
-  type: VALUE_RESOURCE_TYPES;
+  type: RESOURCE_TYPES;
   name: string;
   tag: string;
 };
@@ -80,7 +79,7 @@ export type TypeResModule = {
   index: number;
   name: string;
   icon: string;
-  groupList: TypeResPageGroup[];
+  pageGroupList: TypeResPageGroup[];
 };
 
 // 预览页面组
@@ -119,9 +118,9 @@ export type TypeLayoutConfig = {
 };
 
 // 图片元素数据
-export type TypeLayoutImageElement = {
+export type TypeLayoutImage = {
+  readonly type: RESOURCE_TYPES.IMAGE;
   readonly tag: ELEMENT_TAG.Image;
-  readonly type: VALUE_RESOURCE_TYPES.IMAGE;
   src: string;
   desc: string;
   data: TypeResImageData;
@@ -136,9 +135,9 @@ export type TypeLayoutImageElement = {
 };
 
 // 颜色元素数据
-export type TypeLayoutTextElement = {
+export type TypeLayoutText = {
+  readonly type: RESOURCE_TYPES;
   readonly tag: ELEMENT_TAG.Text;
-  readonly type: VALUE_RESOURCE_TYPES;
   name: string;
   text: string;
   src: string;
@@ -192,7 +191,7 @@ export type TypeResDefinition =
   | TypeResXmlDefinition;
 
 // 预览元素数据
-export type TypeLayoutElement = TypeLayoutImageElement | TypeLayoutTextElement;
+export type TypeLayoutElement = TypeLayoutImage | TypeLayoutText;
 
 // 预览单个页面配置
 export type TypeResPageOption = {

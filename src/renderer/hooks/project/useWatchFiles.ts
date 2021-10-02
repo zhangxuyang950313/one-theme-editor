@@ -1,4 +1,4 @@
-import { SOCKET_EVENT } from "src/common/socketConf";
+import { SOCKET_EVENT } from "src/constant/socketConf";
 import useSocket from "../socket/useSocket";
 
 export default function useWatchFiles(): (

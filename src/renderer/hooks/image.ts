@@ -5,6 +5,7 @@ import electronStore from "src/common/electronStore";
 export function useImagePrefix(): string {
   const hostname = electronStore.get("hostname");
   return `http://${hostname}/image?filepath=`;
+  // return `one://`;
 }
 
 /**

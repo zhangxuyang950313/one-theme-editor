@@ -7,24 +7,23 @@ import { StyleGirdBackground } from "@/style";
 /**
  * 图片素材展示, 底部有个背景
  */
-type TypePropsOfShowImage = {
-  imageUrl?: string;
-  onClick?: () => void;
-};
 
-const ImageDisplay: React.FC<TypePropsOfShowImage> = props => {
-  const { imageUrl, onClick } = props;
+const ImageDisplay: React.FC<{
+  src?: string;
+  onClick?: () => void;
+}> = props => {
+  const { src, onClick } = props;
 
   return (
-    <StyleShowImage>
+    <StyleImageDisplay>
       <LazyImage
         className="preview"
-        alt={imageUrl}
-        src={imageUrl}
+        alt={src}
+        src={src}
         can-click={String(!!onClick)}
         onClick={() => onClick && onClick()}
       />
-    </StyleShowImage>
+    </StyleImageDisplay>
   );
 };
 
@@ -40,7 +39,7 @@ const StyleImageBackground = styled(StyleGirdBackground)`
   border-radius: 6px;
 `;
 
-const StyleShowImage = styled(StyleImageBackground)`
+const StyleImageDisplay = styled(StyleImageBackground)`
   .preview {
     position: relative;
     left: 0;

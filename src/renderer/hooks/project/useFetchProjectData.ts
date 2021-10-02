@@ -7,7 +7,7 @@ import { TypeProjectDataDoc } from "src/types/project";
 import { sleep } from "src/utils";
 import { apiGetProjectByUUID } from "@/request";
 import { ActionInitEditor, ActionSetProjectData } from "@/store/editor/action";
-import ERR_CODE from "src/common/errorCode";
+import ERR_CODE from "src/constant/errorCode";
 
 /**
  * 加载工程

@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { SOCKET_EVENT } from "src/common/socketConf";
+import { SOCKET_EVENT } from "src/constant/socketConf";
 import { TypeSyncFileContent } from "src/types/socket";
 import useSocket from "../socket/useSocket";
 

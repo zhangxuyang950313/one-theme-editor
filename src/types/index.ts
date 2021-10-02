@@ -5,9 +5,6 @@ export type TypeDatabase<T = { [x: string]: any }> = T & {
   updatedAt?: Date;
 };
 
-// 图片路径
-export type TypeImagePathLike = string;
-
 export type TypeKeyValue = { key: string; value: string };
 
 // 枚举对象 key

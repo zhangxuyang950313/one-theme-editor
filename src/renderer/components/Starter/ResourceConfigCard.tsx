@@ -2,7 +2,7 @@ import path from "path";
 
 import React from "react";
 import styled from "styled-components";
-import { useResourceConfigDir } from "@/hooks/resource/index";
+import { useResConfigDir } from "@/hooks/resource/index";
 import { useImagePrefix } from "@/hooks/image";
 
 import { TypeResourceOption } from "src/types/resource";
@@ -17,7 +17,7 @@ const ResourceConfigCard: React.FC<TypeProps> = props => {
   const { resourceOption } = props;
   const { namespace, preview } = resourceOption;
   const imgPrefix = useImagePrefix();
-  const resourceDir = useResourceConfigDir();
+  const resourceDir = useResConfigDir();
   const imgUrl = imgPrefix + path.join(resourceDir, namespace, preview);
   return (
     <StyleResourceConfigCard>

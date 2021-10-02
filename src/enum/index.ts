@@ -57,7 +57,7 @@ export enum RESOURCE_CATEGORY {
 }
 
 // 资源类型
-export enum VALUE_RESOURCE_TYPES {
+export enum RESOURCE_TYPES {
   IMAGE = "image",
   COLOR = "color",
   BOOLEAN = "boolean",

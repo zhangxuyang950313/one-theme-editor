@@ -1,4 +1,4 @@
-import apiConfig from "src/common/apiConf";
+import apiConfig from "src/constant/apiConf";
 import {
   TypeResourceConfig,
   TypeResourceOption,
@@ -21,12 +21,12 @@ export async function apiGetScenarioOptionList(): Promise<
 }
 
 // 获取资源配置列表
-export async function apiGetResourceOptionList(
+export async function apiGetResOptionList(
   src: string
 ): Promise<TypeResourceOption[]> {
   return createHttp()
     .get<TypeRequestResult<TypeResourceOption[]>>(
-      `${apiConfig.GET_RESOURCE_CONF_PREVIEW_LIST.path}`,
+      `${apiConfig.GET_RESOURCE_CONFIG_PREVIEW_LIST.path}`,
       { params: { src } }
     )
     .then(data => data.data.data);
@@ -57,14 +57,14 @@ export async function apiGetScenarioConfig(
 }
 
 // 获取页面配置数据
-export async function apiGetResourcePageConfData(
+export async function apiGetResPageConfData(
   params: UnionTupleToObjectKey<
-    typeof apiConfig.GET_RESOURCE_CONF_PAGE_CONFIG.query
+    typeof apiConfig.GET_RESOURCE_CONFIG_PAGE_CONFIG.query
   >
 ): Promise<TypeResPageConfig> {
   return createHttp()
     .get<TypeRequestResult<TypeResPageConfig>>(
-      apiConfig.GET_RESOURCE_CONF_PAGE_CONFIG.path,
+      apiConfig.GET_RESOURCE_CONFIG_PAGE_CONFIG.path,
       { params }
     )
     .then(data => data.data.data);

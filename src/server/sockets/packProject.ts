@@ -1,5 +1,5 @@
 import { Socket } from "socket.io";
-import SocketConfig from "src/common/socketConf";
+import SocketConfig from "src/constant/socketConf";
 import ScenarioOptions from "server/compiler/ScenarioOptions";
 import PackageUtil from "server/utils/PackageUtil";
 import { TypePackProcess } from "src/types/socket";

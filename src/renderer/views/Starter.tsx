@@ -4,7 +4,7 @@ import { PRESET_TITLE } from "src/enum";
 import { useDocumentTitle } from "@/hooks/index";
 import useFetchProjectList from "@/hooks/project/useFetchProjectList";
 import useFetchScenarioOptionList from "@/hooks/resource/useFetchScenarioOptionList";
-import useFetchResourceOptionList from "@/hooks/resource/useFetchResourceOptionList";
+import useFetchResOptionList from "@/hooks/resource/useFetchResOptionList";
 
 import Sidebar from "@/components/Starter/Sidebar";
 import ProjectManager from "@/components/Starter/ProjectManager";
@@ -15,7 +15,7 @@ const Starter: React.FC = () => {
   setTitle(PRESET_TITLE.welcome);
 
   useFetchScenarioOptionList();
-  useFetchResourceOptionList();
+  useFetchResOptionList();
   const projectList = useFetchProjectList();
 
   return (

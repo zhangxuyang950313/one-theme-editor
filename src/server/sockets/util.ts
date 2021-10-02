@@ -1,5 +1,5 @@
 import { Socket } from "socket.io";
-import { SOCKET_EVENT } from "src/common/socketConf";
+import { SOCKET_EVENT } from "src/constant/socketConf";
 
 // // 快速将 socket event 建立通讯通道
 // class SocketConnecter {

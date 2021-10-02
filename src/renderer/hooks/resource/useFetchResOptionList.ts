@@ -1,19 +1,19 @@
 import { useState, useLayoutEffect } from "react";
 import { message } from "antd";
-import { apiGetResourceOptionList } from "@/request";
+import { apiGetResOptionList } from "@/request";
 import { useStarterDispatch } from "@/store";
 import { ActionSetSourceOptionList } from "@/store/starter/action";
 import { LOAD_STATUS } from "src/enum";
 import { TypeResourceOption } from "src/types/resource";
 import { sleep } from "src/utils";
-import ERR_CODE from "src/common/errorCode";
+import ERR_CODE from "src/constant/errorCode";
 import { useScenarioOption } from ".";
 
 /**
  * 获取编辑器资源选项列表列表
  * @returns
  */
-export default function useFetchResourceOptionList(): {
+export default function useFetchResOptionList(): {
   state: TypeResourceOption[];
   status: LOAD_STATUS;
   fetch: () => Promise<void>;
@@ -26,7 +26,7 @@ export default function useFetchResourceOptionList(): {
     if (!currentScenarioOption.src) return;
     setStatus(LOAD_STATUS.LOADING);
     await sleep(300);
-    apiGetResourceOptionList(currentScenarioOption.src)
+    apiGetResOptionList(currentScenarioOption.src)
       .then(data => {
         console.log("配置列表", data);
         setState(data);

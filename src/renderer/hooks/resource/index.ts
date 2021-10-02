@@ -10,8 +10,8 @@ import {
   TypeResPageOption,
   TypeResTypeData,
   TypeLayoutElement,
-  TypeLayoutImageElement,
-  TypeLayoutTextElement,
+  TypeLayoutImage,
+  TypeLayoutText,
   TypeResPageConfig,
   TypeResDefinition
 } from "src/types/resource";
@@ -29,7 +29,7 @@ import { useImagePrefix } from "../image";
  * 获取资源配置根目录
  * @returns
  */
-export function useResourceConfigDir(): string {
+export function useResConfigDir(): string {
   return useGlobalSelector(
     state => state.base.appPath.RESOURCE_CONFIG_DIR || ""
   );
@@ -39,9 +39,9 @@ export function useResourceConfigDir(): string {
  * 获取当前资源配置目录
  * @returns
  */
-export function useResourceConfigRootWithNS(): string {
+export function useResConfigRootWithNS(): string {
   const resourceSrc = useEditorSelector(state => state.projectData.resourceSrc);
-  const resourceConfigDir = useResourceConfigDir();
+  const resourceConfigDir = useResConfigDir();
   return path.join(resourceConfigDir, path.dirname(resourceSrc));
 }
 
@@ -62,31 +62,35 @@ export function useScenarioOption(): [
  * 获取当前选择的模块配置
  * @returns
  */
-export function useResourceModuleConf(): [
+export function useCurrentResModule(): [
   TypeResModule,
   (data: TypeResModule) => void
 ] {
   const dispatch = useEditorDispatch();
-  const resourceModuleConf = useEditorSelector(state => state.moduleConfig);
-  return [resourceModuleConf, data => dispatch(ActionSetCurrentModule(data))];
+  const currentModule = useEditorSelector(state => state.currentModule);
+  return [currentModule, data => dispatch(ActionSetCurrentModule(data))];
 }
 
 /**
- * 获取当前选择的页面配置
+ * 获取当前选择的页面配置信息
  * @returns
  */
-export function useResourcePageOption(): [
+export function useCurrentResPage(): [
   TypeResPageOption,
   (data: TypeResPageOption) => void
 ] {
   const dispatch = useEditorDispatch();
-  const pageConf = useEditorSelector(state => state.pageOption);
+  const pageConf = useEditorSelector(state => state.currentPage);
   return [pageConf, data => dispatch(ActionSetCurrentPage(data))];
 }
 
-export function useResourcePageConfig(): TypeResPageConfig | null {
+/**
+ * 获取当前选择的页面配置数据
+ * @returns
+ */
+export function useCurrentResPageConfig(): TypeResPageConfig | null {
   return useEditorSelector(state => {
-    const pageConfSrc = state.pageOption.src;
+    const pageConfSrc = state.currentPage.src;
     return state.pageConfigMap[pageConfSrc] || null;
   });
 }
@@ -94,15 +98,15 @@ export function useResourcePageConfig(): TypeResPageConfig | null {
 /**
  * 获取当前元素类型配置
  */
-export function useResourceTypeList(): TypeResTypeData[] {
+export function useResTypeList(): TypeResTypeData[] {
   return useEditorSelector(state => state.resourceConfig.typeList);
 }
 
 /**
  * 获取素材定义数据列表
  */
-export function useResourceList(): TypeResDefinition[] {
-  const resourcePageSelected = useResourcePageConfig();
+export function useResDefinitionList(): TypeResDefinition[] {
+  const resourcePageSelected = useCurrentResPageConfig();
   return resourcePageSelected?.resourceList || [];
 }
 
@@ -111,7 +115,7 @@ export function useResourceList(): TypeResDefinition[] {
  */
 export function useLayoutElementList(): TypeLayoutElement[] {
   return useEditorSelector(state => {
-    const pageConfSrc = state.pageOption.src;
+    const pageConfSrc = state.currentPage.src;
     if (!pageConfSrc) return [];
     return state.pageConfigMap[pageConfSrc]?.layoutElementList || [];
   });
@@ -120,7 +124,7 @@ export function useLayoutElementList(): TypeLayoutElement[] {
 /**
  * 获取图片类型元素列表
  */
-export function useLayoutImageList(): TypeLayoutImageElement[] {
+export function useLayoutImageList(): TypeLayoutImage[] {
   const layoutElementList = useLayoutElementList();
   return layoutElementList.flatMap(item =>
     item.tag === ELEMENT_TAG.Image ? [item] : []
@@ -130,7 +134,7 @@ export function useLayoutImageList(): TypeLayoutImageElement[] {
 /**
  * 获取 xml 类型元素列表
  */
-export function useTextSourceList(): TypeLayoutTextElement[] {
+export function useLayoutTestList(): TypeLayoutText[] {
   const layoutElementList = useLayoutElementList();
   return layoutElementList.flatMap(item =>
     item.tag === ELEMENT_TAG.Text ? [item] : []
@@ -143,7 +147,7 @@ export function useTextSourceList(): TypeLayoutTextElement[] {
  * @returns
  */
 export function useAbsolutePathInSource(relativePath: string): string {
-  const resourceConfigRoot = useResourceConfigRootWithNS();
+  const resourceConfigRoot = useResConfigRootWithNS();
   return path.join(resourceConfigRoot, relativePath);
 }
 

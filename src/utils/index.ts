@@ -5,8 +5,8 @@ import FileType from "file-type";
 import imageSizeOf from "image-size";
 import dirTree from "directory-tree";
 import ImageData from "src/data/ImageData";
-import ERR_CODE from "src/common/errorCode";
-import { placeholderRegexp, urlRegexp } from "src/common/regexp";
+import ERR_CODE from "src/constant/errorCode";
+import RegexpUtil from "src/utils/RegexpUtil";
 import { TypeImageData, TypeImageMapper } from "src/types/project";
 
 export const base64Regex = /^data:image\/\w+;base64,/;
@@ -279,7 +279,7 @@ export async function sleep(delay: number): Promise<void> {
  * @returns string | null
  */
 export function getPlaceholderVal(val: string): string | null {
-  const match = placeholderRegexp.exec(val);
+  const match = RegexpUtil.placeholderRegexp.exec(val);
   return match && match[1] ? match[1] : null;
 }
 
@@ -289,5 +289,5 @@ export function getPlaceholderVal(val: string): string | null {
  * @returns
  */
 export function isURL(str: string): boolean {
-  return urlRegexp.test(str);
+  return RegexpUtil.urlRegexp.test(str);
 }

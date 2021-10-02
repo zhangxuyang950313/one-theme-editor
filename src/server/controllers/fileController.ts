@@ -1,8 +1,8 @@
 import fse from "fs-extra";
 import { Express } from "express";
 
-import apiConfig from "src/common/apiConf";
-import ERR_CODE from "src/common/errorCode";
+import apiConfig from "src/constant/apiConf";
+import ERR_CODE from "src/constant/errorCode";
 import { checkParamsKey, result } from "server/utils/requestUtil";
 import { TypeResponseFrame, UnionTupleToObjectKey } from "src/types/request";
 

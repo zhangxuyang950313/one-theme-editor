@@ -13,30 +13,9 @@ const defaultState: TypeElectronStore = {
   pathConfig: PathCollection.default
 };
 
-// class Store {
-//   private store: ElectronStore<TypeElectronStore>;
-//   constructor(options: ElectronStore.Options<TypeElectronStore>) {
-//     this.store = new ElectronStore<TypeElectronStore>(options);
-//   }
-
-//   getInstance() {
-//     return this.store;
-//   }
-
-//   get(key: keyof TypeElectronStore) {
-//     return this.store.get(key);
-//   }
-
-//   set<K extends keyof TypeElectronStore>(key: K, data: TypeElectronStore[K]) {
-//     this.store.set(key, data);
-//   }
-//   clear() {
-//     store.clear();
-//   }
-// }
-
 const electronStore = new ElectronStore<TypeElectronStore>();
 
+// 若 key 不存在给个默认值
 for (const key in defaultState) {
   if (!defaultState[key as keyof TypeElectronStore]) {
     electronStore.set(key, defaultState[key as keyof TypeElectronStore]);

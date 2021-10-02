@@ -1,4 +1,4 @@
-import { tempStrRegexp } from "src/common/regexp";
+import RegexpUtil from "src/utils/RegexpUtil";
 
 // 模板字符串处理
 export default class TempStringUtil {
@@ -7,10 +7,10 @@ export default class TempStringUtil {
   static match(content: string): Array<[string, string]> {
     const result: Array<[string, string]> = [];
     let m: RegExpExecArray | null;
-    while ((m = tempStrRegexp.exec(content)) !== null) {
+    while ((m = RegexpUtil.tempStrRegexp.exec(content)) !== null) {
       // This is necessary to avoid infinite loops with zero-width matches
-      if (m.index === tempStrRegexp.lastIndex) {
-        tempStrRegexp.lastIndex++;
+      if (m.index === RegexpUtil.tempStrRegexp.lastIndex) {
+        RegexpUtil.tempStrRegexp.lastIndex++;
       }
       result.push([m[0], m[1]]);
     }

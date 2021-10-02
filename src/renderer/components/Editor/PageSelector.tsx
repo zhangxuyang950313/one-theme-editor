@@ -2,7 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import { Collapse } from "antd";
 import {
-  useResourcePageOption,
+  useCurrentResModule,
+  useCurrentResPage,
   useResourceImageUrl
 } from "@/hooks/resource/index";
 import { PreloadImage } from "@/components/ImageCollection";
@@ -12,14 +13,14 @@ import { useEditorSelector } from "@/store";
 const PagePreview: React.FC<{ pageData: TypeResPageOption }> = props => {
   const { pageData } = props;
   const resourceImageURL = useResourceImageUrl(pageData.preview);
-  const [pageConf, setPageConf] = useResourcePageOption();
+  const [pageOpt, setPageOpt] = useCurrentResPage();
 
   return (
-    <StylePreviewImage data-active={String(pageConf.key === pageData.key)}>
+    <StylePreviewImage data-active={String(pageOpt.key === pageData.key)}>
       <PreloadImage
         className="preview-image"
         src={resourceImageURL}
-        onClick={() => setPageConf(pageData)}
+        onClick={() => setPageOpt(pageData)}
       />
     </StylePreviewImage>
   );
@@ -50,13 +51,13 @@ const StylePreviewImage = styled.span`
 
 // 页面选择器
 const PageSelector: React.FC = () => {
-  const groupList = useEditorSelector(state => state.moduleConfig.groupList);
+  const [{ pageGroupList }] = useCurrentResModule();
 
-  if (groupList.length === 0) return null;
+  if (pageGroupList.length === 0) return null;
 
   return (
-    <Collapse bordered={false} defaultActiveKey={Object.keys(groupList)}>
-      {groupList.map(
+    <Collapse bordered={false} defaultActiveKey={Object.keys(pageGroupList)}>
+      {pageGroupList.map(
         (group, key) =>
           group.pageList.length && (
             <Collapse.Panel header={group.name} key={key}>

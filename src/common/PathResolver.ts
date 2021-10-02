@@ -1,5 +1,5 @@
 import path from "path";
-import { placeholderRegexp } from "src/common/regexp";
+import RegexpUtil from "src/utils/RegexpUtil";
 import { PLACEHOLDER } from "src/enum/index";
 // import PATHS_CONFIG from "../types/extraConfig";
 
@@ -11,7 +11,7 @@ export default class PathResolver {
     pathname: string
   ): string {
     let result = pathname;
-    const execResult = placeholderRegexp.exec(result);
+    const execResult = RegexpUtil.placeholderRegexp.exec(result);
     if (!execResult) return path.normalize(result);
     const matched = execResult[0];
     const placeholder = execResult[1];

@@ -1,4 +1,4 @@
-import apiConfig from "src/common/apiConf";
+import apiConfig from "src/constant/apiConf";
 import { TypeElectronPath, TypePathConfig } from "src/types/extraConfig";
 import { TypeRequestResult } from "src/types/request";
 import { createHttp } from "./axios";

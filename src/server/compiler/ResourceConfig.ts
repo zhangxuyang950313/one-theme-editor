@@ -11,20 +11,20 @@ import {
 } from "src/types/resource";
 import {
   ResourceOption,
-  ResourceModuleConf,
-  ResourcePageOption,
-  ResourcePageGroupConf,
-  ResourceTypeConf,
+  ResModuleConfig,
+  ResPageOption,
+  ResPageGroup,
+  ResTypeConfig,
   UiVersion
 } from "src/data/ResourceConfig";
 import { TypeUiVersion } from "src/types/project";
 import pathUtil from "server/utils/pathUtil";
-import PageConfig from "./PageConfig";
+import PageConfigCompiler from "./PageConfig";
 import XMLNodeBase from "./XMLNodeElement";
 import XmlFileCompiler from "./XmlFileCompiler";
 
 // 解析 resourceConfig xml 配置文件
-export default class ResourceConfig extends XmlFileCompiler {
+export default class ResourceConfigCompiler extends XmlFileCompiler {
   // xiaomi/miui12
   private namespace: string;
   constructor(pathname: string) {
@@ -33,6 +33,10 @@ export default class ResourceConfig extends XmlFileCompiler {
       pathUtil.RESOURCE_CONFIG_DIR,
       path.dirname(this.getDescFile())
     );
+  }
+
+  static from(pathname: string): ResourceConfigCompiler {
+    return new ResourceConfigCompiler(pathname);
   }
 
   // 处理成模板根目录
@@ -89,7 +93,7 @@ export default class ResourceConfig extends XmlFileCompiler {
     return super
       .getRootChildrenNodesOf(ELEMENT_TAG.Resource)
       .map(item =>
-        new ResourceTypeConf()
+        new ResTypeConfig()
           .set("type", item.getAttributeOf("type"))
           .set("tag", item.getAttributeOf("tag"))
           .set("name", item.getAttributeOf("name"))
@@ -102,11 +106,11 @@ export default class ResourceConfig extends XmlFileCompiler {
     // 这里是在选择模板版本后得到的目标模块目录
     return pageNodeList.map(node => {
       const src = node.getAttributeOf("src");
-      const previewList = new PageConfig({
+      const previewList = new PageConfigCompiler({
         namespace: this.namespace,
         config: src
       }).getPreviewList();
-      return new ResourcePageOption()
+      return new ResPageOption()
         .set("key", UUID())
         .set("name", node.getAttributeOf("name"))
         .set("preview", previewList[0] || "")
@@ -121,7 +125,7 @@ export default class ResourceConfig extends XmlFileCompiler {
       const pageList = this.getPageList(
         groupNode.getChildrenNodesByTagname(ELEMENT_TAG.Page)
       );
-      return new ResourcePageGroupConf()
+      return new ResPageGroup()
         .set("name", groupNode.getAttributeOf("name"))
         .set("pageList", pageList)
         .create();
@@ -133,14 +137,14 @@ export default class ResourceConfig extends XmlFileCompiler {
     return super
       .getRootChildrenNodesOf(ELEMENT_TAG.Module)
       .map((moduleNode, index) => {
-        const groupList = this.getPageGroupList(
+        const pageGroupList = this.getPageGroupList(
           moduleNode.getChildrenNodesByTagname(ELEMENT_TAG.Group)
         );
-        return new ResourceModuleConf()
+        return new ResModuleConfig()
           .set("index", index)
           .set("name", moduleNode.getAttributeOf("name"))
           .set("icon", path.normalize(moduleNode.getAttributeOf("icon")))
-          .set("groupList", groupList)
+          .set("pageGroupList", pageGroupList)
           .create();
       });
   }
