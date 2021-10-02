@@ -49,13 +49,16 @@ export enum ELEMENT_TYPE {
   TEXT = "text"
 }
 
-// 图片资源类型
-export enum IMAGE_RESOURCE_TYPES {
-  IMAGE = "image"
+// 资源分类
+export enum RESOURCE_CATEGORY {
+  UNKNOWN = "unknown",
+  IMAGE = "image",
+  XML = "xml"
 }
 
-// 值资源类型
+// 资源类型
 export enum VALUE_RESOURCE_TYPES {
+  IMAGE = "image",
   COLOR = "color",
   BOOLEAN = "boolean",
   NUMBER = "number",

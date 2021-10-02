@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { TypeValueDefinition } from "src/types/resource";
+import { TypeResXmlDefinition } from "src/types/resource";
 import { apiWriteXmlTemplate } from "@/request";
 import { useProjectUUID, useProjectXmlValueBySrc } from "@/hooks/project/index";
 import { VALUE_RESOURCE_TYPES } from "src/enum/index";
@@ -12,12 +12,12 @@ import StringInput from "./StringInput";
 
 const XmlController: React.FC<{
   resourceType: VALUE_RESOURCE_TYPES;
-  valueDefinition: TypeValueDefinition;
+  valueDefinition: TypeResXmlDefinition;
 }> = props => {
   const { resourceType, valueDefinition } = props;
-  const { data, src } = valueDefinition;
+  const { name, src, data } = valueDefinition;
   const uuid = useProjectUUID();
-  const value = useProjectXmlValueBySrc(valueDefinition.name, src);
+  const value = useProjectXmlValueBySrc(name, src);
 
   if (!data) return null;
 

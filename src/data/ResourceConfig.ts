@@ -8,7 +8,7 @@ import {
   TypeResPageOption,
   TypeResPageConfig,
   TypeResPageGroup,
-  TypeResType,
+  TypeResTypeData,
   TypeResDefinition,
   TypeResValueData
 } from "../types/resource";
@@ -17,9 +17,10 @@ import {
   ALIGN_VALUES,
   ALIGN_V_VALUES,
   ELEMENT_TAG,
-  IMAGE_RESOURCE_TYPES,
+  RESOURCE_CATEGORY,
   VALUE_RESOURCE_TYPES
 } from "../enum/index";
+import ImageData from "../data/ImageData";
 import { AbstractDataModel } from "./AbstractDataModel";
 
 export class ResourcePageOption extends AbstractDataModel<TypeResPageOption> {
@@ -34,14 +35,8 @@ export class ResourcePageOption extends AbstractDataModel<TypeResPageOption> {
 }
 
 export class ResImageData extends AbstractDataModel<TypeImageData> {
-  protected data: TypeImageData = {
-    width: 0,
-    height: 0,
-    size: 0,
-    ninePatch: false,
-    filename: ""
-  };
-  static default = new ResImageData().create();
+  protected data: TypeImageData = ImageData.default;
+  static default = ImageData.default;
 }
 
 export class ResValueData extends AbstractDataModel<TypeResValueData> {
@@ -51,12 +46,12 @@ export class ResValueData extends AbstractDataModel<TypeResValueData> {
   };
 }
 
-export class ResourceDefinitionData extends AbstractDataModel<TypeResDefinition> {
+export class ResDefinitionData extends AbstractDataModel<TypeResDefinition> {
   protected data: TypeResDefinition = {
-    type: IMAGE_RESOURCE_TYPES.IMAGE,
-    tagName: "",
+    type: RESOURCE_CATEGORY.UNKNOWN,
+    tag: "",
     name: "",
-    description: "",
+    desc: "",
     src: "",
     data: null
   };
@@ -77,11 +72,11 @@ export class ElementLayoutConf extends AbstractDataModel<TypeLayoutConfig> {
 
 export class LayoutImageElement extends AbstractDataModel<TypeLayoutImageElement> {
   protected data: TypeLayoutImageElement = {
+    type: VALUE_RESOURCE_TYPES.IMAGE,
     tag: ELEMENT_TAG.Image,
-    type: IMAGE_RESOURCE_TYPES.IMAGE,
-    description: "",
     src: "",
-    resourceData: new ResImageData().create(),
+    desc: "",
+    data: ResImageData.default,
     layout: {
       x: "0",
       y: "0",
@@ -95,12 +90,12 @@ export class LayoutImageElement extends AbstractDataModel<TypeLayoutImageElement
 
 export class LayoutTextElement extends AbstractDataModel<TypeLayoutTextElement> {
   protected data: TypeLayoutTextElement = {
-    tag: ELEMENT_TAG.Text,
     type: VALUE_RESOURCE_TYPES.COLOR,
+    tag: ELEMENT_TAG.Text,
     name: "",
     text: "",
     src: "",
-    valueData: {
+    data: {
       defaultValue: "",
       valueName: ""
     },
@@ -145,8 +140,8 @@ export class ResourceModuleConf extends AbstractDataModel<TypeResModule> {
   static default = new ResourceModuleConf().create();
 }
 
-export class ResourceTypeConf extends AbstractDataModel<TypeResType> {
-  protected data: TypeResType = {
+export class ResourceTypeConf extends AbstractDataModel<TypeResTypeData> {
+  protected data: TypeResTypeData = {
     type: VALUE_RESOURCE_TYPES.STRING,
     name: "",
     tag: ""

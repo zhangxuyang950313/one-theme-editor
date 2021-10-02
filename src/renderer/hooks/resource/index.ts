@@ -8,7 +8,7 @@ import {
   TypeScenarioOption,
   TypeResModule,
   TypeResPageOption,
-  TypeResType,
+  TypeResTypeData,
   TypeLayoutElement,
   TypeLayoutImageElement,
   TypeLayoutTextElement,
@@ -94,7 +94,7 @@ export function useResourcePageConfig(): TypeResPageConfig | null {
 /**
  * 获取当前元素类型配置
  */
-export function useResourceTypeList(): TypeResType[] {
+export function useResourceTypeList(): TypeResTypeData[] {
   return useEditorSelector(state => state.resourceConfig.typeList);
 }
 

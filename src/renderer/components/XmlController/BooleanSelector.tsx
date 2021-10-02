@@ -2,16 +2,16 @@ import React from "react";
 import styled from "styled-components";
 
 import { Radio } from "antd";
-import { TypeValueDefinition } from "src/types/resource";
+import { TypeResXmlDefinition } from "src/types/resource";
 import Wrapper from "./Wrapper";
 
 const BooleanSelector: React.FC<{
   value: string;
-  valueDefinition: TypeValueDefinition;
+  valueDefinition: TypeResXmlDefinition;
   onChange: (s: string) => void;
 }> = props => {
   const { value, valueDefinition, onChange } = props;
-  const { name, description, data } = valueDefinition;
+  const { name, desc: description, data } = valueDefinition;
 
   if (!data) return null;
   return (

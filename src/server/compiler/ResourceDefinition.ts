@@ -4,11 +4,12 @@ import fse from "fs-extra";
 import {
   ResImageData,
   ResValueData,
-  ResourceDefinitionData
+  ResDefinitionData
 } from "src/data/ResourceConfig";
 import { filenameIsImage, filenameIsXml, getImageData } from "src/utils/index";
 import { TypeResDefinition } from "src/types/resource";
 import XMLNodeElement from "server/compiler/XMLNodeElement";
+import { RESOURCE_CATEGORY } from "src/enum";
 import XmlTemplate from "./XmlTemplate";
 import XmlFileCompiler from "./XmlFileCompiler";
 
@@ -50,7 +51,7 @@ export default class ResourceDefinition {
    * ->
    * ```json
    * {
-   *   "tagName": "Color",
+   *   "tag": "Color",
    *   "name": "icon_title_text",
    *   "description": "颜色值测试",
    *   "value": {
@@ -67,25 +68,20 @@ export default class ResourceDefinition {
     const value = node.getAttributeOf("value");
     const description = node.getAttributeOf("description");
     const { src, searchParams } = this.getUrlData(value);
-    const resourceData = new ResourceDefinitionData()
-      .set("tagName", node.getTagname())
+    const resDefinitionData = new ResDefinitionData()
+      .set("tag", node.getTagname())
       .set("name", node.getAttributeOf("name"))
-      .set("description", description);
+      .set("desc", description);
     // 图片素材
     if (filenameIsImage(src)) {
       const resImageData = new ResImageData();
       const file = this.resolvePath(src);
       if (fse.existsSync(file)) {
-        const imageData = getImageData(file);
-        resImageData
-          .set("width", imageData.width)
-          .set("height", imageData.height)
-          .set("size", imageData.size)
-          .set("ninePatch", imageData.ninePatch)
-          .set("filename", imageData.filename);
+        resImageData.setBatch(getImageData(file));
       }
-      resourceData.set("data", resImageData.create());
-      resourceData.set("src", src);
+      resDefinitionData.set("type", RESOURCE_CATEGORY.IMAGE);
+      resDefinitionData.set("data", resImageData.create());
+      resDefinitionData.set("src", src);
     }
     // xml 素材
     if (filenameIsXml(src)) {
@@ -95,13 +91,15 @@ export default class ResourceDefinition {
       const defaultValue = new XmlTemplate(
         new XmlFileCompiler(this.resolvePath(src)).getElement()
       ).getTextByAttrName(valueName);
-      const valueData = new ResValueData()
+      const resValueData = new ResValueData()
         .set("valueName", valueName)
         .set("defaultValue", defaultValue)
         .create();
-      resourceData.set("data", valueData).set("src", src);
+      resDefinitionData.set("type", RESOURCE_CATEGORY.XML);
+      resDefinitionData.set("data", resValueData);
+      resDefinitionData.set("src", src);
     }
-    return resourceData.create();
+    return resDefinitionData.create();
   }
 
   getResMap(): Map<string, TypeResDefinition> {

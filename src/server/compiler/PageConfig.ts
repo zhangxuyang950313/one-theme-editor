@@ -21,7 +21,7 @@ import {
   ELEMENT_TAG,
   ALIGN_VALUES,
   ALIGN_V_VALUES,
-  IMAGE_RESOURCE_TYPES
+  RESOURCE_CATEGORY
 } from "src/enum/index";
 import pathUtil from "server/utils/pathUtil";
 import XMLNodeElement from "server/compiler/XMLNodeElement";
@@ -229,7 +229,7 @@ export default class PageConfig extends XMLNodeElement {
     // 定义的数据，尝试解析 ${placeholder}
     if (valueDefinition && valueDefinition.data) {
       src = valueDefinition.src;
-      description = valueDefinition.description;
+      description = valueDefinition.desc;
     } else {
       try {
         // 直接定义，用于显示一些静态图片
@@ -238,24 +238,20 @@ export default class PageConfig extends XMLNodeElement {
         console.log(`layout url ${srcVal} 解析失败`);
       }
     }
-    const definitionImageData = new ResImageData();
-    const imageElement = new LayoutImageElement();
+    const resImageData = new ResImageData();
+    const layoutImageElement = new LayoutImageElement();
     const resourcePath = this.resolvePath(src);
     if (fse.existsSync(resourcePath)) {
-      const imageData = getImageData(this.resolvePath(src));
-      definitionImageData
-        .set("width", imageData.width)
-        .set("height", imageData.height)
-        .set("filename", imageData.filename)
-        .set("ninePatch", imageData.ninePatch)
-        .set("size", imageData.size);
-      imageElement
-        .set("description", description)
-        .set("resourceData", definitionImageData.create())
+      const imageData = resImageData
+        .setBatch(getImageData(this.resolvePath(src)))
+        .create();
+      layoutImageElement
+        .set("desc", description)
+        .set("data", imageData)
         .set("layout", this.layoutConf(node))
         .set("src", src);
     }
-    return imageElement.create();
+    return layoutImageElement.create();
   }
 
   /**
@@ -270,10 +266,10 @@ export default class PageConfig extends XMLNodeElement {
    * ->
    * ```json
    * {
-   *   "tagName": "Image",
+   *   "tag": "Image",
    *   "name": "com.android.contacts.activities.TwelveKeyDialer",
    *   "description": "拨号",
-   *   "valueData": {
+   *   "data": {
    *       "defaultValue": "file://icons/res/com.android.contacts.activities.TwelveKeyDialer.png",
    *       "valueName": "",
    *       "src": "icons/res/com.android.contacts.activities.TwelveKeyDialer.png"
@@ -288,22 +284,17 @@ export default class PageConfig extends XMLNodeElement {
     const text = node.getAttributeOf("text");
     const colorVal = node.getAttributeOf("color");
     const valueDefinition = this.getResDefinitionByName(colorVal);
-    const textElementData = new LayoutTextElement();
-    textElementData.set("text", text);
-    textElementData.set("name", text);
-    textElementData.set("layout", {
-      x: layout.x,
-      y: layout.y,
-      align: layout.align,
-      alignV: layout.alignV
-    });
+    const textElementData = new LayoutTextElement()
+      .set("text", text)
+      .set("name", text)
+      .setBatchOf("layout", layout);
     if (valueDefinition) {
-      const { description, src } = valueDefinition;
-      textElementData.set("name", description);
-      if (valueDefinition.type !== IMAGE_RESOURCE_TYPES.IMAGE) {
-        textElementData.set("valueData", valueDefinition.data);
-      }
+      const { desc, src } = valueDefinition;
+      textElementData.set("name", desc);
       textElementData.set("src", src);
+      if (valueDefinition.type === RESOURCE_CATEGORY.XML) {
+        textElementData.set("data", valueDefinition.data);
+      }
     }
     return textElementData.create();
   }

@@ -6,6 +6,7 @@ import installExtension, {
 } from "electron-devtools-installer";
 import { mainWindow } from "./windows";
 import { localUrl } from "./constant";
+import registerProtocol from "./protocol";
 
 // 用于添加Chromium插件
 async function setupDevTools() {
@@ -25,6 +26,8 @@ app.on("ready", () => {
     // 利用 electron-debug，添加和Chrome类似的快捷键
     electronDebug({ isEnabled: true, showDevTools: true });
   });
+
+  registerProtocol();
 });
 
 app.on("window-all-closed", () => {

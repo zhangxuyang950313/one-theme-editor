@@ -1,4 +1,4 @@
-import { IMAGE_RESOURCE_TYPES } from "src/enum";
+import { VALUE_RESOURCE_TYPES } from "src/enum";
 import { TypeResImageDefinition } from "src/types/resource";
 import { useResourceTypeList, useResourceList } from ".";
 
@@ -9,9 +9,9 @@ export default function useImageDefinitionList(): TypeResImageDefinition[] {
   const resourceTypeList = useResourceTypeList();
   const resourceList = useResourceList();
   const imageResourceTags = resourceTypeList
-    .filter(item => item.type === IMAGE_RESOURCE_TYPES.IMAGE)
+    .filter(item => item.type === VALUE_RESOURCE_TYPES.IMAGE)
     .map(item => item.tag);
   return resourceList.flatMap(item =>
-    imageResourceTags.includes(item.tagName) ? [item] : []
+    imageResourceTags.includes(item.tag) ? [item] : []
   ) as TypeResImageDefinition[];
 }

@@ -57,19 +57,19 @@ const ImageController: React.FC<{
   imageDefinition: TypeResImageDefinition;
 }> = props => {
   const { imageDefinition, className } = props;
-  const { data: resourceData, description, src } = imageDefinition;
+  const { data, desc, src } = imageDefinition;
   const resourceImageUrl = useResourceImageUrl(src);
   const projectImageUrl = useProjectImageUrlBySrc(src);
   const absPathInSource = useAbsolutePathInSource(src);
   const absPathInProject = useAbsolutePathInProject(src);
 
-  if (!resourceData) return null;
-  const { width, height, size } = resourceData;
+  if (!data) return null;
+  const { width, height, size } = data;
   return (
     <StyleImageController className={className}>
       {/* 图片名称 */}
       <div className="name">
-        {description}
+        {desc}
         {width && height ? (
           <span className="image-size">
             ({`${width}×${height}`}
@@ -89,7 +89,7 @@ const ImageController: React.FC<{
             if (process.platform !== "darwin") {
               remote.shell.showItemInFolder(absPathInSource);
             } else {
-              previewFile(absPathInSource, description);
+              previewFile(absPathInSource, desc);
             }
           }}
         />

@@ -28,9 +28,19 @@ export abstract class AbstractDataModel<T extends Record<string, unknown>> {
     }
     return this;
   }
+  // 批量设定当前数据结构已有的属性
   setBatch(data: T): this {
     for (const key in data) {
       this.set(key, data[key]);
+    }
+    return this;
+  }
+  // 批量设定当前数据结构中键的对象数据结构
+  setBatchOf<K extends keyof T>(k: K, value: T[K]): this {
+    if (this.has(k)) {
+      for (const key in this.data[k]) {
+        this.data[k][key] = value[key];
+      }
     }
     return this;
   }

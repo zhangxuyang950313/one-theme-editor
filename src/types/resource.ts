@@ -1,12 +1,12 @@
 import archiver from "archiver";
 import {
+  RESOURCE_CATEGORY,
+  VALUE_RESOURCE_TYPES,
+  FILE_TEMPLATE_TYPE,
+  ELEMENT_TAG,
   ALIGN_VALUES,
   ALIGN_V_VALUES,
-  ELEMENT_TAG,
-  FILE_TEMPLATE_TYPE,
-  PACK_TYPE,
-  IMAGE_RESOURCE_TYPES,
-  VALUE_RESOURCE_TYPES
+  PACK_TYPE
 } from "../enum";
 import XMLNodeBase from "../server/compiler/XMLNodeElement";
 import { TypeImageData, TypeUiVersion } from "./project";
@@ -25,7 +25,7 @@ export type TypeResourceOption = {
 
 // 资源配置数据
 export type TypeResourceConfig = TypeResourceOption & {
-  typeList: TypeResType[];
+  typeList: TypeResTypeData[];
   moduleList: TypeResModule[];
 };
 
@@ -70,17 +70,11 @@ export type TypeScenarioConfig = {
 };
 
 // 素材类型定义数据
-export type TypeResImageType = {
-  type: IMAGE_RESOURCE_TYPES;
-  name: string;
-  tag: string;
-};
-export type TypeResValueType = {
+export type TypeResTypeData = {
   type: VALUE_RESOURCE_TYPES;
   name: string;
   tag: string;
 };
-export type TypeResType = TypeResImageType | TypeResValueType;
 // 预览模块
 export type TypeResModule = {
   index: number;
@@ -127,10 +121,10 @@ export type TypeLayoutConfig = {
 // 图片元素数据
 export type TypeLayoutImageElement = {
   readonly tag: ELEMENT_TAG.Image;
-  readonly type: IMAGE_RESOURCE_TYPES.IMAGE;
-  description: string;
+  readonly type: VALUE_RESOURCE_TYPES.IMAGE;
   src: string;
-  resourceData: TypeResImageData;
+  desc: string;
+  data: TypeResImageData;
   layout: {
     x: string;
     y: string;
@@ -148,7 +142,7 @@ export type TypeLayoutTextElement = {
   name: string;
   text: string;
   src: string;
-  valueData: TypeResValueData | null;
+  data: TypeResValueData;
   layout: {
     x: string;
     y: string;
@@ -164,24 +158,38 @@ export type TypeResValueData = {
 
 export type TypeResImageData = TypeImageData;
 
-// 素材定义
+// 素材定义数据
+// 未知类型
+export type TypeResUnknownDefinition = {
+  type: RESOURCE_CATEGORY.UNKNOWN;
+  tag: string;
+  name: string;
+  desc: string;
+  src: string;
+  data: null;
+};
+// 图片类型
 export type TypeResImageDefinition = {
-  type: IMAGE_RESOURCE_TYPES;
-  tagName: string;
+  type: RESOURCE_CATEGORY.IMAGE;
+  tag: string;
   name: string;
-  description: string;
+  desc: string;
   src: string;
-  data: TypeResImageData | null;
+  data: TypeResImageData;
 };
-export type TypeValueDefinition = {
-  type: VALUE_RESOURCE_TYPES;
-  tagName: string;
+// xml文件类型
+export type TypeResXmlDefinition = {
+  type: RESOURCE_CATEGORY.XML;
+  tag: string;
   name: string;
-  description: string;
+  desc: string;
   src: string;
-  data: TypeResValueData | null;
+  data: TypeResValueData;
 };
-export type TypeResDefinition = TypeResImageDefinition | TypeValueDefinition;
+export type TypeResDefinition =
+  | TypeResUnknownDefinition
+  | TypeResImageDefinition
+  | TypeResXmlDefinition;
 
 // 预览元素数据
 export type TypeLayoutElement = TypeLayoutImageElement | TypeLayoutTextElement;

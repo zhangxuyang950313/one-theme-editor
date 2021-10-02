@@ -2,16 +2,16 @@ import React from "react";
 import styled from "styled-components";
 import { Input } from "antd";
 import { RightCircleOutlined } from "@ant-design/icons";
-import { TypeValueDefinition } from "src/types/resource";
+import { TypeResXmlDefinition } from "src/types/resource";
 import Wrapper from "./Wrapper";
 
 const StringInput: React.FC<{
   value: string;
-  valueDefinition: TypeValueDefinition;
+  valueDefinition: TypeResXmlDefinition;
   onChange: (e: string) => void;
 }> = props => {
   const { value, valueDefinition, onChange } = props;
-  const { name, description, data } = valueDefinition;
+  const { name, desc: description, data } = valueDefinition;
 
   if (!data) return null;
   const { defaultValue } = data;

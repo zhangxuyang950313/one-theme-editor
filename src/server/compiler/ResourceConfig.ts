@@ -7,7 +7,7 @@ import {
   TypeResPageGroup,
   TypeResPageOption,
   TypeResourceOption,
-  TypeResType
+  TypeResTypeData
 } from "src/types/resource";
 import {
   ResourceOption,
@@ -85,7 +85,7 @@ export default class ResourceConfig extends XmlFileCompiler {
   }
 
   // 素材类型定义列表
-  getResTypeList(): TypeResType[] {
+  getResTypeList(): TypeResTypeData[] {
     return super
       .getRootChildrenNodesOf(ELEMENT_TAG.Resource)
       .map(item =>

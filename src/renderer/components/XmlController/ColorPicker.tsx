@@ -4,7 +4,7 @@ import { Input, message, Tooltip } from "antd";
 import { RGBColor, SketchPicker } from "react-color";
 import { RightCircleOutlined } from "@ant-design/icons";
 import { useProjectUUID } from "@/hooks/project/index";
-import { TypeValueDefinition } from "src/types/resource";
+import { TypeResXmlDefinition } from "src/types/resource";
 import { StyleGirdBackground } from "@/style";
 import { RgbaObject } from "hex-rgb";
 import ColorUtil, { HEX_FORMAT } from "src/utils/ColorUtil";
@@ -169,18 +169,12 @@ const StyleColorPick = styled.div`
 // 颜色值选择器
 const ColorPicker: React.FC<{
   value: string;
-  valueDefinition: TypeValueDefinition;
+  valueDefinition: TypeResXmlDefinition;
   onChange: (x: string) => void;
 }> = props => {
   const { value, valueDefinition, onChange } = props;
-  const { description, data } = valueDefinition;
+  const { desc, data } = valueDefinition;
   const uuid = useProjectUUID();
-
-  // useProjectFileWatcher(valueData?.src || "", file => {
-  //   apiGetTempValueByName({ uuid, name: valueData?.valueName || "", src: file })
-  //     .then(value => setReleaseColor(value))
-  //     .catch(err => message.error(err.message));
-  // });
 
   if (!uuid || !data) return null;
   const { defaultValue } = data;
@@ -189,7 +183,7 @@ const ColorPicker: React.FC<{
   );
 
   return (
-    <Wrapper name={data.valueName} description={description}>
+    <Wrapper name={data.valueName} description={desc}>
       <StyleColorPicker>
         <ColorBox color={defaultColor} />
         <RightCircleOutlined
