@@ -50,8 +50,12 @@ export default class XmlFileCompiler extends XMLNodeElement {
       super(XmlFileCompiler.compile(data));
       this.file = file;
     } catch (err) {
-      throw new Error(`${err.message}（${file}）`);
+      throw new Error(`${err}（${file}）`);
     }
+  }
+
+  static from(file: string): XmlFileCompiler {
+    return new XmlFileCompiler(file);
   }
 
   protected getFile(): string {
@@ -82,7 +86,7 @@ export default class XmlFileCompiler extends XMLNodeElement {
     try {
       return xml2js(data, { ...xml2jsConfig, ...options });
     } catch (err) {
-      throw new Error(`${ERR_CODE[3009]} ${err.message}`);
+      throw new Error(`${ERR_CODE[3009]} ${err}`);
     }
   }
 

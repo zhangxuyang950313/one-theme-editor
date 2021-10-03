@@ -18,7 +18,9 @@ export class ElectronPathCollection extends AbstractDataModel<TypeElectronPath> 
     ELECTRON_LOCAL: "",
     ELECTRON_LOGS: ""
   };
-  static default = new ElectronPathCollection().create();
+  static get default(): TypeElectronPath {
+    return new ElectronPathCollection().create();
+  }
 }
 
 export class ServerPathCollection extends AbstractDataModel<TypeServerPath> {
@@ -37,7 +39,9 @@ export class ServerPathCollection extends AbstractDataModel<TypeServerPath> {
     ADB_TOOL: "",
     PACK_TEMPORARY: ""
   };
-  static default = new ServerPathCollection().create();
+  static get default(): TypeServerPath {
+    return new ServerPathCollection().create();
+  }
 }
 
 export default class PathCollection extends AbstractDataModel<TypePathConfig> {
@@ -45,5 +49,7 @@ export default class PathCollection extends AbstractDataModel<TypePathConfig> {
     ...new ElectronPathCollection().create(),
     ...new ServerPathCollection().create()
   };
-  static default = new PathCollection().create();
+  static get default(): TypePathConfig {
+    return new PathCollection().create();
+  }
 }

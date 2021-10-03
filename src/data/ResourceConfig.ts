@@ -1,5 +1,5 @@
 import {
-  TypeLayoutConfig,
+  TypeLayoutData,
   TypeResourceConfig,
   TypeResourceOption,
   TypeLayoutImage,
@@ -17,7 +17,7 @@ import {
   ALIGN_VALUES,
   ALIGN_V_VALUES,
   ELEMENT_TAG,
-  RESOURCE_CATEGORY,
+  FILE_PROTOCOL,
   RESOURCE_TYPES
 } from "../enum/index";
 import ImageData from "../data/ImageData";
@@ -31,12 +31,16 @@ export class ResPageOption extends AbstractDataModel<TypeResPageOption> {
     src: ""
   };
 
-  static default = new ResPageOption().create();
+  static get default(): TypeResPageOption {
+    return new ResPageOption().create();
+  }
 }
 
 export class ResImageData extends AbstractDataModel<TypeImageData> {
   protected data: TypeImageData = ImageData.default;
-  static default = ImageData.default;
+  static get default(): TypeImageData {
+    return new ResImageData().create();
+  }
 }
 
 export class ResValueData extends AbstractDataModel<TypeResValueData> {
@@ -44,21 +48,27 @@ export class ResValueData extends AbstractDataModel<TypeResValueData> {
     defaultValue: "",
     valueName: ""
   };
+  static get default(): TypeImageData {
+    return new ResImageData().create();
+  }
 }
 
 export class ResDefinition extends AbstractDataModel<TypeResDefinition> {
   protected data: TypeResDefinition = {
-    type: RESOURCE_CATEGORY.UNKNOWN,
-    tag: "",
+    protocol: FILE_PROTOCOL.UNKNOWN,
+    type: RESOURCE_TYPES.UNKNOWN,
     name: "",
     desc: "",
     src: "",
     data: null
   };
+  static get default(): TypeResDefinition {
+    return new ResDefinition().create();
+  }
 }
 
-export class ElementLayoutConfig extends AbstractDataModel<TypeLayoutConfig> {
-  protected data: TypeLayoutConfig = {
+export class ElementLayoutConfig extends AbstractDataModel<TypeLayoutData> {
+  protected data: TypeLayoutData = {
     x: "",
     y: "",
     w: "",
@@ -67,7 +77,9 @@ export class ElementLayoutConfig extends AbstractDataModel<TypeLayoutConfig> {
     alignV: ALIGN_V_VALUES.TOP
   };
 
-  static default = new ElementLayoutConfig().create();
+  static get default(): TypeLayoutData {
+    return new ElementLayoutConfig().create();
+  }
 }
 
 export class LayoutImageElement extends AbstractDataModel<TypeLayoutImage> {
@@ -86,13 +98,16 @@ export class LayoutImageElement extends AbstractDataModel<TypeLayoutImage> {
       alignV: ALIGN_V_VALUES.TOP
     }
   };
+  static get default(): TypeLayoutImage {
+    return new LayoutImageElement().create();
+  }
 }
 
 export class LayoutTextElement extends AbstractDataModel<TypeLayoutText> {
   protected data: TypeLayoutText = {
     type: RESOURCE_TYPES.COLOR,
     tag: ELEMENT_TAG.Text,
-    name: "",
+    desc: "",
     text: "",
     src: "",
     data: {
@@ -106,6 +121,9 @@ export class LayoutTextElement extends AbstractDataModel<TypeLayoutText> {
       alignV: ALIGN_V_VALUES.TOP
     }
   };
+  static get default(): TypeLayoutText {
+    return new LayoutTextElement().create();
+  }
 }
 
 export class ResPageConfig extends AbstractDataModel<TypeResPageConfig> {
@@ -126,7 +144,9 @@ export class ResPageGroup extends AbstractDataModel<TypeResPageGroup> {
     pageList: []
   };
 
-  static default = new ResPageOption().create();
+  static get default(): TypeResPageGroup {
+    return new ResPageGroup().create();
+  }
 }
 
 export class ResModuleConfig extends AbstractDataModel<TypeResModule> {
@@ -137,7 +157,9 @@ export class ResModuleConfig extends AbstractDataModel<TypeResModule> {
     pageGroupList: []
   };
 
-  static default = new ResModuleConfig().create();
+  static get default(): TypeResModule {
+    return new ResModuleConfig().create();
+  }
 }
 
 export class ResTypeConfig extends AbstractDataModel<TypeResTypeData> {
@@ -147,7 +169,9 @@ export class ResTypeConfig extends AbstractDataModel<TypeResTypeData> {
     tag: ""
   };
 
-  static default = new ResTypeConfig().create();
+  static get default(): TypeResTypeData {
+    return new ResTypeConfig().create();
+  }
 }
 
 export class UiVersion extends AbstractDataModel<TypeUiVersion> {
@@ -155,7 +179,9 @@ export class UiVersion extends AbstractDataModel<TypeUiVersion> {
     name: "",
     code: ""
   };
-  static default = new UiVersion().create();
+  static get default(): TypeUiVersion {
+    return new UiVersion().create();
+  }
 }
 
 export class ResourceOption extends AbstractDataModel<TypeResourceOption> {
@@ -168,7 +194,9 @@ export class ResourceOption extends AbstractDataModel<TypeResourceOption> {
     version: "",
     uiVersion: UiVersion.default
   };
-  static default = new ResourceOption().create();
+  static get default(): TypeResourceOption {
+    return new ResourceOption().create();
+  }
 }
 
 export default class ResourceConfigData extends AbstractDataModel<TypeResourceConfig> {
@@ -177,5 +205,7 @@ export default class ResourceConfigData extends AbstractDataModel<TypeResourceCo
     typeList: [],
     moduleList: []
   };
-  static default = new ResourceConfigData().create();
+  static get default(): TypeResourceConfig {
+    return new ResourceConfigData().create();
+  }
 }

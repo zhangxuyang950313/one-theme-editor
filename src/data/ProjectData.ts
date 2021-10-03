@@ -5,7 +5,9 @@ import { UiVersion } from "./ResourceConfig";
 export class ProjectInfo extends AbstractDataModel<TypeProjectInfo> {
   protected data: TypeProjectInfo = {};
 
-  static default = new ProjectInfo().create();
+  static get default(): TypeProjectInfo {
+    return new ProjectInfo().create();
+  }
 }
 
 export default class ProjectData extends AbstractDataModel<TypeProjectDataDoc> {
@@ -22,5 +24,7 @@ export default class ProjectData extends AbstractDataModel<TypeProjectDataDoc> {
     updatedAt: new Date()
   };
 
-  static default = new ProjectData().create();
+  static get default(): TypeProjectDataDoc {
+    return new ProjectData().create();
+  }
 }

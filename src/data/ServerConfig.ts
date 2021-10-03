@@ -6,5 +6,7 @@ export default class ServerConfig extends AbstractDataModel<TypeServerConfig> {
     host: "localhost",
     port: 0
   };
-  static default = new ServerConfig().create();
+  static get default(): TypeServerConfig {
+    return new ServerConfig().create();
+  }
 }

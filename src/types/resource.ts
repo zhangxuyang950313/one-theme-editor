@@ -1,6 +1,6 @@
 import archiver from "archiver";
 import {
-  RESOURCE_CATEGORY,
+  FILE_PROTOCOL,
   RESOURCE_TYPES,
   FILE_TEMPLATE_TYPE,
   ELEMENT_TAG,
@@ -108,7 +108,7 @@ export type TypeXmlTempConfig = {
   release: string;
 };
 
-export type TypeLayoutConfig = {
+export type TypeLayoutData = {
   x: string;
   y: string;
   w: string;
@@ -124,22 +124,15 @@ export type TypeLayoutImage = {
   src: string;
   desc: string;
   data: TypeResImageData;
-  layout: {
-    x: string;
-    y: string;
-    w: string;
-    h: string;
-    align: ALIGN_VALUES;
-    alignV: ALIGN_V_VALUES;
-  };
+  layout: TypeLayoutData;
 };
 
 // 颜色元素数据
 export type TypeLayoutText = {
-  readonly type: RESOURCE_TYPES;
+  readonly type: RESOURCE_TYPES.COLOR;
   readonly tag: ELEMENT_TAG.Text;
-  name: string;
   text: string;
+  desc: string;
   src: string;
   data: TypeResValueData;
   layout: {
@@ -160,8 +153,8 @@ export type TypeResImageData = TypeImageData;
 // 素材定义数据
 // 未知类型
 export type TypeResUnknownDefinition = {
-  type: RESOURCE_CATEGORY.UNKNOWN;
-  tag: string;
+  protocol: FILE_PROTOCOL.UNKNOWN;
+  type: RESOURCE_TYPES.UNKNOWN;
   name: string;
   desc: string;
   src: string;
@@ -169,17 +162,17 @@ export type TypeResUnknownDefinition = {
 };
 // 图片类型
 export type TypeResImageDefinition = {
-  type: RESOURCE_CATEGORY.IMAGE;
-  tag: string;
+  protocol: FILE_PROTOCOL.IMAGE;
+  type: RESOURCE_TYPES;
   name: string;
   desc: string;
   src: string;
   data: TypeResImageData;
 };
 // xml文件类型
-export type TypeResXmlDefinition = {
-  type: RESOURCE_CATEGORY.XML;
-  tag: string;
+export type TypeResXmlValDefinition = {
+  protocol: FILE_PROTOCOL.XML;
+  type: RESOURCE_TYPES;
   name: string;
   desc: string;
   src: string;
@@ -188,7 +181,7 @@ export type TypeResXmlDefinition = {
 export type TypeResDefinition =
   | TypeResUnknownDefinition
   | TypeResImageDefinition
-  | TypeResXmlDefinition;
+  | TypeResXmlValDefinition;
 
 // 预览元素数据
 export type TypeLayoutElement = TypeLayoutImage | TypeLayoutText;

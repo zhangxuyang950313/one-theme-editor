@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import ImageController from "@/components/ImageController/index";
+import ImageController from "@/components/ImageHandler/index";
 import useImageDefinitionList from "@/hooks/resource/useImageDefinitionList";
 
 const ResImageList: React.FC = () => {

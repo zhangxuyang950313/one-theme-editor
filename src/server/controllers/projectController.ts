@@ -16,7 +16,7 @@ import {
 import { releaseXmlTemplate } from "server/services/xmlTemplate";
 import {
   getPageResourceData,
-  getProjectFileData,
+  getFileData,
   packProject,
   unpackProject
 } from "server/services/project";
@@ -181,11 +181,10 @@ export default function projectController(service: Express): void {
   >(`${apiConfig.GET_RESOURCE_FILE.path}`, async (request, response) => {
     const { query } = request;
     checkParamsKey(query, apiConfig.GET_RESOURCE_FILE.query);
-    const { root: projectRoot } = await findProjectByQuery({
-      uuid: query.uuid
-    });
-    const data = getProjectFileData(projectRoot, query.filepath);
-    response.send(result.success(data));
+    const { uuid, filepath } = query;
+    const { root } = await findProjectByQuery({ uuid });
+    const fileData = getFileData(path.join(root, filepath), filepath);
+    response.send(result.success(fileData));
   });
 
   /**

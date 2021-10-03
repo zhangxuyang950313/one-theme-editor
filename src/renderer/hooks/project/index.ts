@@ -5,7 +5,7 @@ import { useResConfigRootWithNS } from "@/hooks/resource/index";
 import { ActionInitEditor } from "@/store/editor/action";
 import { useEditorDispatch, useEditorSelector } from "@/store/index";
 import { TypeProjectDataDoc, TypeFileData } from "src/types/project";
-import { FILE_TEMPLATE_TYPE, LOAD_STATUS, PROJECT_FILE_TYPE } from "src/enum";
+import { FILE_TEMPLATE_TYPE, LOAD_STATUS, FILE_PROTOCOL } from "src/enum";
 import {
   TypeFileTemplateConfig,
   TypeResourceConfig,
@@ -118,7 +118,7 @@ export function useResolveSourcePath(relativePath: string): string {
   return resourcePath;
 }
 
-export function useProjectFileDataMap(): Map<string, TypeFileData> {
+export function useFileDataMap(): Map<string, TypeFileData> {
   const fileDataMap = useEditorSelector(state => state.fileDataMap);
   return new Map(Object.entries(fileDataMap));
 }
@@ -129,7 +129,7 @@ export function useProjectFileDataMap(): Map<string, TypeFileData> {
 export function useProjectImageUrlBySrc(src: string): string {
   const imageFileDataMap = useEditorSelector(state => {
     const entries = Object.entries(state.fileDataMap).flatMap(([key, val]) => {
-      return val.type === PROJECT_FILE_TYPE.IMAGE
+      return val.type === FILE_PROTOCOL.IMAGE
         ? [[key, val] as [string, typeof val]]
         : [];
     });
@@ -145,15 +145,15 @@ export function useProjectImageUrlBySrc(src: string): string {
 export function useProjectXmlValueBySrc(name: string, src: string): string {
   const xmlFileDataMap = useEditorSelector(state => {
     const entries = Object.entries(state.fileDataMap).flatMap(([key, val]) => {
-      return val.type === PROJECT_FILE_TYPE.XML
+      return val.type === FILE_PROTOCOL.XML
         ? [[key, val] as [string, typeof val]]
         : [];
     });
     return new Map(entries);
   });
   const xmlData = xmlFileDataMap.get(src);
-  if (!xmlData?.element) return "";
-  return new XMLNodeElement(xmlData.element)
+  if (!xmlData?.data) return "";
+  return new XMLNodeElement(xmlData.data)
     .getFirstChildNode()
     .getFirstChildNodeByAttrValue("name", name)
     .getFirstTextChildValue();

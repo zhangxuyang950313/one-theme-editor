@@ -20,48 +20,42 @@ export async function getPageResourceData(
   const { root, resourceSrc } = await findProjectByQuery({ uuid });
   const namespace = path.dirname(resourceSrc);
   const pageConfig = new PageConfigCompiler({ namespace, config });
-  const resourcePathList = pageConfig.getResPathList();
-  return resourcePathList.reduce<Record<string, TypeFileData>>(
-    (record, src) => {
-      record[src] = getProjectFileData(root, src);
-      return record;
-    },
-    {}
-  );
+  const resPathList = pageConfig.getResPathList();
+  return resPathList.reduce<Record<string, TypeFileData>>((record, src) => {
+    const fileData = getFileData(path.join(root, src), src);
+    record[src] = fileData;
+    return record;
+  }, {});
 }
 
 /**
- * 解析工程目录下 filepath 文件的数据
+ * 解析文件数据
  * 目前支持 image 、 xml
  * @param uuid
  * @param file
  * @returns
  */
-export function getProjectFileData(
-  projectRoot: string,
-  src: string
-): TypeFileData {
-  const absPath = path.join(projectRoot, src);
-  const fileExists = fse.pathExistsSync(absPath);
-  if (filenameIsImage(src)) {
+export function getFileData(file: string, src: string): TypeFileData {
+  const fileExists = fse.pathExistsSync(file);
+  if (filenameIsImage(file)) {
     const hostname = electronStore.get("hostname");
-    const url = `http://${hostname}/image?filepath=${absPath}&time=${Date.now()}`;
+    const url = `http://${hostname}/image?filepath=${file}&time=${Date.now()}`;
     // const url = `one://${absPath}?t=${Date.now()}`;
-    const data = new ProjectFileImageData();
-    data.set("src", src);
-    data.set("url", url);
+    const imageData = new ProjectFileImageData();
+    imageData.set("url", url);
+    imageData.set("src", src);
     if (fileExists) {
-      data.set("imageData", getImageData(absPath));
+      imageData.set("data", getImageData(file));
     }
-    return data.create();
+    return imageData.create();
   }
-  if (filenameIsXml(src)) {
-    const data = new ProjectFileXmlData();
-    data.set("src", src);
+  if (filenameIsXml(file)) {
+    const xmlData = new ProjectFileXmlData();
+    xmlData.set("src", src);
     if (fileExists) {
-      data.set("element", new XmlFileCompiler(absPath).getElement());
+      xmlData.set("data", XmlFileCompiler.from(file).getElement());
     }
-    return data.create();
+    return xmlData.create();
   }
   // throw new Error(`不支持的文件类型"${src}"`);
   return new ProjectFileUnknown().set("src", src).create();

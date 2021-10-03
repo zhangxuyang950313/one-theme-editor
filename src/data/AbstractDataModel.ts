@@ -44,7 +44,12 @@ export abstract class AbstractDataModel<T extends Record<string, unknown>> {
     }
     return this;
   }
-  create(): T {
+  // 构建数据结构，可选传入数据，这是最后设置数据的机会
+  // instance.create(data) <=> instance.setBatch(data) && instance.create()
+  create(data?: T): T {
+    if (data) {
+      this.setBatch(data);
+    }
     return this.data;
   }
 }

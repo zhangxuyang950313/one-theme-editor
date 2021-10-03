@@ -2,62 +2,90 @@
 
 <Page version="1.0.0" description="桌面壁纸和首屏图标" screenWidth="1080">
 
-    <!-- 配置 -->
+    <!-- 
+        资源列表配置
+        资源标签：   File | Value
+        属性 type： 匹配 description.xml 中的定义
+        文件协议：   xxx://  image | xml，对应着不同的解析器
+    -->
     <Resource>
-        <Image 
+        <File 
+            type="image"
             name="wallpaper"
             description="默认壁纸"
-            value="file://wallpaper/default_wallpaper.jpg"
+            value="image://wallpaper/default_wallpaper.jpg"
         />
-        <Image
+        <File
+            type="image"
             name="com.android.contacts.activities.TwelveKeyDialer"
             description="拨号"
-            value="file://icons/res/drawable-xxhdpi/com.android.contacts.activities.TwelveKeyDialer.png"
+            value="image://icons/res/drawable-xxhdpi/com.android.contacts.activities.TwelveKeyDialer.png"
         />
-        <Image
+        <File
+            type="image"
             name="com.android.mms"
             description="短信"
-            value="file://icons/res/drawable-xxhdpi/com.android.mms.png"
+            value="image://icons/res/drawable-xxhdpi/com.android.mms.png"
         />
-        <Color
+        <File
+            type="image"
+            name="com.android.browser"
+            description="浏览器"
+            value="image://icons/res/drawable-xxhdpi/com.android.browser.png"
+        />
+        <File
+            type="image"
+            name="com.android.camera"
+            description="相机"
+            value="image://icons/res/drawable-xxhdpi/com.android.camera.png"
+        />
+        <Value
+            type="color"
             name="icon_title_text"
             description="图标字体"
-            value="file://com.miui.home/theme_values.xml?name=icon_title_text"
+            value="xml://com.miui.home/theme_values.xml?name=icon_title_text"
         />
-        <Color
+        <Value
+            type="color"
             name="action_bar_title_text_color_light"
             description="图标字体"
-            value="file://wallpaper/theme_values.xml?name=action_bar_title_text_color_light"
+            value="xml://wallpaper/theme_values.xml?name=action_bar_title_text_color_light"
         />
-        <Bool
+        <Value
+            type="bool"
             name="bool_test1"
             description="布尔值测试"
-            value="file://com.miui.home/theme_values.xml?name=bool_test1"
+            value="xml://com.miui.home/theme_values.xml?name=bool_test1"
         />
-        <Bool
+        <Value
+            type="bool"
             name="bool_test2"
             description="布尔值测试"
-            value="file://com.miui.home/theme_values.xml?name=bool_test2"
+            value="xml://com.miui.home/theme_values.xml?name=bool_test2"
         />
-        <Dimen
+        <Value
+            type="dimen"
             name="dimen_test1"
             description="尺寸值测试"
-            value="file://com.miui.home/theme_values.xml?name=dimen_test1"
+            value="xml://com.miui.home/theme_values.xml?name=dimen_test1"
         />
-        <Dimen
+        <Value
+            type="dimen"
             name="dimen_test2"
             description="尺寸值测试"
-            value="file://com.miui.home/theme_values.xml?name=dimen_test2"
+            value="xml://com.miui.home/theme_values.xml?name=dimen_test2"
         />
-        <Integer
+        <Value
+            type="integer"
             name="integer_test1"
             description="整型值测试"
-            value="file://com.miui.home/theme_values.xml?name=integer_test1"
+            value="xml://com.miui.home/theme_values.xml?name=integer_test1"
         />
-        <Integer
+        <Value
+            type="integer"
             name="integer_test2"
             description="整型值测试"
-            value="file://com.miui.home/theme_values.xml?name=integer_test2"
+            value="xml://com.miui.home/theme_values.xml?name=integer_test2"
         />
     </Resource>
 
@@ -73,11 +101,11 @@
     <Layout>
         <!-- 这个图片不会在素材区展示，因为它是静态的，没有在 Resource 节点中定义 -->
         <Image 
-            x="160" y="2150" w="186" h="186" align="center" alignV="center" 
-            src="file://wallpaper/default_wallpaper.jpg"
+            x="0" y="0" w="1080" h="2340"
+            src="resource://wallpaper/default_wallpaper.jpg"
         />
         <Image 
-            x="160" y="2150" w="186" h="186" align="center" alignV="center" 
+            x="0" y="0" w="1080" h="2340"
             src="${wallpaper}"
         />
         <Image 
@@ -85,8 +113,16 @@
             src="${com.android.contacts.activities.TwelveKeyDialer}"
         />
         <Image 
-            x="160" y="2150" w="186" h="186" align="center" alignV="center" 
+            x="415" y="2150" w="186" h="186" align="center" alignV="center" 
             src="${com.android.mms}"
+        />
+        <Image 
+            x="670" y="2150" w="186" h="186" align="center" alignV="center" 
+            src="${com.android.browser}"
+        />
+        <Image 
+            x="925" y="2150" w="186" h="186" align="center" alignV="center" 
+            src="${com.android.camera}"
         />
         <Text
             text="拨号"

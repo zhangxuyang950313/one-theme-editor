@@ -16,7 +16,7 @@ import { TypeResImageDefinition } from "src/types/resource";
 
 import SourceStatus from "./SourceStatus";
 import ImageDisplay from "./ImageDisplay";
-import ImageHandler from "./ImageHandler";
+import ImageHandler from "./ImageButtons";
 import { previewFile } from "./utils";
 
 /**

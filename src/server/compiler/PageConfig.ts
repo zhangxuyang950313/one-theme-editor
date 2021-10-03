@@ -21,7 +21,7 @@ import {
   ELEMENT_TAG,
   ALIGN_VALUES,
   ALIGN_V_VALUES,
-  RESOURCE_CATEGORY
+  FILE_PROTOCOL
 } from "src/enum/index";
 import pathUtil from "server/utils/pathUtil";
 import XMLNodeElement from "server/compiler/XMLNodeElement";
@@ -190,7 +190,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
   // 获取定义的资源配置数据
   private getResDefinitionByName(srcVal: string): TypeResDefinition | null {
     const placeholder = this.getPlaceholderName(srcVal);
-    return this.resDefinitionInstance.getResByName(placeholder);
+    return this.resDefinitionInstance.getResDefinitionByName(placeholder);
   }
 
   /**
@@ -286,13 +286,13 @@ export default class PageConfigCompiler extends XMLNodeElement {
     const valueDefinition = this.getResDefinitionByName(colorVal);
     const textElementData = new LayoutTextElement()
       .set("text", text)
-      .set("name", text)
+      .set("desc", text)
       .setBatchOf("layout", layout);
     if (valueDefinition) {
       const { desc, src } = valueDefinition;
-      textElementData.set("name", desc);
+      textElementData.set("desc", desc);
       textElementData.set("src", src);
-      if (valueDefinition.type === RESOURCE_CATEGORY.XML) {
+      if (valueDefinition.protocol === FILE_PROTOCOL.XML) {
         textElementData.set("data", valueDefinition.data);
       }
     }
@@ -322,12 +322,9 @@ export default class PageConfigCompiler extends XMLNodeElement {
       });
   }
 
-  getResList(): TypeResDefinition[] {
-    return this.resDefinitionInstance.getResList();
-  }
-
   getResPathList(): string[] {
-    return this.getResList()
+    return this.resDefinitionInstance
+      .getResDefinitionList()
       .map(item => item.src)
       .filter(Boolean);
   }
@@ -339,7 +336,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
       .set("description", this.getDescription())
       .set("screenWidth", this.getScreenWidth())
       .set("previewList", this.getPreviewList())
-      .set("resourceList", this.resDefinitionInstance.getResList())
+      .set("resourceList", this.resDefinitionInstance.getResDefinitionList())
       .set("layoutElementList", this.getLayoutElementList())
       .create();
   }

@@ -2,12 +2,12 @@ import React from "react";
 import styled from "styled-components";
 import { Input } from "antd";
 import { RightCircleOutlined } from "@ant-design/icons";
-import { TypeResXmlDefinition } from "src/types/resource";
+import { TypeResXmlValDefinition } from "src/types/resource";
 import Wrapper from "./Wrapper";
 
 const StringInput: React.FC<{
   value: string;
-  valueDefinition: TypeResXmlDefinition;
+  valueDefinition: TypeResXmlValDefinition;
   onChange: (e: string) => void;
 }> = props => {
   const { value, valueDefinition, onChange } = props;

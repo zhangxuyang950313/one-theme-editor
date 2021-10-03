@@ -19,7 +19,7 @@ export default function registerSocket(server: http.Server): void {
     // 打包工程
     packProject(socket);
     // 监听文件
-    watchFiles(socket);
+    watchFiles(socket, io);
     // 取消监听并关闭
     unwatchFileAndCloseWatcher(socket);
   });

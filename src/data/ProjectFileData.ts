@@ -1,4 +1,4 @@
-import { PROJECT_FILE_TYPE } from "src/enum/index";
+import { FILE_PROTOCOL } from "src/enum/index";
 import {
   TypeImageFileData,
   TypeUnknownFileData,
@@ -9,25 +9,33 @@ import ImageData from "./ImageData";
 
 export class ProjectFileImageData extends AbstractDataModel<TypeImageFileData> {
   protected data: TypeImageFileData = {
-    type: PROJECT_FILE_TYPE.IMAGE,
+    type: FILE_PROTOCOL.IMAGE,
     src: "",
     url: "",
-    imageData: ImageData.default
+    data: ImageData.default
   };
+  static get default(): TypeImageFileData {
+    return new ProjectFileImageData().create();
+  }
 }
 
 export class ProjectFileXmlData extends AbstractDataModel<TypeXmlFileData> {
   protected data: TypeXmlFileData = {
-    type: PROJECT_FILE_TYPE.XML,
+    type: FILE_PROTOCOL.XML,
     src: "",
-    element: {}
+    data: {}
   };
+  static get default(): TypeXmlFileData {
+    return new ProjectFileXmlData().create();
+  }
 }
 
 export class ProjectFileUnknown extends AbstractDataModel<TypeUnknownFileData> {
   protected data: TypeUnknownFileData = {
-    type: PROJECT_FILE_TYPE.UNKNOWN,
+    type: FILE_PROTOCOL.UNKNOWN,
     src: ""
   };
-  static default = new ProjectFileUnknown().create();
+  static get default(): TypeUnknownFileData {
+    return new ProjectFileUnknown().create();
+  }
 }

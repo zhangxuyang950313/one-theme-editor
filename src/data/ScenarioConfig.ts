@@ -16,7 +16,9 @@ export class FileTemplate extends AbstractDataModel<TypeFileTemplateConfig> {
     items: [],
     template: ""
   };
-  static default = new FileTemplate().create();
+  static get default(): TypeFileTemplateConfig {
+    return new FileTemplate().create();
+  }
 }
 
 // 打包配置数据
@@ -28,7 +30,9 @@ export class PackageConfig extends AbstractDataModel<TypePackConfig> {
     items: [],
     excludes: []
   };
-  static default = new PackageConfig().create();
+  static get default(): TypePackConfig {
+    return new PackageConfig().create();
+  }
 }
 
 // 应用配置数据
@@ -36,7 +40,9 @@ export class ApplyConfig extends AbstractDataModel<TypeApplyConfig> {
   protected data: TypeApplyConfig = {
     steps: []
   };
-  static default = new ApplyConfig().create();
+  static get default(): TypeApplyConfig {
+    return new ApplyConfig().create();
+  }
 }
 
 // 场景选项列表配置
@@ -46,7 +52,9 @@ export default class ScenarioConfigData extends AbstractDataModel<TypeScenarioCo
     packageConfig: PackageConfig.default,
     applyConfig: ApplyConfig.default
   };
-  static default = new ScenarioConfigData().create();
+  static get default(): TypeScenarioConfig {
+    return new ScenarioConfigData().create();
+  }
 }
 
 // 场景配置
@@ -57,5 +65,7 @@ export class ScenarioOption extends AbstractDataModel<TypeScenarioOption> {
     src: "",
     ...ScenarioConfigData.default
   };
-  static default = new ScenarioOption().create();
+  static get default(): TypeScenarioOption {
+    return new ScenarioOption().create();
+  }
 }

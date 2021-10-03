@@ -106,8 +106,8 @@ export function useResTypeList(): TypeResTypeData[] {
  * 获取素材定义数据列表
  */
 export function useResDefinitionList(): TypeResDefinition[] {
-  const resourcePageSelected = useCurrentResPageConfig();
-  return resourcePageSelected?.resourceList || [];
+  const curResPageConfig = useCurrentResPageConfig();
+  return curResPageConfig?.resourceList || [];
 }
 
 /**

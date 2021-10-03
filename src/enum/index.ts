@@ -49,8 +49,8 @@ export enum ELEMENT_TYPE {
   TEXT = "text"
 }
 
-// 资源分类
-export enum RESOURCE_CATEGORY {
+// 文件协议
+export enum FILE_PROTOCOL {
   UNKNOWN = "unknown",
   IMAGE = "image",
   XML = "xml"
@@ -58,6 +58,7 @@ export enum RESOURCE_CATEGORY {
 
 // 资源类型
 export enum RESOURCE_TYPES {
+  UNKNOWN = "unknown",
   IMAGE = "image",
   COLOR = "color",
   BOOLEAN = "boolean",
@@ -90,13 +91,6 @@ export enum PLACEHOLDER {
   RESOURCE = "resource",
   MODULE = "module",
   NAMESPACE = "namespace"
-}
-
-// 工程文件类型
-export enum PROJECT_FILE_TYPE {
-  UNKNOWN = "unknown",
-  XML = "xml",
-  IMAGE = "image"
 }
 
 // 文件变动类型

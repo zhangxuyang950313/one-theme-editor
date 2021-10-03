@@ -3,7 +3,7 @@ import { Tabs } from "antd";
 import { RESOURCE_TYPES } from "src/enum";
 import { useResTypeList } from "@/hooks/resource/index";
 import useValueDefinitionList from "@/hooks/resource/useValueDefinitionList";
-import XmlController from "../XmlController";
+import XmlController from "../XmlHandler";
 
 const ResXmlValList: React.FC = () => {
   const resTypeList = useResTypeList();

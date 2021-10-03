@@ -6,10 +6,10 @@ import {
   ResValueData,
   ResDefinition
 } from "src/data/ResourceConfig";
-import { filenameIsImage, filenameIsXml, getImageData } from "src/utils/index";
+import { getImageData } from "src/utils/index";
 import { TypeResDefinition } from "src/types/resource";
+import { FILE_PROTOCOL } from "src/enum";
 import XMLNodeElement from "server/compiler/XMLNodeElement";
-import { RESOURCE_CATEGORY } from "src/enum";
 import XmlTemplate from "./XmlTemplate";
 import XmlFileCompiler from "./XmlFileCompiler";
 
@@ -26,11 +26,16 @@ export default class ResourceDefinitionCompiler {
   }
 
   // 获取 url 解析数据
-  getUrlData(url: string): { src: string; searchParams: URLSearchParams } {
-    const data = new URL(url);
+  getUrlData(url: string): {
+    protocol: FILE_PROTOCOL | string;
+    src: string;
+    searchParams: URLSearchParams;
+  } {
+    const urlData = new URL(url);
     return {
-      src: path.join(data.hostname, data.pathname),
-      searchParams: data.searchParams
+      protocol: urlData.protocol.replace(/:$/, ""),
+      src: path.join(urlData.hostname, urlData.pathname),
+      searchParams: urlData.searchParams
     };
   }
 
@@ -67,24 +72,25 @@ export default class ResourceDefinitionCompiler {
   private getResDefinition(node: XMLNodeElement): TypeResDefinition {
     const value = node.getAttributeOf("value");
     const description = node.getAttributeOf("description");
-    const { src, searchParams } = this.getUrlData(value);
+    const { protocol, src, searchParams } = this.getUrlData(value);
+    console.log({ protocol });
     const resDefinition = new ResDefinition()
-      .set("tag", node.getTagname())
+      .set("type", node.getAttributeOf("type"))
       .set("name", node.getAttributeOf("name"))
       .set("desc", description);
     // 图片素材
-    if (filenameIsImage(src)) {
+    if (protocol === FILE_PROTOCOL.IMAGE) {
       const resImageData = new ResImageData();
       const file = this.resolvePath(src);
       if (fse.existsSync(file)) {
         resImageData.setBatch(getImageData(file));
       }
-      resDefinition.set("type", RESOURCE_CATEGORY.IMAGE);
+      resDefinition.set("protocol", protocol);
       resDefinition.set("data", resImageData.create());
       resDefinition.set("src", src);
     }
     // xml 素材
-    if (filenameIsXml(src)) {
+    if (protocol === FILE_PROTOCOL.XML) {
       // url 中的 name 参数
       // TODO： 先固定使用 name，后续看需求是否需要自定义其他属性去 xml 中查找
       const valueName = searchParams.get("name") || "";
@@ -95,14 +101,14 @@ export default class ResourceDefinitionCompiler {
         .set("valueName", valueName)
         .set("defaultValue", defaultValue)
         .create();
-      resDefinition.set("type", RESOURCE_CATEGORY.XML);
+      resDefinition.set("protocol", protocol);
       resDefinition.set("data", resValueData);
       resDefinition.set("src", src);
     }
     return resDefinition.create();
   }
 
-  getResMap(): Map<string, TypeResDefinition> {
+  getResDefinitionMap(): Map<string, TypeResDefinition> {
     if (this.resourceMap.size === 0) {
       this.node.getChildrenNodes().forEach(item => {
         const name = item.getAttributeOf("name");
@@ -116,13 +122,13 @@ export default class ResourceDefinitionCompiler {
     return this.resourceMap;
   }
 
-  getResList(): TypeResDefinition[] {
+  getResDefinitionList(): TypeResDefinition[] {
     const result: TypeResDefinition[] = [];
-    this.getResMap().forEach(item => result.push(item));
+    this.getResDefinitionMap().forEach(item => result.push(item));
     return result;
   }
 
-  getResByName(name: string): TypeResDefinition | null {
-    return this.getResMap().get(name) || null;
+  getResDefinitionByName(name: string): TypeResDefinition | null {
+    return this.getResDefinitionMap().get(name) || null;
   }
 }
