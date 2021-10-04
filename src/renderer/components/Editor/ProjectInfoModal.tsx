@@ -19,10 +19,7 @@ const ProjectInfoModal: React.FC<ModalProps> = props => {
       onOk={async e => {
         const data = form.getFieldsValue();
         // TODO 写入 projectInfoConfig.content
-        const replaced = TempStringUtil.replace(
-          projectInfoConfig.template,
-          data
-        );
+        const replaced = TempStringUtil.eval(projectInfoConfig.template, data);
         console.log({
           projectInfoConfig,
           projectInfo: data,

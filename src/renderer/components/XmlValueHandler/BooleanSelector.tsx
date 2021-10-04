@@ -2,12 +2,12 @@ import React from "react";
 import styled from "styled-components";
 
 import { Radio } from "antd";
-import { TypeResXmlValDefinition } from "src/types/resource";
+import { TypeXmlValDefinition } from "src/types/resource";
 import Wrapper from "./Wrapper";
 
 const BooleanSelector: React.FC<{
   value: string;
-  valueDefinition: TypeResXmlValDefinition;
+  valueDefinition: TypeXmlValDefinition;
   onChange: (s: string) => void;
 }> = props => {
   const { value, valueDefinition, onChange } = props;

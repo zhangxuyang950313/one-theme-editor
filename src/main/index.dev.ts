@@ -13,7 +13,6 @@ async function setupDevTools() {
   // 安装 react 开发者工具
   return installExtension([REDUX_DEVTOOLS, REACT_DEVELOPER_TOOLS]);
 }
-app.allowRendererProcessReuse = true;
 
 app.on("ready", () => {
   console.log(`主进程进程号 ${process.pid}`);

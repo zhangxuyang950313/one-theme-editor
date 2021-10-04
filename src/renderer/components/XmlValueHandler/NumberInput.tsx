@@ -1,13 +1,13 @@
 import React from "react";
 import styled from "styled-components";
-import { Input } from "antd";
+import { InputNumber } from "antd";
 import { RightCircleOutlined } from "@ant-design/icons";
-import { TypeResXmlValDefinition } from "src/types/resource";
+import { TypeXmlValDefinition } from "src/types/resource";
 import Wrapper from "./Wrapper";
 
-const StringInput: React.FC<{
+const NumberInput: React.FC<{
   value: string;
-  valueDefinition: TypeResXmlValDefinition;
+  valueDefinition: TypeXmlValDefinition;
   onChange: (e: string) => void;
 }> = props => {
   const { value, valueDefinition, onChange } = props;
@@ -15,19 +15,21 @@ const StringInput: React.FC<{
 
   if (!data) return null;
   const { defaultValue } = data;
+
   return (
     <Wrapper name={name} description={description}>
       <StyleNumberInput>
-        <Input className="input" disabled value={defaultValue} />
+        <InputNumber disabled keyboard className="input" value={defaultValue} />
         <RightCircleOutlined
           className="middle-button"
           onClick={() => onChange(defaultValue)}
         />
-        <Input
+        <InputNumber
+          keyboard
           className="input"
           placeholder="缺省"
           value={value}
-          onChange={e => onChange(e.target.value)}
+          onChange={onChange}
         />
       </StyleNumberInput>
     </Wrapper>
@@ -52,4 +54,4 @@ const StyleNumberInput = styled.div`
   }
 `;
 
-export default StringInput;
+export default NumberInput;

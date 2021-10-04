@@ -29,7 +29,6 @@ export enum ELEMENT_TAG {
   Page = "Page",
   Group = "Group",
   Resource = "Resource",
-  Previews = "Previews",
   Preview = "Preview",
   UiVersion = "UiVersion",
   Layout = "Layout",
@@ -49,10 +48,11 @@ export enum ELEMENT_TYPE {
   TEXT = "text"
 }
 
-// 文件协议
-export enum FILE_PROTOCOL {
+// 资源协议
+export enum RESOURCE_PROTOCOL {
   UNKNOWN = "unknown",
   IMAGE = "image",
+  FILE = "file",
   XML = "xml"
 }
 

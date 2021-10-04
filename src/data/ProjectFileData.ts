@@ -1,4 +1,4 @@
-import { FILE_PROTOCOL } from "src/enum/index";
+import { RESOURCE_PROTOCOL } from "src/enum/index";
 import {
   TypeImageFileData,
   TypeUnknownFileData,
@@ -9,7 +9,7 @@ import ImageData from "./ImageData";
 
 export class ProjectFileImageData extends AbstractDataModel<TypeImageFileData> {
   protected data: TypeImageFileData = {
-    type: FILE_PROTOCOL.IMAGE,
+    type: RESOURCE_PROTOCOL.IMAGE,
     src: "",
     url: "",
     data: ImageData.default
@@ -21,7 +21,7 @@ export class ProjectFileImageData extends AbstractDataModel<TypeImageFileData> {
 
 export class ProjectFileXmlData extends AbstractDataModel<TypeXmlFileData> {
   protected data: TypeXmlFileData = {
-    type: FILE_PROTOCOL.XML,
+    type: RESOURCE_PROTOCOL.XML,
     src: "",
     data: {}
   };
@@ -32,7 +32,7 @@ export class ProjectFileXmlData extends AbstractDataModel<TypeXmlFileData> {
 
 export class ProjectFileUnknown extends AbstractDataModel<TypeUnknownFileData> {
   protected data: TypeUnknownFileData = {
-    type: FILE_PROTOCOL.UNKNOWN,
+    type: RESOURCE_PROTOCOL.UNKNOWN,
     src: ""
   };
   static get default(): TypeUnknownFileData {

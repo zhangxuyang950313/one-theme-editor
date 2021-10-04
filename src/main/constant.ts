@@ -1,8 +1,8 @@
 import path from "path";
-import { app } from "electron";
+import electron from "electron";
 
 function resolvePath(src: string) {
-  return path.join(app.getAppPath(), isDev ? ".." : "", src);
+  return path.join(electron.app.getAppPath(), isDev ? ".." : "", src);
 }
 
 export const isDev = process.env.NODE_ENV !== "production";

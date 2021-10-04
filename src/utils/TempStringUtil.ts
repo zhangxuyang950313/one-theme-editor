@@ -24,4 +24,14 @@ export default class TempStringUtil {
       content
     );
   }
+
+  // 借力 eval 计算模板字符串
+  static eval(content: string, data: Record<string, string>): string {
+    const varDefine = Object.keys(data).reduce(
+      (prev, key) => (prev += `const ${key} = "${data[key]}";\n`),
+      ""
+    );
+    // eslint-disable-next-line no-eval
+    return eval(`${varDefine} \`${content}\`;`);
+  }
 }

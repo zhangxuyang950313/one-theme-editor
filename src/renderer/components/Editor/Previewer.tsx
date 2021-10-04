@@ -10,7 +10,7 @@ import {
 import {
   ALIGN_VALUES,
   ALIGN_V_VALUES,
-  FILE_PROTOCOL,
+  RESOURCE_PROTOCOL,
   RESOURCE_TYPES
 } from "src/enum";
 import { useFileDataMap } from "@/hooks/project";
@@ -82,7 +82,7 @@ const Previewer: React.FC = () => {
               case RESOURCE_TYPES.IMAGE: {
                 const layoutComputed = computeLayout(element.layout);
                 const fileData = fileDataMap.get(element.src);
-                if (fileData?.type === FILE_PROTOCOL.IMAGE) {
+                if (fileData?.type === RESOURCE_PROTOCOL.IMAGE) {
                   return (
                     <img
                       key={key}

@@ -16,6 +16,7 @@ import LightTheme from "./theme/light";
 const Index: React.FC = () => {
   useEffect(() => {
     localStorage.setItem("debug", "socket.io-client:socket");
+    console.log(`渲染进程启动 ${process.pid}`);
     // localStorage.debug = "*.io-client:socket";
     // localStorage.debug = "*";
   }, []);

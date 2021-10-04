@@ -9,7 +9,7 @@ import { apiCopyFile, apiDeleteFile } from "@/request/file";
 import { useProjectRoot } from "@/hooks/project/index";
 
 // 图片操作区
-const ImageHandler: React.FC<{
+const ImageButtons: React.FC<{
   src: string;
 }> = props => {
   const { src } = props;
@@ -78,4 +78,4 @@ const StyleImageHandler = styled.div`
   }
 `;
 
-export default ImageHandler;
+export default ImageButtons;

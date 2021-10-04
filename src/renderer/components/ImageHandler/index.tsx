@@ -12,11 +12,11 @@ import {
   useAbsolutePathInSource,
   useResourceImageUrl
 } from "@/hooks/resource/index";
-import { TypeResImageDefinition } from "src/types/resource";
+import { TypeImageResDefinition } from "src/types/resource";
 
 import SourceStatus from "./SourceStatus";
 import ImageDisplay from "./ImageDisplay";
-import ImageHandler from "./ImageButtons";
+import ImageButtons from "./ImageButtons";
 import { previewFile } from "./utils";
 
 /**
@@ -52,9 +52,9 @@ import { previewFile } from "./utils";
 //   }
 // `;
 
-const ImageController: React.FC<{
-  className: string;
-  imageDefinition: TypeResImageDefinition;
+const ImageHandler: React.FC<{
+  className?: string;
+  imageDefinition: TypeImageResDefinition;
 }> = props => {
   const { imageDefinition, className } = props;
   const { data, desc, src } = imageDefinition;
@@ -66,7 +66,7 @@ const ImageController: React.FC<{
   if (!data) return null;
   const { width, height, size } = data;
   return (
-    <StyleImageController className={className}>
+    <StyleImageHandler className={className}>
       {/* 图片名称 */}
       <div className="name">
         {desc}
@@ -103,13 +103,19 @@ const ImageController: React.FC<{
           src={projectImageUrl}
           onClick={() => remote.shell.showItemInFolder(absPathInProject)}
         />
-        <ImageHandler src={src} />
+        <ImageButtons src={src} />
       </div>
-    </StyleImageController>
+    </StyleImageHandler>
   );
 };
 
-const StyleImageController = styled.div`
+const StyleImageHandler = styled.div`
+  flex-shrink: 0;
+  box-sizing: content-box;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid;
+  border-bottom-color: ${({ theme }) => theme["@border-color-base"]};
   .name {
     width: 100%;
     margin-bottom: 6px;
@@ -142,4 +148,4 @@ const StyleImageController = styled.div`
     }
   }
 `;
-export default ImageController;
+export default ImageHandler;

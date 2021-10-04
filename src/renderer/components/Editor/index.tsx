@@ -3,8 +3,8 @@ import styled from "styled-components";
 import { StyleBorderRight } from "@/style";
 import PageSelector from "@/components/Editor/PageSelector";
 import Previewer from "@/components/Editor/Previewer";
-import ResImageList from "@/components/Editor/ResImageList";
-import ResXmlValList from "@/components/Editor/ResXmlValList";
+// import ResImageList from "@/components/Editor/ResImageList";
+import ResHandlerList from "@/components/Editor/ResHandlerList";
 
 // 主编辑区域
 const EditorContainer: React.FC = () => {
@@ -19,11 +19,11 @@ const EditorContainer: React.FC = () => {
         <Previewer />
       </StylePreviewer>
       {/* 素材编辑区 */}
-      <StyleResImageList>
+      {/* <StyleResImageList>
         <ResImageList />
-      </StyleResImageList>
+      </StyleResImageList> */}
       <StyleResXmlValList>
-        <ResXmlValList />
+        <ResHandlerList />
       </StyleResXmlValList>
     </StyleEditorContainer>
   );
@@ -53,15 +53,16 @@ const StylePreviewer = styled(StyleBorderRight)`
   overflow: auto;
 `;
 
-const StyleResImageList = styled(StyleBorderRight)`
-  flex-basis: 320px;
-  flex-shrink: 0;
-  padding: 20px;
-  overflow: auto;
-`;
+// const StyleResImageList = styled(StyleBorderRight)`
+//   flex-basis: 320px;
+//   flex-shrink: 0;
+//   padding: 20px;
+//   overflow: auto;
+// `;
 
 const StyleResXmlValList = styled.div`
-  min-width: 400px;
+  /* min-width: 400px; */
+  flex: 1;
   flex-shrink: 0;
   padding: 0 20px;
   overflow: auto;

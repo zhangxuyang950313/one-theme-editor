@@ -1,6 +1,7 @@
 import archiver from "archiver";
+import { Element } from "xml-js";
 import {
-  FILE_PROTOCOL,
+  RESOURCE_PROTOCOL,
   RESOURCE_TYPES,
   FILE_TEMPLATE_TYPE,
   ELEMENT_TAG,
@@ -24,7 +25,7 @@ export type TypeResourceOption = {
 
 // 资源配置数据
 export type TypeResourceConfig = TypeResourceOption & {
-  typeList: TypeResTypeData[];
+  resTypeList: TypeResTypeConfig[];
   moduleList: TypeResModule[];
 };
 
@@ -69,10 +70,10 @@ export type TypeScenarioConfig = {
 };
 
 // 素材类型定义数据
-export type TypeResTypeData = {
+export type TypeResTypeConfig = {
   type: RESOURCE_TYPES;
+  protocol: RESOURCE_PROTOCOL;
   name: string;
-  tag: string;
 };
 // 预览模块
 export type TypeResModule = {
@@ -123,37 +124,32 @@ export type TypeLayoutImage = {
   readonly tag: ELEMENT_TAG.Image;
   src: string;
   desc: string;
-  data: TypeResImageData;
+  data: TypeImageData;
   layout: TypeLayoutData;
 };
 
+export type TypeXmlValueData = {
+  defaultValue: string;
+  valueName: string;
+};
 // 颜色元素数据
 export type TypeLayoutText = {
-  readonly type: RESOURCE_TYPES.COLOR;
+  readonly type: RESOURCE_TYPES;
   readonly tag: ELEMENT_TAG.Text;
   text: string;
   desc: string;
   src: string;
-  data: TypeResValueData;
-  layout: {
-    x: string;
-    y: string;
-    align: ALIGN_VALUES;
-    alignV: ALIGN_V_VALUES;
-  };
+  data: TypeXmlValueData;
+  layout: TypeLayoutData;
 };
 
-export type TypeResValueData = {
-  defaultValue: string;
-  valueName: string;
-};
-
-export type TypeResImageData = TypeImageData;
+// 预览元素数据
+export type TypeLayoutElement = TypeLayoutImage | TypeLayoutText;
 
 // 素材定义数据
 // 未知类型
-export type TypeResUnknownDefinition = {
-  protocol: FILE_PROTOCOL.UNKNOWN;
+export type TypeUnknownResDefinition = {
+  protocol: RESOURCE_PROTOCOL.UNKNOWN;
   type: RESOURCE_TYPES.UNKNOWN;
   name: string;
   desc: string;
@@ -161,30 +157,31 @@ export type TypeResUnknownDefinition = {
   data: null;
 };
 // 图片类型
-export type TypeResImageDefinition = {
-  protocol: FILE_PROTOCOL.IMAGE;
-  type: RESOURCE_TYPES;
+export type TypeImageResDefinition = {
+  protocol: RESOURCE_PROTOCOL.IMAGE;
+  type: RESOURCE_TYPES.IMAGE;
   name: string;
   desc: string;
   src: string;
-  data: TypeResImageData;
+  data: TypeImageData;
 };
-// xml文件类型
-export type TypeResXmlValDefinition = {
-  protocol: FILE_PROTOCOL.XML;
-  type: RESOURCE_TYPES;
+// xml类型
+export type TypeXmlValDefinition = {
+  protocol: RESOURCE_PROTOCOL.XML;
+  type:
+    | RESOURCE_TYPES.COLOR
+    | RESOURCE_TYPES.BOOLEAN
+    | RESOURCE_TYPES.NUMBER
+    | RESOURCE_TYPES.STRING;
   name: string;
   desc: string;
   src: string;
-  data: TypeResValueData;
+  data: TypeXmlValueData;
 };
 export type TypeResDefinition =
-  | TypeResUnknownDefinition
-  | TypeResImageDefinition
-  | TypeResXmlValDefinition;
-
-// 预览元素数据
-export type TypeLayoutElement = TypeLayoutImage | TypeLayoutText;
+  | TypeUnknownResDefinition
+  | TypeImageResDefinition
+  | TypeXmlValDefinition;
 
 // 预览单个页面配置
 export type TypeResPageOption = {

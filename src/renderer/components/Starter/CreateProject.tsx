@@ -1,7 +1,7 @@
 import path from "path";
 import fse from "fs-extra";
 import { v4 as UUID } from "uuid";
-import { remote } from "electron";
+import { dialog } from "electron";
 
 import { isDev } from "@/core/constant";
 import { apiCreateProject } from "@/request";
@@ -17,6 +17,7 @@ import { FileAddOutlined } from "@ant-design/icons";
 import Steps from "@/components/Steps";
 import { useEditorSelector, useStarterSelector } from "@/store";
 import { FILE_TEMPLATE_TYPE } from "src/enum";
+import electronStore from "src/common/electronStore";
 import { ProjectInput } from "../Forms";
 import ResourceConfigManager from "./ResourceConfigManager";
 
@@ -30,7 +31,7 @@ const initialValues = {
   uiVersion: "10"
 };
 
-const defaultPath = remote.app.getPath("desktop");
+const defaultPath = electronStore.get("pathConfig").ELECTRON_DESKTOP;
 
 // 创建主题按钮
 const CreateProject: React.FC<{
@@ -63,7 +64,7 @@ const CreateProject: React.FC<{
   );
 
   // 当前按钮组件
-  const thisRef = useRef<HTMLElement | null>(null);
+  const thisRef = useRef<HTMLElement | false>(false);
 
   // projectInfo
   const projectInfoRef = useRef<TypeProjectInfo>({});
@@ -98,7 +99,7 @@ const CreateProject: React.FC<{
   };
 
   const selectDir = () => {
-    remote.dialog
+    dialog
       .showOpenDialog({
         // https://www.electronjs.org/docs/api/dialog#dialogshowopendialogsyncbrowserwindow-options
         title: "选择工程文件",
@@ -374,7 +375,7 @@ const CreateProject: React.FC<{
   ];
 
   return (
-    <div ref={r => (thisRef.current = r)}>
+    <div ref={r => (thisRef.current = r || false)}>
       <Button type="primary" onClick={handleStartCreate}>
         新建主题
       </Button>
@@ -389,7 +390,7 @@ const CreateProject: React.FC<{
         footer={modalFooter}
         forceRender
         maskClosable={false}
-        getContainer={thisRef.current}
+        getContainer={thisRef.current || false}
       >
         <StyleSteps steps={steps.map(o => o.name)} current={curStep} />
         {step.Context}

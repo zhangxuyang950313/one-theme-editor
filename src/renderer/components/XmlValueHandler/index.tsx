@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { TypeResXmlValDefinition } from "src/types/resource";
+import { TypeXmlValDefinition } from "src/types/resource";
 import { apiWriteXmlTemplate } from "@/request";
 import { useProjectUUID, useProjectXmlValueBySrc } from "@/hooks/project/index";
 import { RESOURCE_TYPES } from "src/enum/index";
@@ -10,30 +10,29 @@ import BooleanSelector from "./BooleanSelector";
 import NumberInput from "./NumberInput";
 import StringInput from "./StringInput";
 
-const XmlController: React.FC<{
-  resourceType: RESOURCE_TYPES;
-  valueDefinition: TypeResXmlValDefinition;
+const XmlValueHandler: React.FC<{
+  xmlValueDefinition: TypeXmlValDefinition;
 }> = props => {
-  const { resourceType, valueDefinition } = props;
-  const { name, src, data } = valueDefinition;
+  const { type, name, src, data } = props.xmlValueDefinition;
   const uuid = useProjectUUID();
   const value = useProjectXmlValueBySrc(name, src);
 
   if (!data) return null;
 
-  const Controllers = () => {
+  // 分类编辑控件
+  const CategoryHandler = () => {
     // 写入 xml
     const writeXml = (value: string) => {
       const name = data.valueName;
       apiWriteXmlTemplate(uuid, { name, value, src });
     };
-    switch (resourceType) {
+    switch (type) {
       // 颜色选择器
       case RESOURCE_TYPES.COLOR: {
         return (
           <ColorPicker
             value={value}
-            valueDefinition={valueDefinition}
+            valueDefinition={props.xmlValueDefinition}
             onChange={writeXml}
           />
         );
@@ -43,7 +42,7 @@ const XmlController: React.FC<{
         return (
           <BooleanSelector
             value={value}
-            valueDefinition={valueDefinition}
+            valueDefinition={props.xmlValueDefinition}
             onChange={writeXml}
           />
         );
@@ -53,7 +52,7 @@ const XmlController: React.FC<{
         return (
           <NumberInput
             value={value}
-            valueDefinition={valueDefinition}
+            valueDefinition={props.xmlValueDefinition}
             onChange={writeXml}
           />
         );
@@ -64,7 +63,7 @@ const XmlController: React.FC<{
         return (
           <StringInput
             value={value}
-            valueDefinition={valueDefinition}
+            valueDefinition={props.xmlValueDefinition}
             onChange={writeXml}
           />
         );
@@ -73,7 +72,7 @@ const XmlController: React.FC<{
   };
   return (
     <StyleXmlController>
-      <Controllers />
+      <CategoryHandler />
     </StyleXmlController>
   );
 };
@@ -87,4 +86,4 @@ const StyleXmlController = styled.div`
   border-bottom-color: ${({ theme }) => theme["@border-color-base"]};
 `;
 
-export default XmlController;
+export default XmlValueHandler;

@@ -69,9 +69,10 @@ export function useInitEditorConfig(): [LOAD_STATUS, () => Promise<void>] {
   const dispatch = useGlobalDispatch();
   const fetch = async () => {
     setStatus(LOAD_STATUS.LOADING);
-    const pathConfig = {
+    const pathConfig: TypePathConfig = {
       ...electronStore.get("pathConfig"),
       ELECTRON_LOCAL: remote.app.getLocale(),
+      ELECTRON_TEMP: remote.app.getPath("temp"),
       ELECTRON_HOME: remote.app.getPath("home"),
       ELECTRON_DESKTOP: remote.app.getPath("desktop"),
       ELECTRON_CACHE: remote.app.getPath("cache"),

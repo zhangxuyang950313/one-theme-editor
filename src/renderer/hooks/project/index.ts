@@ -5,7 +5,7 @@ import { useResConfigRootWithNS } from "@/hooks/resource/index";
 import { ActionInitEditor } from "@/store/editor/action";
 import { useEditorDispatch, useEditorSelector } from "@/store/index";
 import { TypeProjectDataDoc, TypeFileData } from "src/types/project";
-import { FILE_TEMPLATE_TYPE, LOAD_STATUS, FILE_PROTOCOL } from "src/enum";
+import { FILE_TEMPLATE_TYPE, LOAD_STATUS, RESOURCE_PROTOCOL } from "src/enum";
 import {
   TypeFileTemplateConfig,
   TypeResourceConfig,
@@ -129,7 +129,7 @@ export function useFileDataMap(): Map<string, TypeFileData> {
 export function useProjectImageUrlBySrc(src: string): string {
   const imageFileDataMap = useEditorSelector(state => {
     const entries = Object.entries(state.fileDataMap).flatMap(([key, val]) => {
-      return val.type === FILE_PROTOCOL.IMAGE
+      return val.type === RESOURCE_PROTOCOL.IMAGE
         ? [[key, val] as [string, typeof val]]
         : [];
     });
@@ -145,7 +145,7 @@ export function useProjectImageUrlBySrc(src: string): string {
 export function useProjectXmlValueBySrc(name: string, src: string): string {
   const xmlFileDataMap = useEditorSelector(state => {
     const entries = Object.entries(state.fileDataMap).flatMap(([key, val]) => {
-      return val.type === FILE_PROTOCOL.XML
+      return val.type === RESOURCE_PROTOCOL.XML
         ? [[key, val] as [string, typeof val]]
         : [];
     });

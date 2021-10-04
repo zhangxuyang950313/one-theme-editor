@@ -3,6 +3,7 @@ import { TypeDatabase } from "../types/index";
 
 export type TypeElectronPath = Readonly<{
   ELECTRON_CACHE: string;
+  ELECTRON_TEMP: string;
   ELECTRON_APP_DATA: string;
   ELECTRON_DESKTOP: string;
   ELECTRON_DOCUMENTS: string;

@@ -10,7 +10,6 @@ import {
 } from "src/types/resource";
 import {
   ElementLayoutConfig,
-  ResImageData,
   LayoutImageElement,
   ResPageConfig,
   LayoutTextElement
@@ -21,10 +20,11 @@ import {
   ELEMENT_TAG,
   ALIGN_VALUES,
   ALIGN_V_VALUES,
-  FILE_PROTOCOL
+  RESOURCE_PROTOCOL
 } from "src/enum/index";
 import pathUtil from "server/utils/pathUtil";
 import XMLNodeElement from "server/compiler/XMLNodeElement";
+import ImageData from "src/data/ImageData";
 import XmlFileCompiler from "./XmlFileCompiler";
 import ResourceDefinitionCompiler from "./ResourceDefinition";
 
@@ -51,7 +51,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
       data.namespace
     );
     this.resDefinitionInstance = new ResourceDefinitionCompiler(
-      this.getRootFirstChildNodeOf(ELEMENT_TAG.Resource),
+      this.getRootChildrenNodesByTagname(ELEMENT_TAG.Resource),
       this.resourceRootAbsolute
     );
   }
@@ -61,7 +61,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
    * @param tagname
    * @returns
    */
-  private getRootFirstChildNodeOf(tagname: string): XMLNodeElement {
+  private getRootFirstChildNodeByTagname(tagname: string): XMLNodeElement {
     return this.getFirstChildNode().getFirstChildNodeByTagname(tagname);
   }
 
@@ -70,7 +70,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
    * @param tagname
    * @returns
    */
-  public getRootChildrenNodesOf(tagname: string): XMLNodeElement[] {
+  public getRootChildrenNodesByTagname(tagname: string): XMLNodeElement[] {
     return this.getFirstChildNode().getChildrenNodesByTagname(tagname);
   }
 
@@ -150,16 +150,14 @@ export default class PageConfigCompiler extends XMLNodeElement {
   /**
    * ```xml
    * <!-- 静态预览图 -->
-   * <Previews>
-   *     <Preview src="../preview/preview.jpg"/>
-   * </Previews>
+   * <Preview src="../preview/preview.jpg"/>
    * ```
    * @returns
    */
   getPreviewList(): string[] {
-    return this.getRootFirstChildNodeOf(ELEMENT_TAG.Previews)
-      .getChildrenNodesByTagname(ELEMENT_TAG.Preview)
-      .map(item => this.relativePagePath(item.getAttributeOf("src")));
+    return this.getRootChildrenNodesByTagname(ELEMENT_TAG.Preview).map(item =>
+      this.relativePagePath(item.getAttributeOf("src"))
+    );
   }
   /**
    * 从值的 query 字符串中获得对应的映射值
@@ -238,7 +236,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
         console.log(`layout url ${srcVal} 解析失败`);
       }
     }
-    const resImageData = new ResImageData();
+    const resImageData = new ImageData();
     const layoutImageElement = new LayoutImageElement();
     const resourcePath = this.resolvePath(src);
     if (fse.existsSync(resourcePath)) {
@@ -292,7 +290,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
       const { desc, src } = valueDefinition;
       textElementData.set("desc", desc);
       textElementData.set("src", src);
-      if (valueDefinition.protocol === FILE_PROTOCOL.XML) {
+      if (valueDefinition.protocol === RESOURCE_PROTOCOL.XML) {
         textElementData.set("data", valueDefinition.data);
       }
     }

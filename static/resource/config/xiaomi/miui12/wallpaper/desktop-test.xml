@@ -3,20 +3,17 @@
 <Page version="1.0.0" description="桌面壁纸和首屏图标" screenWidth="1080">
 
     <!-- 配置 -->
-    <Resource>
-        <Image 
-            name="wallpaper"
-            description="默认壁纸"
-            value="file://wallpaper/default_wallpaper.jpg"
-            />
-    </Resource>
+    <Resource 
+        type="image"
+        name="wallpaper"
+        description="默认壁纸"
+        value="file://wallpaper/default_wallpaper.jpg"
+    />
 
 
     <!-- 静态预览图 -->
-    <Previews>
-        <Preview src="../preview/preview.jpg"/>
-        <Preview src="../preview/preview1.jpg"/>
-    </Previews>
+    <Preview src="../preview/preview.jpg"/>
+    <Preview src="../preview/preview1.jpg"/>
 
 
     <!-- 预览结构配置 -->

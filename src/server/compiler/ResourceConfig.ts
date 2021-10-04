@@ -7,9 +7,9 @@ import {
   TypeResPageGroup,
   TypeResPageOption,
   TypeResourceOption,
-  TypeResTypeData
+  TypeResTypeConfig
 } from "src/types/resource";
-import {
+import ResourceConfigData, {
   ResourceOption,
   ResModuleConfig,
   ResPageOption,
@@ -23,7 +23,12 @@ import PageConfigCompiler from "./PageConfig";
 import XMLNodeBase from "./XMLNodeElement";
 import XmlFileCompiler from "./XmlFileCompiler";
 
-// 解析 resourceConfig xml 配置文件
+/**
+ * 解析 配置模板的配置文件 ResourceConfig.src
+ * ```xml
+ * <ResourceConfig src="xiaomi/miui12/description.xml"/>
+ * ```
+ */
 export default class ResourceConfigCompiler extends XmlFileCompiler {
   // xiaomi/miui12
   private namespace: string;
@@ -89,13 +94,13 @@ export default class ResourceConfigCompiler extends XmlFileCompiler {
   }
 
   // 素材类型定义列表
-  getResTypeList(): TypeResTypeData[] {
+  getResTypeList(): TypeResTypeConfig[] {
     return super
       .getRootChildrenNodesOf(ELEMENT_TAG.Resource)
       .map(item =>
         new ResTypeConfig()
           .set("type", item.getAttributeOf("type"))
-          .set("tag", item.getAttributeOf("tag"))
+          .set("protocol", item.getAttributeOf("protocol"))
           .set("name", item.getAttributeOf("name"))
           .create()
       );
@@ -169,10 +174,10 @@ export default class ResourceConfigCompiler extends XmlFileCompiler {
    * 解析全部配置数据
    */
   getConfig(): TypeResourceConfig {
-    return {
+    return new ResourceConfigData().create({
       ...this.getOption(),
-      typeList: this.getResTypeList(),
+      resTypeList: this.getResTypeList(),
       moduleList: this.getModuleList()
-    };
+    });
   }
 }

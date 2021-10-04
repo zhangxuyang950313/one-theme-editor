@@ -1275,9 +1275,9 @@
     ajv-keywords "^3.4.1"
 
 "@electron/get@^1.0.1":
-  version "1.12.4"
-  resolved "https://registry.npm.taobao.org/@electron/get/download/@electron/get-1.12.4.tgz?cache=0&sync_timestamp=1612575876868&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40electron%2Fget%2Fdownload%2F%40electron%2Fget-1.12.4.tgz#a5971113fc1bf8fa12a8789dc20152a7359f06ab"
-  integrity sha1-pZcRE/wb+PoSqHidwgFSpzWfBqs=
+  version "1.13.0"
+  resolved "https://registry.nlark.com/@electron/get/download/@electron/get-1.13.0.tgz#95c6bcaff4f9a505ea46792424f451efea89228c"
+  integrity sha1-lca8r/T5pQXqRnkkJPRR7+qJIow=
   dependencies:
     debug "^4.1.1"
     env-paths "^2.2.0"
@@ -1289,6 +1289,11 @@
   optionalDependencies:
     global-agent "^2.0.2"
     global-tunnel-ng "^2.7.1"
+
+"@electron/remote@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.nlark.com/@electron/remote/download/@electron/remote-2.0.1.tgz#810cbc595a21f0f94641eb2d7e8264063a3f84de"
+  integrity sha1-gQy8WVoh8PlGQestfoJkBjo/hN4=
 
 "@electron/universal@1.0.5":
   version "1.0.5"
@@ -1841,9 +1846,9 @@
   integrity sha1-JGkforDD7IwNNL/P1JXtrFWT67Q=
 
 "@types/node@^12.0.12":
-  version "12.20.16"
-  resolved "https://registry.nlark.com/@types/node/download/@types/node-12.20.16.tgz?cache=0&sync_timestamp=1625868327749&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40types%2Fnode%2Fdownload%2F%40types%2Fnode-12.20.16.tgz#1acf34f6456208f495dac0434dd540488d17f991"
-  integrity sha1-Gs809kViCPSV2sBDTdVASI0X+ZE=
+  version "12.20.27"
+  resolved "https://registry.npmmirror.com/@types/node/download/@types/node-12.20.27.tgz#4141fcad57c332a120591de883e26fe4bb14aaea"
+  integrity sha1-QUH8rVfDMqEgWR3og+Jv5LsUquo=
 
 "@types/node@^16.10.2":
   version "16.10.2"
@@ -4917,9 +4922,9 @@ electron-to-chromium@^1.3.854:
   resolved "https://registry.npmmirror.com/electron-to-chromium/download/electron-to-chromium-1.3.857.tgz?cache=0&sync_timestamp=1633125813528&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Felectron-to-chromium%2Fdownload%2Felectron-to-chromium-1.3.857.tgz#dcc239ff8a12b6e4b501e6a5ad20fd0d5a3210f9"
   integrity sha1-3MI5/4oStuS1AealrSD9DVoyEPk=
 
-electron@^8.5.5:
+electron@8.5.5:
   version "8.5.5"
-  resolved "https://registry.nlark.com/electron/download/electron-8.5.5.tgz#17b12bd70139c0099f750fc5de0d480bf03acb96"
+  resolved "https://registry.npmmirror.com/electron/download/electron-8.5.5.tgz#17b12bd70139c0099f750fc5de0d480bf03acb96"
   integrity sha1-F7Er1wE5wAmfdQ/F3g1IC/A6y5Y=
   dependencies:
     "@electron/get" "^1.0.1"
