@@ -29,7 +29,7 @@
         <Group name="桌面壁纸和图标">
             <!-- 页面定义 -->
             <Page name="桌面1" src="wallpaper/desktop.xml"/>
-            <Page name="桌面1" src="wallpaper/desktop-test.xml"/>
+            <!-- <Page name="桌面1" src="wallpaper/desktop-test.xml"/> -->
             <!-- <Page name="桌面2" src="wallpaper/desktop2.xml"/> -->
             <!-- <Page name="桌面2" src="wallpaper/desktop2.xml"/> -->
         </Group>

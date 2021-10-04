@@ -9,10 +9,10 @@ import {
   useProjectImageUrlBySrc
 } from "@/hooks/project/index";
 import {
-  useAbsolutePathInSource,
+  useAbsolutePathInRes,
   useResourceImageUrl
 } from "@/hooks/resource/index";
-import { TypeImageResDefinition } from "src/types/resource";
+import { TypeResImageDefinition } from "src/types/resource";
 
 import SourceStatus from "./SourceStatus";
 import ImageDisplay from "./ImageDisplay";
@@ -54,13 +54,14 @@ import { previewFile } from "./utils";
 
 const ImageHandler: React.FC<{
   className?: string;
-  imageDefinition: TypeImageResDefinition;
+  imageDefinition: TypeResImageDefinition;
 }> = props => {
   const { imageDefinition, className } = props;
-  const { data, desc, src } = imageDefinition;
+  const { data, src } = imageDefinition.sourceData;
+  const { desc } = imageDefinition;
   const resourceImageUrl = useResourceImageUrl(src);
   const projectImageUrl = useProjectImageUrlBySrc(src);
-  const absPathInSource = useAbsolutePathInSource(src);
+  const absPathInSource = useAbsolutePathInRes(src);
   const absPathInProject = useAbsolutePathInProject(src);
 
   if (!data) return null;
@@ -96,7 +97,12 @@ const ImageHandler: React.FC<{
         {/* 一键拷贝默认素材 */}
         <RightCircleOutlined
           className="quick-copy-btn"
-          onClick={() => apiCopyFile(absPathInSource, absPathInProject)}
+          onClick={() =>
+            apiCopyFile({
+              from: absPathInSource,
+              to: absPathInProject
+            })
+          }
         />
         {/* 工程素材展示 */}
         <ImageDisplay

@@ -6,7 +6,7 @@ import imageSizeOf from "image-size";
 import dirTree from "directory-tree";
 import ImageData from "src/data/ImageData";
 import ERR_CODE from "src/constant/errorCode";
-import RegexpUtil from "src/utils/RegexpUtil";
+import RegexpUtil from "src/common/utils/RegexpUtil";
 import { TypeImageData, TypeImageMapper } from "src/types/project";
 
 export const base64Regex = /^data:image\/\w+;base64,/;

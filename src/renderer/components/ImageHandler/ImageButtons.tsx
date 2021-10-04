@@ -27,7 +27,7 @@ const ImageButtons: React.FC<{
       })
       .then(result => {
         if (result.canceled) return;
-        apiCopyFile(result.filePaths[0], absPath);
+        apiCopyFile({ from: result.filePaths[0], to: absPath });
       });
   };
 

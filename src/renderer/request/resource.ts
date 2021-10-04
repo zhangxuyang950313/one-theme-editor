@@ -6,66 +6,56 @@ import {
   TypeScenarioConfig,
   TypeScenarioOption
 } from "src/types/resource";
-import { TypeRequestResult, UnionTupleToObjectKey } from "src/types/request";
+import { UnionTupleToObjectKey } from "src/types/request";
 import { createHttp } from "./axios";
 
 // 获取场景列表
-export async function apiGetScenarioOptionList(): Promise<
-  TypeScenarioOption[]
-> {
+export async function apiGetScenarioOptionList<
+  T = TypeScenarioOption[]
+>(): Promise<T> {
   return createHttp()
-    .get<TypeRequestResult<TypeScenarioOption[]>>(
-      apiConfig.GET_SCENARIO_OPTION_LIST.path
-    )
-    .then(data => data.data.data);
+    .get<T>(apiConfig.GET_SCENARIO_OPTION_LIST.path)
+    .then(data => data.data);
 }
 
 // 获取资源配置列表
-export async function apiGetResOptionList(
+export async function apiGetResOptionList<T = TypeResourceOption[]>(
   src: string
-): Promise<TypeResourceOption[]> {
+): Promise<T> {
   return createHttp()
-    .get<TypeRequestResult<TypeResourceOption[]>>(
-      `${apiConfig.GET_RESOURCE_CONFIG_PREVIEW_LIST.path}`,
-      { params: { src } }
-    )
-    .then(data => data.data.data);
+    .get<T>(`${apiConfig.GET_RESOURCE_CONFIG_PREVIEW_LIST.path}`, {
+      params: { src }
+    })
+    .then(data => data.data);
 }
 
 // 获取配置数据
-export async function apiGetResourceConfig(
+export async function apiGetResourceConfig<T = TypeResourceConfig>(
   config: string
-): Promise<TypeResourceConfig> {
+): Promise<T> {
   return createHttp()
-    .get<TypeRequestResult<TypeResourceConfig>>(
-      apiConfig.GET_RESOURCE_CONFIG.path,
-      { params: { config } }
-    )
-    .then(data => data.data.data);
+    .get<T>(apiConfig.GET_RESOURCE_CONFIG.path, {
+      params: { config }
+    })
+    .then(data => data.data);
 }
 
 // 获取场景配置
-export async function apiGetScenarioConfig(
+export async function apiGetScenarioConfig<T = TypeScenarioConfig>(
   config: string
-): Promise<TypeScenarioConfig> {
+): Promise<T> {
   return createHttp()
-    .get<TypeRequestResult<TypeScenarioConfig>>(
-      apiConfig.GET_SCENARIO_CONFIG.path,
-      { params: { config } }
-    )
-    .then(data => data.data.data);
+    .get<T>(apiConfig.GET_SCENARIO_CONFIG.path, { params: { config } })
+    .then(data => data.data);
 }
 
 // 获取页面配置数据
-export async function apiGetResPageConfData(
+export async function apiGetResPageConfData<T = TypeResPageConfig>(
   params: UnionTupleToObjectKey<
     typeof apiConfig.GET_RESOURCE_CONFIG_PAGE_CONFIG.query
   >
-): Promise<TypeResPageConfig> {
+): Promise<T> {
   return createHttp()
-    .get<TypeRequestResult<TypeResPageConfig>>(
-      apiConfig.GET_RESOURCE_CONFIG_PAGE_CONFIG.path,
-      { params }
-    )
-    .then(data => data.data.data);
+    .get<T>(apiConfig.GET_RESOURCE_CONFIG_PAGE_CONFIG.path, { params })
+    .then(data => data.data);
 }

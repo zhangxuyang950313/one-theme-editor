@@ -1,5 +1,5 @@
 import { Element } from "xml-js";
-import { RESOURCE_PROTOCOL } from "../enum";
+import { FILE_TYPE } from "../enum";
 import { TypeDatabase } from "./index";
 
 // 版本信息
@@ -55,21 +55,22 @@ export type TypeImageDataDoc = TypeDatabase<TypeImageData>;
 export type TypeProjectDataDoc = TypeDatabase<TypeProjectData>;
 
 export type TypeImageFileData = {
-  readonly type: RESOURCE_PROTOCOL.IMAGE;
+  type: FILE_TYPE.IMAGE;
   src: string;
   url: string;
   data: TypeImageData;
 };
 
 export type TypeXmlFileData = {
-  readonly type: RESOURCE_PROTOCOL.XML;
+  type: FILE_TYPE.XML;
   src: string;
   data: Element;
 };
 
 export type TypeUnknownFileData = {
-  readonly type: RESOURCE_PROTOCOL.UNKNOWN;
+  readonly type: FILE_TYPE.UNKNOWN;
   src: string;
+  data: null;
 };
 
 export type TypeFileData =

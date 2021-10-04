@@ -6,7 +6,7 @@ import micromatch from "micromatch";
 import pathUtil from "server/utils/pathUtil";
 import { TypePackConfig } from "src/types/resource";
 import { PACK_TYPE } from "src/enum";
-import { asyncQueue } from "src/utils";
+import { asyncQueue } from "src/common/utils";
 import { TypePackProcess } from "src/types/socket";
 import { compactNinePatch } from "./NinePatchUtil";
 
@@ -232,7 +232,7 @@ export class UnpackUtil {
 
   // 获取 zip 中的文件列表
   static async getFiles(
-    data: JsZip.InputType[keyof JsZip.InputType]
+    data: JsZip.InputType
   ): Promise<{ [x: string]: JsZip.JSZipObject }> {
     const jsZip = await JsZip.loadAsync(data);
     return jsZip.files;

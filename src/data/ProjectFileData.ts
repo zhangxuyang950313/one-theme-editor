@@ -1,4 +1,4 @@
-import { RESOURCE_PROTOCOL } from "src/enum/index";
+import { FILE_TYPE } from "src/enum/index";
 import {
   TypeImageFileData,
   TypeUnknownFileData,
@@ -7,35 +7,36 @@ import {
 import { AbstractDataModel } from "./AbstractDataModel";
 import ImageData from "./ImageData";
 
-export class ProjectFileImageData extends AbstractDataModel<TypeImageFileData> {
+export class ImageFileData extends AbstractDataModel<TypeImageFileData> {
   protected data: TypeImageFileData = {
-    type: RESOURCE_PROTOCOL.IMAGE,
+    type: FILE_TYPE.IMAGE,
     src: "",
     url: "",
     data: ImageData.default
   };
   static get default(): TypeImageFileData {
-    return new ProjectFileImageData().create();
+    return new ImageFileData().create();
   }
 }
 
-export class ProjectFileXmlData extends AbstractDataModel<TypeXmlFileData> {
+export class XmlFileData extends AbstractDataModel<TypeXmlFileData> {
   protected data: TypeXmlFileData = {
-    type: RESOURCE_PROTOCOL.XML,
+    type: FILE_TYPE.XML,
     src: "",
     data: {}
   };
   static get default(): TypeXmlFileData {
-    return new ProjectFileXmlData().create();
+    return new XmlFileData().create();
   }
 }
 
-export class ProjectFileUnknown extends AbstractDataModel<TypeUnknownFileData> {
+export class UnknownFileData extends AbstractDataModel<TypeUnknownFileData> {
   protected data: TypeUnknownFileData = {
-    type: RESOURCE_PROTOCOL.UNKNOWN,
-    src: ""
+    type: FILE_TYPE.UNKNOWN,
+    src: "",
+    data: null
   };
   static get default(): TypeUnknownFileData {
-    return new ProjectFileUnknown().create();
+    return new UnknownFileData().create();
   }
 }

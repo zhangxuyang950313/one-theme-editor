@@ -1,5 +1,4 @@
 import apiConfig from "src/constant/apiConf";
-import { TypeRequestResult } from "src/types/request";
 import { createHttp } from "./axios";
 
 // // 写入文件
@@ -13,15 +12,18 @@ import { createHttp } from "./axios";
 // }
 
 // 复制文件
-export async function apiCopyFile(from: string, to: string): Promise<null> {
+export async function apiCopyFile(data: {
+  from: string;
+  to: string;
+}): Promise<null> {
   return createHttp()
-    .post<TypeRequestResult<null>>(apiConfig.COPY_FILE.path, { from, to })
-    .then(data => data.data.data);
+    .post<typeof data, null>(apiConfig.COPY_FILE.path, data)
+    .then(data => data);
 }
 
 // 删除文件
 export async function apiDeleteFile(file: string): Promise<null> {
   return createHttp()
-    .post<TypeRequestResult<null>>(apiConfig.DELETE_FILE.path, { file })
-    .then(data => data.data.data);
+    .post<{ file: string }, null>(apiConfig.DELETE_FILE.path, { file })
+    .then(data => data);
 }

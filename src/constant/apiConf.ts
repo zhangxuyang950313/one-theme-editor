@@ -131,7 +131,7 @@ const apiConfig = {
     query: ["config"]
   }),
   // 获取一个文件的数据
-  GET_RESOURCE_FILE: createApiConf({
+  GET_PROJECT_FILE: createApiConf({
     path: "/project/file",
     query: ["uuid", "filepath"]
   }),

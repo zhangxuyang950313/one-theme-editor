@@ -4,7 +4,7 @@ import React from "react";
 import { Form, Modal, ModalProps } from "antd";
 import { useProjectInfoConfig } from "@/hooks/project/index";
 import { TypeProjectInfo } from "src/types/project";
-import TempStringUtil from "src/utils/TempStringUtil";
+import TempStringUtil from "src/common/utils/TempStringUtil";
 import { useEditorSelector } from "@/store";
 import { ProjectInput } from "../Forms";
 

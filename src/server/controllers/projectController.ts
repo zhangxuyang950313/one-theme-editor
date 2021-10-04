@@ -177,10 +177,10 @@ export default function projectController(service: Express): void {
     never,
     TypeResponseFrame<TypeFileData>,
     never,
-    UnionTupleToObjectKey<typeof apiConfig.GET_RESOURCE_FILE.query>
-  >(`${apiConfig.GET_RESOURCE_FILE.path}`, async (request, response) => {
+    UnionTupleToObjectKey<typeof apiConfig.GET_PROJECT_FILE.query>
+  >(`${apiConfig.GET_PROJECT_FILE.path}`, async (request, response) => {
     const { query } = request;
-    checkParamsKey(query, apiConfig.GET_RESOURCE_FILE.query);
+    checkParamsKey(query, apiConfig.GET_PROJECT_FILE.query);
     const { uuid, filepath } = query;
     const { root } = await findProjectByQuery({ uuid });
     const fileData = getFileData(path.join(root, filepath), filepath);

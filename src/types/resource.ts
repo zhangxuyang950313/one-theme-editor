@@ -1,13 +1,13 @@
 import archiver from "archiver";
-import { Element } from "xml-js";
 import {
   RESOURCE_PROTOCOL,
-  RESOURCE_TYPES,
+  RESOURCE_TYPE,
   FILE_TEMPLATE_TYPE,
   ELEMENT_TAG,
-  ALIGN_VALUES,
-  ALIGN_V_VALUES,
-  PACK_TYPE
+  ALIGN_VALUE,
+  ALIGN_V_VALUE,
+  PACK_TYPE,
+  FILE_TYPE
 } from "../enum";
 import XMLNodeBase from "../server/compiler/XMLNodeElement";
 import { TypeImageData, TypeUiVersion } from "./project";
@@ -71,7 +71,7 @@ export type TypeScenarioConfig = {
 
 // 素材类型定义数据
 export type TypeResTypeConfig = {
-  type: RESOURCE_TYPES;
+  type: RESOURCE_TYPE;
   protocol: RESOURCE_PROTOCOL;
   name: string;
 };
@@ -114,17 +114,17 @@ export type TypeLayoutData = {
   y: string;
   w: string;
   h: string;
-  align: ALIGN_VALUES;
-  alignV: ALIGN_V_VALUES;
+  align: ALIGN_VALUE;
+  alignV: ALIGN_V_VALUE;
 };
 
 // 图片元素数据
-export type TypeLayoutImage = {
-  readonly type: RESOURCE_TYPES.IMAGE;
-  readonly tag: ELEMENT_TAG.Image;
+export type TypeLayoutImageElement = {
+  tag: ELEMENT_TAG.Image;
+  resType: RESOURCE_TYPE.IMAGE;
+  protocol: RESOURCE_PROTOCOL;
   src: string;
-  desc: string;
-  data: TypeImageData;
+  url: string;
   layout: TypeLayoutData;
 };
 
@@ -133,55 +133,102 @@ export type TypeXmlValueData = {
   valueName: string;
 };
 // 颜色元素数据
-export type TypeLayoutText = {
-  readonly type: RESOURCE_TYPES;
-  readonly tag: ELEMENT_TAG.Text;
+export type TypeLayoutTextElement = {
+  tag: ELEMENT_TAG.Text;
+  resType:
+    | RESOURCE_TYPE.COLOR
+    | RESOURCE_TYPE.BOOLEAN
+    | RESOURCE_TYPE.NUMBER
+    | RESOURCE_TYPE.STRING;
+  protocol: RESOURCE_PROTOCOL;
   text: string;
-  desc: string;
-  src: string;
-  data: TypeXmlValueData;
+  color: string;
   layout: TypeLayoutData;
 };
 
 // 预览元素数据
-export type TypeLayoutElement = TypeLayoutImage | TypeLayoutText;
+export type TypeLayoutElement = TypeLayoutImageElement | TypeLayoutTextElement;
 
 // 素材定义数据
-// 未知类型
-export type TypeUnknownResDefinition = {
-  protocol: RESOURCE_PROTOCOL.UNKNOWN;
-  type: RESOURCE_TYPES.UNKNOWN;
-  name: string;
-  desc: string;
-  src: string;
-  data: null;
-};
 // 图片类型
-export type TypeImageResDefinition = {
-  protocol: RESOURCE_PROTOCOL.IMAGE;
-  type: RESOURCE_TYPES.IMAGE;
-  name: string;
-  desc: string;
+export type TypeImageSourceData = {
+  fileType: FILE_TYPE.IMAGE;
+  protocol: string;
   src: string;
+  query: Record<string, string>;
   data: TypeImageData;
 };
-// xml类型
-export type TypeXmlValDefinition = {
-  protocol: RESOURCE_PROTOCOL.XML;
-  type:
-    | RESOURCE_TYPES.COLOR
-    | RESOURCE_TYPES.BOOLEAN
-    | RESOURCE_TYPES.NUMBER
-    | RESOURCE_TYPES.STRING;
+export type TypeResImageDefinition = {
+  resType: RESOURCE_TYPE.IMAGE;
+  fileType: FILE_TYPE.IMAGE;
   name: string;
   desc: string;
+  url: string;
+  source: string;
+  sourceData: TypeImageSourceData;
+};
+// xml类型
+export type TypeXmlValSourceData = {
+  fileType: FILE_TYPE.XML;
+  protocol: string;
   src: string;
+  query: Record<string, string>;
   data: TypeXmlValueData;
 };
+export type TypeResXmlValDefinition = {
+  fileType: FILE_TYPE.XML;
+  resType:
+    | RESOURCE_TYPE.UNKNOWN
+    | RESOURCE_TYPE.COLOR
+    | RESOURCE_TYPE.BOOLEAN
+    | RESOURCE_TYPE.NUMBER
+    | RESOURCE_TYPE.STRING;
+  name: string;
+  desc: string;
+  source: string;
+  sourceData: TypeXmlValSourceData;
+};
 export type TypeResDefinition =
-  | TypeUnknownResDefinition
-  | TypeImageResDefinition
-  | TypeXmlValDefinition;
+  | TypeResImageDefinition
+  | TypeResXmlValDefinition;
+
+// URL 未知
+export type TypeResUnknownData = {
+  protocol: RESOURCE_PROTOCOL.UNKNOWN;
+  fileType: FILE_TYPE.UNKNOWN;
+  source: string;
+  src: string;
+  srcpath: string;
+  query: Record<string, string>;
+  data: null;
+};
+
+// URL 图片
+export type TypeResUrlImageData = {
+  protocol: RESOURCE_PROTOCOL;
+  fileType: FILE_TYPE.IMAGE;
+  source: string;
+  src: string;
+  srcpath: string;
+  query: Record<string, string>;
+  data: TypeImageData;
+};
+
+// URL xml 值
+export type TypeResUrlXmlValData = {
+  protocol: RESOURCE_PROTOCOL;
+  fileType: FILE_TYPE.XML;
+  source: string;
+  src: string;
+  srcpath: string;
+  query: Record<string, string>;
+  data: TypeXmlValueData;
+};
+
+export type TypeResUrlData =
+  | TypeResUnknownData
+  | TypeResUrlImageData
+  | TypeResUrlXmlValData;
 
 // 预览单个页面配置
 export type TypeResPageOption = {

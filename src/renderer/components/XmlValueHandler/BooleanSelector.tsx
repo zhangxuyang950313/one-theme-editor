@@ -2,20 +2,19 @@ import React from "react";
 import styled from "styled-components";
 
 import { Radio } from "antd";
-import { TypeXmlValDefinition } from "src/types/resource";
+import { TypeResXmlValDefinition } from "src/types/resource";
 import Wrapper from "./Wrapper";
 
 const BooleanSelector: React.FC<{
   value: string;
-  valueDefinition: TypeXmlValDefinition;
+  valueDefinition: TypeResXmlValDefinition;
   onChange: (s: string) => void;
 }> = props => {
   const { value, valueDefinition, onChange } = props;
-  const { name, desc: description, data } = valueDefinition;
+  const { name, desc } = valueDefinition;
 
-  if (!data) return null;
   return (
-    <Wrapper name={name} description={description}>
+    <Wrapper name={name} description={desc}>
       <StyleBooleanSelector>
         <Radio.Group value={value} onChange={e => onChange(e.target.value)}>
           <Radio value="">缺省</Radio>

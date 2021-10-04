@@ -4,10 +4,10 @@ import { Input, message, Tooltip } from "antd";
 import { RGBColor, SketchPicker } from "react-color";
 import { RightCircleOutlined } from "@ant-design/icons";
 import { useProjectUUID } from "@/hooks/project/index";
-import { TypeXmlValDefinition } from "src/types/resource";
+import { TypeResXmlValDefinition } from "src/types/resource";
 import { StyleGirdBackground } from "@/style";
 import { RgbaObject } from "hex-rgb";
-import ColorUtil, { HEX_FORMAT } from "src/utils/ColorUtil";
+import ColorUtil, { HEX_FORMAT } from "src/common/utils/ColorUtil";
 import Wrapper from "./Wrapper";
 
 // 颜色小方块
@@ -169,21 +169,21 @@ const StyleColorPick = styled.div`
 // 颜色值选择器
 const ColorPicker: React.FC<{
   value: string;
-  valueDefinition: TypeXmlValDefinition;
+  valueDefinition: TypeResXmlValDefinition;
   onChange: (x: string) => void;
 }> = props => {
   const { value, valueDefinition, onChange } = props;
-  const { desc, data } = valueDefinition;
+  const { desc, sourceData } = valueDefinition;
   const uuid = useProjectUUID();
 
-  if (!uuid || !data) return null;
-  const { defaultValue } = data;
+  if (!uuid || !sourceData) return null;
+  const { defaultValue, valueName } = sourceData.data;
   const defaultColor = new ColorUtil(defaultValue, HEX_FORMAT.ARGB).format(
     HEX_FORMAT.RGBA
   );
 
   return (
-    <Wrapper name={data.valueName} description={desc}>
+    <Wrapper name={valueName} description={desc}>
       <StyleColorPicker>
         <ColorBox color={defaultColor} />
         <RightCircleOutlined

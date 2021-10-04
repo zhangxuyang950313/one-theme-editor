@@ -1,6 +1,5 @@
 import apiConfig from "src/constant/apiConf";
 import { TypeElectronPath, TypePathConfig } from "src/types/extraConfig";
-import { TypeRequestResult } from "src/types/request";
 import { createHttp } from "./axios";
 
 /**
@@ -8,20 +7,17 @@ import { createHttp } from "./axios";
  * 获取后端路径信息
  * @returns
  */
-export async function apiGetPathConfig(): Promise<TypePathConfig> {
+export async function apiGetPathConfig<T = TypePathConfig>(): Promise<T> {
   return createHttp()
-    .get<TypeRequestResult<TypePathConfig>>(apiConfig.GET_PATH_CONFIG.path)
-    .then(data => data.data.data);
+    .get<T>(apiConfig.GET_PATH_CONFIG.path)
+    .then(data => data.data);
 }
 
 // 给后端设置路径配置
-export async function apiSwopPathConfig(
+export async function apiSwopPathConfig<T = TypePathConfig>(
   config: TypeElectronPath
-): Promise<TypePathConfig> {
+): Promise<T> {
   return createHttp()
-    .post<TypeRequestResult<TypePathConfig>>(
-      apiConfig.SWOP_PATH_CONFIG.path,
-      config
-    )
-    .then(data => data.data.data);
+    .post<typeof config, T>(apiConfig.SWOP_PATH_CONFIG.path, config)
+    .then(data => data);
 }

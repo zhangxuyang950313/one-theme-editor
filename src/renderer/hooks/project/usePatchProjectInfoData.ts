@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { apiGetProjectFileData } from "@/request";
 import { useEditorDispatch } from "@/store";
-import { ActionPatchProjectFileData } from "@/store/editor/action";
+import { ActionPatchFileData } from "@/store/editor/action";
 import { FILE_EVENT } from "src/enum";
 import { useFSWatcherCreator } from "../fileWatcher";
 import {
@@ -11,6 +11,8 @@ import {
 } from "../project";
 
 /**
+ * @deprecated
+ * 在 socket 中实现
  * 监听当前 infoTemplate 目标文件
  */
 export default function usePatchProjectInfoData(): void {
@@ -30,7 +32,7 @@ export default function usePatchProjectInfoData(): void {
         case FILE_EVENT.UNLINK:
         case FILE_EVENT.CHANGE: {
           const fileData = await apiGetProjectFileData(uuid, file);
-          dispatch(ActionPatchProjectFileData(fileData));
+          dispatch(ActionPatchFileData(fileData));
           // const projectInfo = new ProjectInfo().set("name");
           // apiUpdateProject({ uuid: projectUUID, projectInfo });
         }

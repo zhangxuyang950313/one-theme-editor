@@ -4,7 +4,7 @@ import { notification } from "antd";
 import { useEditorDispatch, useEditorSelector } from "@/store";
 import { LOAD_STATUS } from "src/enum";
 import { TypeProjectDataDoc } from "src/types/project";
-import { sleep } from "src/utils";
+import { sleep } from "src/common/utils";
 import { apiGetProjectByUUID } from "@/request";
 import { ActionInitEditor, ActionSetProjectData } from "@/store/editor/action";
 import ERR_CODE from "src/constant/errorCode";

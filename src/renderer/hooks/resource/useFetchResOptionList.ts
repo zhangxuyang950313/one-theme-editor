@@ -5,7 +5,7 @@ import { useStarterDispatch } from "@/store";
 import { ActionSetSourceOptionList } from "@/store/starter/action";
 import { LOAD_STATUS } from "src/enum";
 import { TypeResourceOption } from "src/types/resource";
-import { sleep } from "src/utils";
+import { sleep } from "src/common/utils";
 import ERR_CODE from "src/constant/errorCode";
 import { useScenarioOption } from ".";
 

@@ -10,8 +10,8 @@ import {
   TypeResPageOption,
   TypeResTypeConfig,
   TypeLayoutElement,
-  TypeLayoutImage,
-  TypeLayoutText,
+  TypeLayoutImageElement,
+  TypeLayoutTextElement,
   TypeResPageConfig,
   TypeResDefinition
 } from "src/types/resource";
@@ -124,7 +124,7 @@ export function useLayoutElementList(): TypeLayoutElement[] {
 /**
  * 获取图片类型元素列表
  */
-export function useLayoutImageList(): TypeLayoutImage[] {
+export function useLayoutImageList(): TypeLayoutImageElement[] {
   const layoutElementList = useLayoutElementList();
   return layoutElementList.flatMap(item =>
     item.tag === ELEMENT_TAG.Image ? [item] : []
@@ -134,7 +134,7 @@ export function useLayoutImageList(): TypeLayoutImage[] {
 /**
  * 获取 xml 类型元素列表
  */
-export function useLayoutTestList(): TypeLayoutText[] {
+export function useLayoutTestList(): TypeLayoutTextElement[] {
   const layoutElementList = useLayoutElementList();
   return layoutElementList.flatMap(item =>
     item.tag === ELEMENT_TAG.Text ? [item] : []
@@ -146,7 +146,7 @@ export function useLayoutTestList(): TypeLayoutText[] {
  * @param relativePath
  * @returns
  */
-export function useAbsolutePathInSource(relativePath: string): string {
+export function useAbsolutePathInRes(relativePath: string): string {
   const resourceConfigRoot = useResConfigRootWithNS();
   return path.join(resourceConfigRoot, relativePath);
 }
@@ -158,6 +158,6 @@ export function useAbsolutePathInSource(relativePath: string): string {
  */
 export function useResourceImageUrl(relativePath: string): string {
   const prefix = useImagePrefix();
-  const absolute = useAbsolutePathInSource(relativePath);
+  const absolute = useAbsolutePathInRes(relativePath);
   return prefix + absolute;
 }

@@ -8,7 +8,7 @@ import {
 } from "@/store/global/modules/base/action";
 import { useGlobalSelector, useGlobalDispatch } from "@/store/index";
 import { TypePathConfig } from "src/types/extraConfig";
-import { sleep } from "src/utils/index";
+import { sleep } from "src/common/utils/index";
 import { LOAD_STATUS } from "src/enum";
 import electronStore from "src/common/electronStore";
 

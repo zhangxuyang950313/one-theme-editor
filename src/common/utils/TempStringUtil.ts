@@ -1,4 +1,4 @@
-import RegexpUtil from "src/utils/RegexpUtil";
+import RegexpUtil from "src/common/utils/RegexpUtil";
 
 // 模板字符串处理
 export default class TempStringUtil {
@@ -18,14 +18,14 @@ export default class TempStringUtil {
   }
 
   // 替换模板字符串
-  static replace(content: string, data: Record<string, string>): string {
+  static replace(content: string, data: Map<string, string>): string {
     return TempStringUtil.match(content).reduce(
-      (prev, [temp, variable]) => prev.replace(temp, data[variable] ?? ""),
+      (prev, [temp, variable]) => prev.replace(temp, data.get(variable) ?? ""),
       content
     );
   }
 
-  // 借力 eval 计算模板字符串
+  // 借力 eval 计算模板字符串，这个需要确保变量为标准 js 变量命名，否则会报错
   static eval(content: string, data: Record<string, string>): string {
     const varDefine = Object.keys(data).reduce(
       (prev, key) => (prev += `const ${key} = "${data[key]}";\n`),

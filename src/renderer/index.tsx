@@ -1,3 +1,4 @@
+import logSymbols from "log-symbols";
 import React, { useEffect } from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
@@ -16,7 +17,7 @@ import LightTheme from "./theme/light";
 const Index: React.FC = () => {
   useEffect(() => {
     localStorage.setItem("debug", "socket.io-client:socket");
-    console.log(`渲染进程启动 ${process.pid}`);
+    console.log(logSymbols.success, `渲染进程启动 ${process.pid}`);
     // localStorage.debug = "*.io-client:socket";
     // localStorage.debug = "*";
   }, []);

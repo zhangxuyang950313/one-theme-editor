@@ -6,7 +6,7 @@ import { useEditorDispatch, useEditorSelector } from "@/store";
 import { ActionPatchPageConfMap } from "@/store/editor/action";
 import { TypeResPageConfig } from "src/types/resource";
 import { LOAD_STATUS } from "src/enum";
-import { asyncQueue } from "src/utils";
+import { asyncQueue } from "src/common/utils";
 import { useCurrentResModule } from "./index";
 
 /**

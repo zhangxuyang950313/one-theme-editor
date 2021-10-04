@@ -53,7 +53,7 @@ export const ProjectImage: TypeReactImageElement = props => {
  * 用于显示素材图片
  * @param props 和 img 标签具有相同的属性
  */
-export const SourceImage: TypeReactImageElement = props => {
+export const ResourceImage: TypeReactImageElement = props => {
   const imageUrl = useResourceImageUrl(props.src || "");
   return <LazyImage {...props} src={imageUrl} alt="" />;
 };

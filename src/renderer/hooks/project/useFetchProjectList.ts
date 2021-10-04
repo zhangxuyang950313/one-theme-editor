@@ -4,7 +4,7 @@ import { useStarterDispatch } from "@/store";
 import { ActionSetProjectList } from "@/store/starter/action";
 import { TypeProjectDataDoc } from "src/types/project";
 import { LOAD_STATUS } from "src/enum";
-import { sleep } from "src/utils";
+import { sleep } from "src/common/utils";
 import { useAxiosCanceler } from "..";
 import { useScenarioOption } from "../resource";
 

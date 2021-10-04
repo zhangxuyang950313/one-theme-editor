@@ -48,16 +48,25 @@ export enum ELEMENT_TYPE {
   TEXT = "text"
 }
 
-// 资源协议
-export enum RESOURCE_PROTOCOL {
+// 文件类型
+export enum FILE_TYPE {
   UNKNOWN = "unknown",
   IMAGE = "image",
-  FILE = "file",
   XML = "xml"
 }
 
+// 资源协议
+export enum RESOURCE_PROTOCOL {
+  UNKNOWN = "unknown",
+  FILE = "file", // 单纯的文件
+  SRC = "src", // 资源和工程共用的
+  RESOURCE = "resource", // 相对资源路径
+  PROJECT = "project", // 相对工程路径
+  RELATIVE = "relative" // 相对当前配置路径
+}
+
 // 资源类型
-export enum RESOURCE_TYPES {
+export enum RESOURCE_TYPE {
   UNKNOWN = "unknown",
   IMAGE = "image",
   COLOR = "color",
@@ -66,13 +75,13 @@ export enum RESOURCE_TYPES {
   STRING = "string"
 }
 
-export enum ALIGN_VALUES {
+export enum ALIGN_VALUE {
   LEFT = "left",
   CENTER = "center",
   RIGHT = "right"
 }
 
-export enum ALIGN_V_VALUES {
+export enum ALIGN_V_VALUE {
   TOP = "top",
   CENTER = "center",
   BOTTOM = "bottom"

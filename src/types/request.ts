@@ -7,12 +7,6 @@ export type TypeFileData = {
   base64?: string;
 };
 
-// requestResult
-export type TypeRequestResult<T> = {
-  msg: "success";
-  data: T;
-};
-
 // response 模板
 export type TypeResultSuccess<T> = {
   msg: "success";

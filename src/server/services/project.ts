@@ -1,17 +1,21 @@
 import path from "path";
 import fse from "fs-extra";
-import { filenameIsImage, filenameIsXml, getImageData } from "src/utils/index";
+import {
+  filenameIsImage,
+  filenameIsXml,
+  getImageData
+} from "src/common/utils/index";
 import { findProjectByQuery } from "server/dbHandler/project";
 import { TypeFileData } from "src/types/project";
 import {
-  ProjectFileImageData,
-  ProjectFileUnknown,
-  ProjectFileXmlData
+  ImageFileData,
+  UnknownFileData,
+  XmlFileData
 } from "src/data/ProjectFileData";
 import XmlFileCompiler from "server/compiler/XmlFileCompiler";
 import PageConfigCompiler from "server/compiler/PageConfig";
 import PackageUtil from "server/utils/PackageUtil";
-import electronStore from "src/common/electronStore";
+import ImageUrlUtil from "common/utils/ImageUrlUtil";
 
 export async function getPageResourceData(
   uuid: string,
@@ -19,8 +23,10 @@ export async function getPageResourceData(
 ): Promise<Record<string, TypeFileData>> {
   const { root, resourceSrc } = await findProjectByQuery({ uuid });
   const namespace = path.dirname(resourceSrc);
-  const pageConfig = new PageConfigCompiler({ namespace, config });
-  const resPathList = pageConfig.getResPathList();
+  const resPathList = new PageConfigCompiler({
+    namespace,
+    config
+  }).getResPathList();
   return resPathList.reduce<Record<string, TypeFileData>>((record, src) => {
     const fileData = getFileData(path.join(root, src), src);
     record[src] = fileData;
@@ -38,10 +44,8 @@ export async function getPageResourceData(
 export function getFileData(file: string, src: string): TypeFileData {
   const fileExists = fse.pathExistsSync(file);
   if (filenameIsImage(file)) {
-    const hostname = electronStore.get("hostname");
-    const url = `http://${hostname}/image?filepath=${file}&time=${Date.now()}`;
-    // const url = `one://${absPath}?t=${Date.now()}`;
-    const imageData = new ProjectFileImageData();
+    const url = ImageUrlUtil.getUrl(file);
+    const imageData = new ImageFileData();
     imageData.set("url", url);
     imageData.set("src", src);
     if (fileExists) {
@@ -50,7 +54,7 @@ export function getFileData(file: string, src: string): TypeFileData {
     return imageData.create();
   }
   if (filenameIsXml(file)) {
-    const xmlData = new ProjectFileXmlData();
+    const xmlData = new XmlFileData();
     xmlData.set("src", src);
     if (fileExists) {
       xmlData.set("data", XmlFileCompiler.from(file).getElement());
@@ -58,7 +62,7 @@ export function getFileData(file: string, src: string): TypeFileData {
     return xmlData.create();
   }
   // throw new Error(`不支持的文件类型"${src}"`);
-  return new ProjectFileUnknown().set("src", src).create();
+  return new UnknownFileData().set("src", src).create();
 }
 
 // 打包工程

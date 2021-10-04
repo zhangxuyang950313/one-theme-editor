@@ -16,7 +16,8 @@ export class ElectronPathCollection extends AbstractDataModel<TypeElectronPath> 
     ELECTRON_EXE: "",
     ELECTRON_HOME: "",
     ELECTRON_LOCAL: "",
-    ELECTRON_LOGS: ""
+    ELECTRON_LOGS: "",
+    ELECTRON_TEMP: ""
   };
   static get default(): TypeElectronPath {
     return new ElectronPathCollection().create();

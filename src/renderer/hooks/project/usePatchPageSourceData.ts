@@ -1,13 +1,17 @@
 import { useEffect } from "react";
 import { apiGetProjectFileData } from "@/request";
 import { useEditorDispatch } from "@/store";
-import { ActionPatchProjectFileData } from "@/store/editor/action";
+import {
+  ActionPatchFileData,
+  ActionRemoveFileData
+} from "@/store/editor/action";
 import { FILE_EVENT } from "src/enum";
 import { useFSWatcherCreator } from "../fileWatcher";
 import { useProjectRoot, useProjectUUID } from "../project";
 import { useCurrentResPageConfig } from "../resource";
 
 /**
+ * @deprecated
  * 监听当前页面所有素材
  */
 export default function usePatchPageSourceData(): void {
@@ -25,10 +29,14 @@ export default function usePatchPageSourceData(): void {
       console.log(`监听文件变动（${event}） '${file}' `);
       switch (event) {
         case FILE_EVENT.ADD:
-        case FILE_EVENT.UNLINK:
         case FILE_EVENT.CHANGE: {
           const fileData = await apiGetProjectFileData(uuid, file);
-          dispatch(ActionPatchProjectFileData(fileData));
+          dispatch(ActionPatchFileData(fileData));
+          break;
+        }
+        case FILE_EVENT.UNLINK: {
+          dispatch(ActionRemoveFileData(file));
+          break;
         }
       }
     };

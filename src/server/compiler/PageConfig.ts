@@ -1,40 +1,56 @@
 import path from "path";
-import querystring from "querystring";
+import { URL } from "url";
+import { RESOURCE_PROTOCOL } from "src/enum";
 import fse from "fs-extra";
-import {
+import type {
   TypeLayoutElement,
   TypeResPageConfig,
-  TypeLayoutImage,
-  TypeLayoutText,
-  TypeResDefinition
+  TypeLayoutImageElement,
+  TypeLayoutTextElement,
+  TypeResDefinition,
+  TypeResUrlData
 } from "src/types/resource";
 import {
   ElementLayoutConfig,
   LayoutImageElement,
   ResPageConfig,
-  LayoutTextElement
+  LayoutTextElement,
+  ResourceUrlData,
+  XmlValueData,
+  ResImageDefinition,
+  XmlValResDefinition,
+  ImageSourceData,
+  XmlValSourceData
 } from "src/data/ResourceConfig";
-import { getImageData } from "src/utils/index";
-import RegexpUtil from "src/utils/RegexpUtil";
+import {
+  filenameIsImage,
+  filenameIsXml,
+  getImageData
+} from "src/common/utils/index";
+import RegexpUtil from "src/common/utils/RegexpUtil";
 import {
   ELEMENT_TAG,
-  ALIGN_VALUES,
-  ALIGN_V_VALUES,
-  RESOURCE_PROTOCOL
+  ALIGN_VALUE,
+  ALIGN_V_VALUE,
+  FILE_TYPE
 } from "src/enum/index";
 import pathUtil from "server/utils/pathUtil";
 import XMLNodeElement from "server/compiler/XMLNodeElement";
 import ImageData from "src/data/ImageData";
+import TempStringUtil from "src/common/utils/TempStringUtil";
+import ImageUrlUtil from "src/common/utils/ImageUrlUtil";
 import XmlFileCompiler from "./XmlFileCompiler";
-import ResourceDefinitionCompiler from "./ResourceDefinition";
+import XmlTemplate from "./XmlTemplate";
 
 export default class PageConfigCompiler extends XMLNodeElement {
   private configFile: string;
   private resourceNamespace: string;
   private pageNamespace: string;
   private pageConfig: string;
-  private resourceRootAbsolute: string;
-  private resDefinitionInstance: ResourceDefinitionCompiler;
+  private resourceRoot: string;
+  // private resDefinitionInstance: ResourceDefinitionCompiler;
+  private urlDataMap: Map<string, TypeResUrlData>;
+  private resourceKeyValMap: Map<string, string>;
   constructor(data: { namespace: string; config: string }) {
     const file = path.join(
       pathUtil.RESOURCE_CONFIG_DIR,
@@ -46,14 +62,9 @@ export default class PageConfigCompiler extends XMLNodeElement {
     this.resourceNamespace = path.normalize(data.namespace);
     this.pageNamespace = path.dirname(data.config);
     this.pageConfig = path.normalize(data.config);
-    this.resourceRootAbsolute = path.join(
-      pathUtil.RESOURCE_CONFIG_DIR,
-      data.namespace
-    );
-    this.resDefinitionInstance = new ResourceDefinitionCompiler(
-      this.getRootChildrenNodesByTagname(ELEMENT_TAG.Resource),
-      this.resourceRootAbsolute
-    );
+    this.resourceRoot = path.join(pathUtil.RESOURCE_CONFIG_DIR, data.namespace);
+    this.urlDataMap = new Map();
+    this.resourceKeyValMap = new Map();
   }
 
   /**
@@ -74,14 +85,18 @@ export default class PageConfigCompiler extends XMLNodeElement {
     return this.getFirstChildNode().getChildrenNodesByTagname(tagname);
   }
 
-  // ${root}/path/to/somewhere -> absolute/resource/root/to/somewhere
-  private resolvePath(pathname: string): string {
-    // return PathResolver.parse({ root: this.resourceRootAbsolute }, pathname);
-    return path.join(this.resourceRootAbsolute, pathname);
+  // 生成当前配置中相对于素材根路径的绝对路径
+  private resolveResourcePath(pathname: string): string {
+    return path.join(this.resourceRoot, pathname);
+  }
+
+  // 相对于当前页面目录的路径转为正确的绝对路径
+  private resolvePagePath(pathname: string): string {
+    return path.join(path.dirname(this.configFile), pathname);
   }
 
   // 处理当前页面资源的相对路径
-  private relativePath(pathname: string): string {
+  private relativeResourcePath(pathname: string): string {
     const relative = path.relative(
       pathUtil.RESOURCE_CONFIG_DIR,
       path.dirname(this.configFile)
@@ -89,23 +104,18 @@ export default class PageConfigCompiler extends XMLNodeElement {
     return path.join(relative, pathname);
   }
 
-  // 处理当前页面资源相对于素材根路径
-  private relativeSourcePath(pathname: string): string {
-    return path.join(path.dirname(this.configFile), pathname);
-  }
-
   // 当前页面资源相对于当前素材根路径
   private relativePagePath(pathname: string): string {
     return path.join(this.pageNamespace, pathname);
   }
 
-  private resolveRelativePath(pathname: string): string {
-    const relative = path.relative(
-      this.resourceNamespace,
-      path.dirname(this.configFile)
-    );
-    return path.join(relative, pathname);
-  }
+  // private resolveRelativePath(pathname: string): string {
+  //   const relative = path.relative(
+  //     this.resourceNamespace,
+  //     path.dirname(this.configFile)
+  //   );
+  //   return path.join(relative, pathname);
+  // }
 
   /**
    * 获取形如字符串 ${name} 中的 name 值
@@ -159,36 +169,117 @@ export default class PageConfigCompiler extends XMLNodeElement {
       this.relativePagePath(item.getAttributeOf("src"))
     );
   }
+
+  // // 获取定义的资源配置数据
+  // private getResDefinitionByName(srcVal: string): TypeResDefinition | null {
+  //   const placeholder = this.getPlaceholderName(srcVal);
+  //   return this.resDefinitionInstance.getResDefinitionByName(placeholder);
+  // }
+
   /**
-   * 从值的 query 字符串中获得对应的映射值
-   * 以下表示获取“工程目录下 wallpaper/theme_values.xml 中 name=action_bar_title_text_color_light 的 text 值”
-   * ```xml
-   * <Text
-   *  value=src=${root}/wallpaper/theme_values.xml&amp;name=action_bar_title_text_color_light
-   * />
-   * ```
-   * @param query src=${root}/wallpaper/theme_values.xml&amp;name=action_bar_title_text_color_light
+   * 解析 url 包含的信息
+   * @param url
+   * src://wallpaper/default_wallpaper.jpg
+   * src://com.miui.home/theme_values.xml?tag=color&amp;name=icon_title_text
    * @returns
    */
-  private getValueByQueryStr(query: string): {
-    name: string;
-    src: string;
-  } {
-    let { src, name } = querystring.parse(query);
-    if (!src || !name) {
-      console.debug("query错误", query);
-      return { name: "", src: "" };
-    }
-    // 如果有多个参数取第一个
-    if (Array.isArray(src)) src = src[0];
-    if (Array.isArray(name)) name = name[0];
-    return { name, src };
-  }
+  private getSourceUrlData(url: string): TypeResUrlData {
+    const resUrlData = new ResourceUrlData();
+    if (!url) return resUrlData.create();
 
-  // 获取定义的资源配置数据
-  private getResDefinitionByName(srcVal: string): TypeResDefinition | null {
-    const placeholder = this.getPlaceholderName(srcVal);
-    return this.resDefinitionInstance.getResDefinitionByName(placeholder);
+    // 读取缓存
+    const urlDataCache = this.urlDataMap.get(url);
+    if (urlDataCache) return urlDataCache;
+
+    const urlData = new URL(url);
+    const { hostname, pathname, searchParams } = urlData;
+    const protocol = urlData.protocol.replace(/:$/, "");
+    const src = path.join(hostname, pathname);
+    const query: Record<string, string> = {};
+    searchParams.forEach((value, key) => {
+      query[key] = value;
+    });
+    switch (protocol) {
+      case RESOURCE_PROTOCOL.FILE:
+      case RESOURCE_PROTOCOL.PROJECT:
+      case RESOURCE_PROTOCOL.RELATIVE:
+      case RESOURCE_PROTOCOL.RESOURCE:
+      case RESOURCE_PROTOCOL.SRC: {
+        resUrlData.set("protocol", protocol);
+        break;
+      }
+      default: {
+        resUrlData.set("protocol", RESOURCE_PROTOCOL.UNKNOWN);
+      }
+    }
+    resUrlData.set("source", url).set("query", query).set("src", src);
+
+    // 图片扩展
+    if (filenameIsImage(src)) {
+      const imageData = new ImageData();
+      const file = this.resolveResourcePath(src);
+      if (fse.existsSync(file)) {
+        imageData.setBatch(getImageData(file));
+      }
+      resUrlData.set("data", imageData.create());
+      resUrlData.set("fileType", FILE_TYPE.IMAGE);
+    }
+    // xml 扩展
+    else if (filenameIsXml(src)) {
+      // url 中的 name 参数作为查找 xml 中数据的依据
+      // TODO： 先固定使用 name，后续看需求是否需要自定义其他属性去 xml 中查找
+      const valueName = query["name"] || "";
+      const defaultValue = new XmlTemplate(
+        XmlFileCompiler.from(this.resolveResourcePath(src)).getElement()
+      ).getTextByAttrNameVal(valueName);
+      const xmlValueData = new XmlValueData()
+        .set("valueName", valueName)
+        .set("defaultValue", defaultValue)
+        .create();
+      resUrlData.set("data", xmlValueData);
+      resUrlData.set("fileType", FILE_TYPE.XML);
+    } else {
+      // TODO 其他文件
+    }
+    let srcpath = "";
+    switch (protocol) {
+      /**
+       * relative 协议，相对当前配置路径
+       * ```json
+       * {
+       *   "source": "relative://../icons/res/drawable-xxhdpi/com.android.contacts.activities.TwelveKeyDialer.png",
+       *   "src": "../icons/res/drawable-xxhdpi/com.android.contacts.activities.TwelveKeyDialer.png",
+       *   "url": "http://127.0.0.1:8000/image?filepath=/Users/zhangxuyang/mine/javascript/one-theme-editor/static/resource/config/xiaomi/miui12/icons/res/drawable-xxhdpi/com.android.contacts.activities.TwelveKeyDialer.png&t=1633421373933"
+       * }
+       *
+       * ```
+       */
+      case RESOURCE_PROTOCOL.RELATIVE: {
+        srcpath = this.resolvePagePath(src);
+        break;
+      }
+      /**
+       * resource 协议，相对资源配置根路径
+       * ```json
+       * {
+       *   "source": "resource://icons/res/drawable-xxhdpi/com.android.contacts.activities.TwelveKeyDialer.png",
+       *   "src": "icons/res/drawable-xxhdpi/com.android.contacts.activities.TwelveKeyDialer.png",
+       *   "url": "http://127.0.0.1:8000/image?filepath=/Users/zhangxuyang/mine/javascript/one-theme-editor/static/resource/config/xiaomi/miui12/icons/res/drawable-xxhdpi/com.android.contacts.activities.TwelveKeyDialer.png&t=1633421373934"
+       * }
+       *
+       * ```
+       */
+      case RESOURCE_PROTOCOL.SRC: // src 为资源和工程双向协议，但要生成一个资源的 url
+      case RESOURCE_PROTOCOL.RESOURCE: {
+        srcpath = this.resolveResourcePath(src);
+        break;
+      }
+    }
+    resUrlData.set("srcpath", srcpath);
+    // 写入缓存
+    const data = resUrlData.create();
+    this.urlDataMap.set(url, data);
+    return data;
   }
 
   /**
@@ -198,12 +289,12 @@ export default class PageConfigCompiler extends XMLNodeElement {
    */
   private layoutConf(node: XMLNodeElement) {
     return new ElementLayoutConfig()
-      .set("x", node.getAttributeOf("x"))
-      .set("y", node.getAttributeOf("y"))
-      .set("w", node.getAttributeOf("w"))
-      .set("h", node.getAttributeOf("h"))
-      .set("align", node.getAttributeOf("align", ALIGN_VALUES.LEFT))
-      .set("alignV", node.getAttributeOf("alignV", ALIGN_V_VALUES.TOP))
+      .set("x", node.getAttributeOf("x", "0"))
+      .set("y", node.getAttributeOf("y", "0"))
+      .set("w", node.getAttributeOf("w", "0"))
+      .set("h", node.getAttributeOf("h", "0"))
+      .set("align", node.getAttributeOf("align", ALIGN_VALUE.LEFT))
+      .set("alignV", node.getAttributeOf("alignV", ALIGN_V_VALUE.TOP))
       .create();
   }
 
@@ -219,37 +310,15 @@ export default class PageConfigCompiler extends XMLNodeElement {
    * @param node
    * @returns
    */
-  private imageElement(node: XMLNodeElement): TypeLayoutImage {
-    const srcVal = node.getAttributeOf("src");
-    const valueDefinition = this.getResDefinitionByName(srcVal);
-    let src = srcVal;
-    let description = node.getAttributeOf("description");
-    // 定义的数据，尝试解析 ${placeholder}
-    if (valueDefinition && valueDefinition.data) {
-      src = valueDefinition.src;
-      description = valueDefinition.desc;
-    } else {
-      try {
-        // 直接定义，用于显示一些静态图片
-        src = this.resDefinitionInstance.getUrlData(srcVal).src;
-      } catch (err) {
-        console.log(`layout url ${srcVal} 解析失败`);
-      }
-    }
-    const resImageData = new ImageData();
-    const layoutImageElement = new LayoutImageElement();
-    const resourcePath = this.resolvePath(src);
-    if (fse.existsSync(resourcePath)) {
-      const imageData = resImageData
-        .setBatch(getImageData(this.resolvePath(src)))
-        .create();
-      layoutImageElement
-        .set("desc", description)
-        .set("data", imageData)
-        .set("layout", this.layoutConf(node))
-        .set("src", src);
-    }
-    return layoutImageElement.create();
+  private imageElement(node: XMLNodeElement): TypeLayoutImageElement {
+    // 从 Resource 标签中读取 src 同名的 name 对应的 value
+    const sourceData = this.getSourceUrlData(node.getAttributeOf("src"));
+    return new LayoutImageElement()
+      .set("protocol", sourceData.protocol)
+      .set("src", sourceData.src)
+      .set("url", ImageUrlUtil.getUrl(sourceData.srcpath))
+      .set("layout", this.layoutConf(node))
+      .create();
   }
 
   /**
@@ -277,24 +346,52 @@ export default class PageConfigCompiler extends XMLNodeElement {
    * @param node
    * @returns
    */
-  private textElement(node: XMLNodeElement): TypeLayoutText {
+  private textElement(node: XMLNodeElement): TypeLayoutTextElement {
     const layout = this.layoutConf(node);
     const text = node.getAttributeOf("text");
-    const colorVal = node.getAttributeOf("color");
-    const valueDefinition = this.getResDefinitionByName(colorVal);
-    const textElementData = new LayoutTextElement()
+    const color = node.getAttributeOf("color");
+    const sourceData = this.getSourceUrlData(color);
+    const layoutTextElement = new LayoutTextElement()
+      .set("protocol", sourceData.protocol)
       .set("text", text)
-      .set("desc", text)
       .setBatchOf("layout", layout);
-    if (valueDefinition) {
-      const { desc, src } = valueDefinition;
-      textElementData.set("desc", desc);
-      textElementData.set("src", src);
-      if (valueDefinition.protocol === RESOURCE_PROTOCOL.XML) {
-        textElementData.set("data", valueDefinition.data);
-      }
+    if (sourceData.fileType === FILE_TYPE.XML) {
+      layoutTextElement.set("color", sourceData.data.defaultValue);
     }
-    return textElementData.create();
+    return layoutTextElement.create();
+  }
+
+  // 解析 Resource 定义数据
+  getResourceList(): TypeResDefinition[] {
+    return this.getRootChildrenNodesByTagname(ELEMENT_TAG.Resource)
+      .map(node => {
+        const name = node.getAttributeOf("name");
+        const source = node.getAttributeOf("source");
+        this.resourceKeyValMap.set(name, source);
+        // 解析 sourceUrl 信息
+        const sourceData = this.getSourceUrlData(source);
+        if (sourceData.fileType === FILE_TYPE.IMAGE) {
+          return new ResImageDefinition()
+            .set("resType", node.getAttributeOf("type"))
+            .set("desc", node.getAttributeOf("description"))
+            .set("name", name)
+            .set("url", ImageUrlUtil.getUrl(sourceData.srcpath))
+            .set("source", source)
+            .set("sourceData", sourceData)
+            .create();
+        }
+        if (sourceData.fileType === FILE_TYPE.XML) {
+          return new XmlValResDefinition()
+            .set("resType", node.getAttributeOf("type"))
+            .set("desc", node.getAttributeOf("description"))
+            .set("name", name)
+            .set("source", source)
+            .set("sourceData", sourceData)
+            .create();
+        }
+        return null;
+      })
+      .flatMap(item => item || []);
   }
 
   /**
@@ -306,11 +403,21 @@ export default class PageConfigCompiler extends XMLNodeElement {
       .getFirstChildNodeByTagname(ELEMENT_TAG.Layout)
       .getChildrenNodes()
       .flatMap(node => {
+        // 处理指定属性字符串模板
+        const resolveStrWithAttr = (attr: string) => {
+          const replaced = TempStringUtil.replace(
+            node.getAttributeOf(attr),
+            this.resourceKeyValMap
+          );
+          node.setAttributeOf(attr, replaced);
+        };
         switch (node.getTagname()) {
           case ELEMENT_TAG.Image: {
+            resolveStrWithAttr("src");
             return this.imageElement(node);
           }
           case ELEMENT_TAG.Text: {
+            resolveStrWithAttr("color");
             return this.textElement(node);
           }
           default: {
@@ -321,10 +428,9 @@ export default class PageConfigCompiler extends XMLNodeElement {
   }
 
   getResPathList(): string[] {
-    return this.resDefinitionInstance
-      .getResDefinitionList()
-      .map(item => item.src)
-      .filter(Boolean);
+    return this.getResourceList()
+      .map(item => item.sourceData?.src)
+      .flatMap(item => item || []);
   }
 
   getData(): TypeResPageConfig {
@@ -334,7 +440,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
       .set("description", this.getDescription())
       .set("screenWidth", this.getScreenWidth())
       .set("previewList", this.getPreviewList())
-      .set("resourceList", this.resDefinitionInstance.getResDefinitionList())
+      .set("resourceList", this.getResourceList())
       .set("layoutElementList", this.getLayoutElementList())
       .create();
   }

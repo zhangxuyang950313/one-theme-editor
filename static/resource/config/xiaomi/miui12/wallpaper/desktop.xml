@@ -11,31 +11,31 @@
         type="image"
         name="wallpaper" 
         description="默认壁纸" 
-        value="image://wallpaper/default_wallpaper.jpg"
+        source="src://wallpaper/default_wallpaper.jpg"
     />
     <Resource
         type="image"
         name="com.android.contacts.activities.TwelveKeyDialer"
         description="拨号"
-        value="image://icons/res/drawable-xxhdpi/com.android.contacts.activities.TwelveKeyDialer.png"
+        source="src://icons/res/drawable-xxhdpi/com.android.contacts.activities.TwelveKeyDialer.png"
     />
     <Resource
         type="image"
         name="com.android.mms"
         description="短信"
-        value="image://icons/res/drawable-xxhdpi/com.android.mms.png"
+        source="src://icons/res/drawable-xxhdpi/com.android.mms.png"
     />
     <Resource
         type="image"
         name="com.android.browser"
         description="浏览器"
-        value="image://icons/res/drawable-xxhdpi/com.android.browser.png"
+        source="src://icons/res/drawable-xxhdpi/com.android.browser.png"
     />
     <Resource
         type="image"
         name="com.android.camera"
         description="相机"
-        value="image://icons/res/drawable-xxhdpi/com.android.camera.png"
+        source="src://icons/res/drawable-xxhdpi/com.android.camera.png"
     />
 
     <!-- xml 资源 -->
@@ -43,50 +43,50 @@
         type="color"
         name="icon_title_text"
         description="图标文字" 
-        value="xml://com.miui.home/theme_values.xml?tag=color&amp;name=icon_title_text"
+        source="src://com.miui.home/theme_values.xml?tag=color&amp;name=icon_title_text"
     />
     <Resource
         type="color"
         name="action_bar_title_text_color_light"
         description="标题栏文字"
-        value="xml://wallpaper/theme_values.xml?tag=color&amp;name=action_bar_title_text_color_light"
+        source="src://wallpaper/theme_values.xml?tag=color&amp;name=action_bar_title_text_color_light"
     />
 
     <Resource
         type="boolean"
         name="bool_test1"
         description="布尔值测试1"
-        value="xml://com.miui.home/theme_values.xml?tag=color&amp;name=bool_test1"
+        source="src://com.miui.home/theme_values.xml?tag=color&amp;name=bool_test1"
     />
     <Resource
         type="boolean"
         name="bool_test2"
         description="布尔值测试2"
-        value="xml://com.miui.home/theme_values.xml?tag=color&amp;name=bool_test2"
+        source="src://com.miui.home/theme_values.xml?tag=color&amp;name=bool_test2"
     />
     <Resource
         type="string"
         name="dimen_test1"
         description="尺寸值测试1"
-        value="xml://com.miui.home/theme_values.xml?tag=color&amp;name=dimen_test1"
+        source="src://com.miui.home/theme_values.xml?tag=color&amp;name=dimen_test1"
     />
     <Resource
         type="string"
         name="dimen_test2"
         description="尺寸值测试2"
-        value="xml://com.miui.home/theme_values.xml?tag=color&amp;name=dimen_test2"
+        source="src://com.miui.home/theme_values.xml?tag=color&amp;name=dimen_test2"
     />
     <Resource
         type="number"
         name="integer_test1"
         description="整型值测试1"
-        value="xml://com.miui.home/theme_values.xml?tag=color&amp;name=integer_test1"
+        source="src://com.miui.home/theme_values.xml?tag=color&amp;name=integer_test1"
     />
     <Resource
         type="number"
         name="integer_test2"
         description="整型值测试2"
-        value="xml://com.miui.home/theme_values.xml?tag=color&amp;name=integer_test2"
+        source="src://com.miui.home/theme_values.xml?tag=color&amp;name=integer_test2"
     />
 
     <!-- 静态预览图 -->
@@ -96,14 +96,25 @@
 
     <!-- 预览结构配置 -->
     <Layout>
-        <!-- 这个图片不会在素材区展示，因为它是静态的，没有在 Resource 节点中定义 -->
-        <Image 
-            x="0" y="0" w="1080" h="2340"
-            src="local://../wallpaper/default_wallpaper.jpg"
-        />
         <Image 
             x="0" y="0" w="1080" h="2340"
             src="${wallpaper}"
+        />
+        <!--
+            relative 协议
+            相对的静态图片定义，这个图片不会在素材区展示，因为它是静态的，没有在 Resource 节点中定义，并不支持资源变更 
+        -->
+        <Image
+            x="0" y="0" size="36" w="168" h="168" 
+            src="relative://../icons/res/drawable-xxhdpi/com.android.contacts.activities.TwelveKeyDialer.png"
+        />
+        <!-- 
+            resource 协议
+            相对资源根路径的路径，同上图片不会在素材区展示和被修改
+         -->
+        <Image
+            x="0" y="300" size="36" w="168" h="168" 
+            src="resource://icons/res/drawable-xxhdpi/com.android.contacts.activities.TwelveKeyDialer.png"
         />
         <Image 
             x="160" y="2150" w="186" h="186" align="center" alignV="center" 
@@ -131,10 +142,6 @@
             x="0" y="0" size="40" align="center" alignV="center"
             color="${action_bar_title_text_color_light}"
         /> 
-        <Image
-            x="0" y="0" size="36" w="168" h="168" 
-            src="local://../icons/res/drawable-xxhdpi/com.android.contacts.activities.TwelveKeyDialer.png"
-        />
     </Layout>
 </Page>
 
@@ -149,7 +156,7 @@
             name="图标字体"
             text="拨号"
             x="415" y="1250" size="36" align="center" alignV="center"
-            value="${icon_title_text}"
+            source="${icon_title_text}"
         />
         <Image
             name="短信"
@@ -179,7 +186,7 @@
             name="图标字体"
             text="天气"
             x="168" y="1250" size="36" align="center" alignV="center"
-            value="src=${root}/com.miui.home/theme_values.xml&amp;name=icon_title_text_light"
+            source="src=${root}/com.miui.home/theme_values.xml&amp;name=icon_title_text_light"
         />
         <Image 
             name="小米商城"

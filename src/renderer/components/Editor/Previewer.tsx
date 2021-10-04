@@ -8,10 +8,11 @@ import {
   useCurrentResPageConfig
 } from "@/hooks/resource/index";
 import {
-  ALIGN_VALUES,
-  ALIGN_V_VALUES,
-  RESOURCE_PROTOCOL,
-  RESOURCE_TYPES
+  ALIGN_VALUE,
+  ALIGN_V_VALUE,
+  ELEMENT_TAG,
+  FILE_TYPE,
+  RESOURCE_PROTOCOL
 } from "src/enum";
 import { useFileDataMap } from "@/hooks/project";
 import { TypeLayoutData } from "src/types/resource";
@@ -23,21 +24,21 @@ function computeLayout(data: TypeLayoutData): { x: number; y: number } {
     y: Number(data.y)
   };
   switch (data.align) {
-    case ALIGN_VALUES.CENTER: {
+    case ALIGN_VALUE.CENTER: {
       result.x = Number(data.x) - Number(data.w) / 2;
       break;
     }
-    case ALIGN_VALUES.RIGHT: {
+    case ALIGN_VALUE.RIGHT: {
       result.x = Number(data.x) - Number(data.w);
       break;
     }
   }
   switch (data.alignV) {
-    case ALIGN_V_VALUES.CENTER: {
+    case ALIGN_V_VALUE.CENTER: {
       result.y = Number(data.y) - Number(data.h) / 2;
       break;
     }
-    case ALIGN_V_VALUES.BOTTOM: {
+    case ALIGN_V_VALUE.BOTTOM: {
       result.x = Number(data.h) - Number(data.h);
       break;
     }
@@ -76,36 +77,56 @@ const Previewer: React.FC = () => {
           }}
         >
           {layoutElementList.map((element, k) => {
-            const key = `${element.src}-${k}`;
-            switch (element.type) {
-              // 图片
-              case RESOURCE_TYPES.IMAGE: {
-                const layoutComputed = computeLayout(element.layout);
+            const layoutComputed = computeLayout(element.layout);
+            switch (element.tag) {
+              // 图片类型预览
+              case ELEMENT_TAG.Image: {
                 const fileData = fileDataMap.get(element.src);
-                if (fileData?.type === RESOURCE_PROTOCOL.IMAGE) {
-                  return (
-                    <img
-                      key={key}
-                      className="image"
-                      style={{
-                        left: `${layoutComputed.x}px`,
-                        top: `${layoutComputed.y}px`,
-                        width: `${element.layout.w}px`,
-                        height: `${element.layout.h}px`
-                      }}
-                      alt=""
-                      src={fileData.url}
-                    />
-                  );
+                // 若 fileDataMap 中不存在当前图片，使用默认的 element.url
+                let url = element.url;
+                const fileDataUrl =
+                  fileData?.type === FILE_TYPE.IMAGE ? fileData.url : "";
+                switch (element.protocol) {
+                  // src 协议支持双向寻图
+                  case RESOURCE_PROTOCOL.SRC: {
+                    url = fileDataUrl || element.url;
+                    break;
+                  }
+                  // project 协议强制使用工程图片
+                  case RESOURCE_PROTOCOL.PROJECT: {
+                    url = fileDataUrl;
+                    break;
+                  }
+                  // relative | resource 协议为相对路径，用于描述静态图片
+                  case RESOURCE_PROTOCOL.RELATIVE:
+                  case RESOURCE_PROTOCOL.RESOURCE: {
+                    url = element.url;
+                    break;
+                  }
+                  // TODO: file 文件协议，可用于替换所有文件类型，展示图标图标吧
+                  case RESOURCE_PROTOCOL.FILE: {
+                    break;
+                  }
                 }
+                const style = {
+                  left: `${layoutComputed.x}px`,
+                  top: `${layoutComputed.y}px`,
+                  width: `${element.layout.w}px`,
+                  height: `${element.layout.h}px`
+                };
+                return (
+                  <PreloadImage
+                    key={`${element.src}-${k}`}
+                    className="image"
+                    style={style}
+                    alt=""
+                    src={url}
+                  />
+                );
+              }
+              default: {
                 return null;
               }
-              // 字体颜色
-              case RESOURCE_TYPES.COLOR: {
-                return null;
-              }
-              default:
-                return null;
             }
           })}
         </div>

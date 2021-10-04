@@ -11,7 +11,7 @@ import {
   TypeScenarioConfig
 } from "src/types/resource";
 
-export enum ACTION_TYPES {
+export enum ACTION_TYPE {
   // 初始化
   INIT_EDITOR = "INIT_EDITOR",
   // 设置资源配置
@@ -25,7 +25,8 @@ export enum ACTION_TYPES {
   // 添加页面配置数据映射
   PATCH_PAGE_CONFIG = "PATCH_PAGE_CONFIG",
   // 添加工程文件数据映射
-  PATCH_PROJECT_RESOURCE = "PATCH_PROJECT_RESOURCE",
+  PATCH_FILE_DATA_MAP = "PATCH_FILE_DATA_MAP",
+  REMOVE_FILE_DATA_MAP = "REMOVE_FILE_DATA_MAP",
 
   // 设置工程新数据
   SET_PROJECT_DATA = "SET_PROJECT_DATA",
@@ -34,53 +35,59 @@ export enum ACTION_TYPES {
 }
 
 type TypeActionInitEditor = {
-  type: typeof ACTION_TYPES.INIT_EDITOR;
+  type: typeof ACTION_TYPE.INIT_EDITOR;
 };
 
 type TypeActionSetResourceConfig = {
-  type: typeof ACTION_TYPES.SET_RESOURCE_CONFIG;
+  type: typeof ACTION_TYPE.SET_RESOURCE_CONFIG;
   payload: TypeResourceConfig;
 };
 
 type TypeActionSetScenarioConfig = {
-  type: typeof ACTION_TYPES.SET_SCENARIO_CONFIG;
+  type: typeof ACTION_TYPE.SET_SCENARIO_CONFIG;
   payload: TypeScenarioConfig;
 };
 
 // 设置模块
 type TypeActionSetModuleConf = {
-  type: typeof ACTION_TYPES.SET_MODULE_CONFIG;
+  type: typeof ACTION_TYPE.SET_MODULE_CONFIG;
   payload: TypeResModule;
 };
 
 // 设置页面
 type TypeActionSetPageConf = {
-  type: typeof ACTION_TYPES.SET_PAGE_OPTION;
+  type: typeof ACTION_TYPE.SET_PAGE_OPTION;
   payload: TypeResPageOption;
 };
 
 // 设置工程数据
 type TypeActionSetProjectData = {
-  type: typeof ACTION_TYPES.SET_PROJECT_DATA;
+  type: typeof ACTION_TYPE.SET_PROJECT_DATA;
   payload: TypeProjectDataDoc;
 };
 
 // 设置工程描述信息
 type TypeActionSetProjectInfo = {
-  type: typeof ACTION_TYPES.SET_PROJECT_INFO;
+  type: typeof ACTION_TYPE.SET_PROJECT_INFO;
   payload: TypeProjectInfo;
 };
 
 // 更新页面配置表
 type TypeActionPatchPageConfMap = {
-  type: typeof ACTION_TYPES.PATCH_PAGE_CONFIG;
+  type: typeof ACTION_TYPE.PATCH_PAGE_CONFIG;
   payload: TypeResPageConfig;
 };
 
 // 更新工程文件数据表
-type TypeActionPatchProjectFileDataMap = {
-  type: typeof ACTION_TYPES.PATCH_PROJECT_RESOURCE;
+type TypeActionPatchFileDataMap = {
+  type: typeof ACTION_TYPE.PATCH_FILE_DATA_MAP;
   payload: TypeFileData;
+};
+
+// 删除工程文件数据
+type TypeActionRemoveFileDataMap = {
+  type: typeof ACTION_TYPE.REMOVE_FILE_DATA_MAP;
+  payload: string;
 };
 
 // main actions
@@ -93,63 +100,70 @@ export type TypeEditorActions =
   | TypeActionSetProjectData
   | TypeActionSetProjectInfo
   | TypeActionPatchPageConfMap
-  | TypeActionPatchProjectFileDataMap;
+  | TypeActionPatchFileDataMap
+  | TypeActionRemoveFileDataMap;
 
 export function ActionInitEditor(): TypeActionInitEditor {
-  return { type: ACTION_TYPES.INIT_EDITOR };
+  return { type: ACTION_TYPE.INIT_EDITOR };
 }
 
 // 设置当前场景配置
 export function ActionSetScenarioConfig(
   payload: TypeScenarioConfig
 ): TypeActionSetScenarioConfig {
-  return { type: ACTION_TYPES.SET_SCENARIO_CONFIG, payload };
+  return { type: ACTION_TYPE.SET_SCENARIO_CONFIG, payload };
 }
 
 // 设置当前资源配置
 export function ActionSetResourceConfig(
   payload: TypeResourceConfig
 ): TypeActionSetResourceConfig {
-  return { type: ACTION_TYPES.SET_RESOURCE_CONFIG, payload };
+  return { type: ACTION_TYPE.SET_RESOURCE_CONFIG, payload };
 }
 
 // 设置当前模块配置
 export function ActionSetCurrentModule(
   payload: TypeResModule
 ): TypeActionSetModuleConf {
-  return { type: ACTION_TYPES.SET_MODULE_CONFIG, payload };
+  return { type: ACTION_TYPE.SET_MODULE_CONFIG, payload };
 }
 
 // 设置当前页面配置
 export function ActionSetCurrentPage(
   payload: TypeResPageOption
 ): TypeActionSetPageConf {
-  return { type: ACTION_TYPES.SET_PAGE_OPTION, payload };
+  return { type: ACTION_TYPE.SET_PAGE_OPTION, payload };
 }
 
 // 设置工程数据
 export function ActionSetProjectData(
   payload: TypeProjectDataDoc
 ): TypeActionSetProjectData {
-  return { type: ACTION_TYPES.SET_PROJECT_DATA, payload };
+  return { type: ACTION_TYPE.SET_PROJECT_DATA, payload };
 }
 
 // 设置 description
 export function ActionSetDescription(
   payload: TypeProjectInfo
 ): TypeActionSetProjectInfo {
-  return { type: ACTION_TYPES.SET_PROJECT_INFO, payload };
+  return { type: ACTION_TYPE.SET_PROJECT_INFO, payload };
 }
 
 // 更新页面数据表
 export function ActionPatchPageConfMap(
   payload: TypeResPageConfig
 ): TypeActionPatchPageConfMap {
-  return { type: ACTION_TYPES.PATCH_PAGE_CONFIG, payload };
+  return { type: ACTION_TYPE.PATCH_PAGE_CONFIG, payload };
 }
 
-export function ActionPatchProjectFileData(
+export function ActionPatchFileData(
   payload: TypeFileData
-): TypeActionPatchProjectFileDataMap {
-  return { type: ACTION_TYPES.PATCH_PROJECT_RESOURCE, payload };
+): TypeActionPatchFileDataMap {
+  return { type: ACTION_TYPE.PATCH_FILE_DATA_MAP, payload };
+}
+
+export function ActionRemoveFileData(
+  payload: string
+): TypeActionRemoveFileDataMap {
+  return { type: ACTION_TYPE.REMOVE_FILE_DATA_MAP, payload };
 }

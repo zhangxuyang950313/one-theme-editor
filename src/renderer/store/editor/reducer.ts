@@ -13,7 +13,7 @@ import ResourceConfigData, {
 } from "src/data/ResourceConfig";
 import ProjectData from "src/data/ProjectData";
 import ScenarioConfigData from "src/data/ScenarioConfig";
-import { ACTION_TYPES, TypeEditorActions } from "./action";
+import { ACTION_TYPE, TypeEditorActions } from "./action";
 
 // main states
 export type TypeEditorState = {
@@ -46,24 +46,24 @@ export default function EditorReducer(
 ): TypeEditorState {
   switch (action.type) {
     // 初始化数据
-    case ACTION_TYPES.INIT_EDITOR: {
+    case ACTION_TYPE.INIT_EDITOR: {
       return { ...defaultState };
     }
     // 工程数据
-    case ACTION_TYPES.SET_PROJECT_DATA: {
+    case ACTION_TYPE.SET_PROJECT_DATA: {
       document.title = action.payload.description.name || document.title;
       return updateState(state, {
         projectData: action.payload
       });
     }
     // 场景数据
-    case ACTION_TYPES.SET_SCENARIO_CONFIG: {
+    case ACTION_TYPE.SET_SCENARIO_CONFIG: {
       return updateState(state, {
         scenarioConfig: action.payload
       });
     }
     // 配置数据
-    case ACTION_TYPES.SET_RESOURCE_CONFIG: {
+    case ACTION_TYPE.SET_RESOURCE_CONFIG: {
       const { moduleList: resourceModuleList } = action.payload;
       return updateState(state, {
         resourceConfig: action.payload,
@@ -72,19 +72,19 @@ export default function EditorReducer(
       });
     }
     // 模块配置
-    case ACTION_TYPES.SET_MODULE_CONFIG: {
+    case ACTION_TYPE.SET_MODULE_CONFIG: {
       return updateState(state, {
         currentModule: action.payload
       });
     }
     // 页面配置
-    case ACTION_TYPES.SET_PAGE_OPTION: {
+    case ACTION_TYPE.SET_PAGE_OPTION: {
       return updateState(state, {
         currentPage: action.payload
       });
     }
     // 页面数据
-    case ACTION_TYPES.PATCH_PAGE_CONFIG: {
+    case ACTION_TYPE.PATCH_PAGE_CONFIG: {
       return updateState(state, {
         pageConfigMap: {
           ...state.pageConfigMap,
@@ -92,12 +92,18 @@ export default function EditorReducer(
         }
       });
     }
-    case ACTION_TYPES.PATCH_PROJECT_RESOURCE: {
+    case ACTION_TYPE.PATCH_FILE_DATA_MAP: {
       return updateState(state, {
         fileDataMap: {
           ...state.fileDataMap,
           [action.payload.src]: action.payload
         }
+      });
+    }
+    case ACTION_TYPE.REMOVE_FILE_DATA_MAP: {
+      delete state.fileDataMap[action.payload];
+      return updateState(state, {
+        fileDataMap: { ...state.fileDataMap }
       });
     }
     default:

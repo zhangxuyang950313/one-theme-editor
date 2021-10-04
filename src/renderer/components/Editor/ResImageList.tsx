@@ -1,13 +1,17 @@
 import React from "react";
 
 import ImageHandler from "@/components/ImageHandler/index";
-import useImageDefinitionList from "@/hooks/resource/useImageDefinitionList";
+import { useResDefinitionList } from "@/hooks/resource";
+import { FILE_TYPE } from "src/enum";
 
 const ResImageList: React.FC = () => {
-  const imageDefinitionList = useImageDefinitionList();
+  const resourceList = useResDefinitionList();
+  const imageResourceList = resourceList.flatMap(item =>
+    item.fileType === FILE_TYPE.IMAGE ? item : []
+  );
   return (
     <>
-      {imageDefinitionList.map((item, key) => (
+      {imageResourceList.map((item, key) => (
         <ImageHandler key={key} imageDefinition={item} />
       ))}
     </>

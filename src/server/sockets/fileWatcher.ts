@@ -6,7 +6,7 @@ import { SOCKET_EVENT } from "src/constant/socketConf";
 import { getFileData } from "server/services/project";
 import { TypeErrorData, TypeWatchFilesPayload } from "src/types/socket";
 import { FILE_EVENT } from "src/enum";
-import { sleep } from "src/utils";
+import { sleep } from "src/common/utils";
 
 /**
  * 文件监听 map

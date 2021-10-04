@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import { TypeXmlValDefinition } from "src/types/resource";
+import { TypeResXmlValDefinition } from "src/types/resource";
 import { apiWriteXmlTemplate } from "@/request";
 import { useProjectUUID, useProjectXmlValueBySrc } from "@/hooks/project/index";
-import { RESOURCE_TYPES } from "src/enum/index";
+import { RESOURCE_TYPE } from "src/enum/index";
 
 import ColorPicker from "./ColorPicker";
 import BooleanSelector from "./BooleanSelector";
@@ -11,24 +11,22 @@ import NumberInput from "./NumberInput";
 import StringInput from "./StringInput";
 
 const XmlValueHandler: React.FC<{
-  xmlValueDefinition: TypeXmlValDefinition;
+  xmlValueDefinition: TypeResXmlValDefinition;
 }> = props => {
-  const { type, name, src, data } = props.xmlValueDefinition;
+  const { resType, name, sourceData } = props.xmlValueDefinition;
   const uuid = useProjectUUID();
-  const value = useProjectXmlValueBySrc(name, src);
-
-  if (!data) return null;
+  const value = useProjectXmlValueBySrc(name, sourceData.src);
 
   // 分类编辑控件
   const CategoryHandler = () => {
     // 写入 xml
     const writeXml = (value: string) => {
-      const name = data.valueName;
-      apiWriteXmlTemplate(uuid, { name, value, src });
+      const name = sourceData.data.valueName;
+      apiWriteXmlTemplate(uuid, { name, value, src: sourceData.src });
     };
-    switch (type) {
+    switch (resType) {
       // 颜色选择器
-      case RESOURCE_TYPES.COLOR: {
+      case RESOURCE_TYPE.COLOR: {
         return (
           <ColorPicker
             value={value}
@@ -38,7 +36,7 @@ const XmlValueHandler: React.FC<{
         );
       }
       // 布尔选择器
-      case RESOURCE_TYPES.BOOLEAN: {
+      case RESOURCE_TYPE.BOOLEAN: {
         return (
           <BooleanSelector
             value={value}
@@ -48,7 +46,7 @@ const XmlValueHandler: React.FC<{
         );
       }
       // 数字输入器
-      case RESOURCE_TYPES.NUMBER: {
+      case RESOURCE_TYPE.NUMBER: {
         return (
           <NumberInput
             value={value}
@@ -58,7 +56,7 @@ const XmlValueHandler: React.FC<{
         );
       }
       // 未注明的都使用通用的字符串输入器
-      case RESOURCE_TYPES.STRING:
+      case RESOURCE_TYPE.STRING:
       default: {
         return (
           <StringInput

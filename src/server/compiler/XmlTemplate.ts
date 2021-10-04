@@ -1,5 +1,5 @@
 import { Element } from "xml-js";
-import { getPlaceholderVal } from "src/utils/index";
+import { getPlaceholderVal } from "src/common/utils/index";
 import { TypeKeyValue } from "src/types";
 import { TypeXmlTempKeyValMap } from "src/types/resource";
 import XMLNodeElement from "./XMLNodeElement";
@@ -85,15 +85,25 @@ export default class XmlTemplate extends XMLNodeElement {
   }
 
   /**
-   * 获取匹配 name 属性节点的 text 值
-   * @param name
+   * 获取匹配指定属性和属性值节点的 text 值
+   * @param attrName 属性名称
+   * @param val 属性值
    * @returns
    */
-  public getTextByAttrName(name: string): string {
+  public getTextByAttrValOf(attrName: string, val: string): string {
     return super
       .getFirstChildNode()
-      .getFirstChildNodeByAttrValue("name", name)
+      .getFirstChildNodeByAttrValue(attrName, val)
       .getFirstTextChildValue();
+  }
+
+  /**
+   * 获取匹配 name 属性节点的 text 值
+   * @param val
+   * @returns
+   */
+  public getTextByAttrNameVal(val: string): string {
+    return this.getTextByAttrValOf("name", val);
   }
 
   /**
