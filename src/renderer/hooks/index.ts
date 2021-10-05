@@ -8,7 +8,6 @@ import {
 } from "@/store/global/modules/base/action";
 import { useGlobalSelector, useGlobalDispatch } from "@/store/index";
 import { TypePathConfig } from "src/types/extraConfig";
-import { sleep } from "src/common/utils/index";
 import { LOAD_STATUS } from "src/enum";
 import electronStore from "src/common/electronStore";
 
@@ -86,7 +85,7 @@ export function useInitEditorConfig(): [LOAD_STATUS, () => Promise<void>] {
     electronStore.set("pathConfig", pathConfig);
     dispatch(ActionSetServerPort(electronStore.get("serverPort")));
     dispatch(ActionSetAppConfig(pathConfig));
-    await sleep(300);
+    // await sleep(300);
     setStatus(LOAD_STATUS.SUCCESS);
   };
   useLayoutEffect(() => {

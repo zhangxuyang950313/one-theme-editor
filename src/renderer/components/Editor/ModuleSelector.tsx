@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Tooltip } from "antd";
 import { useCurrentResModule } from "@/hooks/resource/index";
 import { useEditorSelector } from "@/store";
-import { ResourceImage } from "../ImageCollection";
+import { StaticResourceImage } from "../ImageCollection";
 
 // 模块选择器
 const ModuleSelector: React.FC = () => {
@@ -26,7 +26,7 @@ const ModuleSelector: React.FC = () => {
               alt=""
               src={getImageURL(item.icon)}
             /> */}
-            <ResourceImage
+            <StaticResourceImage
               className="icon"
               data-active={String(currentModule.index === item.index)}
               src={item.icon}

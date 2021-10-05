@@ -18,9 +18,7 @@ import {
   ResourceUrlData,
   XmlValueData,
   ResImageDefinition,
-  XmlValResDefinition,
-  ImageSourceData,
-  XmlValSourceData
+  XmlValResDefinition
 } from "src/data/ResourceConfig";
 import {
   filenameIsImage,
@@ -39,6 +37,7 @@ import XMLNodeElement from "server/compiler/XMLNodeElement";
 import ImageData from "src/data/ImageData";
 import TempStringUtil from "src/common/utils/TempStringUtil";
 import ImageUrlUtil from "src/common/utils/ImageUrlUtil";
+import electronStore from "src/common/electronStore";
 import XmlFileCompiler from "./XmlFileCompiler";
 import XmlTemplate from "./XmlTemplate";
 
@@ -88,6 +87,10 @@ export default class PageConfigCompiler extends XMLNodeElement {
   // 生成当前配置中相对于素材根路径的绝对路径
   private resolveResourcePath(pathname: string): string {
     return path.join(this.resourceRoot, pathname);
+  }
+
+  private resolveProjectPath(pathname: string): string {
+    return path.join(electronStore.get("projectData").root, pathname);
   }
 
   // 相对于当前页面目录的路径转为正确的绝对路径
@@ -191,6 +194,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
     const urlDataCache = this.urlDataMap.get(url);
     if (urlDataCache) return urlDataCache;
 
+    // 解析 url 数据
     const urlData = new URL(url);
     const { hostname, pathname, searchParams } = urlData;
     const protocol = urlData.protocol.replace(/:$/, "");
@@ -199,6 +203,11 @@ export default class PageConfigCompiler extends XMLNodeElement {
     searchParams.forEach((value, key) => {
       query[key] = value;
     });
+    resUrlData.set("source", url);
+    resUrlData.set("query", query);
+    resUrlData.set("src", src);
+
+    // 协议
     switch (protocol) {
       case RESOURCE_PROTOCOL.FILE:
       case RESOURCE_PROTOCOL.PROJECT:
@@ -212,35 +221,8 @@ export default class PageConfigCompiler extends XMLNodeElement {
         resUrlData.set("protocol", RESOURCE_PROTOCOL.UNKNOWN);
       }
     }
-    resUrlData.set("source", url).set("query", query).set("src", src);
 
-    // 图片扩展
-    if (filenameIsImage(src)) {
-      const imageData = new ImageData();
-      const file = this.resolveResourcePath(src);
-      if (fse.existsSync(file)) {
-        imageData.setBatch(getImageData(file));
-      }
-      resUrlData.set("data", imageData.create());
-      resUrlData.set("fileType", FILE_TYPE.IMAGE);
-    }
-    // xml 扩展
-    else if (filenameIsXml(src)) {
-      // url 中的 name 参数作为查找 xml 中数据的依据
-      // TODO： 先固定使用 name，后续看需求是否需要自定义其他属性去 xml 中查找
-      const valueName = query["name"] || "";
-      const defaultValue = new XmlTemplate(
-        XmlFileCompiler.from(this.resolveResourcePath(src)).getElement()
-      ).getTextByAttrNameVal(valueName);
-      const xmlValueData = new XmlValueData()
-        .set("valueName", valueName)
-        .set("defaultValue", defaultValue)
-        .create();
-      resUrlData.set("data", xmlValueData);
-      resUrlData.set("fileType", FILE_TYPE.XML);
-    } else {
-      // TODO 其他文件
-    }
+    // 根据协议处理资源路径
     let srcpath = "";
     switch (protocol) {
       /**
@@ -274,8 +256,39 @@ export default class PageConfigCompiler extends XMLNodeElement {
         srcpath = this.resolveResourcePath(src);
         break;
       }
+      case RESOURCE_PROTOCOL.PROJECT: {
+        srcpath = this.resolveProjectPath(src);
+        break;
+      }
     }
     resUrlData.set("srcpath", srcpath);
+
+    // 图片
+    if (filenameIsImage(srcpath)) {
+      const imageData = new ImageData();
+      if (fse.existsSync(srcpath)) {
+        imageData.setBatch(getImageData(srcpath));
+      }
+      resUrlData.set("data", imageData.create());
+      resUrlData.set("fileType", FILE_TYPE.IMAGE);
+    }
+    // xml 中的值
+    else if (filenameIsXml(srcpath)) {
+      // url 中的 name 参数作为查找 xml 中数据的依据
+      // TODO： 先固定使用 name，后续看需求是否需要自定义其他属性去 xml 中查找
+      const valueName = query["name"] || "";
+      const defaultValue = new XmlTemplate(
+        XmlFileCompiler.from(srcpath).getElement()
+      ).getTextByAttrNameVal(valueName);
+      const xmlValueData = new XmlValueData()
+        .set("valueName", valueName)
+        .set("defaultValue", defaultValue)
+        .create();
+      resUrlData.set("data", xmlValueData);
+      resUrlData.set("fileType", FILE_TYPE.XML);
+    } else {
+      // TODO 其他文件
+    }
     // 写入缓存
     const data = resUrlData.create();
     this.urlDataMap.set(url, data);
@@ -287,12 +300,15 @@ export default class PageConfigCompiler extends XMLNodeElement {
    * @param node
    * @returns
    */
-  private layoutConf(node: XMLNodeElement) {
+  private layoutConf(
+    node: XMLNodeElement,
+    size?: { width: string; height: string }
+  ) {
     return new ElementLayoutConfig()
       .set("x", node.getAttributeOf("x", "0"))
       .set("y", node.getAttributeOf("y", "0"))
-      .set("w", node.getAttributeOf("w", "0"))
-      .set("h", node.getAttributeOf("h", "0"))
+      .set("w", node.getAttributeOf("w", size?.width || "100"))
+      .set("h", node.getAttributeOf("h", size?.height || "100"))
       .set("align", node.getAttributeOf("align", ALIGN_VALUE.LEFT))
       .set("alignV", node.getAttributeOf("alignV", ALIGN_V_VALUE.TOP))
       .create();
@@ -313,11 +329,18 @@ export default class PageConfigCompiler extends XMLNodeElement {
   private imageElement(node: XMLNodeElement): TypeLayoutImageElement {
     // 从 Resource 标签中读取 src 同名的 name 对应的 value
     const sourceData = this.getSourceUrlData(node.getAttributeOf("src"));
+    const size =
+      sourceData.fileType === FILE_TYPE.IMAGE
+        ? {
+            width: String(sourceData.data.width),
+            height: String(sourceData.data.height)
+          }
+        : { width: "", height: "" };
     return new LayoutImageElement()
       .set("protocol", sourceData.protocol)
       .set("src", sourceData.src)
       .set("url", ImageUrlUtil.getUrl(sourceData.srcpath))
-      .set("layout", this.layoutConf(node))
+      .set("layout", this.layoutConf(node, size))
       .create();
   }
 
@@ -347,10 +370,10 @@ export default class PageConfigCompiler extends XMLNodeElement {
    * @returns
    */
   private textElement(node: XMLNodeElement): TypeLayoutTextElement {
-    const layout = this.layoutConf(node);
     const text = node.getAttributeOf("text");
     const color = node.getAttributeOf("color");
     const sourceData = this.getSourceUrlData(color);
+    const layout = this.layoutConf(node);
     const layoutTextElement = new LayoutTextElement()
       .set("protocol", sourceData.protocol)
       .set("text", text)

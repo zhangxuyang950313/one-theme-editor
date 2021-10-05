@@ -1,3 +1,4 @@
+import path from "path";
 import { updateState } from "@/store/utils";
 import { TypeProjectDataDoc, TypeFileData } from "src/types/project";
 import {
@@ -13,6 +14,8 @@ import ResourceConfigData, {
 } from "src/data/ResourceConfig";
 import ProjectData from "src/data/ProjectData";
 import ScenarioConfigData from "src/data/ScenarioConfig";
+import electronStore from "src/common/electronStore";
+import pathUtil from "server/utils/pathUtil";
 import { ACTION_TYPE, TypeEditorActions } from "./action";
 
 // main states
@@ -52,23 +55,32 @@ export default function EditorReducer(
     // 工程数据
     case ACTION_TYPE.SET_PROJECT_DATA: {
       document.title = action.payload.description.name || document.title;
+      electronStore.set("projectData", action.payload);
+      electronStore.set("projectPath", action.payload.root);
       return updateState(state, {
         projectData: action.payload
       });
     }
     // 场景数据
     case ACTION_TYPE.SET_SCENARIO_CONFIG: {
+      electronStore.set("scenarioConfig", action.payload);
       return updateState(state, {
         scenarioConfig: action.payload
       });
     }
     // 配置数据
     case ACTION_TYPE.SET_RESOURCE_CONFIG: {
-      const { moduleList: resourceModuleList } = action.payload;
+      const { moduleList } = action.payload;
+      electronStore.set("resourceConfig", action.payload);
+      const resourcePath = path.join(
+        pathUtil.RESOURCE_CONFIG_DIR,
+        action.payload.namespace
+      );
+      electronStore.set("resourcePath", resourcePath);
       return updateState(state, {
         resourceConfig: action.payload,
-        currentModule: resourceModuleList[0],
-        currentPage: resourceModuleList[0]?.pageGroupList?.[0].pageList?.[0]
+        currentModule: moduleList[0],
+        currentPage: moduleList[0]?.pageGroupList?.[0].pageList?.[0]
       });
     }
     // 模块配置

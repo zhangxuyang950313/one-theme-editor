@@ -143,6 +143,7 @@
     "nedb-promises": "^5.0.1",
     "node-loader": "^2.0.0",
     "nodemon": "^2.0.13",
+    "pm2": "^5.1.2",
     "portfinder": "^1.0.28",
     "postcss-loader": "4.3.0",
     "postcss-preset-env": "^6.7.0",

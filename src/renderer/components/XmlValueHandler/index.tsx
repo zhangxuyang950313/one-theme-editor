@@ -81,7 +81,7 @@ const StyleXmlController = styled.div`
   padding-bottom: 20px;
   margin-bottom: 20px;
   border-bottom: 1px solid;
-  border-bottom-color: ${({ theme }) => theme["@border-color-base"]};
+  border-bottom-color: ${({ theme }) => theme["@border-color-secondary"]};
 `;
 
 export default XmlValueHandler;

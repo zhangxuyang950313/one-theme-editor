@@ -106,7 +106,8 @@ export enum PLACEHOLDER {
 export enum FILE_EVENT {
   ADD = "add", // 增加
   CHANGE = "change", // 内容变更
-  UNLINK = "unlink" // 删除
+  UNLINK = "unlink", // 删除
+  ADD_DIR = "addDir"
 }
 
 // 打包方式类型

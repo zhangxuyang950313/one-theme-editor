@@ -15,14 +15,15 @@ import { Modal, Button, Form, Input, message } from "antd";
 import { FieldError } from "rc-field-form/lib/interface";
 import { FileAddOutlined } from "@ant-design/icons";
 import Steps from "@/components/Steps";
-import { useEditorSelector, useStarterSelector } from "@/store";
+import { useStarterSelector } from "@/store";
 import { FILE_TEMPLATE_TYPE } from "src/enum";
 import electronStore from "src/common/electronStore";
 import { ProjectInput } from "../Forms";
 import ResourceConfigManager from "./ResourceConfigManager";
 
 // 表单默认值
-const txt = `测试${UUID()}`;
+// const txt = `测试${UUID()}`;
+const txt = `测试text`;
 const initialValues = {
   name: isDev ? txt : "",
   designer: isDev ? txt : "",

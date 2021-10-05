@@ -1,7 +1,6 @@
 import path from "path";
 import {
   app,
-  remote,
   Menu,
   BrowserWindow,
   BrowserWindowConstructorOptions,
@@ -15,7 +14,7 @@ const preload = path.resolve(app.getAppPath(), "../release.server/index");
 const windowNormalizeOptions: BrowserWindowConstructorOptions = {
   webPreferences: {
     // https://www.electronjs.org/docs/tutorial/security#6-define-a-content-security-policy
-    webSecurity: true,
+    webSecurity: false,
     nodeIntegration: true,
     nodeIntegrationInWorker: true,
     enableRemoteModule: true,

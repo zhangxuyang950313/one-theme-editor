@@ -4,7 +4,6 @@ import { useStarterDispatch } from "@/store";
 import { ActionSetProjectList } from "@/store/starter/action";
 import { TypeProjectDataDoc } from "src/types/project";
 import { LOAD_STATUS } from "src/enum";
-import { sleep } from "src/common/utils";
 import { useAxiosCanceler } from "..";
 import { useScenarioOption } from "../resource";
 
@@ -25,7 +24,7 @@ export default function useFetchProjectList(): {
     if (!scenarioOption.md5) return;
     setStatus(LOAD_STATUS.LOADING);
     setProjectList([]);
-    await sleep(300);
+    // await sleep(300);
     apiGetProjectList(scenarioOption, registerCancelToken)
       .then(projects => {
         console.log("工程列表", projects);

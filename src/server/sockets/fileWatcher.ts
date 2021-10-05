@@ -22,6 +22,7 @@ function addWatcherListener(
   return watcher
     .setMaxListeners(1)
     .on(FILE_EVENT.ADD, file => callback(file, FILE_EVENT.ADD))
+    .on(FILE_EVENT.ADD_DIR, file => callback(file, FILE_EVENT.ADD_DIR))
     .on(FILE_EVENT.CHANGE, file => callback(file, FILE_EVENT.CHANGE))
     .on(FILE_EVENT.UNLINK, file => callback(file, FILE_EVENT.UNLINK));
 }
@@ -33,8 +34,12 @@ export function watchFiles(socket: Socket, io: Server): void {
     const root = watcher.options.cwd;
     if (!root) return;
     addWatcherListener(watcher, async (file, event) => {
-      await sleep(0); // 异步化
+      console.log("文件变动", file);
+      await sleep(0); // 异步化监听器
+      console.time(`加载: ${file}`);
       const fileData = getFileData(path.join(root, file), file);
+      console.timeEnd(`加载: ${file}`);
+      console.time(`发送: ${file}`);
       socket.emit(SOCKET_EVENT.FILE_CHANGE, { file, event, data: fileData });
     });
   };

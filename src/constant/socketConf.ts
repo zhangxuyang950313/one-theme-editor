@@ -17,7 +17,8 @@ export enum SOCKET_EVENT {
 
   WATCH_FILES = "WATCH_FILES", // 监听文件
   UNWATCH_FILES = "UNWATCH_FILES", // 取消监听文件
-  FILE_CHANGE = "FILE_CHANGE" // 文件变动
+  FILE_CHANGE = "FILE_CHANGE", // 文件变动
+  FILE_CHANGE_RECEIVED = "FILE_CHANGE_RECEIVED"
 }
 
 class SocketConfig {

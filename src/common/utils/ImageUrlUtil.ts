@@ -8,9 +8,9 @@ export default class ImageUrlUtil {
     blur: 0 | 1 | 2 | 3 | 4 = 1
   ): string {
     const hostname = electronStore.get("hostname");
-    // const url = `one://${absPath}?t=${Date.now()}`; // 自定义协议方法备用
     const now = String(Date.now());
     const timeSys = now.substr(0, now.length - blur);
     return `http://${hostname}/image?filepath=${pathname}&t=${timeSys}`;
+    // return `local-resource://${pathname}?t=${timeSys}`; // 自定义协议方法备用
   }
 }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useHistory } from "react-router";
 import { Button, Empty, Spin } from "antd";
@@ -8,7 +8,7 @@ import { LOAD_STATUS } from "src/enum";
 import ModuleSelector from "@/components/Editor/ModuleSelector";
 import EditorToolsBar from "@/components/Editor/ToolsBar";
 import EditorContainer from "@/components/Editor/index";
-import useWatchProjectFiles from "@/hooks/project/useWatchProjectFiles";
+import { useResDefinitionList } from "@/hooks/resource";
 // import usePatchPageSourceData from "@/hooks/project/usePatchPageSourceData";
 // import usePatchProjectInfoData from "@/hooks/project/usePatchProjectInfoData";
 // import useWatchFiles from "@/hooks/project/useWatchFiles";
@@ -16,10 +16,21 @@ import useWatchProjectFiles from "@/hooks/project/useWatchProjectFiles";
 const Editor: React.FC = () => {
   const history = useHistory();
   const [projectData, status, handleFetch] = useInitProject();
+  const resourceList = useResDefinitionList();
+
+  useEffect(() => {
+    if (!resourceList.length) return;
+    // subscribeFile(resourceList[0].sourceData.src, evt => {
+    //   console.log(1, { evt });
+    // });
+    // subscribeFile(resourceList[1].sourceData.src, evt => {
+    //   console.log(2, { evt });
+    // });
+  }, [resourceList]);
   // const handleWatchFiles = useWatchFiles();
   // usePatchPageSourceData();
   // usePatchProjectInfoData();
-  useWatchProjectFiles();
+  // useWatchProjectFiles();
   switch (status) {
     case LOAD_STATUS.INITIAL:
     case LOAD_STATUS.LOADING: {

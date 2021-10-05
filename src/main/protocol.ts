@@ -1,7 +1,11 @@
+import path from "path";
 import { URL } from "url";
-import { protocol } from "electron";
 import fse from "fs-extra";
 import FileType from "file-type";
+import { protocol } from "electron";
+import { getImgBuffAndFileType } from "../common/utils";
+
+import electronStore from "../common/electronStore";
 
 export default function registerProtocol(): void {
   protocol.registerBufferProtocol("one", async (request, callback) => {
@@ -11,7 +15,7 @@ export default function registerProtocol(): void {
     callback({ mimeType, data });
   });
   protocol.registerFileProtocol("local-resource", (request, callback) => {
-    const url = request.url.replace(/^local-resource:\/\//, "");
+    const url = request.url.replace(/^local-resource:\/\//, "file://");
     // Decode URL to prevent errors when loading filenames with UTF-8 chars or chars like "#"
     const decodedUrl = decodeURI(url); // Needed in case URL contains spaces
     try {
@@ -21,6 +25,44 @@ export default function registerProtocol(): void {
         "ERROR: registerLocalResourceProtocol: Could not get file path:",
         error
       );
+    }
+  });
+  protocol.registerBufferProtocol("resource", async (request, response) => {
+    try {
+      const { hostname, pathname } = new URL(request.url);
+      const root = electronStore.get("resourcePath");
+      const file = decodeURIComponent(path.join(root, hostname, pathname));
+      const { buff, fileType } = await getImgBuffAndFileType(file);
+      response({ mimeType: fileType.mime, data: buff });
+    } catch (err) {
+      response({ mimeType: "image/png", data: Buffer.from("") });
+    }
+  });
+  protocol.registerBufferProtocol("project", async (request, response) => {
+    try {
+      const { hostname, pathname } = new URL(request.url);
+      const root = electronStore.get("projectPath");
+      const file = decodeURIComponent(path.join(root, hostname, pathname));
+      const { buff, fileType } = await getImgBuffAndFileType(file);
+      response({ mimeType: fileType.mime, data: buff });
+    } catch (err) {
+      response({ mimeType: "image/png", data: Buffer.from("") });
+    }
+  });
+  // 双向选择协议
+  protocol.registerBufferProtocol("src", async (request, response) => {
+    try {
+      const { hostname, pathname } = new URL(request.url);
+      const projectPath = electronStore.get("projectPath");
+      let file = path.join(projectPath, hostname, pathname);
+      if (!fse.existsSync(file)) {
+        const resourcePath = electronStore.get("resourcePath");
+        file = path.join(resourcePath, hostname, pathname);
+      }
+      const { buff, fileType } = await getImgBuffAndFileType(file);
+      response({ mimeType: fileType.mime, data: buff });
+    } catch (err) {
+      response({ mimeType: "image/png", data: Buffer.from("") });
     }
   });
   // protocol.registerFileProtocol("one", (request, callback) => {

@@ -1,7 +1,7 @@
 import path from "path";
 import md5 from "md5";
 import fse from "fs-extra";
-import FileType from "file-type";
+import FileType, { FileTypeResult } from "file-type";
 import imageSizeOf from "image-size";
 import dirTree from "directory-tree";
 import ImageData from "src/data/ImageData";
@@ -290,4 +290,18 @@ export function getPlaceholderVal(val: string): string | null {
  */
 export function isURL(str: string): boolean {
   return RegexpUtil.urlRegexp.test(str);
+}
+
+export async function getImgBuffAndFileType(
+  file: string
+): Promise<{ buff: Buffer; fileType: FileTypeResult }> {
+  if (!fse.existsSync(file)) {
+    throw new Error(ERR_CODE[4003]);
+  }
+  const buff = fse.readFileSync(file);
+  const fileType = await FileType.fromBuffer(buff);
+  if (!fileType) {
+    throw new Error(ERR_CODE[4003]);
+  }
+  return { buff, fileType };
 }

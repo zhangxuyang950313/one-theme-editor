@@ -64,7 +64,7 @@ const StyleResXmlValList = styled.div`
   /* min-width: 400px; */
   flex: 1;
   flex-shrink: 0;
-  padding: 0 20px;
+  padding: 0 0 0 20px;
   overflow: auto;
 `;
 

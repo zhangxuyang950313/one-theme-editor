@@ -1,16 +1,19 @@
 import os from "os";
 import path from "path";
+import { remote } from "electron";
 import { TypeServerPath } from "src/types/extraConfig";
 
 /**
  * 这些路径是基于 dirname 的相对路径，调用前请确保你的执行路径
  * 目前只是在 server 模块中使用
  */
+
+const dirname = remote.app.getAppPath();
 const paths: TypeServerPath = {
   // 软件数据
-  CLIENT_DATA: path.resolve(__dirname, "../appData"),
+  CLIENT_DATA: path.resolve(dirname, "../appData"),
   // 静态资源目录
-  CLIENT_STATIC: path.resolve(__dirname, "../static"),
+  CLIENT_STATIC: path.resolve(dirname, "../static"),
   // 用户缓存
   get CLIENT_CACHE(): string {
     return path.resolve(this.CLIENT_DATA, "cache");

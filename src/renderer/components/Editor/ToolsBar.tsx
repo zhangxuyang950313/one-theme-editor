@@ -135,7 +135,7 @@ const ToolsBar: React.FC = () => {
         title="修改主题信息"
         centered
         destroyOnClose
-        getContainer={thisRef.current}
+        getContainer={thisRef.current || false}
         visible={projectInfoVisible}
         onCancel={() => setProjectInfoVisible(false)}
         onOk={() => setProjectInfoVisible(false)}
