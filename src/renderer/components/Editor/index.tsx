@@ -45,6 +45,7 @@ const StyleEditorContainer = styled.div`
 const StylePageSelector = styled(StyleBorderRight)`
   flex: 1;
   flex-shrink: 0;
+  padding: 20px;
   min-width: 200px;
   max-width: 280px;
   overflow: auto;

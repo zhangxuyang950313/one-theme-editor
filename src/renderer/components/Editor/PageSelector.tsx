@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { Collapse } from "antd";
 import {
   useCurrentResModule,
   useCurrentPageOption,
@@ -35,6 +34,7 @@ const PagePreview: React.FC<{ pageData: TypeResPageOption }> = props => {
 const StylePreviewImage = styled.span`
   cursor: pointer;
   width: 48%;
+  height: auto;
   margin: 1%;
   /* border: 1px solid;
   border-color: ${({ theme }) => theme["@border-color-base"]}; */
@@ -58,32 +58,25 @@ const StylePreviewImage = styled.span`
 
 // 页面选择器
 const PageSelector: React.FC = () => {
-  const [{ pageGroupList }] = useCurrentResModule();
+  const [{ pageList }] = useCurrentResModule();
 
-  if (pageGroupList.length === 0) return null;
+  if (pageList.length === 0) return null;
 
   return (
-    <Collapse bordered={false} defaultActiveKey={Object.keys(pageGroupList)}>
-      {pageGroupList.map(
-        (group, key) =>
-          group.pageList.length && (
-            <Collapse.Panel header={group.name} key={key}>
-              <StylePagePreview>
-                {group.pageList.map((page, index) => (
-                  <PagePreview key={index} pageData={page} />
-                ))}
-              </StylePagePreview>
-            </Collapse.Panel>
-          )
-      )}
-    </Collapse>
+    <StylePagePreview>
+      {pageList.map((page, index) => (
+        <PagePreview key={index} pageData={page} />
+      ))}
+    </StylePagePreview>
   );
 };
 
 const StylePagePreview = styled.div`
   display: flex;
+  flex-direction: column;
   /* justify-content: space-around; */
   width: 100%;
+  height: 100%;
   overflow: hidden;
   flex-wrap: wrap;
   flex-grow: 0;

@@ -25,21 +25,13 @@
 
     <!-- 模块定义 -->
     <Module name="图标和壁纸" icon="icons/res/drawable-xxhdpi//com.android.thememanager.png">
-        <!-- 桌面壁纸 -->
-        <Group name="桌面壁纸和图标">
-            <!-- 页面定义 -->
-            <Page name="桌面1" src="wallpaper/desktop.xml"/>
-            <!-- <Page name="桌面1" src="wallpaper/desktop-test.xml"/> -->
-            <!-- <Page name="桌面2" src="wallpaper/desktop2.xml"/> -->
-            <!-- <Page name="桌面2" src="wallpaper/desktop2.xml"/> -->
-        </Group>
-        <!-- 锁屏壁纸 -->
-        <Group name="锁屏壁纸">
-            <!-- <Page src="wallpaper/lock.xml"/> -->
-        </Group>
-        <Group name="第三方图标">
-            <!-- <Page src="icons/pages/icons-more.xml"/> -->
-        </Group>
+        <!-- 页面定义 -->
+        <Page name="桌面1" src="wallpaper/desktop.xml"/>
+        <!-- <Page name="桌面1" src="wallpaper/desktop-test.xml"/> -->
+        <!-- <Page name="桌面2" src="wallpaper/desktop2.xml"/> -->
+        <!-- <Page name="桌面2" src="wallpaper/desktop2.xml"/> -->
+        <!-- <Page src="wallpaper/lock.xml"/> -->
+        <!-- <Page src="icons/pages/icons-more.xml"/> -->
     </Module>
     <Module name="拨号与联系人" icon="icons/res/drawable-xxhdpi/com.android.contacts.activities.TwelveKeyDialer.png">
         <Group name="联系人">

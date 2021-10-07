@@ -80,7 +80,7 @@ export default function EditorReducer(
       return updateState(state, {
         resourceConfig: action.payload,
         currentModule: moduleList[0],
-        currentPage: moduleList[0]?.pageGroupList?.[0].pageList?.[0]
+        currentPage: moduleList[0]?.pageList?.[0]
       });
     }
     // 模块配置

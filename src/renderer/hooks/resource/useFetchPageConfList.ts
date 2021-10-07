@@ -20,22 +20,20 @@ export default function useFetchPageConfList(): [
 ] {
   const [status, setStatus] = useState(LOAD_STATUS.INITIAL);
   const [pageData, setPageData] = useState<TypeResPageConfig[]>([]);
-  const [{ pageGroupList }] = useCurrentResModule();
+  const [{ pageList }] = useCurrentResModule();
   const dispatch = useEditorDispatch();
   const resourceSrc = useEditorSelector(state => state.projectData.resourceSrc);
 
   const handleFetch = async (changeStatus = true) => {
     if (!resourceSrc) return;
-    const pageConfDataQueue = pageGroupList
-      .flatMap(item => item.pageList)
-      .map(item => async () => {
-        const data = await apiGetResPageConfData({
-          namespace: path.dirname(resourceSrc),
-          config: item.src
-        });
-        dispatch(ActionPatchPageConfMap(data));
-        return data;
+    const pageConfDataQueue = pageList.map(item => async () => {
+      const data = await apiGetResPageConfData({
+        namespace: path.dirname(resourceSrc),
+        config: item.src
       });
+      dispatch(ActionPatchPageConfMap(data));
+      return data;
+    });
     changeStatus && setStatus(LOAD_STATUS.LOADING);
     return asyncQueue(pageConfDataQueue)
       .then(data => {
@@ -52,6 +50,6 @@ export default function useFetchPageConfList(): [
     handleFetch(false).catch(err => {
       notification.error({ message: err.message });
     });
-  }, [pageGroupList]);
+  }, [pageList]);
   return [pageData, status, handleFetch];
 }

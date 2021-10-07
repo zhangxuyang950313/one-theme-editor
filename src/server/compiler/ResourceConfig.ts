@@ -4,7 +4,6 @@ import { ELEMENT_TAG } from "src/enum";
 import {
   TypeResourceConfig,
   TypeResModule,
-  TypeResPageGroup,
   TypeResPageOption,
   TypeResourceOption,
   TypeResTypeConfig
@@ -13,7 +12,6 @@ import ResourceConfigData, {
   ResourceOption,
   ResModuleConfig,
   ResPageOption,
-  ResPageGroup,
   ResTypeConfig,
   UiVersion
 } from "src/data/ResourceConfig";
@@ -124,32 +122,32 @@ export default class ResourceConfigCompiler extends XmlFileCompiler {
     });
   }
 
-  // 页面分组数据
-  getPageGroupList(groupNodeList: XMLNodeBase[]): TypeResPageGroup[] {
-    return groupNodeList.map(groupNode => {
-      const pageList = this.getPageList(
-        groupNode.getChildrenNodesByTagname(ELEMENT_TAG.Page)
-      );
-      return new ResPageGroup()
-        .set("name", groupNode.getAttributeOf("name"))
-        .set("pageList", pageList)
-        .create();
-    });
-  }
+  // // 页面分组数据
+  // getPageGroupList(groupNodeList: XMLNodeBase[]): TypeResPageGroup[] {
+  //   return groupNodeList.map(groupNode => {
+  //     const pageList = this.getPageList(
+  //       groupNode.getChildrenNodesByTagname(ELEMENT_TAG.Page)
+  //     );
+  //     return new ResPageGroup()
+  //       .set("name", groupNode.getAttributeOf("name"))
+  //       .set("pageList", pageList)
+  //       .create();
+  //   });
+  // }
 
   // 模块配置数据
   getModuleList(): TypeResModule[] {
     return super
       .getRootChildrenNodesOf(ELEMENT_TAG.Module)
       .map((moduleNode, index) => {
-        const pageGroupList = this.getPageGroupList(
-          moduleNode.getChildrenNodesByTagname(ELEMENT_TAG.Group)
+        const pageList = this.getPageList(
+          moduleNode.getChildrenNodesByTagname(ELEMENT_TAG.Page)
         );
         return new ResModuleConfig()
           .set("index", index)
           .set("name", moduleNode.getAttributeOf("name"))
           .set("icon", path.normalize(moduleNode.getAttributeOf("icon")))
-          .set("pageGroupList", pageGroupList)
+          .set("pageList", pageList)
           .create();
       });
   }

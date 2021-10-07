@@ -80,14 +80,14 @@ export type TypeResModule = {
   index: number;
   name: string;
   icon: string;
-  pageGroupList: TypeResPageGroup[];
-};
-
-// 预览页面组
-export type TypeResPageGroup = {
-  name: string;
   pageList: TypeResPageOption[];
 };
+
+// // 预览页面组
+// export type TypeResPageGroup = {
+//   name: string;
+//   pageList: TypeResPageOption[];
+// };
 
 // 键值对配置数据
 export type TypeXmlTempKeyValMap = Map<

@@ -7,7 +7,6 @@ import {
   TypeResModule,
   TypeResPageOption,
   TypeResPageConfig,
-  TypeResPageGroup,
   TypeResTypeConfig,
   TypeXmlValueData,
   TypeResUrlData,
@@ -159,23 +158,23 @@ export class ResPageConfig extends AbstractDataModel<TypeResPageConfig> {
   };
 }
 
-export class ResPageGroup extends AbstractDataModel<TypeResPageGroup> {
-  protected data: TypeResPageGroup = {
-    name: "",
-    pageList: []
-  };
+// export class ResPageGroup extends AbstractDataModel<TypeResPageGroup> {
+//   protected data: TypeResPageGroup = {
+//     name: "",
+//     pageList: []
+//   };
 
-  static get default(): TypeResPageGroup {
-    return new ResPageGroup().create();
-  }
-}
+//   static get default(): TypeResPageGroup {
+//     return new ResPageGroup().create();
+//   }
+// }
 
 export class ResModuleConfig extends AbstractDataModel<TypeResModule> {
   protected data: TypeResModule = {
     index: 0,
     name: "",
     icon: "",
-    pageGroupList: []
+    pageList: []
   };
 
   static get default(): TypeResModule {
