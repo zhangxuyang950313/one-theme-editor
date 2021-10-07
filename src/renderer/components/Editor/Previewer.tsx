@@ -2,12 +2,11 @@ import React, { useState } from "react";
 import styled from "styled-components";
 
 import {
-  useCurrentResPage,
   useLayoutElementList,
-  useCurrentResPageConfig
+  useCurrentPageConfig
 } from "@/hooks/resource/index";
 import { ALIGN_VALUE, ALIGN_V_VALUE, ELEMENT_TAG } from "src/enum";
-import { TypeLayoutData } from "src/types/resource";
+import { TypeLayoutData, TypeResPageConfig } from "src/types/resource";
 import { DynamicBothSourceImage, PreloadImage } from "../ImageCollection";
 
 function computeLayout(data: TypeLayoutData): { x: number; y: number } {
@@ -38,13 +37,9 @@ function computeLayout(data: TypeLayoutData): { x: number; y: number } {
   return result;
 }
 
-const Previewer: React.FC = () => {
+const Previewer: React.FC<{ pageConfig: TypeResPageConfig }> = props => {
+  const { screenWidth, layoutElementList, previewList } = props.pageConfig;
   const [scale, setScale] = useState(0);
-  const [currentPage] = useCurrentResPage();
-  const currentPageConfig = useCurrentResPageConfig();
-  const layoutElementList = useLayoutElementList();
-
-  const screenWidth = currentPageConfig?.screenWidth;
 
   if (!screenWidth) return null;
 
@@ -121,7 +116,7 @@ const Previewer: React.FC = () => {
       ) : (
         <PreloadImage
           className="preview-static"
-          src={`resource://${currentPage.preview}`}
+          src={`resource://${previewList[0]}`}
         />
       )}
     </StylePreviewer>

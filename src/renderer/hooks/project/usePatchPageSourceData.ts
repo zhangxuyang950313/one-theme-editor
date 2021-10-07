@@ -8,7 +8,7 @@ import {
 import { FILE_EVENT } from "src/enum";
 import { useFSWatcherCreator } from "../fileWatcher";
 import { useProjectRoot, useProjectUUID } from "../project";
-import { useCurrentResPageConfig } from "../resource";
+import { useCurrentPageConfig } from "../resource";
 
 /**
  * @deprecated
@@ -17,13 +17,15 @@ import { useCurrentResPageConfig } from "../resource";
 export default function usePatchPageSourceData(): void {
   const uuid = useProjectUUID();
   const projectRoot = useProjectRoot();
-  const pageData = useCurrentResPageConfig();
+  const pageData = useCurrentPageConfig();
   const dispatch = useEditorDispatch();
   const createWatcher = useFSWatcherCreator();
   useEffect(() => {
     if (!pageData || !uuid || !projectRoot) return;
     const watcher = createWatcher({ cwd: projectRoot });
-    const resourceSrcSet = new Set(pageData.resourceList.map(o => o.src));
+    const resourceSrcSet = new Set(
+      pageData.resourceList.map(o => o.sourceData.src)
+    );
     const listener = async (file: string, event: FILE_EVENT) => {
       if (!resourceSrcSet.has(file)) return;
       console.log(`监听文件变动（${event}） '${file}' `);

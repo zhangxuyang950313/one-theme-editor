@@ -3,25 +3,31 @@ import styled from "styled-components";
 import { Collapse } from "antd";
 import {
   useCurrentResModule,
-  useCurrentResPage,
-  useResourceImageUrl
+  useCurrentPageOption,
+  useResourceImageUrl,
+  useCurrentPageConfig
 } from "@/hooks/resource/index";
 import { PreloadImage } from "@/components/ImageCollection";
 import { TypeResPageOption } from "src/types/resource";
-import { useEditorSelector } from "@/store";
+import Previewer from "./Previewer";
 
 const PagePreview: React.FC<{ pageData: TypeResPageOption }> = props => {
   const { pageData } = props;
   const resourceImageURL = useResourceImageUrl(pageData.preview);
-  const [pageOpt, setPageOpt] = useCurrentResPage();
+  const [pageOpt, setPageOpt] = useCurrentPageOption();
+  const pageConf = useCurrentPageConfig();
 
   return (
     <StylePreviewImage data-active={String(pageOpt.key === pageData.key)}>
-      <PreloadImage
-        className="preview-image"
-        src={resourceImageURL}
-        onClick={() => setPageOpt(pageData)}
-      />
+      {pageConf ? (
+        <Previewer pageConfig={pageConf} />
+      ) : (
+        <PreloadImage
+          className="preview-image"
+          src={resourceImageURL}
+          onClick={() => setPageOpt(pageData)}
+        />
+      )}
     </StylePreviewImage>
   );
 };
@@ -30,15 +36,16 @@ const StylePreviewImage = styled.span`
   cursor: pointer;
   width: 48%;
   margin: 1%;
-  border: 1px solid;
-  border-color: ${({ theme }) => theme["@border-color-base"]};
+  /* border: 1px solid;
+  border-color: ${({ theme }) => theme["@border-color-base"]}; */
   border-radius: 6px;
   overflow: hidden;
+  box-sizing: border-box;
   opacity: 0.4;
   transition: 0.4s all;
   &[data-active="true"] {
-    border: 1px solid;
-    border-color: ${({ theme }) => theme["@primary-color"]};
+    /* border: 1px solid;
+    border-color: ${({ theme }) => theme["@primary-color"]}; */
     opacity: 1;
   }
   .preview-image {
@@ -79,6 +86,7 @@ const StylePagePreview = styled.div`
   width: 100%;
   overflow: hidden;
   flex-wrap: wrap;
+  flex-grow: 0;
 `;
 
 export default PageSelector;

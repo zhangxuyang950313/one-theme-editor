@@ -5,9 +5,11 @@ import PageSelector from "@/components/Editor/PageSelector";
 import Previewer from "@/components/Editor/Previewer";
 // import ResImageList from "@/components/Editor/ResImageList";
 import ResHandlerList from "@/components/Editor/ResHandlerList";
+import { useCurrentPageConfig } from "@/hooks/resource";
 
 // 主编辑区域
 const EditorContainer: React.FC = () => {
+  const currentResPageConfig = useCurrentPageConfig();
   return (
     <StyleEditorContainer>
       {/* 页面选择器 */}
@@ -16,7 +18,10 @@ const EditorContainer: React.FC = () => {
       </StylePageSelector>
       {/* 预览 */}
       <StylePreviewer>
-        <Previewer />
+        {/* TODO: 占位图 */}
+        {currentResPageConfig && (
+          <Previewer pageConfig={currentResPageConfig} />
+        )}
       </StylePreviewer>
       {/* 素材编辑区 */}
       {/* <StyleResImageList>
@@ -39,6 +44,7 @@ const StyleEditorContainer = styled.div`
 
 const StylePageSelector = styled(StyleBorderRight)`
   flex: 1;
+  flex-shrink: 0;
   min-width: 200px;
   max-width: 280px;
   overflow: auto;
