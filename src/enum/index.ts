@@ -69,6 +69,12 @@ export enum RESOURCE_PROTOCOL {
 export enum RESOURCE_TYPE {
   UNKNOWN = "unknown",
   IMAGE = "image",
+  XML_VALUE = "xml-value"
+}
+
+// 资源类型编辑器
+export enum VALUE_RESOURCE_CATEGORY {
+  UNKNOWN = "unknown",
   COLOR = "color",
   BOOLEAN = "boolean",
   NUMBER = "number",

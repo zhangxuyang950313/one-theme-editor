@@ -1,7 +1,7 @@
 import { Express } from "express";
 import apiConfig from "src/constant/apiConf";
 import {
-  TypeResModule,
+  TypeResModuleConfig,
   TypeResPageConfig,
   TypeResourceConfig,
   TypeResourceOption,
@@ -71,7 +71,7 @@ export default function sourceController(service: Express): void {
    */
   service.get<
     never, // reqParams
-    TypeResponseFrame<TypeResModule[], string>, // resBody
+    TypeResponseFrame<TypeResModuleConfig[], string>, // resBody
     never, // reqBody
     UnionTupleToObjectKey<
       typeof apiConfig.GET_RESOURCE_CONFIG_MODULE_LIST.query

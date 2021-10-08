@@ -4,16 +4,17 @@ import {
   TypeResourceOption,
   TypeLayoutImageElement,
   TypeLayoutTextElement,
-  TypeResModule,
+  TypeResModuleConfig,
   TypeResPageOption,
   TypeResPageConfig,
-  TypeResTypeConfig,
   TypeXmlValueData,
   TypeResUrlData,
   TypeResImageDefinition,
-  TypeResXmlValDefinition,
+  TypeResXmlValuesDefinition,
   TypeXmlValSourceData,
-  TypeImageSourceData
+  TypeImageSourceData,
+  TypeResTypeImageConfig,
+  TypeResTypeXmlValueConfig
 } from "../types/resource";
 import { TypeUiVersion } from "../types/project";
 import {
@@ -21,8 +22,9 @@ import {
   ALIGN_V_VALUE,
   ELEMENT_TAG,
   FILE_TYPE,
-  RESOURCE_PROTOCOL,
-  RESOURCE_TYPE
+  RESOURCE_TYPE,
+  VALUE_RESOURCE_CATEGORY,
+  RESOURCE_PROTOCOL
 } from "../enum/index";
 import ImageData from "../data/ImageData";
 import { AbstractDataModel } from "./AbstractDataModel";
@@ -90,17 +92,18 @@ export class XmlValSourceData extends AbstractDataModel<TypeXmlValSourceData> {
     return new XmlValSourceData().create();
   }
 }
-export class XmlValResDefinition extends AbstractDataModel<TypeResXmlValDefinition> {
-  protected data: TypeResXmlValDefinition = {
+export class ResXmlValuesDefinition extends AbstractDataModel<TypeResXmlValuesDefinition> {
+  protected data: TypeResXmlValuesDefinition = {
     name: "",
     desc: "",
-    resType: RESOURCE_TYPE.UNKNOWN,
+    resType: RESOURCE_TYPE.XML_VALUE,
     fileType: FILE_TYPE.XML,
     source: "",
-    sourceData: XmlValSourceData.default
+    sourceData: XmlValSourceData.default,
+    items: []
   };
-  static get default(): TypeResXmlValDefinition {
-    return new XmlValResDefinition().create();
+  static get default(): TypeResXmlValuesDefinition {
+    return new ResXmlValuesDefinition().create();
   }
 }
 
@@ -136,7 +139,7 @@ export class LayoutImageElement extends AbstractDataModel<TypeLayoutImageElement
 export class LayoutTextElement extends AbstractDataModel<TypeLayoutTextElement> {
   protected data: TypeLayoutTextElement = {
     tag: ELEMENT_TAG.Text,
-    resType: RESOURCE_TYPE.COLOR,
+    resType: RESOURCE_TYPE.XML_VALUE,
     protocol: RESOURCE_PROTOCOL.UNKNOWN,
     text: "",
     color: "",
@@ -170,28 +173,38 @@ export class ResPageConfig extends AbstractDataModel<TypeResPageConfig> {
 //   }
 // }
 
-export class ResModuleConfig extends AbstractDataModel<TypeResModule> {
-  protected data: TypeResModule = {
+export class ResModuleConfig extends AbstractDataModel<TypeResModuleConfig> {
+  protected data: TypeResModuleConfig = {
     index: 0,
     name: "",
     icon: "",
     pageList: []
   };
 
-  static get default(): TypeResModule {
+  static get default(): TypeResModuleConfig {
     return new ResModuleConfig().create();
   }
 }
 
-export class ResTypeConfig extends AbstractDataModel<TypeResTypeConfig> {
-  protected data: TypeResTypeConfig = {
-    type: RESOURCE_TYPE.UNKNOWN,
-    protocol: RESOURCE_PROTOCOL.UNKNOWN,
+export class ResTypeImageConfig extends AbstractDataModel<TypeResTypeImageConfig> {
+  protected data: TypeResTypeImageConfig = {
+    type: RESOURCE_TYPE.IMAGE,
     name: ""
   };
+  static get default(): TypeResTypeImageConfig {
+    return new ResTypeImageConfig().create();
+  }
+}
 
-  static get default(): TypeResTypeConfig {
-    return new ResTypeConfig().create();
+export class ResTypeXmlValTypeConfig extends AbstractDataModel<TypeResTypeXmlValueConfig> {
+  protected data: TypeResTypeXmlValueConfig = {
+    type: RESOURCE_TYPE.XML_VALUE,
+    name: "",
+    tag: "",
+    use: VALUE_RESOURCE_CATEGORY.UNKNOWN
+  };
+  static get default(): TypeResTypeXmlValueConfig {
+    return new ResTypeXmlValTypeConfig().create();
   }
 }
 

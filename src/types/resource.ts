@@ -7,11 +7,52 @@ import {
   ALIGN_VALUE,
   ALIGN_V_VALUE,
   PACK_TYPE,
-  FILE_TYPE
+  FILE_TYPE,
+  VALUE_RESOURCE_CATEGORY
 } from "../enum";
 import XMLNodeBase from "../server/compiler/XMLNodeElement";
 import { TypeImageData, TypeUiVersion } from "./project";
 
+/*************************** scenarioConfig **************************/
+// 工程文件模板配置
+export type TypeFileTempConfig = {
+  output: string;
+  type: FILE_TEMPLATE_TYPE;
+  items: Array<{
+    name: string;
+    description: string;
+    disabled: boolean;
+    visible: boolean;
+  }>;
+  template: string;
+};
+// 打包配置
+export type TypePackConfig = {
+  extname: string;
+  format: archiver.Format;
+  execute9patch: boolean;
+  items: Array<{ type: PACK_TYPE; pattern: string }>;
+  excludes: Array<{ regex: string; pattern: string }>;
+};
+// 应用配置
+export type TypeApplyConfig = {
+  steps: Array<{ description: string; command: string }>;
+};
+// 场景配置选项
+export type TypeScenarioOption = {
+  name: string;
+  md5: string;
+  src: string;
+} & TypeScenarioConfig;
+// 场景配置数据
+export type TypeScenarioConfig = {
+  fileTempList: TypeFileTempConfig[];
+  packageConfig: TypePackConfig;
+  applyConfig: TypeApplyConfig;
+};
+/*****************************************************/
+
+/************************* sourceCOnfig ****************************/
 // 资源配置信息
 export type TypeResourceOption = {
   key: string;
@@ -23,64 +64,53 @@ export type TypeResourceOption = {
   uiVersion: TypeUiVersion;
 };
 
-// 资源配置数据
-export type TypeResourceConfig = TypeResourceOption & {
-  resTypeList: TypeResTypeConfig[];
-  moduleList: TypeResModule[];
-};
-
-export type TypeFileTemplateConfig = {
-  output: string;
-  type: FILE_TEMPLATE_TYPE;
-  items: Array<{
-    name: string;
-    description: string;
-    disabled: boolean;
-    visible: boolean;
-  }>;
-  template: string;
-};
-
-// 打包配置
-export type TypePackConfig = {
-  extname: string;
-  format: archiver.Format;
-  execute9patch: boolean;
-  items: Array<{ type: PACK_TYPE; pattern: string }>;
-  excludes: Array<{ regex: string; pattern: string }>;
-};
-
-// 应用配置
-export type TypeApplyConfig = {
-  steps: Array<{ description: string; command: string }>;
-};
-
-// 场景配置选项
-export type TypeScenarioOption = {
+// image 类型素材
+export type TypeResTypeImageConfig = {
+  type: RESOURCE_TYPE.IMAGE;
   name: string;
-  md5: string;
-  src: string;
-} & TypeScenarioConfig;
-
-// 场景配置数据
-export type TypeScenarioConfig = {
-  fileTempList: TypeFileTemplateConfig[];
-  packageConfig: TypePackConfig;
-  applyConfig: TypeApplyConfig;
 };
-
+// xml-value 类型素材
+export type TypeResTypeXmlValueConfig = {
+  type: RESOURCE_TYPE.XML_VALUE;
+  name: string;
+  tag: string;
+  use: VALUE_RESOURCE_CATEGORY;
+};
 // 素材类型定义数据
-export type TypeResTypeConfig = {
-  type: RESOURCE_TYPE;
-  protocol: RESOURCE_PROTOCOL;
-  name: string;
-};
+export type TypeResTypeConfig =
+  | TypeResTypeImageConfig
+  | TypeResTypeXmlValueConfig;
+
 // 预览模块
-export type TypeResModule = {
+export type TypeResModuleConfig = {
   index: number;
   name: string;
   icon: string;
   pageList: TypeResPageOption[];
+};
+
+// 资源配置数据
+export type TypeResourceConfig = TypeResourceOption & {
+  resTypeList: TypeResTypeConfig[];
+  moduleList: TypeResModuleConfig[];
+};
+
+/************************** pageConfig ***************************/
+// 预览单个页面配置
+export type TypeResPageOption = {
+  key: string;
+  name: string;
+  preview: string;
+  src: string;
+};
+export type TypeResPageConfig = {
+  config: string;
+  version: string;
+  description: string;
+  screenWidth: string;
+  previewList: string[];
+  resourceList: TypeResDefinition[];
+  layoutElementList: TypeLayoutElement[];
 };
 
 // // 预览页面组
@@ -102,13 +132,6 @@ export type TypeXmlKeyValConfig = {
   description: string;
 };
 
-// 配置模板原始配置
-export type TypeXmlTempConfig = {
-  template: string;
-  values: string;
-  release: string;
-};
-
 export type TypeLayoutData = {
   x: string;
   y: string;
@@ -128,18 +151,10 @@ export type TypeLayoutImageElement = {
   layout: TypeLayoutData;
 };
 
-export type TypeXmlValueData = {
-  defaultValue: string;
-  valueName: string;
-};
 // 颜色元素数据
 export type TypeLayoutTextElement = {
   tag: ELEMENT_TAG.Text;
-  resType:
-    | RESOURCE_TYPE.COLOR
-    | RESOURCE_TYPE.BOOLEAN
-    | RESOURCE_TYPE.NUMBER
-    | RESOURCE_TYPE.STRING;
+  resType: RESOURCE_TYPE.XML_VALUE;
   protocol: RESOURCE_PROTOCOL;
   text: string;
   color: string;
@@ -169,6 +184,10 @@ export type TypeResImageDefinition = {
   sourceData: TypeImageSourceData;
 };
 // xml类型
+export type TypeXmlValueData = {
+  defaultValue: string;
+  valueName: string;
+};
 export type TypeXmlValSourceData = {
   fileType: FILE_TYPE.XML;
   protocol: string;
@@ -176,22 +195,23 @@ export type TypeXmlValSourceData = {
   query: Record<string, string>;
   data: TypeXmlValueData;
 };
-export type TypeResXmlValDefinition = {
+export type TypeXmlValItemDefinition = {
+  tag: string;
+  name: string;
+  desc: string;
+};
+export type TypeResXmlValuesDefinition = {
   fileType: FILE_TYPE.XML;
-  resType:
-    | RESOURCE_TYPE.UNKNOWN
-    | RESOURCE_TYPE.COLOR
-    | RESOURCE_TYPE.BOOLEAN
-    | RESOURCE_TYPE.NUMBER
-    | RESOURCE_TYPE.STRING;
+  resType: RESOURCE_TYPE.XML_VALUE;
   name: string;
   desc: string;
   source: string;
   sourceData: TypeXmlValSourceData;
+  items: TypeXmlValItemDefinition[];
 };
 export type TypeResDefinition =
   | TypeResImageDefinition
-  | TypeResXmlValDefinition;
+  | TypeResXmlValuesDefinition;
 
 // URL 未知
 export type TypeResUnknownData = {
@@ -234,22 +254,7 @@ export type TypeResUrlData =
   | TypeResUrlImageData
   | TypeResUrlXmlValData;
 
-// 预览单个页面配置
-export type TypeResPageOption = {
-  key: string;
-  name: string;
-  preview: string;
-  src: string;
-};
-export type TypeResPageConfig = {
-  config: string;
-  version: string;
-  description: string;
-  screenWidth: string;
-  previewList: string[];
-  resourceList: TypeResDefinition[];
-  layoutElementList: TypeLayoutElement[];
-};
-
 // 键值对映射 map
 export type TypeXmlKeyValMapperMap = Map<string, XMLNodeBase>;
+
+/*****************************************************/

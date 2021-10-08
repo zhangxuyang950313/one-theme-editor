@@ -6,7 +6,7 @@ import {
 } from "@/store/editor/action";
 import {
   TypeScenarioOption,
-  TypeResModule,
+  TypeResModuleConfig,
   TypeResPageOption,
   TypeResTypeConfig,
   TypeLayoutElement,
@@ -63,8 +63,8 @@ export function useScenarioOption(): [
  * @returns
  */
 export function useCurrentResModule(): [
-  TypeResModule,
-  (data: TypeResModule) => void
+  TypeResModuleConfig,
+  (data: TypeResModuleConfig) => void
 ] {
   const dispatch = useEditorDispatch();
   const currentModule = useEditorSelector(state => state.currentModule);

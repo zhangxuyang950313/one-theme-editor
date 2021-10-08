@@ -2,7 +2,7 @@ import path from "path";
 import fse from "fs-extra";
 import {
   TypeApplyConfig,
-  TypeFileTemplateConfig,
+  TypeFileTempConfig,
   TypePackConfig,
   TypeResourceOption,
   TypeScenarioConfig
@@ -28,7 +28,7 @@ export default class ScenarioConfigCompiler extends XmlTemplate {
   }
 
   // 解析描述文件配置
-  getFileTempList(): TypeFileTemplateConfig[] {
+  getFileTempList(): TypeFileTempConfig[] {
     const fileTempNodes = super
       .getRootNode()
       .getChildrenNodesByTagname(ELEMENT_TAG.FileTemplate);
@@ -39,7 +39,7 @@ export default class ScenarioConfigCompiler extends XmlTemplate {
       const templateNode = fileTempNode.getFirstChildNodeByTagname(
         ELEMENT_TAG.Template
       );
-      const itemNodes: TypeFileTemplateConfig["items"] = itemsNode
+      const itemNodes: TypeFileTempConfig["items"] = itemsNode
         .getChildrenNodesByTagname(ELEMENT_TAG.Item)
         .map(item => {
           return {

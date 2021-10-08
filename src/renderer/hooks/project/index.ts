@@ -7,7 +7,7 @@ import { useEditorDispatch, useEditorSelector } from "@/store/index";
 import { TypeProjectDataDoc, TypeFileData } from "src/types/project";
 import { FILE_TEMPLATE_TYPE, FILE_TYPE, LOAD_STATUS } from "src/enum";
 import {
-  TypeFileTemplateConfig,
+  TypeFileTempConfig,
   TypeResourceConfig,
   TypeResPageConfig,
   TypeScenarioConfig
@@ -31,7 +31,7 @@ export function useProjectRoot(): string {
 }
 
 // 工程信息模板配置
-export function useProjectInfoConfig(): TypeFileTemplateConfig {
+export function useProjectInfoConfig(): TypeFileTempConfig {
   const fileTempList = useEditorSelector(
     state => state.scenarioConfig.fileTempList
   );
@@ -143,6 +143,7 @@ export function useProjectImageUrlBySrc(src: string): string {
  * @returns 工程中 xml 文件数据map
  */
 export function useProjectXmlValueBySrc(name: string, src: string): string {
+  console.log(name, src);
   const xmlFileDataMap = useEditorSelector(state => {
     const entries = Object.entries(state.fileDataMap).flatMap(([key, val]) => {
       return val.type === FILE_TYPE.XML

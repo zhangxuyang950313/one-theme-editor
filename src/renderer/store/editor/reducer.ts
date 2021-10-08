@@ -2,7 +2,7 @@ import path from "path";
 import { updateState } from "@/store/utils";
 import { TypeProjectDataDoc, TypeFileData } from "src/types/project";
 import {
-  TypeResModule,
+  TypeResModuleConfig,
   TypeResPageOption,
   TypeResPageConfig,
   TypeResourceConfig,
@@ -23,7 +23,7 @@ export type TypeEditorState = {
   projectData: TypeProjectDataDoc;
   scenarioConfig: TypeScenarioConfig;
   resourceConfig: TypeResourceConfig;
-  currentModule: TypeResModule;
+  currentModule: TypeResModuleConfig;
   currentPage: TypeResPageOption;
   pageConfigMap: Record<string, TypeResPageConfig>;
   fileDataMap: Record<string, TypeFileData>;

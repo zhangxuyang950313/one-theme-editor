@@ -41,7 +41,7 @@ const StyleEditorContainer = styled.div`
   display: flex;
   overflow-y: auto;
   /* height: 100%; */
-  /* flex-grow: 1; */
+  flex-grow: 1;
   box-sizing: border-box;
 `;
 

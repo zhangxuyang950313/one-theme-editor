@@ -5,7 +5,7 @@ import {
 } from "src/types/project";
 import {
   TypeResourceConfig,
-  TypeResModule,
+  TypeResModuleConfig,
   TypeResPageOption,
   TypeResPageConfig,
   TypeScenarioConfig
@@ -51,7 +51,7 @@ type TypeActionSetScenarioConfig = {
 // 设置模块
 type TypeActionSetModuleConf = {
   type: typeof ACTION_TYPE.SET_MODULE_CONFIG;
-  payload: TypeResModule;
+  payload: TypeResModuleConfig;
 };
 
 // 设置页面
@@ -123,7 +123,7 @@ export function ActionSetResourceConfig(
 
 // 设置当前模块配置
 export function ActionSetCurrentModule(
-  payload: TypeResModule
+  payload: TypeResModuleConfig
 ): TypeActionSetModuleConf {
   return { type: ACTION_TYPE.SET_MODULE_CONFIG, payload };
 }

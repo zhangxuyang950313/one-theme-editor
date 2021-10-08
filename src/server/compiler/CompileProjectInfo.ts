@@ -1,6 +1,6 @@
 import { ProjectInfo } from "src/data/ProjectData";
 import { TypeProjectInfo } from "src/types/project";
-import { TypeFileTemplateConfig } from "src/types/resource";
+import { TypeFileTempConfig } from "src/types/resource";
 import XmlFileCompiler from "./XmlFileCompiler";
 import XmlTemplate from "./XmlTemplate";
 
@@ -11,7 +11,7 @@ export default class CompileProjectInfo extends XmlTemplate {
     return new CompileProjectInfo(element);
   }
 
-  getData(projectInfoConfig: TypeFileTemplateConfig): TypeProjectInfo {
+  getData(projectInfoConfig: TypeFileTempConfig): TypeProjectInfo {
     const projectInfo = new ProjectInfo();
     projectInfoConfig.items.forEach(item => {
       // const value = super.

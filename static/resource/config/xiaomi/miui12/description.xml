@@ -17,11 +17,11 @@
         string  - 字符串输入
         number  - 数字输入
     -->
-    <Resource name="图片"     protocol="file" type="image"/>
-    <Resource name="颜色值"   protocol="xml"   type="color"  format="argb"/>
-    <Resource name="布尔值"   protocol="xml"   type="boolean"/>
-    <Resource name="尺寸值"   protocol="xml"   type="string"/>
-    <Resource name="整型值"   protocol="xml"   type="number"/>
+    <Resource name="图片"     type="image"/>
+    <Resource name="颜色值"   type="xml-value" tag="color"     use="color"  format="argb"/>
+    <Resource name="布尔值"   type="xml-value" tag="bool"      use="boolean"/>
+    <Resource name="尺寸值"   type="xml-value" tag="dimen"     use="string"/>
+    <Resource name="整型值"   type="xml-value" tag="integer"   use="number"/>
 
     <!-- 模块定义 -->
     <Module name="图标和壁纸" icon="icons/res/drawable-xxhdpi//com.android.thememanager.png">

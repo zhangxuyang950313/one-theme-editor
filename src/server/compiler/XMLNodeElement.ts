@@ -21,8 +21,19 @@ class XMLNodeBase {
     this.node = node;
   }
 
+  // 当前是空节点
   public isEmpty(): boolean {
     return Object.keys(this.node).length === 0;
+  }
+
+  // 当前是元素节点
+  public isElement(): boolean {
+    return this.node.type === "element";
+  }
+
+  // 当前是注释节点
+  public isComment(): boolean {
+    return this.node.type === "comment";
   }
 
   public clear(): this {
@@ -60,6 +71,11 @@ class XMLNodeBase {
   // 标签名
   public getTagname<T extends string>(): T {
     return (this.node.name || "") as T;
+  }
+
+  // 注释信息
+  public getComment(): string {
+    return this.node.type === "comment" ? this.node.comment ?? "" : "";
   }
 
   // 如果 getType 是 text，这里会获得节点的文本信息

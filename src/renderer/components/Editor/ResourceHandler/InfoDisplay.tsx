@@ -10,8 +10,8 @@ const InfoDisplay: React.FC<{
 
   return (
     <StyleInfoDisplay className={className}>
-      <span className="title">{title}</span>
-      <span className="description">{description}</span>
+      <div className="title">{title}</div>
+      <div className="description">{description}</div>
     </StyleInfoDisplay>
   );
 };

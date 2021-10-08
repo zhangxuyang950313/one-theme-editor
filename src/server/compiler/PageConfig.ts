@@ -1,6 +1,6 @@
 import path from "path";
 import { URL } from "url";
-import { RESOURCE_PROTOCOL } from "src/enum";
+import { RESOURCE_PROTOCOL, RESOURCE_TYPE } from "src/enum";
 import fse from "fs-extra";
 import type {
   TypeLayoutElement,
@@ -18,7 +18,7 @@ import {
   ResourceUrlData,
   XmlValueData,
   ResImageDefinition,
-  XmlValResDefinition
+  ResXmlValuesDefinition
 } from "src/data/ResourceConfig";
 import {
   filenameIsImage,
@@ -391,27 +391,40 @@ export default class PageConfigCompiler extends XMLNodeElement {
       .map(node => {
         const name = node.getAttributeOf("name");
         const source = node.getAttributeOf("source");
+        const type = node.getAttributeOf<RESOURCE_TYPE>("type");
+        const sourceData = this.getSourceUrlData(source);
         this.resourceKeyValMap.set(name, source);
         // 解析 sourceUrl 信息
-        const sourceData = this.getSourceUrlData(source);
-        if (sourceData.fileType === FILE_TYPE.IMAGE) {
-          return new ResImageDefinition()
-            .set("resType", node.getAttributeOf("type"))
+        if (type === RESOURCE_TYPE.IMAGE) {
+          const imageDefinition = new ResImageDefinition()
+            .set("resType", type)
             .set("desc", node.getAttributeOf("description"))
             .set("name", name)
             .set("url", ImageUrlUtil.getUrl(sourceData.srcpath))
-            .set("source", source)
-            .set("sourceData", sourceData)
-            .create();
+            .set("source", source);
+          if (sourceData.fileType === FILE_TYPE.IMAGE)
+            imageDefinition.set("sourceData", sourceData);
+          return imageDefinition.create();
         }
-        if (sourceData.fileType === FILE_TYPE.XML) {
-          return new XmlValResDefinition()
+        if (type === RESOURCE_TYPE.XML_VALUE) {
+          console.log(node);
+          const items = node.getChildrenNodes().flatMap((item, key, arr) => {
+            if (item.isComment()) return [];
+            return {
+              tag: item.getTagname(),
+              name: item.getAttributeOf("name"),
+              desc: arr[key - 1]?.getComment() || ""
+            };
+          });
+          const xmlValDefinition = new ResXmlValuesDefinition()
             .set("resType", node.getAttributeOf("type"))
             .set("desc", node.getAttributeOf("description"))
             .set("name", name)
             .set("source", source)
-            .set("sourceData", sourceData)
-            .create();
+            .set("items", items);
+          if (sourceData.fileType === FILE_TYPE.XML)
+            xmlValDefinition.set("sourceData", sourceData);
+          return xmlValDefinition.create();
         }
         return null;
       })

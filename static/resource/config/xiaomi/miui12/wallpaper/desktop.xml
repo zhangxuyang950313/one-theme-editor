@@ -7,6 +7,8 @@
         属性 type： 匹配 description.xml 中的定义
         文件协议：   src://  
     -->
+
+    <!-- 第一排图标 -->
     <Resource 
         type="image"
         name="wallpaper" 
@@ -38,7 +40,7 @@
         source="src://icons/res/drawable-xxhdpi/com.android.camera.png"
     />
 
-
+    <!-- 第二排图标 -->
     <Resource
         type="image"
         name="com.miui.weather2"
@@ -64,7 +66,7 @@
         source="src://icons/res/drawable-xxhdpi/com.miui.video.png"
     />
 
-
+    <!-- 第三排图标 -->
     <Resource
         type="image"
         name="com.android.calendar"
@@ -102,7 +104,7 @@
         source="src://icons/res/drawable-xxhdpi/com.android.settings.png"
     />
 
-
+    <!-- 第四排图标 -->
     <Resource
         type="image"
         name="com.xiaomi.market"
@@ -128,56 +130,40 @@
         source="src://icons/res/drawable-xxhdpi/com.xiaomi.smarthome.png"
     />
 
-    <!-- xml 资源 -->
-    <Resource 
-        type="color"
-        name="icon_title_text"
-        description="图标文字" 
-        source="src://com.miui.home/theme_values.xml?tag=color&amp;name=icon_title_text"
-    />
+    <!-- xml-value 资源 -->
     <Resource
-        type="color"
-        name="action_bar_title_text_color_light"
-        description="标题栏文字"
-        source="src://wallpaper/theme_values.xml?tag=color&amp;name=action_bar_title_text_color_light"
-    />
-
+        type="xml-value"
+        name="xml.com.miui.home"
+        description="桌面模块"
+        source="src://com.miui.home/theme_values.xml"
+    >
+        <!-- 这里用注释描述每个 item -->
+        <!-- 图标文字 -->
+        <color name="icon_title_tex1t"/>
+        <!-- 图标文字 -->
+        <color name="icon_title_text2"/>
+        <!-- 布尔值测试1 -->
+        <bool name="bool_test1"/>
+        <!-- 布尔值测试2 -->
+        <bool name="bool_test2"/>
+        <!-- 尺寸值测试1 -->
+        <dimen name="dimen_test1"/>
+        <!-- 尺寸值测试2 -->
+        <dimen name="dimen_test2"/>
+        <!-- 整型值测试1 -->
+        <integer name="integer_test1"/>
+        <!-- 整型值测试2 -->
+        <integer name="integer_test2"/>
+    </Resource> 
     <Resource
-        type="boolean"
-        name="bool_test1"
-        description="布尔值测试1"
-        source="src://com.miui.home/theme_values.xml?tag=color&amp;name=bool_test1"
-    />
-    <Resource
-        type="boolean"
-        name="bool_test2"
-        description="布尔值测试2"
-        source="src://com.miui.home/theme_values.xml?tag=color&amp;name=bool_test2"
-    />
-    <Resource
-        type="string"
-        name="dimen_test1"
-        description="尺寸值测试1"
-        source="src://com.miui.home/theme_values.xml?tag=color&amp;name=dimen_test1"
-    />
-    <Resource
-        type="string"
-        name="dimen_test2"
-        description="尺寸值测试2"
-        source="src://com.miui.home/theme_values.xml?tag=color&amp;name=dimen_test2"
-    />
-    <Resource
-        type="number"
-        name="integer_test1"
-        description="整型值测试1"
-        source="src://com.miui.home/theme_values.xml?tag=color&amp;name=integer_test1"
-    />
-    <Resource
-        type="number"
-        name="integer_test2"
-        description="整型值测试2"
-        source="src://com.miui.home/theme_values.xml?tag=color&amp;name=integer_test2"
-    />
+        type="xml-value"
+        name="xml.wallpaper"
+        description="壁纸模块"
+        source="src://wallpaper/theme_values.xml"
+    >
+        <!-- 标题栏文字 -->
+        <color name="action_bar_title_text_color_light"/>
+    </Resource> 
 
     <!-- 静态预览图 -->
     <Preview src="../preview/preview.jpg"/>
@@ -319,12 +305,12 @@
         <Text
             text="拨号"
             x="415" y="1250" size="36" align="center" alignV="center"
-            color="${icon_title_text}"
+            color="${xml.com.miui.home}?name=icon_title_text"
         />
         <Text
             text="顶栏字体"
             x="0" y="0" size="40" align="center" alignV="center"
-            color="${action_bar_title_text_color_light}"
+            color="${xml.com.miui.home}?name=action_bar_title_text_color_light"
         /> 
     </Layout>
 </Page>

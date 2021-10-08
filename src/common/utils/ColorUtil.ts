@@ -15,7 +15,11 @@ class ColorUtil {
    */
   constructor(hex: string, type: HEX_FORMAT) {
     if (!ColorUtil.isHex(hex)) {
-      throw new Error(`"${hex}" 不是合法颜色值`);
+      // throw new Error(`"${hex}" 不是合法颜色值`);
+      console.error(`"${hex}" 不是合法颜色值`);
+      this.hex = "#ffffff";
+      this.hexType = HEX_FORMAT.RGB;
+      return;
     }
     this.hex = hex;
     this.hexType = type;

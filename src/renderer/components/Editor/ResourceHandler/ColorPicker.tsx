@@ -2,9 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { Input, message, Tooltip } from "antd";
 import { RGBColor, SketchPicker } from "react-color";
-import { RightCircleOutlined } from "@ant-design/icons";
 import { useProjectUUID } from "@/hooks/project/index";
-import { TypeResXmlValDefinition } from "src/types/resource";
+import { TypeXmlValItemDefinition } from "src/types/resource";
 import { StyleGirdBackground } from "@/style";
 import { RgbaObject } from "hex-rgb";
 import ColorUtil, { HEX_FORMAT } from "src/common/utils/ColorUtil";
@@ -169,16 +168,13 @@ const StyleColorPick = styled.div`
 // 颜色值选择器
 const ColorPicker: React.FC<{
   value: string;
-  valueDefinition: TypeResXmlValDefinition;
   onChange: (x: string) => void;
 }> = props => {
-  const { value, valueDefinition, onChange } = props;
-  const { desc, sourceData } = valueDefinition;
+  const { value, onChange } = props;
   const uuid = useProjectUUID();
 
-  if (!uuid || !sourceData) return null;
-  const { defaultValue, valueName } = sourceData.data;
-  const defaultColor = new ColorUtil(defaultValue, HEX_FORMAT.ARGB).format(
+  if (!uuid) return null;
+  const defaultColor = new ColorUtil(value, HEX_FORMAT.ARGB).format(
     HEX_FORMAT.RGBA
   );
 
@@ -194,7 +190,6 @@ const ColorPicker: React.FC<{
         placeholder={defaultColor}
         onDisabled={onChange}
       />
-      <InfoDisplay className="info" title={desc} description={valueName} />
     </StyleColorPicker>
   );
 };
@@ -203,7 +198,7 @@ const StyleColorPicker = styled.div`
   display: flex;
   flex-direction: column;
   .info {
-    margin: 10px 0;
+    margin-bottom: 10px;
   }
   /* .middle-button {
     cursor: pointer;

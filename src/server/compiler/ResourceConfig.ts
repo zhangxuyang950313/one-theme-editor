@@ -1,9 +1,9 @@
 import path from "path";
 import { v4 as UUID } from "uuid";
-import { ELEMENT_TAG } from "src/enum";
+import { ELEMENT_TAG, RESOURCE_TYPE } from "src/enum";
 import {
   TypeResourceConfig,
-  TypeResModule,
+  TypeResModuleConfig,
   TypeResPageOption,
   TypeResourceOption,
   TypeResTypeConfig
@@ -12,11 +12,12 @@ import ResourceConfigData, {
   ResourceOption,
   ResModuleConfig,
   ResPageOption,
-  ResTypeConfig,
-  UiVersion
+  UiVersion,
+  ResTypeXmlValTypeConfig
 } from "src/data/ResourceConfig";
 import { TypeUiVersion } from "src/types/project";
 import pathUtil from "server/utils/pathUtil";
+import { ResTypeImageConfig } from "./../../data/ResourceConfig";
 import PageConfigCompiler from "./PageConfig";
 import XMLNodeBase from "./XMLNodeElement";
 import XmlFileCompiler from "./XmlFileCompiler";
@@ -93,15 +94,24 @@ export default class ResourceConfigCompiler extends XmlFileCompiler {
 
   // 素材类型定义列表
   getResTypeList(): TypeResTypeConfig[] {
-    return super
-      .getRootChildrenNodesOf(ELEMENT_TAG.Resource)
-      .map(item =>
-        new ResTypeConfig()
-          .set("type", item.getAttributeOf("type"))
-          .set("protocol", item.getAttributeOf("protocol"))
-          .set("name", item.getAttributeOf("name"))
-          .create()
-      );
+    return super.getRootChildrenNodesOf(ELEMENT_TAG.Resource).flatMap(node => {
+      const type = node.getAttributeOf<RESOURCE_TYPE>("type");
+      if (type === RESOURCE_TYPE.IMAGE) {
+        return new ResTypeImageConfig()
+          .set("type", node.getAttributeOf("type"))
+          .set("name", node.getAttributeOf("name"))
+          .create();
+      }
+      if (type === RESOURCE_TYPE.XML_VALUE) {
+        return new ResTypeXmlValTypeConfig()
+          .set("name", node.getAttributeOf("name"))
+          .set("type", node.getAttributeOf("type"))
+          .set("tag", node.getAttributeOf("tag"))
+          .set("use", node.getAttributeOf("use"))
+          .create();
+      }
+      return [];
+    });
   }
 
   // 页面配置列表
@@ -136,7 +146,7 @@ export default class ResourceConfigCompiler extends XmlFileCompiler {
   // }
 
   // 模块配置数据
-  getModuleList(): TypeResModule[] {
+  getModuleList(): TypeResModuleConfig[] {
     return super
       .getRootChildrenNodesOf(ELEMENT_TAG.Module)
       .map((moduleNode, index) => {
