@@ -77,7 +77,9 @@ const Editor: React.FC = () => {
         <StyleEditor>
           {/* 模块选择器 */}
           <StyleModuleSelector>
-            <ModuleSelector />
+            <div className="module-selector-container">
+              <ModuleSelector />
+            </div>
           </StyleModuleSelector>
           {/* 编辑区域 */}
           <StyleEditorContent>
@@ -108,11 +110,12 @@ const StyleEditor = styled.div`
 `;
 
 const StyleModuleSelector = styled(StyleBorderRight)`
-  width: 80px;
-  height: 100vh;
-  padding: 80px 0;
-  flex-shrink: 0;
   overflow-y: auto;
+  flex-shrink: 0;
+  padding: 80px 0;
+  .module-selector-container {
+    width: 80px;
+  }
 `;
 
 const StyleEditorContent = styled.div`

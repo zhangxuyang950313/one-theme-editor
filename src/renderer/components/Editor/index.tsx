@@ -14,50 +14,61 @@ const EditorContainer: React.FC = () => {
     <StyleEditorContainer>
       {/* 页面选择器 */}
       <StylePageSelector>
-        <PageSelector />
+        <div className="page-selector-container">
+          <PageSelector />
+        </div>
       </StylePageSelector>
       {/* 预览 */}
       <StylePreviewer>
         {/* TODO: 占位图 */}
+        {/* 
+        setScale(divEl.getClientRects()[0].width / Number(screenWidth)); */}
         {currentResPageConfig && (
-          <Previewer pageConfig={currentResPageConfig} />
+          <div className="preview-container">
+            <Previewer pageConfig={currentResPageConfig} canClick useDash />
+          </div>
         )}
       </StylePreviewer>
       {/* 素材编辑区 */}
       {/* <StyleResImageList>
         <ResImageList />
       </StyleResImageList> */}
-      <StyleResXmlValList>
-        <ResHandlerList />
-      </StyleResXmlValList>
+      <StyleResHandlerList>
+        <div className="resource-handler-container">
+          <ResHandlerList />
+        </div>
+      </StyleResHandlerList>
     </StyleEditorContainer>
   );
 };
 
 const StyleEditorContainer = styled.div`
   display: flex;
-  overflow: auto;
+  overflow-y: auto;
   /* height: 100%; */
-  flex-grow: 1;
+  /* flex-grow: 1; */
   box-sizing: border-box;
 `;
 
 const StylePageSelector = styled(StyleBorderRight)`
-  flex: 1;
+  /* flex: 1; */
   flex-shrink: 0;
-  padding: 20px;
-  min-width: 200px;
-  max-width: 280px;
-  overflow: auto;
+  padding: 10px;
+  overflow-y: auto;
+  .page-selector-container {
+    width: 120px;
+  }
 `;
 
 const StylePreviewer = styled(StyleBorderRight)`
-  flex: 1;
   flex-shrink: 0;
   padding: 20px;
-  min-width: 300px;
-  max-width: 350px;
-  overflow: auto;
+  overflow-y: auto;
+  .preview-container {
+    flex: 1;
+    min-width: 300px;
+    max-width: 350px;
+  }
 `;
 
 // const StyleResImageList = styled(StyleBorderRight)`
@@ -67,12 +78,17 @@ const StylePreviewer = styled(StyleBorderRight)`
 //   overflow: auto;
 // `;
 
-const StyleResXmlValList = styled.div`
+const StyleResHandlerList = styled.div`
   /* min-width: 400px; */
   flex: 1;
   flex-shrink: 0;
-  padding: 0 0 0 20px;
-  overflow: auto;
+  padding-left: 20px;
+  overflow-y: auto;
+  .resource-handler-container {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+  }
 `;
 
 export default EditorContainer;

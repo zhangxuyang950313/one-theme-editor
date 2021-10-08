@@ -47,6 +47,7 @@ const ResHandlerList: React.FC = () => {
 };
 
 const StyleResHandlerList = styled.div`
+  width: 100%;
   height: 100%;
   overflow: hidden;
   display: flex;
@@ -56,6 +57,7 @@ const StyleResHandlerList = styled.div`
     flex-direction: column;
     flex-grow: 0;
     height: 100%;
+    padding-right: 20px;
     overflow-x: hidden;
     overflow-y: auto;
   }

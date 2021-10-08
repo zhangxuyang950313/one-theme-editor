@@ -1,18 +1,19 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-import {
-  useLayoutElementList,
-  useCurrentPageConfig
-} from "@/hooks/resource/index";
 import { ALIGN_VALUE, ALIGN_V_VALUE, ELEMENT_TAG } from "src/enum";
 import { TypeLayoutData, TypeResPageConfig } from "src/types/resource";
 import { DynamicBothSourceImage, PreloadImage } from "../ImageCollection";
 
-function computeLayout(data: TypeLayoutData): { x: number; y: number } {
-  const result: { x: number; y: number } = {
+function computeLayout(
+  data: TypeLayoutData,
+  scale: number
+): { x: number; y: number; w: number; h: number } {
+  const result = {
     x: Number(data.x),
-    y: Number(data.y)
+    y: Number(data.y),
+    w: Number(data.w),
+    h: Number(data.h)
   };
   switch (data.align) {
     case ALIGN_VALUE.CENTER: {
@@ -34,10 +35,18 @@ function computeLayout(data: TypeLayoutData): { x: number; y: number } {
       break;
     }
   }
+  result.x *= scale;
+  result.y *= scale;
+  result.w *= scale;
+  result.h *= scale;
   return result;
 }
 
-const Previewer: React.FC<{ pageConfig: TypeResPageConfig }> = props => {
+const Previewer: React.FC<{
+  pageConfig: TypeResPageConfig;
+  useDash: boolean;
+  canClick: boolean;
+}> = props => {
   const { screenWidth, layoutElementList, previewList } = props.pageConfig;
   const [scale, setScale] = useState(0);
 
@@ -45,24 +54,24 @@ const Previewer: React.FC<{ pageConfig: TypeResPageConfig }> = props => {
 
   return (
     <StylePreviewer
+      style={{
+        borderRadius: `${50 * scale}px`
+      }}
       ref={divEl => {
         if (!divEl || scale) return;
-        setScale(divEl.getClientRects()[0].width / Number(screenWidth));
+        setScale(divEl.getBoundingClientRect().width / Number(screenWidth));
       }}
     >
       {layoutElementList.length ? (
         <div
-          className="preview-dynamic"
+          className="dynamic"
           style={{
-            width: `${screenWidth}px`,
-            height: `${2340}px`,
-            transform: `scale(${scale})`,
-            transformOrigin: "0 0",
-            borderRadius: `${16 / scale}px`
+            width: `${Number(screenWidth) * scale}px`,
+            height: `${2340 * scale}px`
           }}
         >
           {layoutElementList.map((element, k) => {
-            const layoutComputed = computeLayout(element.layout);
+            const layoutComputed = computeLayout(element.layout, scale);
             switch (element.tag) {
               // 图片类型预览
               case ELEMENT_TAG.Image: {
@@ -93,13 +102,15 @@ const Previewer: React.FC<{ pageConfig: TypeResPageConfig }> = props => {
                 const style = {
                   left: `${layoutComputed.x}px`,
                   top: `${layoutComputed.y}px`,
-                  width: `${element.layout.w}px`,
-                  height: `${element.layout.h}px`
+                  width: `${layoutComputed.w}px`,
+                  height: `${layoutComputed.h}px`
                 };
                 return (
                   <DynamicBothSourceImage
                     key={`${element.src}-${k}`}
                     data-name={element.src}
+                    data-dash={props.useDash}
+                    data-click={props.canClick}
                     className="image"
                     style={style}
                     alt=""
@@ -114,10 +125,7 @@ const Previewer: React.FC<{ pageConfig: TypeResPageConfig }> = props => {
           })}
         </div>
       ) : (
-        <PreloadImage
-          className="preview-static"
-          src={`resource://${previewList[0]}`}
-        />
+        <PreloadImage className="static" src={`resource://${previewList[0]}`} />
       )}
     </StylePreviewer>
   );
@@ -125,37 +133,31 @@ const Previewer: React.FC<{ pageConfig: TypeResPageConfig }> = props => {
 
 const StylePreviewer = styled.div`
   width: 100%;
-  height: 100%;
+  border: 1px solid;
+  border-color: ${({ theme }) => theme["@border-color-base"]};
   box-sizing: border-box;
-  /* 动态预览 */
-  .preview-dynamic {
+  overflow: hidden;
+  .dynamic {
     position: relative;
-    border: 1px solid;
-    border-color: ${({ theme }) => theme["@border-color-base"]};
-    box-sizing: border-box;
-    overflow: hidden;
+    transform-origin: 0 0;
     .image {
       position: absolute;
       width: 100%;
-      transition: all 0.5s;
-      border: 1px dashed red;
+      transition: transform 0.5s;
       object-fit: cover;
-      &:hover {
+      &[data-dash="true"] {
+        border: 1px dashed red;
+      }
+      &[data-click="true"]:hover {
         cursor: pointer;
         transform: scale(1.2);
-        transition: all 0.3s ease;
+        transition: transform 0.3s ease;
       }
     }
     .text {
       position: absolute;
       width: 100%;
     }
-  }
-  /* 静态预览图 */
-  .preview-static {
-    width: 100%;
-    border: 1px solid;
-    border-color: ${({ theme }) => theme["@border-color-base"]};
   }
 `;
 

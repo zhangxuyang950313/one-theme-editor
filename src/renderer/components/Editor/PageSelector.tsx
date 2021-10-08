@@ -17,15 +17,14 @@ const PagePreview: React.FC<{ pageData: TypeResPageOption }> = props => {
   const pageConf = useCurrentPageConfig();
 
   return (
-    <StylePreviewImage data-active={String(pageOpt.key === pageData.key)}>
+    <StylePreviewImage
+      data-active={String(pageOpt.key === pageData.key)}
+      onClick={() => setPageOpt(pageData)}
+    >
       {pageConf ? (
-        <Previewer pageConfig={pageConf} />
+        <Previewer pageConfig={pageConf} useDash={false} canClick={false} />
       ) : (
-        <PreloadImage
-          className="preview-image"
-          src={resourceImageURL}
-          onClick={() => setPageOpt(pageData)}
-        />
+        <PreloadImage className="preview-image" src={resourceImageURL} />
       )}
     </StylePreviewImage>
   );
@@ -33,14 +32,14 @@ const PagePreview: React.FC<{ pageData: TypeResPageOption }> = props => {
 
 const StylePreviewImage = styled.span`
   cursor: pointer;
-  width: 48%;
-  height: auto;
-  margin: 1%;
+  margin: 5px 0;
+  /* flex-grow: 0; */
+  /* width: 100%; */
+  /* height: auto; */
   /* border: 1px solid;
   border-color: ${({ theme }) => theme["@border-color-base"]}; */
   border-radius: 6px;
   overflow: hidden;
-  box-sizing: border-box;
   opacity: 0.4;
   transition: 0.4s all;
   &[data-active="true"] {
@@ -74,11 +73,9 @@ const PageSelector: React.FC = () => {
 const StylePagePreview = styled.div`
   display: flex;
   flex-direction: column;
-  /* justify-content: space-around; */
   width: 100%;
-  height: 100%;
-  overflow: hidden;
-  flex-wrap: wrap;
+  overflow-y: auto;
+  flex-wrap: nowrap;
   flex-grow: 0;
 `;
 
