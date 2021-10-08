@@ -9,11 +9,11 @@ const Wrapper: React.FC<{
 
   return (
     <StyleWrapper>
+      {props.children}
       <div className="text-wrapper">
         <span className="description">{description}</span>
         <span className="value-name">{name}</span>
       </div>
-      {props.children}
     </StyleWrapper>
   );
 };

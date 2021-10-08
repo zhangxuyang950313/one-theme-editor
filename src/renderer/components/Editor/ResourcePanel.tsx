@@ -6,10 +6,10 @@ import {
   useResTypeConfigList
 } from "@/hooks/resource/index";
 import { RESOURCE_TYPE } from "src/enum";
-import XmlValueHandler from "../XmlValueHandler";
-import ImageHandler from "../ImageHandler/index";
+import XmlValueHandler from "./ResourceHandler/XmlValueHandler";
+import ImageHandler from "./ResourceHandler/ImageHandler";
 
-const ResHandlerList: React.FC = () => {
+const ResourceHandler: React.FC = () => {
   const resTypeList = useResTypeConfigList();
   const resourceList = useResDefinitionList();
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -20,13 +20,13 @@ const ResHandlerList: React.FC = () => {
       // 和定义的 type 相同会被展示
       switch (resource.resType) {
         case RESOURCE_TYPE.IMAGE: {
-          return <ImageHandler key={key} imageDefinition={resource} />;
+          return <ImageHandler className="item" key={key} data={resource} />;
         }
         case RESOURCE_TYPE.COLOR:
         case RESOURCE_TYPE.BOOLEAN:
         case RESOURCE_TYPE.STRING:
         case RESOURCE_TYPE.NUMBER: {
-          return <XmlValueHandler key={key} xmlValueDefinition={resource} />;
+          return <XmlValueHandler className="item" key={key} data={resource} />;
         }
         default:
           return null;
@@ -35,32 +35,46 @@ const ResHandlerList: React.FC = () => {
   });
 
   return (
-    <StyleResHandlerList>
-      <Tabs onChange={index => setSelectedIndex(Number(index))}>
+    <StyleResourceHandler>
+      <Tabs
+        className="tabs"
+        onChange={index => setSelectedIndex(Number(index))}
+      >
         {resTypeList.map((resTypeConfig, index) => {
           return <Tabs.TabPane key={index} tab={resTypeConfig.name} />;
         })}
       </Tabs>
-      <div className="list">{resourceCategory[selectedIndex]}</div>
-    </StyleResHandlerList>
+      <div className="resource-container">
+        {resourceCategory[selectedIndex]}
+      </div>
+    </StyleResourceHandler>
   );
 };
 
-const StyleResHandlerList = styled.div`
+const StyleResourceHandler = styled.div`
   width: 100%;
   height: 100%;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  .list {
+  .tabs {
+    padding: 0 20px;
+    flex-shrink: 0;
+    .ant-tabs-nav {
+      margin: 0 0 10px 0;
+    }
+  }
+  .resource-container {
     display: flex;
-    flex-direction: column;
     flex-grow: 0;
-    height: 100%;
-    padding-right: 20px;
+    flex-wrap: wrap;
+    padding: 20px;
     overflow-x: hidden;
     overflow-y: auto;
+    .item {
+      margin: 0 20px 20px 0;
+    }
   }
 `;
 
-export default ResHandlerList;
+export default ResourceHandler;

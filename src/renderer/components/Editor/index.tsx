@@ -4,7 +4,7 @@ import { StyleBorderRight } from "@/style";
 import PageSelector from "@/components/Editor/PageSelector";
 import Previewer from "@/components/Editor/Previewer";
 // import ResImageList from "@/components/Editor/ResImageList";
-import ResHandlerList from "@/components/Editor/ResHandlerList";
+import ResourcePanel from "@/components/Editor/ResourcePanel";
 import { useCurrentPageConfig } from "@/hooks/resource";
 
 // 主编辑区域
@@ -21,23 +21,18 @@ const EditorContainer: React.FC = () => {
       {/* 预览 */}
       <StylePreviewer>
         {/* TODO: 占位图 */}
-        {/* 
-        setScale(divEl.getClientRects()[0].width / Number(screenWidth)); */}
         {currentResPageConfig && (
           <div className="preview-container">
             <Previewer pageConfig={currentResPageConfig} canClick useDash />
           </div>
         )}
       </StylePreviewer>
-      {/* 素材编辑区 */}
-      {/* <StyleResImageList>
-        <ResImageList />
-      </StyleResImageList> */}
-      <StyleResHandlerList>
+      {/* 资源编辑区 */}
+      <StyleResourcePanel>
         <div className="resource-handler-container">
-          <ResHandlerList />
+          <ResourcePanel />
         </div>
-      </StyleResHandlerList>
+      </StyleResourcePanel>
     </StyleEditorContainer>
   );
 };
@@ -78,11 +73,10 @@ const StylePreviewer = styled(StyleBorderRight)`
 //   overflow: auto;
 // `;
 
-const StyleResHandlerList = styled.div`
+const StyleResourcePanel = styled.div`
   /* min-width: 400px; */
   flex: 1;
   flex-shrink: 0;
-  padding-left: 20px;
   overflow-y: auto;
   .resource-handler-container {
     flex: 1;

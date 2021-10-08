@@ -53,6 +53,7 @@ export class XmlValueData extends AbstractDataModel<TypeXmlValueData> {
 export class ImageSourceData extends AbstractDataModel<TypeImageSourceData> {
   protected data: TypeImageSourceData = {
     fileType: FILE_TYPE.IMAGE,
+    extname: "",
     protocol: "",
     src: "",
     query: {},
@@ -224,6 +225,7 @@ export class ResourceUrlData extends AbstractDataModel<TypeResUrlData> {
   protected data: TypeResUrlData = {
     protocol: RESOURCE_PROTOCOL.UNKNOWN,
     fileType: FILE_TYPE.UNKNOWN,
+    extname: "",
     source: "",
     src: "",
     srcpath: "",

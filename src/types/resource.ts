@@ -153,6 +153,7 @@ export type TypeLayoutElement = TypeLayoutImageElement | TypeLayoutTextElement;
 // 图片类型
 export type TypeImageSourceData = {
   fileType: FILE_TYPE.IMAGE;
+  extname: string;
   protocol: string;
   src: string;
   query: Record<string, string>;
@@ -196,6 +197,7 @@ export type TypeResDefinition =
 export type TypeResUnknownData = {
   protocol: RESOURCE_PROTOCOL.UNKNOWN;
   fileType: FILE_TYPE.UNKNOWN;
+  extname: string;
   source: string;
   src: string;
   srcpath: string;
@@ -207,6 +209,7 @@ export type TypeResUnknownData = {
 export type TypeResUrlImageData = {
   protocol: RESOURCE_PROTOCOL;
   fileType: FILE_TYPE.IMAGE;
+  extname: string;
   source: string;
   src: string;
   srcpath: string;
@@ -218,6 +221,7 @@ export type TypeResUrlImageData = {
 export type TypeResUrlXmlValData = {
   protocol: RESOURCE_PROTOCOL;
   fileType: FILE_TYPE.XML;
+  extname: string;
   source: string;
   src: string;
   srcpath: string;

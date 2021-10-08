@@ -9,13 +9,14 @@ import { StyleGirdBackground } from "@/style";
  */
 
 const ImageDisplay: React.FC<{
+  className?: string;
   src?: string;
   onClick?: () => void;
 }> = props => {
-  const { src, onClick } = props;
+  const { src, onClick, className } = props;
 
   return (
-    <StyleImageDisplay>
+    <StyleImageDisplay className={className}>
       <LazyImage
         className="preview"
         alt={src}
@@ -30,8 +31,8 @@ const ImageDisplay: React.FC<{
 const StyleImageBackground = styled(StyleGirdBackground)`
   flex-shrink: 0;
   position: relative;
-  width: 80px;
-  height: 80px;
+  width: 100%;
+  height: 100%;
   box-sizing: border-box;
   display: flex;
   justify-content: center;
@@ -47,7 +48,7 @@ const StyleImageDisplay = styled(StyleImageBackground)`
     width: 100%;
     height: 100%;
     object-fit: contain;
-    /* border: 1px dashed red; */
+    border: 1px dashed red;
     /* background: center/contain no-repeat; */
     &[can-click="true"] {
       cursor: pointer;

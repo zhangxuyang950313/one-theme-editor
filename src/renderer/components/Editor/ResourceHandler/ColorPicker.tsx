@@ -8,7 +8,7 @@ import { TypeResXmlValDefinition } from "src/types/resource";
 import { StyleGirdBackground } from "@/style";
 import { RgbaObject } from "hex-rgb";
 import ColorUtil, { HEX_FORMAT } from "src/common/utils/ColorUtil";
-import Wrapper from "./Wrapper";
+import InfoDisplay from "./InfoDisplay";
 
 // 颜色小方块
 const ColorBox: React.FC<{ color: string; onClick?: () => void }> = props => {
@@ -183,27 +183,29 @@ const ColorPicker: React.FC<{
   );
 
   return (
-    <Wrapper name={valueName} description={desc}>
-      <StyleColorPicker>
-        <ColorBox color={defaultColor} />
-        <RightCircleOutlined
+    <StyleColorPicker>
+      {/* <ColorBox color={defaultColor} /> */}
+      {/* <RightCircleOutlined
           className="middle-button"
           onClick={() => onChange(defaultValue)}
-        />
-        <ColorPick
-          defaultColor={value}
-          placeholder={defaultColor}
-          onDisabled={onChange}
-        />
-      </StyleColorPicker>
-    </Wrapper>
+        /> */}
+      <ColorPick
+        defaultColor={value}
+        placeholder={defaultColor}
+        onDisabled={onChange}
+      />
+      <InfoDisplay className="info" title={desc} description={valueName} />
+    </StyleColorPicker>
   );
 };
 
 const StyleColorPicker = styled.div`
   display: flex;
-  align-items: center;
-  .middle-button {
+  flex-direction: column;
+  .info {
+    margin: 10px 0;
+  }
+  /* .middle-button {
     cursor: pointer;
     color: ${({ theme }) => theme["@text-color-secondary"]};
     font-size: 22px;
@@ -212,7 +214,7 @@ const StyleColorPicker = styled.div`
     &:hover {
       opacity: 0.5;
     }
-  }
+  } */
 `;
 
 export default ColorPicker;

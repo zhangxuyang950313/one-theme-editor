@@ -203,6 +203,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
     searchParams.forEach((value, key) => {
       query[key] = value;
     });
+    resUrlData.set("extname", path.extname(src));
     resUrlData.set("source", url);
     resUrlData.set("query", query);
     resUrlData.set("src", src);

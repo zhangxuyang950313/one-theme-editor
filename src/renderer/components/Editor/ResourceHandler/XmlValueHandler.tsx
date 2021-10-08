@@ -11,9 +11,10 @@ import NumberInput from "./NumberInput";
 import StringInput from "./StringInput";
 
 const XmlValueHandler: React.FC<{
-  xmlValueDefinition: TypeResXmlValDefinition;
+  className?: string;
+  data: TypeResXmlValDefinition;
 }> = props => {
-  const { resType, name, sourceData } = props.xmlValueDefinition;
+  const { resType, name, sourceData } = props.data;
   const uuid = useProjectUUID();
   const value = useProjectXmlValueBySrc(name, sourceData.src);
 
@@ -30,7 +31,7 @@ const XmlValueHandler: React.FC<{
         return (
           <ColorPicker
             value={value}
-            valueDefinition={props.xmlValueDefinition}
+            valueDefinition={props.data}
             onChange={writeXml}
           />
         );
@@ -40,7 +41,7 @@ const XmlValueHandler: React.FC<{
         return (
           <BooleanSelector
             value={value}
-            valueDefinition={props.xmlValueDefinition}
+            valueDefinition={props.data}
             onChange={writeXml}
           />
         );
@@ -50,7 +51,7 @@ const XmlValueHandler: React.FC<{
         return (
           <NumberInput
             value={value}
-            valueDefinition={props.xmlValueDefinition}
+            valueDefinition={props.data}
             onChange={writeXml}
           />
         );
@@ -61,7 +62,7 @@ const XmlValueHandler: React.FC<{
         return (
           <StringInput
             value={value}
-            valueDefinition={props.xmlValueDefinition}
+            valueDefinition={props.data}
             onChange={writeXml}
           />
         );
@@ -69,7 +70,7 @@ const XmlValueHandler: React.FC<{
     }
   };
   return (
-    <StyleXmlController>
+    <StyleXmlController className={props.className}>
       <CategoryHandler />
     </StyleXmlController>
   );
@@ -78,10 +79,10 @@ const XmlValueHandler: React.FC<{
 const StyleXmlController = styled.div`
   flex-shrink: 0;
   box-sizing: content-box;
-  padding-bottom: 20px;
-  margin-bottom: 20px;
-  border-bottom: 1px solid;
-  border-bottom-color: ${({ theme }) => theme["@border-color-secondary"]};
+  /* padding-bottom: 20px;
+  margin-bottom: 20px; */
+  /* border-bottom: 1px solid;
+  border-bottom-color: ${({ theme }) => theme["@border-color-secondary"]}; */
 `;
 
 export default XmlValueHandler;
