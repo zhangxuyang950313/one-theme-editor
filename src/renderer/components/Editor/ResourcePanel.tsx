@@ -1,27 +1,26 @@
 import React, { useRef, useState, useEffect } from "react";
 import styled from "styled-components";
-import { Button, Tabs } from "antd";
-import {
-  useResDefinitionList,
-  useResTypeConfigList
-} from "@/hooks/resource/index";
+import { Tabs } from "antd";
+import { useResourceList, useResTypeConfigList } from "@/hooks/resource/index";
 import { RESOURCE_TYPE } from "src/enum";
 import {
-  TypeResDefinition,
-  TypeResImageDefinition,
-  TypeResXmlValuesDefinition
+  TypeResourceDefinition,
+  TypeImageResource,
+  TypeXmlValueResource
 } from "src/types/resource";
 import XmlValueHandler from "./ResourceHandler/XmlValueHandler";
 import ImageHandler from "./ResourceHandler/ImageHandler";
 
 const ResourceHandler: React.FC = () => {
   const resTypeList = useResTypeConfigList();
-  const resourceList = useResDefinitionList();
+  const resourceList = useResourceList();
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  const imageListRef = useRef<TypeResImageDefinition[]>([]);
-  const xmlValListRef = useRef<TypeResXmlValuesDefinition[]>([]);
-  const [currentResource, setCurrentRes] = useState<TypeResDefinition[]>([]);
+  const imageListRef = useRef<TypeImageResource[]>([]);
+  const xmlValListRef = useRef<TypeXmlValueResource[]>([]);
+  const [currentResource, setCurrentRes] = useState<TypeResourceDefinition[]>(
+    []
+  );
 
   // 筛选出 resType 类型的所有资源定义
   // 后期加资源类型编辑应在这里加
@@ -63,7 +62,7 @@ const ResourceHandler: React.FC = () => {
         {currentResource.map((item, key) => {
           switch (item.resType) {
             case RESOURCE_TYPE.IMAGE: {
-              return <ImageHandler className="item" key={key} data={item} />;
+              return <ImageHandler key={key} data={item} />;
             }
             case RESOURCE_TYPE.XML_VALUE: {
               if (currentResType.type !== RESOURCE_TYPE.XML_VALUE) return null;
@@ -115,8 +114,9 @@ const StyleResourceHandler = styled.div`
   }
   .image-container {
     display: flex;
+    flex-direction: column;
     flex-grow: 0;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     padding: 20px;
     overflow-x: hidden;
     overflow-y: auto;
@@ -132,9 +132,6 @@ const StyleResourceHandler = styled.div`
     padding: 20px;
     overflow-x: hidden;
     overflow-y: auto;
-    .item {
-      margin: 0 20px 20px 0;
-    }
   }
 `;
 

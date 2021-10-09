@@ -23,7 +23,7 @@ export abstract class AbstractDataModel<T extends Record<string, unknown>> {
     return this.data[k];
   }
   set<K extends keyof T>(k: K, value: T[K]): this {
-    if (this.has(k)) {
+    if (this.has(k) && value !== undefined) {
       this.data[k] = value;
     }
     return this;

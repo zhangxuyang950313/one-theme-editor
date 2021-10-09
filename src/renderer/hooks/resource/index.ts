@@ -13,7 +13,7 @@ import {
   TypeLayoutImageElement,
   TypeLayoutTextElement,
   TypeResPageConfig,
-  TypeResDefinition
+  TypeResourceDefinition
 } from "src/types/resource";
 import {
   useStarterDispatch,
@@ -104,7 +104,7 @@ export function useResTypeConfigList(): TypeResTypeConfig[] {
 /**
  * 获取素材定义数据列表
  */
-export function useResDefinitionList(): TypeResDefinition[] {
+export function useResourceList(): TypeResourceDefinition[] {
   const curResPageConfig = useCurrentPageConfig();
   return curResPageConfig?.resourceList || [];
 }

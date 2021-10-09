@@ -124,7 +124,10 @@ const apiConfig = {
     path: "/project",
     params: [] as Array<keyof TypeProjectDataDoc>
   }),
-  // 获取页面配置的素材文件数据
+  /**
+   * @deprecated
+   * 取页面配置的素材文件数据
+   */
   GET_PAGE_RESOURCE: createApiConf({
     path: "/project/resource",
     params: ["uuid"],

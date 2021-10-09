@@ -7,14 +7,15 @@ import {
   TypeResModuleConfig,
   TypeResPageOption,
   TypeResPageConfig,
-  TypeXmlValueData,
   TypeResUrlData,
-  TypeResImageDefinition,
-  TypeResXmlValuesDefinition,
+  TypeImageResource,
+  TypeImageResourceItem,
+  TypeXmlValueResource,
   TypeXmlValSourceData,
   TypeImageSourceData,
   TypeResTypeImageConfig,
-  TypeResTypeXmlValueConfig
+  TypeResTypeXmlValueConfig,
+  TypeXmlValueResourceItem
 } from "../types/resource";
 import { TypeUiVersion } from "../types/project";
 import {
@@ -42,16 +43,6 @@ export class ResPageOption extends AbstractDataModel<TypeResPageOption> {
   }
 }
 
-export class XmlValueData extends AbstractDataModel<TypeXmlValueData> {
-  protected data: TypeXmlValueData = {
-    defaultValue: "",
-    valueName: ""
-  };
-  static get default(): TypeXmlValueData {
-    return new XmlValueData().create();
-  }
-}
-
 export class ImageSourceData extends AbstractDataModel<TypeImageSourceData> {
   protected data: TypeImageSourceData = {
     fileType: FILE_TYPE.IMAGE,
@@ -65,18 +56,26 @@ export class ImageSourceData extends AbstractDataModel<TypeImageSourceData> {
     return new ImageSourceData().create();
   }
 }
-export class ResImageDefinition extends AbstractDataModel<TypeResImageDefinition> {
-  protected data: TypeResImageDefinition = {
-    name: "",
-    desc: "",
+export class ImageResource extends AbstractDataModel<TypeImageResource> {
+  protected data: TypeImageResource = {
     resType: RESOURCE_TYPE.IMAGE,
-    fileType: FILE_TYPE.IMAGE,
-    url: "",
+    name: "",
+    description: "",
+    items: []
+  };
+  static get default(): TypeImageResource {
+    return new ImageResource().create();
+  }
+}
+export class ImageResourceItem extends AbstractDataModel<TypeImageResourceItem> {
+  protected data: TypeImageResourceItem = {
+    name: "",
+    description: "",
     source: "",
     sourceData: ImageSourceData.default
   };
-  static get default(): TypeResImageDefinition {
-    return new ResImageDefinition().create();
+  static get default(): TypeImageResourceItem {
+    return new ImageResourceItem().create();
   }
 }
 
@@ -85,25 +84,34 @@ export class XmlValSourceData extends AbstractDataModel<TypeXmlValSourceData> {
     fileType: FILE_TYPE.XML,
     protocol: "",
     src: "",
-    query: {},
-    data: XmlValueData.default
+    query: {}
   };
   static get default(): TypeXmlValSourceData {
     return new XmlValSourceData().create();
   }
 }
-export class ResXmlValuesDefinition extends AbstractDataModel<TypeResXmlValuesDefinition> {
-  protected data: TypeResXmlValuesDefinition = {
+export class XmlValueResourceItem extends AbstractDataModel<TypeXmlValueResourceItem> {
+  protected data: TypeXmlValueResourceItem = {
+    tag: "",
     name: "",
-    desc: "",
+    description: "",
+    value: ""
+  };
+  static get default(): TypeXmlValueResourceItem {
+    return new XmlValueResourceItem().create();
+  }
+}
+export class XmlValueResource extends AbstractDataModel<TypeXmlValueResource> {
+  protected data: TypeXmlValueResource = {
     resType: RESOURCE_TYPE.XML_VALUE,
-    fileType: FILE_TYPE.XML,
+    name: "",
+    description: "",
     source: "",
     sourceData: XmlValSourceData.default,
     items: []
   };
-  static get default(): TypeResXmlValuesDefinition {
-    return new ResXmlValuesDefinition().create();
+  static get default(): TypeXmlValueResource {
+    return new XmlValueResource().create();
   }
 }
 
@@ -126,9 +134,8 @@ export class LayoutImageElement extends AbstractDataModel<TypeLayoutImageElement
   protected data: TypeLayoutImageElement = {
     tag: ELEMENT_TAG.Image,
     resType: RESOURCE_TYPE.IMAGE,
-    protocol: RESOURCE_PROTOCOL.UNKNOWN,
-    url: "",
-    src: "",
+    source: "",
+    sourceData: ImageSourceData.default,
     layout: ElementLayoutConfig.default
   };
   static get default(): TypeLayoutImageElement {
@@ -140,7 +147,6 @@ export class LayoutTextElement extends AbstractDataModel<TypeLayoutTextElement> 
   protected data: TypeLayoutTextElement = {
     tag: ELEMENT_TAG.Text,
     resType: RESOURCE_TYPE.XML_VALUE,
-    protocol: RESOURCE_PROTOCOL.UNKNOWN,
     text: "",
     color: "",
     layout: ElementLayoutConfig.default
@@ -241,7 +247,6 @@ export class ResourceUrlData extends AbstractDataModel<TypeResUrlData> {
     extname: "",
     source: "",
     src: "",
-    srcpath: "",
     query: {},
     data: null
   };

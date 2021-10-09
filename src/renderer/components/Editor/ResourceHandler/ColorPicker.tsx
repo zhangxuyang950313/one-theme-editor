@@ -3,11 +3,9 @@ import styled from "styled-components";
 import { Input, message, Tooltip } from "antd";
 import { RGBColor, SketchPicker } from "react-color";
 import { useProjectUUID } from "@/hooks/project/index";
-import { TypeXmlValItemDefinition } from "src/types/resource";
 import { StyleGirdBackground } from "@/style";
 import { RgbaObject } from "hex-rgb";
 import ColorUtil, { HEX_FORMAT } from "src/common/utils/ColorUtil";
-import InfoDisplay from "./InfoDisplay";
 
 // 颜色小方块
 const ColorBox: React.FC<{ color: string; onClick?: () => void }> = props => {

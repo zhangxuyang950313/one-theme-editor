@@ -7,7 +7,7 @@ import {
   ActionPatchFileData,
   ActionRemoveFileData
 } from "@/store/editor/action";
-import { useResDefinitionList } from "../resource";
+import { useResourceList } from "../resource";
 import useSocket from "../socket/useSocket";
 import { useProjectRoot } from "./index";
 
@@ -15,7 +15,7 @@ import { useProjectRoot } from "./index";
 export default function useWatchProjectFile(): void {
   const socket = useSocket();
   const projectRoot = useProjectRoot();
-  const resourceList = useResDefinitionList();
+  const resourceList = useResourceList();
   const dispatch = useEditorDispatch();
   useEffect(() => {
     if (!projectRoot || resourceList.length === 0) return;

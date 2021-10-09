@@ -109,7 +109,7 @@ export type TypeResPageConfig = {
   description: string;
   screenWidth: string;
   previewList: string[];
-  resourceList: TypeResDefinition[];
+  resourceList: TypeResourceDefinition[];
   layoutElementList: TypeLayoutElement[];
 };
 
@@ -145,9 +145,8 @@ export type TypeLayoutData = {
 export type TypeLayoutImageElement = {
   tag: ELEMENT_TAG.Image;
   resType: RESOURCE_TYPE.IMAGE;
-  protocol: RESOURCE_PROTOCOL;
-  src: string;
-  url: string;
+  source: string;
+  sourceData: TypeImageSourceData;
   layout: TypeLayoutData;
 };
 
@@ -155,7 +154,6 @@ export type TypeLayoutImageElement = {
 export type TypeLayoutTextElement = {
   tag: ELEMENT_TAG.Text;
   resType: RESOURCE_TYPE.XML_VALUE;
-  protocol: RESOURCE_PROTOCOL;
   text: string;
   color: string;
   layout: TypeLayoutData;
@@ -174,44 +172,40 @@ export type TypeImageSourceData = {
   query: Record<string, string>;
   data: TypeImageData;
 };
-export type TypeResImageDefinition = {
-  resType: RESOURCE_TYPE.IMAGE;
-  fileType: FILE_TYPE.IMAGE;
+export type TypeImageResourceItem = {
   name: string;
-  desc: string;
-  url: string;
+  description: string;
   source: string;
   sourceData: TypeImageSourceData;
 };
-// xml类型
-export type TypeXmlValueData = {
-  defaultValue: string;
-  valueName: string;
+export type TypeImageResource = {
+  resType: RESOURCE_TYPE.IMAGE;
+  name: string;
+  description: string;
+  items: TypeImageResourceItem[];
 };
+// xml类型
 export type TypeXmlValSourceData = {
   fileType: FILE_TYPE.XML;
   protocol: string;
   src: string;
   query: Record<string, string>;
-  data: TypeXmlValueData;
 };
-export type TypeXmlValItemDefinition = {
+export type TypeXmlValueResourceItem = {
   tag: string;
   name: string;
-  desc: string;
+  description: string;
+  value: string;
 };
-export type TypeResXmlValuesDefinition = {
-  fileType: FILE_TYPE.XML;
+export type TypeXmlValueResource = {
   resType: RESOURCE_TYPE.XML_VALUE;
   name: string;
-  desc: string;
+  description: string;
   source: string;
   sourceData: TypeXmlValSourceData;
-  items: TypeXmlValItemDefinition[];
+  items: TypeXmlValueResourceItem[];
 };
-export type TypeResDefinition =
-  | TypeResImageDefinition
-  | TypeResXmlValuesDefinition;
+export type TypeResourceDefinition = TypeImageResource | TypeXmlValueResource;
 
 // URL 未知
 export type TypeResUnknownData = {
@@ -220,7 +214,6 @@ export type TypeResUnknownData = {
   extname: string;
   source: string;
   src: string;
-  srcpath: string;
   query: Record<string, string>;
   data: null;
 };
@@ -232,7 +225,6 @@ export type TypeResUrlImageData = {
   extname: string;
   source: string;
   src: string;
-  srcpath: string;
   query: Record<string, string>;
   data: TypeImageData;
 };
@@ -244,9 +236,8 @@ export type TypeResUrlXmlValData = {
   extname: string;
   source: string;
   src: string;
-  srcpath: string;
   query: Record<string, string>;
-  data: TypeXmlValueData;
+  data: string;
 };
 
 export type TypeResUrlData =

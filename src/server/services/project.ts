@@ -17,6 +17,12 @@ import PageConfigCompiler from "server/compiler/PageConfig";
 import PackageUtil from "server/utils/PackageUtil";
 import ImageUrlUtil from "common/utils/ImageUrlUtil";
 
+/**
+ * @deprecated
+ * @param uuid
+ * @param config
+ * @returns
+ */
 export async function getPageResourceData(
   uuid: string,
   config: string

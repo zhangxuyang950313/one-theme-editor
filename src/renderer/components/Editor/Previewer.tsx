@@ -75,30 +75,6 @@ const Previewer: React.FC<{
             switch (element.tag) {
               // 图片类型预览
               case ELEMENT_TAG.Image: {
-                // const fileData = fileDataMap.get(element.src);
-                // // 若 fileDataMap 中不存在当前图片，使用默认的 element.url
-                // let url = element.url;
-                // const fileDataUrl =
-                //   fileData?.type === FILE_TYPE.IMAGE ? fileData.url : "";
-                // switch (element.protocol) {
-                //   // src 协议支持双向寻图
-                //   case RESOURCE_PROTOCOL.SRC: {
-                //     url = fileDataUrl || element.url;
-                //     break;
-                //   }
-                //   // project 协议强制使用工程图片
-                //   // relative | resource | project 协议为相对路径，用于描述静态图片
-                //   case RESOURCE_PROTOCOL.PROJECT:
-                //   case RESOURCE_PROTOCOL.RELATIVE:
-                //   case RESOURCE_PROTOCOL.RESOURCE: {
-                //     url = element.url;
-                //     break;
-                //   }
-                //   // TODO: file 文件协议，可用于替换所有文件类型，展示图标图标吧
-                //   case RESOURCE_PROTOCOL.FILE: {
-                //     break;
-                //   }
-                // }
                 const style = {
                   left: `${layoutComputed.x}px`,
                   top: `${layoutComputed.y}px`,
@@ -107,14 +83,14 @@ const Previewer: React.FC<{
                 };
                 return (
                   <DynamicBothSourceImage
-                    key={`${element.src}-${k}`}
-                    data-name={element.src}
+                    key={`${element.sourceData.src}-${k}`}
+                    data-name={element.sourceData.src}
                     data-dash={props.useDash}
                     data-click={props.canClick}
                     className="image"
                     style={style}
                     alt=""
-                    src={element.src}
+                    src={element.sourceData.src}
                   />
                 );
               }

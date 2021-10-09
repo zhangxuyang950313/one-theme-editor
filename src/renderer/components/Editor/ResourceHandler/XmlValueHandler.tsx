@@ -1,15 +1,11 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import {
-  TypeResXmlValuesDefinition,
-  TypeXmlValItemDefinition
-} from "src/types/resource";
-import { apiWriteXmlTemplate } from "@/request";
-import { useProjectUUID, useProjectXmlValueBySrc } from "@/hooks/project/index";
-import { RESOURCE_TYPE, VALUE_RESOURCE_CATEGORY } from "src/enum/index";
-
-import { useResTypeConfigList } from "@/hooks/resource";
 import { Button } from "antd";
+import { TypeXmlValueResource } from "src/types/resource";
+import { apiWriteXmlTemplate } from "@/request";
+import { useProjectUUID } from "@/hooks/project/index";
+import { RESOURCE_TYPE, VALUE_RESOURCE_CATEGORY } from "src/enum/index";
+import { useResTypeConfigList } from "@/hooks/resource";
 import ButtonGroup from "antd/lib/button/button-group";
 import ColorPicker from "./ColorPicker";
 import BooleanSelector from "./BooleanSelector";
@@ -48,7 +44,7 @@ const XmlValueHandlerItem: React.FC<{
 const XmlValueHandler: React.FC<{
   className?: string;
   filterItemTag: string;
-  data: TypeResXmlValuesDefinition;
+  data: TypeXmlValueResource;
 }> = props => {
   const { name, sourceData } = props.data;
   const { filterItemTag } = props;
@@ -70,11 +66,6 @@ const XmlValueHandler: React.FC<{
     setTagTypeMap(map);
   }, [resTypeList]);
 
-  // 写入 xml
-  const writeXml = (value: string) => {
-    const name = sourceData.data.valueName;
-    apiWriteXmlTemplate(uuid, { name, value, src: sourceData.src });
-  };
   if (props.data.items.length === 0) return null;
 
   const xmlValueList = props.data.items.filter(
@@ -84,7 +75,7 @@ const XmlValueHandler: React.FC<{
   return (
     <StyleXmlValueHandler className={props.className}>
       <div className="xml-file-info">
-        <span className="desc">{props.data.desc}</span>
+        <span className="desc">{props.data.description}</span>
         <span className="file"> | {props.data.sourceData.src}</span>
       </div>
       {xmlValueList.map((item, key) => {
@@ -92,13 +83,20 @@ const XmlValueHandler: React.FC<{
           <div key={key}>
             <InfoDisplay
               className="xml-value-info"
-              title={item.desc}
+              title={item.description}
               description={item.name}
             />
             <div className="item">
               <XmlValueHandlerItem
                 value={value}
-                onChange={writeXml}
+                onChange={value => {
+                  // 写入 xml
+                  apiWriteXmlTemplate(uuid, {
+                    name: item.name,
+                    value,
+                    src: sourceData.src
+                  });
+                }}
                 use={tagTypeMap.get(item.tag) || VALUE_RESOURCE_CATEGORY.STRING}
               />
               <div>

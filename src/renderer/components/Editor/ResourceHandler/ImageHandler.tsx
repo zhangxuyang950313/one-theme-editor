@@ -7,7 +7,7 @@ import {
   ImportOutlined,
   UndoOutlined
 } from "@ant-design/icons";
-import { TypeResImageDefinition } from "src/types/resource";
+import { TypeImageResource, TypeImageResourceItem } from "src/types/resource";
 import { FILE_EVENT } from "src/enum";
 import { apiCopyFile, apiDeleteFile } from "@/request/file";
 import { useAbsolutePathInProject } from "@/hooks/project/index";
@@ -17,9 +17,9 @@ import ERR_CODE from "src/constant/errorCode";
 import ImageDisplay from "./ImageDisplay";
 import InfoDisplay from "./InfoDisplay";
 
-const ImageHandler: React.FC<{
+const ImageHandlerItem: React.FC<{
   className?: string;
-  data: TypeResImageDefinition;
+  data: TypeImageResourceItem;
 }> = props => {
   const { data, className } = props;
   const subscribe = useSubscribeProjectFile();
@@ -38,9 +38,8 @@ const ImageHandler: React.FC<{
   }, []);
 
   const size = `${data.sourceData.data.width}×${data.sourceData.data.height}`;
-
   return (
-    <StyleImageHandler className={className}>
+    <StyleImageHandlerList className={className}>
       <div className="wrapper">
         <ImageDisplay
           className="display"
@@ -62,7 +61,11 @@ const ImageHandler: React.FC<{
           }
           placement="bottom"
         >
-          <InfoDisplay className="info" title={data.desc} description={size} />
+          <InfoDisplay
+            className="info"
+            title={data.description || "-"}
+            description={size || "?×?"}
+          />
         </Tooltip>
       </div>
       <div className="handler">
@@ -106,11 +109,11 @@ const ImageHandler: React.FC<{
           }}
         />
       </div>
-    </StyleImageHandler>
+    </StyleImageHandlerList>
   );
 };
 
-const StyleImageHandler = styled.div`
+const StyleImageHandlerList = styled.div`
   display: flex;
   /* 图标和操作悍妞 */
   .wrapper {
@@ -147,6 +150,44 @@ const StyleImageHandler = styled.div`
     }
     .delete {
       color: red;
+    }
+  }
+`;
+
+const ImageHandler: React.FC<{
+  className?: string;
+  data: TypeImageResource;
+}> = props => {
+  const { data, className } = props;
+
+  return (
+    <StyleImageHandler className={className}>
+      <div className="image-category-info">
+        <span className="desc">{props.data.description}</span>
+      </div>
+      <div className="image-handler-list">
+        {data.items.map((item, key) => {
+          return <ImageHandlerItem className="item" key={key} data={item} />;
+        })}
+      </div>
+    </StyleImageHandler>
+  );
+};
+
+const StyleImageHandler = styled.div`
+  .image-category-info {
+    display: inline-block;
+    margin-bottom: 20px;
+    .desc {
+      color: ${({ theme }) => theme["@text-color"]};
+      font-size: ${({ theme }) => theme["@text-size-title"]};
+    }
+  }
+  .image-handler-list {
+    display: flex;
+    flex-wrap: wrap;
+    .item {
+      margin: 0 20px 20px 0;
     }
   }
 `;

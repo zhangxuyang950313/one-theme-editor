@@ -8,7 +8,7 @@ import { LOAD_STATUS } from "src/enum";
 import ModuleSelector from "@/components/Editor/ModuleSelector";
 import EditorToolsBar from "@/components/Editor/ToolsBar";
 import EditorContainer from "@/components/Editor/index";
-import { useResDefinitionList } from "@/hooks/resource";
+import { useResourceList } from "@/hooks/resource";
 // import usePatchPageSourceData from "@/hooks/project/usePatchPageSourceData";
 // import usePatchProjectInfoData from "@/hooks/project/usePatchProjectInfoData";
 // import useWatchFiles from "@/hooks/project/useWatchFiles";
@@ -16,7 +16,7 @@ import { useResDefinitionList } from "@/hooks/resource";
 const Editor: React.FC = () => {
   const history = useHistory();
   const [projectData, status, handleFetch] = useInitProject();
-  const resourceList = useResDefinitionList();
+  const resourceList = useResourceList();
 
   useEffect(() => {
     if (!resourceList.length) return;
