@@ -1,23 +1,20 @@
 import path from "path";
 import { v4 as UUID } from "uuid";
-import { ELEMENT_TAG, RESOURCE_TYPE } from "src/enum";
 import {
   TypeResourceConfig,
-  TypeResModuleConfig,
-  TypeResPageOption,
-  TypeResourceOption,
-  TypeResTypeConfig
-} from "src/types/resource";
+  TypeModuleConfig,
+  TypePageOption,
+  TypeResourceOption
+} from "src/types/resource.config";
 import ResourceConfigData, {
   ResourceOption,
-  ResModuleConfig,
-  ResPageOption,
-  UiVersion,
-  ResTypeXmlValTypeConfig
+  ModuleConfig,
+  PageOption,
+  UiVersion
 } from "src/data/ResourceConfig";
 import { TypeUiVersion } from "src/types/project";
+import { ELEMENT_TAG } from "src/enum";
 import pathUtil from "server/utils/pathUtil";
-import { ResTypeImageConfig } from "./../../data/ResourceConfig";
 import PageConfigCompiler from "./PageConfig";
 import XMLNodeBase from "./XMLNodeElement";
 import XmlFileCompiler from "./XmlFileCompiler";
@@ -92,30 +89,8 @@ export default class ResourceConfigCompiler extends XmlFileCompiler {
       .create();
   }
 
-  // 素材类型定义列表
-  getResTypeList(): TypeResTypeConfig[] {
-    return super.getRootChildrenNodesOf(ELEMENT_TAG.Resource).flatMap(node => {
-      const type = node.getAttributeOf<RESOURCE_TYPE>("type");
-      if (type === RESOURCE_TYPE.IMAGE) {
-        return new ResTypeImageConfig()
-          .set("type", node.getAttributeOf("type"))
-          .set("name", node.getAttributeOf("name"))
-          .create();
-      }
-      if (type === RESOURCE_TYPE.XML_VALUE) {
-        return new ResTypeXmlValTypeConfig()
-          .set("name", node.getAttributeOf("name"))
-          .set("type", node.getAttributeOf("type"))
-          .set("tag", node.getAttributeOf("tag"))
-          .set("use", node.getAttributeOf("use"))
-          .create();
-      }
-      return [];
-    });
-  }
-
   // 页面配置列表
-  getPageList(pageNodeList: XMLNodeBase[]): TypeResPageOption[] {
+  getPageList(pageNodeList: XMLNodeBase[]): TypePageOption[] {
     // 这里是在选择模板版本后得到的目标模块目录
     return pageNodeList.map(node => {
       const src = node.getAttributeOf("src");
@@ -123,7 +98,7 @@ export default class ResourceConfigCompiler extends XmlFileCompiler {
         namespace: this.namespace,
         config: src
       }).getPreviewList();
-      return new ResPageOption()
+      return new PageOption()
         .set("key", UUID())
         .set("name", node.getAttributeOf("name"))
         .set("preview", previewList[0] || "")
@@ -146,14 +121,14 @@ export default class ResourceConfigCompiler extends XmlFileCompiler {
   // }
 
   // 模块配置数据
-  getModuleList(): TypeResModuleConfig[] {
+  getModuleList(): TypeModuleConfig[] {
     return super
       .getRootChildrenNodesOf(ELEMENT_TAG.Module)
       .map((moduleNode, index) => {
         const pageList = this.getPageList(
           moduleNode.getChildrenNodesByTagname(ELEMENT_TAG.Page)
         );
-        return new ResModuleConfig()
+        return new ModuleConfig()
           .set("index", index)
           .set("name", moduleNode.getAttributeOf("name"))
           .set("icon", path.normalize(moduleNode.getAttributeOf("icon")))
@@ -184,7 +159,6 @@ export default class ResourceConfigCompiler extends XmlFileCompiler {
   getConfig(): TypeResourceConfig {
     return new ResourceConfigData().create({
       ...this.getOption(),
-      resTypeList: this.getResTypeList(),
       moduleList: this.getModuleList()
     });
   }

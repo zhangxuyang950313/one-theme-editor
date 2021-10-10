@@ -6,7 +6,7 @@ import { RightCircleOutlined } from "@ant-design/icons";
 import { apiCopyFile } from "@/request";
 import { useAbsolutePathInProject } from "@/hooks/project/index";
 import { useAbsolutePathInRes } from "@/hooks/resource/index";
-import { TypeImageResource } from "src/types/resource";
+import { TypeFileResource } from "src/types/resource.config";
 
 import useSubscribeProjectFile from "@/hooks/project/useSubscribeProjectFile";
 import SourceStatus from "./SourceStatus";
@@ -49,7 +49,7 @@ import { previewFile } from "./utils";
 
 const ImageHandler: React.FC<{
   className?: string;
-  imageDefinition: TypeImageResource;
+  imageDefinition: TypeFileResource;
 }> = props => {
   const { imageDefinition, className } = props;
   const { data, src } = imageDefinition.sourceData;

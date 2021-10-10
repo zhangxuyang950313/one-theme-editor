@@ -2,25 +2,33 @@ import { useEffect } from "react";
 import { SOCKET_EVENT } from "src/constant/socketConf";
 import { FILE_EVENT } from "src/enum";
 import { TypeSyncFileContent, TypeWatchFilesPayload } from "src/types/socket";
-import { useEditorDispatch } from "@/store";
-import {
-  ActionPatchFileData,
-  ActionRemoveFileData
-} from "@/store/editor/action";
+// import { useEditorDispatch } from "@/store";
 import { useResourceList } from "../resource";
 import useSocket from "../socket/useSocket";
 import { useProjectRoot } from "./index";
 
-// 监听当前页面文件
+/**
+ * @deprecated
+ * 监听当前页面文件
+ */
 export default function useWatchProjectFile(): void {
   const socket = useSocket();
   const projectRoot = useProjectRoot();
   const resourceList = useResourceList();
-  const dispatch = useEditorDispatch();
+  // const dispatch = useEditorDispatch();
   useEffect(() => {
     if (!projectRoot || resourceList.length === 0) return;
     const files = Array.from(
-      new Set(resourceList.map(item => item.sourceData.src))
+      new Set(
+        resourceList.reduce<string[]>((prev, item) => {
+          item.children.forEach(o => {
+            o.items.forEach(oo => {
+              prev.push(oo.source);
+            });
+          });
+          return prev;
+        }, [])
+      )
     );
     socket.on(
       SOCKET_EVENT.FILE_CHANGE,
@@ -32,12 +40,12 @@ export default function useWatchProjectFile(): void {
           case FILE_EVENT.ADD:
           case FILE_EVENT.ADD_DIR:
           case FILE_EVENT.CHANGE: {
-            dispatch(ActionPatchFileData(data.data));
+            // dispatch(ActionPatchFileData(data.data));
             break;
           }
           // 删除则删掉 fileDataMap 对应的文件内容
           case FILE_EVENT.UNLINK: {
-            dispatch(ActionRemoveFileData(data.file));
+            // dispatch(ActionRemoveFileData(data.file));
           }
         }
       }

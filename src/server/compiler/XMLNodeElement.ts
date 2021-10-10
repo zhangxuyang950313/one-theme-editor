@@ -95,7 +95,15 @@ class XMLNodeBase {
 
   // 获取属性所有值
   public getAttributeValues(): string[] {
-    return Object.values(String(this.getAttributes()));
+    return Object.values(this.getAttributes()).flatMap(item =>
+      item === undefined ? [] : String(item)
+    );
+  }
+
+  public getAttributeEntries() {
+    return Object.entries(this.getAttributes()).flatMap<[string, string]>(
+      item => (item[1] === undefined ? [] : [item[0], String(item[1])])
+    );
   }
 
   /**

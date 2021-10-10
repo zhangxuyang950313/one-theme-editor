@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-import { ALIGN_VALUE, ALIGN_V_VALUE, ELEMENT_TAG } from "src/enum";
-import { TypeLayoutData, TypeResPageConfig } from "src/types/resource";
+import { ALIGN_VALUE, ALIGN_V_VALUE, LAYOUT_ELEMENT_TAG } from "src/enum";
+import { TypePageConfig } from "src/types/resource.config";
+import { TypeLayoutData } from "src/types/resource.page";
 import { DynamicBothSourceImage, PreloadImage } from "../ImageCollection";
 
 function computeLayout(
@@ -43,7 +44,7 @@ function computeLayout(
 }
 
 const Previewer: React.FC<{
-  pageConfig: TypeResPageConfig;
+  pageConfig: TypePageConfig;
   useDash: boolean;
   canClick: boolean;
 }> = props => {
@@ -71,10 +72,10 @@ const Previewer: React.FC<{
           }}
         >
           {layoutElementList.map((element, k) => {
-            const layoutComputed = computeLayout(element.layout, scale);
             switch (element.tag) {
               // 图片类型预览
-              case ELEMENT_TAG.Image: {
+              case LAYOUT_ELEMENT_TAG.Image: {
+                const layoutComputed = computeLayout(element.layout, scale);
                 const style = {
                   left: `${layoutComputed.x}px`,
                   top: `${layoutComputed.y}px`,
@@ -83,7 +84,7 @@ const Previewer: React.FC<{
                 };
                 return (
                   <DynamicBothSourceImage
-                    key={`${element.sourceData.src}-${k}`}
+                    key={k}
                     data-name={element.sourceData.src}
                     data-dash={props.useDash}
                     data-click={props.canClick}
@@ -94,6 +95,30 @@ const Previewer: React.FC<{
                   />
                 );
               }
+              case LAYOUT_ELEMENT_TAG.Text: {
+                const layoutComputed = computeLayout(element.layout, scale);
+                const style = {
+                  left: `${layoutComputed.x}px`,
+                  top: `${layoutComputed.y}px`,
+                  width: `${layoutComputed.w}px`,
+                  height: `${layoutComputed.h}px`
+                };
+                return (
+                  <span
+                    key={k}
+                    data-name={element.text}
+                    data-dash={props.useDash}
+                    data-click={props.canClick}
+                    className="text"
+                    style={{
+                      ...style,
+                      fontSize: `${Number(element.size) * scale}px`
+                    }}
+                  >
+                    {element.text}
+                  </span>
+                );
+              }
               default: {
                 return null;
               }
@@ -101,7 +126,7 @@ const Previewer: React.FC<{
           })}
         </div>
       ) : (
-        <PreloadImage className="static" src={`resource://${previewList[0]}`} />
+        <PreloadImage className="static" src={previewList[0]} />
       )}
     </StylePreviewer>
   );
@@ -134,6 +159,9 @@ const StylePreviewer = styled.div`
       position: absolute;
       width: 100%;
     }
+  }
+  .static {
+    width: 100%;
   }
 `;
 

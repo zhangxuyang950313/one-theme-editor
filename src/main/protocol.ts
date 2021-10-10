@@ -1,19 +1,54 @@
 import path from "path";
 import { URL } from "url";
 import fse from "fs-extra";
-import FileType from "file-type";
-import { protocol } from "electron";
+import { protocol, app } from "electron";
 import { getImgBuffAndFileType } from "../common/utils";
 
 import electronStore from "../common/electronStore";
 
-export default function registerProtocol(): void {
-  protocol.registerBufferProtocol("one", async (request, callback) => {
-    const { pathname } = new URL(request.url);
-    const data = fse.readFileSync(decodeURIComponent(pathname));
-    const mimeType = (await FileType.fromBuffer(data))?.mime || "image/png";
-    callback({ mimeType, data });
+async function getFileIconData(file: string) {
+  const data = await app.getFileIcon(file);
+  return { mimeType: "image/png", data: data.toPNG() };
+}
+
+/**
+ * 图片协议 responseData
+ * @param url 要解析的 url
+ * @param root 首选根目录
+ * @param backupRoot 备选目录
+ * @returns
+ */
+async function getFilePicResponseData(
+  url: string,
+  root: string,
+  backupRoot?: string
+) {
+  let file = "";
+  return new Promise<{ mimeType: string; data: Buffer }>(async resolve => {
+    try {
+      const { hostname, pathname } = new URL(url);
+      file = decodeURIComponent(path.join(root, hostname, pathname));
+      if (!fse.existsSync(file)) {
+        if (backupRoot) {
+          const data = await getFilePicResponseData(url, backupRoot);
+          resolve(data);
+        } else {
+          throw new Error(`${file} is not exists`);
+        }
+      }
+      const { buff, fileType } = await getImgBuffAndFileType(file);
+      resolve({ mimeType: fileType.mime, data: buff });
+    } catch (err) {
+      const data = await getFileIconData(file).catch(() => ({
+        mimeType: "image/png",
+        data: Buffer.from("")
+      }));
+      resolve(data);
+    }
   });
+}
+
+export default function registerProtocol(): void {
   protocol.registerFileProtocol("local-resource", (request, callback) => {
     const url = request.url.replace(/^local-resource:\/\//, "file://");
     // Decode URL to prevent errors when loading filenames with UTF-8 chars or chars like "#"
@@ -27,43 +62,29 @@ export default function registerProtocol(): void {
       );
     }
   });
+
   protocol.registerBufferProtocol("resource", async (request, response) => {
-    try {
-      const { hostname, pathname } = new URL(request.url);
-      const root = electronStore.get("resourcePath");
-      const file = decodeURIComponent(path.join(root, hostname, pathname));
-      const { buff, fileType } = await getImgBuffAndFileType(file);
-      response({ mimeType: fileType.mime, data: buff });
-    } catch (err) {
-      response({ mimeType: "image/png", data: Buffer.from("") });
-    }
+    const root = electronStore.get("resourcePath");
+    const data = await getFilePicResponseData(request.url, root);
+    response(data);
   });
+
   protocol.registerBufferProtocol("project", async (request, response) => {
-    try {
-      const { hostname, pathname } = new URL(request.url);
-      const root = electronStore.get("projectPath");
-      const file = decodeURIComponent(path.join(root, hostname, pathname));
-      const { buff, fileType } = await getImgBuffAndFileType(file);
-      response({ mimeType: fileType.mime, data: buff });
-    } catch (err) {
-      response({ mimeType: "image/png", data: Buffer.from("") });
-    }
+    const root = electronStore.get("projectPath");
+    const data = await getFilePicResponseData(request.url, root);
+    response(data);
   });
+
   // 双向选择协议
   protocol.registerBufferProtocol("src", async (request, response) => {
-    try {
-      const { hostname, pathname } = new URL(request.url);
-      const projectPath = electronStore.get("projectPath");
-      let file = path.join(projectPath, hostname, pathname);
-      if (!fse.existsSync(file)) {
-        const resourcePath = electronStore.get("resourcePath");
-        file = path.join(resourcePath, hostname, pathname);
-      }
-      const { buff, fileType } = await getImgBuffAndFileType(file);
-      response({ mimeType: fileType.mime, data: buff });
-    } catch (err) {
-      response({ mimeType: "image/png", data: Buffer.from("") });
-    }
+    const projectPath = electronStore.get("projectPath");
+    const resourcePath = electronStore.get("resourcePath");
+    const data = await getFilePicResponseData(
+      request.url,
+      projectPath,
+      resourcePath
+    );
+    response(data);
   });
   // protocol.registerFileProtocol("one", (request, callback) => {
   //   console.log(request);

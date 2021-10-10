@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Page version="1.0.0" description="桌面壁纸和首屏图标" screenWidth="1080">
+
+    <Resource name="图片">
+
+        <Block name="必做图标" use="file">
+            <!-- 桌面壁纸 -->
+            <Image name="default_wallpaper" src="src://wallpaper/default_wallpaper.jpg"/>
+            <!-- 锁屏壁纸 -->
+            <Image name="default_lock_wallpaper" src="src://wallpaper/default_lock_wallpaper.jpg"/>
+        </Block>
+        
+        <Block name="第三方图标" use="file">
+            <!-- 短信 -->
+            <Image name="com.android.mms" src="src://icons/res/drawable-xxhdpi/com.android.mms.png"/>
+            <!-- 浏览器 -->
+            <Image name="com.android.browser" src="src://icons/res/drawable-xxhdpi/com.android.browser.png"/>
+        </Block>
+
+    </Resource>
+
+
+    <Resource name="颜色值">
+
+        <Block name="桌面模块" use="color">
+            <Xml src="src://com.miui.home/theme_values.xml">
+                <color name="color_ext1"/>
+                <color name="color_ext2"/>
+            </Xml>
+        </Block>
+        
+        <Block name="壁纸模块" use="color">
+            <color name="color_text1" src="src://wallpaper/theme_values.xml"/>
+        </Block>
+        
+        <Block name="其他" use="color">
+            <color name="color_text3" src="src://wallpaper/theme_values.xml"/>
+            <color name="color_text4" src="src://com.miui.home/theme_values.xml"/>
+        </Block>
+
+    </Resource>
+
+
+
+
+    <!-- 
+        资源列表配置
+        属性 type： 匹配 description.xml 中的定义
+        文件协议：   src://  
+    -->
+    <!-- 壁纸 -->
+    <Resource 
+        type="file" 
+        name="wallpaper"
+        description="壁纸"
+    >
+        <!-- 桌面壁纸 -->
+        <Image name="default_wallpaper" src="src://wallpaper/default_wallpaper.jpg"/>
+        <!-- 锁屏壁纸 -->
+        <Image name="default_lock_wallpaper" src="src://wallpaper/default_lock_wallpaper.jpg"/>
+    </Resource>
+
+    <!-- 必做图标 -->
+    <Resource 
+        type="file" 
+        name="required.icons"
+        description="预置图标"
+    >
+        <!-- 拨号 -->
+        <Image name="com.android.contacts.activities.TwelveKeyDialer" src="src://icons/res/drawable-xxhdpi/com.android.contacts.activities.TwelveKeyDialer.png"/>
+        <!-- 短信 -->
+        <Image name="com.android.mms" src="src://icons/res/drawable-xxhdpi/com.android.mms.png"/>
+        <!-- 浏览器 -->
+        <Image name="com.android.browser" src="src://icons/res/drawable-xxhdpi/com.android.browser.png"/>
+        <!-- 相机 -->
+        <Image name="com.android.camera" src="src://icons/res/drawable-xxhdpi/com.android.camera.png"/>
+        <!-- 天气 -->
+        <Image name="com.miui.weather2" src="src://icons/res/drawable-xxhdpi/com.miui.weather2.png"/>
+        <!-- 相册 -->
+        <Image name="com.miui.gallery" src="src://icons/res/drawable-xxhdpi/com.miui.gallery.png"/>
+        <!-- 主题壁纸 -->
+        <Image name="com.android.thememanager" src="src://icons/res/drawable-xxhdpi/com.android.thememanager.png"/>
+        <!-- 小米视频 -->
+        <Image name="com.miui.video" src="src://icons/res/drawable-xxhdpi/com.miui.video.png"/>
+        <!-- 日历 -->
+        <Image name="com.android.calendar" src="src://icons/res/drawable-xxhdpi/com.android.calendar.png"/>
+        <!-- 文件管理 -->
+        <Image name="com.android.fileexplorer" src="src://icons/res/drawable-xxhdpi/com.android.fileexplorer.png"/>
+        <!-- 小米商城 -->
+        <Image name="com.xiaomi.shop" src="src://icons/res/drawable-xxhdpi/com.xiaomi.shop.png"/>
+        <!-- 小米商城pad -->
+        <Image name="com.xiaomi.padshop" src="src://icons/res/drawable-xxhdpi/com.xiaomi.padshop.png"/>
+        <!-- 小米商城pad -->
+        <Image name="com.xiaomi.shop.activity.MainTabActivity.shop" src="src://icons/res/drawable-xxhdpi/com.xiaomi.shop.activity.MainTabActivity.shop.png"/>
+        <!-- 设置 -->
+        <Image name="com.android.settings" src="src://icons/res/drawable-xxhdpi/com.android.settings.png"/>
+        <!-- 应用商店 -->
+        <Image name="com.xiaomi.market" src="src://icons/res/drawable-xxhdpi/com.xiaomi.market.png"/>
+        <!-- 游戏中心 -->
+        <Image name="com.xiaomi.gamecenter" src="src://icons/res/drawable-xxhdpi/com.xiaomi.gamecenter.png"/>
+        <!-- 手机管家 -->
+        <Image name="com.miui.securitycenter" src="src://icons/res/drawable-xxhdpi/com.miui.securitycenter.png"/>
+        <!-- 米家 -->
+        <Image name="com.xiaomi.smarthome" src="src://icons/res/drawable-xxhdpi/com.xiaomi.smarthome.png"/>
+    </Resource>
+
+    <!-- 第三方图标 -->
+    <Resource
+        type="file"
+        name="third.part.icons"
+        description="更多图标"
+    >
+        <!-- 斗鱼 -->
+        <Image name="1" src="src://icons/res/drawable-xxhdpi/air.tv.douyu.android.png"/>
+    </Resource>
+
+    <!-- xml-value 资源 -->
+
+    <!-- 桌面模块 -->
+    <Resource
+        type="xml"
+        name="xml.com.miui.home"
+        description="桌面模块"
+        src="src://com.miui.home/theme_values.xml"
+    >
+        <!-- 图标文字 -->
+        <color name="icon_title_text"/>
+        <!-- 图标文字 -->
+        <color name="icon_title_text2"/>
+        <!-- 布尔值测试1 -->
+        <bool name="bool_test1"/>
+        <!-- 布尔值测试2 -->
+        <bool name="bool_test2"/>
+        <!-- 尺寸值测试1 -->
+        <dimen name="dimen_test1"/>
+        <!-- 尺寸值测试2 -->
+        <dimen name="dimen_test2"/>
+        <!-- 整型值测试1 -->
+        <integer name="integer_test1"/>
+        <!-- 整型值测试2 -->
+        <integer name="integer_test2"/>
+    </Resource> 
+    <Resource
+        type="xml"
+        name="xml.wallpaper"
+        description="壁纸模块"
+        src="src://wallpaper/theme_values.xml"
+    >
+        <!-- 标题栏文字 -->
+        <color name="action_bar_title_text_color_light"/>
+    </Resource> 
+
+    <!-- 静态预览图 -->
+    <Preview src="resource://preview/preview.jpg"/>
+
+
+    <!-- 预览结构配置 -->
+    <Layout>
+        <Image 
+            x="0" y="0" w="1080" h="2340"
+            src="${wallpaper/default_wallpaper}"
+        />
+        <Image 
+            x="540" y="100" 
+            src="src://icons/res/drawable-xxhdpi/com.android.settings.png"
+        />
+        <!--
+            relative 协议
+            相对的静态图片定义，这个图片不会在素材区展示，因为它是静态的，没有在 Resource 节点中定义，并不支持资源变更 
+        -->
+        <!-- <Image
+            x="0" y="0" size="36" w="168" h="168" 
+            src="relative://../icons/res/drawable-xxhdpi/com.android.contacts.activities.TwelveKeyDialer.png"
+        /> -->
+        <!-- 
+            resource 协议
+            相对资源根路径的路径，同上图片不会在素材区展示和被修改
+         -->
+        <!-- <Image
+            x="0" y="300" size="36" w="168" h="168" 
+            src="resource://icons/res/drawable-xxhdpi/com.android.contacts.activities.TwelveKeyDialer.png"
+        /> -->
+
+
+
+        
+        <!-- 第一排图标 -->
+        <Image 
+            name="天气"
+            x="168" y="1100" w="186" h="186" align="center" alignV="center"
+            src="${required.icons/com.miui.weather2}"
+        />
+       <!--  <Text
+            name="图标字体"
+            text="天气"
+            x="168" y="1250" size="36" align="center" alignV="center"
+            src="${root}/com.miui.home/theme_values.xml&amp;name=icon_title_text_light"
+        /> -->
+        <Image 
+            name="相册"
+            x="415" y="1100" w="186" h="186" align="center" alignV="center"
+            src="${required.icons/com.miui.gallery}"
+        />
+        <Image 
+            name="小米视频"
+            x="670" y="1100" w="186" h="186" align="center" alignV="center"
+            src="${required.icons/com.miui.video}"
+        />
+        <Image 
+            name="主题壁纸"
+            x="925" y="1100" w="186" h="186" align="center" alignV="center"
+            src="${required.icons/com.android.thememanager}"
+        />
+
+        
+        <!-- 第二排图标 -->
+        <Image 
+            name="日历"
+            x="168" y="1400" w="186" h="186" align="center" alignV="center"
+            src="${required.icons/com.android.calendar}"
+        />
+        <Image 
+            name="文件管理"
+            x="415" y="1400" w="186" h="186" align="center" alignV="center"
+            src="${required.icons/com.android.fileexplorer}"
+        />
+        <Image 
+            name="小米商城"
+            x="670" y="1400" w="186" h="186" align="center" alignV="center"
+            src="${required.icons/com.xiaomi.shop}"
+        />
+        <Image 
+            name="小米商城pad"
+            x="670" y="1400" w="186" h="186" align="center" alignV="center"
+            src="${required.icons/com.xiaomi.padshop}"
+        />
+        <Image 
+            name="小米商城"
+            x="670" y="1400" w="186" h="186" align="center" alignV="center"
+            src="${required.icons/com.xiaomi.shop.activity.MainTabActivity.shop}"
+        />
+        <Image 
+            name="设置"
+            x="925" y="1400" w="186" h="186" align="center" alignV="center"
+            src="${required.icons/com.android.settings}"
+        />
+
+        <!-- 第三排图标 -->
+        <Image 
+            name="应用商店"
+            x="168" y="1700" w="186" h="186" align="center" alignV="center"
+            src="${required.icons/com.xiaomi.market}"
+        />
+        <Image 
+            name="游戏中心"
+            x="415" y="1700" w="186" h="186" align="center" alignV="center"
+            src="${required.icons/com.xiaomi.gamecenter}"
+        />
+        <Image 
+            name="手机管家"
+            x="670" y="1700" w="186" h="186" align="center" alignV="center"
+            src="${required.icons/com.miui.securitycenter}"
+        />
+        <Image 
+            name="米家"
+            x="925" y="1700" w="186" h="186" align="center" alignV="center"
+            src="${required.icons/com.xiaomi.smarthome}"
+        />
+
+
+
+        <!-- 底栏图标 -->
+        <Image 
+            x="160" y="2150" w="186" h="186" align="center" alignV="center" 
+            src="${required.icons/com.android.contacts.activities.TwelveKeyDialer}"
+        />
+        <Image 
+            x="415" y="2150" w="186" h="186" align="center" alignV="center" 
+            src="${required.icons/com.android.mms}"
+        />
+        <Image 
+            x="670" y="2150" w="186" h="186" align="center" alignV="center" 
+            src="${required.icons/com.android.browser}"
+        />
+        <Image 
+            x="925" y="2150" w="186" h="186" align="center" alignV="center" 
+            src="${required.icons/com.android.camera}"
+        />
+        <Text
+            text="拨号"
+            x="415" y="1250" size="36" align="center" alignV="center"
+            color="${xml.com.miui.home/icon_title_text}"
+        />
+        <Text
+            text="顶栏字体"
+            x="0" y="0" size="40" align="center" alignV="center"
+            color="${xml.wallpaper/action_bar_title_text_color_light}"
+        /> 
+    </Layout>
+</Page>

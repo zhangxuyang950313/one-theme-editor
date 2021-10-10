@@ -4,7 +4,7 @@ import { apiGetResourceConfig } from "@/request";
 import { useEditorDispatch, useEditorSelector } from "@/store";
 import { ActionSetResourceConfig } from "@/store/editor/action";
 import { LOAD_STATUS } from "src/enum";
-import { TypeResourceConfig } from "src/types/resource";
+import { TypeResourceConfig } from "src/types/resource.config";
 import ResourceConfigData from "src/data/ResourceConfig";
 import ERR_CODE from "src/constant/errorCode";
 

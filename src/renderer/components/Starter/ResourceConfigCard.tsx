@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { useResConfigDir } from "@/hooks/resource/index";
 import { useImagePrefix } from "@/hooks/image";
 
-import { TypeResourceOption } from "src/types/resource";
+import { TypeResourceOption } from "src/types/resource.config";
 import { LazyImage } from "../ImageCollection";
 
 type TypeProps = {

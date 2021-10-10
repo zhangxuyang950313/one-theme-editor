@@ -7,10 +7,10 @@ import {
   useCurrentPageConfig
 } from "@/hooks/resource/index";
 import { PreloadImage } from "@/components/ImageCollection";
-import { TypeResPageOption } from "src/types/resource";
+import { TypePageOption } from "src/types/resource.config";
 import Previewer from "./Previewer";
 
-const PagePreview: React.FC<{ pageData: TypeResPageOption }> = props => {
+const PagePreview: React.FC<{ pageData: TypePageOption }> = props => {
   const { pageData } = props;
   const resourceImageURL = useResourceImageUrl(pageData.preview);
   const [pageOpt, setPageOpt] = useCurrentPageOption();

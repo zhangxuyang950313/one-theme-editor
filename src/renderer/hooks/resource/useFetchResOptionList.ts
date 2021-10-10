@@ -2,9 +2,9 @@ import { useState, useLayoutEffect } from "react";
 import { message } from "antd";
 import { apiGetResOptionList } from "@/request";
 import { useStarterDispatch } from "@/store";
-import { ActionSetSourceOptionList } from "@/store/starter/action";
+import { ActionSetResourceOptionList } from "@/store/starter/action";
 import { LOAD_STATUS } from "src/enum";
-import { TypeResourceOption } from "src/types/resource";
+import { TypeResourceOption } from "src/types/resource.config";
 import ERR_CODE from "src/constant/errorCode";
 import { useScenarioOption } from ".";
 
@@ -29,7 +29,7 @@ export default function useFetchResOptionList(): {
       .then(data => {
         console.log("配置列表", data);
         setState(data);
-        dispatch(ActionSetSourceOptionList(data));
+        dispatch(ActionSetResourceOptionList(data));
         setStatus(LOAD_STATUS.SUCCESS);
       })
       .catch(err => {

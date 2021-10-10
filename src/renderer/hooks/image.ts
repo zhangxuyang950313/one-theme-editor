@@ -40,7 +40,7 @@ export function useLoadImage(src: string): string {
 export function useLoadImageLazy(
   src: string
 ): React.RefObject<HTMLImageElement> {
-  const imageRef = useRef<HTMLImageElement>(null);
+  const imageRef = useRef<HTMLImageElement | null>(null);
   const [imageUrl, setImageUrl] = useState("");
   const url = useLoadImage(imageUrl);
 

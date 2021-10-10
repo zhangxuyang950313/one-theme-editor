@@ -6,7 +6,7 @@ import {
   TypePackConfig,
   TypeResourceOption,
   TypeScenarioConfig
-} from "src/types/resource";
+} from "src/types/resource.config";
 import { ELEMENT_TAG, PACK_TYPE } from "src/enum/index";
 import ScenarioConfigData, {
   ApplyConfig,

@@ -5,7 +5,7 @@ import {
   TypeScenarioConfig,
   TypeScenarioOption,
   TypePackConfig
-} from "src/types/resource";
+} from "src/types/scenario.config";
 import { ELEMENT_TAG } from "src/enum/index";
 import ScenarioConfigData, { ScenarioOption } from "src/data/ScenarioConfig";
 import ScenarioConfigCompiler from "server/compiler/ScenarioConfig";

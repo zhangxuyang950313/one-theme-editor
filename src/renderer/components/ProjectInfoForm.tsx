@@ -2,9 +2,6 @@ import React, { forwardRef, useImperativeHandle } from "react";
 import { Form, FormInstance, FormProps } from "antd";
 import { TypeProjectInfo } from "src/types/project";
 
-/**
- * @deprecated
- */
 type TypeProps = {
   className?: string;
   // 初始化数据
@@ -14,7 +11,11 @@ type TypeProps = {
 
 type TypeRef = FormInstance<TypeProjectInfo>;
 
-// 主题信息表单
+/**
+ * @deprecated
+ * 主题信息表单
+ */
+
 function ProjectInfoForm(props: TypeProps, ref: React.ForwardedRef<TypeRef>) {
   const { form, initialValues, className } = props;
 

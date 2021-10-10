@@ -8,21 +8,6 @@
     <!-- 适配UI版本描述 -->
     <UiVersion name="MIUI 12" code="10"/>
 
-    <!-- 
-        资源类型定义 
-        type: 决定使用哪种编辑器
-        image   - 图片编辑器
-        color   - 颜色选择器
-        boolean - 布尔选择器
-        string  - 字符串输入
-        number  - 数字输入
-    -->
-    <Resource name="图片"     type="image"/>
-    <Resource name="颜色值"   type="xml-value" tag="color"     use="color"  format="argb"/>
-    <Resource name="布尔值"   type="xml-value" tag="bool"      use="boolean"/>
-    <Resource name="尺寸值"   type="xml-value" tag="dimen"     use="string"/>
-    <Resource name="整型值"   type="xml-value" tag="integer"   use="number"/>
-
     <!-- 模块定义 -->
     <Module name="图标和壁纸" icon="icons/res/drawable-xxhdpi//com.android.thememanager.png">
         <!-- 页面定义 -->

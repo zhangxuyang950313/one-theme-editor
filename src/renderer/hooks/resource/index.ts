@@ -4,17 +4,18 @@ import {
   ActionSetCurrentModule,
   ActionSetCurrentPage
 } from "@/store/editor/action";
+import { TypeScenarioOption } from "src/types/scenario.config";
 import {
-  TypeScenarioOption,
-  TypeResModuleConfig,
-  TypeResPageOption,
-  TypeResTypeConfig,
+  TypeModuleConfig,
+  TypePageOption,
+  TypePageConfig
+} from "src/types/resource.config";
+import {
+  TypeResourceDefinition,
   TypeLayoutElement,
   TypeLayoutImageElement,
-  TypeLayoutTextElement,
-  TypeResPageConfig,
-  TypeResourceDefinition
-} from "src/types/resource";
+  TypeLayoutTextElement
+} from "src/types/resource.page";
 import {
   useStarterDispatch,
   useEditorDispatch,
@@ -22,7 +23,7 @@ import {
   useEditorSelector,
   useGlobalSelector
 } from "@/store/index";
-import { ELEMENT_TAG } from "src/enum";
+import { LAYOUT_ELEMENT_TAG } from "src/enum";
 import { useImagePrefix } from "../image";
 
 /**
@@ -63,8 +64,8 @@ export function useScenarioOption(): [
  * @returns
  */
 export function useCurrentResModule(): [
-  TypeResModuleConfig,
-  (data: TypeResModuleConfig) => void
+  TypeModuleConfig,
+  (data: TypeModuleConfig) => void
 ] {
   const dispatch = useEditorDispatch();
   const currentModule = useEditorSelector(state => state.currentModule);
@@ -76,8 +77,8 @@ export function useCurrentResModule(): [
  * @returns
  */
 export function useCurrentPageOption(): [
-  TypeResPageOption,
-  (data: TypeResPageOption) => void
+  TypePageOption,
+  (data: TypePageOption) => void
 ] {
   const dispatch = useEditorDispatch();
   const pageConf = useEditorSelector(state => state.currentPage);
@@ -88,21 +89,14 @@ export function useCurrentPageOption(): [
  * 获取当前选择的页面配置数据
  * @returns
  */
-export function useCurrentPageConfig(): TypeResPageConfig | null {
+export function useCurrentPageConfig(): TypePageConfig | null {
   return useEditorSelector(state => {
     return state.pageConfigMap[state.currentPage.src] || null;
   });
 }
 
 /**
- * 获取当前元素类型配置
- */
-export function useResTypeConfigList(): TypeResTypeConfig[] {
-  return useEditorSelector(state => state.resourceConfig.resTypeList);
-}
-
-/**
- * 获取素材定义数据列表
+ * 获取素材定义列表
  */
 export function useResourceList(): TypeResourceDefinition[] {
   const curResPageConfig = useCurrentPageConfig();
@@ -126,7 +120,7 @@ export function useLayoutElementList(): TypeLayoutElement[] {
 export function useLayoutImageList(): TypeLayoutImageElement[] {
   const layoutElementList = useLayoutElementList();
   return layoutElementList.flatMap(item =>
-    item.tag === ELEMENT_TAG.Image ? [item] : []
+    item.tag === LAYOUT_ELEMENT_TAG.Image ? [item] : []
   );
 }
 
@@ -136,7 +130,7 @@ export function useLayoutImageList(): TypeLayoutImageElement[] {
 export function useLayoutTestList(): TypeLayoutTextElement[] {
   const layoutElementList = useLayoutElementList();
   return layoutElementList.flatMap(item =>
-    item.tag === ELEMENT_TAG.Text ? [item] : []
+    item.tag === LAYOUT_ELEMENT_TAG.Text ? [item] : []
   );
 }
 
@@ -145,7 +139,7 @@ export function useLayoutTestList(): TypeLayoutTextElement[] {
  * @param relativePath
  * @returns
  */
-export function useAbsolutePathInRes(relativePath: string): string {
+export function useResourceAbsolutePath(relativePath: string): string {
   const resourceConfigRoot = useResConfigRootWithNS();
   return path.join(resourceConfigRoot, relativePath);
 }
@@ -157,6 +151,6 @@ export function useAbsolutePathInRes(relativePath: string): string {
  */
 export function useResourceImageUrl(relativePath: string): string {
   const prefix = useImagePrefix();
-  const absolute = useAbsolutePathInRes(relativePath);
+  const absolute = useResourceAbsolutePath(relativePath);
   return prefix + absolute;
 }

@@ -4,7 +4,10 @@ import PathCollection from "src/data/PathCollection";
 import ProjectData from "src/data/ProjectData";
 import { TypePathConfig } from "src/types/extraConfig";
 import { TypeProjectData } from "src/types/project";
-import { TypeResourceConfig, TypeScenarioConfig } from "src/types/resource";
+import {
+  TypeResourceConfig,
+  TypeScenarioConfig
+} from "src/types/resource.config";
 import { ScenarioOption } from "src/data/ScenarioConfig";
 import ResourceConfigData from "src/data/ResourceConfig";
 

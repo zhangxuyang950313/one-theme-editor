@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { Empty } from "antd";
 import { CheckCircleTwoTone } from "@ant-design/icons";
-import { TypeResourceOption } from "src/types/resource";
+import { TypeResourceOption } from "src/types/resource.config";
 import { useStarterSelector } from "@/store";
 import ResourceConfigCard from "./ResourceConfigCard";
 
@@ -11,10 +11,10 @@ const ResourceConfigManager: React.FC<{
   selectedKey: string;
   onSelected: (config?: TypeResourceOption) => void;
 }> = props => {
-  // 模板列表
-  const resourceList = useStarterSelector(state => state.resourceList);
+  // 配置列表
+  const optionList = useStarterSelector(state => state.resourceOptionList);
 
-  if (resourceList.length === 0) {
+  if (optionList.length === 0) {
     return (
       <StyleResourceConfigManager>
         <Empty
@@ -28,7 +28,7 @@ const ResourceConfigManager: React.FC<{
 
   return (
     <StyleResourceConfigManager>
-      {resourceList.map((item, key) => {
+      {optionList.map((item, key) => {
         const isActive = props.selectedKey === item.key;
         const isInit = !props.selectedKey;
         return (

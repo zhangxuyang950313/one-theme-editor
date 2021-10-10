@@ -2,10 +2,10 @@ import apiConfig from "src/constant/apiConf";
 import {
   TypeResourceConfig,
   TypeResourceOption,
-  TypeResPageConfig,
+  TypePageConfig,
   TypeScenarioConfig,
   TypeScenarioOption
-} from "src/types/resource";
+} from "src/types/resource.config";
 import { UnionTupleToObjectKey } from "src/types/request";
 import { createHttp } from "./axios";
 
@@ -50,7 +50,7 @@ export async function apiGetScenarioConfig<T = TypeScenarioConfig>(
 }
 
 // 获取页面配置数据
-export async function apiGetResPageConfData<T = TypeResPageConfig>(
+export async function apiGetResPageConfData<T = TypePageConfig>(
   params: UnionTupleToObjectKey<
     typeof apiConfig.GET_RESOURCE_CONFIG_PAGE_CONFIG.query
   >

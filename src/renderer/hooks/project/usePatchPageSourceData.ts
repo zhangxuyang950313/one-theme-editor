@@ -24,7 +24,10 @@ export default function usePatchPageSourceData(): void {
     if (!pageData || !uuid || !projectRoot) return;
     const watcher = createWatcher({ cwd: projectRoot });
     const resourceSrcSet = new Set(
-      pageData.resourceList.map(o => o.sourceData.src)
+      [""]
+      // Object.entries(pageData.resourceMapper).reduce((prev,[,resourceList]) => {
+      //   resourceList.forEach(resource =>resource.items.)
+      // },[])
     );
     const listener = async (file: string, event: FILE_EVENT) => {
       if (!resourceSrcSet.has(file)) return;

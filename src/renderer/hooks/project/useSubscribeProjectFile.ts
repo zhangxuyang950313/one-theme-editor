@@ -2,11 +2,10 @@ import path from "path";
 import { FSWatcher } from "chokidar";
 import { useEffect, useRef } from "react";
 import { FILE_EVENT } from "src/enum";
-import { getFileData } from "server/services/project";
-import { TypeFileData } from "src/types/project";
+// import { getFileData } from "server/services/project";
 import { useProjectRoot } from "./index";
 
-type TypeListener = (evt: FILE_EVENT, data: TypeFileData) => void;
+type TypeListener = (evt: FILE_EVENT) => void;
 type TypeSubscribeFile = (pathname: string, listener: TypeListener) => void;
 
 let watcher: FSWatcher | null = null;
@@ -43,8 +42,8 @@ export default function useSubscribeProjectFile(): TypeSubscribeFile {
       if (!(callbackList instanceof Set)) return;
       callbackList.forEach(callback => {
         console.log("文件变动", event, pathname);
-        const data = getFileData(path.join(projectRoot, pathname), pathname);
-        callback(event, data);
+        // const data = getFileData(path.join(projectRoot, pathname), pathname);
+        callback(event);
       });
     };
     watcher.on(FILE_EVENT.ADD, file => listener(FILE_EVENT.ADD, file));

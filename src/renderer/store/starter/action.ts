@@ -1,5 +1,6 @@
 import { TypeProjectDataDoc } from "src/types/project";
-import { TypeScenarioOption, TypeResourceOption } from "src/types/resource";
+import { TypeResourceOption } from "src/types/resource.config";
+import { TypeScenarioOption } from "src/types/scenario.config";
 
 export enum ACTION_TYPES {
   SET_SCENARIO_LIST = "SET_SCENARIO_LIST", // 场景列表
@@ -58,13 +59,13 @@ export function ActionSetScenarioOption(
   return { type: ACTION_TYPES.SET_SCENARIO_SELECTED, payload };
 }
 
-export function ActionSetSourceOptionList(
+export function ActionSetResourceOptionList(
   payload: TypeResourceOption[]
 ): TypeActionSetResourceList {
   return { type: ACTION_TYPES.SET_RESOURCE_LIST, payload };
 }
 
-export function ActionSetSourceOption(
+export function ActionSetResourceOption(
   payload: TypeResourceOption
 ): TypeActionSetResource {
   return { type: ACTION_TYPES.SET_RESOURCE_SELECTED, payload };

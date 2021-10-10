@@ -1,22 +1,23 @@
 import { updateState } from "@/store/utils";
-import { TypeScenarioOption, TypeResourceOption } from "src/types/resource";
+import { TypeResourceOption } from "src/types/resource.config";
+import { TypeScenarioOption } from "src/types/scenario.config";
 import { TypeProjectDataDoc } from "src/types/project";
 import { ResourceOption } from "src/data/ResourceConfig";
 import { ScenarioOption } from "src/data/ScenarioConfig";
 import { ACTION_TYPES, TypeStarterActions } from "./action";
 
 export type TypeStarterState = {
-  scenarioList: TypeScenarioOption[];
+  scenarioOptionList: TypeScenarioOption[];
   scenarioSelected: TypeScenarioOption;
-  resourceList: TypeResourceOption[];
+  resourceOptionList: TypeResourceOption[];
   resourceSelected: TypeResourceOption;
   projectList: TypeProjectDataDoc[];
 };
 
 const starterState: TypeStarterState = {
-  scenarioList: [],
+  scenarioOptionList: [],
   scenarioSelected: ScenarioOption.default,
-  resourceList: [],
+  resourceOptionList: [],
   resourceSelected: ResourceOption.default,
   projectList: []
 };
@@ -29,7 +30,7 @@ export default function StarterReducer(
     case ACTION_TYPES.SET_SCENARIO_LIST: {
       return updateState(state, {
         scenarioSelected: action.payload[0],
-        scenarioList: action.payload
+        scenarioOptionList: action.payload
       });
     }
     case ACTION_TYPES.SET_SCENARIO_SELECTED: {
@@ -39,8 +40,8 @@ export default function StarterReducer(
     }
     case ACTION_TYPES.SET_RESOURCE_LIST: {
       return updateState(state, {
-        resourceList: action.payload,
-        resourceSelected: action.payload[0]
+        resourceOptionList: action.payload,
+        resourceSelected: action.payload[0] || ResourceOption.default
       });
     }
     case ACTION_TYPES.SET_RESOURCE_SELECTED: {

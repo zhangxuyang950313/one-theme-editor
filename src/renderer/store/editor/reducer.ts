@@ -1,16 +1,16 @@
 import path from "path";
 import { updateState } from "@/store/utils";
-import { TypeProjectDataDoc, TypeFileData } from "src/types/project";
+import { TypeProjectDataDoc } from "src/types/project";
 import {
-  TypeResModuleConfig,
-  TypeResPageOption,
-  TypeResPageConfig,
-  TypeResourceConfig,
-  TypeScenarioConfig
-} from "src/types/resource";
+  TypeModuleConfig,
+  TypePageOption,
+  TypePageConfig,
+  TypeResourceConfig
+} from "src/types/resource.config";
+import { TypeScenarioConfig } from "src/types/scenario.config";
 import ResourceConfigData, {
-  ResModuleConfig,
-  ResPageOption
+  ModuleConfig,
+  PageOption
 } from "src/data/ResourceConfig";
 import ProjectData from "src/data/ProjectData";
 import ScenarioConfigData from "src/data/ScenarioConfig";
@@ -23,20 +23,18 @@ export type TypeEditorState = {
   projectData: TypeProjectDataDoc;
   scenarioConfig: TypeScenarioConfig;
   resourceConfig: TypeResourceConfig;
-  currentModule: TypeResModuleConfig;
-  currentPage: TypeResPageOption;
-  pageConfigMap: Record<string, TypeResPageConfig>;
-  fileDataMap: Record<string, TypeFileData>;
+  currentModule: TypeModuleConfig;
+  currentPage: TypePageOption;
+  pageConfigMap: Record<string, TypePageConfig>;
 };
 
 const defaultState: TypeEditorState = {
   projectData: ProjectData.default,
   scenarioConfig: ScenarioConfigData.default,
   resourceConfig: ResourceConfigData.default,
-  currentModule: ResModuleConfig.default,
-  currentPage: ResPageOption.default,
-  pageConfigMap: {},
-  fileDataMap: {}
+  currentModule: ModuleConfig.default,
+  currentPage: PageOption.default,
+  pageConfigMap: {}
 };
 
 const editorState: TypeEditorState = {
@@ -102,20 +100,6 @@ export default function EditorReducer(
           ...state.pageConfigMap,
           [action.payload.config]: action.payload
         }
-      });
-    }
-    case ACTION_TYPE.PATCH_FILE_DATA_MAP: {
-      return updateState(state, {
-        fileDataMap: {
-          ...state.fileDataMap,
-          [action.payload.src]: action.payload
-        }
-      });
-    }
-    case ACTION_TYPE.REMOVE_FILE_DATA_MAP: {
-      delete state.fileDataMap[action.payload];
-      return updateState(state, {
-        fileDataMap: { ...state.fileDataMap }
       });
     }
     default:

@@ -9,7 +9,9 @@ import TopInfo from "./TopInfo";
 
 // 欢迎页侧边栏
 const Sidebar: React.FC = () => {
-  const scenarioOptionList = useStarterSelector(state => state.scenarioList);
+  const scenarioOptionList = useStarterSelector(
+    state => state.scenarioOptionList
+  );
   const [scenarioOption, setScenarioOption] = useScenarioOption();
 
   const ScenarioMenu: React.FC = () => {

@@ -1,78 +1,41 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Tabs } from "antd";
-import { useResourceList, useResTypeConfigList } from "@/hooks/resource/index";
-import { RESOURCE_TYPE } from "src/enum";
-import {
-  TypeResourceDefinition,
-  TypeImageResource,
-  TypeXmlValueResource
-} from "src/types/resource";
-import XmlValueHandler from "./ResourceHandler/XmlValueHandler";
-import ImageHandler from "./ResourceHandler/ImageHandler";
+import { useCurrentPageConfig, useResourceList } from "@/hooks/resource/index";
+import { RESOURCE_TAG } from "src/enum";
+import FileBlock from "./ResourceHandler/FileBlock";
+import XmlValueBlock from "./ResourceHandler/XmlValueBlock";
 
 const ResourceHandler: React.FC = () => {
-  const resTypeList = useResTypeConfigList();
+  const pageConfig = useCurrentPageConfig();
   const resourceList = useResourceList();
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  const imageListRef = useRef<TypeImageResource[]>([]);
-  const xmlValListRef = useRef<TypeXmlValueResource[]>([]);
-  const [currentResource, setCurrentRes] = useState<TypeResourceDefinition[]>(
-    []
-  );
-
-  // 筛选出 resType 类型的所有资源定义
-  // 后期加资源类型编辑应在这里加
-  useEffect(() => {
-    imageListRef.current = [];
-    xmlValListRef.current = [];
-    resourceList.forEach(resource => {
-      if (resource.resType === RESOURCE_TYPE.IMAGE) {
-        imageListRef.current.push(resource);
-      }
-      if (resource.resType === RESOURCE_TYPE.XML_VALUE) {
-        xmlValListRef.current.push(resource);
-      }
-    });
-  }, [resourceList]);
-
-  useEffect(() => {
-    const currentResType = resTypeList[selectedIndex];
-    switch (currentResType.type) {
-      case RESOURCE_TYPE.IMAGE: {
-        setCurrentRes(imageListRef.current);
-        break;
-      }
-      case RESOURCE_TYPE.XML_VALUE: {
-        setCurrentRes(xmlValListRef.current);
-        break;
-      }
-    }
-  }, [selectedIndex]);
-
-  const ResourceContent = () => {
-    const currentResType = resTypeList[selectedIndex];
-    const className = {
-      [RESOURCE_TYPE.IMAGE]: "image-container",
-      [RESOURCE_TYPE.XML_VALUE]: "xml-value-container"
-    }[currentResType.type];
-    return (
-      <div className={className}>
-        {currentResource.map((item, key) => {
-          switch (item.resType) {
-            case RESOURCE_TYPE.IMAGE: {
-              return <ImageHandler key={key} data={item} />;
+  const currentResourceList = resourceList[selectedIndex].children;
+  return (
+    <StyleResourceHandler>
+      {pageConfig?.disableTabs !== true && (
+        <Tabs
+          className="tabs"
+          onChange={index => setSelectedIndex(Number(index))}
+        >
+          {resourceList.map((item, index) => (
+            <Tabs.TabPane key={index} tab={item.name} />
+          ))}
+        </Tabs>
+      )}
+      <div className="resource-container">
+        {currentResourceList.map((resource, key) => {
+          switch (resource.tag) {
+            case RESOURCE_TAG.File: {
+              return <FileBlock key={key} data={resource} />;
             }
-            case RESOURCE_TYPE.XML_VALUE: {
-              if (currentResType.type !== RESOURCE_TYPE.XML_VALUE) return null;
+            case RESOURCE_TAG.String:
+            case RESOURCE_TAG.Number:
+            case RESOURCE_TAG.Color:
+            case RESOURCE_TAG.Boolean: {
               return (
-                <XmlValueHandler
-                  key={key}
-                  className="item"
-                  filterItemTag={currentResType.tag}
-                  data={item}
-                />
+                <XmlValueBlock key={key} className="item" data={resource} />
               );
             }
             default: {
@@ -81,20 +44,6 @@ const ResourceHandler: React.FC = () => {
           }
         })}
       </div>
-    );
-  };
-
-  return (
-    <StyleResourceHandler>
-      <Tabs
-        className="tabs"
-        onChange={index => setSelectedIndex(Number(index))}
-      >
-        {resTypeList.map((resTypeConfig, index) => (
-          <Tabs.TabPane key={index} tab={resTypeConfig.name} />
-        ))}
-      </Tabs>
-      <ResourceContent />
     </StyleResourceHandler>
   );
 };
@@ -124,7 +73,7 @@ const StyleResourceHandler = styled.div`
       margin: 0 20px 20px 0;
     }
   }
-  .xml-value-container {
+  .resource-container {
     display: flex;
     flex-grow: 0;
     flex-wrap: nowrap;

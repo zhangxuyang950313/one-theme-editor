@@ -1,15 +1,11 @@
 import {
-  TypeProjectDataDoc,
-  TypeProjectInfo,
-  TypeFileData
-} from "src/types/project";
-import {
   TypeResourceConfig,
-  TypeResModuleConfig,
-  TypeResPageOption,
-  TypeResPageConfig,
-  TypeScenarioConfig
-} from "src/types/resource";
+  TypeModuleConfig,
+  TypePageOption,
+  TypePageConfig
+} from "src/types/resource.config";
+import { TypeScenarioConfig } from "src/types/scenario.config";
+import { TypeProjectDataDoc, TypeProjectInfo } from "src/types/project";
 
 export enum ACTION_TYPE {
   // 初始化
@@ -24,9 +20,6 @@ export enum ACTION_TYPE {
   SET_PAGE_OPTION = "SET_PAGE_OPTION",
   // 添加页面配置数据映射
   PATCH_PAGE_CONFIG = "PATCH_PAGE_CONFIG",
-  // 添加工程文件数据映射
-  PATCH_FILE_DATA_MAP = "PATCH_FILE_DATA_MAP",
-  REMOVE_FILE_DATA_MAP = "REMOVE_FILE_DATA_MAP",
 
   // 设置工程新数据
   SET_PROJECT_DATA = "SET_PROJECT_DATA",
@@ -51,13 +44,13 @@ type TypeActionSetScenarioConfig = {
 // 设置模块
 type TypeActionSetModuleConf = {
   type: typeof ACTION_TYPE.SET_MODULE_CONFIG;
-  payload: TypeResModuleConfig;
+  payload: TypeModuleConfig;
 };
 
 // 设置页面
 type TypeActionSetPageConf = {
   type: typeof ACTION_TYPE.SET_PAGE_OPTION;
-  payload: TypeResPageOption;
+  payload: TypePageOption;
 };
 
 // 设置工程数据
@@ -75,19 +68,7 @@ type TypeActionSetProjectInfo = {
 // 更新页面配置表
 type TypeActionPatchPageConfMap = {
   type: typeof ACTION_TYPE.PATCH_PAGE_CONFIG;
-  payload: TypeResPageConfig;
-};
-
-// 更新工程文件数据表
-type TypeActionPatchFileDataMap = {
-  type: typeof ACTION_TYPE.PATCH_FILE_DATA_MAP;
-  payload: TypeFileData;
-};
-
-// 删除工程文件数据
-type TypeActionRemoveFileDataMap = {
-  type: typeof ACTION_TYPE.REMOVE_FILE_DATA_MAP;
-  payload: string;
+  payload: TypePageConfig;
 };
 
 // main actions
@@ -99,9 +80,7 @@ export type TypeEditorActions =
   | TypeActionSetPageConf
   | TypeActionSetProjectData
   | TypeActionSetProjectInfo
-  | TypeActionPatchPageConfMap
-  | TypeActionPatchFileDataMap
-  | TypeActionRemoveFileDataMap;
+  | TypeActionPatchPageConfMap;
 
 export function ActionInitEditor(): TypeActionInitEditor {
   return { type: ACTION_TYPE.INIT_EDITOR };
@@ -123,14 +102,14 @@ export function ActionSetResourceConfig(
 
 // 设置当前模块配置
 export function ActionSetCurrentModule(
-  payload: TypeResModuleConfig
+  payload: TypeModuleConfig
 ): TypeActionSetModuleConf {
   return { type: ACTION_TYPE.SET_MODULE_CONFIG, payload };
 }
 
 // 设置当前页面配置
 export function ActionSetCurrentPage(
-  payload: TypeResPageOption
+  payload: TypePageOption
 ): TypeActionSetPageConf {
   return { type: ACTION_TYPE.SET_PAGE_OPTION, payload };
 }
@@ -151,19 +130,7 @@ export function ActionSetDescription(
 
 // 更新页面数据表
 export function ActionPatchPageConfMap(
-  payload: TypeResPageConfig
+  payload: TypePageConfig
 ): TypeActionPatchPageConfMap {
   return { type: ACTION_TYPE.PATCH_PAGE_CONFIG, payload };
-}
-
-export function ActionPatchFileData(
-  payload: TypeFileData
-): TypeActionPatchFileDataMap {
-  return { type: ACTION_TYPE.PATCH_FILE_DATA_MAP, payload };
-}
-
-export function ActionRemoveFileData(
-  payload: string
-): TypeActionRemoveFileDataMap {
-  return { type: ACTION_TYPE.REMOVE_FILE_DATA_MAP, payload };
 }

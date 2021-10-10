@@ -2,7 +2,7 @@ import path from "path";
 import md5 from "md5";
 import fse from "fs-extra";
 import FileType, { FileTypeResult } from "file-type";
-import imageSizeOf from "image-size";
+import imageSize from "image-size";
 import dirTree from "directory-tree";
 import ImageData from "src/data/ImageData";
 import ERR_CODE from "src/constant/errorCode";
@@ -154,11 +154,11 @@ export async function getFileMD5(file: string): Promise<string> {
 }
 
 // 获取图片尺寸
-export function getImageSizeOf(file: string): {
+export function getImageSize(file: string): {
   width: number;
   height: number;
 } {
-  const dimensions = imageSizeOf(file);
+  const dimensions = imageSize(file);
   return { width: dimensions.width || 0, height: dimensions.height || 0 };
 }
 
@@ -169,7 +169,7 @@ export async function getFileSizeOfAsync(file: string): Promise<number> {
 }
 
 // 获取文件大小
-export function getFileSizeOf(file: string): number {
+export function getFileSize(file: string): number {
   return fse.readFileSync(file).byteLength;
 }
 
@@ -181,13 +181,13 @@ export function getImageData(file: string): TypeImageData {
   if (!fse.existsSync(file)) {
     throw new Error(`${ERR_CODE[4003]}: ${file}`);
   }
-  const { width, height } = getImageSizeOf(file);
+  const { width, height } = getImageSize(file);
   return new ImageData()
     .set("width", width)
     .set("height", height)
-    .set("size", getFileSizeOf(file))
+    .set("size", getFileSize(file))
     .set("filename", path.basename(file))
-    .set("ninePatch", isNinePatchPath(file))
+    .set("ninePatch", filenameIsNinePatch(file))
     .create();
 }
 
@@ -207,7 +207,7 @@ export function getImageMapper(file: string, root: string): TypeImageMapper {
 }
 
 // is .9 path
-export function isNinePatchPath(file: string): boolean {
+export function filenameIsNinePatch(file: string): boolean {
   return /\.9\.png$/.test(file);
 }
 

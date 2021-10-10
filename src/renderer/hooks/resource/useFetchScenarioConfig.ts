@@ -4,7 +4,7 @@ import { apiGetScenarioConfig } from "@/request";
 import { useEditorDispatch, useEditorSelector } from "@/store";
 import { ActionSetScenarioConfig } from "@/store/editor/action";
 import { LOAD_STATUS } from "src/enum";
-import { TypeScenarioConfig } from "src/types/resource";
+import { TypeScenarioConfig } from "src/types/resource.config";
 import ScenarioConfigData from "src/data/ScenarioConfig";
 import ERR_CODE from "src/constant/errorCode";
 

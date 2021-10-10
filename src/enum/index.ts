@@ -39,10 +39,11 @@ export enum ELEMENT_TAG {
   Scenario = "Scenario",
   ResourceConfig = "ResourceConfig",
   FileTemplate = "FileTemplate",
-  Items = "Items"
+  Items = "Items",
+  Xml = "Xml"
 }
 
-// 元素类型
+// xml元素类型
 export enum ELEMENT_TYPE {
   IMAGE = "image",
   TEXT = "text"
@@ -57,7 +58,6 @@ export enum FILE_TYPE {
 
 // 资源协议
 export enum RESOURCE_PROTOCOL {
-  UNKNOWN = "unknown",
   FILE = "file", // 单纯的文件
   SRC = "src", // 资源和工程共用的
   RESOURCE = "resource", // 相对资源路径
@@ -65,20 +65,19 @@ export enum RESOURCE_PROTOCOL {
   RELATIVE = "relative" // 相对当前配置路径
 }
 
-// 资源类型
-export enum RESOURCE_TYPE {
-  UNKNOWN = "unknown",
-  IMAGE = "image",
-  XML_VALUE = "xml-value"
+// 资源类型标签
+export enum RESOURCE_TAG {
+  File = "File",
+  Color = "Color",
+  String = "String",
+  Number = "Number",
+  Boolean = "Boolean"
 }
 
-// 资源类型编辑器
-export enum VALUE_RESOURCE_CATEGORY {
-  UNKNOWN = "unknown",
-  COLOR = "color",
-  BOOLEAN = "boolean",
-  NUMBER = "number",
-  STRING = "string"
+export enum LAYOUT_ELEMENT_TAG {
+  Layout = "Layout",
+  Image = "Image",
+  Text = "Text"
 }
 
 export enum ALIGN_VALUE {

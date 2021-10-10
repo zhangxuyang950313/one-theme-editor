@@ -7,46 +7,47 @@ import {
   ImportOutlined,
   UndoOutlined
 } from "@ant-design/icons";
-import { TypeImageResource, TypeImageResourceItem } from "src/types/resource";
-import { FILE_EVENT } from "src/enum";
+import { TypeFileBlock, TypeFileItem } from "src/types/resource.page";
 import { apiCopyFile, apiDeleteFile } from "@/request/file";
-import { useAbsolutePathInProject } from "@/hooks/project/index";
-import { useAbsolutePathInRes } from "@/hooks/resource";
+import { useProjectAbsolutePath } from "@/hooks/project/index";
+import { useResourceAbsolutePath } from "@/hooks/resource";
 import useSubscribeProjectFile from "@/hooks/project/useSubscribeProjectFile";
 import ERR_CODE from "src/constant/errorCode";
 import ImageDisplay from "./ImageDisplay";
 import InfoDisplay from "./InfoDisplay";
 
-const ImageHandlerItem: React.FC<{
+const FileItem: React.FC<{
   className?: string;
-  data: TypeImageResourceItem;
+  data: TypeFileItem;
 }> = props => {
   const { data, className } = props;
   const subscribe = useSubscribeProjectFile();
-  const absPathInSource = useAbsolutePathInRes(data.sourceData.src);
-  const absPathInProject = useAbsolutePathInProject(data.sourceData.src);
+  const resourcePath = useResourceAbsolutePath(data.sourceData.src);
+  const projectPath = useProjectAbsolutePath(data.sourceData.src);
   const [src, setSrc] = useState(`src://${data.sourceData.src}`);
+  const [imageSize, setImageSize] = useState({ width: 0, height: 0 });
 
   useEffect(() => {
     subscribe(data.sourceData.src, event => {
-      if (event === FILE_EVENT.UNLINK) {
-        setSrc("");
-        return;
-      }
       setSrc(`src://${data.sourceData.src}?t=${Date.now()}`);
     });
   }, []);
 
-  const size = `${data.sourceData.data.width}×${data.sourceData.data.height}`;
+  // setImageSize({
+  //   width: ref.naturalWidth,
+  //   height: ref.naturalHeight
+  // });
+
+  const size = `${imageSize.width}×${imageSize.height}`;
   return (
-    <StyleImageHandlerList className={className}>
+    <StyleFileItem className={className}>
       <div className="wrapper">
         <ImageDisplay
           className="display"
           src={src}
           onClick={() => {
             // 预览图片
-            remote.shell.showItemInFolder(absPathInProject);
+            remote.shell.showItemInFolder(projectPath);
           }}
         />
         <Tooltip
@@ -55,7 +56,7 @@ const ImageHandlerItem: React.FC<{
               <div>路径：{data.sourceData.src}</div>
               <div>
                 尺寸：
-                {`${size} | ${(data.sourceData.data.size / 1024).toFixed(2)}px`}
+                {`${size} | ${(data.sourceData.size / 1024).toFixed(2)}px`}
               </div>
             </>
           }
@@ -63,8 +64,8 @@ const ImageHandlerItem: React.FC<{
         >
           <InfoDisplay
             className="info"
-            title={data.description || "-"}
-            description={size || "?×?"}
+            title={data.comment || "-"}
+            description={size}
           />
         </Tooltip>
       </div>
@@ -83,7 +84,7 @@ const ImageHandlerItem: React.FC<{
                 if (result.canceled) return;
                 apiCopyFile({
                   from: result.filePaths[0],
-                  to: absPathInProject
+                  to: projectPath
                 });
               });
           }}
@@ -94,8 +95,8 @@ const ImageHandlerItem: React.FC<{
           className="press import"
           onClick={() =>
             apiCopyFile({
-              from: absPathInSource,
-              to: absPathInProject
+              from: resourcePath,
+              to: projectPath
             })
           }
         />
@@ -103,17 +104,17 @@ const ImageHandlerItem: React.FC<{
         <DeleteOutlined
           className="press delete"
           onClick={() => {
-            apiDeleteFile(absPathInProject).catch(err => {
+            apiDeleteFile(projectPath).catch(err => {
               notification.warn({ message: ERR_CODE[4007] });
             });
           }}
         />
       </div>
-    </StyleImageHandlerList>
+    </StyleFileItem>
   );
 };
 
-const StyleImageHandlerList = styled.div`
+const StyleFileItem = styled.div`
   display: flex;
   /* 图标和操作悍妞 */
   .wrapper {
@@ -154,36 +155,39 @@ const StyleImageHandlerList = styled.div`
   }
 `;
 
-const ImageHandler: React.FC<{
+const FileBlock: React.FC<{
   className?: string;
-  data: TypeImageResource;
+  data: TypeFileBlock;
 }> = props => {
   const { data, className } = props;
 
   return (
-    <StyleImageHandler className={className}>
-      <div className="image-category-info">
-        <span className="desc">{props.data.description}</span>
+    <StyleFileBlock className={className}>
+      <div className="title-container">
+        <span className="title">{props.data.name}</span>
       </div>
-      <div className="image-handler-list">
-        {data.items.map((item, key) => {
-          return <ImageHandlerItem className="item" key={key} data={item} />;
-        })}
+      <div className="list">
+        {data.items.map((item, key) => (
+          <FileItem className="item" key={key} data={item} />
+        ))}
       </div>
-    </StyleImageHandler>
+    </StyleFileBlock>
   );
 };
 
-const StyleImageHandler = styled.div`
-  .image-category-info {
+const StyleFileBlock = styled.div`
+  margin-bottom: 20px;
+  border-bottom: 1px solid;
+  border-bottom-color: ${({ theme }) => theme["@border-color-secondary"]};
+  .title-container {
     display: inline-block;
     margin-bottom: 20px;
-    .desc {
+    .title {
       color: ${({ theme }) => theme["@text-color"]};
       font-size: ${({ theme }) => theme["@text-size-title"]};
     }
   }
-  .image-handler-list {
+  .list {
     display: flex;
     flex-wrap: wrap;
     .item {
@@ -192,4 +196,4 @@ const StyleImageHandler = styled.div`
   }
 `;
 
-export default ImageHandler;
+export default FileBlock;

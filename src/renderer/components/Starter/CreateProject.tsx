@@ -7,7 +7,7 @@ import { isDev } from "@/core/constant";
 import { apiCreateProject } from "@/request";
 import { useScenarioOption } from "@/hooks/resource/index";
 import { TypeProjectInfo } from "src/types/project";
-import { TypeResourceOption } from "src/types/resource";
+import { TypeResourceOption } from "src/types/resource.config";
 
 import styled from "styled-components";
 import React, { useEffect, useRef, useState } from "react";

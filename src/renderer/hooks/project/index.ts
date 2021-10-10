@@ -4,16 +4,14 @@ import { useMergeLoadStatus } from "@/hooks/index";
 import { useResConfigRootWithNS } from "@/hooks/resource/index";
 import { ActionInitEditor } from "@/store/editor/action";
 import { useEditorDispatch, useEditorSelector } from "@/store/index";
-import { TypeProjectDataDoc, TypeFileData } from "src/types/project";
-import { FILE_TEMPLATE_TYPE, FILE_TYPE, LOAD_STATUS } from "src/enum";
+import { FILE_TEMPLATE_TYPE, LOAD_STATUS } from "src/enum";
+import { TypeProjectDataDoc } from "src/types/project";
+import { TypeResourceConfig, TypePageConfig } from "src/types/resource.config";
 import {
   TypeFileTempConfig,
-  TypeResourceConfig,
-  TypeResPageConfig,
   TypeScenarioConfig
-} from "src/types/resource";
+} from "src/types/scenario.config";
 import { FileTemplate } from "src/data/ScenarioConfig";
-import XMLNodeElement from "src/server/compiler/XMLNodeElement";
 import { useImagePrefix } from "../image";
 import useFetchProjectData from "../project/useFetchProjectData";
 import useFetchResourceConfig from "../resource/useFetchResourceConfig";
@@ -50,7 +48,7 @@ type TypeInitializedProjectData = {
   projectData: TypeProjectDataDoc;
   scenarioConfig: TypeScenarioConfig;
   resourceConfig: TypeResourceConfig;
-  pageConfigList: TypeResPageConfig[];
+  pageConfigList: TypePageConfig[];
 };
 export function useInitProject(): [
   TypeInitializedProjectData,
@@ -118,54 +116,12 @@ export function useResolveSourcePath(relativePath: string): string {
   return resourcePath;
 }
 
-export function useFileDataMap(): Map<string, TypeFileData> {
-  const fileDataMap = useEditorSelector(state => state.fileDataMap);
-  return new Map(Object.entries(fileDataMap));
-}
-
-/**
- * @returns 工程图片文件数据map
- */
-export function useProjectImageUrlBySrc(src: string): string {
-  const imageFileDataMap = useEditorSelector(state => {
-    const entries = Object.entries(state.fileDataMap).flatMap(([key, val]) => {
-      return val.type === FILE_TYPE.IMAGE
-        ? [[key, val] as [string, typeof val]]
-        : [];
-    });
-    return new Map(entries);
-  });
-  const imageData = imageFileDataMap.get(src);
-  return imageData?.url || "";
-}
-
-/**
- * @returns 工程中 xml 文件数据map
- */
-export function useProjectXmlValueBySrc(name: string, src: string): string {
-  console.log(name, src);
-  const xmlFileDataMap = useEditorSelector(state => {
-    const entries = Object.entries(state.fileDataMap).flatMap(([key, val]) => {
-      return val.type === FILE_TYPE.XML
-        ? [[key, val] as [string, typeof val]]
-        : [];
-    });
-    return new Map(entries);
-  });
-  const xmlData = xmlFileDataMap.get(src);
-  if (!xmlData?.data) return "";
-  return new XMLNodeElement(xmlData.data)
-    .getFirstChildNode()
-    .getFirstChildNodeByAttrValue("name", name)
-    .getFirstTextChildValue();
-}
-
 /**
  * 获取工程相对路径的绝对路径
  * @param relativePath
  * @returns
  */
-export function useAbsolutePathInProject(relativePath: string): string {
+export function useProjectAbsolutePath(relativePath: string): string {
   const projectRoot = useProjectRoot();
   return path.join(projectRoot, relativePath);
 }
