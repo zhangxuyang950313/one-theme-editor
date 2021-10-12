@@ -25,20 +25,23 @@ const FileItem: React.FC<{
   const resourcePath = useResourceAbsolutePath(data.sourceData.src);
   const projectPath = useProjectAbsolutePath(data.sourceData.src);
   const [src, setSrc] = useState(`src://${data.sourceData.src}`);
-  const [imageSize, setImageSize] = useState({ width: 0, height: 0 });
 
   useEffect(() => {
-    subscribe(data.sourceData.src, event => {
+    subscribe(data.sourceData.src, () => {
       setSrc(`src://${data.sourceData.src}?t=${Date.now()}`);
     });
   }, []);
 
-  // setImageSize({
-  //   width: ref.naturalWidth,
-  //   height: ref.naturalHeight
-  // });
-
-  const size = `${imageSize.width}×${imageSize.height}`;
+  let size = "";
+  switch (data.fileData.fileType) {
+    case "image/webp":
+    case "image/jpeg":
+    case "image/gif":
+    case "image/png": {
+      size = `${data.fileData.width}×${data.fileData.height}`;
+      break;
+    }
+  }
   return (
     <StyleFileItem className={className}>
       <div className="wrapper">
@@ -56,7 +59,7 @@ const FileItem: React.FC<{
               <div>路径：{data.sourceData.src}</div>
               <div>
                 尺寸：
-                {`${size} | ${(data.sourceData.size / 1024).toFixed(2)}px`}
+                {`${size} | ${(data.fileData.size / 1024).toFixed(2)}px`}
               </div>
             </>
           }
@@ -64,8 +67,8 @@ const FileItem: React.FC<{
         >
           <InfoDisplay
             className="info"
-            title={data.comment || "-"}
-            description={size}
+            main={data.comment || "-"}
+            secondary={size}
           />
         </Tooltip>
       </div>
@@ -162,7 +165,7 @@ const FileBlocker: React.FC<{
   const { data, className } = props;
 
   return (
-    <StyleFileBlock className={className}>
+    <StyleFileBlocker className={className}>
       <div className="title-container">
         <span className="title">{props.data.name}</span>
       </div>
@@ -171,11 +174,11 @@ const FileBlocker: React.FC<{
           <FileItem className="item" key={key} data={item} />
         ))}
       </div>
-    </StyleFileBlock>
+    </StyleFileBlocker>
   );
 };
 
-const StyleFileBlock = styled.div`
+const StyleFileBlocker = styled.div`
   margin-bottom: 20px;
   border-bottom: 1px solid;
   border-bottom-color: ${({ theme }) => theme["@border-color-secondary"]};

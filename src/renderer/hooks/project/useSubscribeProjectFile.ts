@@ -1,5 +1,5 @@
 import path from "path";
-import { FSWatcher } from "chokidar";
+import { FSWatcher, WatchOptions } from "chokidar";
 import { useEffect, useRef } from "react";
 import { FILE_EVENT } from "src/enum";
 // import { getFileData } from "server/services/project";
@@ -13,7 +13,9 @@ const subscribeMap = new Map<string, Set<TypeListener>>();
 
 // 监听当前页面文件
 // 发布订阅模式，可多次订阅同一个 file
-export default function useSubscribeProjectFile(): TypeSubscribeFile {
+export default function useSubscribeProjectFile(
+  watcherOptions?: WatchOptions
+): TypeSubscribeFile {
   const projectRoot = useProjectRoot();
   const callbackList = useRef(
     new Array<{ pathname: string; callback: TypeListener }>()
@@ -34,7 +36,8 @@ export default function useSubscribeProjectFile(): TypeSubscribeFile {
       atomic: false, // unlink 后超过 interval(atomic=true) 或 1 秒内重新被 add，则触发 change
       alwaysStat: true,
       ignorePermissionErrors: true,
-      interval: 0
+      interval: 0,
+      ...(watcherOptions || {})
     }).setMaxListeners(9999);
     watcher.add("./**/*{.xml,.png,.9.png,.jpg,.jpeg,.webp}");
     const listener = (event: FILE_EVENT, pathname: string) => {

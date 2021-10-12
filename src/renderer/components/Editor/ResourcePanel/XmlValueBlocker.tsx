@@ -1,20 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { Button } from "antd";
 import { apiWriteXmlTemplate } from "@/request";
 import { useProjectUUID } from "@/hooks/project/index";
 import { RESOURCE_TAG } from "src/enum/index";
-import ButtonGroup from "antd/lib/button/button-group";
-import { TypeXmlTypeBlock } from "src/types/resource.page";
+import {
+  TypeXmlItem,
+  TypeXmlTypeBlock,
+  TypeXmlTypeTags,
+  TypeXmlValueItem
+} from "src/types/resource.page";
+import useSubscribeProjectFile from "@/hooks/project/useSubscribeProjectFile";
 import ColorPicker from "./ColorPicker";
 import BooleanSelector from "./BooleanSelector";
 import NumberInput from "./NumberInput";
 import StringInput from "./StringInput";
 
 // 分类编辑控件
-const XmlValueItem: React.FC<{
+const XmlValueEditor: React.FC<{
   value: string;
-  use: RESOURCE_TAG;
+  use: TypeXmlTypeTags;
   onChange: (v: string) => void;
 }> = props => {
   const { value, onChange } = props;
@@ -39,96 +44,120 @@ const XmlValueItem: React.FC<{
   }
 };
 
-const XmlValueBlocker: React.FC<{
-  className?: string;
-  data: TypeXmlTypeBlock;
+const XmlValueItem: React.FC<{
+  data: TypeXmlValueItem;
+  use: TypeXmlTypeTags;
+  from: string;
+  onChange: (v: string) => void;
 }> = props => {
-  const uuid = useProjectUUID();
-  // const value = useProjectXmlValueBySrc(name, sourceData.src);
-  const value = "#f7d2d2";
-
   return (
-    <StyleXmlValueBlock className={props.className}>
-      <div className="title-container">
-        <span className="title">{props.data.name}</span>
+    <StyleXmlValueItem>
+      <div className="value-name-container">
+        <div className="name">{props.data.comment}</div>
+        <div className="file">{props.from}</div>
       </div>
-      {props.data.items.map((item, key) => {
-        return (
-          <div key={key}>
-            {/* <div className="title-secondary">
-              <span className="title">{item.description}</span>
-            </div> */}
-            {item.items.map((valueItem, valueKey) => {
-              return (
-                <div className="item-container" key={valueKey}>
-                  <div>{valueItem.comment}</div>
-                  <div className="item">
-                    <XmlValueItem
-                      value={value}
-                      onChange={value => {
-                        // 写入 xml
-                        apiWriteXmlTemplate(uuid, {
-                          name: item.key,
-                          value,
-                          src: item.source
-                        });
-                      }}
-                      use={props.data.tag}
-                    />
-                    <div>
-                      <ButtonGroup>
-                        <Button type="primary">默认</Button>
-                        <Button type="default">删除</Button>
-                      </ButtonGroup>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        );
-      })}
-    </StyleXmlValueBlock>
+      <div className="value-item">
+        <XmlValueEditor
+          value={props.data.value}
+          use={props.use}
+          onChange={props.onChange}
+        />
+        <div>
+          <Button.Group>
+            <Button type="primary">默认</Button>
+            <Button type="default">删除</Button>
+          </Button.Group>
+        </div>
+      </div>
+    </StyleXmlValueItem>
   );
 };
 
-const StyleXmlValueBlock = styled.div`
-  flex-shrink: 0;
-  box-sizing: content-box;
-  margin-bottom: 20px;
-  .title-container {
+const StyleXmlValueItem = styled.div`
+  padding-bottom: 20px;
+  .value-name-container {
     display: inline-block;
-    margin-bottom: 20px;
-    .title {
+    .name {
       color: ${({ theme }) => theme["@text-color"]};
-      font-size: ${({ theme }) => theme["@text-size-title"]};
     }
     .file {
       color: ${({ theme }) => theme["@text-color-secondary"]};
       font-size: ${({ theme }) => theme["@text-size-secondary"]};
     }
   }
-  .title-secondary {
+  .value-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 70px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid;
+    border-bottom-color: ${({ theme }) => theme["@border-color-secondary"]};
+  }
+`;
+
+const XmlItem: React.FC<{ xmlItem: TypeXmlItem; use: TypeXmlTypeTags }> =
+  props => {
+    const uuid = useProjectUUID();
+    const subscribe = useSubscribeProjectFile({ ignoreInitial: false });
+    useEffect(() => {
+      subscribe(xmlItem.sourceData.src, () => {
+        console.log(1, xmlItem.sourceData.src);
+      });
+    }, []);
+
+    const { xmlItem, use } = props;
+    return (
+      <>
+        {xmlItem.valueItems.map((valueItem, key) => (
+          <XmlValueItem
+            key={key}
+            data={valueItem}
+            use={use}
+            from={xmlItem.sourceData.src}
+            onChange={value => {
+              // 写入 xml
+              apiWriteXmlTemplate(uuid, {
+                attributes: valueItem.attributes,
+                value,
+                src: xmlItem.source
+              });
+            }}
+          />
+        ))}
+      </>
+    );
+  };
+
+const XmlValueBlocker: React.FC<{
+  className?: string;
+  data: TypeXmlTypeBlock;
+}> = props => {
+  // const value = useProjectXmlValueBySrc(name, sourceData.src);
+
+  return (
+    <StyleXmlValueBlocker className={props.className}>
+      <div className="title-container">
+        <span className="name">{props.data.name}</span>
+      </div>
+      {props.data.items.map((xmlItem, key) => (
+        <XmlItem key={key} xmlItem={xmlItem} use={props.data.tag} />
+      ))}
+    </StyleXmlValueBlocker>
+  );
+};
+
+const StyleXmlValueBlocker = styled.div`
+  flex-shrink: 0;
+  box-sizing: content-box;
+  margin-bottom: 20px;
+  margin-right: 20px;
+  .title-container {
     display: inline-block;
     margin-bottom: 20px;
-    .title {
+    .name {
       color: ${({ theme }) => theme["@text-color"]};
-      font-size: ${({ theme }) => theme["@text-size-main"]};
-    }
-  }
-  .xml-value-info {
-    display: inline-block;
-  }
-  .item-container {
-    padding-bottom: 20px;
-    .item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 70px;
-      padding-bottom: 20px;
-      border-bottom: 1px solid;
-      border-bottom-color: ${({ theme }) => theme["@border-color-secondary"]};
+      font-size: ${({ theme }) => theme["@text-size-title"]};
     }
   }
 `;

@@ -8,77 +8,77 @@
     <!-- 
         资源定义：按照顺序生成 tab
     -->
-    <Resource name="图片" key="image">
-        <File name="壁纸" key="wallpaper">
+    <Resource name="图片" :key="image">
+        <File name="壁纸" :key="wallpaper">
             <!-- 桌面壁纸 -->
-            <Item key="default_wallpaper" src="src://wallpaper/default_wallpaper.jpg"/>
+            <Item :key="default_wallpaper" src="src://wallpaper/default_wallpaper.jpg"/>
             <!-- 锁屏壁纸 -->
-            <Item key="default_lock_wallpaper" src="src://wallpaper/default_lock_wallpaper.jpg"/>
+            <Item :key="default_lock_wallpaper" src="src://wallpaper/default_lock_wallpaper.jpg"/>
         </File> 
-        <File name="必做图标" key="default.icons">
+        <File name="必做图标" :key="default.icons">
             <!-- 拨号 -->
-            <Item key="com.android.contacts.activities.TwelveKeyDialer" src="src://icons/res/drawable-xxhdpi/com.android.contacts.activities.TwelveKeyDialer.png"/>
+            <Item :key="com.android.contacts.activities.TwelveKeyDialer" src="src://icons/res/drawable-xxhdpi/com.android.contacts.activities.TwelveKeyDialer.png"/>
             <!-- 短信 -->
-            <Item key="com.android.mms" src="src://icons/res/drawable-xxhdpi/com.android.mms.png"/>
+            <Item :key="com.android.mms" src="src://icons/res/drawable-xxhdpi/com.android.mms.png"/>
             <!-- 浏览器 -->
-            <Item key="com.android.browser" src="src://icons/res/drawable-xxhdpi/com.android.browser.png"/>
+            <Item :key="com.android.browser" src="src://icons/res/drawable-xxhdpi/com.android.browser.png"/>
             <!-- 相机 -->
-            <Item key="com.android.camera" src="src://icons/res/drawable-xxhdpi/com.android.camera.png"/>
+            <Item :key="com.android.camera" src="src://icons/res/drawable-xxhdpi/com.android.camera.png"/>
             <!-- 天气 -->
-            <Item key="com.miui.weather2" src="src://icons/res/drawable-xxhdpi/com.miui.weather2.png"/>
+            <Item :key="com.miui.weather2" src="src://icons/res/drawable-xxhdpi/com.miui.weather2.png"/>
             <!-- 相册 -->
-            <Item key="com.miui.gallery" src="src://icons/res/drawable-xxhdpi/com.miui.gallery.png"/>
+            <Item :key="com.miui.gallery" src="src://icons/res/drawable-xxhdpi/com.miui.gallery.png"/>
             <!-- 主题壁纸 -->
-            <Item key="com.android.thememanager" src="src://icons/res/drawable-xxhdpi/com.android.thememanager.png"/>
+            <Item :key="com.android.thememanager" src="src://icons/res/drawable-xxhdpi/com.android.thememanager.png"/>
             <!-- 小米视频 -->
-            <Item key="com.miui.video" src="src://icons/res/drawable-xxhdpi/com.miui.video.png"/>
+            <Item :key="com.miui.video" src="src://icons/res/drawable-xxhdpi/com.miui.video.png"/>
             <!-- 日历 -->
-            <Item key="com.android.calendar" src="src://icons/res/drawable-xxhdpi/com.android.calendar.png"/>
+            <Item :key="com.android.calendar" src="src://icons/res/drawable-xxhdpi/com.android.calendar.png"/>
             <!-- 文件管理 -->
-            <Item key="com.android.fileexplorer" src="src://icons/res/drawable-xxhdpi/com.android.fileexplorer.png"/>
+            <Item :key="com.android.fileexplorer" src="src://icons/res/drawable-xxhdpi/com.android.fileexplorer.png"/>
             <!-- 小米商城 -->
-            <Item key="com.xiaomi.shop" src="src://icons/res/drawable-xxhdpi/com.xiaomi.shop.png"/>
+            <Item :key="com.xiaomi.shop" src="src://icons/res/drawable-xxhdpi/com.xiaomi.shop.png"/>
             <!-- 小米商城pad -->
-            <Item key="com.xiaomi.padshop" src="src://icons/res/drawable-xxhdpi/com.xiaomi.padshop.png"/>
+            <Item :key="com.xiaomi.padshop" src="src://icons/res/drawable-xxhdpi/com.xiaomi.padshop.png"/>
             <!-- 小米商城pad -->
-            <Item key="com.xiaomi.shop.activity.MainTabActivity.shop" src="src://icons/res/drawable-xxhdpi/com.xiaomi.shop.activity.MainTabActivity.shop.png"/>
+            <Item :key="com.xiaomi.shop.activity.MainTabActivity.shop" src="src://icons/res/drawable-xxhdpi/com.xiaomi.shop.activity.MainTabActivity.shop.png"/>
             <!-- 设置 -->
-            <Item key="com.android.settings" src="src://icons/res/drawable-xxhdpi/com.android.settings.png"/>
+            <Item :key="com.android.settings" src="src://icons/res/drawable-xxhdpi/com.android.settings.png"/>
             <!-- 应用商店 -->
-            <Item key="com.xiaomi.market" src="src://icons/res/drawable-xxhdpi/com.xiaomi.market.png"/>
+            <Item :key="com.xiaomi.market" src="src://icons/res/drawable-xxhdpi/com.xiaomi.market.png"/>
             <!-- 游戏中心 -->
-            <Item key="com.xiaomi.gamecenter" src="src://icons/res/drawable-xxhdpi/com.xiaomi.gamecenter.png"/>
+            <Item :key="com.xiaomi.gamecenter" src="src://icons/res/drawable-xxhdpi/com.xiaomi.gamecenter.png"/>
             <!-- 手机管家 -->
-            <Item key="com.miui.securitycenter" src="src://icons/res/drawable-xxhdpi/com.miui.securitycenter.png"/>
+            <Item :key="com.miui.securitycenter" src="src://icons/res/drawable-xxhdpi/com.miui.securitycenter.png"/>
             <!-- 米家 -->
-            <Item key="com.xiaomi.smarthome" src="src://icons/res/drawable-xxhdpi/com.xiaomi.smarthome.png"/>
+            <Item :key="com.xiaomi.smarthome" src="src://icons/res/drawable-xxhdpi/com.xiaomi.smarthome.png"/>
         </File>
-        <File name="第三方图标" key="thirdly.icons">
+        <File name="第三方图标" :key="thirdly.icons">
             <!-- 斗鱼 -->
-            <Item key="air.tv.douyu.android" src="src://icons/res/drawable-xxhdpi/air.tv.douyu.android.png"/>
+            <Item :key="air.tv.douyu.android" src="src://icons/res/drawable-xxhdpi/air.tv.douyu.android.png"/>
         </File>
     </Resource>
 
 
-    <Resource name="颜色值" key="color">
-        <Color name="桌面模块" key="home">
+    <Resource name="颜色值" :key="color">
+        <Color name="桌面模块" :key="home">
             <!-- 桌面模块 -->
-            <Xml key="com.miui.home" name="桌面模块xml" src="src://com.miui.home/theme_values.xml">
+            <Xml :key="com.miui.home" name="桌面模块xml" src="src://com.miui.home/theme_values.xml">
                 <!-- 图标文字 -->
-                <color name="icon_title_text"/>
+                <color :key="icon_title_text" name="icon_title_text"/>
                 <!-- 图标文字 -->
                 <color name="icon_title_text2"/>
             </Xml>
             <!-- 壁纸模块 -->
-            <Xml key="wallpaper" name="壁纸模块xml" src="src://wallpaper/theme_values.xml">
+            <Xml :key="wallpaper" name="壁纸模块xml" src="src://wallpaper/theme_values.xml">
                 <!-- 图标文字 -->
                 <color name="icon_title_text"/>
                 <!-- 图标文字 -->
                 <color name="icon_title_text2"/>
             </Xml>
         </Color>
-        <Color name="壁纸模块" key="wallpaper">
-            <Xml key="wallpaper" name="壁纸模块xml" src="src://wallpaper/theme_values.xml">
+        <Color name="壁纸模块" :key="wallpaper">
+            <Xml :key="wallpaper" name="壁纸模块xml" src="src://wallpaper/theme_values.xml">
                 <!-- 图标文字 -->
                 <color name="icon_title_text"/>
                 <!-- 图标文字 -->
@@ -87,9 +87,9 @@
         </Color>
     </Resource>
 
-    <Resource name="布尔值" key="boolean">
-        <Boolean name="桌面模块" key="home">
-            <Xml key="com.miui.home" name="桌面模块xml" src="src://com.miui.home/theme_values.xml">
+    <Resource name="布尔值" :key="boolean">
+        <Boolean name="桌面模块" :key="home">
+            <Xml :key="com.miui.home" name="桌面模块xml" src="src://com.miui.home/theme_values.xml">
                 <!-- 布尔值测试1 -->
                 <bool name="bool_test1"/>
                 <!-- 布尔值测试2 -->
@@ -98,9 +98,9 @@
         </Boolean>
     </Resource>
 
-    <Resource name="尺寸值" key="dimen">
-        <String name="桌面模块" key="home">
-            <Xml key="com.miui.home" name="桌面模块xml" src="src://com.miui.home/theme_values.xml">
+    <Resource name="尺寸值" :key="dimen">
+        <String name="桌面模块" :key="home">
+            <Xml :key="com.miui.home" name="桌面模块xml" src="src://com.miui.home/theme_values.xml">
                 <!-- 尺寸值测试1 -->
                 <dimen name="dimen_test1"/>
                 <!-- 尺寸值测试2 -->
@@ -109,9 +109,9 @@
         </String>
     </Resource>
 
-    <Resource name="整型值" key="integer">
-        <Number name="桌面模块" key="home">
-            <Xml key="com.miui.home" name="桌面模块xml" src="src://com.miui.home/theme_values.xml">
+    <Resource name="整型值" :key="integer">
+        <Number name="桌面模块" :key="home">
+            <Xml :key="com.miui.home" name="桌面模块xml" src="src://com.miui.home/theme_values.xml">
                 <!-- 尺寸值测试1 -->
                 <dimen name="dimen_test1"/>
                 <!-- 尺寸值测试2 -->
@@ -244,7 +244,7 @@
         <Text
             text="拨号"
             x="160" y="1250" size="36" align="center" alignV="center"
-            color="${color/home/com.miui.home}?name=icon_title_text"
+            color="${color/home/com.miui.home/icon_title_text}"
         />
         <Image 
             x="415" y="2150" w="186" h="186" align="center" alignV="center" 

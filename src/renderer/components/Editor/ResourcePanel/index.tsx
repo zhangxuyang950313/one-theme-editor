@@ -13,7 +13,7 @@ const ResourcePanel: React.FC = () => {
 
   const currentResourceList = resourceList[selectedIndex].children;
   return (
-    <StyleResourceHandler>
+    <StyleResourcePanel>
       {pageConfig?.disableTabs !== true && (
         <Tabs
           className="tabs"
@@ -44,11 +44,11 @@ const ResourcePanel: React.FC = () => {
           }
         })}
       </div>
-    </StyleResourceHandler>
+    </StyleResourcePanel>
   );
 };
 
-const StyleResourceHandler = styled.div`
+const StyleResourcePanel = styled.div`
   width: 100%;
   height: 100%;
   overflow: hidden;

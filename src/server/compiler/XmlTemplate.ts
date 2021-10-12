@@ -1,7 +1,7 @@
 import { Element } from "xml-js";
 import { getPlaceholderVal } from "src/common/utils/index";
+import { TypeXmlTempKeyValMap } from "src/types/resource.page";
 import { TypeKeyValue } from "src/types";
-import { TypeXmlTempKeyValMap } from "src/types/resource.config";
 import XMLNodeElement from "./XMLNodeElement";
 import XmlFileCompiler from "./XmlFileCompiler";
 import TempKeyValMapper from "./TempKeyValMapper";
@@ -40,6 +40,7 @@ export default class XmlTemplate extends XMLNodeElement {
   }
 
   /**
+   * @deprecated
    * 获取替换占位符后的 XMLNodeElement 实例
    * @param valuesFile 定义 key value 的文件
    * @returns
@@ -52,6 +53,7 @@ export default class XmlTemplate extends XMLNodeElement {
   }
 
   /**
+   * @deprecated
    * 获取模板 name 和 textVal 的映射对象
    * 解析忽略节点 tag
    * ```xml
@@ -104,6 +106,30 @@ export default class XmlTemplate extends XMLNodeElement {
    */
   public getTextByAttrNameVal(val: string): string {
     return this.getTextByAttrValOf("name", val);
+  }
+
+  /**
+   * 匹配给定 tag 和 属性一致节点的 text 值
+   * @param tag
+   * @param attrsEntries
+   */
+  public getTextByTagAndAttributes(
+    tag: string,
+    attrsEntries: [string, string][]
+  ): string {
+    const matchedNode = super
+      .getFirstChildNode()
+      .getChildrenNodes()
+      .find(node => {
+        const tagIsEqual = node.getTagname() === tag;
+        const attrObj = node.getAttributes(true);
+        const attrsIsEqual = attrsEntries.every(
+          ([key, value]) => attrObj[key] === value
+        );
+        return tagIsEqual && attrsIsEqual;
+      });
+    if (!matchedNode) return "";
+    return String(matchedNode.getFirstTextChildValue());
   }
 
   /**

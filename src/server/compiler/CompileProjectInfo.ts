@@ -1,6 +1,6 @@
 import { ProjectInfo } from "src/data/ProjectData";
 import { TypeProjectInfo } from "src/types/project";
-import { TypeFileTempConfig } from "src/types/resource.config";
+import { TypeFileTempConfig } from "src/types/scenario.config";
 import XmlFileCompiler from "./XmlFileCompiler";
 import XmlTemplate from "./XmlTemplate";
 

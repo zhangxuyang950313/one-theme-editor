@@ -1,25 +1,56 @@
-import { FileTypeResult } from "file-type";
+import { FileTypeResult, MimeType } from "file-type";
 import {
-  RESOURCE_PROTOCOL,
-  ELEMENT_TAG,
   ALIGN_VALUE,
   ALIGN_V_VALUE,
   RESOURCE_TAG,
+  RESOURCE_PROTOCOL,
   LAYOUT_ELEMENT_TAG
 } from "../enum";
 import XMLNodeBase from "../server/compiler/XMLNodeElement";
 import { TypeImageData } from "./project";
 
 /*************************** Resource ***************************/
+type Diff<T, U> = T extends U ? never : T;
+
+type PickType<T, U> = T extends U ? T : never;
 
 // src="src://" 数据
 export type TypeSourceData = {
-  fileType: string;
-  extname: string;
-  size: number;
   protocol: string;
   src: string;
   query: Record<string, string>;
+};
+
+export type TypeImageMimeType =
+  | "image/jpeg"
+  | "image/png"
+  | "image/gif"
+  | "image/webp";
+
+// fileData
+export type TypeFileData =
+  | {
+      fileType:
+        | Diff<
+            MimeType,
+            TypeImageFileData["fileType"] | TypeXmlFileData["fileType"]
+          >
+        | "";
+      size: number;
+    }
+  | TypeImageFileData
+  | TypeXmlFileData;
+
+export type TypeImageFileData = {
+  fileType: TypeImageMimeType | "";
+  width: number;
+  height: number;
+  size: number;
+  is9patch: boolean;
+};
+export type TypeXmlFileData = {
+  fileType: "application/xml" | "";
+  size: number;
 };
 
 // Xml 节点
@@ -29,13 +60,14 @@ export type TypeXmlItem = {
   name: string;
   source: string;
   sourceData: TypeSourceData;
-  items: TypeXmlValueItem[];
+  valueItems: TypeXmlValueItem[];
 };
 // <Xml/> 节点下的子节点
 export type TypeXmlValueItem = {
   tag: string;
   comment: string;
   attributes: [string, string][];
+  value: string;
 };
 
 export type TypeXmlTypeTags =
@@ -72,6 +104,7 @@ export type TypeFileItem = {
   comment: string;
   source: string;
   sourceData: TypeSourceData;
+  fileData: TypeFileData;
 };
 
 // Resource
@@ -101,7 +134,6 @@ export type TypeLayoutData = {
 // 图片元素数据
 export type TypeLayoutImageElement = {
   tag: LAYOUT_ELEMENT_TAG.Image;
-  resType: RESOURCE_TAG.File;
   source: string;
   sourceData: TypeSourceData;
   layout: TypeLayoutData;
@@ -110,7 +142,6 @@ export type TypeLayoutImageElement = {
 // 颜色元素数据
 export type TypeLayoutTextElement = {
   tag: LAYOUT_ELEMENT_TAG.Text;
-  resType: RESOURCE_TAG.Color;
   text: string;
   size: string;
   color: string;

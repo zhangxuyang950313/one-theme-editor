@@ -1,5 +1,6 @@
 import { Element } from "xml-js";
 import { FILE_TYPE } from "../enum";
+import { TypeImageMimeType } from "./resource.page";
 import { TypeDatabase } from "./index";
 
 // 版本信息

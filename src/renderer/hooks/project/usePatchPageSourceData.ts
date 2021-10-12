@@ -1,10 +1,6 @@
 import { useEffect } from "react";
 import { apiGetProjectFileData } from "@/request";
 import { useEditorDispatch } from "@/store";
-import {
-  ActionPatchFileData,
-  ActionRemoveFileData
-} from "@/store/editor/action";
 import { FILE_EVENT } from "src/enum";
 import { useFSWatcherCreator } from "../fileWatcher";
 import { useProjectRoot, useProjectUUID } from "../project";
@@ -36,11 +32,11 @@ export default function usePatchPageSourceData(): void {
         case FILE_EVENT.ADD:
         case FILE_EVENT.CHANGE: {
           const fileData = await apiGetProjectFileData(uuid, file);
-          dispatch(ActionPatchFileData(fileData));
+          // dispatch(ActionPatchFileData(fileData));
           break;
         }
         case FILE_EVENT.UNLINK: {
-          dispatch(ActionRemoveFileData(file));
+          // dispatch(ActionRemoveFileData(file));
           break;
         }
       }

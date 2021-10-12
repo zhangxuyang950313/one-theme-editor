@@ -19,13 +19,15 @@ import {
   TypeBooleanBlock,
   TypeXmlItem,
   TypeXmlTypeBlock,
-  TypeXmlValueItem
+  TypeXmlValueItem,
+  TypeFileData,
+  TypeImageFileData,
+  TypeXmlFileData
 } from "../types/resource.page";
 import { TypeUiVersion } from "../types/project";
 import {
   ALIGN_VALUE,
   ALIGN_V_VALUE,
-  ELEMENT_TAG,
   LAYOUT_ELEMENT_TAG,
   RESOURCE_TAG
 } from "../enum/index";
@@ -33,9 +35,6 @@ import { AbstractDataModel } from "./AbstractDataModel";
 
 export class SourceData extends AbstractDataModel<TypeSourceData> {
   protected data: TypeSourceData = {
-    fileType: "",
-    extname: "",
-    size: 0,
     protocol: "",
     src: "",
     query: {}
@@ -45,23 +44,53 @@ export class SourceData extends AbstractDataModel<TypeSourceData> {
   }
 }
 
-export class ImageItem extends AbstractDataModel<TypeFileItem> {
+export class ImageFileData extends AbstractDataModel<TypeImageFileData> {
+  protected data: TypeImageFileData = {
+    fileType: "",
+    width: 0,
+    height: 0,
+    size: 0,
+    is9patch: false
+  };
+}
+
+export class XmlFileData extends AbstractDataModel<TypeXmlFileData> {
+  protected data: TypeXmlFileData = {
+    fileType: "",
+    size: 0
+  };
+}
+
+export class FileData extends AbstractDataModel<TypeFileData> {
+  protected data: TypeFileData = {
+    fileType: "",
+    size: 0
+  };
+
+  static get default(): TypeFileData {
+    return new FileData().create();
+  }
+}
+
+export class FileItem extends AbstractDataModel<TypeFileItem> {
   protected data: TypeFileItem = {
     key: "",
     comment: "",
     source: "",
-    sourceData: SourceData.default
+    sourceData: SourceData.default,
+    fileData: FileData.default
   };
   static get default(): TypeFileItem {
-    return new ImageItem().create();
+    return new FileItem().create();
   }
 }
 
 export class XmlValueItem extends AbstractDataModel<TypeXmlValueItem> {
   protected data: TypeXmlValueItem = {
-    tag: "",
     comment: "",
-    attributes: []
+    tag: "",
+    attributes: [],
+    value: ""
   };
 }
 
@@ -72,7 +101,7 @@ export class XmlItem extends AbstractDataModel<TypeXmlItem> {
     name: "",
     source: "",
     sourceData: SourceData.default,
-    items: []
+    valueItems: []
   };
 }
 
@@ -238,7 +267,6 @@ export class ElementLayoutConfig extends AbstractDataModel<TypeLayoutData> {
 export class LayoutImageElement extends AbstractDataModel<TypeLayoutImageElement> {
   protected data: TypeLayoutImageElement = {
     tag: LAYOUT_ELEMENT_TAG.Image,
-    resType: RESOURCE_TAG.File,
     source: "",
     sourceData: SourceData.default,
     layout: ElementLayoutConfig.default
@@ -251,7 +279,6 @@ export class LayoutImageElement extends AbstractDataModel<TypeLayoutImageElement
 export class LayoutTextElement extends AbstractDataModel<TypeLayoutTextElement> {
   protected data: TypeLayoutTextElement = {
     tag: LAYOUT_ELEMENT_TAG.Text,
-    resType: RESOURCE_TAG.Color,
     text: "",
     size: "20",
     color: "#ffffff",

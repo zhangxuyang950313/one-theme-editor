@@ -3,6 +3,7 @@ import { AbstractDataModel } from "./AbstractDataModel";
 
 export default class ImageData extends AbstractDataModel<TypeImageData> {
   protected data: TypeImageData = {
+    mimeType: "",
     width: 0,
     height: 0,
     size: 0,

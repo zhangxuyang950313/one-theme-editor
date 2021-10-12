@@ -83,26 +83,34 @@ class XMLNodeBase {
     return this.node.text ?? "";
   }
 
-  // 获取所有键值映射
-  public getAttributes(): Attributes {
-    return this.node.attributes || {};
+  // 获取所有键值映射，支持忽略特殊键，但忽略后得出的 Attributes 为拷贝后的值，不能再被继续修改，否则失效
+  public getAttributes(ignoreKeys = false): Attributes {
+    const keys = [":key"];
+    const attributes = this.node.attributes || {};
+    if (!ignoreKeys) return attributes;
+    const result: Attributes = {};
+    for (const key in attributes) {
+      if (keys.includes(key)) continue;
+      result[key] = attributes[key];
+    }
+    return result;
   }
 
   // 获取属性所有键
   public getAttributeKeys(): string[] {
-    return Object.keys(this.getAttributes());
+    return Object.keys(this.getAttributes(true));
   }
 
   // 获取属性所有值
   public getAttributeValues(): string[] {
-    return Object.values(this.getAttributes()).flatMap(item =>
+    return Object.values(this.getAttributes(true)).flatMap(item =>
       item === undefined ? [] : String(item)
     );
   }
 
   public getAttributeEntries() {
-    return Object.entries(this.getAttributes()).flatMap<[string, string]>(
-      item => (item[1] === undefined ? [] : [item[0], String(item[1])])
+    return Object.entries(this.getAttributes(true)).flatMap<[string, string]>(
+      item => (item[1] === undefined ? [] : [[item[0], String(item[1])]])
     );
   }
 
@@ -132,9 +140,11 @@ class XMLNodeBase {
    * @param val
    */
   public setAttributeOf(attr: string, val: string | number | boolean): this {
-    const attributes = this.getAttributes();
-    if (!attributes) return this;
-    attributes[attr] = String(val);
+    if (!this.node.attributes) {
+      this.node.attributes = {};
+    }
+    if (!this.node.attributes) return this;
+    this.node.attributes[attr] = String(val);
     return this;
   }
 

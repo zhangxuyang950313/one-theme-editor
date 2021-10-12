@@ -1,6 +1,6 @@
 import path from "path";
 import { URL } from "url";
-import fse from "fs-extra";
+import { MimeType } from "file-type";
 import mimeTypes from "mime-types";
 import type {
   TypeResourceDefinition,
@@ -10,7 +10,8 @@ import type {
   TypeSourceData,
   TypeFileBlock,
   TypeXmlTypeBlock,
-  TypeXmlTypeTags
+  TypeXmlTypeTags,
+  TypeFileData
 } from "src/types/resource.page";
 import { TypePageConfig } from "src/types/resource.config";
 import { TypeImageData } from "src/types/project";
@@ -20,16 +21,18 @@ import {
   LayoutTextElement,
   PageConfig,
   SourceData,
-  ImageItem,
+  FileItem,
   ResourceDefinition,
   FileBlocker,
   XmlItem,
   XmlTypeBlock,
-  XmlValueItem
+  XmlValueItem,
+  ImageFileData,
+  FileData,
+  XmlFileData
 } from "src/data/ResourceConfig";
 import {
-  filenameIsImage,
-  filenameIsXml,
+  filenameIsNinePatch,
   getFileSize,
   getImageData
 } from "src/common/utils/index";
@@ -44,7 +47,6 @@ import {
 } from "src/enum/index";
 import pathUtil from "server/utils/pathUtil";
 import XMLNodeElement from "server/compiler/XMLNodeElement";
-import ImageData from "src/data/ImageData";
 import TempStringUtil from "src/common/utils/TempStringUtil";
 import electronStore from "src/common/electronStore";
 import XmlFileCompiler from "./XmlFileCompiler";
@@ -55,9 +57,11 @@ export default class PageConfigCompiler extends XMLNodeElement {
   private pageNamespace: string;
   private pageConfig: string;
   private resourceRoot: string;
-  private urlDataCache: Map<string, TypeSourceData>;
+  private sourceKeyValMap: Map<string, string>;
+  private sourceDataCache: Map<string, TypeSourceData>;
+  private fileDataCache: Map<string, TypeFileData>;
   private imageDataCache: Map<string, TypeImageData>;
-  private resourceKeyValMap: Map<string, string>;
+  private xmlValueCache: Map<string, string>;
   constructor(data: { namespace: string; config: string }) {
     const file = path.join(
       pathUtil.RESOURCE_CONFIG_DIR,
@@ -69,9 +73,11 @@ export default class PageConfigCompiler extends XMLNodeElement {
     this.pageNamespace = path.dirname(data.config);
     this.pageConfig = path.normalize(data.config);
     this.resourceRoot = path.join(pathUtil.RESOURCE_CONFIG_DIR, data.namespace);
-    this.urlDataCache = new Map();
+    this.sourceKeyValMap = new Map();
+    this.sourceDataCache = new Map();
+    this.fileDataCache = new Map();
     this.imageDataCache = new Map();
-    this.resourceKeyValMap = new Map();
+    this.xmlValueCache = new Map();
   }
 
   /**
@@ -256,15 +262,15 @@ export default class PageConfigCompiler extends XMLNodeElement {
     if (!url) return urlSourceData.create();
 
     // 读取缓存
-    const urlDataCache = this.urlDataCache.get(url);
-    if (urlDataCache) return urlDataCache;
+    const sourceDataCache = this.sourceDataCache.get(url);
+    if (sourceDataCache) return sourceDataCache;
 
     // 解析 url 数据
-    let urlData: URL = new URL("unknown://");
+    let urlData = new URL("unknown://");
     try {
       urlData = new URL(url);
     } catch (err) {
-      console.error(err);
+      console.log(err);
     }
     const { hostname, pathname, searchParams } = urlData;
     const protocol = urlData.protocol.replace(/:$/, "");
@@ -273,54 +279,78 @@ export default class PageConfigCompiler extends XMLNodeElement {
     searchParams.forEach((value, key) => {
       query[key] = value;
     });
-    const fileType = mimeTypes.lookup(src) || "";
-    urlSourceData.set("fileType", fileType);
-    urlSourceData.set("extname", path.extname(src));
+    urlSourceData.set("protocol", protocol);
     urlSourceData.set("query", query);
     urlSourceData.set("src", src);
 
-    // 协议
-    urlSourceData.set("protocol", "");
-    switch (protocol) {
-      case RESOURCE_PROTOCOL.FILE:
-      case RESOURCE_PROTOCOL.PROJECT:
-      case RESOURCE_PROTOCOL.RELATIVE:
-      case RESOURCE_PROTOCOL.RESOURCE:
-      case RESOURCE_PROTOCOL.SRC: {
-        urlSourceData.set("protocol", protocol);
-        break;
-      }
-    }
-    // 根据协议处理资源路径
-    const file = this.resolveProtocolPath(url);
-    if (fse.existsSync(file)) {
-      urlSourceData.set("size", getFileSize(file));
-    }
+    // // 根据协议处理资源路径
+    // const file = this.resolveProtocolPath(url);
+    // if (fse.existsSync(file)) {
+    //   urlSourceData.set("size", getFileSize(file));
+    // }
 
-    // 图片
-    if (filenameIsImage(file)) {
-      const imageData = new ImageData();
-      if (fse.existsSync(file)) {
-        imageData.setBatch(this.getImageData(file));
-      }
-      // urlSourceData.set("extra", imageData.create());
-    }
-    // xml 中的值
-    else if (filenameIsXml(file)) {
-      // url 中的 name 参数作为查找 xml 中数据的依据
-      // TODO： 先固定使用 name，后续看需求是否需要自定义其他属性去 xml 中查找
-      const valueName = query["name"] || "";
-      const value = new XmlTemplate(
-        XmlFileCompiler.from(file).getElement()
-      ).getTextByAttrNameVal(valueName);
-      // resUrlData.set("extra", { value });
-    } else {
-      // TODO 其他文件
-    }
+    // // 图片
+    // if (filenameIsImage(file)) {
+    //   // const imageData = new ImageData();
+    //   // if (fse.existsSync(file)) {
+    //   //   imageData.setBatch(this.getImageData(file));
+    //   // }
+    //   // urlSourceData.set("width", imageData.get("width"));
+    //   // urlSourceData.set("height", imageData.get("height"));
+    //   // urlSourceData.set("ninePatch", filenameIsImage(file));
+    // }
+    // // xml 中的值
+    // else if (filenameIsXml(file)) {
+    //   // url 中的 name 参数作为查找 xml 中数据的依据
+    //   // TODO： 先固定使用 name，后续看需求是否需要自定义其他属性去 xml 中查找
+    //   const valueName = query["name"] || "";
+    //   const value = new XmlTemplate(
+    //     XmlFileCompiler.from(file).getElement()
+    //   ).getTextByAttrNameVal(valueName);
+    //   // resUrlData.set("extra", { value });
+    // } else {
+    //   // TODO 其他文件
+    // }
     // 写入缓存
     const data = urlSourceData.create();
-    this.urlDataCache.set(url, data);
+    this.sourceDataCache.set(url, data);
     return data;
+  }
+
+  private getFileData(file: string): TypeFileData {
+    // 读取缓存
+    const fileData = this.fileDataCache.get(file);
+    if (fileData) return fileData;
+
+    const mimeType = (mimeTypes.lookup(file) || "") as MimeType;
+    switch (mimeType) {
+      case "image/webp":
+      case "image/png":
+      case "image/gif":
+      case "image/jpeg": {
+        const imageData = getImageData(file);
+        const imageFileData = new ImageFileData()
+          .set("fileType", mimeType)
+          .set("width", imageData.width)
+          .set("height", imageData.height)
+          .set("size", imageData.size)
+          .set("is9patch", filenameIsNinePatch(file))
+          .create();
+        this.fileDataCache.set(file, imageFileData);
+        return imageFileData;
+      }
+      case "application/xml": {
+        const xmlFileData = new XmlFileData()
+          .set("fileType", mimeType)
+          .set("size", getFileSize(file))
+          .create();
+        this.fileDataCache.set(file, xmlFileData);
+        return xmlFileData;
+      }
+      default: {
+        return FileData.default;
+      }
+    }
   }
 
   /**
@@ -356,18 +386,17 @@ export default class PageConfigCompiler extends XMLNodeElement {
    */
   private layoutImageElement(node: XMLNodeElement): TypeLayoutImageElement {
     const source = node.getAttributeOf("src");
-    // 从 Resource 标签中读取 src 同名的 name 对应的 value
     const sourceData = this.getUrlSourceData(source);
-    const imageData = { width: "0", height: "0" };
+    const size = { width: "0", height: "0" };
     try {
-      this.getImageData(this.resolveResourcePath(sourceData.src));
+      const imageData = this.getImageData(
+        this.resolveResourcePath(sourceData.src)
+      );
+      size.width = String(imageData.width);
+      size.height = String(imageData.height);
     } catch (err) {
-      //
+      console.log(err);
     }
-    const size = {
-      width: String(imageData.width),
-      height: String(imageData.height)
-    };
     return new LayoutImageElement()
       .set("source", source)
       .set("sourceData", sourceData)
@@ -397,19 +426,23 @@ export default class PageConfigCompiler extends XMLNodeElement {
   }
 
   private getImageBlock(node: XMLNodeElement, rootKey: string): TypeFileBlock {
-    const imageKey = node.getAttributeOf("key");
+    const imageKey = node.getAttributeOf(":key");
     const imageItems = node.getChildrenNodes().flatMap((item, key, arr) => {
       // 不接受非 Item 节点
       if (item.getTagname() !== ELEMENT_TAG.Item) return [];
-      const itemKey = item.getAttributeOf("key");
+      const itemKey = item.getAttributeOf(":key");
       const source = item.getAttributeOf("src");
       const sourceData = this.getUrlSourceData(source);
-      this.resourceKeyValMap.set(`${rootKey}/${imageKey}/${itemKey}`, source);
-      return new ImageItem()
+      const fileData = this.getFileData(
+        this.resolveResourcePath(sourceData.src)
+      );
+      this.sourceKeyValMap.set(`${rootKey}/${imageKey}/${itemKey}`, source);
+      return new FileItem()
         .set("key", itemKey)
         .set("comment", arr[key - 1]?.getComment())
         .set("source", source)
         .set("sourceData", sourceData)
+        .set("fileData", fileData)
         .create();
     });
     return new FileBlocker()
@@ -425,31 +458,45 @@ export default class PageConfigCompiler extends XMLNodeElement {
     tag: TypeXmlTypeTags,
     rootKey: string
   ): TypeXmlTypeBlock {
-    const xmlItemKey = node.getAttributeOf("key");
+    const xmlItemKey = node.getAttributeOf(":key");
     const xmlItems = node.getChildrenNodes().flatMap((item, k, arr) => {
       // 不接受非 Xml 节点
       if (item.getTagname() !== ELEMENT_TAG.Xml) return [];
-      const itemKey = item.getAttributeOf("key");
+      const itemKey = item.getAttributeOf(":key");
       const source = item.getAttributeOf("src");
       const sourceData = this.getUrlSourceData(source);
       const valueItems = item
         .getChildrenNodes()
         .flatMap((XmlChild, kk, arr) => {
           if (!XmlChild.isElement()) return [];
+          const tagname = XmlChild.getTagname();
+          const attributes = XmlChild.getAttributeEntries();
+          // 获取 tag 和 attributes 匹配的节点的 text 值作为默认值
+          const cacheKey = JSON.stringify({ source, tagname, attributes });
+          let defaultVal = this.xmlValueCache.get(cacheKey);
+          if (!defaultVal) {
+            defaultVal = new XmlTemplate(
+              XmlFileCompiler.from(
+                this.resolveResourcePath(sourceData.src)
+              ).getElement()
+            ).getTextByTagAndAttributes(tagname, attributes);
+            this.xmlValueCache.set(cacheKey, defaultVal);
+          }
           return new XmlValueItem()
-            .set("tag", XmlChild.getTagname())
+            .set("tag", tagname)
             .set("comment", arr[kk - 1]?.getComment())
-            .set("attributes", XmlChild.getAttributeEntries())
+            .set("attributes", attributes)
+            .set("value", defaultVal)
             .create();
         });
-      this.resourceKeyValMap.set(`${rootKey}/${xmlItemKey}/${itemKey}`, source);
+      this.sourceKeyValMap.set(`${rootKey}/${xmlItemKey}/${itemKey}`, source);
       return new XmlItem()
         .set("tag", item.getTagname())
         .set("key", itemKey)
         .set("name", item.getAttributeOf("name"))
         .set("source", source)
         .set("sourceData", sourceData)
-        .set("items", valueItems)
+        .set("valueItems", valueItems)
         .create();
     });
     return new XmlTypeBlock()
@@ -464,7 +511,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
   getResourceList(): TypeResourceDefinition[] {
     return this.getRootChildrenNodesByTagname(ELEMENT_TAG.Resource).map(
       Resource => {
-        const key = Resource.getAttributeOf("key");
+        const key = Resource.getAttributeOf(":key");
         const resource = new ResourceDefinition()
           .set("key", key)
           .set("name", Resource.getAttributeOf("name"));
@@ -487,8 +534,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
             }
           }
         });
-        resource.set("children", children);
-        return resource.create();
+        return resource.set("children", children).create();
       }
     );
   }
@@ -507,7 +553,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
         const resolveTempStrWithAttr = (attr: string) => {
           const replaced = TempStringUtil.replace(
             node.getAttributeOf(attr),
-            this.resourceKeyValMap
+            this.sourceKeyValMap
           );
           node.setAttributeOf(attr, replaced);
           return !!replaced;

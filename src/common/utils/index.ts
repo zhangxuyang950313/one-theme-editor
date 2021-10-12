@@ -1,7 +1,8 @@
 import path from "path";
 import md5 from "md5";
 import fse from "fs-extra";
-import FileType, { FileTypeResult } from "file-type";
+import FileType, { FileTypeResult, MimeType } from "file-type";
+import mimeTypes from "mime-types";
 import imageSize from "image-size";
 import dirTree from "directory-tree";
 import ImageData from "src/data/ImageData";
@@ -228,7 +229,7 @@ export function filenameIsImage(filename: string): boolean {
  * @param file
  * @returns
  */
-export async function fileIsImage(file: string): Promise<boolean> {
+export async function fileIsImageAsync(file: string): Promise<boolean> {
   try {
     const fileType = await FileType.fromFile(file);
     if (!fileType?.ext) return false;
@@ -237,7 +238,6 @@ export async function fileIsImage(file: string): Promise<boolean> {
     return false;
   }
 }
-
 /**
  * 判断文件后缀为 xml
  * @param filename

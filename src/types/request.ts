@@ -24,7 +24,7 @@ export type TypeGetCanceler = (c: Canceler) => void;
 
 // 释放 xml 模板请求载荷
 export type TypeReleaseXmlTempPayload = {
-  name: string;
+  attributes: [string, string][];
   value: string;
   src: string;
 };

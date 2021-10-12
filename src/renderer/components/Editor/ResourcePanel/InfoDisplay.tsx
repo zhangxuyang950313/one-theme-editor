@@ -3,15 +3,15 @@ import styled from "styled-components";
 
 const InfoDisplay: React.FC<{
   className?: string;
-  title: string;
-  description: string;
+  main?: string;
+  secondary?: string;
 }> = props => {
-  const { title, description, className } = props;
+  const { main, secondary, className } = props;
 
   return (
     <StyleInfoDisplay className={className}>
-      <div className="title">{title}</div>
-      <div className="description">{description}</div>
+      {main && <div className="main">{main}</div>}
+      {secondary && <div className="secondary">{secondary}</div>}
     </StyleInfoDisplay>
   );
 };
@@ -23,11 +23,11 @@ const StyleInfoDisplay = styled.div`
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis; */
-  .title {
+  .main {
     font-size: ${({ theme }) => theme["@text-size-main"]};
     color: ${({ theme }) => theme["@text-color"]};
   }
-  .description {
+  .secondary {
     /* user-select: text; */
     font-size: ${({ theme }) => theme["@text-size-secondary"]};
     color: ${({ theme }) => theme["@text-color-secondary"]};
