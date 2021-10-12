@@ -39,7 +39,7 @@ const XmlValueItem: React.FC<{
   }
 };
 
-const XmlValueBlock: React.FC<{
+const XmlValueBlocker: React.FC<{
   className?: string;
   data: TypeXmlTypeBlock;
 }> = props => {
@@ -133,4 +133,4 @@ const StyleXmlValueBlock = styled.div`
   }
 `;
 
-export default XmlValueBlock;
+export default XmlValueBlocker;

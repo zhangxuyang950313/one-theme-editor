@@ -3,10 +3,10 @@ import styled from "styled-components";
 import { Tabs } from "antd";
 import { useCurrentPageConfig, useResourceList } from "@/hooks/resource/index";
 import { RESOURCE_TAG } from "src/enum";
-import FileBlock from "./ResourceHandler/FileBlock";
-import XmlValueBlock from "./ResourceHandler/XmlValueBlock";
+import FileBlocker from "./FileBlocker";
+import XmlValueBlocker from "./XmlValueBlocker";
 
-const ResourceHandler: React.FC = () => {
+const ResourcePanel: React.FC = () => {
   const pageConfig = useCurrentPageConfig();
   const resourceList = useResourceList();
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -28,14 +28,14 @@ const ResourceHandler: React.FC = () => {
         {currentResourceList.map((resource, key) => {
           switch (resource.tag) {
             case RESOURCE_TAG.File: {
-              return <FileBlock key={key} data={resource} />;
+              return <FileBlocker key={key} data={resource} />;
             }
             case RESOURCE_TAG.String:
             case RESOURCE_TAG.Number:
             case RESOURCE_TAG.Color:
             case RESOURCE_TAG.Boolean: {
               return (
-                <XmlValueBlock key={key} className="item" data={resource} />
+                <XmlValueBlocker key={key} className="item" data={resource} />
               );
             }
             default: {
@@ -84,4 +84,4 @@ const StyleResourceHandler = styled.div`
   }
 `;
 
-export default ResourceHandler;
+export default ResourcePanel;

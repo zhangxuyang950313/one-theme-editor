@@ -22,7 +22,7 @@ import {
   SourceData,
   ImageItem,
   ResourceDefinition,
-  FileBlock,
+  FileBlocker,
   XmlItem,
   XmlTypeBlock,
   XmlValueItem
@@ -412,7 +412,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
         .set("sourceData", sourceData)
         .create();
     });
-    return new FileBlock()
+    return new FileBlocker()
       .set("key", imageKey)
       .set("name", node.getAttributeOf("name"))
       .set("items", imageItems)

@@ -4,7 +4,7 @@ import { StyleBorderRight } from "@/style";
 import PageSelector from "@/components/Editor/PageSelector";
 import Previewer from "@/components/Editor/Previewer";
 // import ResImageList from "@/components/Editor/ResImageList";
-import ResourcePanel from "@/components/Editor/ResourcePanel";
+import ResourcePanel from "@/components/Editor/ResourcePanel/index";
 import { useCurrentPageConfig } from "@/hooks/resource";
 
 // 主编辑区域

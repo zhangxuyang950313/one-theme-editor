@@ -155,7 +155,7 @@ const StyleFileItem = styled.div`
   }
 `;
 
-const FileBlock: React.FC<{
+const FileBlocker: React.FC<{
   className?: string;
   data: TypeFileBlock;
 }> = props => {
@@ -196,4 +196,4 @@ const StyleFileBlock = styled.div`
   }
 `;
 
-export default FileBlock;
+export default FileBlocker;

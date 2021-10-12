@@ -85,7 +85,7 @@ export class XmlTypeBlock extends AbstractDataModel<TypeXmlTypeBlock> {
   };
 }
 
-export class FileBlock extends AbstractDataModel<TypeFileBlock> {
+export class FileBlocker extends AbstractDataModel<TypeFileBlock> {
   protected data: TypeFileBlock = {
     tag: RESOURCE_TAG.File,
     key: "",
