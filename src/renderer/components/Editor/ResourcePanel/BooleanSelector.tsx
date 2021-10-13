@@ -15,6 +15,9 @@ const BooleanSelector: React.FC<{
         <Radio value="true">true</Radio>
         <Radio value="false">false</Radio>
       </Radio.Group>
+      {!["true", "false"].includes(value) && (
+        <div className="error">{`非合法布尔值("${value}")，应为"true"或"false"`}</div>
+      )}
     </StyleBooleanSelector>
   );
 };
@@ -22,6 +25,10 @@ const BooleanSelector: React.FC<{
 const StyleBooleanSelector = styled.div`
   display: flex;
   align-items: center;
+  .error {
+    color: ${({ theme }) => theme["@error-color"]};
+    font-size: ${({ theme }) => theme["@text-size-thirdly"]};
+  }
 `;
 
 export default BooleanSelector;

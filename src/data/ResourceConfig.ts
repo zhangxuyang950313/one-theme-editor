@@ -1,3 +1,4 @@
+import XMLNodeElement from "server/compiler/XMLNodeElement";
 import {
   TypeResourceConfig,
   TypeResourceOption,
@@ -13,12 +14,12 @@ import {
   TypeSourceData,
   TypeImageUrlData,
   TypeFileItem,
-  TypeFileBlock,
-  TypeStringBlock,
-  TypeNumberBlock,
-  TypeBooleanBlock,
+  TypeFileBlocker,
+  TypeStringBlocker,
+  TypeNumberBlocker,
+  TypeBooleanBlocker,
   TypeXmlItem,
-  TypeXmlTypeBlock,
+  TypeXmlBlocker,
   TypeXmlValueItem,
   TypeFileData,
   TypeImageFileData,
@@ -57,8 +58,12 @@ export class ImageFileData extends AbstractDataModel<TypeImageFileData> {
 export class XmlFileData extends AbstractDataModel<TypeXmlFileData> {
   protected data: TypeXmlFileData = {
     fileType: "",
-    size: 0
+    size: 0,
+    element: XMLNodeElement.createEmptyNode().getElement()
   };
+  static get default(): TypeXmlFileData {
+    return new XmlFileData().create();
+  }
 }
 
 export class FileData extends AbstractDataModel<TypeFileData> {
@@ -101,12 +106,13 @@ export class XmlItem extends AbstractDataModel<TypeXmlItem> {
     name: "",
     source: "",
     sourceData: SourceData.default,
+    fileData: XmlFileData.default,
     valueItems: []
   };
 }
 
-export class XmlTypeBlock extends AbstractDataModel<TypeXmlTypeBlock> {
-  protected data: TypeXmlTypeBlock = {
+export class XmlBlocker extends AbstractDataModel<TypeXmlBlocker> {
+  protected data: TypeXmlBlocker = {
     tag: RESOURCE_TAG.String,
     key: "",
     name: "",
@@ -114,8 +120,8 @@ export class XmlTypeBlock extends AbstractDataModel<TypeXmlTypeBlock> {
   };
 }
 
-export class FileBlocker extends AbstractDataModel<TypeFileBlock> {
-  protected data: TypeFileBlock = {
+export class FileBlocker extends AbstractDataModel<TypeFileBlocker> {
+  protected data: TypeFileBlocker = {
     tag: RESOURCE_TAG.File,
     key: "",
     name: "",
@@ -123,8 +129,8 @@ export class FileBlocker extends AbstractDataModel<TypeFileBlock> {
   };
 }
 
-export class StringBlock extends AbstractDataModel<TypeStringBlock> {
-  protected data: TypeStringBlock = {
+export class StringBlock extends AbstractDataModel<TypeStringBlocker> {
+  protected data: TypeStringBlocker = {
     tag: RESOURCE_TAG.String,
     key: "",
     name: "",
@@ -132,8 +138,8 @@ export class StringBlock extends AbstractDataModel<TypeStringBlock> {
   };
 }
 
-export class NumberBlock extends AbstractDataModel<TypeNumberBlock> {
-  protected data: TypeNumberBlock = {
+export class NumberBlock extends AbstractDataModel<TypeNumberBlocker> {
+  protected data: TypeNumberBlocker = {
     tag: RESOURCE_TAG.Number,
     key: "",
     name: "",
@@ -141,8 +147,8 @@ export class NumberBlock extends AbstractDataModel<TypeNumberBlock> {
   };
 }
 
-export class BooleanBlock extends AbstractDataModel<TypeBooleanBlock> {
-  protected data: TypeBooleanBlock = {
+export class BooleanBlock extends AbstractDataModel<TypeBooleanBlocker> {
+  protected data: TypeBooleanBlocker = {
     tag: RESOURCE_TAG.Boolean,
     key: "",
     name: "",

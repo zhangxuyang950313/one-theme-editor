@@ -49,7 +49,7 @@ export const DynamicProjectImage: TypeReactImageElement = props => {
   const [src, setSrc] = useState(props.src);
   useEffect(() => {
     if (!props.src) return;
-    subscribe(props.src, event => {
+    subscribe(props.src, { immediately: false }, event => {
       if (event === FILE_EVENT.UNLINK) {
         setSrc("");
         return;
@@ -76,7 +76,7 @@ export const DynamicBothSourceImage: TypeReactImageElement = props => {
   const [src, setSrc] = useState(`src://${props.src}`);
   useEffect(() => {
     if (!props.src) return;
-    subscribe(props.src, event => {
+    subscribe(props.src, { immediately: false }, event => {
       if (event === FILE_EVENT.UNLINK) {
         setSrc(`resource://${props.src}?t=${Date.now()}`);
         return;

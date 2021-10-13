@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Input } from "antd";
-import { RightCircleOutlined } from "@ant-design/icons";
+// import { RightCircleOutlined } from "@ant-design/icons";
 
 const StringInput: React.FC<{
   value: string;
@@ -10,11 +10,11 @@ const StringInput: React.FC<{
   const { value, onChange } = props;
   return (
     <StyleNumberInput>
-      <Input className="input" disabled value={value} />
+      {/* <Input className="input" disabled value={value} />
       <RightCircleOutlined
         className="middle-button"
         onClick={() => onChange(value)}
-      />
+      /> */}
       <Input
         className="input"
         placeholder="缺省"
@@ -28,7 +28,7 @@ const StringInput: React.FC<{
 const StyleNumberInput = styled.div`
   display: flex;
   align-items: center;
-  .middle-button {
+  /* .middle-button {
     cursor: pointer;
     color: ${({ theme }) => theme["@text-color-secondary"]};
     font-size: 20px;
@@ -37,7 +37,7 @@ const StyleNumberInput = styled.div`
     &:hover {
       opacity: 0.5;
     }
-  }
+  } */
   .input {
     width: 100px;
   }

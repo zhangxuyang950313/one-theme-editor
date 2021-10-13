@@ -1,16 +1,18 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
 import { Button } from "antd";
-import { apiWriteXmlTemplate } from "@/request";
+import { apiGetProjectFileData, apiWriteXmlTemplate } from "@/request";
 import { useProjectUUID } from "@/hooks/project/index";
 import { RESOURCE_TAG } from "src/enum/index";
 import {
   TypeXmlItem,
-  TypeXmlTypeBlock,
-  TypeXmlTypeTags,
+  TypeXmlBlocker,
+  TypeXmlValueTags,
   TypeXmlValueItem
 } from "src/types/resource.page";
 import useSubscribeProjectFile from "@/hooks/project/useSubscribeProjectFile";
+import XMLNodeElement from "src/server/compiler/XMLNodeElement";
+import XmlCompilerExtra from "src/server/compiler/XmlCompilerExtra";
 import ColorPicker from "./ColorPicker";
 import BooleanSelector from "./BooleanSelector";
 import NumberInput from "./NumberInput";
@@ -19,7 +21,7 @@ import StringInput from "./StringInput";
 // 分类编辑控件
 const XmlValueEditor: React.FC<{
   value: string;
-  use: TypeXmlTypeTags;
+  use: TypeXmlValueTags;
   onChange: (v: string) => void;
 }> = props => {
   const { value, onChange } = props;
@@ -44,21 +46,28 @@ const XmlValueEditor: React.FC<{
   }
 };
 
+/**
+ *
+ * static/comment/5071634098731_.pic.jpg
+ * @param props
+ * @returns
+ */
 const XmlValueItem: React.FC<{
-  data: TypeXmlValueItem;
-  use: TypeXmlTypeTags;
+  value: string;
+  comment: string;
+  use: TypeXmlValueTags;
   from: string;
   onChange: (v: string) => void;
 }> = props => {
   return (
     <StyleXmlValueItem>
-      <div className="value-name-container">
-        <div className="name">{props.data.comment}</div>
+      <div className="info-container">
+        <div className="name">{props.comment}</div>
         <div className="file">{props.from}</div>
       </div>
-      <div className="value-item">
+      <div className="item">
         <XmlValueEditor
-          value={props.data.value}
+          value={props.value}
           use={props.use}
           onChange={props.onChange}
         />
@@ -74,53 +83,87 @@ const XmlValueItem: React.FC<{
 };
 
 const StyleXmlValueItem = styled.div`
-  padding-bottom: 20px;
-  .value-name-container {
+  margin-bottom: 20px;
+  border-bottom: 1px solid;
+  border-bottom-color: ${({ theme }) => theme["@border-color-secondary"]};
+  .info-container {
     display: inline-block;
     .name {
       color: ${({ theme }) => theme["@text-color"]};
+      font-size: ${({ theme }) => theme["@text-size-big"]};
     }
     .file {
       color: ${({ theme }) => theme["@text-color-secondary"]};
-      font-size: ${({ theme }) => theme["@text-size-secondary"]};
+      font-size: ${({ theme }) => theme["@text-size-main"]};
     }
   }
-  .value-item {
+  .item {
     display: flex;
     align-items: center;
     justify-content: space-between;
     height: 70px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid;
-    border-bottom-color: ${({ theme }) => theme["@border-color-secondary"]};
+    /* margin-bottom: 20px; */
   }
 `;
 
-const XmlItem: React.FC<{ xmlItem: TypeXmlItem; use: TypeXmlTypeTags }> =
+/**
+ * static/comment/5081634098844_.pic.jpg
+ * @param props
+ * @returns
+ */
+const XmlItem: React.FC<{ xmlItem: TypeXmlItem; use: TypeXmlValueTags }> =
   props => {
+    const { xmlItem, use } = props;
     const uuid = useProjectUUID();
-    const subscribe = useSubscribeProjectFile({ ignoreInitial: false });
+    const subscribe = useSubscribeProjectFile();
+
+    const genValWeakMap = async () => {
+      const fileData = await apiGetProjectFileData(xmlItem.sourceData.src);
+      console.log(fileData);
+      if (fileData.fileType !== "application/xml") return;
+      const xmlTemp = new XmlCompilerExtra(fileData.element);
+      const weakMap = xmlItem.valueItems.reduce<
+        WeakMap<TypeXmlValueItem, string>
+      >((prev, item) => {
+        const value = xmlTemp.findTextByTagAndAttributes(
+          item.tag,
+          item.attributes
+        );
+        prev.set(item, value);
+        return prev;
+      }, new WeakMap());
+      console.log(weakMap);
+      return weakMap;
+    };
+
     useEffect(() => {
-      subscribe(xmlItem.sourceData.src, () => {
-        console.log(1, xmlItem.sourceData.src);
-      });
+      subscribe(
+        xmlItem.sourceData.src,
+        { immediately: true },
+        async (event, data) => {
+          console.log(1, xmlItem.sourceData.src);
+          console.log(data);
+          // genValWeakMap();
+        }
+      );
     }, []);
 
-    const { xmlItem, use } = props;
     return (
       <>
         {xmlItem.valueItems.map((valueItem, key) => (
           <XmlValueItem
             key={key}
-            data={valueItem}
+            value={valueItem.value}
+            comment={valueItem.comment}
             use={use}
             from={xmlItem.sourceData.src}
             onChange={value => {
               // 写入 xml
               apiWriteXmlTemplate(uuid, {
+                tag: valueItem.tag,
                 attributes: valueItem.attributes,
-                value,
-                src: xmlItem.source
+                value: value,
+                src: xmlItem.sourceData.src
               });
             }}
           />
@@ -131,10 +174,9 @@ const XmlItem: React.FC<{ xmlItem: TypeXmlItem; use: TypeXmlTypeTags }> =
 
 const XmlValueBlocker: React.FC<{
   className?: string;
-  data: TypeXmlTypeBlock;
+  data: TypeXmlBlocker;
 }> = props => {
   // const value = useProjectXmlValueBySrc(name, sourceData.src);
-
   return (
     <StyleXmlValueBlocker className={props.className}>
       <div className="title-container">

@@ -3,9 +3,9 @@ import { Express } from "express";
 import apiConfig from "src/constant/apiConf";
 import {
   TypeCreateProjectPayload,
-  TypeProjectDataDoc,
-  TypeFileData
+  TypeProjectDataDoc
 } from "src/types/project";
+import { TypeFileData } from "src/types/resource.page";
 import { TypeResponseFrame, UnionTupleToObjectKey } from "src/types/request";
 import {
   findProjectByQuery,
@@ -16,14 +16,15 @@ import {
 import { releaseXmlTemplate } from "server/services/xmlTemplate";
 import {
   getPageResourceData,
-  getFileData,
   packProject,
   unpackProject
 } from "server/services/project";
+import { getFileData } from "src/common/utils/index";
 import { checkParamsKey, result } from "server/utils/requestUtil";
-import XmlTemplate from "server/compiler/XmlTemplate";
+import XmlCompilerExtra from "server/compiler/XmlCompilerExtra";
 import XmlFileCompiler from "server/compiler/XmlFileCompiler";
 import ScenarioOptions from "server/compiler/ScenarioOptions";
+import electronStore from "src/common/electronStore";
 
 export default function projectController(service: Express): void {
   // 添加工程
@@ -134,7 +135,7 @@ export default function projectController(service: Express): void {
     const project = await findProjectByQuery({ uuid });
     const releaseFile = path.join(project.root, src);
     const xmlElement = new XmlFileCompiler(releaseFile).getElement();
-    const value = new XmlTemplate(xmlElement).getValueByName(name);
+    const value = new XmlCompilerExtra(xmlElement).getValueByName(name);
     response.send(result.success({ value }));
   });
 
@@ -177,13 +178,13 @@ export default function projectController(service: Express): void {
     never,
     TypeResponseFrame<TypeFileData>,
     never,
-    UnionTupleToObjectKey<typeof apiConfig.GET_PROJECT_FILE.query>
-  >(`${apiConfig.GET_PROJECT_FILE.path}`, async (request, response) => {
+    UnionTupleToObjectKey<typeof apiConfig.GET_PROJECT_FILE_DATA.query>
+  >(`${apiConfig.GET_PROJECT_FILE_DATA.path}`, async (request, response) => {
     const { query } = request;
-    checkParamsKey(query, apiConfig.GET_PROJECT_FILE.query);
-    const { uuid, filepath } = query;
-    const { root } = await findProjectByQuery({ uuid });
-    const fileData = getFileData(path.join(root, filepath), filepath);
+    checkParamsKey(query, apiConfig.GET_PROJECT_FILE_DATA.query);
+    const { filepath } = query;
+    const root = electronStore.get("projectPath");
+    const fileData = getFileData(path.join(root, filepath));
     response.send(result.success(fileData));
   });
 

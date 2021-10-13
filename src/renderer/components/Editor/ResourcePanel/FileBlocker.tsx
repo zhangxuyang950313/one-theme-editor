@@ -7,7 +7,7 @@ import {
   ImportOutlined,
   UndoOutlined
 } from "@ant-design/icons";
-import { TypeFileBlock, TypeFileItem } from "src/types/resource.page";
+import { TypeFileBlocker, TypeFileItem } from "src/types/resource.page";
 import { apiCopyFile, apiDeleteFile } from "@/request/file";
 import { useProjectAbsolutePath } from "@/hooks/project/index";
 import { useResourceAbsolutePath } from "@/hooks/resource";
@@ -27,7 +27,7 @@ const FileItem: React.FC<{
   const [src, setSrc] = useState(`src://${data.sourceData.src}`);
 
   useEffect(() => {
-    subscribe(data.sourceData.src, () => {
+    subscribe(data.sourceData.src, { immediately: false }, () => {
       setSrc(`src://${data.sourceData.src}?t=${Date.now()}`);
     });
   }, []);
@@ -160,7 +160,7 @@ const StyleFileItem = styled.div`
 
 const FileBlocker: React.FC<{
   className?: string;
-  data: TypeFileBlock;
+  data: TypeFileBlocker;
 }> = props => {
   const { data, className } = props;
 

@@ -1,6 +1,3 @@
-import { Element } from "xml-js";
-import { FILE_TYPE } from "../enum";
-import { TypeImageMimeType } from "./resource.page";
 import { TypeDatabase } from "./index";
 
 // 版本信息
@@ -54,27 +51,3 @@ export type TypeImageDataDoc = TypeDatabase<TypeImageData>;
 
 // 在数据库中的工程信息
 export type TypeProjectDataDoc = TypeDatabase<TypeProjectData>;
-
-export type TypeImageFileData = {
-  type: FILE_TYPE.IMAGE;
-  src: string;
-  url: string;
-  data: TypeImageData;
-};
-
-export type TypeXmlFileData = {
-  type: FILE_TYPE.XML;
-  src: string;
-  data: Element;
-};
-
-export type TypeUnknownFileData = {
-  readonly type: FILE_TYPE.UNKNOWN;
-  src: string;
-  data: null;
-};
-
-export type TypeFileData =
-  | TypeUnknownFileData
-  | TypeImageFileData
-  | TypeXmlFileData;

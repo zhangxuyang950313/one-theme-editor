@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import { InputNumber } from "antd";
-import { RightCircleOutlined } from "@ant-design/icons";
 
 const NumberInput: React.FC<{
   value: string;
@@ -11,25 +10,31 @@ const NumberInput: React.FC<{
 
   return (
     <StyleNumberInput>
-      <InputNumber disabled keyboard className="input" value={value} />
+      {/* <InputNumber disabled keyboard className="input" value={value} />
       <RightCircleOutlined
         className="middle-button"
         onClick={() => onChange(value)}
-      />
+      /> */}
       <InputNumber
         keyboard
         className="input"
         placeholder="缺省"
         value={value}
-        onChange={onChange}
+        onChange={val => {
+          if (isNaN(Number(val))) return;
+          onChange(val);
+        }}
       />
+      {isNaN(Number(value)) && (
+        <div className="error">{`非合法数字类型("${value}")`}</div>
+      )}
     </StyleNumberInput>
   );
 };
 
 const StyleNumberInput = styled.div`
   display: flex;
-  align-items: center;
+  flex-direction: column;
   .middle-button {
     cursor: pointer;
     color: ${({ theme }) => theme["@text-color-secondary"]};
@@ -42,6 +47,10 @@ const StyleNumberInput = styled.div`
   }
   .input {
     width: 100px;
+  }
+  .error {
+    color: ${({ theme }) => theme["@error-color"]};
+    font-size: ${({ theme }) => theme["@text-size-thirdly"]};
   }
 `;
 

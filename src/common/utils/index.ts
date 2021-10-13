@@ -9,6 +9,9 @@ import ImageData from "src/data/ImageData";
 import ERR_CODE from "src/constant/errorCode";
 import RegexpUtil from "src/common/utils/RegexpUtil";
 import { TypeImageData, TypeImageMapper } from "src/types/project";
+import { TypeFileData } from "src/types/resource.page";
+import { FileData, ImageFileData, XmlFileData } from "src/data/ResourceConfig";
+import XmlFileCompiler from "server/compiler/XmlFileCompiler";
 
 export const base64Regex = /^data:image\/\w+;base64,/;
 
@@ -304,4 +307,47 @@ export async function getImgBuffAndFileType(
     throw new Error(ERR_CODE[4003]);
   }
   return { buff, fileType };
+}
+
+/**
+ * 获取文件信息
+ * @param file
+ * @param options { ignoreXmlElement:boolean // 忽略解析 xml  element，返回为空，默认为 true}
+ * @returns
+ */
+export function getFileData(
+  file: string,
+  options?: { ignoreXmlElement?: boolean }
+): TypeFileData {
+  if (!fse.existsSync(file)) return FileData.default;
+  const mimeType = (mimeTypes.lookup(file) || "") as MimeType;
+  switch (mimeType) {
+    case "image/webp":
+    case "image/png":
+    case "image/gif":
+    case "image/jpeg": {
+      const imageData = getImageData(file);
+      const imageFileData = new ImageFileData()
+        .set("fileType", mimeType)
+        .set("width", imageData.width)
+        .set("height", imageData.height)
+        .set("size", imageData.size)
+        .set("is9patch", filenameIsNinePatch(file))
+        .create();
+      return imageFileData;
+    }
+    case "application/xml": {
+      const xmlFileData = new XmlFileData()
+        .set("fileType", mimeType)
+        .set("size", getFileSize(file));
+      if (!options?.ignoreXmlElement) {
+        const element = XmlFileCompiler.from(file).getElement();
+        xmlFileData.set("element", element);
+      }
+      return xmlFileData.create();
+    }
+    default: {
+      return FileData.default;
+    }
+  }
 }

@@ -3,7 +3,7 @@ import {
   TypeXmlKeyValConfig,
   TypeXmlKeyValMapperMap,
   TypeXmlTempKeyValMap
-} from "src/types/resource.config";
+} from "src/types/resource.page";
 import XmlFileCompiler from "./XmlFileCompiler";
 
 export default class TempKeyValMapper extends XmlFileCompiler {
@@ -14,10 +14,13 @@ export default class TempKeyValMapper extends XmlFileCompiler {
    * @returns
    */
   getKeyValList(): TypeKeyValue[] {
-    return super.getRootChildrenNodes().map(item => ({
-      key: item.getAttributeOf("name"),
-      value: item.getAttributeOf("value") || item.getFirstTextChildValue()
-    }));
+    return super
+      .getFirstChildNode()
+      .getChildrenNodes()
+      .map(item => ({
+        key: item.getAttributeOf("name"),
+        value: item.getAttributeOf("value") || item.getFirstTextChildValue()
+      }));
   }
 
   /**
@@ -25,11 +28,14 @@ export default class TempKeyValMapper extends XmlFileCompiler {
    * @returns
    */
   getDataList(): TypeXmlKeyValConfig[] {
-    return super.getRootChildrenNodes().map(item => ({
-      name: item.getAttributeOf("name"),
-      value: item.getAttributeOf("value") || item.getFirstTextChildValue(),
-      description: item.getAttributeOf("description")
-    }));
+    return super
+      .getFirstChildNode()
+      .getChildrenNodes()
+      .map(item => ({
+        name: item.getAttributeOf("name"),
+        value: item.getAttributeOf("value") || item.getFirstTextChildValue(),
+        description: item.getAttributeOf("description")
+      }));
   }
 
   /**
@@ -38,7 +44,8 @@ export default class TempKeyValMapper extends XmlFileCompiler {
    */
   getDataObj(): TypeXmlTempKeyValMap {
     return super
-      .getRootChildrenNodes()
+      .getFirstChildNode()
+      .getChildrenNodes()
       .reduce<TypeXmlTempKeyValMap>((total, item) => {
         const key = item.getAttributeOf("name");
         if (!key) return total;
@@ -56,7 +63,7 @@ export default class TempKeyValMapper extends XmlFileCompiler {
    */
   getDataMap(): TypeXmlKeyValMapperMap {
     if (this.keyValMapData) return this.keyValMapData;
-    const rootNodes = super.getRootChildrenNodes();
+    const rootNodes = super.getFirstChildNode().getChildrenNodes();
     const map: TypeXmlKeyValMapperMap = new Map();
     rootNodes.forEach(item => {
       map.set(item.getAttributeOf("name"), item);

@@ -2,9 +2,9 @@ import apiConfig from "src/constant/apiConf";
 import {
   TypeCreateProjectPayload,
   TypeProjectData,
-  TypeProjectDataDoc,
-  TypeFileData
+  TypeProjectDataDoc
 } from "src/types/project";
+import { TypeFileData } from "src/types/resource.page";
 import {
   TypeGetCanceler,
   UnionTupleToObjectKey,
@@ -93,12 +93,11 @@ export async function apiWriteXmlTemplate(
  * @returns
  */
 export async function apiGetProjectFileData<T = TypeFileData>(
-  uuid: string,
   filepath: string
 ): Promise<T> {
   return createHttp()
-    .get<T>(apiConfig.GET_PROJECT_FILE.path, {
-      params: { filepath, uuid }
+    .get<T>(apiConfig.GET_PROJECT_FILE_DATA.path, {
+      params: { filepath }
     })
     .then(data => data.data);
 }

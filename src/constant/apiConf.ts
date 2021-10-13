@@ -133,17 +133,12 @@ const apiConfig = {
     params: ["uuid"],
     query: ["config"]
   }),
-  // 获取一个文件的数据
-  GET_PROJECT_FILE: createApiConf({
-    path: "/project/file",
-    query: ["uuid", "filepath"]
-  }),
 
   // 按行写入 xml
   XML_TEMPLATE_WRITE: createApiConf({
     path: "/project/xml/template/write",
     query: ["uuid"],
-    bodyKeys: ["name", "value", "src"],
+    bodyKeys: ["value", "src"],
     body: {} as TypeReleaseXmlTempPayload
   }),
   // 通过 name 查找工程的 value
@@ -152,6 +147,11 @@ const apiConfig = {
     query: ["uuid", "name", "src"]
   }),
 
+  // 获取一个文件的数据
+  GET_PROJECT_FILE_DATA: createApiConf({
+    path: "/project/file/data",
+    query: ["filepath"]
+  }),
   // 复制文件
   COPY_FILE: createApiConf({
     path: "/file/copy",

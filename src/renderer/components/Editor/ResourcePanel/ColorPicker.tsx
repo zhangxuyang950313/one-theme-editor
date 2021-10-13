@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { Input, message, Tooltip } from "antd";
 import { RGBColor, SketchPicker } from "react-color";
-import { useProjectUUID } from "@/hooks/project/index";
 import { StyleGirdBackground } from "@/style";
 import { RgbaObject } from "hex-rgb";
 import ColorUtil, { HEX_FORMAT } from "src/common/utils/ColorUtil";
@@ -169,9 +168,6 @@ const ColorPicker: React.FC<{
   onChange: (x: string) => void;
 }> = props => {
   const { value, onChange } = props;
-  const uuid = useProjectUUID();
-
-  if (!uuid) return null;
   const defaultColor = new ColorUtil(value, HEX_FORMAT.ARGB).format(
     HEX_FORMAT.RGBA
   );
@@ -188,6 +184,9 @@ const ColorPicker: React.FC<{
         placeholder={defaultColor}
         onDisabled={onChange}
       />
+      {!ColorUtil.isHex(value) && (
+        <div className="error">{`非合法颜色值("${value}")`}</div>
+      )}
     </StyleColorPicker>
   );
 };
@@ -195,8 +194,12 @@ const ColorPicker: React.FC<{
 const StyleColorPicker = styled.div`
   display: flex;
   flex-direction: column;
-  .info {
+  /* .info {
     margin-bottom: 10px;
+  } */
+  .error {
+    color: ${({ theme }) => theme["@error-color"]};
+    font-size: ${({ theme }) => theme["@text-size-thirdly"]};
   }
   /* .middle-button {
     cursor: pointer;

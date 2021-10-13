@@ -9,13 +9,13 @@ import {
 import { ELEMENT_TAG } from "src/enum/index";
 import ScenarioConfigData, { ScenarioOption } from "src/data/ScenarioConfig";
 import ScenarioConfigCompiler from "server/compiler/ScenarioConfig";
-import XmlTemplate from "server/compiler/XmlTemplate";
+import XmlCompilerExtra from "server/compiler/XmlCompilerExtra";
 import XmlFileCompiler from "server/compiler/XmlFileCompiler";
 import pathUtil from "server/utils/pathUtil";
 import ERR_CODE from "src/constant/errorCode";
 import XMLNodeElement from "./XMLNodeElement";
 
-export default class ScenarioOptions extends XmlTemplate {
+export default class ScenarioOptions extends XmlCompilerExtra {
   // 默认配置路径
   static get def(): ScenarioOptions {
     return ScenarioOptions.from(pathUtil.RESOURCE_CONFIG_FILE);
@@ -41,7 +41,9 @@ export default class ScenarioOptions extends XmlTemplate {
   }
 
   private getScenarioNodes(): XMLNodeElement[] {
-    return super.getRootNode().getChildrenNodesByTagname(ELEMENT_TAG.Scenario);
+    return super
+      .getFirstChildNode()
+      .getChildrenNodesByTagname(ELEMENT_TAG.Scenario);
   }
 
   // 获取场景配置列表

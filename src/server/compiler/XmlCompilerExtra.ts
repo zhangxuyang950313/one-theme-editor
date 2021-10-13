@@ -6,20 +6,13 @@ import XMLNodeElement from "./XMLNodeElement";
 import XmlFileCompiler from "./XmlFileCompiler";
 import TempKeyValMapper from "./TempKeyValMapper";
 
-export default class XmlTemplate extends XMLNodeElement {
-  /**
-   * 获取第一个子节点
-   * @returns
-   */
-  public getRootNode(): XMLNodeElement {
-    return super.getFirstChildNode();
-  }
+export default class XmlCompilerExtra extends XMLNodeElement {
   /**
    * 获取所有 element 节数据
    * @returns
    */
   public getElementList(): Element[] {
-    return this.getRootNode()
+    return this.getFirstChildNode()
       .getChildrenNodes()
       .map(item => item.getElement());
   }
@@ -34,7 +27,8 @@ export default class XmlTemplate extends XMLNodeElement {
    * @returns
    */
   public getValueByName(name: string): string {
-    return this.getRootNode()
+    return super
+      .getFirstChildNode()
       .getFirstChildNodeByAttrValue("name", name)
       .getFirstTextChildValue();
   }
@@ -109,14 +103,14 @@ export default class XmlTemplate extends XMLNodeElement {
   }
 
   /**
-   * 匹配给定 tag 和 属性一致节点的 text 值
+   * 匹配给定 tag 和 属性一致的节点
    * @param tag
    * @param attrsEntries
    */
-  public getTextByTagAndAttributes(
+  public findNodeByTagAndAttributes(
     tag: string,
     attrsEntries: [string, string][]
-  ): string {
+  ): XMLNodeElement {
     const matchedNode = super
       .getFirstChildNode()
       .getChildrenNodes()
@@ -128,8 +122,20 @@ export default class XmlTemplate extends XMLNodeElement {
         );
         return tagIsEqual && attrsIsEqual;
       });
-    if (!matchedNode) return "";
-    return String(matchedNode.getFirstTextChildValue());
+    return matchedNode || XMLNodeElement.emptyNode;
+  }
+
+  /**
+   * 匹配给定 tag 和 属性一致节点的 text 值
+   * @param tag
+   * @param attrsEntries
+   */
+  public findTextByTagAndAttributes(
+    tag: string,
+    attrsEntries: [string, string][]
+  ): string {
+    const matchedNode = this.findNodeByTagAndAttributes(tag, attrsEntries);
+    return matchedNode ? String(matchedNode.getFirstTextChildValue()) : "";
   }
 
   /**

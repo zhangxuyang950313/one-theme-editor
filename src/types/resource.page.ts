@@ -1,4 +1,5 @@
 import { FileTypeResult, MimeType } from "file-type";
+import { Element } from "xml-js";
 import {
   ALIGN_VALUE,
   ALIGN_V_VALUE,
@@ -51,6 +52,7 @@ export type TypeImageFileData = {
 export type TypeXmlFileData = {
   fileType: "application/xml" | "";
   size: number;
+  element: Element;
 };
 
 // Xml 节点
@@ -60,6 +62,7 @@ export type TypeXmlItem = {
   name: string;
   source: string;
   sourceData: TypeSourceData;
+  fileData: TypeFileData;
   valueItems: TypeXmlValueItem[];
 };
 // <Xml/> 节点下的子节点
@@ -70,13 +73,13 @@ export type TypeXmlValueItem = {
   value: string;
 };
 
-export type TypeXmlTypeTags =
+export type TypeXmlValueTags =
   | RESOURCE_TAG.String
   | RESOURCE_TAG.Color
   | RESOURCE_TAG.Number
   | RESOURCE_TAG.Boolean;
 
-export type TypeXmlTypeBlock<T = TypeXmlTypeTags> = {
+export type TypeXmlBlocker<T = TypeXmlValueTags> = {
   readonly tag: T;
   key: string;
   name: string;
@@ -84,16 +87,16 @@ export type TypeXmlTypeBlock<T = TypeXmlTypeTags> = {
 };
 
 // String
-export type TypeStringBlock = TypeXmlTypeBlock<RESOURCE_TAG.String>;
+export type TypeStringBlocker = TypeXmlBlocker<RESOURCE_TAG.String>;
 // Color
-export type TypeColorBlock = TypeXmlTypeBlock<RESOURCE_TAG.Color>;
+export type TypeColorBlocker = TypeXmlBlocker<RESOURCE_TAG.Color>;
 // Number
-export type TypeNumberBlock = TypeXmlTypeBlock<RESOURCE_TAG.Number>;
+export type TypeNumberBlocker = TypeXmlBlocker<RESOURCE_TAG.Number>;
 // Boolean
-export type TypeBooleanBlock = TypeXmlTypeBlock<RESOURCE_TAG.Boolean>;
+export type TypeBooleanBlocker = TypeXmlBlocker<RESOURCE_TAG.Boolean>;
 
 // Image
-export type TypeFileBlock = {
+export type TypeFileBlocker = {
   readonly tag: RESOURCE_TAG.File;
   key: string;
   name: string;
@@ -112,11 +115,11 @@ export type TypeResourceDefinition = {
   key: string;
   name: string;
   children: Array<
-    | TypeFileBlock
-    | TypeStringBlock
-    | TypeColorBlock
-    | TypeNumberBlock
-    | TypeBooleanBlock
+    | TypeFileBlocker
+    | TypeStringBlocker
+    | TypeColorBlocker
+    | TypeNumberBlocker
+    | TypeBooleanBlocker
   >;
 };
 

@@ -17,8 +17,8 @@ class ColorUtil {
     if (!ColorUtil.isHex(hex)) {
       // throw new Error(`"${hex}" 不是合法颜色值`);
       console.error(`"${hex}" 不是合法颜色值`);
-      this.hex = "#ffffff";
-      this.hexType = HEX_FORMAT.RGB;
+      this.hex = "#00000000";
+      this.hexType = HEX_FORMAT.RGBA;
       return;
     }
     this.hex = hex;

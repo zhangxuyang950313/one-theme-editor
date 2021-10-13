@@ -1,21 +1,64 @@
 import path from "path";
-import { FSWatcher, WatchOptions } from "chokidar";
+import { FSWatcher } from "chokidar";
 import { useEffect, useRef } from "react";
 import { FILE_EVENT } from "src/enum";
-// import { getFileData } from "server/services/project";
+import { getFileData } from "src/common/utils/";
+import { TypeFileData } from "src/types/resource.page";
 import { useProjectRoot } from "./index";
 
-type TypeListener = (evt: FILE_EVENT) => void;
-type TypeSubscribeFile = (pathname: string, listener: TypeListener) => void;
+type TypeListener = (evt: FILE_EVENT, fileData: TypeFileData) => void;
+type TypeSubscribeFile = (
+  pathname: string,
+  options: { immediately: boolean },
+  listener: TypeListener
+) => void;
 
 let watcher: FSWatcher | null = null;
 const subscribeMap = new Map<string, Set<TypeListener>>();
 
+// // 订阅类
+// class Subscribe {
+//   private pathname: string;
+//   private options?: { immediately: boolean };
+//   private callback?: TypeListener;
+//   constructor(pathname: string, options?: { immediately: boolean }) {
+//     this.pathname = pathname;
+//     this.options = options;
+//   }
+//   on(callback: TypeListener) {
+//     this.callback = callback;
+//     const { pathname } = this;
+//     if (this.options?.immediately) {
+//       const data = getFileData(path.join(projectRoot, pathname));
+//       callback(FILE_EVENT.ADD, data);
+//     }
+//     // 存下当前生命周期内的 callback
+//     callbackList.current.push({ pathname, callback });
+//     // 将 callback 存入对应 file 的 callbackSet
+//     const callbackSet = subscribeMap.get(pathname);
+//     if (!callbackSet) {
+//       subscribeMap.set(pathname, new Set([callback]));
+//     } else {
+//       callbackSet.add(callback);
+//     }
+//     return this;
+//   }
+//   remove() {
+//     if (!this.callback) return;
+//     const callbackSet = subscribeMap.get(this.pathname);
+//     if (callbackSet?.has(this.callback)) {
+//       callbackSet.delete(this.callback);
+//     }
+//   }
+// }
+
+// setInterval(() => {
+//   console.log(subscribeMap);
+// }, 1000);
+
 // 监听当前页面文件
 // 发布订阅模式，可多次订阅同一个 file
-export default function useSubscribeProjectFile(
-  watcherOptions?: WatchOptions
-): TypeSubscribeFile {
+export default function useSubscribeProjectFile(): TypeSubscribeFile {
   const projectRoot = useProjectRoot();
   const callbackList = useRef(
     new Array<{ pathname: string; callback: TypeListener }>()
@@ -36,17 +79,16 @@ export default function useSubscribeProjectFile(
       atomic: false, // unlink 后超过 interval(atomic=true) 或 1 秒内重新被 add，则触发 change
       alwaysStat: true,
       ignorePermissionErrors: true,
-      interval: 0,
-      ...(watcherOptions || {})
+      interval: 0
     }).setMaxListeners(9999);
     watcher.add("./**/*{.xml,.png,.9.png,.jpg,.jpeg,.webp}");
     const listener = (event: FILE_EVENT, pathname: string) => {
       const callbackList = subscribeMap.get(pathname);
       if (!(callbackList instanceof Set)) return;
+      const data = getFileData(path.join(projectRoot, pathname));
       callbackList.forEach(callback => {
         console.log("文件变动", event, pathname);
-        // const data = getFileData(path.join(projectRoot, pathname), pathname);
-        callback(event);
+        callback(event, data);
       });
     };
     watcher.on(FILE_EVENT.ADD, file => listener(FILE_EVENT.ADD, file));
@@ -67,7 +109,11 @@ export default function useSubscribeProjectFile(
   }, [projectRoot]);
 
   // 订阅函数
-  const subscribe = (pathname: string, callback: TypeListener) => {
+  const subscribe: TypeSubscribeFile = (pathname, options, callback) => {
+    if (options.immediately) {
+      const data = getFileData(path.join(projectRoot, pathname));
+      callback(FILE_EVENT.ADD, data);
+    }
     // 存下当前生命周期内的 callback
     callbackList.current.push({ pathname, callback });
     // 将 callback 存入对应 file 的 callbackSet

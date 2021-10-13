@@ -4,9 +4,9 @@ import {
   TypeApplyConfig,
   TypeFileTempConfig,
   TypePackConfig,
-  TypeResourceOption,
   TypeScenarioConfig
-} from "src/types/resource.config";
+} from "src/types/scenario.config";
+import { TypeResourceOption } from "src/types/resource.config";
 import { ELEMENT_TAG, PACK_TYPE } from "src/enum/index";
 import ScenarioConfigData, {
   ApplyConfig,
@@ -15,11 +15,11 @@ import ScenarioConfigData, {
 } from "src/data/ScenarioConfig";
 import ResourceConfigCompiler from "server/compiler/ResourceConfig";
 import pathUtil from "server/utils/pathUtil";
-import XmlTemplate from "./XmlTemplate";
+import XmlCompilerExtra from "./XmlCompilerExtra";
 import XmlFileCompiler from "./XmlFileCompiler";
 
 // 解析场景配置
-export default class ScenarioConfigCompiler extends XmlTemplate {
+export default class ScenarioConfigCompiler extends XmlCompilerExtra {
   // 从文件创建实例
   static from(src: string): ScenarioConfigCompiler {
     const file = path.join(pathUtil.RESOURCE_CONFIG_DIR, src);
@@ -30,7 +30,7 @@ export default class ScenarioConfigCompiler extends XmlTemplate {
   // 解析描述文件配置
   getFileTempList(): TypeFileTempConfig[] {
     const fileTempNodes = super
-      .getRootNode()
+      .getFirstChildNode()
       .getChildrenNodesByTagname(ELEMENT_TAG.FileTemplate);
     return fileTempNodes.map(fileTempNode => {
       const itemsNode = fileTempNode.getFirstChildNodeByTagname(
@@ -61,7 +61,7 @@ export default class ScenarioConfigCompiler extends XmlTemplate {
   // 解析打包配置
   getPackageConfig(): TypePackConfig {
     const pkgNode = super
-      .getRootNode()
+      .getFirstChildNode()
       .getFirstChildNodeByTagname(ELEMENT_TAG.PackConfig);
     const items: TypePackConfig["items"] = pkgNode
       .getChildrenNodesByTagname(ELEMENT_TAG.Item)
@@ -94,7 +94,7 @@ export default class ScenarioConfigCompiler extends XmlTemplate {
   // 解析应用配置
   getApplyConfig(): TypeApplyConfig {
     const applyNode = super
-      .getRootNode()
+      .getFirstChildNode()
       .getFirstChildNodeByTagname(ELEMENT_TAG.ApplyConfig);
     const steps: TypeApplyConfig["steps"] = applyNode
       .getChildrenNodesByTagname(ELEMENT_TAG.Step)
@@ -108,7 +108,7 @@ export default class ScenarioConfigCompiler extends XmlTemplate {
   // 解析编辑器资源配置列表
   getResourceOptionList(): TypeResourceOption[] {
     return super
-      .getRootNode()
+      .getFirstChildNode()
       .getChildrenNodesByTagname(ELEMENT_TAG.ResourceConfig)
       .flatMap(node => {
         const src = node.getAttributeOf("src");

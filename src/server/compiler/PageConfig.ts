@@ -1,16 +1,14 @@
 import path from "path";
 import { URL } from "url";
-import { MimeType } from "file-type";
-import mimeTypes from "mime-types";
 import type {
   TypeResourceDefinition,
   TypeLayoutElement,
   TypeLayoutImageElement,
   TypeLayoutTextElement,
   TypeSourceData,
-  TypeFileBlock,
-  TypeXmlTypeBlock,
-  TypeXmlTypeTags,
+  TypeFileBlocker,
+  TypeXmlBlocker,
+  TypeXmlValueTags,
   TypeFileData
 } from "src/types/resource.page";
 import { TypePageConfig } from "src/types/resource.config";
@@ -25,17 +23,10 @@ import {
   ResourceDefinition,
   FileBlocker,
   XmlItem,
-  XmlTypeBlock,
-  XmlValueItem,
-  ImageFileData,
-  FileData,
-  XmlFileData
+  XmlBlocker,
+  XmlValueItem
 } from "src/data/ResourceConfig";
-import {
-  filenameIsNinePatch,
-  getFileSize,
-  getImageData
-} from "src/common/utils/index";
+import { getFileData, getImageData } from "src/common/utils/index";
 import RegexpUtil from "src/common/utils/RegexpUtil";
 import {
   ELEMENT_TAG,
@@ -50,7 +41,7 @@ import XMLNodeElement from "server/compiler/XMLNodeElement";
 import TempStringUtil from "src/common/utils/TempStringUtil";
 import electronStore from "src/common/electronStore";
 import XmlFileCompiler from "./XmlFileCompiler";
-import XmlTemplate from "./XmlTemplate";
+import XmlCompilerExtra from "./XmlCompilerExtra";
 
 export default class PageConfigCompiler extends XMLNodeElement {
   private configFile: string;
@@ -304,7 +295,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
     //   // url 中的 name 参数作为查找 xml 中数据的依据
     //   // TODO： 先固定使用 name，后续看需求是否需要自定义其他属性去 xml 中查找
     //   const valueName = query["name"] || "";
-    //   const value = new XmlTemplate(
+    //   const value = new XmlCompilerExtra(
     //     XmlFileCompiler.from(file).getElement()
     //   ).getTextByAttrNameVal(valueName);
     //   // resUrlData.set("extra", { value });
@@ -317,40 +308,21 @@ export default class PageConfigCompiler extends XMLNodeElement {
     return data;
   }
 
+  /**
+   * 获取文件数据，增加对文件解析的支持
+   * @param file
+   * @returns
+   */
   private getFileData(file: string): TypeFileData {
     // 读取缓存
-    const fileData = this.fileDataCache.get(file);
-    if (fileData) return fileData;
+    const cache = this.fileDataCache.get(file);
+    if (cache) return cache;
 
-    const mimeType = (mimeTypes.lookup(file) || "") as MimeType;
-    switch (mimeType) {
-      case "image/webp":
-      case "image/png":
-      case "image/gif":
-      case "image/jpeg": {
-        const imageData = getImageData(file);
-        const imageFileData = new ImageFileData()
-          .set("fileType", mimeType)
-          .set("width", imageData.width)
-          .set("height", imageData.height)
-          .set("size", imageData.size)
-          .set("is9patch", filenameIsNinePatch(file))
-          .create();
-        this.fileDataCache.set(file, imageFileData);
-        return imageFileData;
-      }
-      case "application/xml": {
-        const xmlFileData = new XmlFileData()
-          .set("fileType", mimeType)
-          .set("size", getFileSize(file))
-          .create();
-        this.fileDataCache.set(file, xmlFileData);
-        return xmlFileData;
-      }
-      default: {
-        return FileData.default;
-      }
-    }
+    const fileData = getFileData(file, { ignoreXmlElement: true });
+
+    this.fileDataCache.set(file, fileData);
+
+    return fileData;
   }
 
   /**
@@ -425,7 +397,10 @@ export default class PageConfigCompiler extends XMLNodeElement {
       .create();
   }
 
-  private getImageBlock(node: XMLNodeElement, rootKey: string): TypeFileBlock {
+  private getFileBlocker(
+    node: XMLNodeElement,
+    rootKey: string
+  ): TypeFileBlocker {
     const imageKey = node.getAttributeOf(":key");
     const imageItems = node.getChildrenNodes().flatMap((item, key, arr) => {
       // 不接受非 Item 节点
@@ -453,11 +428,11 @@ export default class PageConfigCompiler extends XMLNodeElement {
   }
 
   // xml 类型的块
-  private getXmlTypeBlock(
+  private getXmlBlocker(
     node: XMLNodeElement,
-    tag: TypeXmlTypeTags,
+    tag: TypeXmlValueTags,
     rootKey: string
-  ): TypeXmlTypeBlock {
+  ): TypeXmlBlocker {
     const xmlItemKey = node.getAttributeOf(":key");
     const xmlItems = node.getChildrenNodes().flatMap((item, k, arr) => {
       // 不接受非 Xml 节点
@@ -475,11 +450,11 @@ export default class PageConfigCompiler extends XMLNodeElement {
           const cacheKey = JSON.stringify({ source, tagname, attributes });
           let defaultVal = this.xmlValueCache.get(cacheKey);
           if (!defaultVal) {
-            defaultVal = new XmlTemplate(
+            defaultVal = new XmlCompilerExtra(
               XmlFileCompiler.from(
                 this.resolveResourcePath(sourceData.src)
               ).getElement()
-            ).getTextByTagAndAttributes(tagname, attributes);
+            ).findTextByTagAndAttributes(tagname, attributes);
             this.xmlValueCache.set(cacheKey, defaultVal);
           }
           return new XmlValueItem()
@@ -490,16 +465,20 @@ export default class PageConfigCompiler extends XMLNodeElement {
             .create();
         });
       this.sourceKeyValMap.set(`${rootKey}/${xmlItemKey}/${itemKey}`, source);
+      const fileData = this.getFileData(
+        this.resolveResourcePath(sourceData.src)
+      );
       return new XmlItem()
         .set("tag", item.getTagname())
         .set("key", itemKey)
         .set("name", item.getAttributeOf("name"))
         .set("source", source)
         .set("sourceData", sourceData)
+        .set("fileData", fileData)
         .set("valueItems", valueItems)
         .create();
     });
-    return new XmlTypeBlock()
+    return new XmlBlocker()
       .set("tag", tag)
       .set("key", xmlItemKey)
       .set("name", node.getAttributeOf("name"))
@@ -520,14 +499,14 @@ export default class PageConfigCompiler extends XMLNodeElement {
           switch (tag) {
             // 图片类型资源
             case RESOURCE_TAG.File: {
-              return this.getImageBlock(item, key);
+              return this.getFileBlocker(item, key);
             }
             // xml 值类型资源
             case RESOURCE_TAG.String:
             case RESOURCE_TAG.Number:
             case RESOURCE_TAG.Color:
             case RESOURCE_TAG.Boolean: {
-              return this.getXmlTypeBlock(item, tag, key);
+              return this.getXmlBlocker(item, tag, key);
             }
             default: {
               return [];

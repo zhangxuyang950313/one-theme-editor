@@ -97,38 +97,4 @@ export default class XmlFileCompiler extends XMLNodeElement {
   // public compile(xmlStr: string): Element {
   //   return XmlFileCompiler.compile(xmlStr);
   // }
-
-  /**
-   * 以第一个节点作为根节点
-   * @returns 返回这个节点的 node 实例
-   */
-  public getRootNode(): XMLNodeElement {
-    return super.getFirstChildNode();
-  }
-
-  /**
-   * 获取根节点的子节点实例列表
-   * @returns
-   */
-  public getRootChildrenNodes(): XMLNodeElement[] {
-    return this.getRootNode().getChildrenNodes();
-  }
-
-  /**
-   * 获取根节点的第一个 {tagname} 节点
-   * @param tagname
-   * @returns
-   */
-  public getRootFirstChildNodeOf(tagname: string): XMLNodeElement {
-    return this.getRootNode().getFirstChildNodeByTagname(tagname);
-  }
-
-  /**
-   * 获取根节点所有 {tagname} 节点
-   * @param tagname
-   * @returns
-   */
-  public getRootChildrenNodesOf(tagname: string): XMLNodeElement[] {
-    return this.getRootNode().getChildrenNodesByTagname(tagname);
-  }
 }

@@ -3,7 +3,7 @@
 import React, { useLayoutEffect } from "react";
 import { Button } from "antd";
 import PageConfigCompiler from "server/compiler/PageConfig";
-import XmlTemplate from "server/compiler/XmlTemplate";
+import XmlCompilerExtra from "server/compiler/XmlCompilerExtra";
 import TempKeyValMapper from "server/compiler/TempKeyValMapper";
 import ResourceConfigCompiler from "server/compiler/ResourceConfig";
 
@@ -25,7 +25,7 @@ const Test: React.FC = () => {
     // const page = new PageConfig(pageFile);
     // console.log(page.getData());
 
-    const xmlTemplate = new XmlTemplate(xmlTempFile);
+    const xmlTemplate = new XmlCompilerExtra(xmlTempFile);
     const data = xmlTemplate.getElementList();
     const set = new Set(data);
     const has = set.has({ type: "element" });
