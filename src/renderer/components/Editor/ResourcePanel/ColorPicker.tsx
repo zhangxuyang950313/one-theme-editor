@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { Input, message, Tooltip } from "antd";
+import { RightCircleOutlined } from "@ant-design/icons";
 import { RGBColor, SketchPicker } from "react-color";
 import { StyleGirdBackground } from "@/style";
 import { RgbaObject } from "hex-rgb";
@@ -164,26 +165,30 @@ const StyleColorPick = styled.div`
 
 // 颜色值选择器
 const ColorPicker: React.FC<{
+  defaultValue: string;
   value: string;
+  colorFormatter: HEX_FORMAT;
   onChange: (x: string) => void;
 }> = props => {
-  const { value, onChange } = props;
-  const defaultColor = new ColorUtil(value, HEX_FORMAT.ARGB).format(
+  const { value, defaultValue, colorFormatter, onChange } = props;
+  const defaultColor = new ColorUtil(defaultValue, colorFormatter).format(
     HEX_FORMAT.RGBA
   );
 
   return (
     <StyleColorPicker>
-      {/* <ColorBox color={defaultColor} /> */}
-      {/* <RightCircleOutlined
+      <div className="content-wrapper">
+        <ColorBox color={defaultColor} />
+        <RightCircleOutlined
           className="middle-button"
-          onClick={() => onChange(defaultValue)}
-        /> */}
-      <ColorPick
-        defaultColor={value}
-        placeholder={defaultColor}
-        onDisabled={onChange}
-      />
+          onClick={() => onChange(defaultColor)}
+        />
+        <ColorPick
+          defaultColor={value}
+          placeholder={defaultColor}
+          onDisabled={onChange}
+        />
+      </div>
       {!ColorUtil.isHex(value) && (
         <div className="error">{`非合法颜色值("${value}")`}</div>
       )}
@@ -197,11 +202,15 @@ const StyleColorPicker = styled.div`
   /* .info {
     margin-bottom: 10px;
   } */
+  .content-wrapper {
+    display: flex;
+    align-items: center;
+  }
   .error {
     color: ${({ theme }) => theme["@error-color"]};
     font-size: ${({ theme }) => theme["@text-size-thirdly"]};
   }
-  /* .middle-button {
+  .middle-button {
     cursor: pointer;
     color: ${({ theme }) => theme["@text-color-secondary"]};
     font-size: 22px;
@@ -210,7 +219,7 @@ const StyleColorPicker = styled.div`
     &:hover {
       opacity: 0.5;
     }
-  } */
+  }
 `;
 
 export default ColorPicker;

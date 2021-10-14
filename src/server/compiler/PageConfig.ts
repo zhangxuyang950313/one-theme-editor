@@ -40,6 +40,7 @@ import pathUtil from "server/utils/pathUtil";
 import XMLNodeElement from "server/compiler/XMLNodeElement";
 import TempStringUtil from "src/common/utils/TempStringUtil";
 import electronStore from "src/common/electronStore";
+import md5 from "md5";
 import XmlFileCompiler from "./XmlFileCompiler";
 import XmlCompilerExtra from "./XmlCompilerExtra";
 
@@ -48,7 +49,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
   private pageNamespace: string;
   private pageConfig: string;
   private resourceRoot: string;
-  private sourceKeyValMap: Map<string, string>;
+  private keyValMap: Map<string, string>;
   private sourceDataCache: Map<string, TypeSourceData>;
   private fileDataCache: Map<string, TypeFileData>;
   private imageDataCache: Map<string, TypeImageData>;
@@ -64,7 +65,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
     this.pageNamespace = path.dirname(data.config);
     this.pageConfig = path.normalize(data.config);
     this.resourceRoot = path.join(pathUtil.RESOURCE_CONFIG_DIR, data.namespace);
-    this.sourceKeyValMap = new Map();
+    this.keyValMap = new Map();
     this.sourceDataCache = new Map();
     this.fileDataCache = new Map();
     this.imageDataCache = new Map();
@@ -411,7 +412,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
       const fileData = this.getFileData(
         this.resolveResourcePath(sourceData.src)
       );
-      this.sourceKeyValMap.set(`${rootKey}/${imageKey}/${itemKey}`, source);
+      this.keyValMap.set(path.join(rootKey, imageKey, itemKey), source);
       return new FileItem()
         .set("key", itemKey)
         .set("comment", arr[key - 1]?.getComment())
@@ -443,7 +444,8 @@ export default class PageConfigCompiler extends XMLNodeElement {
       const valueItems = item
         .getChildrenNodes()
         .flatMap((XmlChild, kk, arr) => {
-          if (!XmlChild.isElement()) return [];
+          if (!XmlChild.isElement) return [];
+          const valueKey = XmlChild.getAttributeOf(":key");
           const tagname = XmlChild.getTagname();
           const attributes = XmlChild.getAttributeEntries();
           // 获取 tag 和 attributes 匹配的节点的 text 值作为默认值
@@ -454,20 +456,30 @@ export default class PageConfigCompiler extends XMLNodeElement {
               XmlFileCompiler.from(
                 this.resolveResourcePath(sourceData.src)
               ).getElement()
-            ).findTextByTagAndAttributes(tagname, attributes);
+            ).findTextByTagAndAttrs(tagname, attributes);
             this.xmlValueCache.set(cacheKey, defaultVal);
           }
+          const template = XmlCompilerExtra.generateXmlNodeStr({
+            tag: tagname,
+            attributes: Object.fromEntries(attributes)
+          });
+          this.keyValMap.set(
+            path.join(rootKey, xmlItemKey, itemKey, valueKey),
+            defaultVal
+          );
           return new XmlValueItem()
+            .set("md5", md5(JSON.stringify({ tag: tagname, attributes })))
             .set("tag", tagname)
             .set("comment", arr[kk - 1]?.getComment())
             .set("attributes", attributes)
             .set("value", defaultVal)
+            .set("template", template)
             .create();
         });
-      this.sourceKeyValMap.set(`${rootKey}/${xmlItemKey}/${itemKey}`, source);
       const fileData = this.getFileData(
         this.resolveResourcePath(sourceData.src)
       );
+      this.keyValMap.set(path.join(rootKey, xmlItemKey, itemKey), source);
       return new XmlItem()
         .set("tag", item.getTagname())
         .set("key", itemKey)
@@ -532,7 +544,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
         const resolveTempStrWithAttr = (attr: string) => {
           const replaced = TempStringUtil.replace(
             node.getAttributeOf(attr),
-            this.sourceKeyValMap
+            this.keyValMap
           );
           node.setAttributeOf(attr, replaced);
           return !!replaced;

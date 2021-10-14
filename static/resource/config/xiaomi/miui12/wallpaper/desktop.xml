@@ -64,25 +64,17 @@
         <Color name="桌面模块" :key="home">
             <!-- 桌面模块 -->
             <Xml :key="com.miui.home" name="桌面模块xml" src="src://com.miui.home/theme_values.xml">
-                <!-- 图标文字 -->
+                <!-- 桌面图标文字颜色 -->
                 <color :key="icon_title_text" name="icon_title_text"/>
-                <!-- 图标文字 -->
-                <color name="icon_title_text2"/>
-            </Xml>
-            <!-- 壁纸模块 -->
-            <Xml :key="wallpaper" name="壁纸模块xml" src="src://wallpaper/theme_values.xml">
-                <!-- 图标文字 -->
-                <color name="icon_title_text"/>
-                <!-- 图标文字 -->
-                <color name="icon_title_text2"/>
+                <!-- 桌面图标文字（深色壁纸） -->
+                <color name="icon_title_text_light"/>
             </Xml>
         </Color>
         <Color name="壁纸模块" :key="wallpaper">
+            <!-- 壁纸模块 -->
             <Xml :key="wallpaper" name="壁纸模块xml" src="src://wallpaper/theme_values.xml">
-                <!-- 图标文字 -->
-                <color name="icon_title_text"/>
-                <!-- 图标文字 -->
-                <color name="icon_title_text2"/>
+                <!-- 标题栏文字颜色 -->
+                <color name="action_bar_title_text_color_light"/>
             </Xml>
         </Color>
     </Resource>
@@ -113,9 +105,9 @@
         <Number name="桌面模块" :key="home">
             <Xml :key="com.miui.home" name="桌面模块xml" src="src://com.miui.home/theme_values.xml">
                 <!-- 尺寸值测试1 -->
-                <dimen name="dimen_test1"/>
+                <integer name="integer_test1" package="miui"/>
                 <!-- 尺寸值测试2 -->
-                <dimen name="dimen_test2"/>
+                <integer name="integer_test2" package="miui"/>
             </Xml>
         </Number>
     </Resource>

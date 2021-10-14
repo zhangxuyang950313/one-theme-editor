@@ -6,51 +6,31 @@ import {
 } from "src/types/resource.config";
 import { TypeScenarioConfig } from "src/types/scenario.config";
 import { TypeProjectDataDoc, TypeProjectInfo } from "src/types/project";
+import { TypeXmlFileData } from "src/types/resource.page";
 
 export enum ACTION_TYPE {
   // 初始化
   INIT_EDITOR = "INIT_EDITOR",
-  // 设置资源配置
-  SET_RESOURCE_CONFIG = "SET_RESOURCE_CONFIG",
+  // 设置工程新数据
+  SET_PROJECT_DATA = "SET_PROJECT_DATA",
+  // 设置工程描述数据
+  SET_PROJECT_INFO = "SET_PROJECT_INFO",
   // 设置场景配置
   SET_SCENARIO_CONFIG = "SET_SCENARIO_CONFIG",
+  // 设置资源配置
+  SET_RESOURCE_CONFIG = "SET_RESOURCE_CONFIG",
   // 设置模块配置
   SET_MODULE_CONFIG = "SET_MODULE_CONFIG",
   // 设置页面配置
   SET_PAGE_OPTION = "SET_PAGE_OPTION",
   // 添加页面配置数据映射
   PATCH_PAGE_CONFIG = "PATCH_PAGE_CONFIG",
-
-  // 设置工程新数据
-  SET_PROJECT_DATA = "SET_PROJECT_DATA",
-  // 设置工程描述数据
-  SET_PROJECT_INFO = "SET_PROJECT_INFO"
+  // 添加 xml 文件数据
+  PATCH_XML_FILE_DATA = "PATCH_XML_FILE_DATA"
 }
 
 type TypeActionInitEditor = {
   type: typeof ACTION_TYPE.INIT_EDITOR;
-};
-
-type TypeActionSetResourceConfig = {
-  type: typeof ACTION_TYPE.SET_RESOURCE_CONFIG;
-  payload: TypeResourceConfig;
-};
-
-type TypeActionSetScenarioConfig = {
-  type: typeof ACTION_TYPE.SET_SCENARIO_CONFIG;
-  payload: TypeScenarioConfig;
-};
-
-// 设置模块
-type TypeActionSetModuleConf = {
-  type: typeof ACTION_TYPE.SET_MODULE_CONFIG;
-  payload: TypeModuleConfig;
-};
-
-// 设置页面
-type TypeActionSetPageConf = {
-  type: typeof ACTION_TYPE.SET_PAGE_OPTION;
-  payload: TypePageOption;
 };
 
 // 设置工程数据
@@ -65,22 +45,49 @@ type TypeActionSetProjectInfo = {
   payload: TypeProjectInfo;
 };
 
+type TypeActionSetScenarioConfig = {
+  type: typeof ACTION_TYPE.SET_SCENARIO_CONFIG;
+  payload: TypeScenarioConfig;
+};
+
+type TypeActionSetResourceConfig = {
+  type: typeof ACTION_TYPE.SET_RESOURCE_CONFIG;
+  payload: TypeResourceConfig;
+};
+// 设置模块
+type TypeActionSetModuleConf = {
+  type: typeof ACTION_TYPE.SET_MODULE_CONFIG;
+  payload: TypeModuleConfig;
+};
+
+// 设置页面
+type TypeActionSetPageConf = {
+  type: typeof ACTION_TYPE.SET_PAGE_OPTION;
+  payload: TypePageOption;
+};
+
 // 更新页面配置表
 type TypeActionPatchPageConfMap = {
   type: typeof ACTION_TYPE.PATCH_PAGE_CONFIG;
   payload: TypePageConfig;
 };
 
+type TypeActionPatchXmlFileDataMap = {
+  type: typeof ACTION_TYPE.PATCH_XML_FILE_DATA;
+  payload: { src: string; fileData: TypeXmlFileData | null };
+};
+
 // main actions
 export type TypeEditorActions =
   | TypeActionInitEditor
+  | TypeActionSetProjectData
+  | TypeActionSetProjectInfo
   | TypeActionSetScenarioConfig
   | TypeActionSetResourceConfig
   | TypeActionSetModuleConf
   | TypeActionSetPageConf
-  | TypeActionSetProjectData
-  | TypeActionSetProjectInfo
-  | TypeActionPatchPageConfMap;
+  | TypeActionPatchPageConfMap
+  | TypeActionPatchXmlFileDataMap;
 
 export function ActionInitEditor(): TypeActionInitEditor {
   return { type: ACTION_TYPE.INIT_EDITOR };
@@ -133,4 +140,10 @@ export function ActionPatchPageConfMap(
   payload: TypePageConfig
 ): TypeActionPatchPageConfMap {
   return { type: ACTION_TYPE.PATCH_PAGE_CONFIG, payload };
+}
+
+export function ActionPatchXmlFileDataMap(
+  payload: TypeActionPatchXmlFileDataMap["payload"]
+): TypeActionPatchXmlFileDataMap {
+  return { type: ACTION_TYPE.PATCH_XML_FILE_DATA, payload };
 }

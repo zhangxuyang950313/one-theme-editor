@@ -42,25 +42,23 @@ export async function releaseXmlTemplate(
   const fromNode = templateXml.findNodeByTagAndAttributes(tag, attributes);
   const targetNode = releaseXml.findNodeByTagAndAttributes(tag, attributes);
   // 空文件用模板替换
-  if (releaseXml.isEmpty()) {
+  if (releaseXml.isEmpty) {
     templateXml.getFirstChildNode().removeChildren();
     releaseXml.setNode(templateXml);
   }
   // 创建 text value 并替换子节点
-  if (fromNode.isEmpty()) {
-    const nodeTemp = XmlCompilerExtra.createEmptyElementNode()
-      .setTagname(tag)
-      .setAttributes(Object.fromEntries(attributes));
-    const xmlTemp = XmlCompilerExtra.createEmptyRootNode(false)
-      .appendChild(nodeTemp)
-      .buildXml();
+  if (fromNode.isEmpty) {
+    const xmlTemp = XmlCompilerExtra.generateXmlNodeStr({
+      tag,
+      attributes: Object.fromEntries(attributes)
+    });
     throw new Error(`模板中不存在：${xmlTemp}`);
   }
   fromNode
     .getFirstChildNode()
     .replaceNode(XmlCompilerExtra.createTextNode(value));
   // 插入工程文件
-  if (targetNode.isEmpty()) {
+  if (targetNode.isEmpty) {
     const releaseRoot = releaseXml.getFirstChildNode();
     releaseRoot.appendChild(fromNode);
   } else {

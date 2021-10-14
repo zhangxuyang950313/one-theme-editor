@@ -53,6 +53,7 @@ export type TypeXmlFileData = {
   fileType: "application/xml" | "";
   size: number;
   element: Element;
+  valueMapper: Record<string, string | undefined>;
 };
 
 // Xml 节点
@@ -67,10 +68,12 @@ export type TypeXmlItem = {
 };
 // <Xml/> 节点下的子节点
 export type TypeXmlValueItem = {
+  md5: string;
   tag: string;
   comment: string;
   attributes: [string, string][];
   value: string;
+  template: string;
 };
 
 export type TypeXmlValueTags =

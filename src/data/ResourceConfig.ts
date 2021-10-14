@@ -59,7 +59,8 @@ export class XmlFileData extends AbstractDataModel<TypeXmlFileData> {
   protected data: TypeXmlFileData = {
     fileType: "",
     size: 0,
-    element: XMLNodeElement.createEmptyNode().getElement()
+    element: XMLNodeElement.createEmptyNode().getElement(),
+    valueMapper: {}
   };
   static get default(): TypeXmlFileData {
     return new XmlFileData().create();
@@ -93,9 +94,11 @@ export class FileItem extends AbstractDataModel<TypeFileItem> {
 export class XmlValueItem extends AbstractDataModel<TypeXmlValueItem> {
   protected data: TypeXmlValueItem = {
     comment: "",
+    md5: "",
     tag: "",
     attributes: [],
-    value: ""
+    value: "",
+    template: ""
   };
 }
 

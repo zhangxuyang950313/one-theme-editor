@@ -12,6 +12,7 @@ import { TypeImageData, TypeImageMapper } from "src/types/project";
 import { TypeFileData } from "src/types/resource.page";
 import { FileData, ImageFileData, XmlFileData } from "src/data/ResourceConfig";
 import XmlFileCompiler from "server/compiler/XmlFileCompiler";
+import XmlCompilerExtra from "server/compiler/XmlCompilerExtra";
 
 export const base64Regex = /^data:image\/\w+;base64,/;
 
@@ -337,12 +338,26 @@ export function getFileData(
       return imageFileData;
     }
     case "application/xml": {
+      const xmlFileCompiler = XmlFileCompiler.from(file);
+      // 生成 value 映射
+      const valueMapper = xmlFileCompiler
+        .getFirstChildNode()
+        .getChildrenNodes()
+        .reduce<Record<string, string>>((prev, item) => {
+          if (!item.isElement) return prev;
+          const template = XmlCompilerExtra.generateXmlNodeStr({
+            tag: item.getTagname(),
+            attributes: item.getAttributes()
+          });
+          prev[template] = item.getFirstTextChildValue();
+          return prev;
+        }, {});
       const xmlFileData = new XmlFileData()
         .set("fileType", mimeType)
-        .set("size", getFileSize(file));
+        .set("size", getFileSize(file))
+        .set("valueMapper", valueMapper);
       if (!options?.ignoreXmlElement) {
-        const element = XmlFileCompiler.from(file).getElement();
-        xmlFileData.set("element", element);
+        xmlFileData.set("element", xmlFileCompiler.getElement());
       }
       return xmlFileData.create();
     }

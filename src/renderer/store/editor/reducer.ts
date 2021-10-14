@@ -16,6 +16,7 @@ import ProjectData from "src/data/ProjectData";
 import ScenarioConfigData from "src/data/ScenarioConfig";
 import electronStore from "src/common/electronStore";
 import pathUtil from "server/utils/pathUtil";
+import { TypeXmlFileData } from "src/types/resource.page";
 import { ACTION_TYPE, TypeEditorActions } from "./action";
 
 // main states
@@ -25,7 +26,8 @@ export type TypeEditorState = {
   resourceConfig: TypeResourceConfig;
   currentModule: TypeModuleConfig;
   currentPage: TypePageOption;
-  pageConfigMap: Record<string, TypePageConfig>;
+  pageConfigMap: Record<string, TypePageConfig | undefined>;
+  xmlFileDataMap: Record<string, TypeXmlFileData | undefined>;
 };
 
 const defaultState: TypeEditorState = {
@@ -34,7 +36,8 @@ const defaultState: TypeEditorState = {
   resourceConfig: ResourceConfigData.default,
   currentModule: ModuleConfig.default,
   currentPage: PageOption.default,
-  pageConfigMap: {}
+  pageConfigMap: {},
+  xmlFileDataMap: {}
 };
 
 const editorState: TypeEditorState = {
@@ -93,12 +96,28 @@ export default function EditorReducer(
         currentPage: action.payload
       });
     }
-    // 页面数据
+    // 页面配置数据
     case ACTION_TYPE.PATCH_PAGE_CONFIG: {
       return updateState(state, {
         pageConfigMap: {
           ...state.pageConfigMap,
           [action.payload.config]: action.payload
+        }
+      });
+    }
+    // xml 文件数据
+    case ACTION_TYPE.PATCH_XML_FILE_DATA: {
+      const { src, fileData } = action.payload;
+      if (fileData === null) {
+        delete state.xmlFileDataMap[src];
+        return updateState(state, {
+          xmlFileDataMap: { ...state.xmlFileDataMap }
+        });
+      }
+      return updateState(state, {
+        xmlFileDataMap: {
+          ...state.xmlFileDataMap,
+          [src]: fileData
         }
       });
     }

@@ -1,4 +1,4 @@
-import { Element } from "xml-js";
+import { Attributes, Element } from "xml-js";
 import { getPlaceholderVal } from "src/common/utils/index";
 import { TypeXmlTempKeyValMap } from "src/types/resource.page";
 import { TypeKeyValue } from "src/types";
@@ -130,7 +130,7 @@ export default class XmlCompilerExtra extends XMLNodeElement {
    * @param tag
    * @param attrsEntries
    */
-  public findTextByTagAndAttributes(
+  public findTextByTagAndAttrs(
     tag: string,
     attrsEntries: [string, string][]
   ): string {
@@ -172,5 +172,27 @@ export default class XmlCompilerExtra extends XMLNodeElement {
         return kvMap.get(placeholder) || textVal;
       }
     });
+  }
+
+  /**
+   * 生成一段 xml 片段字符串
+   * @param opt
+   * @returns
+   */
+  static generateXmlNodeStr(opt: {
+    tag: string;
+    attributes: Attributes;
+    elements?: Array<Element>;
+  }): string {
+    const nodeTemp = XmlCompilerExtra.createEmptyElementNode()
+      .setTagname(opt.tag)
+      .setAttributes(opt.attributes);
+    if (Array.isArray(opt.elements)) {
+      opt.elements.forEach(nodeTemp.appendChildrenElement);
+    }
+    const xmlTemp = XmlCompilerExtra.createEmptyRootNode(false)
+      .appendChild(nodeTemp)
+      .buildXml();
+    return xmlTemp;
   }
 }

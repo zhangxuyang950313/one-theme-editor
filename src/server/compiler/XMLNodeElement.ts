@@ -22,17 +22,17 @@ class XMLNodeBase {
   }
 
   // 当前是空节点
-  public isEmpty(): boolean {
+  public get isEmpty(): boolean {
     return Object.keys(this.element).length === 0;
   }
 
   // 当前是元素节点
-  public isElement(): boolean {
+  public get isElement(): boolean {
     return this.element.type === "element";
   }
 
   // 当前是注释节点
-  public isComment(): boolean {
+  public get isComment(): boolean {
     return this.element.type === "comment";
   }
 
@@ -295,7 +295,7 @@ class XMLNodeHandler extends XMLNodeChildren {
 
   // 替换节点
   public replaceNode(newNode: XMLNodeElement): this {
-    if (newNode.isEmpty()) return this;
+    if (newNode.isEmpty) return this;
     Object.assign(this.clear().getElement(), newNode.getElement());
     return this;
   }
