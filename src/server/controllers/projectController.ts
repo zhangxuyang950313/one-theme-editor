@@ -151,7 +151,7 @@ export default function projectController(service: Express): void {
     const { body, query } = request;
     checkParamsKey(query, apiConfig.XML_TEMPLATE_WRITE.query);
     checkParamsKey(body, apiConfig.XML_TEMPLATE_WRITE.bodyKeys);
-    const data = await releaseXmlTemplate(query.uuid, body);
+    const data = await releaseXmlTemplate(body);
     response.send(result.success(data));
   });
 

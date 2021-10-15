@@ -7,18 +7,17 @@ import {
   TypeReleaseXmlTempPayload,
   UnionTupleToObjectKey
 } from "src/types/request";
-import { findProjectByQuery } from "server/dbHandler/project";
 import XmlFileCompiler from "server/compiler/XmlFileCompiler";
+import electronStore from "src/common/electronStore";
 
 /**
  * 输出被 key value 处理过模板字符串的 xml 模板
  * @param data
  */
 export async function releaseXmlTemplate(
-  uuid: string,
   data: TypeReleaseXmlTempPayload
 ): Promise<Record<string, string>> {
-  const project = await findProjectByQuery({ uuid });
+  const project = electronStore.get("projectData");
   const { tag, attributes, value, src } = data;
   const resourceRoot = path.join(
     pathUtil.RESOURCE_CONFIG_DIR,
@@ -67,7 +66,7 @@ export async function releaseXmlTemplate(
   const xmlStr = releaseXml.buildXml();
   fse.ensureDirSync(path.dirname(releaseXmlFile));
   fse.writeFileSync(releaseXmlFile, xmlStr);
-  return { uuid, value: value, release: releaseXmlFile };
+  return { value: value, release: releaseXmlFile };
 }
 
 /**

@@ -1,6 +1,5 @@
 import path from "path";
 import fse from "fs-extra";
-import { v4 as UUID } from "uuid";
 import { dialog } from "electron";
 
 import { isDev } from "@/core/constant";

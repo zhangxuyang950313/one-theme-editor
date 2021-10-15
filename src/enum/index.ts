@@ -92,11 +92,11 @@ export enum ALIGN_V_VALUE {
   BOTTOM = "bottom"
 }
 
-// 颜色格式化
+// 颜色格式
 export enum HEX_FORMAT {
-  RGBA = "rgba",
-  ARGB = "argb",
-  RGB = "rgb"
+  RGBA = "RGBA",
+  ARGB = "ARGB",
+  RGB = "RGB"
 }
 
 export enum PLACEHOLDER {

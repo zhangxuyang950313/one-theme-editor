@@ -60,7 +60,7 @@
     </Resource>
 
 
-    <Resource name="颜色值" :key="color">
+    <Resource name="颜色值" formatter="ARGB" :key="color">
         <Color name="桌面模块" :key="home">
             <!-- 桌面模块 -->
             <Xml :key="com.miui.home" name="桌面模块xml" src="src://com.miui.home/theme_values.xml">

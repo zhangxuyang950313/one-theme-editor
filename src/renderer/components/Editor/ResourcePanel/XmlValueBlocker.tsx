@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
-import { Button } from "antd";
 import { apiWriteXmlTemplate } from "@/request";
 import { useProjectUUID } from "@/hooks/project/index";
 import { useEditorSelector } from "@/store";
@@ -11,6 +10,7 @@ import {
   TypeXmlValueTags
 } from "src/types/resource.page";
 import useSubscribeProjectFile from "@/hooks/project/useSubscribeProjectFile";
+import { CloseOutlined } from "@ant-design/icons";
 import ColorPicker from "./ColorPicker";
 import BooleanSelector from "./BooleanSelector";
 import NumberInput from "./NumberInput";
@@ -29,9 +29,9 @@ const XmlValueEditor: React.FC<{
     case RESOURCE_TAG.Color: {
       return (
         <ColorPicker
-          defaultValue={defaultValue}
           value={value}
-          colorFormatter={HEX_FORMAT.ARGB}
+          defaultValue={defaultValue}
+          format={HEX_FORMAT.ARGB}
           onChange={onChange}
         />
       );
@@ -93,11 +93,12 @@ const XmlValueItem: React.FC<{
           use={props.use}
           onChange={props.onChange}
         />
-        <div>
-          <Button.Group>
-            <Button type="primary">默认</Button>
-            <Button type="default">删除</Button>
-          </Button.Group>
+        <div className="handle-wrapper">
+          {/* 删除 */}
+          <CloseOutlined
+            className="delete"
+            onClick={() => props.onChange("")}
+          />
         </div>
       </div>
     </StyleXmlValueItem>
@@ -125,6 +126,14 @@ const StyleXmlValueItem = styled.div`
     justify-content: space-between;
     height: 70px;
     /* margin-bottom: 20px; */
+  }
+  .handle-wrapper {
+    padding-left: 20px;
+    border-left: 1px solid;
+    border-left-color: ${({ theme }) => theme["@border-color-base"]};
+    .delete {
+      color: red;
+    }
   }
 `;
 

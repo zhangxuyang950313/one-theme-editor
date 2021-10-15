@@ -1,17 +1,21 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { RgbaObject } from "hex-rgb";
 import { Input, message, Tooltip } from "antd";
 import { RightCircleOutlined } from "@ant-design/icons";
 import { RGBColor, SketchPicker } from "react-color";
-import { StyleGirdBackground } from "@/style";
-import { RgbaObject } from "hex-rgb";
 import ColorUtil, { HEX_FORMAT } from "src/common/utils/ColorUtil";
+import { StyleGirdBackground } from "@/style";
 
 // 颜色小方块
-const ColorBox: React.FC<{ color: string; onClick?: () => void }> = props => {
-  const { color, onClick } = props;
+const ColorBox: React.FC<{
+  color: string;
+  tipColor: string;
+  onClick?: () => void;
+}> = props => {
+  const { color, tipColor, onClick } = props;
   return (
-    <Tooltip title={color}>
+    <Tooltip title={tipColor}>
       <StyleColorBox
         girdSize={10}
         color={color}
@@ -42,59 +46,31 @@ const StyleColorBox = styled(StyleGirdBackground)<{ color: string }>`
 `;
 
 // rgba 和 react-color-picker 数据互转
-const rgba2sketch = (rgba: RgbaObject): RGBColor => {
-  const { red, green, blue, alpha } = rgba;
-  return { a: alpha, r: red, g: green, b: blue };
-};
+// const rgba2sketch = (rgba: RgbaObject): RGBColor => {
+//   const { red, green, blue, alpha } = rgba;
+//   return { a: alpha, r: red, g: green, b: blue };
+// };
 const sketch2rgba = (sketch: RGBColor): RgbaObject => {
   const { r, g, b, a } = sketch;
-  return { alpha: a || 1, red: r, green: g, blue: b };
-};
-
-type TypeColorChangerProps = {
-  defaultColor: string;
-  placeholder: string;
-  onChange?: (color: string) => void;
-  onDisabled?: (color: string) => void;
+  return { alpha: a ?? 1, red: r, green: g, blue: b };
 };
 
 // 颜色选择器
-function ColorPick(props: TypeColorChangerProps): JSX.Element {
-  const { defaultColor, placeholder, onChange, onDisabled } = props;
-  const [inputColor, setInputColor] = useState(defaultColor);
-  const [cssColor, setCssColor] = useState("");
-  const [rgbColor, setRgbColor] = useState<RgbaObject>();
-  const RefInputPrev = useRef(inputColor);
+function ColorPickerBox(props: {
+  color: string; // RGBAHex
+  tipColor: string;
+  onChange?: (color: string) => void;
+  onDisabled?: (color: string) => void;
+}): JSX.Element {
+  const { color, tipColor, onChange, onDisabled } = props;
+  const [colorRGBAHex, setColorRGBAHex] = useState(color);
 
   useEffect(() => {
-    try {
-      // TODO: 根据项目配置颜色格式转换
-      if (!defaultColor) return;
-      const colorUtil = new ColorUtil(defaultColor, HEX_FORMAT.ARGB);
-      setRgbColor(colorUtil.getRgbaData());
-    } catch (err) {
-      console.log(err);
-    }
-  }, []);
-
-  useEffect(() => {
-    RefInputPrev.current = defaultColor;
-    setInputColor(defaultColor);
-  }, [defaultColor]);
-
-  useEffect(() => {
-    try {
-      if (!ColorUtil.isUnit8Hex(inputColor)) return;
-      const colorUtil = new ColorUtil(inputColor, HEX_FORMAT.ARGB);
-      setRgbColor(colorUtil.getRgbaData());
-      setCssColor(colorUtil.format(HEX_FORMAT.RGBA));
-    } catch (err) {
-      console.log(err);
-    }
-  }, [inputColor]);
+    setColorRGBAHex(color);
+  }, [color]);
 
   return (
-    <StyleColorPick>
+    <StyleColorPickerBox>
       <Tooltip
         overlayInnerStyle={{
           color: "black",
@@ -109,87 +85,132 @@ function ColorPick(props: TypeColorChangerProps): JSX.Element {
           <SketchPicker
             width="auto"
             // presetColors={getLocalStorage.presetColors}
-            color={rgbColor ? rgba2sketch(rgbColor) : ""}
-            onChange={color => {
-              const rgbaData = sketch2rgba(color.rgb);
-              const argbStr = ColorUtil.rgbaFormat(rgbaData, HEX_FORMAT.ARGB);
-              setInputColor(argbStr);
-              onChange && onChange(argbStr);
+            color={colorRGBAHex}
+            onChange={({ rgb }) => {
+              const rgba = sketch2rgba(rgb);
+              const rgbaHex = ColorUtil.rgba(rgba).format(HEX_FORMAT.RGBA);
+              setColorRGBAHex(rgbaHex);
+              onChange && onChange(rgbaHex);
             }}
           />
         }
         onVisibleChange={visible => {
-          !visible && onDisabled && onDisabled(inputColor);
+          !visible && onDisabled && onDisabled(colorRGBAHex);
         }}
       >
-        <ColorBox color={cssColor} />
+        <ColorBox color={colorRGBAHex} tipColor={tipColor} />
       </Tooltip>
-      <Input
-        value={inputColor}
-        defaultValue={inputColor}
-        placeholder={placeholder}
-        className="color-input"
-        onChange={e => {
-          const color = e.target.value;
-          if (color.length > 9) {
-            message.warn(`${color} 不是正确的颜色格式`);
-            return;
-          }
-          setInputColor(color);
-        }}
-        onBlur={e => {
-          const color = e.target.value;
-          if (ColorUtil.isUnit8Hex(color)) {
-            RefInputPrev.current = color;
-            return;
-          }
-          message.warn(`${color} 不是正确的颜色格式`);
-          setInputColor(RefInputPrev.current);
-        }}
-      />
-    </StyleColorPick>
+    </StyleColorPickerBox>
   );
 }
 
-const StyleColorPick = styled.div`
+const StyleColorPickerBox = styled.div`
   display: flex;
   align-items: center;
   position: inline-block;
-  .color-input {
-    width: 120px;
-    height: 36px;
-    margin: 0 10px;
-    border-radius: 6px;
-  }
 `;
 
 // 颜色值选择器
 const ColorPicker: React.FC<{
-  defaultValue: string;
   value: string;
-  colorFormatter: HEX_FORMAT;
+  defaultValue: string;
+  format: HEX_FORMAT;
   onChange: (x: string) => void;
 }> = props => {
-  const { value, defaultValue, colorFormatter, onChange } = props;
-  const defaultColor = new ColorUtil(defaultValue, colorFormatter).format(
-    HEX_FORMAT.RGBA
-  );
+  const { value, defaultValue, format, onChange } = props;
+  const [defaultColor, setDefaultColor] = useState("");
+  const [colorRGBAHex, setColorRGBAHex] = useState("");
+  const [inputColor, setInputColor] = useState("");
+
+  const resetColor = () => {
+    if (inputColor !== "") setInputColor("");
+    if (colorRGBAHex !== "") setColorRGBAHex("");
+  };
+
+  // 生成默认 formatter 规定的颜色
+  useEffect(() => {
+    try {
+      setDefaultColor(
+        ColorUtil.create(defaultValue, format).format(HEX_FORMAT.RGBA)
+      );
+    } catch (err: any) {
+      console.log(err);
+      message.warn(`默认颜色格式错误"${defaultValue}"`);
+    }
+  }, [defaultValue]);
+
+  // 生成 formatter 规定的颜色
+  useEffect(() => {
+    try {
+      setColorRGBAHex(ColorUtil.create(value, format).format(HEX_FORMAT.RGBA));
+      setInputColor(value);
+    } catch (err: any) {
+      // console.log("value", err);
+      resetColor();
+    }
+  }, [value]);
+
+  // 选色器和输入框联动
+  useEffect(() => {
+    try {
+      setInputColor(
+        ColorUtil.create(colorRGBAHex, HEX_FORMAT.RGBA).format(format)
+      );
+    } catch (err: any) {
+      // console.log("colorRGBAHex", err);
+      // message.warn(err.message);
+    }
+  }, [colorRGBAHex]);
+
+  // 输入框与选色器联动
+  useEffect(() => {
+    try {
+      setColorRGBAHex(
+        ColorUtil.create(inputColor, format).format(HEX_FORMAT.RGBA)
+      );
+    } catch (err: any) {
+      setColorRGBAHex("");
+      // console.log("inputColor", err);
+    }
+  }, [inputColor]);
+
+  // 在输入框失焦触发变更
+  const onInputBlur = (val: string) => {
+    try {
+      if (inputColor !== "") {
+        setColorRGBAHex(ColorUtil.create(val, format).format(HEX_FORMAT.RGBA));
+      }
+      onChange(inputColor);
+    } catch (err: any) {
+      setInputColor(value);
+      message.warn(err.message);
+    }
+  };
 
   return (
     <StyleColorPicker>
       <div className="content-wrapper">
-        <ColorBox color={defaultColor} />
+        <ColorBox color={defaultColor} tipColor={defaultValue} />
         <RightCircleOutlined
           className="middle-button"
-          onClick={() => onChange(defaultColor)}
+          onClick={() => onChange(defaultValue)}
         />
-        <ColorPick
-          defaultColor={value}
-          placeholder={defaultColor}
-          onDisabled={onChange}
+        <ColorPickerBox
+          color={colorRGBAHex}
+          tipColor={inputColor}
+          onDisabled={() => onChange(inputColor)}
+          onChange={setColorRGBAHex}
+        />
+        <Input
+          value={inputColor}
+          className="color-input"
+          defaultValue={inputColor}
+          placeholder={defaultValue}
+          onChange={e => setInputColor(e.target.value)}
+          onBlur={e => onInputBlur(e.target.value)}
         />
       </div>
-      {!ColorUtil.isHex(value) && (
+      {!ColorUtil.isHex(value) && value.length > 0 && (
         <div className="error">{`非合法颜色值("${value}")`}</div>
       )}
     </StyleColorPicker>
@@ -205,20 +226,26 @@ const StyleColorPicker = styled.div`
   .content-wrapper {
     display: flex;
     align-items: center;
+    .middle-button {
+      cursor: pointer;
+      color: ${({ theme }) => theme["@text-color-secondary"]};
+      font-size: 22px;
+      margin: 10px;
+      transition: all 0.3s;
+      &:hover {
+        opacity: 0.5;
+      }
+    }
+    .color-input {
+      width: 120px;
+      height: 36px;
+      margin: 0 10px;
+      border-radius: 6px;
+    }
   }
   .error {
     color: ${({ theme }) => theme["@error-color"]};
     font-size: ${({ theme }) => theme["@text-size-thirdly"]};
-  }
-  .middle-button {
-    cursor: pointer;
-    color: ${({ theme }) => theme["@text-color-secondary"]};
-    font-size: 22px;
-    margin: 10px;
-    transition: all 0.3s;
-    &:hover {
-      opacity: 0.5;
-    }
   }
 `;
 

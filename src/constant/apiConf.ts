@@ -137,7 +137,6 @@ const apiConfig = {
   // 按行写入 xml
   XML_TEMPLATE_WRITE: createApiConf({
     path: "/project/xml/template/write",
-    query: ["uuid"],
     bodyKeys: ["value", "src"],
     body: {} as TypeReleaseXmlTempPayload
   }),
