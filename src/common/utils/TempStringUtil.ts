@@ -7,10 +7,11 @@ export default class TempStringUtil {
   static match(content: string): Array<[string, string]> {
     const result: Array<[string, string]> = [];
     let m: RegExpExecArray | null;
-    while ((m = RegexpUtil.tempStrRegexp.exec(content)) !== null) {
+    const regexp = new RegExp(RegexpUtil.tempStrRegexp);
+    while ((m = regexp.exec(content)) !== null) {
       // This is necessary to avoid infinite loops with zero-width matches
-      if (m.index === RegexpUtil.tempStrRegexp.lastIndex) {
-        RegexpUtil.tempStrRegexp.lastIndex++;
+      if (m.index === regexp.lastIndex) {
+        regexp.lastIndex++;
       }
       result.push([m[0], m[1]]);
     }

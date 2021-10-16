@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<Page version="1.0.0" name="桌面壁纸和首屏图标" screenWidth="1080">
+<!-- 
+    单页面配置
+    screenWidth: 预览的屏幕基准
+    colorFormat: 颜色格式
+-->
+<Page version="1.0.0" name="桌面壁纸和首屏图标" screenWidth="1080" colorFormat="ARGB">
 
     <!-- 静态预览图 -->
     <Preview src="resource://preview/preview.jpg"/>
@@ -60,7 +65,7 @@
     </Resource>
 
 
-    <Resource name="颜色值" formatter="ARGB" :key="color">
+    <Resource name="颜色值" :key="color">
         <Color name="桌面模块" :key="home">
             <!-- 桌面模块 -->
             <Xml :key="com.miui.home" name="桌面模块xml" src="src://com.miui.home/theme_values.xml">
@@ -145,9 +150,13 @@
         
         <!-- 第一排图标 -->
         <Image 
-            name="天气"
             x="168" y="1100" w="186" h="186" align="center" alignV="center"
             src="${image/default.icons/com.miui.weather2}"
+        />
+        <Text
+            text="天气"
+            x="168" y="1200" size="38" align="center"
+            color="${color/home/com.miui.home/icon_title_text}"
         />
        <!--  <Text
             name="图标字体"
@@ -156,32 +165,52 @@
             src="${root}/com.miui.home/theme_values.xml&amp;name=icon_title_text_light"
         /> -->
         <Image 
-            name="相册"
             x="415" y="1100" w="186" h="186" align="center" alignV="center"
             src="${image/default.icons/com.miui.gallery}"
         />
+        <Text
+            text="相册"
+            x="415" y="1200" size="38" align="center"
+            color="${color/home/com.miui.home/icon_title_text}"
+        />
         <Image 
-            name="小米视频"
             x="670" y="1100" w="186" h="186" align="center" alignV="center"
             src="${image/default.icons/com.miui.video}"
         />
+        <Text
+            text="小米视频"
+            x="670" y="1200" size="38" align="center"
+            color="${color/home/com.miui.home/icon_title_text}"
+        />
         <Image 
-            name="主题壁纸"
             x="925" y="1100" w="186" h="186" align="center" alignV="center"
             src="${image/default.icons/com.android.thememanager}"
+        />
+        <Text
+            text="主题壁纸"
+            x="925" y="1200" size="38" align="center"
+            color="${color/home/com.miui.home/icon_title_text}"
         />
 
         
         <!-- 第二排图标 -->
         <Image 
-            name="日历"
             x="168" y="1400" w="186" h="186" align="center" alignV="center"
             src="${image/default.icons/com.android.calendar}"
         />
+        <Text
+            text="日历"
+            x="168" y="1500" size="38" align="center"
+            color="${color/home/com.miui.home/icon_title_text}"
+        />
         <Image 
-            name="文件管理"
             x="415" y="1400" w="186" h="186" align="center" alignV="center"
             src="${image/default.icons/com.android.fileexplorer}"
+        />
+        <Text
+            text="文件管理"
+            x="415" y="1500" size="38" align="center"
+            color="${color/home/com.miui.home/icon_title_text}"
         />
         <Image 
             name="小米商城"
@@ -189,7 +218,6 @@
             src="${image/default.icons/com.xiaomi.shop}"
         />
         <Image 
-            name="小米商城pad"
             x="670" y="1400" w="186" h="186" align="center" alignV="center"
             src="${image/default.icons/com.xiaomi.padshop}"
         />
@@ -198,32 +226,57 @@
             x="670" y="1400" w="186" h="186" align="center" alignV="center"
             src="${image/default.icons/com.xiaomi.shop.activity.MainTabActivity.shop}"
         />
+        <Text
+            text="小米商城"
+            x="670" y="1500" size="38" align="center"
+            color="${color/home/com.miui.home/icon_title_text}"
+        />
         <Image 
-            name="设置"
             x="925" y="1400" w="186" h="186" align="center" alignV="center"
             src="${image/default.icons/com.android.settings}"
+        />
+        <Text
+            text="设置"
+            x="925" y="1500" size="38" align="center"
+            color="${color/home/com.miui.home/icon_title_text}"
         />
 
         <!-- 第三排图标 -->
         <Image 
-            name="应用商店"
             x="168" y="1700" w="186" h="186" align="center" alignV="center"
             src="${image/default.icons/com.xiaomi.market}"
         />
+        <Text
+            text="应用商店"
+            x="168" y="1800" size="38" align="center"
+            color="${color/home/com.miui.home/icon_title_text}"
+        />
         <Image 
-            name="游戏中心"
             x="415" y="1700" w="186" h="186" align="center" alignV="center"
             src="${image/default.icons/com.xiaomi.gamecenter}"
         />
+        <Text
+            text="游戏中心"
+            x="415" y="1800" size="38" align="center"
+            color="${color/home/com.miui.home/icon_title_text}"
+        />
         <Image 
-            name="手机管家"
             x="670" y="1700" w="186" h="186" align="center" alignV="center"
             src="${image/default.icons/com.miui.securitycenter}"
         />
+        <Text
+            text="手机管家"
+            x="670" y="1800" size="38" align="center"
+            color="${color/home/com.miui.home/icon_title_text}"
+        />
         <Image 
-            name="米家"
             x="925" y="1700" w="186" h="186" align="center" alignV="center"
             src="${image/default.icons/com.xiaomi.smarthome}"
+        />
+        <Text
+            text="米家"
+            x="925" y="1800" size="38" align="center"
+            color="${color/home/com.miui.home/icon_title_text}"
         />
 
 
@@ -235,20 +288,35 @@
         />
         <Text
             text="拨号"
-            x="160" y="1250" size="36" align="center" alignV="center"
+            x="160" y="2250" size="38" align="center"
             color="${color/home/com.miui.home/icon_title_text}"
         />
         <Image 
             x="415" y="2150" w="186" h="186" align="center" alignV="center" 
             src="${image/default.icons/com.android.mms}"
         />
+        <Text
+            text="短信"
+            x="415" y="2250" size="38" align="center"
+            color="${color/home/com.miui.home/icon_title_text}"
+        />
         <Image 
             x="670" y="2150" w="186" h="186" align="center" alignV="center" 
             src="${image/default.icons/com.android.browser}"
         />
+        <Text
+            text="浏览器"
+            x="670" y="2250" size="38" align="center"
+            color="${color/home/com.miui.home/icon_title_text}"
+        />
         <Image 
             x="925" y="2150" w="186" h="186" align="center" alignV="center" 
             src="${image/default.icons/com.android.camera}"
+        />
+        <Text
+            text="相机"
+            x="925" y="2250" size="38" align="center"
+            color="${color/home/com.miui.home/icon_title_text}"
         />
     </Layout>
 </Page>

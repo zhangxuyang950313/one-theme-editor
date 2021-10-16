@@ -15,7 +15,7 @@ export default class TempKeyValMapper extends XmlFileCompiler {
    */
   getKeyValList(): TypeKeyValue[] {
     return super
-      .getFirstChildNode()
+      .getFirstElementChildNode()
       .getChildrenNodes()
       .map(item => ({
         key: item.getAttributeOf("name"),
@@ -29,7 +29,7 @@ export default class TempKeyValMapper extends XmlFileCompiler {
    */
   getDataList(): TypeXmlKeyValConfig[] {
     return super
-      .getFirstChildNode()
+      .getFirstElementChildNode()
       .getChildrenNodes()
       .map(item => ({
         name: item.getAttributeOf("name"),
@@ -44,7 +44,7 @@ export default class TempKeyValMapper extends XmlFileCompiler {
    */
   getDataObj(): TypeXmlTempKeyValMap {
     return super
-      .getFirstChildNode()
+      .getFirstElementChildNode()
       .getChildrenNodes()
       .reduce<TypeXmlTempKeyValMap>((total, item) => {
         const key = item.getAttributeOf("name");
@@ -63,7 +63,7 @@ export default class TempKeyValMapper extends XmlFileCompiler {
    */
   getDataMap(): TypeXmlKeyValMapperMap {
     if (this.keyValMapData) return this.keyValMapData;
-    const rootNodes = super.getFirstChildNode().getChildrenNodes();
+    const rootNodes = super.getFirstElementChildNode().getChildrenNodes();
     const map: TypeXmlKeyValMapperMap = new Map();
     rootNodes.forEach(item => {
       map.set(item.getAttributeOf("name"), item);

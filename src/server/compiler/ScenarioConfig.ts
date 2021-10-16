@@ -30,7 +30,7 @@ export default class ScenarioConfigCompiler extends XmlCompilerExtra {
   // 解析描述文件配置
   getFileTempList(): TypeFileTempConfig[] {
     const fileTempNodes = super
-      .getFirstChildNode()
+      .getFirstElementChildNode()
       .getChildrenNodesByTagname(ELEMENT_TAG.FileTemplate);
     return fileTempNodes.map(fileTempNode => {
       const itemsNode = fileTempNode.getFirstChildNodeByTagname(
@@ -61,7 +61,7 @@ export default class ScenarioConfigCompiler extends XmlCompilerExtra {
   // 解析打包配置
   getPackageConfig(): TypePackConfig {
     const pkgNode = super
-      .getFirstChildNode()
+      .getFirstElementChildNode()
       .getFirstChildNodeByTagname(ELEMENT_TAG.PackConfig);
     const items: TypePackConfig["items"] = pkgNode
       .getChildrenNodesByTagname(ELEMENT_TAG.Item)
@@ -94,7 +94,7 @@ export default class ScenarioConfigCompiler extends XmlCompilerExtra {
   // 解析应用配置
   getApplyConfig(): TypeApplyConfig {
     const applyNode = super
-      .getFirstChildNode()
+      .getFirstElementChildNode()
       .getFirstChildNodeByTagname(ELEMENT_TAG.ApplyConfig);
     const steps: TypeApplyConfig["steps"] = applyNode
       .getChildrenNodesByTagname(ELEMENT_TAG.Step)
@@ -108,7 +108,7 @@ export default class ScenarioConfigCompiler extends XmlCompilerExtra {
   // 解析编辑器资源配置列表
   getResourceOptionList(): TypeResourceOption[] {
     return super
-      .getFirstChildNode()
+      .getFirstElementChildNode()
       .getChildrenNodesByTagname(ELEMENT_TAG.ResourceConfig)
       .flatMap(node => {
         const src = node.getAttributeOf("src");

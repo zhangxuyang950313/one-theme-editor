@@ -1,3 +1,4 @@
+import { HEX_FORMAT } from "src/enum/index";
 import { FileTypeResult, MimeType } from "file-type";
 import { Element } from "xml-js";
 import {
@@ -117,6 +118,7 @@ export type TypeFileItem = {
 export type TypeResourceDefinition = {
   key: string;
   name: string;
+  extra: Record<string, string>; // 备用字段
   children: Array<
     | TypeFileBlocker
     | TypeStringBlocker
@@ -139,7 +141,7 @@ export type TypeLayoutData = {
 
 // 图片元素数据
 export type TypeLayoutImageElement = {
-  tag: LAYOUT_ELEMENT_TAG.Image;
+  elementTag: LAYOUT_ELEMENT_TAG.Image;
   source: string;
   sourceData: TypeSourceData;
   layout: TypeLayoutData;
@@ -147,10 +149,13 @@ export type TypeLayoutImageElement = {
 
 // 颜色元素数据
 export type TypeLayoutTextElement = {
-  tag: LAYOUT_ELEMENT_TAG.Text;
+  elementTag: LAYOUT_ELEMENT_TAG.Text;
   text: string;
   size: string;
   color: string;
+  source: string;
+  sourceData: TypeSourceData;
+  valueData: TypeXmlValueItem;
   layout: TypeLayoutData;
 };
 

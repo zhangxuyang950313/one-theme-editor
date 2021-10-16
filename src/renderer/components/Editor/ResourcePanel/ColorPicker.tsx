@@ -88,7 +88,7 @@ function ColorPickerBox(props: {
             color={colorRGBAHex}
             onChange={({ rgb }) => {
               const rgba = sketch2rgba(rgb);
-              const rgbaHex = ColorUtil.rgba(rgba).format(HEX_FORMAT.RGBA);
+              const rgbaHex = ColorUtil.rgba(rgba).toRGBAHex();
               setColorRGBAHex(rgbaHex);
               onChange && onChange(rgbaHex);
             }}
@@ -130,9 +130,7 @@ const ColorPicker: React.FC<{
   // 生成默认 formatter 规定的颜色
   useEffect(() => {
     try {
-      setDefaultColor(
-        ColorUtil.create(defaultValue, format).format(HEX_FORMAT.RGBA)
-      );
+      setDefaultColor(ColorUtil.create(defaultValue, format).toRGBAHex());
     } catch (err: any) {
       console.log(err);
       message.warn(`默认颜色格式错误"${defaultValue}"`);
@@ -142,7 +140,7 @@ const ColorPicker: React.FC<{
   // 生成 formatter 规定的颜色
   useEffect(() => {
     try {
-      setColorRGBAHex(ColorUtil.create(value, format).format(HEX_FORMAT.RGBA));
+      setColorRGBAHex(ColorUtil.create(value, format).toRGBAHex());
       setInputColor(value);
     } catch (err: any) {
       // console.log("value", err);
@@ -165,9 +163,7 @@ const ColorPicker: React.FC<{
   // 输入框与选色器联动
   useEffect(() => {
     try {
-      setColorRGBAHex(
-        ColorUtil.create(inputColor, format).format(HEX_FORMAT.RGBA)
-      );
+      setColorRGBAHex(ColorUtil.create(inputColor, format).toRGBAHex());
     } catch (err: any) {
       setColorRGBAHex("");
       // console.log("inputColor", err);
@@ -178,7 +174,7 @@ const ColorPicker: React.FC<{
   const onInputBlur = (val: string) => {
     try {
       if (inputColor !== "") {
-        setColorRGBAHex(ColorUtil.create(val, format).format(HEX_FORMAT.RGBA));
+        setColorRGBAHex(ColorUtil.create(val, format).toRGBAHex());
       }
       onChange(inputColor);
     } catch (err: any) {

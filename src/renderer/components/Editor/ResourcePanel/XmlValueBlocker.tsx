@@ -1,7 +1,9 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
+import { CloseOutlined } from "@ant-design/icons";
 import { apiWriteXmlTemplate } from "@/request";
 import { useProjectUUID } from "@/hooks/project/index";
+import { useCurrentPageConfig } from "@/hooks/resource";
 import { useEditorSelector } from "@/store";
 import { HEX_FORMAT, RESOURCE_TAG } from "src/enum/index";
 import {
@@ -10,7 +12,6 @@ import {
   TypeXmlValueTags
 } from "src/types/resource.page";
 import useSubscribeProjectFile from "@/hooks/project/useSubscribeProjectFile";
-import { CloseOutlined } from "@ant-design/icons";
 import ColorPicker from "./ColorPicker";
 import BooleanSelector from "./BooleanSelector";
 import NumberInput from "./NumberInput";
@@ -24,6 +25,8 @@ const XmlValueEditor: React.FC<{
   onChange: (v: string) => void;
 }> = props => {
   const { value, defaultValue, onChange } = props;
+  const pageConfig = useCurrentPageConfig();
+
   switch (props.use) {
     // 颜色选择器
     case RESOURCE_TAG.Color: {
@@ -31,7 +34,7 @@ const XmlValueEditor: React.FC<{
         <ColorPicker
           value={value}
           defaultValue={defaultValue}
-          format={HEX_FORMAT.ARGB}
+          format={pageConfig?.colorFormat || HEX_FORMAT.RGBA}
           onChange={onChange}
         />
       );

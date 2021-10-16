@@ -29,6 +29,7 @@ import { TypeUiVersion } from "../types/project";
 import {
   ALIGN_VALUE,
   ALIGN_V_VALUE,
+  HEX_FORMAT,
   LAYOUT_ELEMENT_TAG,
   RESOURCE_TAG
 } from "../enum/index";
@@ -100,6 +101,9 @@ export class XmlValueItem extends AbstractDataModel<TypeXmlValueItem> {
     value: "",
     template: ""
   };
+  static get default(): TypeXmlValueItem {
+    return new XmlValueItem().create();
+  }
 }
 
 export class XmlItem extends AbstractDataModel<TypeXmlItem> {
@@ -163,6 +167,7 @@ export class ResourceDefinition extends AbstractDataModel<TypeResourceDefinition
   protected data: TypeResourceDefinition = {
     key: "",
     name: "",
+    extra: {},
     children: []
   };
   static get default(): TypeResourceDefinition {
@@ -190,6 +195,7 @@ export class PageConfig extends AbstractDataModel<TypePageConfig> {
     name: "",
     screenWidth: "",
     disableTabs: false,
+    colorFormat: HEX_FORMAT.RGBA,
     previewList: [],
     resourceList: [],
     layoutElementList: []
@@ -275,7 +281,7 @@ export class ElementLayoutConfig extends AbstractDataModel<TypeLayoutData> {
 
 export class LayoutImageElement extends AbstractDataModel<TypeLayoutImageElement> {
   protected data: TypeLayoutImageElement = {
-    tag: LAYOUT_ELEMENT_TAG.Image,
+    elementTag: LAYOUT_ELEMENT_TAG.Image,
     source: "",
     sourceData: SourceData.default,
     layout: ElementLayoutConfig.default
@@ -287,10 +293,13 @@ export class LayoutImageElement extends AbstractDataModel<TypeLayoutImageElement
 
 export class LayoutTextElement extends AbstractDataModel<TypeLayoutTextElement> {
   protected data: TypeLayoutTextElement = {
-    tag: LAYOUT_ELEMENT_TAG.Text,
+    elementTag: LAYOUT_ELEMENT_TAG.Text,
     text: "",
-    size: "20",
-    color: "#ffffff",
+    size: "36",
+    color: "",
+    source: "",
+    sourceData: SourceData.default,
+    valueData: XmlValueItem.default,
     layout: ElementLayoutConfig.default
   };
   static get default(): TypeLayoutTextElement {

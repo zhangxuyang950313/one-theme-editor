@@ -64,12 +64,12 @@ export default class ResourceConfigCompiler extends XmlFileCompiler {
 
   // 名称
   getName(): string {
-    return super.getFirstChildNode().getAttributeOf("name");
+    return super.getFirstElementChildNode().getAttributeOf("name");
   }
 
   // 版本
   getVersion(): string {
-    return super.getFirstChildNode().getAttributeOf("version");
+    return super.getFirstElementChildNode().getAttributeOf("version");
   }
 
   // 预览图
@@ -77,7 +77,7 @@ export default class ResourceConfigCompiler extends XmlFileCompiler {
     // TODO: 默认预览图
     return path.normalize(
       super
-        .getFirstChildNode()
+        .getFirstElementChildNode()
         .getFirstChildNodeByTagname(ELEMENT_TAG.Preview)
         .getAttributeOf("src")
     );
@@ -86,7 +86,7 @@ export default class ResourceConfigCompiler extends XmlFileCompiler {
   // UI信息
   getUiVersion(): TypeUiVersion {
     const uiVersionNode = super
-      .getFirstChildNode()
+      .getFirstElementChildNode()
       .getFirstChildNodeByTagname(ELEMENT_TAG.UiVersion);
     return new UiVersion()
       .set("name", uiVersionNode.getAttributeOf("name"))
@@ -128,7 +128,7 @@ export default class ResourceConfigCompiler extends XmlFileCompiler {
   // 模块配置数据
   getModuleList(): TypeModuleConfig[] {
     return super
-      .getFirstChildNode()
+      .getFirstElementChildNode()
       .getChildrenNodesByTagname(ELEMENT_TAG.Module)
       .map((moduleNode, index) => {
         const pageList = this.getPageList(

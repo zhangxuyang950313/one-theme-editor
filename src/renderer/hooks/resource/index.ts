@@ -120,7 +120,7 @@ export function useLayoutElementList(): TypeLayoutElement[] {
 export function useLayoutImageList(): TypeLayoutImageElement[] {
   const layoutElementList = useLayoutElementList();
   return layoutElementList.flatMap(item =>
-    item.tag === LAYOUT_ELEMENT_TAG.Image ? [item] : []
+    item.elementTag === LAYOUT_ELEMENT_TAG.Image ? [item] : []
   );
 }
 
@@ -130,7 +130,7 @@ export function useLayoutImageList(): TypeLayoutImageElement[] {
 export function useLayoutTestList(): TypeLayoutTextElement[] {
   const layoutElementList = useLayoutElementList();
   return layoutElementList.flatMap(item =>
-    item.tag === LAYOUT_ELEMENT_TAG.Text ? [item] : []
+    item.elementTag === LAYOUT_ELEMENT_TAG.Text ? [item] : []
   );
 }
 

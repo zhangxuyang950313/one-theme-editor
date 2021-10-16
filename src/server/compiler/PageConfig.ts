@@ -1,5 +1,6 @@
 import path from "path";
 import { URL } from "url";
+import md5 from "md5";
 import type {
   TypeResourceDefinition,
   TypeLayoutElement,
@@ -9,7 +10,8 @@ import type {
   TypeFileBlocker,
   TypeXmlBlocker,
   TypeXmlValueTags,
-  TypeFileData
+  TypeFileData,
+  TypeXmlValueItem
 } from "src/types/resource.page";
 import { TypePageConfig } from "src/types/resource.config";
 import { TypeImageData } from "src/types/project";
@@ -27,20 +29,20 @@ import {
   XmlValueItem
 } from "src/data/ResourceConfig";
 import { getFileData, getImageData } from "src/common/utils/index";
-import RegexpUtil from "src/common/utils/RegexpUtil";
 import {
   ELEMENT_TAG,
   ALIGN_VALUE,
   ALIGN_V_VALUE,
   RESOURCE_TAG,
   RESOURCE_PROTOCOL,
-  LAYOUT_ELEMENT_TAG
+  LAYOUT_ELEMENT_TAG,
+  HEX_FORMAT
 } from "src/enum/index";
-import pathUtil from "server/utils/pathUtil";
-import XMLNodeElement from "server/compiler/XMLNodeElement";
-import TempStringUtil from "src/common/utils/TempStringUtil";
 import electronStore from "src/common/electronStore";
-import md5 from "md5";
+import XMLNodeElement from "server/compiler/XMLNodeElement";
+import pathUtil from "server/utils/pathUtil";
+import RegexpUtil from "src/common/utils/RegexpUtil";
+import TempStringUtil from "src/common/utils/TempStringUtil";
 import XmlFileCompiler from "./XmlFileCompiler";
 import XmlCompilerExtra from "./XmlCompilerExtra";
 
@@ -49,11 +51,12 @@ export default class PageConfigCompiler extends XMLNodeElement {
   private pageNamespace: string;
   private pageConfig: string;
   private resourceRoot: string;
-  private keyValMap: Map<string, string>;
+  private sourceKeyValCache: Map<string, string>;
   private sourceDataCache: Map<string, TypeSourceData>;
   private fileDataCache: Map<string, TypeFileData>;
   private imageDataCache: Map<string, TypeImageData>;
   private xmlValueCache: Map<string, string>;
+  private xmlValueItemCache: Map<string, TypeXmlValueItem>;
   constructor(data: { namespace: string; config: string }) {
     const file = path.join(
       pathUtil.RESOURCE_CONFIG_DIR,
@@ -65,11 +68,12 @@ export default class PageConfigCompiler extends XMLNodeElement {
     this.pageNamespace = path.dirname(data.config);
     this.pageConfig = path.normalize(data.config);
     this.resourceRoot = path.join(pathUtil.RESOURCE_CONFIG_DIR, data.namespace);
-    this.keyValMap = new Map();
+    this.sourceKeyValCache = new Map();
     this.sourceDataCache = new Map();
     this.fileDataCache = new Map();
     this.imageDataCache = new Map();
     this.xmlValueCache = new Map();
+    this.xmlValueItemCache = new Map();
   }
 
   /**
@@ -78,7 +82,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
    * @returns
    */
   private getRootFirstChildNodeByTagname(tagname: string): XMLNodeElement {
-    return this.getFirstChildNode().getFirstChildNodeByTagname(tagname);
+    return this.getFirstElementChildNode().getFirstChildNodeByTagname(tagname);
   }
 
   /**
@@ -87,7 +91,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
    * @returns
    */
   public getRootChildrenNodesByTagname(tagname: string): XMLNodeElement[] {
-    return this.getFirstChildNode().getChildrenNodesByTagname(tagname);
+    return this.getFirstElementChildNode().getChildrenNodesByTagname(tagname);
   }
 
   // 生成当前配置中相对于素材根路径的绝对路径
@@ -196,10 +200,10 @@ export default class PageConfigCompiler extends XMLNodeElement {
   //   return this.relativePath(path.join(relative, pathname));
   // }
 
-  private getRootAttribute(
-    attribute: "version" | "name" | "screenWidth" | "disableTab"
-  ): string {
-    return this.getFirstChildNode().getAttributeOf(attribute);
+  private getRootAttribute<T extends string>(
+    attribute: "version" | "name" | "screenWidth" | "disableTab" | "colorFormat"
+  ): T {
+    return this.getFirstElementChildNode().getAttributeOf<T>(attribute);
   }
 
   getVersion(): string {
@@ -216,6 +220,10 @@ export default class PageConfigCompiler extends XMLNodeElement {
 
   getDisableTabs(): boolean {
     return this.getRootAttribute("disableTab") === "true";
+  }
+
+  getColorFormat(): HEX_FORMAT {
+    return this.getRootAttribute<HEX_FORMAT>("colorFormat");
   }
 
   /**
@@ -275,34 +283,6 @@ export default class PageConfigCompiler extends XMLNodeElement {
     urlSourceData.set("query", query);
     urlSourceData.set("src", src);
 
-    // // 根据协议处理资源路径
-    // const file = this.resolveProtocolPath(url);
-    // if (fse.existsSync(file)) {
-    //   urlSourceData.set("size", getFileSize(file));
-    // }
-
-    // // 图片
-    // if (filenameIsImage(file)) {
-    //   // const imageData = new ImageData();
-    //   // if (fse.existsSync(file)) {
-    //   //   imageData.setBatch(this.getImageData(file));
-    //   // }
-    //   // urlSourceData.set("width", imageData.get("width"));
-    //   // urlSourceData.set("height", imageData.get("height"));
-    //   // urlSourceData.set("ninePatch", filenameIsImage(file));
-    // }
-    // // xml 中的值
-    // else if (filenameIsXml(file)) {
-    //   // url 中的 name 参数作为查找 xml 中数据的依据
-    //   // TODO： 先固定使用 name，后续看需求是否需要自定义其他属性去 xml 中查找
-    //   const valueName = query["name"] || "";
-    //   const value = new XmlCompilerExtra(
-    //     XmlFileCompiler.from(file).getElement()
-    //   ).getTextByAttrNameVal(valueName);
-    //   // resUrlData.set("extra", { value });
-    // } else {
-    //   // TODO 其他文件
-    // }
     // 写入缓存
     const data = urlSourceData.create();
     this.sourceDataCache.set(url, data);
@@ -338,8 +318,8 @@ export default class PageConfigCompiler extends XMLNodeElement {
     return new ElementLayoutConfig()
       .set("x", node.getAttributeOf("x", "0"))
       .set("y", node.getAttributeOf("y", "0"))
-      .set("w", node.getAttributeOf("w", size?.width ?? "100"))
-      .set("h", node.getAttributeOf("h", size?.height ?? "100"))
+      .set("w", node.getAttributeOf("w", size?.width ?? "0"))
+      .set("h", node.getAttributeOf("h", size?.height ?? "0"))
       .set("align", node.getAttributeOf("align", ALIGN_VALUE.LEFT))
       .set("alignV", node.getAttributeOf("alignV", ALIGN_V_VALUE.TOP))
       .create();
@@ -390,12 +370,29 @@ export default class PageConfigCompiler extends XMLNodeElement {
    * @returns
    */
   private layoutTextElement(node: XMLNodeElement): TypeLayoutTextElement {
-    return new LayoutTextElement()
+    const textElement = new LayoutTextElement()
       .set("text", node.getAttributeOf("text"))
       .set("size", node.getAttributeOf("size"))
-      .set("color", node.getAttributeOf("color"))
-      .setBatchOf("layout", this.layoutConf(node))
-      .create();
+      .setBatchOf("layout", this.layoutConf(node));
+    const color = node.getAttributeOf("color");
+    // 识别是否是变量语法
+    const sourcePath = new RegExp(RegexpUtil.tempStrRegexp).exec(color);
+    if (sourcePath !== null) {
+      const valueData = this.xmlValueItemCache.get(sourcePath[1]);
+      if (valueData) {
+        textElement.set("valueData", valueData);
+      }
+      const xmlSource = path.dirname(sourcePath[1]); // valueItem 一定是 Xml 节点的子节点
+      const colorSource = this.sourceKeyValCache.get(xmlSource);
+      if (colorSource) {
+        const colorSourceData = this.getUrlSourceData(colorSource);
+        textElement.set("sourceData", colorSourceData);
+        textElement.set("source", colorSource);
+      }
+    } else {
+      textElement.set("color", color);
+    }
+    return textElement.create();
   }
 
   private getFileBlocker(
@@ -412,7 +409,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
       const fileData = this.getFileData(
         this.resolveResourcePath(sourceData.src)
       );
-      this.keyValMap.set(path.join(rootKey, imageKey, itemKey), source);
+      this.sourceKeyValCache.set(path.join(rootKey, imageKey, itemKey), source);
       return new FileItem()
         .set("key", itemKey)
         .set("comment", arr[key - 1]?.getComment())
@@ -463,11 +460,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
             tag: tagname,
             attributes: Object.fromEntries(attributes)
           });
-          this.keyValMap.set(
-            path.join(rootKey, xmlItemKey, itemKey, valueKey),
-            defaultVal
-          );
-          return new XmlValueItem()
+          const xmlValueItem = new XmlValueItem()
             .set("md5", md5(JSON.stringify({ tag: tagname, attributes })))
             .set("tag", tagname)
             .set("comment", arr[kk - 1]?.getComment())
@@ -475,11 +468,19 @@ export default class PageConfigCompiler extends XMLNodeElement {
             .set("value", defaultVal)
             .set("template", template)
             .create();
+          this.xmlValueItemCache.set(
+            path.join(rootKey, xmlItemKey, itemKey, valueKey),
+            xmlValueItem
+          );
+          return xmlValueItem;
         });
       const fileData = this.getFileData(
         this.resolveResourcePath(sourceData.src)
       );
-      this.keyValMap.set(path.join(rootKey, xmlItemKey, itemKey), source);
+      this.sourceKeyValCache.set(
+        path.join(rootKey, xmlItemKey, itemKey),
+        source
+      );
       return new XmlItem()
         .set("tag", item.getTagname())
         .set("key", itemKey)
@@ -502,10 +503,19 @@ export default class PageConfigCompiler extends XMLNodeElement {
   getResourceList(): TypeResourceDefinition[] {
     return this.getRootChildrenNodesByTagname(ELEMENT_TAG.Resource).map(
       Resource => {
+        // 扩展配置（备用）
+        const extra: Record<string, string> = {};
+        // 空的删掉
+        for (const key in extra) {
+          if (!extra[key]) {
+            delete extra[key];
+          }
+        }
         const key = Resource.getAttributeOf(":key");
         const resource = new ResourceDefinition()
           .set("key", key)
-          .set("name", Resource.getAttributeOf("name"));
+          .set("name", Resource.getAttributeOf("name"))
+          .set("extra", extra);
         const children = Resource.getChildrenNodes().flatMap(item => {
           const tag = item.getTagname<RESOURCE_TAG>();
           switch (tag) {
@@ -535,7 +545,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
    * @returns
    */
   getLayoutElementList(): TypeLayoutElement[] {
-    return this.getFirstChildNode()
+    return this.getFirstElementChildNode()
       .getFirstChildNodeByTagname(LAYOUT_ELEMENT_TAG.Layout)
       .getChildrenNodes()
       .flatMap(node => {
@@ -544,7 +554,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
         const resolveTempStrWithAttr = (attr: string) => {
           const replaced = TempStringUtil.replace(
             node.getAttributeOf(attr),
-            this.keyValMap
+            this.sourceKeyValCache
           );
           node.setAttributeOf(attr, replaced);
           return !!replaced;
@@ -555,7 +565,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
             return this.layoutImageElement(node);
           }
           case LAYOUT_ELEMENT_TAG.Text: {
-            if (!resolveTempStrWithAttr("color")) return [];
+            // if (!resolveTempStrWithAttr("color")) return [];
             return this.layoutTextElement(node);
           }
           default: {
@@ -590,6 +600,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
       .set("name", this.getPageName())
       .set("screenWidth", this.getScreenWidth())
       .set("disableTabs", this.getDisableTabs())
+      .set("colorFormat", this.getColorFormat())
       .set("previewList", this.getPreviewList())
       .set("resourceList", this.getResourceList())
       .set("layoutElementList", this.getLayoutElementList())

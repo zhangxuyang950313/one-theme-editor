@@ -34,7 +34,7 @@ export async function releaseXmlTemplate(
   if (fse.pathExistsSync(releaseXmlFile)) {
     releaseElement = new XmlFileCompiler(releaseXmlFile).getElement();
   } else {
-    templateXml.getFirstChildNode().removeChildren();
+    templateXml.getFirstElementChildNode().removeChildren();
     releaseElement = templateXml.getElement();
   }
   const releaseXml = new XmlCompilerExtra(releaseElement);
@@ -42,7 +42,7 @@ export async function releaseXmlTemplate(
   const targetNode = releaseXml.findNodeByTagAndAttributes(tag, attributes);
   // 空文件用模板替换
   if (releaseXml.isEmpty) {
-    templateXml.getFirstChildNode().removeChildren();
+    templateXml.getFirstElementChildNode().removeChildren();
     releaseXml.setNode(templateXml);
   }
   // 创建 text value 并替换子节点
@@ -54,11 +54,11 @@ export async function releaseXmlTemplate(
     throw new Error(`模板中不存在：${xmlTemp}`);
   }
   fromNode
-    .getFirstChildNode()
+    .getFirstElementChildNode()
     .replaceNode(XmlCompilerExtra.createTextNode(value));
   // 插入工程文件
   if (targetNode.isEmpty) {
-    const releaseRoot = releaseXml.getFirstChildNode();
+    const releaseRoot = releaseXml.getFirstElementChildNode();
     releaseRoot.appendChild(fromNode);
   } else {
     targetNode.replaceNode(fromNode);

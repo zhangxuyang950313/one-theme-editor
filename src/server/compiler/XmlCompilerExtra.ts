@@ -12,7 +12,7 @@ export default class XmlCompilerExtra extends XMLNodeElement {
    * @returns
    */
   public getElementList(): Element[] {
-    return this.getFirstChildNode()
+    return this.getFirstElementChildNode()
       .getChildrenNodes()
       .map(item => item.getElement());
   }
@@ -28,7 +28,7 @@ export default class XmlCompilerExtra extends XMLNodeElement {
    */
   public getValueByName(name: string): string {
     return super
-      .getFirstChildNode()
+      .getFirstElementChildNode()
       .getFirstChildNodeByAttrValue("name", name)
       .getFirstTextChildValue();
   }
@@ -67,7 +67,7 @@ export default class XmlCompilerExtra extends XMLNodeElement {
   public getNameValueMapObj(kvList: TypeKeyValue[]): TypeXmlTempKeyValMap {
     return super
       .createInstance(XmlFileCompiler.compile(this.generateXmlByKeyVal(kvList)))
-      .getFirstChildNode()
+      .getFirstElementChildNode()
       .getChildrenNodes()
       .reduce<TypeXmlTempKeyValMap>((obj, item) => {
         const nameVal = item.getAttributeOf("name");
@@ -88,7 +88,7 @@ export default class XmlCompilerExtra extends XMLNodeElement {
    */
   public getTextByAttrValOf(attrName: string, val: string): string {
     return super
-      .getFirstChildNode()
+      .getFirstElementChildNode()
       .getFirstChildNodeByAttrValue(attrName, val)
       .getFirstTextChildValue();
   }
@@ -112,7 +112,7 @@ export default class XmlCompilerExtra extends XMLNodeElement {
     attrsEntries: [string, string][]
   ): XMLNodeElement {
     const matchedNode = super
-      .getFirstChildNode()
+      .getFirstElementChildNode()
       .getChildrenNodes()
       .find(node => {
         const tagIsEqual = node.getTagname() === tag;

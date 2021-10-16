@@ -42,7 +42,7 @@ export default class ScenarioOptions extends XmlCompilerExtra {
 
   private getScenarioNodes(): XMLNodeElement[] {
     return super
-      .getFirstChildNode()
+      .getFirstElementChildNode()
       .getChildrenNodesByTagname(ELEMENT_TAG.Scenario);
   }
 

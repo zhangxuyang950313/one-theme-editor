@@ -341,7 +341,7 @@ export function getFileData(
       const xmlFileCompiler = XmlFileCompiler.from(file);
       // 生成 value 映射
       const valueMapper = xmlFileCompiler
-        .getFirstChildNode()
+        .getFirstElementChildNode()
         .getChildrenNodes()
         .reduce<Record<string, string>>((prev, item) => {
           if (!item.isElement) return prev;

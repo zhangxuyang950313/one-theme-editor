@@ -1,47 +1,170 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
-import { ALIGN_VALUE, ALIGN_V_VALUE, LAYOUT_ELEMENT_TAG } from "src/enum";
+import {
+  ALIGN_VALUE,
+  ALIGN_V_VALUE,
+  HEX_FORMAT,
+  LAYOUT_ELEMENT_TAG
+} from "src/enum";
 import { TypePageConfig } from "src/types/resource.config";
-import { TypeLayoutData } from "src/types/resource.page";
+import { TypeLayoutData, TypeLayoutTextElement } from "src/types/resource.page";
+import ColorUtil from "src/common/utils/ColorUtil";
+import { useCurrentPageConfig } from "@/hooks/resource";
+import useSubscribeProjectFile from "@/hooks/project/useSubscribeProjectFile";
+import { useEditorSelector } from "@/store";
 import { DynamicBothSourceImage, PreloadImage } from "../ImageCollection";
 
-function computeLayout(
-  data: TypeLayoutData,
+// function computeLayout(
+//   data: TypeLayoutData,
+//   scale: number
+// ): { x: number; y: number; w: number; h: number } {
+//   const result = {
+//     x: Number(data.x),
+//     y: Number(data.y),
+//     w: Number(data.w),
+//     h: Number(data.h)
+//   };
+//   switch (data.align) {
+//     case ALIGN_VALUE.CENTER: {
+//       result.x = Number(data.x) - Number(data.w) / 2;
+//       break;
+//     }
+//     case ALIGN_VALUE.RIGHT: {
+//       result.x = Number(data.x) - Number(data.w);
+//       break;
+//     }
+//   }
+//   switch (data.alignV) {
+//     case ALIGN_V_VALUE.CENTER: {
+//       result.y = Number(data.y) - Number(data.h) / 2;
+//       break;
+//     }
+//     case ALIGN_V_VALUE.BOTTOM: {
+//       result.x = Number(data.h) - Number(data.h);
+//       break;
+//     }
+//   }
+//   result.x *= scale;
+//   result.y *= scale;
+//   result.w *= scale;
+//   result.h *= scale;
+//   return result;
+// }
+
+type LayoutStyleComputed = {
+  position: "absolute";
+  left: `${number}px`;
+  top: `${number}px`;
+  width: `${number}px` | "auto";
+  height: `${number}px` | "auto";
+  transform: `translate(${string}, ${string})`;
+};
+
+function computeLayoutStyle(
+  layout: TypeLayoutData,
   scale: number
-): { x: number; y: number; w: number; h: number } {
-  const result = {
-    x: Number(data.x),
-    y: Number(data.y),
-    w: Number(data.w),
-    h: Number(data.h)
+): LayoutStyleComputed {
+  const style: LayoutStyleComputed = {
+    position: "absolute",
+    left: `${Number(layout.x) * scale}px`,
+    top: `${Number(layout.y) * scale}px`,
+    get width(): LayoutStyleComputed["width"] {
+      const num = Number(layout.w);
+      return num ? `${num * scale}px` : "auto";
+    },
+    get height(): LayoutStyleComputed["height"] {
+      const num = Number(layout.h);
+      return num ? `${num * scale}px` : "auto";
+    },
+    get transform(): LayoutStyleComputed["transform"] {
+      let transformX = "0";
+      let transformY = "0";
+      switch (layout.align) {
+        case ALIGN_VALUE.CENTER: {
+          transformX = "-50%";
+          break;
+        }
+        case ALIGN_VALUE.RIGHT: {
+          transformX = "-100%";
+          break;
+        }
+      }
+      switch (layout.alignV) {
+        case ALIGN_V_VALUE.CENTER: {
+          transformY = "-50%";
+          break;
+        }
+        case ALIGN_V_VALUE.BOTTOM: {
+          transformY = "-100%";
+          break;
+        }
+      }
+      return `translate(${transformX}, ${transformY})`;
+    }
   };
-  switch (data.align) {
-    case ALIGN_VALUE.CENTER: {
-      result.x = Number(data.x) - Number(data.w) / 2;
-      break;
-    }
-    case ALIGN_VALUE.RIGHT: {
-      result.x = Number(data.x) - Number(data.w);
-      break;
-    }
-  }
-  switch (data.alignV) {
-    case ALIGN_V_VALUE.CENTER: {
-      result.y = Number(data.y) - Number(data.h) / 2;
-      break;
-    }
-    case ALIGN_V_VALUE.BOTTOM: {
-      result.x = Number(data.h) - Number(data.h);
-      break;
-    }
-  }
-  result.x *= scale;
-  result.y *= scale;
-  result.w *= scale;
-  result.h *= scale;
-  return result;
+  return style;
 }
+
+const LayoutTextElement: React.FC<{
+  element: TypeLayoutTextElement;
+  scale: number;
+  useDash: boolean;
+  canClick: boolean;
+}> = props => {
+  const { element, scale, useDash, canClick } = props;
+  const subscribe = useSubscribeProjectFile();
+  const [defaultColor, setDefaultColor] = useState("#000000");
+  const [color, setColor] = useState(defaultColor);
+  const pageConfig = useCurrentPageConfig();
+  const curXmlValMapper = useEditorSelector(
+    state => state.xmlFileDataMap[element.sourceData.src]?.valueMapper || {}
+  );
+
+  const colorFormat = pageConfig?.colorFormat || HEX_FORMAT.RGBA;
+  const layoutStyle = computeLayoutStyle(element.layout, scale);
+
+  useEffect(() => {
+    try {
+      const defColor = element.valueData.value;
+      setDefaultColor(ColorUtil.create(defColor, colorFormat).toCssHex());
+    } catch (err) {
+      //
+    }
+  }, [element.valueData.value]);
+
+  useEffect(() => {
+    subscribe(element.sourceData.src, { immediately: true });
+  }, []);
+
+  useEffect(() => {
+    const color = curXmlValMapper[element.valueData.template];
+    if (!color) {
+      setColor(defaultColor);
+      return;
+    }
+    try {
+      setColor(ColorUtil.create(color, colorFormat).toCssHex());
+    } catch (err) {
+      setColor(defaultColor);
+    }
+  }, [curXmlValMapper[element.valueData.template]]);
+
+  return (
+    <span
+      data-dash={useDash}
+      data-click={canClick}
+      className="text"
+      style={{
+        ...layoutStyle,
+        fontSize: `${Number(element.size) * scale}px`,
+        color
+      }}
+    >
+      {element.text}
+    </span>
+  );
+};
 
 const Previewer: React.FC<{
   pageConfig: TypePageConfig;
@@ -72,51 +195,31 @@ const Previewer: React.FC<{
           }}
         >
           {layoutElementList.map((element, k) => {
-            switch (element.tag) {
+            switch (element.elementTag) {
               // 图片类型预览
               case LAYOUT_ELEMENT_TAG.Image: {
-                const layoutComputed = computeLayout(element.layout, scale);
-                const style = {
-                  left: `${layoutComputed.x}px`,
-                  top: `${layoutComputed.y}px`,
-                  width: `${layoutComputed.w}px`,
-                  height: `${layoutComputed.h}px`
-                };
+                const layoutStyle = computeLayoutStyle(element.layout, scale);
                 return (
                   <DynamicBothSourceImage
                     key={k}
-                    data-name={element.sourceData.src}
                     data-dash={props.useDash}
                     data-click={props.canClick}
                     className="image"
-                    style={style}
+                    style={layoutStyle}
                     alt=""
                     src={element.sourceData.src}
                   />
                 );
               }
               case LAYOUT_ELEMENT_TAG.Text: {
-                const layoutComputed = computeLayout(element.layout, scale);
-                const style = {
-                  left: `${layoutComputed.x}px`,
-                  top: `${layoutComputed.y}px`,
-                  width: `${layoutComputed.w}px`,
-                  height: `${layoutComputed.h}px`
-                };
                 return (
-                  <span
+                  <LayoutTextElement
                     key={k}
-                    data-name={element.text}
-                    data-dash={props.useDash}
-                    data-click={props.canClick}
-                    className="text"
-                    style={{
-                      ...style,
-                      fontSize: `${Number(element.size) * scale}px`
-                    }}
-                  >
-                    {element.text}
-                  </span>
+                    element={element}
+                    scale={scale}
+                    canClick={props.canClick}
+                    useDash={props.useDash}
+                  />
                 );
               }
               default: {
@@ -156,7 +259,6 @@ const StylePreviewer = styled.div`
       }
     }
     .text {
-      position: absolute;
       width: 100%;
     }
   }

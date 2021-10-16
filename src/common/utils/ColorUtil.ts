@@ -133,29 +133,44 @@ class ColorUtil {
   }
 
   /**
-   * 获取 CSS HEX 颜色
-   * @returns
-   */
-  getCssHex(): TypeHexStr {
-    return this.format(HEX_FORMAT.RGBA);
-  }
-
-  /**
-   * 获取 CSS RGBA 颜色
-   * @returns
-   */
-  getCssRGBA(): TypeRGBAStr {
-    const { red, green, blue, alpha } = this.getRGBA();
-    return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
-  }
-
-  /**
    * 格式化当前实例 rgb 为 hex
    * @param format
    * @returns
    */
   format(format: HEX_FORMAT): TypeHexStr {
     return new RGBAColorUtil(this.getRGBA()).format(format);
+  }
+  /**
+   * 获取 CSS HEX 颜色
+   * @returns
+   */
+  toCssHex(): TypeHexStr {
+    return this.format(HEX_FORMAT.RGBA);
+  }
+
+  /**
+   * 转换 CSS RGBA 颜色
+   * @returns
+   */
+  toCssRGBA(): TypeRGBAStr {
+    const { red, green, blue, alpha } = this.getRGBA();
+    return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
+  }
+
+  /**
+   * 转换 RGBA 格式颜色
+   * @returns
+   */
+  toRGBAHex(): TypeHexStr {
+    return this.format(HEX_FORMAT.RGBA);
+  }
+
+  /**
+   * 转换 ARGB 格式颜色
+   * @returns
+   */
+  toARGBHex(): TypeHexStr {
+    return this.format(HEX_FORMAT.ARGB);
   }
 }
 

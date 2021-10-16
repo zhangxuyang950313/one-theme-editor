@@ -1,3 +1,4 @@
+import { HEX_FORMAT } from "src/enum";
 import { TypeUiVersion } from "./project";
 import { TypeLayoutElement, TypeResourceDefinition } from "./resource.page";
 
@@ -14,6 +15,7 @@ export type TypePageConfig = {
   name: string;
   screenWidth: string;
   disableTabs: boolean;
+  colorFormat: HEX_FORMAT;
   previewList: string[];
   resourceList: TypeResourceDefinition[];
   layoutElementList: TypeLayoutElement[];

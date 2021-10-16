@@ -134,9 +134,16 @@ class XMLNodeChildren extends XMLNodeBase {
     );
   }
 
-  // 获取第一个子节点
-  public getFirstChildNode(): XMLNodeElement {
-    return XMLNodeElement.createNode(this.getChildrenElements()[0] || {});
+  // 获取第一个子元素节点（不包含注释）
+  public getFirstElementChildNode(): XMLNodeElement {
+    const childrenElements = this.getChildrenElements();
+    for (let i = 0; i < childrenElements.length; i++) {
+      const current = XMLNodeElement.createNode(childrenElements[i]);
+      if (current.isElement) {
+        return current;
+      }
+    }
+    return XMLNodeElement.createNode({});
   }
 
   /**
