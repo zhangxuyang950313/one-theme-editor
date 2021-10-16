@@ -9,6 +9,7 @@ import {
 } from "src/types/request";
 import XmlFileCompiler from "server/compiler/XmlFileCompiler";
 import electronStore from "src/common/electronStore";
+import XMLNodeElement from "server/compiler/XMLNodeElement";
 
 /**
  * 输出被 key value 处理过模板字符串的 xml 模板
@@ -19,50 +20,79 @@ export async function releaseXmlTemplate(
 ): Promise<Record<string, string>> {
   const project = electronStore.get("projectData");
   const { tag, attributes, value, src } = data;
-  const resourceRoot = path.join(
+  const resourceXmlFile = path.join(
     pathUtil.RESOURCE_CONFIG_DIR,
-    path.dirname(project.resourceSrc)
+    path.dirname(project.resourceSrc),
+    src
   );
-  const templateXmlFile = path.join(resourceRoot, src);
   const releaseXmlFile = path.join(project.root, src);
-
-  const templateElement = new XmlFileCompiler(templateXmlFile).getElement();
-  const templateXml = new XmlCompilerExtra(templateElement);
+  // console.log({ resourceXmlFile });
+  // 目标插入节点 node 备用
+  const targetNode = XMLNodeElement.createEmptyElementNode(tag).setAttributes(
+    Object.fromEntries(attributes)
+  );
+  const textNode = targetNode.getChildrenFirstTextNode();
+  if (textNode.isEmpty) {
+    targetNode.appendChild(
+      XMLNodeElement.createTextNode().setTextNodeValue(value)
+    );
+  } else {
+    textNode.setTextNodeValue(value);
+  }
 
   // 节点操作
-  let releaseElement = XmlCompilerExtra.createEmptyNode().getElement();
+  let releaseNode = XmlCompilerExtra.createEmptyNode();
+  // 模板文件存在
   if (fse.pathExistsSync(releaseXmlFile)) {
-    releaseElement = new XmlFileCompiler(releaseXmlFile).getElement();
-  } else {
-    templateXml.getFirstElementChildNode().removeChildren();
-    releaseElement = templateXml.getElement();
+    releaseNode = XmlFileCompiler.from(releaseXmlFile);
   }
-  const releaseXml = new XmlCompilerExtra(releaseElement);
-  const fromNode = templateXml.findNodeByTagAndAttributes(tag, attributes);
-  const targetNode = releaseXml.findNodeByTagAndAttributes(tag, attributes);
-  // 空文件用模板替换
+  // 模板 xml 实例
+  const releaseXml = new XmlCompilerExtra(releaseNode.getElement());
+  // 空文件用模板根节点替换
   if (releaseXml.isEmpty) {
-    templateXml.getFirstElementChildNode().removeChildren();
-    releaseXml.setNode(templateXml);
-  }
-  // 创建 text value 并替换子节点
-  if (fromNode.isEmpty) {
-    const xmlTemp = XmlCompilerExtra.generateXmlNodeStr({
-      tag,
-      attributes: Object.fromEntries(attributes)
-    });
-    throw new Error(`模板中不存在：${xmlTemp}`);
-  }
-  fromNode
-    .getFirstElementChildNode()
-    .replaceNode(XmlCompilerExtra.createTextNode(value));
-  // 插入工程文件
-  if (targetNode.isEmpty) {
-    const releaseRoot = releaseXml.getFirstElementChildNode();
-    releaseRoot.appendChild(fromNode);
+    // console.log("空的", releaseXml);
+    // 空模板节点
+    const templateNode = XmlFileCompiler.from(resourceXmlFile);
+    templateNode
+      .getChildrenFirstElementNode()
+      .removeChildren()
+      .appendChild(targetNode);
+    releaseXml.setElement(templateNode.getElement());
+    // console.log(releaseXml);
+    // console.log(templateNode);
   } else {
-    targetNode.replaceNode(fromNode);
+    // console.log("非空");
+    let hasMatched = false;
+    const elementNode = releaseXml.getChildrenFirstElementNode();
+
+    // console.log(elementNode);
+    elementNode.getChildrenNodes().forEach(item => {
+      console.log(item);
+      const nodeKey = JSON.stringify({
+        tag: item.getTagname(),
+        attributes: item.getAttributeEntries()
+      });
+      const targetKey = JSON.stringify({ tag, attributes });
+      // console.log({ nodeKey, targetKey });
+      if (nodeKey === targetKey) {
+        const textNode = item.getChildrenFirstTextNode();
+        if (textNode.isEmpty) {
+          item.appendChild(
+            XMLNodeElement.createTextNode().setTextNodeValue(value)
+          );
+        } else {
+          textNode.setTextNodeValue(value);
+        }
+        hasMatched = true;
+        // console.log("set success", item);
+      }
+    });
+    // 从未匹配到则新增一条
+    if (!hasMatched) {
+      elementNode.appendChild(targetNode);
+    }
   }
+  // 构建 xml 并写入文件
   const xmlStr = releaseXml.buildXml();
   fse.ensureDirSync(path.dirname(releaseXmlFile));
   fse.writeFileSync(releaseXmlFile, xmlStr);

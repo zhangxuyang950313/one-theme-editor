@@ -82,7 +82,9 @@ export default class PageConfigCompiler extends XMLNodeElement {
    * @returns
    */
   private getRootFirstChildNodeByTagname(tagname: string): XMLNodeElement {
-    return this.getFirstElementChildNode().getFirstChildNodeByTagname(tagname);
+    return this.getChildrenFirstElementNode().getChildrenFirstNodeByTagname(
+      tagname
+    );
   }
 
   /**
@@ -91,7 +93,9 @@ export default class PageConfigCompiler extends XMLNodeElement {
    * @returns
    */
   public getRootChildrenNodesByTagname(tagname: string): XMLNodeElement[] {
-    return this.getFirstElementChildNode().getChildrenNodesByTagname(tagname);
+    return this.getChildrenFirstElementNode().getChildrenNodesByTagname(
+      tagname
+    );
   }
 
   // 生成当前配置中相对于素材根路径的绝对路径
@@ -203,7 +207,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
   private getRootAttribute<T extends string>(
     attribute: "version" | "name" | "screenWidth" | "disableTab" | "colorFormat"
   ): T {
-    return this.getFirstElementChildNode().getAttributeOf<T>(attribute);
+    return this.getChildrenFirstElementNode().getAttributeOf<T>(attribute);
   }
 
   getVersion(): string {
@@ -545,8 +549,8 @@ export default class PageConfigCompiler extends XMLNodeElement {
    * @returns
    */
   getLayoutElementList(): TypeLayoutElement[] {
-    return this.getFirstElementChildNode()
-      .getFirstChildNodeByTagname(LAYOUT_ELEMENT_TAG.Layout)
+    return this.getChildrenFirstElementNode()
+      .getChildrenFirstNodeByTagname(LAYOUT_ELEMENT_TAG.Layout)
       .getChildrenNodes()
       .flatMap(node => {
         // 处理指定属性字符串模板

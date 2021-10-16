@@ -12,7 +12,7 @@ export default class XmlCompilerExtra extends XMLNodeElement {
    * @returns
    */
   public getElementList(): Element[] {
-    return this.getFirstElementChildNode()
+    return this.getChildrenFirstElementNode()
       .getChildrenNodes()
       .map(item => item.getElement());
   }
@@ -28,9 +28,9 @@ export default class XmlCompilerExtra extends XMLNodeElement {
    */
   public getValueByName(name: string): string {
     return super
-      .getFirstElementChildNode()
-      .getFirstChildNodeByAttrValue("name", name)
-      .getFirstTextChildValue();
+      .getChildrenFirstElementNode()
+      .getChildrenFirstNodeByAttrValue("name", name)
+      .getChildrenFirstTextValue();
   }
 
   /**
@@ -67,13 +67,13 @@ export default class XmlCompilerExtra extends XMLNodeElement {
   public getNameValueMapObj(kvList: TypeKeyValue[]): TypeXmlTempKeyValMap {
     return super
       .createInstance(XmlFileCompiler.compile(this.generateXmlByKeyVal(kvList)))
-      .getFirstElementChildNode()
+      .getChildrenFirstElementNode()
       .getChildrenNodes()
       .reduce<TypeXmlTempKeyValMap>((obj, item) => {
         const nameVal = item.getAttributeOf("name");
         if (!nameVal) return obj;
         obj.set(nameVal, {
-          value: item.getFirstTextChildValue(),
+          value: item.getChildrenFirstTextValue(),
           description: item.getAttributeOf("description")
         });
         return obj;
@@ -88,9 +88,9 @@ export default class XmlCompilerExtra extends XMLNodeElement {
    */
   public getTextByAttrValOf(attrName: string, val: string): string {
     return super
-      .getFirstElementChildNode()
-      .getFirstChildNodeByAttrValue(attrName, val)
-      .getFirstTextChildValue();
+      .getChildrenFirstElementNode()
+      .getChildrenFirstNodeByAttrValue(attrName, val)
+      .getChildrenFirstTextValue();
   }
 
   /**
@@ -112,7 +112,7 @@ export default class XmlCompilerExtra extends XMLNodeElement {
     attrsEntries: [string, string][]
   ): XMLNodeElement {
     const matchedNode = super
-      .getFirstElementChildNode()
+      .getChildrenFirstElementNode()
       .getChildrenNodes()
       .find(node => {
         const tagIsEqual = node.getTagname() === tag;
@@ -135,7 +135,7 @@ export default class XmlCompilerExtra extends XMLNodeElement {
     attrsEntries: [string, string][]
   ): string {
     const matchedNode = this.findNodeByTagAndAttributes(tag, attrsEntries);
-    return matchedNode ? String(matchedNode.getFirstTextChildValue()) : "";
+    return matchedNode ? String(matchedNode.getChildrenFirstTextValue()) : "";
   }
 
   /**
@@ -184,9 +184,9 @@ export default class XmlCompilerExtra extends XMLNodeElement {
     attributes: Attributes;
     elements?: Array<Element>;
   }): string {
-    const nodeTemp = XmlCompilerExtra.createEmptyElementNode()
-      .setTagname(opt.tag)
-      .setAttributes(opt.attributes);
+    const nodeTemp = XmlCompilerExtra.createEmptyElementNode(
+      opt.tag
+    ).setAttributes(opt.attributes);
     if (Array.isArray(opt.elements)) {
       opt.elements.forEach(nodeTemp.appendChildrenElement);
     }

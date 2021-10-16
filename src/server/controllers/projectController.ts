@@ -143,13 +143,12 @@ export default function projectController(service: Express): void {
    * 将 key 的 value 写入 xml ${placeholder}
    */
   service.post<
-    never, // reqParams
+    UnionTupleToObjectKey<typeof apiConfig.XML_TEMPLATE_WRITE.query>, // reqParams
     TypeResponseFrame<Record<string, string>>, // resBody
     typeof apiConfig.XML_TEMPLATE_WRITE.body, // reqBody
-    UnionTupleToObjectKey<typeof apiConfig.XML_TEMPLATE_WRITE.query> // reqQuery
+    never // reqQuery
   >(apiConfig.XML_TEMPLATE_WRITE.path, async (request, response) => {
-    const { body, query } = request;
-    checkParamsKey(query, apiConfig.XML_TEMPLATE_WRITE.query);
+    const { body } = request;
     checkParamsKey(body, apiConfig.XML_TEMPLATE_WRITE.bodyKeys);
     const data = await releaseXmlTemplate(body);
     response.send(result.success(data));

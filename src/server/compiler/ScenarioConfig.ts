@@ -30,13 +30,13 @@ export default class ScenarioConfigCompiler extends XmlCompilerExtra {
   // 解析描述文件配置
   getFileTempList(): TypeFileTempConfig[] {
     const fileTempNodes = super
-      .getFirstElementChildNode()
+      .getChildrenFirstElementNode()
       .getChildrenNodesByTagname(ELEMENT_TAG.FileTemplate);
     return fileTempNodes.map(fileTempNode => {
-      const itemsNode = fileTempNode.getFirstChildNodeByTagname(
+      const itemsNode = fileTempNode.getChildrenFirstNodeByTagname(
         ELEMENT_TAG.Items
       );
-      const templateNode = fileTempNode.getFirstChildNodeByTagname(
+      const templateNode = fileTempNode.getChildrenFirstNodeByTagname(
         ELEMENT_TAG.Template
       );
       const itemNodes: TypeFileTempConfig["items"] = itemsNode
@@ -61,8 +61,8 @@ export default class ScenarioConfigCompiler extends XmlCompilerExtra {
   // 解析打包配置
   getPackageConfig(): TypePackConfig {
     const pkgNode = super
-      .getFirstElementChildNode()
-      .getFirstChildNodeByTagname(ELEMENT_TAG.PackConfig);
+      .getChildrenFirstElementNode()
+      .getChildrenFirstNodeByTagname(ELEMENT_TAG.PackConfig);
     const items: TypePackConfig["items"] = pkgNode
       .getChildrenNodesByTagname(ELEMENT_TAG.Item)
       .map(item => ({
@@ -94,8 +94,8 @@ export default class ScenarioConfigCompiler extends XmlCompilerExtra {
   // 解析应用配置
   getApplyConfig(): TypeApplyConfig {
     const applyNode = super
-      .getFirstElementChildNode()
-      .getFirstChildNodeByTagname(ELEMENT_TAG.ApplyConfig);
+      .getChildrenFirstElementNode()
+      .getChildrenFirstNodeByTagname(ELEMENT_TAG.ApplyConfig);
     const steps: TypeApplyConfig["steps"] = applyNode
       .getChildrenNodesByTagname(ELEMENT_TAG.Step)
       .map(item => ({
@@ -108,7 +108,7 @@ export default class ScenarioConfigCompiler extends XmlCompilerExtra {
   // 解析编辑器资源配置列表
   getResourceOptionList(): TypeResourceOption[] {
     return super
-      .getFirstElementChildNode()
+      .getChildrenFirstElementNode()
       .getChildrenNodesByTagname(ELEMENT_TAG.ResourceConfig)
       .flatMap(node => {
         const src = node.getAttributeOf("src");

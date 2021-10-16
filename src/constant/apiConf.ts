@@ -137,7 +137,7 @@ const apiConfig = {
   // 按行写入 xml
   XML_TEMPLATE_WRITE: createApiConf({
     path: "/project/xml/template/write",
-    bodyKeys: ["value", "src"],
+    bodyKeys: ["tag", "attributes", "value", "src"],
     body: {} as TypeReleaseXmlTempPayload
   }),
   // 通过 name 查找工程的 value

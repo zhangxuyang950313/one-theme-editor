@@ -148,7 +148,6 @@ const StyleXmlValueItem = styled.div`
 const XmlItem: React.FC<{ xmlItem: TypeXmlItem; use: TypeXmlValueTags }> =
   props => {
     const { xmlItem, use } = props;
-    const uuid = useProjectUUID();
     const subscribe = useSubscribeProjectFile();
     const curXmlValMapper = useEditorSelector(
       state => state.xmlFileDataMap[xmlItem.sourceData.src]?.valueMapper || {}
@@ -172,7 +171,7 @@ const XmlItem: React.FC<{ xmlItem: TypeXmlItem; use: TypeXmlValueTags }> =
               from={xmlItem.sourceData.src}
               onChange={value => {
                 // 写入 xml
-                apiWriteXmlTemplate(uuid, {
+                apiWriteXmlTemplate({
                   tag: valueItem.tag,
                   attributes: valueItem.attributes,
                   value: value,

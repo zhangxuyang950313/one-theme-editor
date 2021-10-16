@@ -341,7 +341,7 @@ export function getFileData(
       const xmlFileCompiler = XmlFileCompiler.from(file);
       // 生成 value 映射
       const valueMapper = xmlFileCompiler
-        .getFirstElementChildNode()
+        .getChildrenFirstElementNode()
         .getChildrenNodes()
         .reduce<Record<string, string>>((prev, item) => {
           if (!item.isElement) return prev;
@@ -349,7 +349,7 @@ export function getFileData(
             tag: item.getTagname(),
             attributes: item.getAttributes()
           });
-          prev[template] = item.getFirstTextChildValue();
+          prev[template] = item.getChildrenFirstTextValue();
           return prev;
         }, {});
       const xmlFileData = new XmlFileData()

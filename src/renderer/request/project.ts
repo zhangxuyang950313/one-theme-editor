@@ -76,13 +76,10 @@ export async function apiGetTempValueByName<T = { value: string }>(
  * @returns
  */
 export async function apiWriteXmlTemplate(
-  uuid: string,
   data: TypeReleaseXmlTempPayload
 ): Promise<null> {
   return createHttp()
-    .post<typeof data, null>(apiConfig.XML_TEMPLATE_WRITE.path, data, {
-      params: { uuid }
-    })
+    .post<typeof data, null>(apiConfig.XML_TEMPLATE_WRITE.path, data)
     .then(data => data);
 }
 

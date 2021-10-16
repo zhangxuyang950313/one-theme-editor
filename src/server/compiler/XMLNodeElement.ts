@@ -128,14 +128,14 @@ class XMLNodeChildren extends XMLNodeBase {
   }
 
   // 获取所有文本子节点
-  public getTextChildrenNodes(): XMLNodeElement[] {
+  public getChildrenTextNodes(): XMLNodeElement[] {
     return this.getChildrenNodes().filter(
       item => item.getType() === ELEMENT_TYPE.TEXT
     );
   }
 
   // 获取第一个子元素节点（不包含注释）
-  public getFirstElementChildNode(): XMLNodeElement {
+  public getChildrenFirstElementNode(): XMLNodeElement {
     const childrenElements = this.getChildrenElements();
     for (let i = 0; i < childrenElements.length; i++) {
       const current = XMLNodeElement.createNode(childrenElements[i]);
@@ -150,7 +150,7 @@ class XMLNodeChildren extends XMLNodeBase {
    * 获取子节点列表第一个指定 tagname 子节点
    * @param tagname 指定节点 tagname
    */
-  public getFirstChildNodeByTagname(tagname: string): XMLNodeElement {
+  public getChildrenFirstNodeByTagname(tagname: string): XMLNodeElement {
     const childNode = this.getChildrenNodes().find(
       item => item.getTagname() === tagname
     );
@@ -162,7 +162,7 @@ class XMLNodeChildren extends XMLNodeBase {
    * @param type
    * @returns
    */
-  public getFirstChildNodeByType(type: ELEMENT_TYPE): XMLNodeElement {
+  public getChildrenFirstNodeByType(type: ELEMENT_TYPE): XMLNodeElement {
     const childNode = this.getChildrenNodes().find(
       item => item.getType() === type
     );
@@ -193,7 +193,7 @@ class XMLNodeChildren extends XMLNodeBase {
   }
 
   // 获取第一个文本节点
-  public getFirstTextChildNode(): XMLNodeElement {
+  public getChildrenFirstTextNode(): XMLNodeElement {
     const childNode = this.getChildrenNodes().find(
       item => item.getType() === ELEMENT_TYPE.TEXT
     );
@@ -201,8 +201,8 @@ class XMLNodeChildren extends XMLNodeBase {
   }
 
   // 获取所有文本子节点的第一个节点文本值
-  public getFirstTextChildValue(): string {
-    return String(this.getFirstTextChildNode().getText()) ?? "";
+  public getChildrenFirstTextValue(): string {
+    return String(this.getChildrenFirstTextNode().getText()) ?? "";
   }
 
   // 获取属性和值匹配的节点列表
@@ -216,7 +216,7 @@ class XMLNodeChildren extends XMLNodeBase {
   }
 
   // 获取第一个属性和值匹配的节点
-  public getFirstChildNodeByAttrValue(
+  public getChildrenFirstNodeByAttrValue(
     attr: string,
     val: string
   ): XMLNodeElement {
@@ -296,7 +296,7 @@ class XMLNodeHandler extends XMLNodeChildren {
 
   // 向子节点添加一个节点
   public appendChild(node: XMLNodeElement): this {
-    this.getChildrenElements().push(node.getElement());
+    this.appendChildrenElement(node.getElement());
     return this;
   }
 
@@ -348,10 +348,10 @@ export default class XMLNodeElement extends XMLNodeHandler {
   }
 
   // 创建空的元素节点
-  public static createEmptyElementNode(): XMLNodeElement {
+  public static createEmptyElementNode(tag: string): XMLNodeElement {
     return XMLNodeElement.createNode({
       type: "element",
-      name: "",
+      name: tag,
       attributes: {},
       elements: []
     });
