@@ -6,6 +6,8 @@ import { RightCircleOutlined } from "@ant-design/icons";
 import { RGBColor, SketchPicker } from "react-color";
 import ColorUtil, { HEX_FORMAT } from "src/common/utils/ColorUtil";
 import { StyleGirdBackground } from "@/style";
+import electronStore from "src/common/electronStore";
+import { useCurrentPageConfig, useCurrentPageOption } from "@/hooks/resource";
 
 // 颜色小方块
 const ColorBox: React.FC<{
@@ -64,10 +66,36 @@ function ColorPickerBox(props: {
 }): JSX.Element {
   const { color, tipColor, onChange, onDisabled } = props;
   const [colorRGBAHex, setColorRGBAHex] = useState(color);
+  const [colorRecently, setColorRecently] = useState<string[]>([]);
+  const pageConfig = useCurrentPageConfig();
 
   useEffect(() => {
     setColorRGBAHex(color);
   }, [color]);
+
+  const appendColorRecently = () => {
+    const colorRecently = electronStore.get("colorRecently");
+    if (!Array.isArray(colorRecently)) {
+      electronStore.set("colorRecently", []);
+      return;
+    }
+    const arr = Array.from(new Set([colorRGBAHex, ...colorRecently])).filter(
+      item => {
+        try {
+          ColorUtil.create(item, pageConfig?.colorFormat || HEX_FORMAT.RGBA);
+          return true;
+        } catch (err) {
+          return false;
+        }
+      }
+    );
+    electronStore.set("colorRecently", arr);
+    setColorRecently(arr);
+  };
+
+  useEffect(() => {
+    appendColorRecently();
+  }, []);
 
   return (
     <StyleColorPickerBox>
@@ -84,7 +112,7 @@ function ColorPickerBox(props: {
         overlay={
           <SketchPicker
             width="auto"
-            // presetColors={getLocalStorage.presetColors}
+            presetColors={colorRecently}
             color={colorRGBAHex}
             onChange={({ rgb }) => {
               const rgba = sketch2rgba(rgb);
@@ -95,6 +123,7 @@ function ColorPickerBox(props: {
           />
         }
         onVisibleChange={visible => {
+          if (!visible) appendColorRecently();
           !visible && onDisabled && onDisabled(colorRGBAHex);
         }}
       >

@@ -1,13 +1,10 @@
-import path from "path";
 import ElectronStore from "electron-store";
 import PathCollection from "src/data/PathCollection";
 import ProjectData from "src/data/ProjectData";
 import { TypePathConfig } from "src/types/extraConfig";
 import { TypeProjectData } from "src/types/project";
-import {
-  TypeResourceConfig,
-  TypeScenarioConfig
-} from "src/types/resource.config";
+import { TypeResourceConfig } from "src/types/resource.config";
+import { TypeScenarioConfig } from "src/types/scenario.config";
 import { ScenarioOption } from "src/data/ScenarioConfig";
 import ResourceConfigData from "src/data/ResourceConfig";
 
@@ -20,6 +17,7 @@ type TypeElectronStore = {
   resourceConfig: TypeResourceConfig;
   resourcePath: string;
   projectPath: string;
+  colorRecently: string[];
 };
 const defaultState: TypeElectronStore = {
   serverPort: 0,
@@ -29,7 +27,8 @@ const defaultState: TypeElectronStore = {
   scenarioConfig: ScenarioOption.default,
   resourceConfig: ResourceConfigData.default,
   resourcePath: "",
-  projectPath: ""
+  projectPath: "",
+  colorRecently: []
 };
 
 const electronStore = new ElectronStore<TypeElectronStore>();

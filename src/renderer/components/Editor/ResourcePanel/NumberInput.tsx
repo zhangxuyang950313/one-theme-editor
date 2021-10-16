@@ -16,7 +16,7 @@ const NumberInput: React.FC<{
         <InputNumber disabled keyboard className="input" value={defaultValue} />
         <RightCircleOutlined
           className="middle-button"
-          onClick={() => onChange(value)}
+          onClick={() => onChange(defaultValue)}
         />
         <InputNumber
           keyboard

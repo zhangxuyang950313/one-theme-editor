@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 import { CloseOutlined } from "@ant-design/icons";
 import { apiWriteXmlTemplate } from "@/request";
-import { useProjectUUID } from "@/hooks/project/index";
 import { useCurrentPageConfig } from "@/hooks/resource";
 import { useEditorSelector } from "@/store";
 import { HEX_FORMAT, RESOURCE_TAG } from "src/enum/index";
