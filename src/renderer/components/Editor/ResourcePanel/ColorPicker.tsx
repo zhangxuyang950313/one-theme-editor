@@ -7,7 +7,7 @@ import { RGBColor, SketchPicker } from "react-color";
 import ColorUtil, { HEX_FORMAT } from "src/common/utils/ColorUtil";
 import { StyleGirdBackground } from "@/style";
 import electronStore from "src/common/electronStore";
-import { useCurrentPageConfig, useCurrentPageOption } from "@/hooks/resource";
+import { useCurrentPageConfig } from "@/hooks/resource";
 
 // 颜色小方块
 const ColorBox: React.FC<{
@@ -89,6 +89,9 @@ function ColorPickerBox(props: {
         }
       }
     );
+    if (arr.length > 55) {
+      arr.length = 55;
+    }
     electronStore.set("colorRecently", arr);
     setColorRecently(arr);
   };
