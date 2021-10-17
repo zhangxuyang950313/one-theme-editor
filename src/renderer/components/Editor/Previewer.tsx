@@ -13,7 +13,7 @@ import ColorUtil from "src/common/utils/ColorUtil";
 import { useCurrentPageConfig } from "@/hooks/resource";
 import useSubscribeProjectFile from "@/hooks/project/useSubscribeProjectFile";
 import { useEditorSelector } from "@/store";
-import { DynamicBothSourceImage, PreloadImage } from "../ImageCollection";
+import { DynamicBothSourceImage } from "../ImageCollection";
 
 // function computeLayout(
 //   data: TypeLayoutData,
@@ -167,19 +167,24 @@ const LayoutTextElement: React.FC<{
 };
 
 const Previewer: React.FC<{
+  className?: string;
   pageConfig: TypePageConfig;
   useDash: boolean;
   canClick: boolean;
 }> = props => {
-  const { screenWidth, layoutElementList, previewList } = props.pageConfig;
+  const {
+    screenWidth, //
+    layoutElementList,
+    previewList,
+    forceStaticPreview
+  } = props.pageConfig;
   const [scale, setScale] = useState(0);
 
   if (!screenWidth) return null;
 
   const Content: React.FC = () => {
-    const pageConfig = useCurrentPageConfig();
-    if (pageConfig?.forceStaticPreview || !layoutElementList.length) {
-      return <PreloadImage className="static" src={previewList[0]} />;
+    if (forceStaticPreview || !layoutElementList.length) {
+      return <img alt="" className="static" src={previewList[0]} />;
     }
     return (
       <div
@@ -231,6 +236,7 @@ const Previewer: React.FC<{
       style={{
         borderRadius: `${50 * scale}px`
       }}
+      className={props.className}
       ref={divEl => {
         if (!divEl || scale) return;
         setScale(divEl.getBoundingClientRect().width / Number(screenWidth));
@@ -243,10 +249,10 @@ const Previewer: React.FC<{
 
 const StylePreviewer = styled.div`
   width: 100%;
-  border: 1px solid;
-  border-color: ${({ theme }) => theme["@border-color-base"]};
   box-sizing: border-box;
   overflow: hidden;
+  border: 1px solid;
+  border-color: ${({ theme }) => theme["@border-color-base"]};
   .dynamic {
     position: relative;
     transform-origin: 0 0;

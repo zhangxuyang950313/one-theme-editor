@@ -1,88 +1,113 @@
 import React from "react";
 import styled from "styled-components";
-import { StyleBorderRight } from "@/style";
+import { useCurrentPageConfig } from "@/hooks/resource";
 import PageSelector from "@/components/Editor/PageSelector";
 import Previewer from "@/components/Editor/Previewer";
-// import ResImageList from "@/components/Editor/ResImageList";
 import ResourcePanel from "@/components/Editor/ResourcePanel/index";
-import { useCurrentPageConfig } from "@/hooks/resource";
+import ModuleSelector from "@/components/Editor/ModuleSelector";
+import EditorToolsBar from "@/components/Editor/ToolsBar";
+import StatusBar from "@/components/Editor/StatusBar";
 
-// 主编辑区域
-const EditorContainer: React.FC = () => {
-  const currentResPageConfig = useCurrentPageConfig();
+// 编辑区域框架
+const EditorFrame: React.FC = () => {
+  const pageConfig = useCurrentPageConfig();
   return (
-    <StyleEditorContainer>
-      {/* 页面选择器 */}
-      <StylePageSelector>
-        <div className="page-selector-container">
-          <PageSelector />
-        </div>
-      </StylePageSelector>
-      {/* 预览 */}
-      <StylePreviewer>
-        {/* TODO: 占位图 */}
-        {currentResPageConfig && (
-          <div className="preview-container">
-            <Previewer pageConfig={currentResPageConfig} canClick useDash />
+    <StyleEditor>
+      <div className="editor__container">
+        {/* 模块选择器 */}
+        <ModuleSelector className="editor__module-selector right-border-line" />
+        {/* 编辑区域 */}
+        <div className="editor__content-wrapper">
+          {/* 工具栏 */}
+          <EditorToolsBar />
+          {/* 主编辑区域 */}
+          <div className="editor__content">
+            {/* 页面选择器 */}
+            <PageSelector className="editor__page-selector right-border-line" />
+            {/* 预览 */}
+            {/* TODO: 占位图 */}
+            <div className="editor__previewer right-border-line">
+              {pageConfig && (
+                <Previewer
+                  className="previewer__content"
+                  pageConfig={pageConfig}
+                  canClick
+                  useDash
+                />
+              )}
+            </div>
+            {/* 资源编辑区 */}
+            <div className="resource-panel ">
+              <ResourcePanel />
+            </div>
           </div>
-        )}
-      </StylePreviewer>
-      {/* 资源编辑区 */}
-      <StyleResourcePanel>
-        <div className="resource-handler-container">
-          <ResourcePanel />
         </div>
-      </StyleResourcePanel>
-    </StyleEditorContainer>
+      </div>
+      {/* 底部工具栏 */}
+      <div className="editor__status-bar">
+        <StatusBar />
+      </div>
+    </StyleEditor>
   );
 };
 
-const StyleEditorContainer = styled.div`
+const StyleEditor = styled.div`
+  width: 100vw;
+  height: 100vh;
   display: flex;
-  overflow-y: auto;
-  /* height: 100%; */
-  flex-grow: 1;
-  box-sizing: border-box;
-`;
-
-const StylePageSelector = styled(StyleBorderRight)`
-  /* flex: 1; */
-  flex-shrink: 0;
-  padding: 10px;
-  overflow-y: auto;
-  .page-selector-container {
-    width: 120px;
+  flex-direction: column;
+  .right-border-line {
+    border-right: 1px solid;
+    border-right-color: ${({ theme }) => theme["@border-color-base"]};
   }
-`;
-
-const StylePreviewer = styled(StyleBorderRight)`
-  flex-shrink: 0;
-  padding: 20px;
-  overflow-y: auto;
-  .preview-container {
-    flex: 1;
-    min-width: 300px;
-    max-width: 350px;
-  }
-`;
-
-// const StyleResImageList = styled(StyleBorderRight)`
-//   flex-basis: 320px;
-//   flex-shrink: 0;
-//   padding: 20px;
-//   overflow: auto;
-// `;
-
-const StyleResourcePanel = styled.div`
-  /* min-width: 400px; */
-  flex: 1;
-  flex-shrink: 0;
-  overflow-y: auto;
-  .resource-handler-container {
-    flex: 1;
-    width: 100%;
+  .editor__container {
     height: 100%;
+    display: flex;
+    overflow-y: hidden;
+
+    .editor__module-selector {
+      flex-shrink: 0;
+      padding: 80px 0;
+      overflow-y: auto;
+    }
+    .editor__content-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      /* width: 100%; */
+      overflow-x: auto;
+      .editor__content {
+        display: flex;
+        flex-grow: 1;
+        overflow-y: auto;
+        box-sizing: border-box;
+        .editor__page-selector {
+          flex-shrink: 0;
+          padding: 10px;
+          overflow-y: auto;
+        }
+        .editor__previewer {
+          flex-shrink: 0;
+          padding: 20px;
+          overflow-y: auto;
+          width: 400px;
+          .previewer__content {
+            width: 350px;
+          }
+        }
+        .resource-panel {
+          flex: 1;
+          flex-shrink: 0;
+          overflow-y: auto;
+        }
+      }
+    }
+  }
+  .editor__status-bar {
+    flex-grow: 1;
+    /* flex-shrink: 0; */
+    height: 30px;
   }
 `;
 
-export default EditorContainer;
+export default EditorFrame;

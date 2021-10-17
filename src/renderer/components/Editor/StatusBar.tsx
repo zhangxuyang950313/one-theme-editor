@@ -8,6 +8,7 @@ const StatusBar: React.FC = () => {
   return (
     <StyleStatusBar>
       <span
+        className="project-name"
         title="跳转目录"
         onClick={() => {
           remote.shell.openItem(`${projectData.root}`);
@@ -20,7 +21,6 @@ const StatusBar: React.FC = () => {
 };
 
 const StyleStatusBar = styled.div`
-  cursor: pointer;
   width: 100%;
   height: 100%;
   overflow: hidden;
@@ -30,8 +30,11 @@ const StyleStatusBar = styled.div`
   color: ${({ theme }) => theme["@text-color"]};
   border-top: 1px solid;
   border-top-color: ${({ theme }) => theme["@border-color-base"]};
-  &:hover {
-    text-decoration: underline;
+  .project-name {
+    cursor: pointer;
+    &:hover {
+      text-decoration: underline;
+    }
   }
 `;
 

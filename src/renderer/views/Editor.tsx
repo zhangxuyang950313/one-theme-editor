@@ -1,37 +1,14 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
-import { useHistory } from "react-router";
 import { Button, Empty, Spin } from "antd";
-import { StyleBorderRight } from "@/style";
+import { useHistory } from "react-router";
 import { useInitProject } from "@/hooks/project/index";
 import { LOAD_STATUS } from "src/enum";
-import ModuleSelector from "@/components/Editor/ModuleSelector";
-import EditorToolsBar from "@/components/Editor/ToolsBar";
-import EditorContainer from "@/components/Editor/index";
-import StatusBar from "@/components/Editor/StatusBar";
-// import { useResourceMapper } from "@/hooks/resource";
-// import usePatchPageSourceData from "@/hooks/project/usePatchPageSourceData";
-// import usePatchProjectInfoData from "@/hooks/project/usePatchProjectInfoData";
-// import useWatchFiles from "@/hooks/project/useWatchFiles";
+import EditorFrame from "@/components/Editor/index";
 
 const Editor: React.FC = () => {
   const history = useHistory();
   const [projectData, status, handleFetch] = useInitProject();
-  // const resourceList = useResourceMapper();
-
-  // useEffect(() => {
-  // if (!resourceList.length) return;
-  // subscribeFile(resourceList[0].sourceData.src, evt => {
-  //   console.log(1, { evt });
-  // });
-  // subscribeFile(resourceList[1].sourceData.src, evt => {
-  //   console.log(2, { evt });
-  // });
-  // }, [resourceList]);
-  // const handleWatchFiles = useWatchFiles();
-  // usePatchPageSourceData();
-  // usePatchProjectInfoData();
-  // useWatchProjectFiles();
   switch (status) {
     case LOAD_STATUS.INITIAL:
     case LOAD_STATUS.LOADING: {
@@ -72,31 +49,9 @@ const Editor: React.FC = () => {
         </StyleEditorEmpty>
       );
     }
+    // 进入编辑状态
     default: {
-      // 进入编辑状态
-      return (
-        <StyleEditor>
-          <div className="editor-main">
-            {/* 模块选择器 */}
-            <StyleModuleSelector>
-              <div className="module-selector-container">
-                <ModuleSelector />
-              </div>
-            </StyleModuleSelector>
-            {/* 编辑区域 */}
-            <StyleEditorContent>
-              {/* 工具栏 */}
-              <EditorToolsBar />
-              {/* 主编辑区域 */}
-              <EditorContainer />
-            </StyleEditorContent>
-          </div>
-          {/* 底部工具栏 */}
-          <div className="status-bar">
-            <StatusBar />
-          </div>
-        </StyleEditor>
-      );
+      return <EditorFrame />;
     }
   }
 };
@@ -108,38 +63,6 @@ const StyleEditorEmpty = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-`;
-
-const StyleEditor = styled.div`
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  .editor-main {
-    overflow-y: hidden;
-    display: flex;
-  }
-  .status-bar {
-    flex-grow: 1;
-    /* flex-shrink: 0; */
-    height: 30px;
-  }
-`;
-
-const StyleModuleSelector = styled(StyleBorderRight)`
-  overflow-y: auto;
-  flex-shrink: 0;
-  padding: 80px 0;
-  .module-selector-container {
-    width: 80px;
-  }
-`;
-
-const StyleEditorContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  overflow-x: auto;
 `;
 
 export default Editor;

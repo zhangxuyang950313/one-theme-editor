@@ -114,7 +114,7 @@ export default function useSubscribeProjectFile(): TypeSubscribeFile {
         subscribeMap.get(item.pathname)?.delete(item.callback);
       });
       watcher?.close().then(() => {
-        console.log("销毁 watcher");
+        console.log("销毁 watcher", projectRoot);
       });
       watcher = null;
     };

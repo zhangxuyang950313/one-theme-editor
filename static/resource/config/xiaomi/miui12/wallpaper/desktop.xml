@@ -6,7 +6,7 @@
     colorFormat: 颜色格式
     forceStaticPreview: 强制使用静态预览图
 -->
-<Page version="1.0.0" name="桌面壁纸和首屏图标" screenWidth="1080" colorFormat="ARGB" forceStaticPreview="true">
+<Page version="1.0.0" name="桌面壁纸和首屏图标" screenWidth="1080" colorFormat="ARGB" forceStaticPreview="false">
 
     <!-- 静态预览图 -->
     <Preview src="resource://preview/preview.jpg"/>

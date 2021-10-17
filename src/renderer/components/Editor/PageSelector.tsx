@@ -3,23 +3,25 @@ import styled from "styled-components";
 import {
   useCurrentResModule,
   useCurrentPageOption,
-  useResourceImageUrl,
-  useCurrentPageConfig
+  useResourceImageUrl
 } from "@/hooks/resource/index";
 import { PreloadImage } from "@/components/ImageCollection";
 import { TypePageOption } from "src/types/resource.config";
+import { useEditorSelector } from "@/store";
 import Previewer from "./Previewer";
 
-const PagePreview: React.FC<{ pageData: TypePageOption }> = props => {
-  const { pageData } = props;
-  const resourceImageURL = useResourceImageUrl(pageData.preview);
+const PagePreview: React.FC<{ pageOption: TypePageOption }> = props => {
+  const { pageOption } = props;
+  const resourceImageURL = useResourceImageUrl(pageOption.preview);
+  const pageConfigMap = useEditorSelector(state => state.pageConfigMap);
   const [pageOpt, setPageOpt] = useCurrentPageOption();
-  const pageConf = useCurrentPageConfig();
+
+  const pageConf = pageConfigMap[pageOption.src];
 
   return (
     <StylePreviewImage
-      data-active={String(pageOpt.key === pageData.key)}
-      onClick={() => setPageOpt(pageData)}
+      data-active={String(pageOpt.key === pageOption.key)}
+      onClick={() => setPageOpt(pageOption)}
     >
       {pageConf ? (
         <Previewer pageConfig={pageConf} useDash={false} canClick={false} />
@@ -33,18 +35,19 @@ const PagePreview: React.FC<{ pageData: TypePageOption }> = props => {
 const StylePreviewImage = styled.span`
   cursor: pointer;
   margin: 5px 0;
+  width: 100%;
   /* flex-grow: 0; */
   /* width: 100%; */
   /* height: auto; */
-  /* border: 1px solid;
-  border-color: ${({ theme }) => theme["@border-color-base"]}; */
+  border: 1px solid;
+  border-color: ${({ theme }) => theme["@border-color-base"]};
   border-radius: 6px;
-  overflow: hidden;
+  /* overflow: hidden; */
   opacity: 0.4;
   transition: 0.4s all;
   &[data-active="true"] {
-    /* border: 1px solid;
-    border-color: ${({ theme }) => theme["@primary-color"]}; */
+    border: 1px solid;
+    border-color: ${({ theme }) => theme["@primary-color"]};
     opacity: 1;
   }
   .preview-image {
@@ -56,27 +59,27 @@ const StylePreviewImage = styled.span`
 `;
 
 // 页面选择器
-const PageSelector: React.FC = () => {
+const PageSelector: React.FC<{ className: string }> = props => {
   const [{ pageList }] = useCurrentResModule();
 
   if (pageList.length === 0) return null;
 
   return (
-    <StylePagePreview>
-      {pageList.map((page, index) => (
-        <PagePreview key={index} pageData={page} />
-      ))}
-    </StylePagePreview>
+    <div className={props.className}>
+      <StylePageSelector>
+        {pageList.map((page, index) => (
+          <PagePreview key={index} pageOption={page} />
+        ))}
+      </StylePageSelector>
+    </div>
   );
 };
 
-const StylePagePreview = styled.div`
+const StylePageSelector = styled.div`
+  width: 120px;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  width: 100%;
-  overflow-y: auto;
-  flex-wrap: nowrap;
-  flex-grow: 0;
 `;
 
 export default PageSelector;

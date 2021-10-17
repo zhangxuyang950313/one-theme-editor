@@ -6,7 +6,7 @@ import { useEditorSelector } from "@/store";
 import { StaticResourceImage } from "../ImageCollection";
 
 // 模块选择器
-const ModuleSelector: React.FC = () => {
+const ModuleSelector: React.FC<{ className?: string }> = props => {
   const resourceModuleList = useEditorSelector(
     state => state.resourceConfig.moduleList
   );
@@ -16,7 +16,7 @@ const ModuleSelector: React.FC = () => {
   if (!currentModule) return null;
 
   return (
-    <>
+    <div className={props.className}>
       {resourceModuleList.map((item, key) => (
         <Tooltip key={key} title={item.name} placement="right">
           <StyleIcon onClick={() => setCurrentModule(item)}>
@@ -34,12 +34,12 @@ const ModuleSelector: React.FC = () => {
           </StyleIcon>
         </Tooltip>
       ))}
-    </>
+    </div>
   );
 };
 
 const StyleIcon = styled.div`
-  width: 100%;
+  width: 80px;
   height: 70px;
   display: flex;
   align-items: center;
