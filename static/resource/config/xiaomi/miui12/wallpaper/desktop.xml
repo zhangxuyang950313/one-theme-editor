@@ -218,7 +218,7 @@
             x="670" y="1400" w="186" h="186" align="center" alignV="center"
             src="${image/default.icons/com.xiaomi.shop}"
         />
-        <Image 
+        <!-- <Image 
             x="670" y="1400" w="186" h="186" align="center" alignV="center"
             src="${image/default.icons/com.xiaomi.padshop}"
         />
@@ -226,7 +226,7 @@
             name="小米商城"
             x="670" y="1400" w="186" h="186" align="center" alignV="center"
             src="${image/default.icons/com.xiaomi.shop.activity.MainTabActivity.shop}"
-        />
+        /> -->
         <Text
             text="小米商城"
             x="670" y="1500" size="38" align="center"

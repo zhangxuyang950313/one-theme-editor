@@ -57,22 +57,14 @@ const subscribeMap = new Map<string, Set<TypeListener>>();
 //   console.log(subscribeMap);
 // }, 1000);
 
-// 监听当前页面文件
-// 发布订阅模式，可多次订阅同一个 file
-export default function useSubscribeProjectFile(): TypeSubscribeFile {
+export function useCreateWatcher(): void {
   const dispatch = useEditorDispatch();
   const projectRoot = useProjectRoot();
-  const xmlFileDataMap = useEditorSelector(state => state.xmlFileDataMap);
-  const callbackList = useRef(
-    new Array<{ pathname: string; callback: TypeListener }>()
-  );
-
   useEffect(() => {
     if (!path.isAbsolute(projectRoot)) return;
     if (projectRoot === watcher?.options.cwd) return;
 
     console.log("创建 watcher", projectRoot);
-    watcher?.close();
     watcher = new FSWatcher({
       cwd: projectRoot,
       persistent: true, // 尽可能保持进程
@@ -110,15 +102,33 @@ export default function useSubscribeProjectFile(): TypeSubscribeFile {
     // 生命周期结束取消监听
     return () => {
       // 清除本次生命周期的 callback
-      callbackList.current.forEach(item => {
-        subscribeMap.get(item.pathname)?.delete(item.callback);
-      });
       watcher?.close().then(() => {
         console.log("销毁 watcher", projectRoot);
       });
       watcher = null;
     };
   }, [projectRoot]);
+}
+
+// 监听当前页面文件
+// 发布订阅模式，可多次订阅同一个 file
+export default function useSubscribeProjectFile(): TypeSubscribeFile {
+  const dispatch = useEditorDispatch();
+  const projectRoot = useProjectRoot();
+  const xmlFileDataMap = useEditorSelector(state => state.xmlFileDataMap);
+  const callbackList = useRef(
+    new Array<{ pathname: string; callback: TypeListener }>()
+  );
+
+  useEffect(() => {
+    // 生命周期结束取消监听
+    return () => {
+      // 清除本次生命周期的 callback
+      callbackList.current.forEach(item => {
+        subscribeMap.get(item.pathname)?.delete(item.callback);
+      });
+    };
+  }, []);
 
   // 订阅函数
   const subscribe: TypeSubscribeFile = (src, options, callback) => {

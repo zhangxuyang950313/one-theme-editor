@@ -2,11 +2,13 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Tabs } from "antd";
 import { useCurrentPageConfig, useResourceList } from "@/hooks/resource/index";
+import { useCreateWatcher } from "@/hooks/project/useSubscribeProjectFile";
 import { RESOURCE_TAG } from "src/enum";
 import FileBlocker from "./FileBlocker";
 import XmlValueBlocker from "./XmlValueBlocker";
 
 const ResourcePanel: React.FC = () => {
+  useCreateWatcher();
   const pageConfig = useCurrentPageConfig();
   const resourceList = useResourceList();
   const [selectedIndex, setSelectedIndex] = useState(0);

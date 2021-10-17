@@ -49,10 +49,14 @@ async function getFilePicResponseData(
         const { buff, fileType } = await getImgBuffAndFileType(file);
         resolve({ mimeType: fileType.mime, data: buff });
       } catch (err) {
-        const data = await getFileIconData(file).catch(() => ({
+        const def = {
           mimeType: "image/png",
           data: Buffer.from("")
-        }));
+        };
+        if (!fse.existsSync(file)) {
+          resolve(def);
+        }
+        const data = await getFileIconData(file).catch(() => def);
         resolve(data);
       }
     }

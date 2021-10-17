@@ -182,67 +182,61 @@ const Previewer: React.FC<{
 
   if (!screenWidth) return null;
 
-  const Content: React.FC = () => {
-    if (forceStaticPreview || !layoutElementList.length) {
-      return <img alt="" className="static" src={previewList[0]} />;
-    }
-    return (
-      <div
-        className="dynamic"
-        style={{
-          width: `${Number(screenWidth) * scale}px`,
-          height: `${2340 * scale}px`
-        }}
-      >
-        {layoutElementList.map((element, k) => {
-          switch (element.elementTag) {
-            // 图片类型预览
-            case LAYOUT_ELEMENT_TAG.Image: {
-              const layoutStyle = computeLayoutStyle(element.layout, scale);
-              return (
-                <DynamicBothSourceImage
-                  key={k}
-                  data-dash={props.useDash}
-                  data-click={props.canClick}
-                  className="image"
-                  style={layoutStyle}
-                  alt=""
-                  src={element.sourceData.src}
-                />
-              );
-            }
-            case LAYOUT_ELEMENT_TAG.Text: {
-              return (
-                <LayoutTextElement
-                  key={k}
-                  element={element}
-                  scale={scale}
-                  canClick={props.canClick}
-                  useDash={props.useDash}
-                />
-              );
-            }
-            default: {
-              return null;
-            }
-          }
-        })}
-      </div>
-    );
-  };
-
   return (
     <StylePreviewer
-      style={{
-        borderRadius: `${50 * scale}px`
-      }}
+      style={{ borderRadius: `${50 * scale}px` }}
       className={props.className}
       ref={divEl => {
         if (!divEl || scale) return;
         setScale(divEl.getBoundingClientRect().width / Number(screenWidth));
       }}
     >
-      <Content />
+      {forceStaticPreview || !layoutElementList.length ? (
+        <img alt="" className="static" src={previewList[0]} />
+      ) : (
+        <div
+          className="dynamic"
+          style={{
+            width: `${Number(screenWidth) * scale}px`,
+            height: `${2340 * scale}px`
+          }}
+        >
+          {layoutElementList.map((element, k) => {
+            switch (element.elementTag) {
+              // 图片类型预览
+              case LAYOUT_ELEMENT_TAG.Image: {
+                const layoutStyle = computeLayoutStyle(element.layout, scale);
+                return (
+                  <DynamicBothSourceImage
+                    key={k}
+                    id={`preview-${element.sourceData.src}`}
+                    data-dash={props.useDash}
+                    data-click={props.canClick}
+                    className="image"
+                    style={layoutStyle}
+                    alt=""
+                    src={element.sourceData.src}
+                  />
+                );
+              }
+              case LAYOUT_ELEMENT_TAG.Text: {
+                return (
+                  <LayoutTextElement
+                    key={k}
+                    element={element}
+                    scale={scale}
+                    canClick={props.canClick}
+                    useDash={props.useDash}
+                  />
+                );
+              }
+              default: {
+                return null;
+              }
+            }
+          })}
+        </div>
+      )}
     </StylePreviewer>
   );
 };

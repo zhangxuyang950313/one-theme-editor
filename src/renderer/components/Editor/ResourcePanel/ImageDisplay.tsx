@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { LazyImage } from "@/components/ImageCollection";
 import { StyleGirdBackground } from "@/style";
@@ -10,19 +10,30 @@ import { StyleGirdBackground } from "@/style";
 const ImageDisplay: React.FC<{
   className?: string;
   src?: string;
+  useDash?: boolean;
+  girdSize?: number;
   onClick?: () => void;
 }> = props => {
-  const { src, onClick, className } = props;
+  const { src, onClick, className, useDash, girdSize } = props;
+
+  const [display, setDisplay] = useState(true);
+
+  useEffect(() => {
+    setDisplay(true);
+  }, [src]);
 
   return (
-    <StyleImageDisplay className={className}>
+    <StyleImageDisplay
+      girdSize={girdSize}
+      className={className}
+      onClick={() => onClick && onClick()}
+    >
       <LazyImage
-        id={src}
         className="preview"
-        alt={src}
+        alt=""
         src={src}
+        use-dash={String(!!(useDash && display))}
         can-click={String(!!onClick)}
-        onClick={() => onClick && onClick()}
       />
     </StyleImageDisplay>
   );
@@ -37,7 +48,6 @@ const StyleImageBackground = styled(StyleGirdBackground)`
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 6px;
 `;
 
 const StyleImageDisplay = styled(StyleImageBackground)`
@@ -45,12 +55,14 @@ const StyleImageDisplay = styled(StyleImageBackground)`
     position: relative;
     left: 0;
     top: 0;
-    max-width: 80%;
-    max-height: 80%;
+    max-width: 100%;
+    max-height: 100%;
     object-fit: contain;
-    /* border: 1px dashed red; */
+    &[use-dash="true"] {
+      border: 1px dashed red;
+    }
     /* background: center/contain no-repeat; */
-    /* &[can-click="true"] {
+    &[can-click="true"] {
       cursor: pointer;
       transform: scale(0.8);
       transition: transform 0.3s ease;
@@ -58,7 +70,7 @@ const StyleImageDisplay = styled(StyleImageBackground)`
         transform: scale(0.9);
         transition: transform 0.1s ease;
       }
-    } */
+    }
   }
 `;
 
