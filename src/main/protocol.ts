@@ -103,7 +103,6 @@ export default function registerProtocol(): void {
 
   // 双向选择协议
   protocol.registerBufferProtocol("src", async (request, response) => {
-    console.log(request);
     const projectPath = electronStore.get("projectPath");
     const resourcePath = electronStore.get("resourcePath");
     const data = await getFilePicResponseData(

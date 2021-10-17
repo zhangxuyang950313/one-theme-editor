@@ -25,14 +25,13 @@ import ProjectInfoModal from "./ProjectInfoModal";
 const buttons = [
   { name: TOOLS_BAR_BUTTON.CREATE, icon: <PlusOutlined /> },
   { name: TOOLS_BAR_BUTTON.OPEN, icon: <FolderOpenOutlined /> },
-  { name: TOOLS_BAR_BUTTON.JUMP, icon: <FolderOpenOutlined /> },
-  { name: TOOLS_BAR_BUTTON.PLACEHOLDER, icon: <div /> },
+  // { name: TOOLS_BAR_BUTTON.PLACEHOLDER, icon: <div /> },
   // { name: TOOLS_BAR_BUTTON.PLACEHOLDER, icon: <div /> },
   // { name: TOOLS_BAR_BUTTON.PLACEHOLDER, icon: <div /> },
   { name: TOOLS_BAR_BUTTON.APPLY, icon: <MobileOutlined /> },
   { name: TOOLS_BAR_BUTTON.SAVE, icon: <FolderOutlined /> },
   { name: TOOLS_BAR_BUTTON.EXPORT, icon: <ExportOutlined /> },
-  { name: TOOLS_BAR_BUTTON.PLACEHOLDER, icon: <div /> },
+  // { name: TOOLS_BAR_BUTTON.PLACEHOLDER, icon: <div /> },
   { name: TOOLS_BAR_BUTTON.INFO, icon: <InfoCircleOutlined /> },
   { name: TOOLS_BAR_BUTTON.DARK, icon: <InfoCircleOutlined /> },
   { name: TOOLS_BAR_BUTTON.LIGHT, icon: <InfoCircleOutlined /> }
@@ -53,10 +52,6 @@ const ToolsBar: React.FC = () => {
         break;
       }
       case TOOLS_BAR_BUTTON.SAVE: {
-        break;
-      }
-      case TOOLS_BAR_BUTTON.JUMP: {
-        remote.shell.showItemInFolder(projectData.root);
         break;
       }
       case TOOLS_BAR_BUTTON.CREATE: {

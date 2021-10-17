@@ -8,6 +8,7 @@ import { LOAD_STATUS } from "src/enum";
 import ModuleSelector from "@/components/Editor/ModuleSelector";
 import EditorToolsBar from "@/components/Editor/ToolsBar";
 import EditorContainer from "@/components/Editor/index";
+import StatusBar from "@/components/Editor/StatusBar";
 // import { useResourceMapper } from "@/hooks/resource";
 // import usePatchPageSourceData from "@/hooks/project/usePatchPageSourceData";
 // import usePatchProjectInfoData from "@/hooks/project/usePatchProjectInfoData";
@@ -75,19 +76,25 @@ const Editor: React.FC = () => {
       // 进入编辑状态
       return (
         <StyleEditor>
-          {/* 模块选择器 */}
-          <StyleModuleSelector>
-            <div className="module-selector-container">
-              <ModuleSelector />
-            </div>
-          </StyleModuleSelector>
-          {/* 编辑区域 */}
-          <StyleEditorContent>
-            {/* 工具栏 */}
-            <EditorToolsBar />
-            {/* 主编辑区域 */}
-            <EditorContainer />
-          </StyleEditorContent>
+          <div className="editor-main">
+            {/* 模块选择器 */}
+            <StyleModuleSelector>
+              <div className="module-selector-container">
+                <ModuleSelector />
+              </div>
+            </StyleModuleSelector>
+            {/* 编辑区域 */}
+            <StyleEditorContent>
+              {/* 工具栏 */}
+              <EditorToolsBar />
+              {/* 主编辑区域 */}
+              <EditorContainer />
+            </StyleEditorContent>
+          </div>
+          {/* 底部工具栏 */}
+          <div className="status-bar">
+            <StatusBar />
+          </div>
         </StyleEditor>
       );
     }
@@ -107,6 +114,16 @@ const StyleEditor = styled.div`
   width: 100vw;
   height: 100vh;
   display: flex;
+  flex-direction: column;
+  .editor-main {
+    overflow-y: hidden;
+    display: flex;
+  }
+  .status-bar {
+    flex-grow: 1;
+    /* flex-shrink: 0; */
+    height: 30px;
+  }
 `;
 
 const StyleModuleSelector = styled(StyleBorderRight)`

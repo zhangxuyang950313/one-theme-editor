@@ -132,7 +132,6 @@ export enum EXTRA_DATA_TYPE {
 export enum TOOLS_BAR_BUTTON {
   CREATE = "新建",
   OPEN = "打开",
-  JUMP = "跳转",
   APPLY = "应用",
   SAVE = "保存",
   EXPORT = "导出",
