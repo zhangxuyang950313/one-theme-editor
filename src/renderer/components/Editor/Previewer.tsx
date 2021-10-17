@@ -54,10 +54,10 @@ import { DynamicBothSourceImage, PreloadImage } from "../ImageCollection";
 
 type LayoutStyleComputed = {
   position: "absolute";
-  left: `${number}px`;
-  top: `${number}px`;
-  width: `${number}px` | "auto";
-  height: `${number}px` | "auto";
+  left: `${string}px`;
+  top: `${string}px`;
+  width: `${string}px` | "auto";
+  height: `${string}px` | "auto";
   transform: `translate(${string}, ${string})`;
 };
 
@@ -71,11 +71,11 @@ function computeLayoutStyle(
     top: `${Number(layout.y) * scale}px`,
     get width(): LayoutStyleComputed["width"] {
       const num = Number(layout.w);
-      return num ? `${num * scale}px` : "auto";
+      return num ? `${(num * scale).toFixed(2)}px` : "auto";
     },
     get height(): LayoutStyleComputed["height"] {
       const num = Number(layout.h);
-      return num ? `${num * scale}px` : "auto";
+      return num ? `${(num * scale).toFixed(2)}px` : "auto";
     },
     get transform(): LayoutStyleComputed["transform"] {
       let transformX = "0";
@@ -176,6 +176,56 @@ const Previewer: React.FC<{
 
   if (!screenWidth) return null;
 
+  const Content: React.FC = () => {
+    const pageConfig = useCurrentPageConfig();
+    if (pageConfig?.forceStaticPreview || !layoutElementList.length) {
+      return <PreloadImage className="static" src={previewList[0]} />;
+    }
+    return (
+      <div
+        className="dynamic"
+        style={{
+          width: `${Number(screenWidth) * scale}px`,
+          height: `${2340 * scale}px`
+        }}
+      >
+        {layoutElementList.map((element, k) => {
+          switch (element.elementTag) {
+            // 图片类型预览
+            case LAYOUT_ELEMENT_TAG.Image: {
+              const layoutStyle = computeLayoutStyle(element.layout, scale);
+              return (
+                <DynamicBothSourceImage
+                  key={k}
+                  data-dash={props.useDash}
+                  data-click={props.canClick}
+                  className="image"
+                  style={layoutStyle}
+                  alt=""
+                  src={element.sourceData.src}
+                />
+              );
+            }
+            case LAYOUT_ELEMENT_TAG.Text: {
+              return (
+                <LayoutTextElement
+                  key={k}
+                  element={element}
+                  scale={scale}
+                  canClick={props.canClick}
+                  useDash={props.useDash}
+                />
+              );
+            }
+            default: {
+              return null;
+            }
+          }
+        })}
+      </div>
+    );
+  };
+
   return (
     <StylePreviewer
       style={{
@@ -186,51 +236,7 @@ const Previewer: React.FC<{
         setScale(divEl.getBoundingClientRect().width / Number(screenWidth));
       }}
     >
-      {layoutElementList.length ? (
-        <div
-          className="dynamic"
-          style={{
-            width: `${Number(screenWidth) * scale}px`,
-            height: `${2340 * scale}px`
-          }}
-        >
-          {layoutElementList.map((element, k) => {
-            switch (element.elementTag) {
-              // 图片类型预览
-              case LAYOUT_ELEMENT_TAG.Image: {
-                const layoutStyle = computeLayoutStyle(element.layout, scale);
-                return (
-                  <DynamicBothSourceImage
-                    key={k}
-                    data-dash={props.useDash}
-                    data-click={props.canClick}
-                    className="image"
-                    style={layoutStyle}
-                    alt=""
-                    src={element.sourceData.src}
-                  />
-                );
-              }
-              case LAYOUT_ELEMENT_TAG.Text: {
-                return (
-                  <LayoutTextElement
-                    key={k}
-                    element={element}
-                    scale={scale}
-                    canClick={props.canClick}
-                    useDash={props.useDash}
-                  />
-                );
-              }
-              default: {
-                return null;
-              }
-            }
-          })}
-        </div>
-      ) : (
-        <PreloadImage className="static" src={previewList[0]} />
-      )}
+      <Content />
     </StylePreviewer>
   );
 };

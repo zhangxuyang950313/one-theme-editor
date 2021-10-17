@@ -78,10 +78,10 @@ export const DynamicBothSourceImage: TypeReactImageElement = props => {
     if (!props.src) return;
     subscribe(props.src, { immediately: false }, event => {
       if (event === FILE_EVENT.UNLINK) {
-        setSrc(`resource://${props.src}?t=${Date.now()}`);
+        setSrc(`resource://${props.src}&t=${Date.now()}`);
         return;
       }
-      setSrc(`src://${props.src}?t=${Date.now()}`);
+      setSrc(`src://${props.src}&=${Date.now()}`);
     });
   }, [props.src]);
   return <PreloadImage {...props} src={src} alt="" />;

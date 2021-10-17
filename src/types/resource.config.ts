@@ -16,6 +16,7 @@ export type TypePageConfig = {
   screenWidth: string;
   disableTabs: boolean;
   colorFormat: HEX_FORMAT;
+  forceStaticPreview: boolean;
   previewList: string[];
   resourceList: TypeResourceDefinition[];
   layoutElementList: TypeLayoutElement[];

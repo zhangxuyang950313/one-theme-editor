@@ -205,7 +205,13 @@ export default class PageConfigCompiler extends XMLNodeElement {
   // }
 
   private getRootAttribute<T extends string>(
-    attribute: "version" | "name" | "screenWidth" | "disableTab" | "colorFormat"
+    attribute:
+      | "version"
+      | "name"
+      | "screenWidth"
+      | "disableTab"
+      | "colorFormat"
+      | "forceStaticPreview"
   ): T {
     return this.getChildrenFirstElementNode().getAttributeOf<T>(attribute);
   }
@@ -228,6 +234,10 @@ export default class PageConfigCompiler extends XMLNodeElement {
 
   getColorFormat(): HEX_FORMAT {
     return this.getRootAttribute<HEX_FORMAT>("colorFormat");
+  }
+
+  getForceStaticPreview(): boolean {
+    return this.getRootAttribute("forceStaticPreview") === "true";
   }
 
   /**
@@ -605,6 +615,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
       .set("screenWidth", this.getScreenWidth())
       .set("disableTabs", this.getDisableTabs())
       .set("colorFormat", this.getColorFormat())
+      .set("forceStaticPreview", this.getForceStaticPreview())
       .set("previewList", this.getPreviewList())
       .set("resourceList", this.getResourceList())
       .set("layoutElementList", this.getLayoutElementList())

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Tabs } from "antd";
 import { useCurrentPageConfig, useResourceList } from "@/hooks/resource/index";
@@ -11,7 +11,12 @@ const ResourcePanel: React.FC = () => {
   const resourceList = useResourceList();
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  const currentResourceList = resourceList[selectedIndex].children;
+  const currentResourceList = resourceList[selectedIndex]?.children || [];
+
+  useEffect(() => {
+    setSelectedIndex(0);
+  }, [resourceList]);
+
   return (
     <StyleResourcePanel>
       {pageConfig?.disableTabs !== true && (

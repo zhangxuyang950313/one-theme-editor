@@ -1,7 +1,7 @@
 import path from "path";
 import { URL } from "url";
 import fse from "fs-extra";
-import { protocol, app } from "electron";
+import { protocol, app, nativeImage } from "electron";
 import { getImgBuffAndFileType } from "../common/utils";
 
 import electronStore from "../common/electronStore";
@@ -24,28 +24,54 @@ async function getFilePicResponseData(
   backupRoot?: string
 ) {
   let file = "";
-  return new Promise<{ mimeType: string; data: Buffer }>(async resolve => {
-    try {
-      const { hostname, pathname } = new URL(url);
-      file = decodeURIComponent(path.join(root, hostname, pathname));
-      if (!fse.existsSync(file)) {
-        if (backupRoot) {
-          const data = await getFilePicResponseData(url, backupRoot);
-          resolve(data);
-        } else {
-          throw new Error(`${file} is not exists`);
+  const options = {
+    width: 0,
+    height: 0,
+    // `good`, `better`, * or `best`
+    quality: "good"
+  };
+  const data = await new Promise<{ mimeType: string; data: Buffer }>(
+    async resolve => {
+      try {
+        const { hostname, pathname, searchParams } = new URL(url);
+        options.width = Number(searchParams.get("w") || 0);
+        options.height = Number(searchParams.get("h") || 0);
+        options.quality = searchParams.get("q") || "good";
+        file = decodeURIComponent(path.join(root, hostname, pathname));
+        if (!fse.existsSync(file)) {
+          if (backupRoot) {
+            const data = await getFilePicResponseData(url, backupRoot);
+            resolve(data);
+          } else {
+            throw new Error(`${file} is not exists`);
+          }
         }
+        const { buff, fileType } = await getImgBuffAndFileType(file);
+        resolve({ mimeType: fileType.mime, data: buff });
+      } catch (err) {
+        const data = await getFileIconData(file).catch(() => ({
+          mimeType: "image/png",
+          data: Buffer.from("")
+        }));
+        resolve(data);
       }
-      const { buff, fileType } = await getImgBuffAndFileType(file);
-      resolve({ mimeType: fileType.mime, data: buff });
-    } catch (err) {
-      const data = await getFileIconData(file).catch(() => ({
-        mimeType: "image/png",
-        data: Buffer.from("")
-      }));
-      resolve(data);
     }
-  });
+  );
+  if (options.width * options.height) {
+    const image = nativeImage.createFromBuffer(data.data).resize(options);
+    switch (data.mimeType) {
+      case "image/jpeg": {
+        data.data = image.toJPEG(1);
+        break;
+      }
+      case "image/png":
+      default: {
+        data.data = image.toPNG();
+        break;
+      }
+    }
+  }
+  return data;
 }
 
 export default function registerProtocol(): void {
@@ -77,6 +103,7 @@ export default function registerProtocol(): void {
 
   // 双向选择协议
   protocol.registerBufferProtocol("src", async (request, response) => {
+    console.log(request);
     const projectPath = electronStore.get("projectPath");
     const resourcePath = electronStore.get("resourcePath");
     const data = await getFilePicResponseData(
@@ -84,7 +111,7 @@ export default function registerProtocol(): void {
       projectPath,
       resourcePath
     );
-    response(data);
+    response(data.data);
   });
   // protocol.registerFileProtocol("one", (request, callback) => {
   //   console.log(request);

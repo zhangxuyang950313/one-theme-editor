@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { LazyImage } from "@/components/ImageCollection";
 import { StyleGirdBackground } from "@/style";
@@ -17,6 +17,7 @@ const ImageDisplay: React.FC<{
   return (
     <StyleImageDisplay className={className}>
       <LazyImage
+        id={src}
         className="preview"
         alt={src}
         src={src}
@@ -44,12 +45,12 @@ const StyleImageDisplay = styled(StyleImageBackground)`
     position: relative;
     left: 0;
     top: 0;
-    width: 100%;
-    height: 100%;
+    max-width: 80%;
+    max-height: 80%;
     object-fit: contain;
-    border: 1px dashed red;
+    /* border: 1px dashed red; */
     /* background: center/contain no-repeat; */
-    &[can-click="true"] {
+    /* &[can-click="true"] {
       cursor: pointer;
       transform: scale(0.8);
       transition: transform 0.3s ease;
@@ -57,7 +58,7 @@ const StyleImageDisplay = styled(StyleImageBackground)`
         transform: scale(0.9);
         transition: transform 0.1s ease;
       }
-    }
+    } */
   }
 `;
 

@@ -1,40 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<page version="1.0.0" description="桌面壁纸和首屏图标" screenWidth="1080">
+<!-- 
+    单页面配置
+    screenWidth: 预览的屏幕基准
+    colorFormat: 颜色格式
+-->
+<Page version="1.0.0" name="桌面壁纸和首屏图标" screenWidth="1080" colorFormat="ARGB"  forceStaticPreview="true">
 
     <!-- 静态预览图 -->
-    <preview src="../com.android.contacts/pages/page_dial_1.jpg"/>
-    
-    <!-- xml 模板文件 -->
-    <template 
-        src="theme_values.xml"
-        values="values.xml" 
-        release="wallpaper/theme_values.xml"
-    />
+    <Preview src="resource://preview/preview.jpg"/>
 
-    <!-- 默认移动的文件 -->
-    <copy from="theme_fallback.xml" to="wallpaper/theme_fallback.xml"/>
-
-
-    <!-- 动态预览配置 -->
-    <layout>
-
-        <image
-            name="相册"
-            x="415" y="1100" w="186" h="186" align="center" alignV="center"
-            src="../icons/res/com.miui.gallery.png"
-        >
-            <to>icons/res/com.miui.gallery.png</to>
-        </image>
-
-        <image
-            name="小米视频"
-            x="670" y="1100" w="186" h="186" align="center" alignV="center"
-            src="../icons/res/com.miui.video.png"
-        >
-            <to>icons/res/com.miui.video.png</to>
-        </image>
+    <!-- 
+        资源定义：按照顺序生成 tab
+    -->
+    <Resource name="图片" :key="image">
+        <File name="大背景" :key="settings">
+            <!-- 全局大背景 -->
+            <Item :key="window_bg_light" src="src://com.android.settings/framework-miui-res/res/drawable-xxhdpi/window_bg_light.9.png"/>
+        </File> 
+    </Resource>
 
 
-    </layout>
-</page>
+    <!-- 预览结构配置 -->
+    <Layout>
+        <Image 
+            x="0" y="0" w="1080" h="2340"
+            src="${image/settings/window_bg_light}"
+        />
+    </Layout>
+</Page>

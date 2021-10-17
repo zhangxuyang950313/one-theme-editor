@@ -196,6 +196,7 @@ export class PageConfig extends AbstractDataModel<TypePageConfig> {
     screenWidth: "",
     disableTabs: false,
     colorFormat: HEX_FORMAT.RGBA,
+    forceStaticPreview: false,
     previewList: [],
     resourceList: [],
     layoutElementList: []

@@ -6697,6 +6697,11 @@ html-tags@^3.1.0:
   resolved "https://registry.nlark.com/html-tags/download/html-tags-3.1.0.tgz#7b5e6f7e665e9fb41f30007ed9e0d41e97fb2140"
   integrity sha1-e15vfmZen7QfMAB+2eDUHpf7IUA=
 
+html-to-image@^1.9.0:
+  version "1.9.0"
+  resolved "https://registry.npmmirror.com/html-to-image/download/html-to-image-1.9.0.tgz#cb49bf9f4b37376771c85cfdd65863ae9420b268"
+  integrity sha1-y0m/n0s3N2dxyFz91lhjrpQgsmg=
+
 html-webpack-plugin@^4.5.2:
   version "4.5.2"
   resolved "https://registry.nlark.com/html-webpack-plugin/download/html-webpack-plugin-4.5.2.tgz#76fc83fa1a0f12dd5f7da0404a54e2699666bc12"
