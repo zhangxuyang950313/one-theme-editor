@@ -1,17 +1,18 @@
 import React from "react";
 import styled from "styled-components";
 
-import { TypeProjectInfo } from "src/types/project";
+import { TypeProjectDataDoc, TypeProjectInfo } from "src/types/project";
 import { LazyImage } from "../ImageCollection";
 
 type TypeProps = {
   hoverable?: boolean;
-  projectInfo: TypeProjectInfo;
+  data: TypeProjectDataDoc;
   onClick?: (data: TypeProjectInfo) => void;
 };
 // 工程卡片展示
 function ProjectCard(props: TypeProps): JSX.Element {
-  const { projectInfo } = props;
+  const projectData = props.data;
+  const projectInfo = projectData.description;
   return (
     <StyleProjectCard
       data-hoverable={props.hoverable}
@@ -37,15 +38,16 @@ const StyleProjectCard = styled.div`
   overflow: hidden;
   .preview {
     width: 100%;
-    height: 85%;
+    height: 60%;
     object-fit: cover;
   }
   .name {
-    height: 15%;
+    height: 40%;
     padding: 10px;
-    white-space: nowrap;
+    color: ${({ theme }) => theme["@text-color"]};
+    /* white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;
+    text-overflow: ellipsis; */
   }
   &:hover[data-hoverable] {
     transform: translateY(-5px);

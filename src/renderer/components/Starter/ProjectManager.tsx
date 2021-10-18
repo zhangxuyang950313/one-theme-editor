@@ -1,4 +1,4 @@
-import { useHistory } from "react-router";
+import { useHistory, useParams } from "react-router";
 import { useScenarioOption } from "@/hooks/resource/index";
 import { TypeProjectInfo } from "src/types/project";
 import { LOAD_STATUS } from "src/enum";
@@ -7,14 +7,16 @@ import React from "react";
 import styled from "styled-components";
 import { Empty, Spin } from "antd";
 import { useStarterSelector } from "@/store";
+import { ipcRenderer } from "electron";
+import { Button } from "@/components/One";
+import IPC_EVENT from "src/enum/ipc-event";
 import ProjectCard from "./ProjectCard";
-import CreateProject from "./CreateProject";
 
 const ProjectManager: React.FC<{
   status: LOAD_STATUS;
   onProjectCreated: (data: TypeProjectInfo) => Promise<void>;
 }> = props => {
-  const [currentScenario] = useScenarioOption();
+  const [scenarioOption] = useScenarioOption();
   const projectList = useStarterSelector(state => state.projectList);
   const history = useHistory();
 
@@ -38,7 +40,7 @@ const ProjectManager: React.FC<{
                 <div className="project-card" key={key}>
                   <ProjectCard
                     hoverable
-                    projectInfo={item?.description}
+                    data={item}
                     onClick={() => {
                       history.push(`/editor/${item.uuid}`);
                     }}
@@ -68,15 +70,30 @@ const ProjectManager: React.FC<{
     <StyleProjectManager>
       <div className="top-container">
         <div className="title">
-          <h2>{currentScenario?.name || ""}列表</h2>
+          <h2>{scenarioOption?.name || ""}列表</h2>
           <p>
             新建{projectList.length > 0 ? "或选择" : ""}一个
-            {currentScenario.name}
+            {scenarioOption.name}
             开始创作
           </p>
         </div>
         {/* 新建主题按钮 */}
-        <CreateProject onProjectCreated={props.onProjectCreated} />
+        {/* <CreateProject onProjectCreated={props.onProjectCreated} /> */}
+
+        <Button
+          type="primary"
+          onClick={() => {
+            ipcRenderer.on(IPC_EVENT.$openCreateProjectWindow, (...args) => {
+              console.log(args);
+            });
+            ipcRenderer.send(
+              IPC_EVENT.$openCreateProjectWindow,
+              scenarioOption.md5
+            );
+          }}
+        >
+          开始创作
+        </Button>
       </div>
       {/* 工程列表 */}
       <ProjectListContent />
@@ -128,6 +145,9 @@ const StyleCenterContainer = styled.div`
   height: 100%;
   .auto-margin {
     margin: auto;
+  }
+  .ant-empty-description {
+    color: ${({ theme }) => theme["@text-color-secondary"]};
   }
 `;
 

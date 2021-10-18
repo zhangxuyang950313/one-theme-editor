@@ -1,5 +1,5 @@
 import logSymbols from "log-symbols";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import styled, { createGlobalStyle, ThemeProvider } from "styled-components";
@@ -9,10 +9,11 @@ import zhCN from "antd/lib/locale/zh_CN"; // antd 中文
 
 import { ConfigProvider, Spin } from "antd";
 import { LOAD_STATUS } from "src/enum";
+import electronStore from "src/common/electronStore";
 import { useInitEditorConfig } from "./hooks";
 import { GlobalStore } from "./store";
 import Router from "./router";
-import LightTheme from "./theme/light";
+import DarkTheme from "./theme/dark";
 
 const Index: React.FC = () => {
   useEffect(() => {
@@ -39,10 +40,15 @@ const Index: React.FC = () => {
 };
 
 function Root(): JSX.Element {
+  const [theme, setTheme] = useState(DarkTheme);
+  useEffect(() => {
+    const thm = electronStore.get("themeConfig");
+    if (thm) setTheme(thm);
+  }, []);
   return (
     <Provider store={GlobalStore.store}>
-      <StyleGlobal />
-      <ThemeProvider theme={LightTheme}>
+      <ThemeProvider theme={theme}>
+        <StyleGlobal />
         <ConfigProvider locale={zhCN}>
           <StyleContainer>
             <Index />
@@ -61,6 +67,24 @@ html {
 }
 body {
   overflow: hidden;
+}
+*{
+  &::-webkit-scrollbar {/*滚动条整体样式*/
+    width: 5px;     /*高宽分别对应横竖滚动条的尺寸*/
+    height: 5px;
+  }
+
+  &::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+    border-radius: 10px;
+    background: ${({ theme }) => theme["@scrollbar-thumb"]};
+  }
+
+  &::-webkit-scrollbar-track {/*滚动条里面轨道*/
+    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+    border-radius: 10px;
+    background: ${({ theme }) => theme["@scrollbar-track"]};
+  }
 }
 `;
 

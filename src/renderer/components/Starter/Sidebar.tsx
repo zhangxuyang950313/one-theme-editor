@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-
-import { Menu } from "antd";
+import { Menu, MenuItem } from "@/components/One";
 
 import { useScenarioOption } from "@/hooks/resource/index";
 import { useStarterSelector } from "@/store";
@@ -14,51 +13,36 @@ const Sidebar: React.FC = () => {
   );
   const [scenarioOption, setScenarioOption] = useScenarioOption();
 
-  const ScenarioMenu: React.FC = () => {
-    if (!scenarioOption) return null;
-    return (
-      <Menu
-        className="menu"
-        selectedKeys={[scenarioOption.md5]}
-        onSelect={v => {
-          const scenarioOption = scenarioOptionList.find(o => v.key === o.md5);
-          if (scenarioOption) setScenarioOption(scenarioOption);
-        }}
-      >
-        {scenarioOptionList.map(item => (
-          <Menu.Item key={item.md5}>{item.name}</Menu.Item>
-        ))}
-      </Menu>
-    );
-  };
-
   return (
     <StyleSidebar>
       {/*  编辑器信息展示 */}
       <TopInfo />
       {/* 场景选择 */}
-      <StyleMenu>
-        <ScenarioMenu />
-      </StyleMenu>
+      <Menu className="menu" defaultKey={scenarioOption.md5 ?? ""}>
+        {scenarioOptionList.map(item => (
+          <MenuItem
+            key={item.md5}
+            $key={item.md5}
+            onClick={() => setScenarioOption(item)}
+          >
+            {item.name}
+          </MenuItem>
+        ))}
+      </Menu>
     </StyleSidebar>
   );
 };
 
 const StyleSidebar = styled.div`
   flex-shrink: 0;
-  min-width: 200px;
+  min-width: 230px;
   height: 100%;
   border-right: 1px solid;
-  border-right-color: ${({ theme }) => theme["@border-color-base"]};
+  border-right-color: ${({ theme }) => theme["@border-color-thirdly"]};
   background-color: ${({ theme }) => theme["@sidebar-color"]};
-`;
-
-// 场景菜单
-const StyleMenu = styled.div`
-  .ant-menu-inline,
-  .ant-menu-vertical,
-  .ant-menu-vertical-left {
-    border-right: 0px transparent !important;
+  .menu {
+    width: 80%;
+    margin: auto;
   }
 `;
 

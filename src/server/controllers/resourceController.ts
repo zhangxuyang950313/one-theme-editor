@@ -51,22 +51,14 @@ export default function sourceController(service: Express): void {
     never,
     TypeResponseFrame<TypeResourceOption[], string>,
     never,
-    UnionTupleToObjectKey<
-      typeof apiConfig.GET_RESOURCE_CONFIG_PREVIEW_LIST.query
-    >
-  >(
-    `${apiConfig.GET_RESOURCE_CONFIG_PREVIEW_LIST.path}`,
-    (request, response) => {
-      checkParamsKey(
-        request.query,
-        apiConfig.GET_RESOURCE_CONFIG_PREVIEW_LIST.query
-      );
-      const list = ScenarioConfigCompiler.from(
-        request.query.src
-      ).getResourceOptionList();
-      response.send(result.success(list));
-    }
-  );
+    UnionTupleToObjectKey<typeof apiConfig.GET_RESOURCE_OPTION_LIST.query>
+  >(`${apiConfig.GET_RESOURCE_OPTION_LIST.path}`, (request, response) => {
+    checkParamsKey(request.query, apiConfig.GET_RESOURCE_OPTION_LIST.query);
+    const list = ScenarioConfigCompiler.from(
+      request.query.src
+    ).getResourceOptionList();
+    response.send(result.success(list));
+  });
 
   /**
    * 获取模块列表

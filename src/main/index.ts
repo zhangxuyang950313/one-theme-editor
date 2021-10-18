@@ -1,11 +1,11 @@
 import { app, BrowserWindow } from "electron";
 
-import { mainWindow } from "./windows";
+import { startWindow } from "./windows";
 import { htmlFile } from "./constant";
 
 app.on("ready", () => {
   // 加载主窗口
-  const win = mainWindow();
+  const win = startWindow();
   win.loadFile(htmlFile);
 
   // // 生产环境不给打开调试工具

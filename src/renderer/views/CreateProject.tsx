@@ -10,6 +10,7 @@ import { TypeResourceOption } from "src/types/resource.config";
 
 import styled from "styled-components";
 import React, { useEffect, useRef, useState } from "react";
+import { useParams } from "react-router";
 import { Modal, Form, Input, message } from "antd";
 import { Button } from "@/components/One";
 import { FieldError } from "rc-field-form/lib/interface";
@@ -18,8 +19,9 @@ import Steps from "@/components/Steps";
 import { useStarterSelector } from "@/store";
 import { FILE_TEMPLATE_TYPE } from "src/enum";
 import electronStore from "src/common/electronStore";
-import { ProjectInput } from "../Forms";
-import ResourceConfigManager from "./ResourceConfigManager";
+import { ProjectInput } from "@/components/Forms";
+import ResourceConfigManager from "@/components/Starter/ResourceConfigManager";
+import IPC_EVENT from "src/enum/ipc-event";
 
 // 表单默认值
 // const txt = `测试${UUID()}`;
@@ -38,6 +40,7 @@ const defaultPath = electronStore.get("pathConfig").ELECTRON_DESKTOP;
 const CreateProject: React.FC<{
   onProjectCreated: (projectInfo: TypeProjectInfo) => Promise<void>;
 }> = props => {
+  const { scenarioMd5 } = useParams<{ scenarioMd5: string }>();
   // 机型配置
   const [currentScenario] = useScenarioOption();
   // 弹框控制
@@ -71,6 +74,13 @@ const CreateProject: React.FC<{
   const projectInfoRef = useRef<TypeProjectInfo>({});
 
   useEffect(() => {
+    ipcRenderer.on(IPC_EVENT.$getScenarioOption, (event, data) => {
+      console.log(data);
+    });
+    ipcRenderer.send(IPC_EVENT.$getScenarioOption, scenarioMd5);
+  }, []);
+
+  useEffect(() => {
     if (!projectRoot) {
       message.warn("路径不能为空");
       setProjectRoot(path.join(defaultPath, form.getFieldValue("name")));
@@ -91,16 +101,6 @@ const CreateProject: React.FC<{
     jumpStep(0);
     setResourceConfig(undefined);
     form.resetFields();
-  };
-
-  // 开始创建主题
-  const handleStartCreate = () => {
-    ipcRenderer.on("$createProject", (...args) => {
-      console.log(args);
-    });
-    ipcRenderer.send("$createProject", { a: 1 });
-    // init();
-    openModal();
   };
 
   const selectDir = () => {
@@ -380,35 +380,28 @@ const CreateProject: React.FC<{
   ];
 
   return (
-    <div ref={r => (thisRef.current = r || false)}>
-      <Button type="primary" onClick={handleStartCreate}>
-        开始创作
-      </Button>
-
-      {/* <StyleCreateModal
-        width="700px"
-        centered
-        visible={modalVisible}
-        title={`创建${currentScenario.name}`}
-        destroyOnClose
-        onCancel={closeModal}
-        footer={modalFooter}
-        forceRender
-        maskClosable={false}
-        getContainer={thisRef.current || false}
-      > */}
-      <StyleSteps steps={steps.map(o => o.name)} current={curStep} />
-      {step.Context}
-      {/* </StyleCreateModal> */}
-    </div>
+    <StyleCreateProject>
+      <span className="title">创建工程</span>
+      <div className="content">
+        <StyleSteps steps={steps.map(o => o.name)} current={curStep} />
+        {step.Context}
+      </div>
+    </StyleCreateProject>
   );
 };
 
-const StyleCreateModal = styled(Modal)`
-  .ant-modal-body {
-    display: flex;
-    flex-direction: column;
-    /* height: 450px; */
+const StyleCreateProject = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  .title {
+    display: inline-block;
+    padding: 10px 15px;
+    color: ${({ theme }) => theme["@text-color"]};
+    border-bottom: 1px ${({ theme }) => theme["@border-color-secondary"]} solid;
+  }
+  .content {
+    padding: 30px;
   }
 `;
 
@@ -419,6 +412,7 @@ const StyleSteps = styled(Steps)`
 const StyleSetLocalPath = styled.div`
   border-top: 0.5px ${({ theme }) => theme["@disabled-color"]} solid;
   padding-top: 20px;
+  color: ${({ theme }) => theme["@text-color"]};
   .input-area {
     display: flex;
   }

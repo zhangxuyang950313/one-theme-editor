@@ -36,8 +36,8 @@ export default class ScenarioOptions extends XmlCompilerExtra {
   }
 
   // 读取场景配置数据
-  static readScenarioConfList(): TypeScenarioConfig[] {
-    return ScenarioOptions.def.getScenarioConfList();
+  static readScenarioConfigList(): TypeScenarioConfig[] {
+    return ScenarioOptions.def.getScenarioConfigList();
   }
 
   private getScenarioNodes(): XMLNodeElement[] {
@@ -47,7 +47,7 @@ export default class ScenarioOptions extends XmlCompilerExtra {
   }
 
   // 获取场景配置列表
-  getScenarioConfList(): TypeScenarioConfig[] {
+  getScenarioConfigList(): TypeScenarioConfig[] {
     return this.getOptionList().map(option => {
       const scenarioConfig = ScenarioConfigCompiler.from(
         option.src

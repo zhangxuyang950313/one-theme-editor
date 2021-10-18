@@ -7,6 +7,7 @@ import { TypeResourceConfig } from "src/types/resource.config";
 import { TypeScenarioConfig } from "src/types/scenario.config";
 import { ScenarioOption } from "src/data/ScenarioConfig";
 import ResourceConfigData from "src/data/ResourceConfig";
+import defaultTheme from "src/renderer/theme/dark";
 
 type TypeElectronStore = {
   serverPort: number;
@@ -18,6 +19,7 @@ type TypeElectronStore = {
   resourcePath: string;
   projectPath: string;
   colorRecently: string[];
+  themeConfig: typeof defaultTheme;
 };
 const defaultState: TypeElectronStore = {
   serverPort: 0,
@@ -28,7 +30,8 @@ const defaultState: TypeElectronStore = {
   resourceConfig: ResourceConfigData.default,
   resourcePath: "",
   projectPath: "",
-  colorRecently: []
+  colorRecently: [],
+  themeConfig: defaultTheme
 };
 
 const electronStore = new ElectronStore<TypeElectronStore>();

@@ -71,7 +71,7 @@ const apiConfig = {
     query: ["config"]
   }),
   // 获取配置信息列表
-  GET_RESOURCE_CONFIG_PREVIEW_LIST: createApiConf({
+  GET_RESOURCE_OPTION_LIST: createApiConf({
     path: "/resource/config/preview/list",
     query: ["src"]
   }),

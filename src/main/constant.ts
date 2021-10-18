@@ -19,3 +19,13 @@ export const serverFile = resolvePath("release.server/index.js");
 export const localUrl = `http://localhost:${
   process.env.WDS_SERVER_PORT || 3000
 }`;
+
+const prefix = isDev ? localUrl : htmlFile;
+
+export function getStarterUrl(): string {
+  return `${prefix}#/starter`;
+}
+
+export function getCreateProjectUrl(scenarioMd5: string): string {
+  return `${prefix}#/create-project/${scenarioMd5}`;
+}

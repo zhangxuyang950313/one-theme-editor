@@ -2,10 +2,12 @@ import apiConfig from "src/constant/apiConf";
 import {
   TypeResourceConfig,
   TypeResourceOption,
-  TypePageConfig,
+  TypePageConfig
+} from "src/types/resource.config";
+import {
   TypeScenarioConfig,
   TypeScenarioOption
-} from "src/types/resource.config";
+} from "src/types/scenario.config";
 import { UnionTupleToObjectKey } from "src/types/request";
 import { createHttp } from "./axios";
 
@@ -23,7 +25,7 @@ export async function apiGetResOptionList<T = TypeResourceOption[]>(
   src: string
 ): Promise<T> {
   return createHttp()
-    .get<T>(`${apiConfig.GET_RESOURCE_CONFIG_PREVIEW_LIST.path}`, {
+    .get<T>(`${apiConfig.GET_RESOURCE_OPTION_LIST.path}`, {
       params: { src }
     })
     .then(data => data.data);

@@ -19,6 +19,7 @@ function TopInfo(): JSX.Element {
 const StyleEditorInfo = styled.div`
   text-align: center;
   margin: 30px;
+  color: ${({ theme }) => theme["@text-color"]};
   .logo {
     width: 60px;
     height: 60px;

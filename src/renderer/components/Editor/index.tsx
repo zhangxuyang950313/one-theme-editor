@@ -90,9 +90,9 @@ const StyleEditor = styled.div`
           flex-shrink: 0;
           padding: 20px;
           overflow-y: auto;
-          width: 400px;
+          width: 380px;
           .previewer__content {
-            width: 350px;
+            width: 320px;
           }
         }
         .resource-panel {

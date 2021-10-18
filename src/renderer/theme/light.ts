@@ -2,6 +2,8 @@ import normal from "./normal";
 
 const lightColors = {
   ...normal,
+  "@scrollbar-thumb": "grey",
+  "@scrollbar-track": "grey",
   "@background-color": "white", // 背景色
   "@sidebar-color": "white",
   "@primary-color": "#1890ff", // 主色
@@ -13,8 +15,9 @@ const lightColors = {
   "@text-color": "rgba(0, 0, 0, 0.85)", // 主文本色
   "@text-color-secondary": "rgba(0, 0, 0, 0.45)", // 次文本色
   "@disabled-color": "rgba(0, 0, 0, 0.25)", // 失效色
-  "@border-color-base": "#d9d9d9", // 边框色
-  "@border-color-secondary": "#f0f0f0",
+  "@border-color-base": "rgba(0, 0, 0, 0.2)", // 边框色
+  "@border-color-secondary": "rgba(0, 0, 0, 0.1)",
+  "@border-color-thirdly": "rgba(0, 0, 0, 0.05)",
   "@box-shadow-base": `
     0 3px 6px -4px rgba(0, 0, 0, 0.12),
     0 6px 16px 0 rgba(0, 0, 0, 0.08),

@@ -67,6 +67,15 @@ const StyleResourcePanel = styled.div`
     flex-shrink: 0;
     .ant-tabs-nav {
       margin: 0 0 10px 0;
+      .ant-tabs-tab-btn {
+        color: ${({ theme }) => theme["@text-color"]};
+      }
+      .ant-tabs-tab-active .ant-tabs-tab-btn {
+        color: ${({ theme }) => theme["@primary-color"]};
+      }
+      .ant-tabs-ink-bar {
+        background: ${({ theme }) => theme["@primary-color"]};
+      }
     }
   }
   .image-container {
