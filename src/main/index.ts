@@ -2,9 +2,9 @@ import { app, BrowserWindow } from "electron";
 import mainIpc from "../ipc/ipc-main";
 import createWindows from "./windows";
 
-app.on("ready", () => {
+app.on("ready", async () => {
   console.log(`主进程进程号 ${process.pid}`);
-  const starter = createWindows.starter();
+  const starter = await createWindows.starter();
   mainIpc.registerServer();
   mainIpc.registerOpenCreateProject(starter);
 });

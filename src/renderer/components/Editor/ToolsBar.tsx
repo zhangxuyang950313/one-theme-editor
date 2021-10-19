@@ -10,8 +10,7 @@ import {
   ExportOutlined,
   InfoCircleOutlined,
   MobileOutlined,
-  FolderOutlined,
-  FolderOpenOutlined
+  FolderOutlined
 } from "@ant-design/icons";
 import IconButton from "@/components/IconButton";
 import usePackProject from "@/hooks/project/usePackProject";
@@ -23,7 +22,7 @@ import ProjectInfoModal from "./ProjectInfoModal";
 
 const buttons = [
   { name: TOOLS_BAR_BUTTON.CREATE, icon: <PlusOutlined /> },
-  { name: TOOLS_BAR_BUTTON.OPEN, icon: <FolderOpenOutlined /> },
+  // { name: TOOLS_BAR_BUTTON.OPEN, icon: <FolderOpenOutlined /> },
   // { name: TOOLS_BAR_BUTTON.PLACEHOLDER, icon: <div /> },
   // { name: TOOLS_BAR_BUTTON.PLACEHOLDER, icon: <div /> },
   // { name: TOOLS_BAR_BUTTON.PLACEHOLDER, icon: <div /> },
@@ -31,9 +30,9 @@ const buttons = [
   { name: TOOLS_BAR_BUTTON.SAVE, icon: <FolderOutlined /> },
   { name: TOOLS_BAR_BUTTON.EXPORT, icon: <ExportOutlined /> },
   // { name: TOOLS_BAR_BUTTON.PLACEHOLDER, icon: <div /> },
-  { name: TOOLS_BAR_BUTTON.INFO, icon: <InfoCircleOutlined /> },
-  { name: TOOLS_BAR_BUTTON.DARK, icon: <InfoCircleOutlined /> },
-  { name: TOOLS_BAR_BUTTON.LIGHT, icon: <InfoCircleOutlined /> }
+  { name: TOOLS_BAR_BUTTON.INFO, icon: <InfoCircleOutlined /> }
+  // { name: TOOLS_BAR_BUTTON.DARK, icon: <InfoCircleOutlined /> },
+  // { name: TOOLS_BAR_BUTTON.LIGHT, icon: <InfoCircleOutlined /> }
 ];
 
 const ToolsBar: React.FC = () => {

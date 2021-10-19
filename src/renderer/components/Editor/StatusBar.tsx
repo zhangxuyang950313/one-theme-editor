@@ -1,6 +1,7 @@
 import { remote } from "electron";
 import React from "react";
 import styled from "styled-components";
+import { FolderOpenOutlined } from "@ant-design/icons";
 import { useEditorSelector } from "@/store";
 
 const StatusBar: React.FC = () => {
@@ -14,6 +15,7 @@ const StatusBar: React.FC = () => {
           remote.shell.openItem(`${projectData.root}`);
         }}
       >
+        <FolderOpenOutlined className="icon" />
         {projectData.description.name}
       </span>
     </StyleStatusBar>
@@ -28,10 +30,11 @@ const StyleStatusBar = styled.div`
   align-items: center;
   padding: 0 10px;
   color: ${({ theme }) => theme["@text-color"]};
-  border-top: 1px solid;
-  border-top-color: ${({ theme }) => theme["@border-color-base"]};
   .project-name {
     cursor: pointer;
+    .icon {
+      margin-right: 6px;
+    }
     &:hover {
       text-decoration: underline;
     }

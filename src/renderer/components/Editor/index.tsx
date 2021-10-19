@@ -17,15 +17,15 @@ const EditorFrame: React.FC = () => {
       <StyleTopBar height="30px">
         <span className="title">{document.title || "一个主题编辑器"}</span>
       </StyleTopBar>
+      {/* 工具栏 */}
+      <div className="editor__tools-bar">
+        <EditorToolsBar />
+      </div>
       <div className="editor__container">
         {/* 模块选择器 */}
         <ModuleSelector className="editor__module-selector right-border-line" />
         {/* 编辑区域 */}
         <div className="editor__content-wrapper">
-          {/* 工具栏 */}
-          <div className="editor__tools-bar">
-            <EditorToolsBar />
-          </div>
           {/* 主编辑区域 */}
           <div className="editor__content">
             {/* 页面选择器 */}
@@ -63,6 +63,7 @@ const StyleTopBar = styled(StyleTopDrag)`
   border-bottom: 1px solid ${({ theme }) => theme["@border-color-secondary"]};
   padding: 0 100px;
   display: flex;
+  background-color: ${({ theme }) => theme["@background-color-thirdly"]};
   .title {
     margin: auto;
     color: ${({ theme }) => theme["@text-color"]};
@@ -76,7 +77,12 @@ const StyleEditorFrame = styled.div`
   flex-direction: column;
   .right-border-line {
     border-right: 1px solid;
-    border-right-color: ${({ theme }) => theme["@border-color-secondary"]};
+    border-right-color: ${({ theme }) => theme["@border-color-thirdly"]};
+  }
+  .editor__tools-bar {
+    background-color: ${({ theme }) => theme["@background-color-thirdly"]};
+    border-bottom: 1px solid;
+    border-bottom-color: ${({ theme }) => theme["@border-color-thirdly"]};
   }
   .editor__container {
     height: 100%;
@@ -85,9 +91,9 @@ const StyleEditorFrame = styled.div`
 
     .editor__module-selector {
       flex-shrink: 0;
-      padding: 80px 0;
+      padding: 10px 0;
       overflow-y: auto;
-      background-color: ${({ theme }) => theme["@background-color-secondary"]};
+      background-color: ${({ theme }) => theme["@background-color-thirdly"]};
     }
     .editor__content-wrapper {
       flex: 1;
@@ -95,12 +101,6 @@ const StyleEditorFrame = styled.div`
       flex-direction: column;
       /* width: 100%; */
       overflow-x: auto;
-      .editor__tools-bar {
-        background-color: ${({ theme }) =>
-          theme["@background-color-secondary"]};
-        border-bottom: 1px solid;
-        border-bottom-color: ${({ theme }) => theme["@border-color-secondary"]};
-      }
       .editor__content {
         display: flex;
         flex-grow: 1;
@@ -110,12 +110,16 @@ const StyleEditorFrame = styled.div`
           flex-shrink: 0;
           padding: 10px;
           overflow-y: auto;
+          background-color: ${({ theme }) =>
+            theme["@background-color-secondary"]};
         }
         .editor__previewer {
           flex-shrink: 0;
           padding: 20px;
           overflow-y: auto;
           width: 380px;
+          background-color: ${({ theme }) =>
+            theme["@background-color-secondary"]};
           .previewer__content {
             width: 320px;
           }
@@ -134,6 +138,8 @@ const StyleEditorFrame = styled.div`
     flex-grow: 1;
     /* flex-shrink: 0; */
     height: 30px;
+    border-top: 1px solid ${({ theme }) => theme["@border-color-secondary"]};
+    background-color: ${({ theme }) => theme["@background-color-thirdly"]};
   }
 `;
 

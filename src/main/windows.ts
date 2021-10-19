@@ -80,7 +80,9 @@ Menu.buildFromTemplate(menuTemplate);
 
 const createWindows = {
   // 开始窗口
-  starter(options?: BrowserWindowConstructorOptions): BrowserWindow {
+  async starter(
+    options?: BrowserWindowConstructorOptions
+  ): Promise<BrowserWindow> {
     const win = new BrowserWindow({
       ...windowNormalizeOptions,
       resizable: false,
@@ -90,16 +92,18 @@ const createWindows = {
     });
     const url = getUrl.starter();
     win.loadURL(url);
-    win.on("ready-to-show", () => win.show());
-    afterCreateWindow(win);
+    win.on("ready-to-show", () => {
+      win.show();
+      afterCreateWindow(win);
+    });
     return win;
   },
 
   // 创建工程窗口
-  createProject(
+  async createProject(
     parentWindow: BrowserWindow,
     scenarioSrc: string
-  ): BrowserWindow {
+  ): Promise<BrowserWindow> {
     const win = new BrowserWindow({
       ...windowNormalizeOptions,
       width: 500,
@@ -109,16 +113,16 @@ const createWindows = {
       modal: true
     });
     const url = getUrl.createProject(scenarioSrc);
-    win.loadURL(url);
+    await win.loadURL(url);
     afterCreateWindow(win);
     return win;
   },
 
   // 工程编辑器窗口
-  projectEditor(
+  async projectEditor(
     uuid: string,
     options?: BrowserWindowConstructorOptions
-  ): BrowserWindow {
+  ): Promise<BrowserWindow> {
     const win = new BrowserWindow({
       ...windowNormalizeOptions,
       width: 1400,
@@ -128,12 +132,13 @@ const createWindows = {
       ...(options || {})
     });
     const url = getUrl.projectEditor(uuid);
-    win.loadURL(url);
+    await win.loadURL(url);
+    afterCreateWindow(win);
 
     // 编辑器窗口管理回到开始页面
-    win.on("close", () => {
+    win.on("close", async () => {
       const bounds = win.getBounds();
-      this.starter({ x: bounds.x, y: bounds.y, center: true });
+      await this.starter({ x: bounds.x, y: bounds.y, center: true });
     });
 
     // 监听状态栏最大化和最小化事件

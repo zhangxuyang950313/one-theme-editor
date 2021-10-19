@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { Tabs } from "antd";
 import { useCurrentPageConfig, useResourceList } from "@/hooks/resource/index";
 import { useCreateWatcher } from "@/hooks/project/useSubscribeProjectFile";
 import { RESOURCE_TAG } from "src/enum";
+import { Tabs } from "@/components/One";
 import FileBlocker from "./FileBlocker";
 import XmlValueBlocker from "./XmlValueBlocker";
 
@@ -24,12 +24,13 @@ const ResourcePanel: React.FC = () => {
       {pageConfig?.disableTabs !== true && (
         <Tabs
           className="tabs"
-          onChange={index => setSelectedIndex(Number(index))}
-        >
-          {resourceList.map((item, index) => (
-            <Tabs.TabPane key={index} tab={item.name} />
-          ))}
-        </Tabs>
+          defaultIndex={0}
+          data={resourceList.map((item, index) => ({
+            index: index,
+            label: item.name
+          }))}
+          onChange={index => setSelectedIndex(index)}
+        />
       )}
       <div className="resource-container">
         {currentResourceList.map((resource, key) => {
@@ -63,20 +64,8 @@ const StyleResourcePanel = styled.div`
   display: flex;
   flex-direction: column;
   .tabs {
-    padding: 0 20px;
+    padding: 0 10px;
     flex-shrink: 0;
-    .ant-tabs-nav {
-      margin: 0 0 10px 0;
-      .ant-tabs-tab-btn {
-        color: ${({ theme }) => theme["@text-color"]};
-      }
-      .ant-tabs-tab-active .ant-tabs-tab-btn {
-        color: ${({ theme }) => theme["@primary-color"]};
-      }
-      .ant-tabs-ink-bar {
-        background: ${({ theme }) => theme["@primary-color"]};
-      }
-    }
   }
   .image-container {
     display: flex;

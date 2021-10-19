@@ -11,7 +11,8 @@ export const StyleBorderRight = styled.div`
 `;
 
 export const StyleGirdBackground = styled.span<{ girdSize?: number }>`
-  background-color: #c2c2c2;
+  /* background-color: #c2c2c2; */
+  background-color: ${({ theme }) => theme["@gird-background-color"]};
   background-image: linear-gradient(
       45deg,
       rgba(0, 0, 0, 0.25) 25%,
@@ -26,7 +27,8 @@ export const StyleGirdBackground = styled.span<{ girdSize?: number }>`
       transparent 75%,
       rgba(0, 0, 0, 0.25) 0
     );
-  background-color: #eee;
+  /* background-color: #eee; */
+  background-color: ${({ theme }) => theme["@gird-background-color"]};
   background-size: ${({ girdSize }) =>
     `${girdSize || 16}px ${girdSize || 16}px`};
   background-position: ${({ girdSize }) => {

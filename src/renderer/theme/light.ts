@@ -3,10 +3,10 @@ import normal from "./normal";
 const lightColors = {
   ...normal,
   "@scrollbar-thumb": "grey",
-  "@scrollbar-track": "grey",
+  "@scrollbar-track": "#00000000",
   "@background-color": "white", // 背景色
   "@sidebar-color": "white",
-  "@primary-color": "#1890ff", // 主色
+  "@primary-color": "#ffc631", // 主色
   "@link-color": "#1890ff", // 链接色
   "@success-color": "#52c41a", // 成功色
   "@warning-color": "#faad14", // 警告色
@@ -18,8 +18,9 @@ const lightColors = {
   "@border-color-base": "rgba(0, 0, 0, 0.2)", // 边框色
   "@border-color-secondary": "rgba(0, 0, 0, 0.1)",
   "@border-color-thirdly": "rgba(0, 0, 0, 0.05)",
-  "@background-color-secondary": "grey",
-  "@background-color-thirdly": "#29292d",
+  "@background-color-secondary": "white",
+  "@background-color-thirdly": "#f8f8f8",
+  "@gird-background-color": "#eee",
   "@box-shadow-base": `
     0 3px 6px -4px rgba(0, 0, 0, 0.12),
     0 6px 16px 0 rgba(0, 0, 0, 0.08),

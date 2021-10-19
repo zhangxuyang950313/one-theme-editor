@@ -131,8 +131,8 @@ const mainIpc = {
     // 打开启动页面
     generateIpcHandle<BrowserWindowConstructorOptions, void>(
       IPC_EVENT.$openStarter,
-      () => {
-        createWindows.starter();
+      async () => {
+        await createWindows.starter();
       }
     );
   }

@@ -1,7 +1,6 @@
 import path from "path";
 import { useState, useEffect } from "react";
 import { notification } from "antd";
-import { apiGetResPageConfData } from "@/request";
 import { useEditorDispatch, useEditorSelector } from "@/store";
 import { ActionPatchPageConfMap } from "@/store/editor/action";
 import { TypePageConfig } from "src/types/resource.config";
