@@ -55,7 +55,7 @@ const ToolsBar: React.FC = () => {
         break;
       }
       case TOOLS_BAR_BUTTON.CREATE: {
-        history.push("/");
+        history.push("/starter");
         break;
       }
       case TOOLS_BAR_BUTTON.EXPORT: {

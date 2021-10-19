@@ -26,6 +26,6 @@ export function getStarterUrl(): string {
   return `${prefix}#/starter`;
 }
 
-export function getCreateProjectUrl(scenarioMd5: string): string {
-  return `${prefix}#/create-project/${scenarioMd5}`;
+export function getCreateProjectUrl(scenarioSrc: string): string {
+  return `${prefix}#/create-project?scenarioSrc=${scenarioSrc}`;
 }

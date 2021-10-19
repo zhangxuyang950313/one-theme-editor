@@ -1,27 +1,27 @@
 import path from "path";
 import fse from "fs-extra";
-import { dialog, ipcRenderer } from "electron";
+import { dialog } from "electron";
 
 import { isDev } from "@/core/constant";
 import { apiCreateProject } from "@/request";
+import { useQuey } from "@/hooks";
 import { useScenarioOption } from "@/hooks/resource/index";
+import { useStarterSelector } from "@/store";
 import { TypeProjectInfo } from "src/types/project";
 import { TypeResourceOption } from "src/types/resource.config";
 
 import styled from "styled-components";
 import React, { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router";
 import { Modal, Form, Input, message } from "antd";
 import { Button } from "@/components/One";
 import { FieldError } from "rc-field-form/lib/interface";
 import { FileAddOutlined } from "@ant-design/icons";
-import Steps from "@/components/Steps";
-import { useStarterSelector } from "@/store";
 import { FILE_TEMPLATE_TYPE } from "src/enum";
-import electronStore from "src/common/electronStore";
 import { ProjectInput } from "@/components/Forms";
+import Steps from "@/components/Steps";
 import ResourceConfigManager from "@/components/Starter/ResourceConfigManager";
-import IPC_EVENT from "src/enum/ipc-event";
+import electronStore from "src/common/electronStore";
+import renderIpc from "src/ipc/render/ipc-manager";
 
 // 表单默认值
 // const txt = `测试${UUID()}`;
@@ -40,11 +40,9 @@ const defaultPath = electronStore.get("pathConfig").ELECTRON_DESKTOP;
 const CreateProject: React.FC<{
   onProjectCreated: (projectInfo: TypeProjectInfo) => Promise<void>;
 }> = props => {
-  const { scenarioMd5 } = useParams<{ scenarioMd5: string }>();
+  const query = useQuey<{ scenarioSrc: string }>();
   // 机型配置
   const [currentScenario] = useScenarioOption();
-  // 弹框控制
-  const [modalVisible, setModalVisible] = useState(false);
   // 当前步骤
   const [curStep, setCurStep] = useState(0);
   // 创建状态
@@ -74,10 +72,11 @@ const CreateProject: React.FC<{
   const projectInfoRef = useRef<TypeProjectInfo>({});
 
   useEffect(() => {
-    ipcRenderer.on(IPC_EVENT.$getScenarioOption, (event, data) => {
-      console.log(data);
+    renderIpc.getScenarioOption(query.scenarioSrc, {
+      success(data) {
+        console.log(data);
+      }
     });
-    ipcRenderer.send(IPC_EVENT.$getScenarioOption, scenarioMd5);
   }, []);
 
   useEffect(() => {
@@ -91,10 +90,6 @@ const CreateProject: React.FC<{
   const nextStep = () => setCurStep(curStep + 1);
   const prevStep = () => setCurStep(curStep - 1);
   const jumpStep = (step: number) => setCurStep(step);
-
-  // 弹框控制
-  const openModal = () => setModalVisible(true);
-  const closeModal = () => setModalVisible(false);
 
   // 复位
   const init = () => {
@@ -212,7 +207,6 @@ const CreateProject: React.FC<{
             title: "提示",
             content: "填写的信息将不被保存，确定取消创建主题？",
             onOk: () => {
-              closeModal();
               init();
             }
           });
@@ -307,7 +301,6 @@ const CreateProject: React.FC<{
               props.onProjectCreated(projectInfoRef.current);
             })
             .finally(() => {
-              closeModal();
               updateCreating(false);
               setTimeout(init, 300);
             });

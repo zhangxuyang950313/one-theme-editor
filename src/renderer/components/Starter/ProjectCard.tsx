@@ -18,10 +18,7 @@ function ProjectCard(props: TypeProps): JSX.Element {
       data-hoverable={props.hoverable}
       onClick={() => props.onClick && props.onClick(projectInfo)}
     >
-      <LazyImage
-        className="preview"
-        src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
-      />
+      <LazyImage className="preview" src="resource://preview/preview.jpg" />
       <div className="name">{projectInfo.name}</div>
     </StyleProjectCard>
   );

@@ -8,6 +8,7 @@ import useFetchResOptionList from "@/hooks/resource/useFetchResOptionList";
 
 import Sidebar from "@/components/Starter/Sidebar";
 import ProjectManager from "@/components/Starter/ProjectManager";
+import { StyleTopDrag } from "@/style";
 
 // 开始页面
 const Starter: React.FC = () => {
@@ -20,6 +21,7 @@ const Starter: React.FC = () => {
 
   return (
     <StyleStarter>
+      <StyleTopDrag />
       {/* 侧边栏 */}
       <Sidebar />
       {/* 工程管理 */}

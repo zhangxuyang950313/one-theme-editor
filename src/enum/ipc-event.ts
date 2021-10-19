@@ -1,6 +1,7 @@
 enum IPC_EVENT {
-  $openCreateProjectWindow = "0",
-  $getScenarioOption = "1"
+  $createProject = "$createProject",
+  $updateProjectInfo = "$updateProjectInfo",
+  $getScenarioOption = "$getScenarioOption"
 }
 
 export default IPC_EVENT;

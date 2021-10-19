@@ -16,11 +16,7 @@ const Router: React.FC = () => {
           {/* <TransitionGroup>
             <CSSTransition key={location.key} classNames="fade" timeout={300}> */}
           <Route exact path="/starter" component={Starter}></Route>
-          <Route
-            exact
-            path="/create-project/:scenarioMd5"
-            component={CreateProject}
-          ></Route>
+          <Route exact path="/create-project" component={CreateProject}></Route>
           {/* uuid 为 project.uuid */}
           <Route exact path="/editor/:uuid" component={Editor}></Route>
           <Route exact path="/test" component={Test} />

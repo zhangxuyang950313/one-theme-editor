@@ -34,3 +34,12 @@ export const StyleGirdBackground = styled.span<{ girdSize?: number }>`
     return ` 0 0, ${s}px ${s}px`;
   }};
 `;
+
+export const StyleTopDrag = styled.div`
+  z-index: 9999;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 50px;
+  -webkit-app-region: drag;
+`;

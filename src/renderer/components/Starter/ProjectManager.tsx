@@ -1,15 +1,14 @@
-import { useHistory, useParams } from "react-router";
+import { useHistory } from "react-router";
 import { useScenarioOption } from "@/hooks/resource/index";
+import { useStarterSelector } from "@/store";
 import { TypeProjectInfo } from "src/types/project";
 import { LOAD_STATUS } from "src/enum";
 
 import React from "react";
 import styled from "styled-components";
 import { Empty, Spin } from "antd";
-import { useStarterSelector } from "@/store";
-import { ipcRenderer } from "electron";
 import { Button } from "@/components/One";
-import IPC_EVENT from "src/enum/ipc-event";
+import renderIpc from "src/ipc/render/ipc-manager";
 import ProjectCard from "./ProjectCard";
 
 const ProjectManager: React.FC<{
@@ -82,15 +81,7 @@ const ProjectManager: React.FC<{
 
         <Button
           type="primary"
-          onClick={() => {
-            ipcRenderer.on(IPC_EVENT.$openCreateProjectWindow, (...args) => {
-              console.log(args);
-            });
-            ipcRenderer.send(
-              IPC_EVENT.$openCreateProjectWindow,
-              scenarioOption.md5
-            );
-          }}
+          onClick={() => renderIpc.createProject(scenarioOption.src)}
         >
           开始创作
         </Button>

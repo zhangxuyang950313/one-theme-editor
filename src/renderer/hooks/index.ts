@@ -1,3 +1,4 @@
+import { URLSearchParams } from "url";
 import { Canceler } from "axios";
 import { useLayoutEffect, useEffect, useState } from "react";
 import { InputProps } from "antd";
@@ -10,12 +11,19 @@ import { useGlobalSelector, useGlobalDispatch } from "@/store/index";
 import { TypePathConfig } from "src/types/extraConfig";
 import { LOAD_STATUS } from "src/enum";
 import electronStore from "src/common/electronStore";
+import { useLocation } from "react-router";
 
 export function useDocumentTitle(): [string, typeof setTitleMethod] {
   const setTitleMethod = (title: string) => {
     document.title = title;
   };
   return [document.title, setTitleMethod];
+}
+
+export function useQuey<T extends { [k: string]: string }>(): T {
+  const location = useLocation<T>();
+  const search = new URLSearchParams(location.search);
+  return Object.fromEntries(search.entries()) as T;
 }
 
 // 获取输入的值

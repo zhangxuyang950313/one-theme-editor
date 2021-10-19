@@ -30,10 +30,7 @@ export type DevServerConfiguration = WebpackDevServer.Configuration & {
 export const rootDir = path.resolve(__dirname, "..");
 
 export const entryFile = {
-  main: {
-    dev: path.resolve(rootDir, "src/main/index.dev.ts"),
-    pro: path.resolve(rootDir, "src/main/index.ts")
-  },
+  main: path.resolve(rootDir, "src/main/index.ts"),
   server: path.resolve(rootDir, "src/server/index.ts"),
   startServer: path.resolve(rootDir, "src/server/start.ts"),
   render: path.resolve(rootDir, "src/renderer/index.tsx")

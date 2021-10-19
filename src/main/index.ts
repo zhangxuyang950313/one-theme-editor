@@ -1,17 +1,15 @@
 import { app, BrowserWindow } from "electron";
-
-import { startWindow } from "./windows";
-import { htmlFile } from "./constant";
+import mainIpc from "../ipc/main/ipc-manager";
+import windows from "./windows";
+import { getStarterUrl } from "./constant";
 
 app.on("ready", () => {
-  // 加载主窗口
-  const win = startWindow();
-  win.loadFile(htmlFile);
-
-  // // 生产环境不给打开调试工具
-  // win.webContents.on("devtools-opened", () => {
-  //   win.webContents.closeDevTools();
-  // });
+  console.log(`主进程进程号 ${process.pid}`);
+  const url = getStarterUrl();
+  const starter = windows.starter();
+  starter.loadURL(url);
+  mainIpc.registerServer();
+  mainIpc.registerOpenCreateProject(starter);
 });
 
 app.on("window-all-closed", () => {
