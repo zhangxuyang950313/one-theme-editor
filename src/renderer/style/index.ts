@@ -35,11 +35,12 @@ export const StyleGirdBackground = styled.span<{ girdSize?: number }>`
   }};
 `;
 
-export const StyleTopDrag = styled.div`
+// 顶部 drag 组件
+export const StyleTopDrag = styled.div<{ height: string }>`
   z-index: 9999;
   position: absolute;
   top: 0;
   width: 100%;
-  height: 50px;
+  height: ${({ height }) => height || "50px"};
   -webkit-app-region: drag;
 `;

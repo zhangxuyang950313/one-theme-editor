@@ -1,10 +1,8 @@
 import { useCallback, useLayoutEffect, useState } from "react";
-import { apiGetProjectList } from "@/request";
 import { useStarterDispatch } from "@/store";
 import { ActionSetProjectList } from "@/store/starter/action";
 import { TypeProjectDataDoc } from "src/types/project";
 import { LOAD_STATUS } from "src/enum";
-import { useAxiosCanceler } from "..";
 import { useScenarioOption } from "../resource";
 
 // 获取项目列表
@@ -17,7 +15,6 @@ export default function useFetchProjectList(): {
   const [scenarioOption] = useScenarioOption();
   const [projectList, setProjectList] = useState<TypeProjectDataDoc[]>([]);
   const [status, setStatus] = useState<LOAD_STATUS>(LOAD_STATUS.INITIAL);
-  const registerCancelToken = useAxiosCanceler();
   const dispatch = useStarterDispatch();
 
   const fetch = useCallback(async () => {
@@ -25,7 +22,8 @@ export default function useFetchProjectList(): {
     setStatus(LOAD_STATUS.LOADING);
     setProjectList([]);
     // await sleep(300);
-    apiGetProjectList(scenarioOption, registerCancelToken)
+    window.$server
+      .getProjectList(scenarioOption.md5)
       .then(projects => {
         console.log("工程列表", projects);
         setProjectList(projects);

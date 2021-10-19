@@ -26,8 +26,10 @@ export default function useFetchProjectData(): [
   const handleFetch = async () => {
     setStatus(LOAD_STATUS.LOADING);
     // await sleep(300);
-    return apiGetProjectByUUID(uuid)
+    return window.$server
+      .getProject(uuid)
       .then(project => {
+        console.log(project);
         if (!project) throw new Error(ERR_CODE[2005]);
         console.log(`载入工程: ${uuid}`, project);
         dispatch(ActionSetProjectData(project));

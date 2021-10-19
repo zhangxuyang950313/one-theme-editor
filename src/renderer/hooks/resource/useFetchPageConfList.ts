@@ -27,7 +27,7 @@ export default function useFetchPageConfList(): [
   const handleFetch = async (changeStatus = true) => {
     if (!resourceSrc) return;
     const pageConfDataQueue = pageList.map(item => async () => {
-      const data = await apiGetResPageConfData({
+      const data = await window.$server.getPageConfigList({
         namespace: path.dirname(resourceSrc),
         config: item.src
       });

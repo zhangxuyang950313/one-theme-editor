@@ -1,5 +1,4 @@
 import { useState, useLayoutEffect } from "react";
-import { apiGetScenarioOptionList } from "@/request";
 import { useStarterDispatch } from "@/store";
 import { ActionSetScenarioOptionList } from "@/store/starter/action";
 import { TypeScenarioOption } from "src/types/scenario.config";
@@ -22,7 +21,7 @@ export default function useFetchScenarioOptionList(): {
   const fetch = async () => {
     try {
       setStatus(LOAD_STATUS.LOADING);
-      const optList = await apiGetScenarioOptionList();
+      const optList = await window.$server.getScenarioOptionList();
       // 去重
       const list = optList.reduce<TypeScenarioOption[]>((t, o) => {
         if (!t.some(item => item.md5 === o.md5)) t.push(o);

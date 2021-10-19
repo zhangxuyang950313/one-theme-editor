@@ -18,7 +18,7 @@ const Router: React.FC = () => {
           <Route exact path="/starter" component={Starter}></Route>
           <Route exact path="/create-project" component={CreateProject}></Route>
           {/* uuid 为 project.uuid */}
-          <Route exact path="/editor/:uuid" component={Editor}></Route>
+          <Route exact path="/project-editor/:uuid" component={Editor}></Route>
           <Route exact path="/test" component={Test} />
           {/* </CSSTransition>
           </TransitionGroup> */}

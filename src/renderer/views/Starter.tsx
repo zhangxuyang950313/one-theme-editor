@@ -21,7 +21,7 @@ const Starter: React.FC = () => {
 
   return (
     <StyleStarter>
-      <StyleTopDrag />
+      <StyleTopDrag height="50px" />
       {/* 侧边栏 */}
       <Sidebar />
       {/* 工程管理 */}

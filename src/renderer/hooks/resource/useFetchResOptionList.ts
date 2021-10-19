@@ -25,7 +25,8 @@ export default function useFetchResOptionList(): {
     if (!currentScenarioOption.src) return;
     setStatus(LOAD_STATUS.LOADING);
     // await sleep(300);
-    apiGetResOptionList(currentScenarioOption.src)
+    window.$server
+      .getResourceOptionList(currentScenarioOption.src)
       .then(data => {
         console.log("配置列表", data);
         setState(data);

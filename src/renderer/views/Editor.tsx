@@ -1,13 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 import { Button, Empty, Spin } from "antd";
-import { useHistory } from "react-router";
 import { useInitProject } from "@/hooks/project/index";
 import { LOAD_STATUS } from "src/enum";
 import EditorFrame from "@/components/Editor/index";
 
 const Editor: React.FC = () => {
-  const history = useHistory();
   const [projectData, status, handleFetch] = useInitProject();
   switch (status) {
     case LOAD_STATUS.INITIAL:
@@ -31,7 +29,7 @@ const Editor: React.FC = () => {
             <Button
               type="primary"
               onClick={() => {
-                history.replace("/");
+                window.$server.openStarter();
               }}
             >
               返回首页

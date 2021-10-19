@@ -21,7 +21,7 @@ import { ProjectInput } from "@/components/Forms";
 import Steps from "@/components/Steps";
 import ResourceConfigManager from "@/components/Starter/ResourceConfigManager";
 import electronStore from "src/common/electronStore";
-import renderIpc from "src/ipc/render/ipc-manager";
+import rendererIpc from "src/ipc/ipc-renderer";
 
 // 表单默认值
 // const txt = `测试${UUID()}`;
@@ -72,11 +72,7 @@ const CreateProject: React.FC<{
   const projectInfoRef = useRef<TypeProjectInfo>({});
 
   useEffect(() => {
-    renderIpc.getScenarioOption(query.scenarioSrc, {
-      success(data) {
-        console.log(data);
-      }
-    });
+    // renderIpc.getScenarioConfig(query.scenarioSrc);
   }, []);
 
   useEffect(() => {

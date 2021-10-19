@@ -22,10 +22,14 @@ export const localUrl = `http://localhost:${
 
 const prefix = isDev ? localUrl : htmlFile;
 
-export function getStarterUrl(): string {
-  return `${prefix}#/starter`;
-}
-
-export function getCreateProjectUrl(scenarioSrc: string): string {
-  return `${prefix}#/create-project?scenarioSrc=${scenarioSrc}`;
-}
+export const getUrl = {
+  starter(): string {
+    return `${prefix}#/starter`;
+  },
+  createProject(scenarioSrc: string): string {
+    return `${prefix}#/create-project?scenarioSrc=${scenarioSrc}`;
+  },
+  projectEditor(uuid: string): string {
+    return `${prefix}#/project-editor/${uuid}`;
+  }
+};

@@ -18,6 +18,7 @@ import DarkTheme from "./theme/dark";
 const Index: React.FC = () => {
   useEffect(() => {
     localStorage.setItem("debug", "socket.io-client:socket");
+    console.log(logSymbols.success, `主进程id ${window.$server.getPID()}`);
     console.log(logSymbols.success, `渲染进程启动 ${process.pid}`);
     // localStorage.debug = "*.io-client:socket";
     // localStorage.debug = "*";

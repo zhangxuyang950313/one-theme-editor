@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/triple-slash-reference */
-/// <reference types="./index" />
 /// <reference types="node" />
 /// <reference types="react" />
 /// <reference types="react-dom" />
@@ -77,5 +76,6 @@ declare module "*.module.sass" {
   export default classes;
 }
 
-declare type TypeBase64 = string;
-declare type TypePathLike = string;
+interface Window {
+  $server: typeof import("src/ipc/ipc-renderer").default;
+}

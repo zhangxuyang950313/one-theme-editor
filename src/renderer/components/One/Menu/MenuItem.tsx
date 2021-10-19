@@ -28,9 +28,9 @@ const StyleMenuItem = styled.ul`
   color: ${({ theme }) => theme["@text-color"]};
   box-sizing: content-box;
   border-radius: 6px;
-  transition: 0.3s all ease;
+  transition: 0.2s all;
   &[data-active="true"] {
-    transition: 0.3s all ease;
+    transition: 0.2s all;
     color: black;
     /* background-color: ${({ theme }) => theme["@border-color-thirdly"]}; */
     background-color: ${({ theme }) => theme["@primary-color"]};

@@ -1,6 +1,5 @@
 import { notification } from "antd";
 import { useState, useCallback, useEffect } from "react";
-import { apiGetScenarioConfig } from "@/request";
 import { useEditorDispatch, useEditorSelector } from "@/store";
 import { ActionSetScenarioConfig } from "@/store/editor/action";
 import { LOAD_STATUS } from "src/enum";
@@ -26,7 +25,8 @@ export default function useFetchScenarioConfig(): [
   const doFetchData = useCallback(async () => {
     if (!scenarioSrc) return;
     setStatus(LOAD_STATUS.LOADING);
-    apiGetScenarioConfig(scenarioSrc)
+    window.$server
+      .getScenarioConfig(scenarioSrc)
       .then(data => {
         if (!data) throw new Error(ERR_CODE[3002]);
         console.log(`加载场景配置: ${scenarioSrc}`, data);

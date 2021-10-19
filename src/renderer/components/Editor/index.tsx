@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useCurrentPageConfig } from "@/hooks/resource";
+import { StyleTopDrag } from "@/style";
 import PageSelector from "@/components/Editor/PageSelector";
 import Previewer from "@/components/Editor/Previewer";
 import ResourcePanel from "@/components/Editor/ResourcePanel/index";
@@ -12,14 +13,19 @@ import StatusBar from "@/components/Editor/StatusBar";
 const EditorFrame: React.FC = () => {
   const pageConfig = useCurrentPageConfig();
   return (
-    <StyleEditor>
+    <StyleEditorFrame>
+      <StyleTopBar height="30px">
+        <span className="title">{document.title || "一个主题编辑器"}</span>
+      </StyleTopBar>
       <div className="editor__container">
         {/* 模块选择器 */}
         <ModuleSelector className="editor__module-selector right-border-line" />
         {/* 编辑区域 */}
         <div className="editor__content-wrapper">
           {/* 工具栏 */}
-          <EditorToolsBar />
+          <div className="editor__tools-bar">
+            <EditorToolsBar />
+          </div>
           {/* 主编辑区域 */}
           <div className="editor__content">
             {/* 页面选择器 */}
@@ -47,18 +53,30 @@ const EditorFrame: React.FC = () => {
       <div className="editor__status-bar">
         <StatusBar />
       </div>
-    </StyleEditor>
+    </StyleEditorFrame>
   );
 };
 
-const StyleEditor = styled.div`
+const StyleTopBar = styled(StyleTopDrag)`
+  position: unset;
+  flex-shrink: 0;
+  border-bottom: 1px solid ${({ theme }) => theme["@border-color-secondary"]};
+  padding: 0 100px;
+  display: flex;
+  .title {
+    margin: auto;
+    color: ${({ theme }) => theme["@text-color"]};
+  }
+`;
+
+const StyleEditorFrame = styled.div`
   width: 100vw;
   height: 100vh;
   display: flex;
   flex-direction: column;
   .right-border-line {
     border-right: 1px solid;
-    border-right-color: ${({ theme }) => theme["@border-color-base"]};
+    border-right-color: ${({ theme }) => theme["@border-color-secondary"]};
   }
   .editor__container {
     height: 100%;
@@ -69,6 +87,7 @@ const StyleEditor = styled.div`
       flex-shrink: 0;
       padding: 80px 0;
       overflow-y: auto;
+      background-color: ${({ theme }) => theme["@background-color-secondary"]};
     }
     .editor__content-wrapper {
       flex: 1;
@@ -76,6 +95,12 @@ const StyleEditor = styled.div`
       flex-direction: column;
       /* width: 100%; */
       overflow-x: auto;
+      .editor__tools-bar {
+        background-color: ${({ theme }) =>
+          theme["@background-color-secondary"]};
+        border-bottom: 1px solid;
+        border-bottom-color: ${({ theme }) => theme["@border-color-secondary"]};
+      }
       .editor__content {
         display: flex;
         flex-grow: 1;
@@ -99,6 +124,8 @@ const StyleEditor = styled.div`
           flex: 1;
           flex-shrink: 0;
           overflow-y: auto;
+          background-color: ${({ theme }) =>
+            theme["@background-color-thirdly"]};
         }
       }
     }

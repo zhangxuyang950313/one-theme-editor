@@ -19,6 +19,8 @@ const darkColors: typeof TypeTheme = {
   "@border-color-base": "rgba(255, 255, 255, 0.2)", // 边框色
   "@border-color-secondary": "rgba(255, 255, 255, 0.1)",
   "@border-color-thirdly": "rgba(255, 255, 255, 0.05)",
+  "@background-color-secondary": "#1b1b1c",
+  "@background-color-thirdly": "#29292d",
   "@box-shadow-base": `
     0 3px 6px -4px rgba(255, 255, 255, 0.12),
     0 6px 16px 0 rgba(255, 255, 255, 0.08),

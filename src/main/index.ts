@@ -1,13 +1,10 @@
 import { app, BrowserWindow } from "electron";
-import mainIpc from "../ipc/main/ipc-manager";
-import windows from "./windows";
-import { getStarterUrl } from "./constant";
+import mainIpc from "../ipc/ipc-main";
+import createWindows from "./windows";
 
 app.on("ready", () => {
   console.log(`主进程进程号 ${process.pid}`);
-  const url = getStarterUrl();
-  const starter = windows.starter();
-  starter.loadURL(url);
+  const starter = createWindows.starter();
   mainIpc.registerServer();
   mainIpc.registerOpenCreateProject(starter);
 });

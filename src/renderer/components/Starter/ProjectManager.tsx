@@ -8,7 +8,8 @@ import React from "react";
 import styled from "styled-components";
 import { Empty, Spin } from "antd";
 import { Button } from "@/components/One";
-import renderIpc from "src/ipc/render/ipc-manager";
+import rendererIpc from "src/ipc/ipc-renderer";
+import { remote, webContents, webFrame } from "electron";
 import ProjectCard from "./ProjectCard";
 
 const ProjectManager: React.FC<{
@@ -40,8 +41,18 @@ const ProjectManager: React.FC<{
                   <ProjectCard
                     hoverable
                     data={item}
-                    onClick={() => {
-                      history.push(`/editor/${item.uuid}`);
+                    onClick={async () => {
+                      const currentWindow = remote.getCurrentWindow();
+                      console.log(currentWindow.getBounds());
+                      const bounds = currentWindow.getBounds();
+                      await window.$server.openProjectEditor({
+                        uuid: item.uuid,
+                        windowOptions: {
+                          x: bounds.x,
+                          y: bounds.y
+                        }
+                      });
+                      currentWindow.close();
                     }}
                   />
                 </div>
@@ -81,7 +92,7 @@ const ProjectManager: React.FC<{
 
         <Button
           type="primary"
-          onClick={() => renderIpc.createProject(scenarioOption.src)}
+          onClick={() => rendererIpc.createProject(scenarioOption.src)}
         >
           开始创作
         </Button>

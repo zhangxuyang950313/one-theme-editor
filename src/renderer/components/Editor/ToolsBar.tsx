@@ -3,7 +3,6 @@
  */
 import path from "path";
 import React, { useRef, useState } from "react";
-import { useHistory } from "react-router";
 import styled from "styled-components";
 
 import {
@@ -38,7 +37,6 @@ const buttons = [
 ];
 
 const ToolsBar: React.FC = () => {
-  const history = useHistory();
   const thisRef = useRef<HTMLDivElement | null>();
   const [projectInfoVisible, setProjectInfoVisible] = useState(false);
   const projectData = useEditorSelector(state => state.projectData);
@@ -55,7 +53,7 @@ const ToolsBar: React.FC = () => {
         break;
       }
       case TOOLS_BAR_BUTTON.CREATE: {
-        history.push("/starter");
+        remote.getCurrentWindow().close();
         break;
       }
       case TOOLS_BAR_BUTTON.EXPORT: {
@@ -142,14 +140,11 @@ const ToolsBar: React.FC = () => {
 const StyleToolsBar = styled.div`
   width: 100%;
   padding: 10px 10px 4px 10px;
-  background: ${({ theme }) => theme["@background-color"]};
   display: flex;
   justify-content: space-between;
   flex-shrink: 0;
   /* justify-content: space-between; */
   box-sizing: border-box;
-  border-bottom: 1px solid;
-  border-bottom-color: ${({ theme }) => theme["@border-color-base"]};
   .btn-group {
     display: flex;
     .btn-item {

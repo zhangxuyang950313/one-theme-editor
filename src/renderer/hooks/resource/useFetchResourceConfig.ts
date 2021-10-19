@@ -1,6 +1,5 @@
 import { notification } from "antd";
 import { useState, useCallback, useEffect } from "react";
-import { apiGetResourceConfig } from "@/request";
 import { useEditorDispatch, useEditorSelector } from "@/store";
 import { ActionSetResourceConfig } from "@/store/editor/action";
 import { LOAD_STATUS } from "src/enum";
@@ -24,7 +23,8 @@ export default function useFetchResourceConfig(): [
   const doFetchData = useCallback(async () => {
     if (!resourceSrc) return;
     setStatus(LOAD_STATUS.LOADING);
-    apiGetResourceConfig(resourceSrc)
+    window.$server
+      .getResourceConfig(resourceSrc)
       .then(data => {
         if (!data) throw new Error(ERR_CODE[3002]);
         console.log(`加载资源配置: ${resourceSrc}`, data);

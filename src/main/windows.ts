@@ -13,10 +13,11 @@ import installExtension, {
 } from "electron-devtools-installer";
 import electronStore from "../common/electronStore";
 import menuTemplate from "./menu";
-import { getCreateProjectUrl, isDev } from "./constant";
+import { getUrl, isDev } from "./constant";
 import registerProtocol from "./protocol";
 
-const preload = path.resolve(app.getAppPath(), "../release.server/index");
+// const preload = path.resolve(app.getAppPath(), "../release.server/index");
+const preload = path.resolve(app.getAppPath(), "../release.main/preload");
 
 const backgroundColor =
   electronStore.get("themeConfig")?.["@background-color"] ?? "white";
@@ -57,8 +58,8 @@ const windowNormalizeOptions: BrowserWindowConstructorOptions = {
     nodeIntegrationInWorker: true,
     enableRemoteModule: true,
     contextIsolation: false,
-    devTools: isDev || true
-    // preload
+    devTools: isDev || true,
+    preload
     // maximize: true
   },
   // https://www.electronjs.org/zh/docs/latest/api/browser-window#new-browserwindowoptions
@@ -74,22 +75,21 @@ const windowNormalizeOptions: BrowserWindowConstructorOptions = {
   minHeight: 680
 };
 
-const menu = Menu.buildFromTemplate(menuTemplate);
+Menu.buildFromTemplate(menuTemplate);
 // Menu.setApplicationMenu(menu);
 
-const windows = {
+const createWindows = {
   // 开始窗口
-  starter(): BrowserWindow {
+  starter(options?: BrowserWindowConstructorOptions): BrowserWindow {
     const win = new BrowserWindow({
       ...windowNormalizeOptions,
-      webPreferences: {
-        ...windowNormalizeOptions.webPreferences,
-        preload
-      },
       resizable: false,
       fullscreenable: false,
-      show: false
+      show: false,
+      ...(options || {})
     });
+    const url = getUrl.starter();
+    win.loadURL(url);
     win.on("ready-to-show", () => win.show());
     afterCreateWindow(win);
     return win;
@@ -108,20 +108,32 @@ const windows = {
       parent: parentWindow,
       modal: true
     });
-    const url = getCreateProjectUrl(scenarioSrc);
+    const url = getUrl.createProject(scenarioSrc);
     win.loadURL(url);
     afterCreateWindow(win);
     return win;
   },
 
   // 工程编辑器窗口
-  projectEditor(): BrowserWindow {
+  projectEditor(
+    uuid: string,
+    options?: BrowserWindowConstructorOptions
+  ): BrowserWindow {
     const win = new BrowserWindow({
       ...windowNormalizeOptions,
       width: 1400,
       height: 880,
       minWidth: 1000,
-      minHeight: 680
+      minHeight: 680,
+      ...(options || {})
+    });
+    const url = getUrl.projectEditor(uuid);
+    win.loadURL(url);
+
+    // 编辑器窗口管理回到开始页面
+    win.on("close", () => {
+      const bounds = win.getBounds();
+      this.starter({ x: bounds.x, y: bounds.y, center: true });
     });
 
     // 监听状态栏最大化和最小化事件
@@ -135,4 +147,4 @@ const windows = {
     return win;
   }
 };
-export default windows;
+export default createWindows;

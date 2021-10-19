@@ -31,6 +31,7 @@ export const rootDir = path.resolve(__dirname, "..");
 
 export const entryFile = {
   main: path.resolve(rootDir, "src/main/index.ts"),
+  preload: path.resolve(rootDir, "src/main/preload.ts"),
   server: path.resolve(rootDir, "src/server/index.ts"),
   startServer: path.resolve(rootDir, "src/server/start.ts"),
   render: path.resolve(rootDir, "src/renderer/index.tsx")

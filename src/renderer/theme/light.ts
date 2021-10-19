@@ -18,6 +18,8 @@ const lightColors = {
   "@border-color-base": "rgba(0, 0, 0, 0.2)", // 边框色
   "@border-color-secondary": "rgba(0, 0, 0, 0.1)",
   "@border-color-thirdly": "rgba(0, 0, 0, 0.05)",
+  "@background-color-secondary": "grey",
+  "@background-color-thirdly": "#29292d",
   "@box-shadow-base": `
     0 3px 6px -4px rgba(0, 0, 0, 0.12),
     0 6px 16px 0 rgba(0, 0, 0, 0.08),
