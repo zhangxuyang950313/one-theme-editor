@@ -4,7 +4,7 @@ import TypeTheme from "./light";
 const darkColors: typeof TypeTheme = {
   ...normal,
   "@scrollbar-thumb": "grey",
-  "@scrollbar-track": "#272a3b",
+  "@scrollbar-track": "#00000000",
   "@background-color": "#121212", // 背景色
   "@background-color-secondary": "#1b1b1c",
   "@background-color-thirdly": "#29292d",

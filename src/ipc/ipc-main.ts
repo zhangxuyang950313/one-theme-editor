@@ -1,9 +1,5 @@
 import createWindows from "src/main/windows";
-import {
-  ipcMain,
-  BrowserWindow,
-  BrowserWindowConstructorOptions
-} from "electron";
+import { ipcMain, BrowserWindowConstructorOptions } from "electron";
 import {
   TypeScenarioConfig,
   TypeScenarioOption

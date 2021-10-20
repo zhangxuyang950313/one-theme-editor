@@ -28,6 +28,7 @@ const config: webpack.ConfigurationFactory = (env, args) => {
       minimize: !isDev
     },
     resolve: {
+      modules: [path.resolve(__dirname, "../node_modules")],
       extensions,
       alias: {
         ...alias,

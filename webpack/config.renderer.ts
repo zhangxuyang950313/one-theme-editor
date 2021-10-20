@@ -1,13 +1,17 @@
 import path from "path";
 import WebpackBar from "webpackbar";
-import webpack, { DefinePlugin, HotModuleReplacementPlugin } from "webpack";
+import webpack, {
+  DefinePlugin,
+  DllReferencePlugin,
+  HotModuleReplacementPlugin
+} from "webpack";
 import WebpackDevServer from "webpack-dev-server";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
-import PostcssPresetEnv from "postcss-preset-env";
 import CopyWebpackPlugin from "copy-webpack-plugin";
 import DotEnvPlugin from "dotenv-webpack";
 import EslintPlugin from "eslint-webpack-plugin";
+import HappyPack from "happypack";
 // import WorkboxPlugin from "workbox-webpack-plugin"; // 引入 PWA 插件
 // import postCssPresetEnv from "postcss-preset-env";
 // import FriendlyErrorsWebpackPlugin from "friendly-errors-webpack-plugin";
@@ -45,16 +49,16 @@ const getCssLoaders = (options: { isDev: boolean; importLoaders: number }) => {
         sourceMap: options.isDev
       }
     },
-    { loader: "scoped-css-loader" },
-    {
-      loader: "postcss-loader",
-      options: {
-        postcssOptions: {
-          ident: "postcss",
-          plugins: () => [PostcssPresetEnv()]
-        }
-      }
-    }
+    { loader: "happypack/loader?id=scoped-css-loader" }
+    // {
+    //   loader: "postcss-loader",
+    //   options: {
+    //     postcssOptions: {
+    //       ident: "postcss",
+    //       plugins: () => [PostcssPresetEnv()]
+    //     }
+    //   }
+    // }
   ].filter(Boolean);
 };
 
@@ -81,7 +85,7 @@ const config: webpack.ConfigurationFactory = (env, args) => {
   const isDev = args.mode !== "production";
   return {
     target: "electron-renderer",
-    devtool: isDev ? "source-map" : false,
+    devtool: isDev ? "cheap-module-eval-source-map" : false,
     watchOptions: {
       ignored: "**/node_modules"
     },
@@ -163,42 +167,38 @@ const config: webpack.ConfigurationFactory = (env, args) => {
       }
     },
     resolve: {
+      // 设置resolve.modules:[path.resolve(__dirname, 'node_modules')]避免层层查找。
+      // resolve.modules告诉webpack去哪些目录下寻找第三方模块，默认值为['node_modules']，
+      // 会依次查找./node_modules、../node_modules、../../node_modules。
+      modules: [path.resolve(__dirname, "../node_modules")],
       alias: {
         ...alias,
         "@": path.resolve(rootDir, "src/renderer")
       },
+      // 合理配置resolve.extensions，减少文件查找
+      // 默认值：extensions:['.js', '.json'],当导入语句没带文件后缀时，Webpack会根据extensions定义的后缀列表进行文件查找，所以：
+
+      // 列表值尽量少
+      // 频率高的文件类型的后缀写在前面
+      // 源码中的导入语句尽可能的写上文件后缀，如require(./data)要写成require(./data.json)
       extensions
     },
     module: {
+      // module.noParse字段告诉Webpack不必解析哪些文件，可以用来排除对非模块化库文件的解析
+      // 如果使用resolve.alias配置了react.min.js，则也应该排除解析，因为react.min.js经过构建，
+      // 已经是可以直接运行在浏览器的、非模块化的文件了。noParse值可以是RegExp、[RegExp]、function
+      noParse: [/react\.min\.js$/],
       rules: [
         {
           test: /\.node$/,
-          use: "node-loader"
+          use: "happypack/loader?id=node-loader"
         },
         {
           // npm i babel-loader @babel/core @babel/preset-env -D
           test: /\.(js|mjs|jsx|ts|tsx)$/,
           exclude: /node_modules/,
-          use: {
-            // https://webpack.docschina.org/loaders/babel-loader/
-            loader: "babel-loader",
-            options: {
-              cacheDirectory: true,
-              cacheCompression: true,
-              presets: [
-                "@babel/preset-env",
-                "@babel/preset-react",
-                "@babel/preset-typescript"
-              ],
-              plugins: [
-                "transform-class-properties",
-                "@babel/plugin-transform-runtime",
-                "babel-plugin-styled-components",
-                "babel-plugin-react-scoped-css",
-                isDev && "react-refresh/babel"
-              ].filter(Boolean)
-            }
-          }
+          // https://webpack.docschina.org/loaders/babel-loader/
+          use: "happypack/loader?id=babel-loader"
         },
         {
           test: /\.(png|svg|jpg|jpeg|gif)$/i,
@@ -213,14 +213,7 @@ const config: webpack.ConfigurationFactory = (env, args) => {
         },
         {
           test: /\.(woff|woff2|eot|ttf|otf)$/,
-          use: {
-            loader: "file-loader",
-            options: {
-              limit: 10 * 1024,
-              name: "[name].[contenthash:8].[ext]",
-              outputPath: "assets/fonts"
-            }
-          }
+          use: "happypack/loader?id=file-loader"
         },
         {
           test: /\.css$/,
@@ -235,14 +228,14 @@ const config: webpack.ConfigurationFactory = (env, args) => {
           test: /\.(sc|sa)ss$/,
           use: [
             ...getCssLoaders({ importLoaders: 3, isDev }),
-            { loader: "sass-loader" }
+            { loader: "happypack/loader?id=sass-loader" }
           ]
         },
         {
           test: /\.less$/,
           use: [
             ...getCssLoaders({ importLoaders: 3, isDev }),
-            { loader: "less-loader" }
+            { loader: "happypack/loader?id=less-loader" }
           ]
         }
       ]
@@ -287,6 +280,63 @@ const config: webpack.ConfigurationFactory = (env, args) => {
           }
         })
       }),
+      new HappyPack({
+        id: "node-loader",
+        loaders: ["node-loader"]
+      }),
+      new HappyPack({
+        id: "babel-loader",
+        loaders: [
+          {
+            loader: "babel-loader",
+            options: {
+              cacheDirectory: true,
+              cacheCompression: true,
+              presets: [
+                "@babel/preset-env",
+                "@babel/preset-react",
+                "@babel/preset-typescript"
+              ],
+              plugins: [
+                "transform-class-properties",
+                "@babel/plugin-transform-runtime",
+                "babel-plugin-styled-components",
+                "babel-plugin-react-scoped-css",
+                isDev && "react-refresh/babel"
+              ].filter(Boolean)
+            }
+          }
+        ]
+      }),
+      new HappyPack({
+        id: "file-loader",
+        loaders: [
+          {
+            loader: "file-loader",
+            options: {
+              limit: 10 * 1024,
+              name: "[name].[contenthash:8].[ext]",
+              outputPath: "assets/fonts"
+            }
+          }
+        ]
+      }),
+      new HappyPack({
+        id: "style-loader",
+        loaders: ["style-loader"]
+      }),
+      new HappyPack({
+        id: "less-loader",
+        loaders: ["less-loader"]
+      }),
+      new HappyPack({
+        id: "sass-loader",
+        loaders: ["sass-loader"]
+      }),
+      new HappyPack({
+        id: "scoped-css-loader",
+        loaders: ["scoped-css-loader"]
+      }),
       new MiniCssExtractPlugin({
         filename: isDev ? "css/[name].css" : "css/[name].[contenthash:8].css",
         chunkFilename: isDev
@@ -309,6 +359,27 @@ const config: webpack.ConfigurationFactory = (env, args) => {
       }),
       new DefinePlugin({
         "process.env.NODE_ENV": `'${args.mode}'`
+      }),
+      new DllReferencePlugin({
+        context: process.cwd(),
+        manifest: require(path.join(
+          __dirname,
+          "../release.dll/react.manifest.json"
+        ))
+      }),
+      new DllReferencePlugin({
+        context: process.cwd(),
+        manifest: require(path.join(
+          __dirname,
+          "../release.dll/styled.manifest.json"
+        ))
+      }),
+      new DllReferencePlugin({
+        context: process.cwd(),
+        manifest: require(path.join(
+          __dirname,
+          "../release.dll/antd.manifest.json"
+        ))
       }),
       // 环境区分
       ...(isDev
