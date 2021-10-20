@@ -43,6 +43,6 @@ export const StyleTopDrag = styled.div<{ height: string }>`
   position: absolute;
   top: 0;
   width: 100%;
-  height: ${({ height }) => height || "50px"};
+  height: ${({ height }) => height || "30px"};
   -webkit-app-region: drag;
 `;

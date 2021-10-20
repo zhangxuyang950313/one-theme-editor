@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 import { TypeProjectDataDoc, TypeProjectInfo } from "src/types/project";
+import ImgDefault from "@/assets/img-default.png";
 import { LazyImage } from "../ImageCollection";
 
 type TypeProps = {
@@ -18,7 +19,7 @@ function ProjectCard(props: TypeProps): JSX.Element {
       data-hoverable={props.hoverable}
       onClick={() => props.onClick && props.onClick(projectInfo)}
     >
-      <LazyImage className="preview" src="resource://preview/preview.jpg" />
+      <LazyImage className="preview" src={ImgDefault} />
       <div className="name">{projectInfo.name}</div>
     </StyleProjectCard>
   );

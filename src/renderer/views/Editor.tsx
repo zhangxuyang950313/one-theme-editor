@@ -1,9 +1,12 @@
 import React from "react";
 import styled from "styled-components";
-import { Button, Empty, Spin } from "antd";
+import { Empty, Spin } from "antd";
+import { Button } from "@/components/One";
 import { useInitProject } from "@/hooks/project/index";
 import { LOAD_STATUS } from "src/enum";
+import { StyleTopDrag } from "@/style";
 import EditorFrame from "@/components/Editor/index";
+import { remote } from "electron";
 
 const Editor: React.FC = () => {
   const [projectData, status, handleFetch] = useInitProject();
@@ -21,15 +24,16 @@ const Editor: React.FC = () => {
       const isEmpty = projectData === null;
       return (
         <StyleEditorEmpty>
-          <Empty
-            image={Empty.PRESENTED_IMAGE_SIMPLE}
-            description={isEmpty ? "暂无主题数据" : "加载失败"}
-          />
+          <StyleTopDrag height="50px" />
+          <div className="empty">
+            <p>{Empty.PRESENTED_IMAGE_SIMPLE}</p>
+            {isEmpty ? "暂无主题数据" : "加载失败"}
+          </div>
           <div>
             <Button
               type="primary"
               onClick={() => {
-                window.$server.openStarter();
+                remote.getCurrentWindow().close();
               }}
             >
               返回首页
@@ -61,6 +65,13 @@ const StyleEditorEmpty = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  color: ${({ theme }) => theme["@text-color"]};
+  .empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+  }
 `;
 
 export default Editor;

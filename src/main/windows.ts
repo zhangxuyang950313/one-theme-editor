@@ -12,9 +12,8 @@ import installExtension, {
   REACT_DEVELOPER_TOOLS
 } from "electron-devtools-installer";
 import electronStore from "../common/electronStore";
-import menuTemplate from "./menu";
 import { getUrl, isDev } from "./constant";
-import registerProtocol from "./protocol";
+import menuTemplate from "./menu";
 
 // const preload = path.resolve(app.getAppPath(), "../release.server/index");
 const preload = path.resolve(app.getAppPath(), "../release.main/preload");
@@ -28,14 +27,8 @@ async function setupDevTools() {
   return installExtension([REDUX_DEVTOOLS, REACT_DEVELOPER_TOOLS]);
 }
 
-// 不能打开调试工具
-function canNotOpenDevtools(win: BrowserWindow): void {
-  win.webContents.on("devtools-opened", () => {
-    win.webContents.closeDevTools();
-  });
-}
-
-async function afterCreateWindow(win: BrowserWindow): Promise<void> {
+async function devToolsHandler(win: BrowserWindow): Promise<void> {
+  await new Promise(resolve => win.on("ready-to-show", resolve));
   if (isDev) {
     // 打开 dev 工具
     win.webContents.openDevTools();
@@ -44,10 +37,10 @@ async function afterCreateWindow(win: BrowserWindow): Promise<void> {
     electronDebug({ isEnabled: true, showDevTools: true });
   } else {
     // 生产环境不允许打开调试工具
-    canNotOpenDevtools(win);
+    win.webContents.on("devtools-opened", () => {
+      win.webContents.closeDevTools();
+    });
   }
-  // 注册协议
-  registerProtocol();
 }
 
 const windowNormalizeOptions: BrowserWindowConstructorOptions = {
@@ -62,6 +55,7 @@ const windowNormalizeOptions: BrowserWindowConstructorOptions = {
     preload
     // maximize: true
   },
+  // center: true,
   // https://www.electronjs.org/zh/docs/latest/api/browser-window#new-browserwindowoptions
   // frame: process.platform === "darwin",
   // transparent: true,
@@ -80,65 +74,49 @@ Menu.buildFromTemplate(menuTemplate);
 
 const createWindows = {
   // 开始窗口
-  async starter(
-    options?: BrowserWindowConstructorOptions
-  ): Promise<BrowserWindow> {
+  async starter(): Promise<BrowserWindow> {
     const win = new BrowserWindow({
       ...windowNormalizeOptions,
       resizable: false,
       fullscreenable: false,
-      show: false,
-      ...(options || {})
+      show: false
     });
-    const url = getUrl.starter();
-    win.loadURL(url);
-    win.on("ready-to-show", () => {
-      win.show();
-      afterCreateWindow(win);
-    });
+    devToolsHandler(win);
+    win.loadURL(getUrl.starter());
+    win.on("ready-to-show", () => win.show());
     return win;
   },
 
   // 创建工程窗口
-  async createProject(
-    parentWindow: BrowserWindow,
-    scenarioSrc: string
-  ): Promise<BrowserWindow> {
+  async createProject(scenarioSrc: string): Promise<BrowserWindow> {
     const win = new BrowserWindow({
       ...windowNormalizeOptions,
       width: 500,
       height: 600,
       resizable: false,
-      parent: parentWindow,
+      parent: BrowserWindow.getFocusedWindow() || undefined,
       modal: true
     });
-    const url = getUrl.createProject(scenarioSrc);
-    await win.loadURL(url);
-    afterCreateWindow(win);
+    devToolsHandler(win);
+    await win.loadURL(getUrl.createProject(scenarioSrc));
     return win;
   },
 
   // 工程编辑器窗口
-  async projectEditor(
-    uuid: string,
-    options?: BrowserWindowConstructorOptions
-  ): Promise<BrowserWindow> {
+  async projectEditor(uuid: string): Promise<BrowserWindow> {
     const win = new BrowserWindow({
       ...windowNormalizeOptions,
       width: 1400,
       height: 880,
       minWidth: 1000,
-      minHeight: 680,
-      ...(options || {})
+      minHeight: 680
     });
-    const url = getUrl.projectEditor(uuid);
-    await win.loadURL(url);
-    afterCreateWindow(win);
+    devToolsHandler(win);
+    await win.loadURL(getUrl.projectEditor(uuid));
 
     // 编辑器窗口管理回到开始页面
     win.on("close", async () => {
-      const bounds = win.getBounds();
-      await this.starter({ x: bounds.x, y: bounds.y, center: true });
+      await this.starter();
     });
 
     // 监听状态栏最大化和最小化事件

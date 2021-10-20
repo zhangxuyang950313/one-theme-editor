@@ -96,10 +96,9 @@ const rendererIpc = {
   ),
 
   // 打开工程编辑器
-  openProjectEditor: generateIpcInvoke<
-    { uuid: string; windowOptions?: BrowserWindowConstructorOptions },
-    void
-  >(IPC_EVENT.$openProjectEditor),
+  openProjectEditor: generateIpcInvoke<string, void>(
+    IPC_EVENT.$openProjectEditor
+  ),
 
   // 打开启动页面
   openStarter: generateIpcInvoke<

@@ -36,16 +36,11 @@ function generateIpcCallback<S, R extends unknown>(
   ipcMain.on(event, async ($event, $data: S) => {
     try {
       const data = await handler($data);
-      $event.reply(event, {
-        type: "success",
-        data: data
-      } as TypeReply<R>);
+      const reply: TypeReply<R> = { type: "success", data: data };
+      $event.reply(event, reply);
     } catch (err: any) {
-      console.log(err);
-      $event.reply(event, {
-        type: "fail",
-        data: err.message
-      });
+      const reply = { type: "fail", data: err.message };
+      $event.reply(event, reply);
     }
   });
 }
@@ -58,81 +53,83 @@ function generateIpcMainSync<S, R>(event: IPC_EVENT, handler: (data: S) => R) {
 }
 
 // 生成 ipcMain handle 调用
-function generateIpcHandle<S, R>(
+function generateIpcHandle<S, R extends Promise<unknown>>(
   event: IPC_EVENT,
-  handler: (data: S) => Promise<R> | R
+  handler: (data: S) => R
 ) {
-  return ipcMain.handle(event, async ($event, $data: S) => {
-    return await handler($data);
-  });
+  return ipcMain.handle(event, async ($event, $data: S) => handler($data));
 }
 
 const mainIpc = {
-  // 监听打开创建工程窗口
-  registerOpenCreateProject(win: BrowserWindow): void {
-    generateIpcCallback<string, void>(IPC_EVENT.$createProject, scenarioSrc => {
-      createWindows.createProject(win, scenarioSrc);
-    });
-  },
   // 注册服务
   registerServer(): void {
     generateIpcMainSync<void, number>(IPC_EVENT.$getPID, () => process.pid);
 
     // 获取场景选项列表
-    generateIpcHandle<void, TypeScenarioOption[]>(
+    generateIpcHandle<void, Promise<TypeScenarioOption[]>>(
       IPC_EVENT.$getScenarioOptionList,
-      () => ScenarioOptions.readScenarioOptionList()
+      async () => ScenarioOptions.readScenarioOptionList()
     );
 
     // 获取场景配置数据
-    generateIpcHandle<string, TypeScenarioConfig>(
+    generateIpcHandle<string, Promise<TypeScenarioConfig>>(
       IPC_EVENT.$getScenarioConfig,
-      scenarioSrc => ScenarioConfigCompiler.from(scenarioSrc).getConfig()
+      async scenarioSrc => ScenarioConfigCompiler.from(scenarioSrc).getConfig()
     );
 
     // 获取资源选项列表
-    generateIpcHandle<string, TypeResourceOption[]>(
+    generateIpcHandle<string, Promise<TypeResourceOption[]>>(
       IPC_EVENT.$getResourceOptionList,
-      src => ScenarioConfigCompiler.from(src).getResourceOptionList()
+      async src => ScenarioConfigCompiler.from(src).getResourceOptionList()
     );
 
     // 获取资源配置
-    generateIpcHandle<string, TypeResourceConfig>(
+    generateIpcHandle<string, Promise<TypeResourceConfig>>(
       IPC_EVENT.$getResourceConfig,
-      src => ResourceConfigCompiler.from(src).getConfig()
+      async src => ResourceConfigCompiler.from(src).getConfig()
     );
 
     // 获取页面配置列表
-    generateIpcHandle<{ namespace: string; config: string }, TypePageConfig>(
-      IPC_EVENT.$getPageConfig,
-      data => new PageConfigCompiler(data).getData()
+    generateIpcHandle<
+      { namespace: string; config: string },
+      Promise<TypePageConfig>
+    >(IPC_EVENT.$getPageConfig, async data =>
+      new PageConfigCompiler(data).getData()
     );
 
     // 获取工程列表
-    generateIpcHandle<string, TypeProjectDataDoc[]>(
+    generateIpcHandle<string, Promise<TypeProjectDataDoc[]>>(
       IPC_EVENT.$getProjectList,
       async scenarioMd5 => await getProjectListByMd5(scenarioMd5)
     );
 
     // 获取工程数据
-    generateIpcHandle<string, TypeProjectDataDoc>(
+    generateIpcHandle<string, Promise<TypeProjectDataDoc>>(
       IPC_EVENT.$getProject,
       async uuid => await findProjectByQuery({ uuid })
     );
 
     // 启动工程编辑器
-    generateIpcHandle<
-      { uuid: string; windowOptions?: BrowserWindowConstructorOptions },
-      void
-    >(IPC_EVENT.$openProjectEditor, ({ uuid, windowOptions }) => {
-      createWindows.projectEditor(uuid, windowOptions);
-    });
+    generateIpcHandle<string, Promise<void>>(
+      IPC_EVENT.$openProjectEditor,
+      async uuid => {
+        await createWindows.projectEditor(uuid);
+      }
+    );
 
     // 打开启动页面
-    generateIpcHandle<BrowserWindowConstructorOptions, void>(
+    generateIpcHandle<BrowserWindowConstructorOptions, Promise<void>>(
       IPC_EVENT.$openStarter,
       async () => {
         await createWindows.starter();
+      }
+    );
+
+    // 打开创建工程窗口
+    generateIpcHandle<string, Promise<void>>(
+      IPC_EVENT.$createProject,
+      async scenarioSrc => {
+        await createWindows.createProject(scenarioSrc);
       }
     );
   }

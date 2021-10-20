@@ -1,4 +1,3 @@
-import { useHistory } from "react-router";
 import { useScenarioOption } from "@/hooks/resource/index";
 import { useStarterSelector } from "@/store";
 import { TypeProjectInfo } from "src/types/project";
@@ -8,8 +7,7 @@ import React from "react";
 import styled from "styled-components";
 import { Empty, Spin } from "antd";
 import { Button } from "@/components/One";
-import rendererIpc from "src/ipc/ipc-renderer";
-import { remote, webContents, webFrame } from "electron";
+import { remote } from "electron";
 import ProjectCard from "./ProjectCard";
 
 const ProjectManager: React.FC<{
@@ -18,7 +16,6 @@ const ProjectManager: React.FC<{
 }> = props => {
   const [scenarioOption] = useScenarioOption();
   const projectList = useStarterSelector(state => state.projectList);
-  const history = useHistory();
 
   // 列表加载中、空、正常状态
   const ProjectListContent: React.FC = () => {
@@ -42,17 +39,8 @@ const ProjectManager: React.FC<{
                     hoverable
                     data={item}
                     onClick={async () => {
-                      const currentWindow = remote.getCurrentWindow();
-                      console.log(currentWindow.getBounds());
-                      const bounds = currentWindow.getBounds();
-                      await window.$server.openProjectEditor({
-                        uuid: item.uuid,
-                        windowOptions: {
-                          x: bounds.x,
-                          y: bounds.y
-                        }
-                      });
-                      currentWindow.close();
+                      await window.$server.openProjectEditor(item.uuid);
+                      remote.getCurrentWindow().close();
                     }}
                   />
                 </div>
@@ -92,7 +80,9 @@ const ProjectManager: React.FC<{
 
         <Button
           type="primary"
-          onClick={() => rendererIpc.createProject(scenarioOption.src)}
+          onClick={() => {
+            window.$server.createProject(scenarioOption.src);
+          }}
         >
           开始创作
         </Button>

@@ -79,6 +79,7 @@ async function getFilePicResponseData(
 }
 
 export default function registerProtocol(): void {
+  console.log("注册协议");
   protocol.registerFileProtocol("local-resource", (request, callback) => {
     const url = request.url.replace(/^local-resource:\/\//, "file://");
     // Decode URL to prevent errors when loading filenames with UTF-8 chars or chars like "#"

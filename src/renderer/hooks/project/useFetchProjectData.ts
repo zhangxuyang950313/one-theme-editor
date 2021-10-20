@@ -4,7 +4,6 @@ import { notification } from "antd";
 import { useEditorDispatch, useEditorSelector } from "@/store";
 import { LOAD_STATUS } from "src/enum";
 import { TypeProjectDataDoc } from "src/types/project";
-import { apiGetProjectByUUID } from "@/request";
 import { ActionInitEditor, ActionSetProjectData } from "@/store/editor/action";
 import ERR_CODE from "src/constant/errorCode";
 
@@ -29,7 +28,6 @@ export default function useFetchProjectData(): [
     return window.$server
       .getProject(uuid)
       .then(project => {
-        console.log(project);
         if (!project) throw new Error(ERR_CODE[2005]);
         console.log(`载入工程: ${uuid}`, project);
         dispatch(ActionSetProjectData(project));

@@ -8,6 +8,7 @@ import { TypeScenarioConfig } from "src/types/scenario.config";
 import { ScenarioOption } from "src/data/ScenarioConfig";
 import ResourceConfigData from "src/data/ResourceConfig";
 import defaultTheme from "src/renderer/theme/dark";
+import { Point } from "electron";
 
 type TypeElectronStore = {
   serverPort: number;
@@ -20,6 +21,7 @@ type TypeElectronStore = {
   projectPath: string;
   colorRecently: string[];
   themeConfig: typeof defaultTheme;
+  screenCenter: Partial<Point>;
 };
 const defaultState: TypeElectronStore = {
   serverPort: 0,
@@ -31,7 +33,8 @@ const defaultState: TypeElectronStore = {
   resourcePath: "",
   projectPath: "",
   colorRecently: [],
-  themeConfig: defaultTheme
+  themeConfig: defaultTheme,
+  screenCenter: {}
 };
 
 const electronStore = new ElectronStore<TypeElectronStore>();

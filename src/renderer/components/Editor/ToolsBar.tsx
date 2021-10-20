@@ -6,7 +6,6 @@ import React, { useRef, useState } from "react";
 import styled from "styled-components";
 
 import {
-  PlusOutlined,
   ExportOutlined,
   InfoCircleOutlined,
   MobileOutlined,
@@ -21,7 +20,7 @@ import { useEditorSelector } from "@/store";
 import ProjectInfoModal from "./ProjectInfoModal";
 
 const buttons = [
-  { name: TOOLS_BAR_BUTTON.CREATE, icon: <PlusOutlined /> },
+  // { name: TOOLS_BAR_BUTTON.CREATE, icon: <PlusOutlined /> },
   // { name: TOOLS_BAR_BUTTON.OPEN, icon: <FolderOpenOutlined /> },
   // { name: TOOLS_BAR_BUTTON.PLACEHOLDER, icon: <div /> },
   // { name: TOOLS_BAR_BUTTON.PLACEHOLDER, icon: <div /> },

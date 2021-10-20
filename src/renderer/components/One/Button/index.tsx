@@ -22,6 +22,8 @@ const StyleButton = styled.span<TypeButtonProps>`
   border-radius: 6px;
   outline: none;
   transition: 0.3s ease;
+  color: ${({ type, theme }) =>
+    type === "primary" ? "black" : theme["@text-color"]};
   &:hover {
     opacity: 0.8;
     transition: 0.3s ease;
