@@ -60,10 +60,10 @@ const EditorFrame: React.FC = () => {
 const StyleTopBar = styled(StyleTopDrag)`
   position: unset;
   flex-shrink: 0;
-  border-bottom: 1px solid ${({ theme }) => theme["@border-color-secondary"]};
   padding: 0 100px;
   display: flex;
   background-color: ${({ theme }) => theme["@background-color-thirdly"]};
+  border-bottom: 1px solid ${({ theme }) => theme["@border-color-thirdly"]};
   .title {
     margin: auto;
     color: ${({ theme }) => theme["@text-color"]};
@@ -75,14 +75,15 @@ const StyleEditorFrame = styled.div`
   height: 100vh;
   display: flex;
   flex-direction: column;
+  --border-color-thirdly: ${({ theme }) => theme["@border-color-thirdly"]};
+  --bg-color-thirdly: ${({ theme }) => theme["@background-color-thirdly"]};
+  --bg-color-secondary: ${({ theme }) => theme["@background-color-secondary"]};
   .right-border-line {
-    border-right: 1px solid;
-    border-right-color: ${({ theme }) => theme["@border-color-thirdly"]};
+    border-right: 1px solid var(--border-color-thirdly);
   }
   .editor__tools-bar {
-    background-color: ${({ theme }) => theme["@background-color-thirdly"]};
-    border-bottom: 1px solid;
-    border-bottom-color: ${({ theme }) => theme["@border-color-thirdly"]};
+    background-color: var(--bg-color-thirdly);
+    border-bottom: 1px solid var(--border-color-thirdly);
   }
   .editor__container {
     height: 100%;
@@ -93,7 +94,7 @@ const StyleEditorFrame = styled.div`
       flex-shrink: 0;
       padding: 10px 0;
       overflow-y: auto;
-      background-color: ${({ theme }) => theme["@background-color-thirdly"]};
+      background-color: var(--bg-color-thirdly);
     }
     .editor__content-wrapper {
       flex: 1;
@@ -110,26 +111,23 @@ const StyleEditorFrame = styled.div`
           flex-shrink: 0;
           padding: 10px;
           overflow-y: auto;
-          background-color: ${({ theme }) =>
-            theme["@background-color-secondary"]};
+          background-color: var(--bg-color-secondary);
         }
         .editor__previewer {
           flex-shrink: 0;
           padding: 20px;
           overflow-y: auto;
           width: 380px;
-          background-color: ${({ theme }) =>
-            theme["@background-color-secondary"]};
+          background-color: var(--bg-color-secondary);
           .previewer__content {
-            width: 320px;
+            width: 340px;
           }
         }
         .resource-panel {
           flex: 1;
           flex-shrink: 0;
           overflow-y: auto;
-          background-color: ${({ theme }) =>
-            theme["@background-color-thirdly"]};
+          background-color: var(--bg-color-thirdly);
         }
       }
     }
@@ -138,8 +136,8 @@ const StyleEditorFrame = styled.div`
     flex-grow: 1;
     /* flex-shrink: 0; */
     height: 30px;
-    border-top: 1px solid ${({ theme }) => theme["@border-color-secondary"]};
-    background-color: ${({ theme }) => theme["@background-color-thirdly"]};
+    border-top: 1px solid var(--border-color-thirdly);
+    background-color: var(--bg-color-thirdly);
   }
 `;
 

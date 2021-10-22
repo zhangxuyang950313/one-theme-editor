@@ -24,7 +24,6 @@ const buttons = [
   // { name: TOOLS_BAR_BUTTON.OPEN, icon: <FolderOpenOutlined /> },
   // { name: TOOLS_BAR_BUTTON.PLACEHOLDER, icon: <div /> },
   // { name: TOOLS_BAR_BUTTON.PLACEHOLDER, icon: <div /> },
-  // { name: TOOLS_BAR_BUTTON.PLACEHOLDER, icon: <div /> },
   { name: TOOLS_BAR_BUTTON.APPLY, icon: <MobileOutlined /> },
   { name: TOOLS_BAR_BUTTON.SAVE, icon: <FolderOutlined /> },
   { name: TOOLS_BAR_BUTTON.EXPORT, icon: <ExportOutlined /> },
@@ -137,7 +136,7 @@ const ToolsBar: React.FC = () => {
 
 const StyleToolsBar = styled.div`
   width: 100%;
-  padding: 10px 10px 4px 10px;
+  padding: 10px 10px 5px 10px;
   display: flex;
   justify-content: space-between;
   flex-shrink: 0;

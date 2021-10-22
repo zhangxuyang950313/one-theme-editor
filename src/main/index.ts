@@ -16,11 +16,11 @@ app.on("activate", () => {
 
 app.on("browser-window-created", (event, win) => {
   moveWindowToCenter(win);
-  // saveCurrentDisplayCenter();
+  saveCurrentDisplayCenter();
 });
 
-app.on("before-quit", async () => {
-  await saveCurrentDisplayCenter();
+app.on("before-quit", () => {
+  saveCurrentDisplayCenter();
 });
 
 app.on("ready", async () => {

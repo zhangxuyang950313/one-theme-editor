@@ -62,7 +62,8 @@ export const extensions = [
   ".json",
   ".css",
   ".less",
-  ".scss"
+  ".scss",
+  ".frag"
 ];
 
 export const alias = {

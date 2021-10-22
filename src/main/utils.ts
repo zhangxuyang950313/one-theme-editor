@@ -19,7 +19,6 @@ export async function saveCurrentDisplayCenter(): Promise<void> {
   };
   const display = await getDisplayMatching(rect);
   const center = getDisplayWorkAreaCenterPoint(display);
-  console.log({ center });
   electronStore.set("screenCenter", center);
 }
 

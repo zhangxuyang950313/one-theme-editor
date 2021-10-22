@@ -187,7 +187,7 @@ const Previewer: React.FC<{
       style={{ borderRadius: `${50 * scale}px` }}
       className={props.className}
       ref={divEl => {
-        if (!divEl || scale) return;
+        if (!divEl) return;
         setScale(divEl.getBoundingClientRect().width / Number(screenWidth));
       }}
     >

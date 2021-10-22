@@ -1,4 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, {
+  useState,
+  useEffect,
+  forwardRef,
+  useImperativeHandle
+} from "react";
 import {
   useLoadImageLazy,
   useLoadImageByPath,
@@ -7,44 +12,57 @@ import {
 import useSubscribeProjectFile from "@/hooks/project/useSubscribeProjectFile";
 import { FILE_EVENT } from "src/enum";
 
-type TypeReactImageElement = React.FC<JSX.IntrinsicElements["img"]>;
+type TypeReactImageElement = JSX.IntrinsicElements["img"];
 
 /**
  * 封装 img
  * 用于显示本地路径的图片
  * @param props 和 img 标签具有相同的属性
  */
-export const LocalImage: TypeReactImageElement = props => {
-  const url = useLoadImageByPath(props.src || "");
-  const show = url && props.src;
-  return show ? <img {...props} src={url} alt={props.src} /> : null;
-};
+export const LocalImage = forwardRef<HTMLImageElement, TypeReactImageElement>(
+  function LocalImage(props, ref) {
+    const url = useLoadImageByPath(props.src || "");
+    const show = url && props.src;
+    return show ? <img ref={ref} {...props} src={url} alt={props.src} /> : null;
+  }
+);
 
 /**
  * 封装 img 为预加载图片
  * 预加载的图片，利用浏览器缓存，实现不会从上到下慢慢加载，加载失败则不会有 img 节点
  * @param props 和 img 标签具有相同的属性
  */
-export const PreloadImage: TypeReactImageElement = props => {
-  const url = useLoadImage(props.src || "");
-  return <img {...props} src={url} alt="" />;
-};
+export const PreloadImage = forwardRef<HTMLImageElement, TypeReactImageElement>(
+  function PreloadImage(props, ref) {
+    const url = useLoadImage(props.src || "");
+    return <img ref={ref} {...props} src={url} alt="" />;
+  }
+);
 
 /**
  * 封装 img 为懒加载图片
  * @param props
  * @returns
  */
-export const LazyImage: TypeReactImageElement = props => {
-  const imageRef = useLoadImageLazy(props.src || "");
-  return <img {...props} src="" alt="" ref={imageRef} />;
-};
+export const LazyImage = forwardRef<HTMLImageElement, TypeReactImageElement>(
+  function LazyImage(props, ref) {
+    const imageRef = useLoadImageLazy(props.src || "");
+    useImperativeHandle<HTMLImageElement | null, HTMLImageElement | null>(
+      ref,
+      () => imageRef.current
+    );
+    return <img {...props} src="" alt="" ref={imageRef} />;
+  }
+);
 
 /**
  * 动态工程图片
  * @param props 和 img 标签具有相同的属性
  */
-export const DynamicProjectImage: TypeReactImageElement = props => {
+export const DynamicProjectImage = forwardRef<
+  HTMLImageElement,
+  TypeReactImageElement
+>(function DynamicProjectImage(props, ref) {
   const subscribe = useSubscribeProjectFile();
   const [src, setSrc] = useState(props.src);
   useEffect(() => {
@@ -57,21 +75,29 @@ export const DynamicProjectImage: TypeReactImageElement = props => {
       setSrc(`project://${props.src}?${Date.now()}`);
     });
   }, [props.src]);
-  return <LazyImage {...props} src={src} alt="" />;
-};
+  return <LazyImage {...props} ref={ref} src={src} alt="" />;
+});
 
 /**
  * 静态素材图片
  * @param props 和 img 标签具有相同的属性
  */
-export const StaticResourceImage: TypeReactImageElement = props => {
-  return <LazyImage {...props} src={`resource://${props.src}`} alt="" />;
-};
+export const StaticResourceImage = forwardRef<
+  HTMLImageElement,
+  TypeReactImageElement
+>(function StaticResourceImage(props, ref) {
+  return (
+    <LazyImage {...props} ref={ref} src={`resource://${props.src}`} alt="" />
+  );
+});
 
 /**
  * 动态双向源图片
  */
-export const DynamicBothSourceImage: TypeReactImageElement = props => {
+export const DynamicBothSourceImage = forwardRef<
+  HTMLImageElement,
+  TypeReactImageElement
+>(function DynamicBothSourceImage(props, ref) {
   const subscribe = useSubscribeProjectFile();
   const [src, setSrc] = useState(`src://${props.src}`);
   useEffect(() => {
@@ -84,5 +110,5 @@ export const DynamicBothSourceImage: TypeReactImageElement = props => {
       setSrc(`src://${props.src}&=${Date.now()}`);
     });
   }, [props.src]);
-  return <PreloadImage {...props} src={src} alt="" />;
-};
+  return <PreloadImage {...props} ref={ref} src={src} alt="" />;
+});
