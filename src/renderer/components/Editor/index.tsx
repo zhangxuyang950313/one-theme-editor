@@ -1,9 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 import {
-  usePageConfig,
+  useCurrentPageConfig,
   useModuleConfig,
-  useResourceDefList
+  useCurrentResourceDefList,
+  useCurrentModuleList
 } from "@/hooks/resource";
 import { StyleTopDrag } from "@/style";
 import PageSelector from "@/components/Editor/PageSelector";
@@ -15,29 +16,38 @@ import StatusBar from "@/components/Editor/StatusBar";
 
 // 编辑区域框架
 const EditorFrame: React.FC = () => {
-  const resourceList = useResourceDefList();
-  const pageConfig = usePageConfig();
-  const [{ pageList }] = useModuleConfig();
+  const resourceList = useCurrentResourceDefList();
+  const moduleList = useCurrentModuleList();
+  const pageConfig = useCurrentPageConfig();
+  const [currentModule, setCurrentModule] = useModuleConfig();
   return (
     <StyleEditorFrame>
       <StyleTopBar height="30px">
         <span className="title">{document.title || "一个主题编辑器"}</span>
       </StyleTopBar>
       {/* 工具栏 */}
-      <div className="editor__tools-bar">
-        <EditorToolsBar />
-      </div>
+      <EditorToolsBar className="editor__tools-bar" />
       <div className="editor__container">
         {/* 模块选择器 */}
-        <ModuleSelector className="editor__module-selector right-border-line" />
+        <div className="editor__module-selector right-border-line">
+          <ModuleSelector
+            className="editor__module-content"
+            moduleList={moduleList}
+            currentModule={currentModule}
+            onChange={setCurrentModule}
+          />
+        </div>
         {/* 编辑区域 */}
         <div className="editor__content-wrapper">
           {/* 主编辑区域 */}
           <div className="editor__content">
             {/* 页面选择器 */}
             <div className="editor__page-selector right-border-line">
-              {pageList.length ? (
-                <PageSelector pageList={pageList} />
+              {currentModule.pageList.length ? (
+                <PageSelector
+                  className="editor__page-content"
+                  pageList={currentModule.pageList}
+                />
               ) : (
                 <div className="no-config">无配置</div>
               )}
@@ -71,9 +81,7 @@ const EditorFrame: React.FC = () => {
         </div>
       </div>
       {/* 底部工具栏 */}
-      <div className="editor__status-bar">
-        <StatusBar />
-      </div>
+      <StatusBar className="editor__status-bar" />
     </StyleEditorFrame>
   );
 };
@@ -122,9 +130,14 @@ const StyleEditorFrame = styled.div`
     .editor__module-selector {
       flex-shrink: 0;
       width: 80px;
-      padding: 10px 0;
       overflow-y: auto;
+      overflow-x: hidden;
       background-color: var(--bg-color-thirdly);
+      .editor__module-content {
+        width: 80px;
+        margin: 0 auto;
+        padding: 10px 0;
+      }
     }
     .editor__content-wrapper {
       flex: 1;
@@ -142,6 +155,9 @@ const StyleEditorFrame = styled.div`
           padding: 10px;
           overflow-y: auto;
           background-color: var(--bg-color-secondary);
+          .editor__page-content {
+            width: 100px;
+          }
         }
         .editor__previewer {
           flex-shrink: 0;

@@ -4,7 +4,7 @@ import { useEditorDispatch } from "@/store";
 import { FILE_EVENT } from "src/enum";
 import { useFSWatcherCreator } from "../fileWatcher";
 import { useProjectRoot } from "../project";
-import { usePageConfig } from "../resource";
+import { useCurrentPageConfig } from "../resource";
 
 /**
  * @deprecated
@@ -12,7 +12,7 @@ import { usePageConfig } from "../resource";
  */
 export default function usePatchPageSourceData(): void {
   const projectRoot = useProjectRoot();
-  const pageData = usePageConfig();
+  const pageData = useCurrentPageConfig();
   const dispatch = useEditorDispatch();
   const createWatcher = useFSWatcherCreator();
   useEffect(() => {

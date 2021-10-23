@@ -10,7 +10,7 @@ import {
 import { TypePageConfig } from "src/types/resource.config";
 import { TypeLayoutData, TypeLayoutTextElement } from "src/types/resource.page";
 import ColorUtil from "src/common/utils/ColorUtil";
-import { usePageConfig } from "@/hooks/resource";
+import { useCurrentPageConfig } from "@/hooks/resource";
 import useSubscribeProjectFile from "@/hooks/project/useSubscribeProjectFile";
 import { useEditorSelector } from "@/store";
 import { DynamicBothSourceImage } from "../ImageCollection";
@@ -116,7 +116,7 @@ const LayoutTextElement: React.FC<{
   const subscribe = useSubscribeProjectFile();
   const [defaultColor, setDefaultColor] = useState("#000000");
   const [color, setColor] = useState(defaultColor);
-  const pageConfig = usePageConfig();
+  const pageConfig = useCurrentPageConfig();
   const curXmlValMapper = useEditorSelector(
     state => state.xmlFileDataMap[element.sourceData.src]?.valueMapper || {}
   );

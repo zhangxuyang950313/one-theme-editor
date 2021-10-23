@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 import { CloseOutlined } from "@ant-design/icons";
 import { apiWriteXmlTemplate } from "@/request";
-import { usePageConfig } from "@/hooks/resource";
+import { useCurrentPageConfig } from "@/hooks/resource";
 import { useEditorSelector } from "@/store";
 import { HEX_FORMAT, RESOURCE_TAG } from "src/enum/index";
 import {
@@ -24,7 +24,7 @@ const XmlValueEditor: React.FC<{
   onChange: (v: string) => void;
 }> = props => {
   const { value, defaultValue, onChange } = props;
-  const pageConfig = usePageConfig();
+  const pageConfig = useCurrentPageConfig();
 
   switch (props.use) {
     // 颜色选择器

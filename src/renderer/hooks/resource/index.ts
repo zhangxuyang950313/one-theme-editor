@@ -86,10 +86,18 @@ export function usePageOption(): [
 }
 
 /**
+ * 获取当前模块列表
+ * @returns
+ */
+export function useCurrentModuleList(): TypeModuleConfig[] {
+  return useEditorSelector(state => state.resourceConfig.moduleList || []);
+}
+
+/**
  * 获取当前选择的页面配置数据
  * @returns
  */
-export function usePageConfig(): TypePageConfig | null {
+export function useCurrentPageConfig(): TypePageConfig | null {
   return useEditorSelector(state => {
     return state.pageConfigMap[state.currentPage.src] || null;
   });
@@ -98,8 +106,8 @@ export function usePageConfig(): TypePageConfig | null {
 /**
  * 获取素材定义列表
  */
-export function useResourceDefList(): TypeResourceDefinition[] {
-  const curResPageConfig = usePageConfig();
+export function useCurrentResourceDefList(): TypeResourceDefinition[] {
+  const curResPageConfig = useCurrentPageConfig();
   return curResPageConfig?.resourceList || [];
 }
 

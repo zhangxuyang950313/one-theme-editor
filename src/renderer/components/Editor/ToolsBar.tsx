@@ -33,7 +33,7 @@ const buttons = [
   // { name: TOOLS_BAR_BUTTON.LIGHT, icon: <InfoCircleOutlined /> }
 ];
 
-const ToolsBar: React.FC = () => {
+const ToolsBar: React.FC<React.HTMLAttributes<HTMLDivElement>> = props => {
   const thisRef = useRef<HTMLDivElement | null>();
   const [projectInfoVisible, setProjectInfoVisible] = useState(false);
   const projectData = useEditorSelector(state => state.projectData);
@@ -106,7 +106,7 @@ const ToolsBar: React.FC = () => {
     }
   };
   return (
-    <StyleToolsBar ref={r => (thisRef.current = r)}>
+    <StyleToolsBar ref={r => (thisRef.current = r)} {...props}>
       <div className="btn-group">
         {buttons.map((button, key) => (
           <div className="btn-item" key={key}>

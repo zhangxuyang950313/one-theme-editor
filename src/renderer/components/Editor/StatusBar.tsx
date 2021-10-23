@@ -4,10 +4,10 @@ import styled from "styled-components";
 import { FolderOpenOutlined } from "@ant-design/icons";
 import { useEditorSelector } from "@/store";
 
-const StatusBar: React.FC = () => {
+const StatusBar: React.FC<React.HTMLAttributes<HTMLDivElement>> = props => {
   const projectData = useEditorSelector(state => state.projectData);
   return (
-    <StyleStatusBar>
+    <StyleStatusBar {...props}>
       <span
         className="project-name"
         title="跳转目录"
