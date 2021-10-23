@@ -35,7 +35,7 @@ const Sidebar: React.FC = () => {
 
 const StyleSidebar = styled.div`
   flex-shrink: 0;
-  min-width: 230px;
+  width: 230px;
   height: 100%;
   border-right: 1px solid;
   border-right-color: ${({ theme }) => theme["@border-color-thirdly"]};
