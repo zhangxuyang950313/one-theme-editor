@@ -305,7 +305,7 @@ const StyleEditorFrame = styled.div`
   }
   .editor__status-bar {
     flex-grow: 1;
-    /* flex-shrink: 0; */
+    flex-shrink: 0;
     height: 30px;
     border-top: 1px solid var(--border-color-thirdly);
     background-color: var(--bg-color-thirdly);

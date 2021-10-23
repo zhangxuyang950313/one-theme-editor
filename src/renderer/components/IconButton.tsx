@@ -56,12 +56,10 @@ const StyleIconButton = styled.div`
       transform: 0.3s ease-in;
     }
     &:hover {
-      opacity: 0.8;
-      transition: 0.3s ease-out;
+      opacity: 0.6;
     }
     &:active {
-      opacity: 0.6;
-      transition: 0.3s ease-out;
+      opacity: 0.4;
     }
   }
   .btn-name {
