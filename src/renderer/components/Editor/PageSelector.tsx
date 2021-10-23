@@ -47,7 +47,6 @@ const StylePreviewImage = styled.span`
     opacity: 1;
   }
   .previewer {
-    transition: 0.4s all;
     border-radius: 6px;
     overflow: hidden;
     box-sizing: border-box;

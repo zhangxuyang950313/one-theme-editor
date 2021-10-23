@@ -22,6 +22,7 @@ const Index: React.FC = () => {
     console.log(logSymbols.success, `渲染进程启动 ${process.pid}`);
     // localStorage.debug = "*.io-client:socket";
     // localStorage.debug = "*";
+    electronStore.set("themeConfig", DarkTheme);
   }, []);
   // const socket = useSocket();
   const [status] = useInitEditorConfig();
@@ -65,6 +66,7 @@ body,
 html {
     margin: 0;
     user-select: none;
+    -webkit-app-region: drag;
 }
 body {
   overflow: hidden;

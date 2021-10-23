@@ -9,18 +9,18 @@ import styled from "styled-components";
 export type TypeIconButtonOption = {
   name: TOOLS_BAR_BUTTON;
   icon: JSX.Element;
-  toggle?: boolean;
+  defaultToggle?: boolean;
   onClick?: (toggle: boolean) => void;
 };
 export default function IconButton(
   props: React.PropsWithChildren<TypeIconButtonOption & { className?: string }>
 ): JSX.Element {
-  const [toggle, setToggle] = useState(props.toggle);
+  const [toggle, setToggle] = useState(props.defaultToggle);
   return (
     <StyleIconButton className={props.className}>
       <div
         className="icon-btn"
-        data-toggle={Boolean(props.toggle)}
+        data-toggle={Boolean(toggle)}
         onClick={() => {
           setToggle(!toggle);
           props?.onClick && props.onClick(!toggle);
@@ -47,7 +47,7 @@ const StyleIconButton = styled.div`
     border-radius: 3px;
     width: 40px;
     height: 22px;
-    background: ${({ theme }) => theme["@disabled-color"]};
+    background: ${({ theme }) => theme["@border-color-secondary"]};
     color: ${({ theme }) => theme["@text-color-secondary"]};
     transition: 0.3s ease-out;
     &[data-toggle="true"] {

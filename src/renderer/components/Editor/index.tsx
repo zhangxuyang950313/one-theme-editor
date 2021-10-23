@@ -56,19 +56,19 @@ const EditorFrame: React.FC = () => {
       {
         name: TOOLS_BAR_BUTTON.MODULE_TOGGLE,
         icon: <DeploymentUnitOutlined />,
-        toggle: moduleSelector,
+        defaultToggle: moduleSelector,
         onClick: setModuleSelector.toggle
       },
       {
         name: TOOLS_BAR_BUTTON.PAGE_TOGGLE,
         icon: <TagsOutlined />,
-        toggle: pageSelector,
+        defaultToggle: pageSelector,
         onClick: setPageSelector.toggle
       },
       {
         name: TOOLS_BAR_BUTTON.PREVIEW_TOGGLE,
         icon: <TabletOutlined />,
-        toggle: previewSelector,
+        defaultToggle: previewSelector,
         onClick: setPreviewSelector.toggle
       }
       // { name: TOOLS_BAR_BUTTON.PLACEHOLDER, icon: <div /> }
@@ -125,7 +125,7 @@ const EditorFrame: React.FC = () => {
         }
       }
     ]);
-  }, [moduleSelector, pageSelector, previewSelector]);
+  }, []);
   return (
     <StyleEditorFrame>
       <StyleTopBar height="30px">
