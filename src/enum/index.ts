@@ -130,12 +130,13 @@ export enum EXTRA_DATA_TYPE {
 
 // 工具栏按钮
 export enum TOOLS_BAR_BUTTON {
-  CREATE = "新建",
-  OPEN = "打开",
+  MODULE_TOGGLE = "模块栏",
+  PAGE_TOGGLE = "页面栏",
+  PREVIEW_TOGGLE = "预览",
   APPLY = "应用",
   SAVE = "保存",
   EXPORT = "导出",
-  INFO = "资料",
+  INFO = "信息",
   DARK = "深色",
   LIGHT = "浅色",
   PLACEHOLDER = ""

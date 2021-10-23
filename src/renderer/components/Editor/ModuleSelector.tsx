@@ -32,7 +32,7 @@ const ModuleSelector: React.FC<{
 
 const StyleModuleSelector = styled.div`
   .icon-wrapper {
-    width: auto;
+    width: 70px;
     height: 70px;
     margin: 0 auto;
     display: flex;
@@ -42,10 +42,11 @@ const StyleModuleSelector = styled.div`
       cursor: pointer;
       width: 45px;
       opacity: 0.4;
-      transition: 0.4s all ease;
+      transition: 0.2s all ease-in;
       &[data-active="true"] {
-        width: 55px;
         opacity: 1;
+        width: 55px;
+        transition: 0.3s all ease-out;
       }
     }
     .name {

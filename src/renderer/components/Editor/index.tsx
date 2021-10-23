@@ -1,5 +1,17 @@
-import React from "react";
+import path from "path";
+import { remote } from "electron";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { message, notification } from "antd";
+import {
+  ExportOutlined,
+  InfoCircleOutlined,
+  MobileOutlined,
+  FolderOutlined,
+  DeploymentUnitOutlined,
+  TagsOutlined,
+  TabletOutlined
+} from "@ant-design/icons";
 import {
   useCurrentPageConfig,
   useModuleConfig,
@@ -7,12 +19,17 @@ import {
   useCurrentModuleList
 } from "@/hooks/resource";
 import { StyleTopDrag } from "@/style";
+import { useToggle } from "ahooks";
+import { useEditorSelector } from "@/store";
 import PageSelector from "@/components/Editor/PageSelector";
 import Previewer from "@/components/Editor/Previewer";
 import ResourcePanel from "@/components/Editor/ResourcePanel/index";
 import ModuleSelector from "@/components/Editor/ModuleSelector";
 import EditorToolsBar from "@/components/Editor/ToolsBar";
 import StatusBar from "@/components/Editor/StatusBar";
+import usePackProject from "@/hooks/project/usePackProject";
+import { TOOLS_BAR_BUTTON } from "src/enum";
+import { TypeIconButtonOption } from "../IconButton";
 
 // 编辑区域框架
 const EditorFrame: React.FC = () => {
@@ -20,52 +37,159 @@ const EditorFrame: React.FC = () => {
   const moduleList = useCurrentModuleList();
   const pageConfig = useCurrentPageConfig();
   const [currentModule, setCurrentModule] = useModuleConfig();
+  const projectData = useEditorSelector(state => state.projectData);
+  const packageConfig = useEditorSelector(
+    state => state.scenarioConfig.packageConfig
+  );
+  const packProject = usePackProject();
+  const [projectInfoVisible, setProjectInfoVisible] = useState(false);
+
+  const [moduleSelector, setModuleSelector] = useToggle(true);
+  const [pageSelector, setPageSelector] = useToggle(true);
+  const [previewSelector, setPreviewSelector] = useToggle(true);
+
+  const [leftButtons, setLeftButtons] = useState<TypeIconButtonOption[]>([]);
+  const [rightButtons, setRightButtons] = useState<TypeIconButtonOption[]>([]);
+
+  useEffect(() => {
+    setLeftButtons([
+      {
+        name: TOOLS_BAR_BUTTON.MODULE_TOGGLE,
+        icon: <DeploymentUnitOutlined />,
+        toggle: moduleSelector,
+        onClick: setModuleSelector.toggle
+      },
+      {
+        name: TOOLS_BAR_BUTTON.PAGE_TOGGLE,
+        icon: <TagsOutlined />,
+        toggle: pageSelector,
+        onClick: setPageSelector.toggle
+      },
+      {
+        name: TOOLS_BAR_BUTTON.PREVIEW_TOGGLE,
+        icon: <TabletOutlined />,
+        toggle: previewSelector,
+        onClick: setPreviewSelector.toggle
+      }
+      // { name: TOOLS_BAR_BUTTON.PLACEHOLDER, icon: <div /> }
+      // { name: TOOLS_BAR_BUTTON.DARK, icon: <InfoCircleOutlined /> },
+      // { name: TOOLS_BAR_BUTTON.LIGHT, icon: <InfoCircleOutlined /> }
+    ]);
+    setRightButtons([
+      { name: TOOLS_BAR_BUTTON.APPLY, icon: <MobileOutlined /> },
+      { name: TOOLS_BAR_BUTTON.SAVE, icon: <FolderOutlined /> },
+      {
+        name: TOOLS_BAR_BUTTON.EXPORT,
+        icon: <ExportOutlined />,
+        onClick: () => {
+          const { root, description, scenarioSrc } = projectData;
+          const { extname } = packageConfig;
+          const defaultPath = path.join(
+            path.dirname(projectData.root),
+            `${description.name}.${extname}`
+          );
+          remote.dialog
+            // https://www.electronjs.org/docs/api/dialog#dialogshowopendialogsyncbrowserwindow-options
+            .showSaveDialog({
+              properties: ["createDirectory"],
+              defaultPath,
+              filters: [{ name: extname, extensions: [extname] }]
+            })
+            .then(result => {
+              if (result.canceled) return;
+              if (!result.filePath) {
+                message.info("未指定任何文件");
+                return;
+              }
+              packProject(
+                {
+                  scenarioSrc,
+                  packDir: root,
+                  outputFile: result.filePath
+                },
+                data => {
+                  notification.info({
+                    message: data.msg,
+                    description: data.data
+                  });
+                }
+              );
+            });
+        }
+      },
+      {
+        name: TOOLS_BAR_BUTTON.INFO,
+        icon: <InfoCircleOutlined />,
+        onClick: () => {
+          setProjectInfoVisible(true);
+        }
+      }
+    ]);
+  }, [moduleSelector, pageSelector, previewSelector]);
   return (
     <StyleEditorFrame>
       <StyleTopBar height="30px">
         <span className="title">{document.title || "一个主题编辑器"}</span>
       </StyleTopBar>
       {/* 工具栏 */}
-      <EditorToolsBar className="editor__tools-bar" />
+      <EditorToolsBar
+        className="editor__tools-bar"
+        buttonsGroupList={[leftButtons, rightButtons]}
+      />
+      {/* <ProjectInfoModal
+        title="修改主题信息"
+        centered
+        destroyOnClose
+        getContainer={thisRef.current || false}
+        visible={projectInfoVisible}
+        onCancel={() => setProjectInfoVisible(false)}
+        onOk={() => setProjectInfoVisible(false)}
+      /> */}
       <div className="editor__container">
         {/* 模块选择器 */}
-        <div className="editor__module-selector right-border-line">
-          <ModuleSelector
-            className="editor__module-content"
-            moduleList={moduleList}
-            currentModule={currentModule}
-            onChange={setCurrentModule}
-          />
-        </div>
+        {moduleSelector && (
+          <div className="editor__module-selector right-border-line">
+            <ModuleSelector
+              className="editor__module-content"
+              moduleList={moduleList}
+              currentModule={currentModule}
+              onChange={setCurrentModule}
+            />
+          </div>
+        )}
         {/* 编辑区域 */}
         <div className="editor__content-wrapper">
           {/* 主编辑区域 */}
           <div className="editor__content">
             {/* 页面选择器 */}
-            <div className="editor__page-selector right-border-line">
-              {currentModule.pageList.length ? (
-                <PageSelector
-                  className="editor__page-content"
-                  pageList={currentModule.pageList}
-                />
-              ) : (
-                <div className="no-config">无配置</div>
-              )}
-            </div>
+            {pageSelector && (
+              <div className="editor__page-selector right-border-line">
+                {currentModule.pageList.length ? (
+                  <PageSelector
+                    className="editor__page-content"
+                    pageList={currentModule.pageList}
+                  />
+                ) : (
+                  <div className="no-config">无配置</div>
+                )}
+              </div>
+            )}
             {/* 预览 */}
             {/* TODO: 占位图 */}
-            <div className="editor__previewer right-border-line">
-              {pageConfig ? (
-                <Previewer
-                  className="previewer__content"
-                  pageConfig={pageConfig}
-                  canClick
-                  useDash
-                />
-              ) : (
-                <div className="no-config">未选择页面</div>
-              )}
-            </div>
+            {previewSelector && (
+              <div className="editor__previewer right-border-line">
+                {pageConfig ? (
+                  <Previewer
+                    className="previewer__content"
+                    pageConfig={pageConfig}
+                    canClick
+                    useDash
+                  />
+                ) : (
+                  <div className="no-config">未选择页面</div>
+                )}
+              </div>
+            )}
             {/* 资源编辑区 */}
             <div className="resource-panel ">
               {pageConfig ? (
@@ -149,6 +273,7 @@ const StyleEditorFrame = styled.div`
         flex-grow: 1;
         overflow-y: auto;
         box-sizing: border-box;
+        transition: 0.3s ease-out;
         .editor__page-selector {
           flex-shrink: 0;
           width: 120px;
