@@ -63,7 +63,7 @@ export function useScenarioOption(): [
  * 获取当前选择的模块配置
  * @returns
  */
-export function useCurrentResModule(): [
+export function useModuleConfig(): [
   TypeModuleConfig,
   (data: TypeModuleConfig) => void
 ] {
@@ -76,7 +76,7 @@ export function useCurrentResModule(): [
  * 获取当前选择的页面配置信息
  * @returns
  */
-export function useCurrentPageOption(): [
+export function usePageOption(): [
   TypePageOption,
   (data: TypePageOption) => void
 ] {
@@ -89,7 +89,7 @@ export function useCurrentPageOption(): [
  * 获取当前选择的页面配置数据
  * @returns
  */
-export function useCurrentPageConfig(): TypePageConfig | null {
+export function usePageConfig(): TypePageConfig | null {
   return useEditorSelector(state => {
     return state.pageConfigMap[state.currentPage.src] || null;
   });
@@ -98,8 +98,8 @@ export function useCurrentPageConfig(): TypePageConfig | null {
 /**
  * 获取素材定义列表
  */
-export function useResourceList(): TypeResourceDefinition[] {
-  const curResPageConfig = useCurrentPageConfig();
+export function useResourceDefList(): TypeResourceDefinition[] {
+  const curResPageConfig = usePageConfig();
   return curResPageConfig?.resourceList || [];
 }
 

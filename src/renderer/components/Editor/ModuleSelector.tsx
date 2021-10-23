@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Tooltip } from "antd";
-import { useCurrentResModule } from "@/hooks/resource/index";
+import { useModuleConfig } from "@/hooks/resource/index";
 import { useEditorSelector } from "@/store";
 import { StaticResourceImage } from "../ImageCollection";
 
@@ -10,53 +10,48 @@ const ModuleSelector: React.FC<{ className?: string }> = props => {
   const resourceModuleList = useEditorSelector(
     state => state.resourceConfig.moduleList
   );
-  const [currentModule, setCurrentModule] = useCurrentResModule();
-
-  if (resourceModuleList.length === 0) return null;
-  if (!currentModule) return null;
+  const [currentModule, setCurrentModule] = useModuleConfig();
 
   return (
-    <div className={props.className}>
+    <StyleModuleSelector className={props.className}>
       {resourceModuleList.map((item, key) => (
         <Tooltip key={key} title={item.name} placement="right">
-          <StyleIcon onClick={() => setCurrentModule(item)}>
-            {/* <img
-              className="icon"
-              data-isActive={String(currentModule.index === item.index)}
-              alt=""
-              src={getImageURL(item.icon)}
-            /> */}
+          <div className="icon-wrapper" onClick={() => setCurrentModule(item)}>
             <StaticResourceImage
               className="icon"
               data-active={String(currentModule.index === item.index)}
               src={item.icon}
             />
-          </StyleIcon>
+          </div>
         </Tooltip>
       ))}
-    </div>
+    </StyleModuleSelector>
   );
 };
 
-const StyleIcon = styled.div`
-  width: 80px;
-  height: 70px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  .icon {
-    cursor: pointer;
-    width: 45px;
-    opacity: 0.4;
-    transition: 0.4s all ease;
-    &[data-active="true"] {
-      width: 55px;
-      opacity: 1;
+const StyleModuleSelector = styled.div`
+  height: 100%;
+  .icon-wrapper {
+    width: 70px;
+    height: 70px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .icon {
+      cursor: pointer;
+      width: 45px;
+      opacity: 0.4;
+      transition: 0.4s all ease;
+      &[data-active="true"] {
+        width: 55px;
+        opacity: 1;
+      }
     }
-  }
-  .name {
-    font-size: 12px;
-    text-align: center;
+    .name {
+      font-size: 12px;
+      text-align: center;
+    }
   }
 `;
 

@@ -7,7 +7,7 @@ import { RGBColor, SketchPicker } from "react-color";
 import ColorUtil, { HEX_FORMAT } from "src/common/utils/ColorUtil";
 import { StyleGirdBackground } from "@/style";
 import electronStore from "src/common/electronStore";
-import { useCurrentPageConfig } from "@/hooks/resource";
+import { usePageConfig } from "@/hooks/resource";
 
 // 颜色小方块
 const ColorBox: React.FC<{
@@ -67,7 +67,7 @@ function ColorPickerBox(props: {
   const { color, tipColor, onChange, onDisabled } = props;
   const [colorRGBAHex, setColorRGBAHex] = useState(color);
   const [colorRecently, setColorRecently] = useState<string[]>([]);
-  const pageConfig = useCurrentPageConfig();
+  const pageConfig = usePageConfig();
 
   useEffect(() => {
     setColorRGBAHex(color);

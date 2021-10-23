@@ -3,7 +3,7 @@ import { SOCKET_EVENT } from "src/constant/socketConf";
 import { FILE_EVENT } from "src/enum";
 import { TypeSyncFileContent, TypeWatchFilesPayload } from "src/types/socket";
 // import { useEditorDispatch } from "@/store";
-import { useResourceList } from "../resource";
+import { useResourceDefList } from "../resource";
 import useSocket from "../socket/useSocket";
 import { useProjectRoot } from "./index";
 
@@ -14,7 +14,7 @@ import { useProjectRoot } from "./index";
 export default function useWatchProjectFile(): void {
   const socket = useSocket();
   const projectRoot = useProjectRoot();
-  const resourceList = useResourceList();
+  const resourceList = useResourceDefList();
   // const dispatch = useEditorDispatch();
   useEffect(() => {
     if (!projectRoot || resourceList.length === 0) return;

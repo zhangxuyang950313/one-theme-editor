@@ -79,21 +79,22 @@ export default function EditorReducer(
       );
       electronStore.set("resourcePath", resourcePath);
       return updateState(state, {
-        resourceConfig: action.payload,
-        currentModule: moduleList[0],
-        currentPage: moduleList[0]?.pageList?.[0]
+        resourceConfig: action.payload || defaultState.resourceConfig,
+        currentModule: moduleList[0] || defaultState.currentModule,
+        currentPage: moduleList[0]?.pageList?.[0] || defaultState.currentPage
       });
     }
     // 模块配置
     case ACTION_TYPE.SET_MODULE_CONFIG: {
       return updateState(state, {
-        currentModule: action.payload
+        currentModule: action.payload || defaultState.currentModule,
+        currentPage: action.payload.pageList[0] || defaultState.currentPage
       });
     }
     // 页面配置
     case ACTION_TYPE.SET_PAGE_OPTION: {
       return updateState(state, {
-        currentPage: action.payload
+        currentPage: action.payload || defaultState.currentPage
       });
     }
     // 页面配置数据

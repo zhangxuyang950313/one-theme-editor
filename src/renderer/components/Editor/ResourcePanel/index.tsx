@@ -1,35 +1,38 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { useCurrentPageConfig, useResourceList } from "@/hooks/resource/index";
-import { useCreateWatcher } from "@/hooks/project/useSubscribeProjectFile";
-import { RESOURCE_TAG } from "src/enum";
 import { Tabs } from "@/components/One";
+import { RESOURCE_TAG } from "src/enum";
+import { useCreateWatcher } from "@/hooks/project/useSubscribeProjectFile";
+import { TypePageConfig } from "src/types/resource.config";
+import { TypeResourceDefinition } from "src/types/resource.page";
 import FileBlocker from "./FileBlocker";
 import XmlValueBlocker from "./XmlValueBlocker";
 
-const ResourcePanel: React.FC = () => {
+const ResourcePanel: React.FC<{
+  pageConfig: TypePageConfig;
+  resourceDefList: TypeResourceDefinition[];
+}> = props => {
   useCreateWatcher();
-  const pageConfig = useCurrentPageConfig();
-  const resourceList = useResourceList();
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const { pageConfig, resourceDefList } = props;
+  const [selectTabIndex, setSelectTabIndex] = useState(0);
 
-  const currentResourceList = resourceList[selectedIndex]?.children || [];
+  const currentResourceList = resourceDefList[selectTabIndex]?.children || [];
 
   useEffect(() => {
-    setSelectedIndex(0);
-  }, [resourceList]);
+    setSelectTabIndex(0);
+  }, [resourceDefList]);
 
   return (
     <StyleResourcePanel>
       {pageConfig?.disableTabs !== true && (
         <Tabs
           className="tabs"
-          defaultIndex={0}
-          data={resourceList.map((item, index) => ({
+          defaultIndex={selectTabIndex}
+          data={resourceDefList.map((item, index) => ({
             index: index,
             label: item.name
           }))}
-          onChange={index => setSelectedIndex(index)}
+          onChange={index => setSelectTabIndex(index)}
         />
       )}
       <div className="resource-container">

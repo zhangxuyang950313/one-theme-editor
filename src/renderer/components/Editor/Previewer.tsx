@@ -10,7 +10,7 @@ import {
 import { TypePageConfig } from "src/types/resource.config";
 import { TypeLayoutData, TypeLayoutTextElement } from "src/types/resource.page";
 import ColorUtil from "src/common/utils/ColorUtil";
-import { useCurrentPageConfig } from "@/hooks/resource";
+import { usePageConfig } from "@/hooks/resource";
 import useSubscribeProjectFile from "@/hooks/project/useSubscribeProjectFile";
 import { useEditorSelector } from "@/store";
 import { DynamicBothSourceImage } from "../ImageCollection";
@@ -116,7 +116,7 @@ const LayoutTextElement: React.FC<{
   const subscribe = useSubscribeProjectFile();
   const [defaultColor, setDefaultColor] = useState("#000000");
   const [color, setColor] = useState(defaultColor);
-  const pageConfig = useCurrentPageConfig();
+  const pageConfig = usePageConfig();
   const curXmlValMapper = useEditorSelector(
     state => state.xmlFileDataMap[element.sourceData.src]?.valueMapper || {}
   );
@@ -184,10 +184,9 @@ const Previewer: React.FC<{
 
   return (
     <StylePreviewer
-      style={{ borderRadius: `${50 * scale}px` }}
       className={props.className}
       ref={divEl => {
-        if (!divEl) return;
+        if (!divEl || scale) return;
         setScale(divEl.getBoundingClientRect().width / Number(screenWidth));
       }}
     >
@@ -244,12 +243,11 @@ const Previewer: React.FC<{
 const StylePreviewer = styled.div`
   width: 100%;
   box-sizing: border-box;
-  overflow: hidden;
-  border: 1px solid;
-  border-color: ${({ theme }) => theme["@border-color-base"]};
+  border: 1px solid ${({ theme }) => theme["@border-color-base"]};
   .dynamic {
     position: relative;
     transform-origin: 0 0;
+    box-sizing: border-box;
     .image {
       position: absolute;
       width: 100%;

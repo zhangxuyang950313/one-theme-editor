@@ -6,7 +6,7 @@ import { ActionPatchPageConfMap } from "@/store/editor/action";
 import { TypePageConfig } from "src/types/resource.config";
 import { LOAD_STATUS } from "src/enum";
 import { asyncQueue } from "src/common/utils";
-import { useCurrentResModule } from "./index";
+import { useModuleConfig } from "./index";
 
 /**
  * 获取当前工程当前模块的页面列表
@@ -19,7 +19,7 @@ export default function useFetchPageConfList(): [
 ] {
   const [status, setStatus] = useState(LOAD_STATUS.INITIAL);
   const [pageData, setPageData] = useState<TypePageConfig[]>([]);
-  const [{ pageList }] = useCurrentResModule();
+  const [{ pageList }] = useModuleConfig();
   const dispatch = useEditorDispatch();
   const resourceSrc = useEditorSelector(state => state.projectData.resourceSrc);
 
