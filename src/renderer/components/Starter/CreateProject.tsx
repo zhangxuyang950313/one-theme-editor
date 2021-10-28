@@ -15,9 +15,9 @@ import { Button } from "@/components/One";
 import { FieldError } from "rc-field-form/lib/interface";
 import { FileAddOutlined } from "@ant-design/icons";
 import Steps from "@/components/Steps";
-import { useStarterSelector } from "@/store";
+import { useStarterSelector } from "@/store/starter";
 import { FILE_TEMPLATE_TYPE } from "src/enum";
-import electronStore from "src/common/electronStore";
+import * as electronStore from "src/store";
 import { ProjectInput } from "../Forms";
 import ResourceConfigManager from "./ResourceConfigManager";
 
@@ -32,7 +32,7 @@ const initialValues = {
   uiVersion: "10"
 };
 
-const defaultPath = electronStore.get("pathConfig").ELECTRON_DESKTOP;
+const defaultPath = electronStore.config.get("pathConfig").ELECTRON_DESKTOP;
 
 // 创建主题按钮
 const CreateProject: React.FC<{
@@ -346,7 +346,7 @@ const CreateProject: React.FC<{
         type="primary"
         onClick={step.next.handleNext}
         disabled={step.next.disabled}
-        loading={isCreating}
+        // loading={isCreating}
       >
         下一步
       </Button>
@@ -364,7 +364,7 @@ const CreateProject: React.FC<{
             .catch(err => message.error({ content: err.message }));
         }}
         disabled={step.start.disabled}
-        loading={isCreating}
+        // loading={isCreating}
       >
         开始
       </Button>

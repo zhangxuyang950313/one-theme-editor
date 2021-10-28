@@ -13,7 +13,7 @@ import {
   createProject,
   updateProject
 } from "server/dbHandler/project";
-import { releaseXmlTemplate } from "server/services/xmlTemplate";
+import { writeXmlTemplate } from "server/services/xmlTemplate";
 import {
   getPageResourceData,
   packProject,
@@ -24,7 +24,6 @@ import { checkParamsKey, result } from "server/utils/requestUtil";
 import XmlCompilerExtra from "server/compiler/XmlCompilerExtra";
 import XmlFileCompiler from "server/compiler/XmlFileCompiler";
 import ScenarioOptions from "server/compiler/ScenarioOptions";
-import electronStore from "src/common/electronStore";
 
 export default function projectController(service: Express): void {
   // 添加工程
@@ -150,7 +149,7 @@ export default function projectController(service: Express): void {
   >(apiConfig.XML_TEMPLATE_WRITE.path, async (request, response) => {
     const { body } = request;
     checkParamsKey(body, apiConfig.XML_TEMPLATE_WRITE.bodyKeys);
-    const data = await releaseXmlTemplate(body);
+    const data = await writeXmlTemplate(body);
     response.send(result.success(data));
   });
 
@@ -182,7 +181,7 @@ export default function projectController(service: Express): void {
     const { query } = request;
     checkParamsKey(query, apiConfig.GET_PROJECT_FILE_DATA.query);
     const { filepath } = query;
-    const root = electronStore.get("projectPath");
+    const root = $reactiveProjectState.get("projectPath");
     const fileData = getFileData(path.join(root, filepath));
     response.send(result.success(fileData));
   });

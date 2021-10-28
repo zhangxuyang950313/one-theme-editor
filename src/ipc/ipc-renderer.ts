@@ -1,15 +1,24 @@
-import { BrowserWindowConstructorOptions, ipcRenderer } from "electron";
+import {
+  BrowserWindowConstructorOptions,
+  ipcRenderer,
+  IpcRendererEvent
+} from "electron";
+import { FILE_EVENT } from "src/enum";
 import { TypeProjectDataDoc } from "src/types/project";
+import { TypeWriteXmlTempPayload } from "src/types/request";
 import {
   TypePageConfig,
   TypeResourceConfig,
   TypeResourceOption
 } from "src/types/resource.config";
+import { TypeFileData } from "src/types/resource.page";
 import {
   TypeScenarioConfig,
   TypeScenarioOption
 } from "src/types/scenario.config";
 import IPC_EVENT from "./ipc-event";
+
+ipcRenderer.setMaxListeners(9999);
 
 type TypeReplyCB<T> = {
   success: (data: T) => void;
@@ -104,7 +113,53 @@ const rendererIpc = {
   openStarter: generateIpcInvoke<
     void | { windowOptions: BrowserWindowConstructorOptions },
     void
-  >(IPC_EVENT.$openStarter)
+  >(IPC_EVENT.$openStarter),
+
+  useFilesChange(
+    callback: (data: {
+      root: string;
+      event: FILE_EVENT;
+      src: string;
+      data: TypeFileData;
+    }) => void
+  ): () => void {
+    const cb = (
+      $event: IpcRendererEvent,
+      $data: {
+        root: string;
+        event: FILE_EVENT;
+        src: string;
+        data: TypeFileData;
+      }
+    ) => {
+      callback($data);
+    };
+    ipcRenderer.on(IPC_EVENT.$fileChange, cb);
+    return () => {
+      ipcRenderer.removeListener(IPC_EVENT.$fileChange, cb);
+    };
+  },
+
+  getWatcherWatched: generateIpcSync<void, { [x: string]: string[] }>(
+    IPC_EVENT.$getWatcherWatched
+  ),
+
+  // 拷贝文件
+  copyFile: generateIpcInvoke<{ from: string; to: string }, void>(
+    IPC_EVENT.$copyFile
+  ),
+
+  // 删除文件
+  deleteFile: generateIpcInvoke<string, void>(IPC_EVENT.$deleteFile),
+
+  // 写入 xml 文件
+  writeXmlTemplate: generateIpcInvoke<
+    TypeWriteXmlTempPayload,
+    Record<string, string>
+  >(IPC_EVENT.$writeXmlTemplate),
+
+  // 获取文件数据
+  getFileData: generateIpcInvoke<string, TypeFileData>(IPC_EVENT.$getFileData)
 };
 
 export default rendererIpc;

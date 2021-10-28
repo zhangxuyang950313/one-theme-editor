@@ -1,5 +1,5 @@
 import { useScenarioOption } from "@/hooks/resource/index";
-import { useStarterSelector } from "@/store";
+import { useStarterSelector } from "@/store/starter";
 import { TypeProjectInfo } from "src/types/project";
 import { LOAD_STATUS } from "src/enum";
 

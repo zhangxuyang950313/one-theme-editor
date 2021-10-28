@@ -1,15 +1,53 @@
-import React from "react";
+import path from "path";
+import React, { useEffect } from "react";
+import { remote } from "electron";
 import styled from "styled-components";
 import { Empty, Spin } from "antd";
 import { Button } from "@/components/One";
 import { useInitProject } from "@/hooks/project/index";
 import { LOAD_STATUS } from "src/enum";
 import { StyleTopDrag } from "@/style";
+import createRoot from "@/Root";
 import EditorFrame from "@/components/Editor/index";
-import { remote } from "electron";
+import electronStoreConfig from "src/store/config";
+import { useEditorDispatch } from "@/store/editor";
+import { ActionPatchFileDataMap } from "@/store/editor/action";
 
-const Editor: React.FC = () => {
-  const [projectData, status, handleFetch] = useInitProject();
+const ProjectEditor: React.FC = () => {
+  const dispatch = useEditorDispatch();
+  const [project, status, handleFetch] = useInitProject();
+  useEffect(() => {
+    return () => {
+      window.$reactiveProjectState.set("projectPath", "");
+    };
+  }, []);
+  useEffect(() => {
+    if (!project.projectData) return;
+    window.$reactiveProjectState.set("projectData", project.projectData);
+    window.$reactiveProjectState.set("projectPath", project.projectData.root);
+  }, [project.projectData]);
+  useEffect(() => {
+    if (!project.resourceConfig) return;
+    const resourcePath = path.join(
+      electronStoreConfig.get("pathConfig").RESOURCE_CONFIG_DIR,
+      project.resourceConfig.namespace
+    );
+    window.$reactiveProjectState.set("resourcePath", resourcePath);
+  }, [project.resourceConfig]);
+
+  useEffect(() => {
+    window.$server.useFilesChange(({ src, data }) => {
+      switch (data.fileType) {
+        case "image/png":
+        case "image/jpeg":
+        case "application/xml": {
+          dispatch(ActionPatchFileDataMap({ src, fileData: data }));
+          break;
+        }
+      }
+    });
+  }, []);
+
   switch (status) {
     case LOAD_STATUS.INITIAL:
     case LOAD_STATUS.LOADING: {
@@ -21,7 +59,7 @@ const Editor: React.FC = () => {
     }
     case LOAD_STATUS.FAILED:
     case LOAD_STATUS.UNKNOWN: {
-      const isEmpty = projectData === null;
+      const isEmpty = project === null;
       return (
         <StyleEditorEmpty>
           <StyleTopDrag height="50px" />
@@ -74,4 +112,4 @@ const StyleEditorEmpty = styled.div`
   }
 `;
 
-export default Editor;
+createRoot(ProjectEditor);

@@ -1,15 +1,10 @@
-import React, {
-  useState,
-  useEffect,
-  forwardRef,
-  useImperativeHandle
-} from "react";
+import React, { useState, forwardRef, useImperativeHandle } from "react";
 import {
   useLoadImageLazy,
   useLoadImageByPath,
   useLoadImage
 } from "@/hooks/image";
-import useSubscribeProjectFile from "@/hooks/project/useSubscribeProjectFile";
+import useSubscribeFile from "@/hooks/project/useSubscribeFile";
 import { FILE_EVENT } from "src/enum";
 
 type TypeReactImageElement = JSX.IntrinsicElements["img"];
@@ -63,18 +58,14 @@ export const DynamicProjectImage = forwardRef<
   HTMLImageElement,
   TypeReactImageElement
 >(function DynamicProjectImage(props, ref) {
-  const subscribe = useSubscribeProjectFile();
   const [src, setSrc] = useState(props.src);
-  useEffect(() => {
-    if (!props.src) return;
-    subscribe(props.src, { immediately: false }, event => {
-      if (event === FILE_EVENT.UNLINK) {
-        setSrc("");
-        return;
-      }
-      setSrc(`project://${props.src}?${Date.now()}`);
-    });
-  }, [props.src]);
+  useSubscribeFile(props.src, event => {
+    if (event === FILE_EVENT.UNLINK) {
+      setSrc("");
+      return;
+    }
+    setSrc(`project://${props.src}?${Date.now()}`);
+  });
   return <LazyImage {...props} ref={ref} src={src} alt="" />;
 });
 
@@ -98,17 +89,13 @@ export const DynamicBothSourceImage = forwardRef<
   HTMLImageElement,
   TypeReactImageElement
 >(function DynamicBothSourceImage(props, ref) {
-  const subscribe = useSubscribeProjectFile();
   const [src, setSrc] = useState(`src://${props.src}`);
-  useEffect(() => {
-    if (!props.src) return;
-    subscribe(props.src, { immediately: false }, event => {
-      if (event === FILE_EVENT.UNLINK) {
-        setSrc(`resource://${props.src}&t=${Date.now()}`);
-        return;
-      }
-      setSrc(`src://${props.src}&=${Date.now()}`);
-    });
-  }, [props.src]);
+  useSubscribeFile(props.src, event => {
+    if (event === FILE_EVENT.UNLINK) {
+      setSrc(`resource://${props.src}?t=${Date.now()}`);
+      return;
+    }
+    setSrc(`src://${props.src}?=${Date.now()}`);
+  });
   return <PreloadImage {...props} ref={ref} src={src} alt="" />;
 });

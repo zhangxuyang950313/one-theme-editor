@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { apiGetProjectFileData } from "@/request";
-import { useEditorDispatch } from "@/store";
+import { useEditorDispatch } from "@/store/editor";
 import { FILE_EVENT } from "src/enum";
 import { useFSWatcherCreator } from "../fileWatcher";
 import { useProjectRoot } from "../project";

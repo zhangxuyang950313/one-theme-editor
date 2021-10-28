@@ -6,7 +6,7 @@ import { RightCircleOutlined } from "@ant-design/icons";
 import { RGBColor, SketchPicker } from "react-color";
 import ColorUtil, { HEX_FORMAT } from "src/common/utils/ColorUtil";
 import { StyleGirdBackground } from "@/style";
-import electronStore from "src/common/electronStore";
+import * as electronStore from "src/store";
 import { useCurrentPageConfig } from "@/hooks/resource";
 
 // 颜色小方块
@@ -74,9 +74,9 @@ function ColorPickerBox(props: {
   }, [color]);
 
   const appendColorRecently = () => {
-    const colorRecently = electronStore.get("colorRecently");
+    const colorRecently = electronStore.config.get("colorRecently");
     if (!Array.isArray(colorRecently)) {
-      electronStore.set("colorRecently", []);
+      electronStore.config.set("colorRecently", []);
       return;
     }
     const arr = Array.from(new Set([colorRGBAHex, ...colorRecently])).filter(
@@ -92,7 +92,7 @@ function ColorPickerBox(props: {
     if (arr.length > 55) {
       arr.length = 55;
     }
-    electronStore.set("colorRecently", arr);
+    electronStore.config.set("colorRecently", arr);
     setColorRecently(arr);
   };
 

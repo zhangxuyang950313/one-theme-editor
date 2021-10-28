@@ -1,16 +1,17 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import { CloseOutlined } from "@ant-design/icons";
-import { apiWriteXmlTemplate } from "@/request";
 import { useCurrentPageConfig } from "@/hooks/resource";
-import { useEditorSelector } from "@/store";
+import { useEditorDispatch, useEditorSelector } from "@/store/editor";
 import { HEX_FORMAT, RESOURCE_TAG } from "src/enum/index";
 import {
   TypeXmlItem,
   TypeXmlBlocker,
   TypeXmlValueTags
 } from "src/types/resource.page";
-import useSubscribeProjectFile from "@/hooks/project/useSubscribeProjectFile";
+import useSubscribeFile from "@/hooks/project/useSubscribeFile";
+import { useProjectAbsolutePath } from "@/hooks/project";
+import { ActionPatchFileDataMap } from "@/store/editor/action";
 import ColorPicker from "./ColorPicker";
 import BooleanSelector from "./BooleanSelector";
 import NumberInput from "./NumberInput";
@@ -147,14 +148,30 @@ const StyleXmlValueItem = styled.div`
 const XmlItem: React.FC<{ xmlItem: TypeXmlItem; use: TypeXmlValueTags }> =
   props => {
     const { xmlItem, use } = props;
-    const subscribe = useSubscribeProjectFile();
-    const curXmlValMapper = useEditorSelector(
-      state => state.xmlFileDataMap[xmlItem.sourceData.src]?.valueMapper || {}
-    );
+    const dispatch = useEditorDispatch();
+    const projectPath = useProjectAbsolutePath(xmlItem.sourceData.src);
+    const xmlValMapper = useEditorSelector(state => {
+      const data = state.fileDataMap[xmlItem.sourceData.src];
+      return data?.fileType === "application/xml" ? data.valueMapper : {};
+    });
 
-    useEffect(() => {
-      subscribe(xmlItem.sourceData.src, { immediately: true });
-    }, []);
+    useSubscribeFile(xmlItem.sourceData.src, data => {
+      window.$server.getFileData(projectPath).then(data => {
+        switch (data.fileType) {
+          case "image/png":
+          case "image/jpeg":
+          case "application/xml": {
+            dispatch(
+              ActionPatchFileDataMap({
+                src: xmlItem.sourceData.src,
+                fileData: data
+              })
+            );
+            break;
+          }
+        }
+      });
+    });
 
     return (
       <>
@@ -163,14 +180,14 @@ const XmlItem: React.FC<{ xmlItem: TypeXmlItem; use: TypeXmlValueTags }> =
             <XmlValueItem
               key={key}
               defaultValue={valueItem.value}
-              value={curXmlValMapper[valueItem.template] || ""}
+              value={xmlValMapper[valueItem.template] || ""}
               valueTemplate={valueItem.template}
               comment={valueItem.comment}
               use={use}
               from={xmlItem.sourceData.src}
               onChange={value => {
                 // 写入 xml
-                apiWriteXmlTemplate({
+                window.$server.writeXmlTemplate({
                   tag: valueItem.tag,
                   attributes: valueItem.attributes,
                   value: value,
@@ -194,9 +211,11 @@ const XmlValueBlocker: React.FC<{
       <div className="title-wrapper">
         <span className="name">{props.data.name}</span>
       </div>
-      {props.data.items.map((xmlItem, key) => (
-        <XmlItem key={key} xmlItem={xmlItem} use={props.data.tag} />
-      ))}
+      <div className="list">
+        {props.data.items.map((xmlItem, key) => (
+          <XmlItem key={key} xmlItem={xmlItem} use={props.data.tag} />
+        ))}
+      </div>
     </StyleXmlValueBlocker>
   );
 };
@@ -205,14 +224,21 @@ const StyleXmlValueBlocker = styled.div`
   flex-shrink: 0;
   box-sizing: content-box;
   margin-bottom: 20px;
-  margin-right: 20px;
+  padding: 20px 0;
   .title-wrapper {
-    display: inline-block;
     margin-bottom: 20px;
+    position: sticky;
+    z-index: 2;
+    top: 0px;
+    padding: 6px 20px;
+    background-color: ${({ theme }) => theme["@background-color-thirdly"]};
     .name {
       color: ${({ theme }) => theme["@text-color"]};
       font-size: ${({ theme }) => theme["@text-size-title"]};
     }
+  }
+  .list {
+    padding: 0 30px;
   }
 `;
 

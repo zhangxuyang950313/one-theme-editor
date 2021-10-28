@@ -1,3 +1,4 @@
+import path from "path";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { remote } from "electron";
@@ -8,11 +9,11 @@ import {
   UndoOutlined
 } from "@ant-design/icons";
 import { TypeFileBlocker, TypeFileItem } from "src/types/resource.page";
-import { apiCopyFile, apiDeleteFile } from "@/request/file";
+import { useEditorDispatch, useEditorSelector } from "@/store/editor";
 import { useProjectAbsolutePath } from "@/hooks/project/index";
-import { useResourceAbsolutePath } from "@/hooks/resource";
-import useSubscribeProjectFile from "@/hooks/project/useSubscribeProjectFile";
+import useSubscribeFile from "@/hooks/project/useSubscribeFile";
 import ERR_CODE from "src/constant/errorCode";
+import { ActionPatchFileDataMap } from "@/store/editor/action";
 import ImageDisplay from "./ImageDisplay";
 import InfoDisplay from "./InfoDisplay";
 
@@ -21,16 +22,26 @@ const FileItem: React.FC<{
   data: TypeFileItem;
 }> = props => {
   const { data, className } = props;
-  const subscribe = useSubscribeProjectFile();
-  const resourcePath = useResourceAbsolutePath(data.sourceData.src);
+  const dispatch = useEditorDispatch();
   const projectPath = useProjectAbsolutePath(data.sourceData.src);
   const [src, setSrc] = useState(data.sourceData.src);
+  const fileData = useEditorSelector(state => {
+    return state.fileDataMap[data.sourceData.src];
+  });
 
-  useEffect(() => {
-    subscribe(data.sourceData.src, { immediately: false }, () => {
-      setSrc(`${data.sourceData.src}?t=${Date.now()}`);
+  useSubscribeFile(data.sourceData.src, () => {
+    setSrc(`${data.sourceData.src}?t=${Date.now()}`);
+    window.$server.getFileData(projectPath).then(fileData => {
+      switch (fileData.fileType) {
+        case "image/png":
+        case "image/jpeg":
+        case "application/xml": {
+          dispatch(ActionPatchFileDataMap({ src, fileData }));
+          break;
+        }
+      }
     });
-  }, []);
+  });
 
   // TODO 为何不响应切换
   useEffect(() => {
@@ -58,7 +69,7 @@ const FileItem: React.FC<{
           className="display"
           src={`project://${src}`}
           girdSize={17}
-          useDash
+          useDash={!!fileData}
           onClick={() => {
             // 预览图片
             remote.shell.showItemInFolder(projectPath);
@@ -102,7 +113,7 @@ const FileItem: React.FC<{
                 })
                 .then(result => {
                   if (result.canceled) return;
-                  apiCopyFile({
+                  window.$server.copyFile({
                     from: result.filePaths[0],
                     to: projectPath
                   });
@@ -116,12 +127,16 @@ const FileItem: React.FC<{
         <Tooltip overlay="默认" placement="right">
           <UndoOutlined
             className="press btn-reset"
-            onClick={() =>
-              apiCopyFile({
+            onClick={() => {
+              const resourcePath = path.join(
+                window.$reactiveProjectState.get("resourcePath"),
+                data.sourceData.src
+              );
+              window.$server.copyFile({
                 from: resourcePath,
                 to: projectPath
-              })
-            }
+              });
+            }}
           />
         </Tooltip>
         {/* 删除按钮 */}
@@ -129,7 +144,7 @@ const FileItem: React.FC<{
           <DeleteOutlined
             className="press btn-delete"
             onClick={() => {
-              apiDeleteFile(projectPath).catch(err => {
+              window.$server.deleteFile(projectPath).catch(err => {
                 notification.warn({ message: ERR_CODE[4007] });
               });
             }}
@@ -215,11 +230,16 @@ const FileBlocker: React.FC<{
 
 const StyleFileBlocker = styled.div`
   margin-bottom: 20px;
-  border-bottom: 1px solid;
-  border-bottom-color: ${({ theme }) => theme["@border-color-secondary"]};
+  padding: 20px 0;
   .title-container {
-    display: inline-block;
+    z-index: 2;
+    position: sticky;
+    top: 0px;
+    padding: 6px 20px;
+    background-color: ${({ theme }) => theme["@background-color-thirdly"]};
     margin-bottom: 20px;
+    border-bottom: 1px solid;
+    border-bottom-color: ${({ theme }) => theme["@border-color-thirdly"]};
     .title {
       color: ${({ theme }) => theme["@text-color"]};
       font-size: ${({ theme }) => theme["@text-size-title"]};
@@ -228,6 +248,7 @@ const StyleFileBlocker = styled.div`
   .list {
     display: flex;
     flex-wrap: wrap;
+    padding: 0 30px;
     .item {
       margin: 0 20px 20px 0;
     }

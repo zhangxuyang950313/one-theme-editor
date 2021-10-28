@@ -102,6 +102,7 @@
     "copy-webpack-plugin": "^6.4.1",
     "cross-env": "^7.0.3",
     "css-loader": "^5.2.6",
+    "devtron": "^1.4.0",
     "directory-tree": "^3.0.0",
     "dotenv-webpack": "^7.0.3",
     "electron": "8.5.5",

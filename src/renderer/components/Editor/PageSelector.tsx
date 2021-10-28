@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { usePageOption, useResourceImageUrl } from "@/hooks/resource/index";
 import { PreloadImage } from "@/components/ImageCollection";
 import { TypePageOption } from "src/types/resource.config";
-import { useEditorSelector } from "@/store";
+import { useEditorSelector } from "@/store/editor";
 import Previewer from "./Previewer";
 
 const PagePreview: React.FC<{ pageOption: TypePageOption }> = props => {

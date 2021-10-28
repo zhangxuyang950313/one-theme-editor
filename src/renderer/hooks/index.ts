@@ -7,10 +7,10 @@ import {
   ActionSetAppConfig,
   ActionSetServerPort
 } from "@/store/global/modules/base/action";
-import { useGlobalSelector, useGlobalDispatch } from "@/store/index";
+import { useGlobalSelector, useGlobalDispatch } from "@/store/global";
 import { TypePathConfig } from "src/types/extraConfig";
 import { LOAD_STATUS } from "src/enum";
-import electronStore from "src/common/electronStore";
+import * as electronStore from "src/store";
 import { useLocation } from "react-router";
 
 export function useDocumentTitle(): [string, typeof setTitleMethod] {
@@ -77,7 +77,7 @@ export function useInitEditorConfig(): [LOAD_STATUS, () => Promise<void>] {
   const fetch = async () => {
     setStatus(LOAD_STATUS.LOADING);
     const pathConfig: TypePathConfig = {
-      ...electronStore.get("pathConfig"),
+      ...electronStore.config.get("pathConfig"),
       ELECTRON_LOCAL: remote.app.getLocale(),
       ELECTRON_TEMP: remote.app.getPath("temp"),
       ELECTRON_HOME: remote.app.getPath("home"),
@@ -90,8 +90,8 @@ export function useInitEditorConfig(): [LOAD_STATUS, () => Promise<void>] {
       ELECTRON_LOGS: remote.app.getPath("logs"),
       ELECTRON_APP_PATH: remote.app.getAppPath()
     };
-    electronStore.set("pathConfig", pathConfig);
-    dispatch(ActionSetServerPort(electronStore.get("serverPort")));
+    electronStore.config.set("pathConfig", pathConfig);
+    dispatch(ActionSetServerPort(electronStore.config.get("serverPort")));
     dispatch(ActionSetAppConfig(pathConfig));
     // await sleep(300);
     setStatus(LOAD_STATUS.SUCCESS);

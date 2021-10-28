@@ -3,7 +3,7 @@ import express from "express";
 import portfinder from "portfinder";
 import logSymbols from "log-symbols";
 import pathUtil from "server/utils/pathUtil";
-import electronStore from "../common/electronStore";
+import * as electronStore from "../store";
 import registerServiceController from "./controllers/index";
 import registerSocket from "./sockets/index";
 
@@ -19,15 +19,15 @@ registerServiceController(service);
 // 注册 socket 服务
 registerSocket(server);
 
-electronStore.set("pathConfig", {
-  ...electronStore.get("pathConfig"),
+electronStore.config.set("pathConfig", {
+  ...electronStore.config.get("pathConfig"),
   ...pathUtil
 });
 
 portfinder.getPortPromise().then(async port => {
   const hostname = `127.0.0.1:${port}`;
-  electronStore.set("serverPort", port);
-  electronStore.set("hostname", hostname);
+  electronStore.config.set("serverPort", port);
+  electronStore.config.set("hostname", hostname);
   server.listen(port, () => {
     console.log(
       logSymbols.success,

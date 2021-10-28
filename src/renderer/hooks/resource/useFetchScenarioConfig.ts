@@ -1,6 +1,6 @@
 import { notification } from "antd";
 import { useState, useCallback, useEffect } from "react";
-import { useEditorDispatch, useEditorSelector } from "@/store";
+import { useEditorDispatch, useEditorSelector } from "@/store/editor";
 import { ActionSetScenarioConfig } from "@/store/editor/action";
 import { LOAD_STATUS } from "src/enum";
 import { TypeScenarioConfig } from "src/types/scenario.config";

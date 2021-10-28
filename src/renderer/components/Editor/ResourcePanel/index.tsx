@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Tabs } from "@/components/One";
 import { RESOURCE_TAG } from "src/enum";
-import { useCreateWatcher } from "@/hooks/project/useSubscribeProjectFile";
 import { TypePageConfig } from "src/types/resource.config";
 import { TypeResourceDefinition } from "src/types/resource.page";
 import FileBlocker from "./FileBlocker";
@@ -12,7 +11,6 @@ const ResourcePanel: React.FC<{
   pageConfig: TypePageConfig;
   resourceDefList: TypeResourceDefinition[];
 }> = props => {
-  useCreateWatcher();
   const { pageConfig, resourceDefList } = props;
   const [selectTabIndex, setSelectTabIndex] = useState(0);
 
@@ -87,7 +85,7 @@ const StyleResourcePanel = styled.div`
     flex-grow: 0;
     flex-wrap: nowrap;
     flex-direction: column;
-    padding: 20px;
+    /* padding: 20px; */
     overflow-x: hidden;
     overflow-y: auto;
   }

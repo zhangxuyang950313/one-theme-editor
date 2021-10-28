@@ -24,6 +24,9 @@ const config: webpack.ConfigurationFactory = (env, args) => {
       path: outputDir.main,
       filename: "[name].js"
     },
+    externals: {
+      fsevents: "fsevents"
+    },
     optimization: {
       minimize: !isDev
     },

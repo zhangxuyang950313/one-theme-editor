@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { notification } from "antd";
-import { useEditorDispatch, useEditorSelector } from "@/store";
+import { useEditorDispatch, useEditorSelector } from "@/store/editor";
 import { LOAD_STATUS } from "src/enum";
 import { TypeProjectDataDoc } from "src/types/project";
 import { ActionInitEditor, ActionSetProjectData } from "@/store/editor/action";
@@ -17,8 +17,12 @@ export default function useFetchProjectData(): [
   LOAD_STATUS,
   () => Promise<void>
 ] {
-  // 从路由参数中获得工程 uuid
-  const { uuid } = useParams<{ uuid: string }>();
+  const [uuid, setUuid] = useState("");
+  useEffect(() => {
+    // 从路由参数中获得工程 uuid
+    const uuid = new URL(window.location.href).searchParams.get("uuid");
+    if (uuid) setUuid(uuid);
+  }, []);
   const dispatch = useEditorDispatch();
   const projectData = useEditorSelector(state => state.projectData);
   const [status, setStatus] = useState<LOAD_STATUS>(LOAD_STATUS.INITIAL);
@@ -40,6 +44,7 @@ export default function useFetchProjectData(): [
       });
   };
   useEffect(() => {
+    if (!uuid) return;
     handleFetch();
   }, [uuid]);
   return [projectData, status, handleFetch];

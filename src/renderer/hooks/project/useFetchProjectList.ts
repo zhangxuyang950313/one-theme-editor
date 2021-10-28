@@ -1,5 +1,5 @@
 import { useCallback, useLayoutEffect, useState } from "react";
-import { useStarterDispatch } from "@/store";
+import { useStarterDispatch } from "@/store/starter";
 import { ActionSetProjectList } from "@/store/starter/action";
 import { TypeProjectDataDoc } from "src/types/project";
 import { LOAD_STATUS } from "src/enum";

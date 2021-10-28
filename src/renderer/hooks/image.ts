@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from "react";
-import electronStore from "src/common/electronStore";
+import * as electronStore from "src/store";
 
 // 返回图片前缀
 export function useImagePrefix(): string {
-  const hostname = electronStore.get("hostname");
+  const hostname = electronStore.config.get("hostname");
   return `http://${hostname}/image?filepath=`;
   // return `one://`;
 }

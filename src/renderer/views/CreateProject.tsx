@@ -6,7 +6,7 @@ import { isDev } from "@/core/constant";
 import { apiCreateProject } from "@/request";
 import { useQuey } from "@/hooks";
 import { useScenarioOption } from "@/hooks/resource/index";
-import { useStarterSelector } from "@/store";
+import { useStarterSelector } from "@/store/starter";
 import { TypeProjectInfo } from "src/types/project";
 import { TypeResourceOption } from "src/types/resource.config";
 
@@ -20,8 +20,7 @@ import { FILE_TEMPLATE_TYPE } from "src/enum";
 import { ProjectInput } from "@/components/Forms";
 import Steps from "@/components/Steps";
 import ResourceConfigManager from "@/components/Starter/ResourceConfigManager";
-import electronStore from "src/common/electronStore";
-import rendererIpc from "src/ipc/ipc-renderer";
+import * as electronStore from "src/store";
 
 // 表单默认值
 // const txt = `测试${UUID()}`;
@@ -34,7 +33,7 @@ const initialValues = {
   uiVersion: "10"
 };
 
-const defaultPath = electronStore.get("pathConfig").ELECTRON_DESKTOP;
+const defaultPath = electronStore.config.get("pathConfig").ELECTRON_DESKTOP;
 
 // 创建主题按钮
 const CreateProject: React.FC<{

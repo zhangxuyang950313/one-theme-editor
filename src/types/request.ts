@@ -22,8 +22,8 @@ export type TypeResponseFrame<S, F = string> =
 
 export type TypeGetCanceler = (c: Canceler) => void;
 
-// 释放 xml 模板请求载荷
-export type TypeReleaseXmlTempPayload = {
+// 写入 xml 模板参数
+export type TypeWriteXmlTempPayload = {
   src: string;
   tag: string;
   attributes: [string, string][];

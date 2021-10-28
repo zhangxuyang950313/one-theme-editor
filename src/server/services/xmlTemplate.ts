@@ -5,9 +5,8 @@ import pathUtil from "server/utils/pathUtil";
 import XmlCompilerExtra from "server/compiler/XmlCompilerExtra";
 import XmlFileCompiler from "server/compiler/XmlFileCompiler";
 import XMLNodeElement from "server/compiler/XMLNodeElement";
-import electronStore from "src/common/electronStore";
 import {
-  TypeReleaseXmlTempPayload,
+  TypeWriteXmlTempPayload,
   UnionTupleToObjectKey
 } from "src/types/request";
 
@@ -15,10 +14,10 @@ import {
  * 输出被 key value 处理过模板字符串的 xml 模板
  * @param data
  */
-export async function releaseXmlTemplate(
-  data: TypeReleaseXmlTempPayload
+export async function writeXmlTemplate(
+  data: TypeWriteXmlTempPayload
 ): Promise<Record<string, string>> {
-  const project = electronStore.get("projectData");
+  const project = $reactiveProjectState.get("projectData");
   const { tag, attributes, value, src } = data;
   const resourceXmlFile = path.join(
     pathUtil.RESOURCE_CONFIG_DIR,

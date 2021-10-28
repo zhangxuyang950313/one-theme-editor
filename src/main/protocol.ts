@@ -4,8 +4,6 @@ import fse from "fs-extra";
 import { protocol, app, nativeImage } from "electron";
 import { getImgBuffAndFileType } from "../common/utils";
 
-import electronStore from "../common/electronStore";
-
 async function getFileIconData(file: string) {
   const data = await app.getFileIcon(file);
   return { mimeType: "image/png", data: data.toPNG() };
@@ -95,21 +93,21 @@ export default function registerProtocol(): void {
   });
 
   protocol.registerBufferProtocol("resource", async (request, response) => {
-    const root = electronStore.get("resourcePath");
+    const root = $reactiveProjectState.get("resourcePath");
     const data = await getFilePicResponseData(request.url, root);
     response(data);
   });
 
   protocol.registerBufferProtocol("project", async (request, response) => {
-    const root = electronStore.get("projectPath");
+    const root = $reactiveProjectState.get("projectPath");
     const data = await getFilePicResponseData(request.url, root);
     response(data);
   });
 
   // 双向选择协议
   protocol.registerBufferProtocol("src", async (request, response) => {
-    const projectPath = electronStore.get("projectPath");
-    const resourcePath = electronStore.get("resourcePath");
+    const projectPath = $reactiveProjectState.get("projectPath");
+    const resourcePath = $reactiveProjectState.get("resourcePath");
     const data = await getFilePicResponseData(
       request.url,
       projectPath,

@@ -12,7 +12,20 @@ enum IPC_EVENT {
   $updateProjectInfo = "$updateProjectInfo",
 
   $openProjectEditor = "$openProjectEditor",
-  $openStarter = "$openStarter"
+  $openStarter = "$openStarter",
+
+  $startWatchDir = "$watchDirFiles",
+  $fileChange = "$fileChange",
+  $getWatcherWatched = "$getWatcherWatched",
+  $closeWatcher = "$closeWatcher",
+  $closeAllWatcher = "$closeAllWatcher",
+
+  $reactiveStateSet = "$reactiveStateSet",
+
+  $copyFile = "$copyFile",
+  $deleteFile = "$deleteFile",
+  $writeXmlTemplate = "$writeXmlTemplate",
+  $getFileData = "$getFileData"
 }
 
 export default IPC_EVENT;

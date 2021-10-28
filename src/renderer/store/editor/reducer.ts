@@ -14,9 +14,9 @@ import ResourceConfigData, {
 } from "src/data/ResourceConfig";
 import ProjectData from "src/data/ProjectData";
 import ScenarioConfigData from "src/data/ScenarioConfig";
-import electronStore from "src/common/electronStore";
+import * as electronStore from "src/store";
 import pathUtil from "server/utils/pathUtil";
-import { TypeXmlFileData } from "src/types/resource.page";
+import { TypeFileData } from "src/types/resource.page";
 import { ACTION_TYPE, TypeEditorActions } from "./action";
 
 // main states
@@ -27,7 +27,7 @@ export type TypeEditorState = {
   currentModule: TypeModuleConfig;
   currentPage: TypePageOption;
   pageConfigMap: Record<string, TypePageConfig | undefined>;
-  xmlFileDataMap: Record<string, TypeXmlFileData | undefined>;
+  fileDataMap: Record<string, TypeFileData | undefined>;
 };
 
 const defaultState: TypeEditorState = {
@@ -37,7 +37,7 @@ const defaultState: TypeEditorState = {
   currentModule: ModuleConfig.default,
   currentPage: PageOption.default,
   pageConfigMap: {},
-  xmlFileDataMap: {}
+  fileDataMap: {}
 };
 
 const editorState: TypeEditorState = {
@@ -56,15 +56,15 @@ export default function EditorReducer(
     // 工程数据
     case ACTION_TYPE.SET_PROJECT_DATA: {
       document.title = action.payload.description.name || document.title;
-      electronStore.set("projectData", action.payload);
-      electronStore.set("projectPath", action.payload.root);
+      electronStore.config.set("projectData", action.payload);
+      electronStore.config.set("projectPath", action.payload.root);
       return updateState(state, {
         projectData: action.payload
       });
     }
     // 场景数据
     case ACTION_TYPE.SET_SCENARIO_CONFIG: {
-      electronStore.set("scenarioConfig", action.payload);
+      electronStore.config.set("scenarioConfig", action.payload);
       return updateState(state, {
         scenarioConfig: action.payload
       });
@@ -72,12 +72,12 @@ export default function EditorReducer(
     // 配置数据
     case ACTION_TYPE.SET_RESOURCE_CONFIG: {
       const { moduleList } = action.payload;
-      electronStore.set("resourceConfig", action.payload);
+      electronStore.config.set("resourceConfig", action.payload);
       const resourcePath = path.join(
         pathUtil.RESOURCE_CONFIG_DIR,
         action.payload.namespace
       );
-      electronStore.set("resourcePath", resourcePath);
+      electronStore.config.set("resourcePath", resourcePath);
       return updateState(state, {
         resourceConfig: action.payload || defaultState.resourceConfig,
         currentModule: moduleList[0] || defaultState.currentModule,
@@ -107,17 +107,17 @@ export default function EditorReducer(
       });
     }
     // xml 文件数据
-    case ACTION_TYPE.PATCH_XML_FILE_DATA: {
+    case ACTION_TYPE.PATCH_FILE_DATA: {
       const { src, fileData } = action.payload;
       if (fileData === null) {
-        delete state.xmlFileDataMap[src];
+        delete state.fileDataMap[src];
         return updateState(state, {
-          xmlFileDataMap: { ...state.xmlFileDataMap }
+          fileDataMap: { ...state.fileDataMap }
         });
       }
       return updateState(state, {
-        xmlFileDataMap: {
-          ...state.xmlFileDataMap,
+        fileDataMap: {
+          ...state.fileDataMap,
           [src]: fileData
         }
       });

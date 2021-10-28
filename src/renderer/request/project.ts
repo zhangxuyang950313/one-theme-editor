@@ -8,7 +8,7 @@ import { TypeFileData } from "src/types/resource.page";
 import {
   TypeGetCanceler,
   UnionTupleToObjectKey,
-  TypeReleaseXmlTempPayload
+  TypeWriteXmlTempPayload
 } from "src/types/request";
 import { TypeScenarioOption } from "src/types/scenario.config";
 import { createHttp } from "./axios";
@@ -76,7 +76,7 @@ export async function apiGetTempValueByName<T = { value: string }>(
  * @returns
  */
 export async function apiWriteXmlTemplate(
-  data: TypeReleaseXmlTempPayload
+  data: TypeWriteXmlTempPayload
 ): Promise<null> {
   return createHttp()
     .post<typeof data, null>(apiConfig.XML_TEMPLATE_WRITE.path, data)

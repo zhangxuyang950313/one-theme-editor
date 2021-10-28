@@ -16,13 +16,9 @@ import {
   TypeLayoutImageElement,
   TypeLayoutTextElement
 } from "src/types/resource.page";
-import {
-  useStarterDispatch,
-  useEditorDispatch,
-  useStarterSelector,
-  useEditorSelector,
-  useGlobalSelector
-} from "@/store/index";
+import { useGlobalSelector } from "@/store/global";
+import { useStarterDispatch, useStarterSelector } from "@/store/starter";
+import { useEditorDispatch, useEditorSelector } from "@/store/editor";
 import { LAYOUT_ELEMENT_TAG } from "src/enum";
 import { useImagePrefix } from "../image";
 

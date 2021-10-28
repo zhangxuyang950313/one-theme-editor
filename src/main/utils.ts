@@ -1,4 +1,4 @@
-import electronStore from "src/common/electronStore";
+import * as electronStore from "src/store";
 import {
   app,
   BrowserWindow,
@@ -19,11 +19,11 @@ export async function saveCurrentDisplayCenter(): Promise<void> {
   };
   const display = await getDisplayMatching(rect);
   const center = getDisplayWorkAreaCenterPoint(display);
-  electronStore.set("screenCenter", center);
+  electronStore.config.set("screenCenter", center);
 }
 
 export function moveWindowToCenter(win: BrowserWindow): void {
-  const { x, y } = electronStore.get("screenCenter") || {};
+  const { x, y } = electronStore.config.get("screenCenter") || {};
   const [width, height] = win.getSize();
   if (x && width && y && height) {
     win.setPosition(

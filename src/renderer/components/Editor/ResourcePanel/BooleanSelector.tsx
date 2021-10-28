@@ -25,6 +25,7 @@ const BooleanSelector: React.FC<{
 const StyleBooleanSelector = styled.div`
   display: flex;
   align-items: center;
+  color: ${({ theme }) => theme["@text-color"]};
   .error {
     color: ${({ theme }) => theme["@error-color"]};
     font-size: ${({ theme }) => theme["@text-size-thirdly"]};

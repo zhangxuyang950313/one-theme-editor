@@ -3,7 +3,7 @@ import { useLayoutEffect, useEffect, useState } from "react";
 import { useMergeLoadStatus } from "@/hooks/index";
 import { useResConfigRootWithNS } from "@/hooks/resource/index";
 import { ActionInitEditor } from "@/store/editor/action";
-import { useEditorDispatch, useEditorSelector } from "@/store/index";
+import { useEditorDispatch, useEditorSelector } from "@/store/editor/index";
 import { FILE_TEMPLATE_TYPE, LOAD_STATUS } from "src/enum";
 import { TypeProjectDataDoc } from "src/types/project";
 import { TypeResourceConfig, TypePageConfig } from "src/types/resource.config";

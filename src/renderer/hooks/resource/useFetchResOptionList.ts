@@ -1,6 +1,6 @@
 import { useState, useLayoutEffect } from "react";
 import { message } from "antd";
-import { useStarterDispatch } from "@/store";
+import { useStarterDispatch } from "@/store/starter";
 import { ActionSetResourceOptionList } from "@/store/starter/action";
 import { LOAD_STATUS } from "src/enum";
 import { TypeResourceOption } from "src/types/resource.config";

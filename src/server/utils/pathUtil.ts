@@ -1,8 +1,7 @@
 import os from "os";
 import path from "path";
-import { remote } from "electron";
 import { TypeServerPath } from "src/types/extraConfig";
-import electronStore from "src/common/electronStore";
+import * as electronStore from "src/store";
 
 /**
  * 这些路径是基于 dirname 的相对路径，调用前请确保你的执行路径
@@ -10,7 +9,7 @@ import electronStore from "src/common/electronStore";
  */
 
 // const dirname = remote.app.getAppPath();
-const dirname = electronStore.get("pathConfig").ELECTRON_APP_PATH;
+const dirname = electronStore.config.get("pathConfig").ELECTRON_APP_PATH;
 const paths: TypeServerPath = {
   // 软件数据
   CLIENT_DATA: path.resolve(dirname, "../appData"),

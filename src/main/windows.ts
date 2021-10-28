@@ -11,15 +11,19 @@ import installExtension, {
   REDUX_DEVTOOLS,
   REACT_DEVELOPER_TOOLS
 } from "electron-devtools-installer";
-import electronStore from "../common/electronStore";
+import { findProjectByQuery } from "server/dbHandler/project";
+import IPC_EVENT from "src/ipc/ipc-event";
+import { getFileData } from "src/common/utils";
+import * as electronStore from "../store/index";
 import { getUrl, isDev } from "./constant";
 import menuTemplate from "./menu";
+import dirWatcher from "./dirWatcher";
 
 // const preload = path.resolve(app.getAppPath(), "../release.server/index");
 const preload = path.resolve(app.getAppPath(), "../release.main/preload");
 
 const backgroundColor =
-  electronStore.get("themeConfig")?.["@background-color"] ?? "white";
+  electronStore.config.get("themeConfig")?.["@background-color"] ?? "white";
 
 // 用于添加Chromium插件
 async function setupDevTools() {
@@ -32,9 +36,13 @@ async function devToolsHandler(win: BrowserWindow): Promise<void> {
   if (isDev) {
     // 打开 dev 工具
     win.webContents.openDevTools();
-    await setupDevTools();
+    await setupDevTools().catch(err => {
+      console.log("Dev tools install failed.", err);
+    });
     // 利用 electron-debug，添加和Chrome类似的快捷键
     electronDebug({ isEnabled: true, showDevTools: true });
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    // require("devtron").install();
   } else {
     // 生产环境不允许打开调试工具
     win.webContents.on("devtools-opened", () => {
@@ -52,7 +60,8 @@ const windowNormalizeOptions: BrowserWindowConstructorOptions = {
     enableRemoteModule: true,
     contextIsolation: false,
     devTools: isDev || true,
-    preload
+    preload,
+    zoomFactor: 1.0
     // maximize: true
   },
   // center: true,
@@ -83,6 +92,7 @@ const createWindows = {
     });
     devToolsHandler(win);
     win.loadURL(getUrl.starter());
+    // win.loadURL(getUrl.projectEditor("6d312b14-2013-42e2-93d3-3e64beda25d1"));
     win.on("ready-to-show", () => win.show());
     return win;
   },
@@ -114,8 +124,16 @@ const createWindows = {
     devToolsHandler(win);
     await win.loadURL(getUrl.projectEditor(uuid));
 
+    // 创建目录监听
+    const { root } = await findProjectByQuery({ uuid });
+    dirWatcher.create(root, (event, src) => {
+      const data = getFileData(path.join(root, src));
+      win.webContents.send(IPC_EVENT.$fileChange, { root, event, src, data });
+    });
+
     // 编辑器窗口管理回到开始页面
     win.on("close", async () => {
+      await dirWatcher.closeWatcher(root);
       await this.starter();
     });
 

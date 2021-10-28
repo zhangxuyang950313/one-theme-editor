@@ -6,7 +6,7 @@ import {
 } from "src/types/resource.config";
 import { TypeScenarioConfig } from "src/types/scenario.config";
 import { TypeProjectDataDoc, TypeProjectInfo } from "src/types/project";
-import { TypeXmlFileData } from "src/types/resource.page";
+import { TypeFileData } from "src/types/resource.page";
 
 export enum ACTION_TYPE {
   // 初始化
@@ -26,7 +26,7 @@ export enum ACTION_TYPE {
   // 添加页面配置数据映射
   PATCH_PAGE_CONFIG = "PATCH_PAGE_CONFIG",
   // 添加 xml 文件数据
-  PATCH_XML_FILE_DATA = "PATCH_XML_FILE_DATA"
+  PATCH_FILE_DATA = "PATCH_FILE_DATA"
 }
 
 type TypeActionInitEditor = {
@@ -72,9 +72,9 @@ type TypeActionPatchPageConfMap = {
   payload: TypePageConfig;
 };
 
-type TypeActionPatchXmlFileDataMap = {
-  type: typeof ACTION_TYPE.PATCH_XML_FILE_DATA;
-  payload: { src: string; fileData: TypeXmlFileData | null };
+type TypeActionPatchFileDataMap = {
+  type: typeof ACTION_TYPE.PATCH_FILE_DATA;
+  payload: { src: string; fileData: TypeFileData | null };
 };
 
 // main actions
@@ -87,7 +87,7 @@ export type TypeEditorActions =
   | TypeActionSetModuleConf
   | TypeActionSetPageConf
   | TypeActionPatchPageConfMap
-  | TypeActionPatchXmlFileDataMap;
+  | TypeActionPatchFileDataMap;
 
 export function ActionInitEditor(): TypeActionInitEditor {
   return { type: ACTION_TYPE.INIT_EDITOR };
@@ -142,8 +142,8 @@ export function ActionPatchPageConfMap(
   return { type: ACTION_TYPE.PATCH_PAGE_CONFIG, payload };
 }
 
-export function ActionPatchXmlFileDataMap(
-  payload: TypeActionPatchXmlFileDataMap["payload"]
-): TypeActionPatchXmlFileDataMap {
-  return { type: ACTION_TYPE.PATCH_XML_FILE_DATA, payload };
+export function ActionPatchFileDataMap(
+  payload: TypeActionPatchFileDataMap["payload"]
+): TypeActionPatchFileDataMap {
+  return { type: ACTION_TYPE.PATCH_FILE_DATA, payload };
 }

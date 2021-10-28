@@ -78,4 +78,6 @@ declare module "*.module.sass" {
 
 interface Window {
   $server: typeof import("src/ipc/ipc-renderer").default;
+  $store: typeof import("src/store/index");
+  $reactiveProjectState: typeof import("src/preload/ReactiveState").reactiveProjectState;
 }

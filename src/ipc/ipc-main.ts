@@ -1,3 +1,4 @@
+import fse from "fs-extra";
 import createWindows from "src/main/windows";
 import { ipcMain, BrowserWindowConstructorOptions } from "electron";
 import {
@@ -18,9 +19,16 @@ import ScenarioConfigCompiler from "src/server/compiler/ScenarioConfig";
 import ResourceConfigCompiler from "server/compiler/ResourceConfig";
 import ScenarioOptions from "server/compiler/ScenarioOptions";
 import PageConfigCompiler from "server/compiler/PageConfig";
+import ERR_CODE from "src/constant/errorCode";
+import { TypeWriteXmlTempPayload } from "src/types/request";
+import { writeXmlTemplate } from "server/services/xmlTemplate";
+import { TypeFileData } from "src/types/resource.page";
+import { getFileData } from "src/common/utils";
 import IPC_EVENT from "./ipc-event";
 
-type TypeReply<T> /* 主进程答复 */ =
+ipcMain.setMaxListeners(9999);
+
+export type TypeMainReply<T> /* 主进程答复 */ =
   | { type: "success"; data: T }
   | { type: "fail"; data: string };
 
@@ -32,17 +40,17 @@ function generateIpcCallback<S, R extends unknown>(
   ipcMain.on(event, async ($event, $data: S) => {
     try {
       const data = await handler($data);
-      const reply: TypeReply<R> = { type: "success", data: data };
+      const reply: TypeMainReply<R> = { type: "success", data: data };
       $event.reply(event, reply);
     } catch (err: any) {
-      const reply = { type: "fail", data: err.message };
+      const reply: TypeMainReply<R> = { type: "fail", data: err.message };
       $event.reply(event, reply);
     }
   });
 }
 
 // 生成 ipcMain 同步调用
-function generateIpcMainSync<S, R>(event: IPC_EVENT, handler: (data: S) => R) {
+function generateIpcSync<S, R>(event: IPC_EVENT, handler: (data: S) => R) {
   ipcMain.on(event, ($event, $data: S) => {
     $event.returnValue = handler($data);
   });
@@ -59,7 +67,7 @@ function generateIpcHandle<S, R extends Promise<unknown>>(
 const mainIpc = {
   // 注册服务
   registerServer(): void {
-    generateIpcMainSync<void, number>(IPC_EVENT.$getPID, () => process.pid);
+    generateIpcSync<void, number>(IPC_EVENT.$getPID, () => process.pid);
 
     // 获取场景选项列表
     generateIpcHandle<void, Promise<TypeScenarioOption[]>>(
@@ -127,6 +135,37 @@ const mainIpc = {
       async scenarioSrc => {
         await createWindows.createProject(scenarioSrc);
       }
+    );
+
+    // 拷贝文件
+    generateIpcHandle<{ from: string; to: string }, Promise<void>>(
+      IPC_EVENT.$copyFile,
+      ({ from, to }) => {
+        if (!fse.existsSync(from)) {
+          throw new Error(ERR_CODE[4003]);
+        }
+        return fse.copy(from, to);
+      }
+    );
+
+    // 删除文件
+    generateIpcHandle<string, Promise<void>>(IPC_EVENT.$deleteFile, file => {
+      if (!fse.existsSync(file)) {
+        throw new Error(ERR_CODE[4003]);
+      }
+      return fse.unlink(file);
+    });
+
+    // 写入 xml 文件
+    generateIpcHandle<TypeWriteXmlTempPayload, Promise<Record<string, string>>>(
+      IPC_EVENT.$writeXmlTemplate,
+      data => writeXmlTemplate(data)
+    );
+
+    // 获取文件数据
+    generateIpcHandle<string, Promise<TypeFileData>>(
+      IPC_EVENT.$getFileData,
+      async file => getFileData(file)
     );
   }
 };

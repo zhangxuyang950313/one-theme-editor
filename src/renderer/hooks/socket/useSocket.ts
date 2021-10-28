@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { io, Socket, ManagerOptions, SocketOptions } from "socket.io-client";
-import electronStore from "src/common/electronStore";
+import * as electronStore from "src/store";
 
 // 单例模式
 let socket: Socket;
@@ -13,7 +13,7 @@ function createSocket(
 
 // 获取 socket 实例
 export default function useSocket(): Socket {
-  const hostname = electronStore.get("hostname");
+  const hostname = electronStore.config.get("hostname");
   const [socket] = useState(
     createSocket(`http://${hostname}`, { autoConnect: false })
   );

@@ -43,13 +43,13 @@ const StyleModuleSelector = styled.div`
       cursor: pointer;
       width: 46px;
       opacity: 0.4;
-      transition: 0.2s all ease-in;
+      transition: 0.2s all ease;
       &[data-active="true"] {
         opacity: 1;
         --drop-color: ${({ theme }) => theme["@primary-color"]};
         filter: drop-shadow(0 0 5px var(--drop-color));
-        width: 55px;
-        transition: 0.2s all ease-out;
+        transform: scale(1.2);
+        transition: 0.2s all ease;
       }
     }
     .name {

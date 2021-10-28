@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Empty } from "antd";
 import { CheckCircleTwoTone } from "@ant-design/icons";
 import { TypeResourceOption } from "src/types/resource.config";
-import { useStarterSelector } from "@/store";
+import { useStarterSelector } from "@/store/starter";
 import ResourceConfigCard from "./ResourceConfigCard";
 
 // 配置管理

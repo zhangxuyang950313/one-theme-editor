@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Menu, MenuItem } from "@/components/One";
 
 import { useScenarioOption } from "@/hooks/resource/index";
-import { useStarterSelector } from "@/store";
+import { useStarterSelector } from "@/store/starter";
 import TopInfo from "./TopInfo";
 
 // 欢迎页侧边栏

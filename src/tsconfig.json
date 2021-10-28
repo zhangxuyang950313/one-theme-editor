@@ -32,6 +32,7 @@
     "skipLibCheck": true,
     "downlevelIteration": true,
     "types": ["node"],
+    "typeRoots": ["./types/custom.d.ts"],
     "baseUrl": "./",
     "paths": {
       "server/*": ["./server/*"],

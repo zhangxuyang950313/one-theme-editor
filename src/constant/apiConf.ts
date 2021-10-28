@@ -1,5 +1,5 @@
 import { ElectronPathCollection } from "src/data/PathCollection";
-import { TypeReleaseXmlTempPayload } from "src/types/request";
+import { TypeWriteXmlTempPayload } from "src/types/request";
 import {
   TypeCreateProjectPayload,
   TypeProjectData,
@@ -138,7 +138,7 @@ const apiConfig = {
   XML_TEMPLATE_WRITE: createApiConf({
     path: "/project/xml/template/write",
     bodyKeys: ["tag", "attributes", "value", "src"],
-    body: {} as TypeReleaseXmlTempPayload
+    body: {} as TypeWriteXmlTempPayload
   }),
   // 通过 name 查找工程的 value
   GET_XML_TEMP_VALUE: createApiConf({

@@ -2,7 +2,7 @@ import { remote } from "electron";
 import React from "react";
 import styled from "styled-components";
 import { FolderOpenOutlined } from "@ant-design/icons";
-import { useEditorSelector } from "@/store";
+import { useEditorSelector } from "@/store/editor";
 
 const StatusBar: React.FC<React.HTMLAttributes<HTMLDivElement>> = props => {
   const projectData = useEditorSelector(state => state.projectData);

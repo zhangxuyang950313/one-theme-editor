@@ -96,7 +96,11 @@ const config: webpack.ConfigurationFactory = (env, args) => {
      * https://www.webpackjs.com/configuration/stats/
      */
     stats: "errors-warnings",
-    entry: entryFile.render,
+    entry: {
+      starter: entryFile.render.starter,
+      createProject: entryFile.render.createProject,
+      projectEditor: entryFile.render.projectEditor
+    },
     output: {
       // 输出目录
       path: outputDir.render,
@@ -263,7 +267,28 @@ const config: webpack.ConfigurationFactory = (env, args) => {
       }),
       new HtmlWebpackPlugin({
         template: path.resolve(rootDir, "public/index.html"), // 指定模板路径
-        filename: "index.html", // 最终创建的文件名
+        filename: "starter.html", // 最终创建的文件名,
+        chunks: ["starter"],
+        cache: false,
+        ...(isDev && {
+          minify: {
+            removeComments: true,
+            collapseWhitespace: true,
+            removeRedundantAttributes: true,
+            useShortDoctype: true,
+            removeEmptyAttributes: true,
+            removeStyleLinkTypeAttributes: true,
+            keepClosingSlash: true,
+            minifyJS: true,
+            minifyCSS: true,
+            minifyURLs: true
+          }
+        })
+      }),
+      new HtmlWebpackPlugin({
+        template: path.resolve(rootDir, "public/index.html"), // 指定模板路径
+        filename: "project-editor.html", // 最终创建的文件名
+        chunks: ["projectEditor"],
         cache: false,
         ...(isDev && {
           minify: {

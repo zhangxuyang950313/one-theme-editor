@@ -1,5 +1,5 @@
 import { useState, useLayoutEffect } from "react";
-import { useStarterDispatch } from "@/store";
+import { useStarterDispatch } from "@/store/starter";
 import { ActionSetScenarioOptionList } from "@/store/starter/action";
 import { TypeScenarioOption } from "src/types/scenario.config";
 import { LOAD_STATUS } from "src/enum";

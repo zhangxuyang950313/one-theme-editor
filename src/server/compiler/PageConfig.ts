@@ -38,7 +38,7 @@ import {
   LAYOUT_ELEMENT_TAG,
   HEX_FORMAT
 } from "src/enum/index";
-import electronStore from "src/common/electronStore";
+import * as electronStore from "src/store";
 import XMLNodeElement from "server/compiler/XMLNodeElement";
 import pathUtil from "server/utils/pathUtil";
 import RegexpUtil from "src/common/utils/RegexpUtil";
@@ -104,7 +104,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
   }
 
   private resolveProjectPath(pathname: string): string {
-    return path.join(electronStore.get("projectData").root, pathname);
+    return path.join($reactiveProjectState.get("projectData").root, pathname);
   }
 
   // 相对于当前页面目录的路径转为正确的绝对路径
@@ -128,7 +128,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
        * {
        *   "source": "relative://../icons/res/drawable-xxhdpi/com.android.contacts.activities.TwelveKeyDialer.png",
        *   "src": "../icons/res/drawable-xxhdpi/com.android.contacts.activities.TwelveKeyDialer.png",
-       *   "url": "http://127.0.0.1:8000/image?filepath=/Users/zhangxuyang/mine/javascript/one-theme-editor/static/resource/config/xiaomi/miui12/icons/res/drawable-xxhdpi/com.android.contacts.activities.TwelveKeyDialer.png&t=1633421373933"
+       *   "url": "http://127.0.0.1:3000/image?filepath=/Users/zhangxuyang/mine/javascript/one-theme-editor/static/resource/config/xiaomi/miui12/icons/res/drawable-xxhdpi/com.android.contacts.activities.TwelveKeyDialer.png&t=1633421373933"
        * }
        *
        * ```
@@ -142,7 +142,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
        * {
        *   "source": "resource://icons/res/drawable-xxhdpi/com.android.contacts.activities.TwelveKeyDialer.png",
        *   "src": "icons/res/drawable-xxhdpi/com.android.contacts.activities.TwelveKeyDialer.png",
-       *   "url": "http://127.0.0.1:8000/image?filepath=/Users/zhangxuyang/mine/javascript/one-theme-editor/static/resource/config/xiaomi/miui12/icons/res/drawable-xxhdpi/com.android.contacts.activities.TwelveKeyDialer.png&t=1633421373934"
+       *   "url": "http://127.0.0.1:3000/image?filepath=/Users/zhangxuyang/mine/javascript/one-theme-editor/static/resource/config/xiaomi/miui12/icons/res/drawable-xxhdpi/com.android.contacts.activities.TwelveKeyDialer.png&t=1633421373934"
        * }
        *
        * ```

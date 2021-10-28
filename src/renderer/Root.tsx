@@ -7,44 +7,42 @@ import styled, { createGlobalStyle, ThemeProvider } from "styled-components";
 import "antd/dist/antd.css"; // antd 样式
 import zhCN from "antd/lib/locale/zh_CN"; // antd 中文
 
-import { ConfigProvider, Spin } from "antd";
-import { LOAD_STATUS } from "src/enum";
-import electronStore from "src/common/electronStore";
-import { useInitEditorConfig } from "./hooks";
-import { GlobalStore } from "./store";
-import Router from "./router";
+import { ConfigProvider } from "antd";
+import * as electronStore from "src/store";
+import { GlobalStore } from "./store/global/index";
+// import Router from "./router";
+// import { useInitEditorConfig } from "./hooks";
+// import { LOAD_STATUS } from "src/enum";
 import DarkTheme from "./theme/dark";
 
-const Index: React.FC = () => {
+// const Index: React.FC = () => {
+//   // const socket = useSocket();
+//   const [status] = useInitEditorConfig();
+//   switch (status) {
+//     case LOAD_STATUS.INITIAL:
+//     case LOAD_STATUS.LOADING: {
+//       return <Spin className="auto-margin" tip="初始化" spinning />;
+//     }
+//     // TODO
+//     case LOAD_STATUS.FAILED: {
+//       return <div>出错了</div>;
+//     }
+//     case LOAD_STATUS.SUCCESS:
+//     default:
+//       return <Router />;
+//   }
+// };
+
+const Root: React.FC = props => {
+  const [theme, setTheme] = useState(DarkTheme);
   useEffect(() => {
     localStorage.setItem("debug", "socket.io-client:socket");
     console.log(logSymbols.success, `主进程id ${window.$server.getPID()}`);
     console.log(logSymbols.success, `渲染进程启动 ${process.pid}`);
     // localStorage.debug = "*.io-client:socket";
     // localStorage.debug = "*";
-    electronStore.set("themeConfig", DarkTheme);
-  }, []);
-  // const socket = useSocket();
-  const [status] = useInitEditorConfig();
-  switch (status) {
-    case LOAD_STATUS.INITIAL:
-    case LOAD_STATUS.LOADING: {
-      return <Spin className="auto-margin" tip="初始化" spinning />;
-    }
-    // TODO
-    case LOAD_STATUS.FAILED: {
-      return <div>出错了</div>;
-    }
-    case LOAD_STATUS.SUCCESS:
-    default:
-      return <Router />;
-  }
-};
-
-function Root(): JSX.Element {
-  const [theme, setTheme] = useState(DarkTheme);
-  useEffect(() => {
-    const thm = electronStore.get("themeConfig");
+    electronStore.config.set("themeConfig", DarkTheme);
+    const thm = electronStore.config.get("themeConfig");
     if (thm) setTheme(thm);
   }, []);
   return (
@@ -52,14 +50,12 @@ function Root(): JSX.Element {
       <ThemeProvider theme={theme}>
         <StyleGlobal />
         <ConfigProvider locale={zhCN}>
-          <StyleContainer>
-            <Index />
-          </StyleContainer>
+          <StyleContainer>{props.children}</StyleContainer>
         </ConfigProvider>
       </ThemeProvider>
     </Provider>
   );
-}
+};
 
 const StyleGlobal = createGlobalStyle`
 body,
@@ -105,4 +101,11 @@ const StyleContainer = styled.div`
 
 // if (module.hot) module.hot.accept();
 
-ReactDOM.render(<Root />, document.getElementById("root"));
+export default function createRoot(Index: React.FC): void {
+  ReactDOM.render(
+    <Root>
+      <Index />
+    </Root>,
+    document.getElementById("root")
+  );
+}

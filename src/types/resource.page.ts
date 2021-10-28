@@ -26,6 +26,7 @@ export type TypeSourceData = {
 export type TypeImageMimeType =
   | "image/jpeg"
   | "image/png"
+  | "image/apng"
   | "image/gif"
   | "image/webp";
 

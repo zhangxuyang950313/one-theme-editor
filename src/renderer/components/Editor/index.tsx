@@ -19,8 +19,9 @@ import {
   useCurrentModuleList
 } from "@/hooks/resource";
 import { StyleTopDrag } from "@/style";
+import { TOOLS_BAR_BUTTON } from "src/enum";
 import { useToggle } from "ahooks";
-import { useEditorSelector } from "@/store";
+import { useEditorSelector } from "@/store/editor";
 import PageSelector from "@/components/Editor/PageSelector";
 import Previewer from "@/components/Editor/Previewer";
 import ResourcePanel from "@/components/Editor/ResourcePanel/index";
@@ -28,7 +29,6 @@ import ModuleSelector from "@/components/Editor/ModuleSelector";
 import EditorToolsBar from "@/components/Editor/ToolsBar";
 import StatusBar from "@/components/Editor/StatusBar";
 import usePackProject from "@/hooks/project/usePackProject";
-import { TOOLS_BAR_BUTTON } from "src/enum";
 import { TypeIconButtonOption } from "../IconButton";
 
 // 编辑区域框架
@@ -41,7 +41,7 @@ const EditorFrame: React.FC = () => {
   const packageConfig = useEditorSelector(
     state => state.scenarioConfig.packageConfig
   );
-  const packProject = usePackProject();
+  // const packProject = usePackProject();
   const [projectInfoVisible, setProjectInfoVisible] = useState(false);
 
   const [moduleSelector, setModuleSelector] = useToggle(true);
@@ -50,6 +50,29 @@ const EditorFrame: React.FC = () => {
 
   const [leftButtons, setLeftButtons] = useState<TypeIconButtonOption[]>([]);
   const [rightButtons, setRightButtons] = useState<TypeIconButtonOption[]>([]);
+
+  // const removeCallback = window.$server.useFilesChange(data => {
+  //   callbackList.current.forEach(item => {
+  //     if (data.root === projectRoot && item.pathname === data.src) {
+  //       item.callback(data.event);
+  //       const fileData = getFileData(path.join(projectRoot, data.src));
+  //       switch (fileData.fileType) {
+  //         case "image/png":
+  //         case "image/jpeg":
+  //         case "application/xml": {
+  //           fileDataMapRef.current[data.src] = fileData;
+  //           dispatch(ActionPatchFileDataMap({ src: data.src, fileData }));
+  //           break;
+  //         }
+  //       }
+  //     }
+  //   });
+  // });
+  // 生命周期结束取消监听
+  // return () => {
+  //   removeCallback();
+  //   callbackList.current = [];
+  // };
 
   useEffect(() => {
     setLeftButtons([
@@ -101,19 +124,19 @@ const EditorFrame: React.FC = () => {
                 message.info("未指定任何文件");
                 return;
               }
-              packProject(
-                {
-                  scenarioSrc,
-                  packDir: root,
-                  outputFile: result.filePath
-                },
-                data => {
-                  notification.info({
-                    message: data.msg,
-                    description: data.data
-                  });
-                }
-              );
+              // packProject(
+              //   {
+              //     scenarioSrc,
+              //     packDir: root,
+              //     outputFile: result.filePath
+              //   },
+              //   data => {
+              //     notification.info({
+              //       message: data.msg,
+              //       description: data.data
+              //     });
+              //   }
+              // );
             });
         }
       },

@@ -1,7 +1,7 @@
 import path from "path";
 import { useState, useEffect } from "react";
 import { notification } from "antd";
-import { useEditorDispatch, useEditorSelector } from "@/store";
+import { useEditorDispatch, useEditorSelector } from "@/store/editor";
 import { ActionPatchPageConfMap } from "@/store/editor/action";
 import { TypePageConfig } from "src/types/resource.config";
 import { LOAD_STATUS } from "src/enum";

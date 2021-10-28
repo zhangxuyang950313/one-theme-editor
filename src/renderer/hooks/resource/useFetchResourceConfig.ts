@@ -1,6 +1,6 @@
 import { notification } from "antd";
 import { useState, useCallback, useEffect } from "react";
-import { useEditorDispatch, useEditorSelector } from "@/store";
+import { useEditorDispatch, useEditorSelector } from "@/store/editor";
 import { ActionSetResourceConfig } from "@/store/editor/action";
 import { LOAD_STATUS } from "src/enum";
 import { TypeResourceConfig } from "src/types/resource.config";

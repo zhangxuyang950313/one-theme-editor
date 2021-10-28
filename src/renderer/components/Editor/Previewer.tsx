@@ -9,10 +9,10 @@ import {
 } from "src/enum";
 import { TypePageConfig } from "src/types/resource.config";
 import { TypeLayoutData, TypeLayoutTextElement } from "src/types/resource.page";
-import ColorUtil from "src/common/utils/ColorUtil";
 import { useCurrentPageConfig } from "@/hooks/resource";
-import useSubscribeProjectFile from "@/hooks/project/useSubscribeProjectFile";
-import { useEditorSelector } from "@/store";
+import { useEditorSelector } from "@/store/editor";
+import ColorUtil from "src/common/utils/ColorUtil";
+import useSubscribeFile from "@/hooks/project/useSubscribeFile";
 import { DynamicBothSourceImage } from "../ImageCollection";
 
 // function computeLayout(
@@ -113,13 +113,15 @@ const LayoutTextElement: React.FC<{
   canClick: boolean;
 }> = props => {
   const { element, scale, useDash, canClick } = props;
-  const subscribe = useSubscribeProjectFile();
   const [defaultColor, setDefaultColor] = useState("#000000");
   const [color, setColor] = useState(defaultColor);
   const pageConfig = useCurrentPageConfig();
-  const curXmlValMapper = useEditorSelector(
-    state => state.xmlFileDataMap[element.sourceData.src]?.valueMapper || {}
-  );
+  const xmlValMapper = useEditorSelector(state => {
+    const data = state.fileDataMap[element.sourceData.src];
+    return data?.fileType === "application/xml" ? data.valueMapper : {};
+  });
+
+  useSubscribeFile(element.sourceData.src);
 
   const colorFormat = pageConfig?.colorFormat || HEX_FORMAT.RGBA;
   const layoutStyle = computeLayoutStyle(element.layout, scale);
@@ -134,11 +136,7 @@ const LayoutTextElement: React.FC<{
   }, [element.valueData.value]);
 
   useEffect(() => {
-    subscribe(element.sourceData.src, { immediately: true });
-  }, []);
-
-  useEffect(() => {
-    const color = curXmlValMapper[element.valueData.template];
+    const color = xmlValMapper[element.valueData.template];
     if (!color) {
       setColor(defaultColor);
       return;
@@ -148,7 +146,7 @@ const LayoutTextElement: React.FC<{
     } catch (err) {
       setColor(defaultColor);
     }
-  }, [curXmlValMapper[element.valueData.template]]);
+  }, [xmlValMapper[element.valueData.template]]);
 
   return (
     <span

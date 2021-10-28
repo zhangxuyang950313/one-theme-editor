@@ -311,16 +311,26 @@ export async function getImgBuffAndFileType(
 }
 
 /**
- * 获取文件信息
+ * 获取文件信息，若文件不存在返回默认数据对象
+ * 支持缓存减少解析次数
  * @param file
- * @param options { ignoreXmlElement:boolean // 忽略解析 xml  element，返回为空，默认为 true}
+ * @param options { ignoreXmlElement:boolean // 忽略解析 xml  element，返回为空，默认为 true }
  * @returns
  */
+const fileDataMap = new Map<string, { mtime: Date; data: TypeFileData }>();
 export function getFileData(
   file: string,
   options?: { ignoreXmlElement?: boolean }
 ): TypeFileData {
-  if (!fse.existsSync(file)) return FileData.default;
+  if (!fse.existsSync(file)) {
+    fileDataMap.delete(file);
+    return FileData.default;
+  }
+  const { mtime } = fse.statSync(file);
+  const cache = fileDataMap.get(file);
+  if (cache && cache.mtime >= mtime) {
+    return cache.data;
+  }
   const mimeType = (mimeTypes.lookup(file) || "") as MimeType;
   switch (mimeType) {
     case "image/webp":
@@ -335,6 +345,7 @@ export function getFileData(
         .set("size", imageData.size)
         .set("is9patch", filenameIsNinePatch(file))
         .create();
+      fileDataMap.set(file, { mtime, data: imageFileData });
       return imageFileData;
     }
     case "application/xml": {
@@ -359,7 +370,9 @@ export function getFileData(
       if (!options?.ignoreXmlElement) {
         xmlFileData.set("element", xmlFileCompiler.getElement());
       }
-      return xmlFileData.create();
+      const data = xmlFileData.create();
+      fileDataMap.set(file, { mtime, data });
+      return data;
     }
     default: {
       return FileData.default;

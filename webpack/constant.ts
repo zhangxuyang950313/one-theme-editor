@@ -31,10 +31,16 @@ export const rootDir = path.resolve(__dirname, "..");
 
 export const entryFile = {
   main: path.resolve(rootDir, "src/main/index.ts"),
-  preload: path.resolve(rootDir, "src/main/preload.ts"),
+  preload: path.resolve(rootDir, "src/preload/index.ts"),
   server: path.resolve(rootDir, "src/server/index.ts"),
-  startServer: path.resolve(rootDir, "src/server/start.ts"),
-  render: path.resolve(rootDir, "src/renderer/index.tsx")
+  render: {
+    starter: path.resolve(rootDir, "src/renderer/views/Starter.tsx"),
+    createProject: path.resolve(
+      rootDir,
+      "src/renderer/views/CreateProject.tsx"
+    ),
+    projectEditor: path.resolve(rootDir, "src/renderer/views/ProjectEditor.tsx")
+  }
 };
 
 export const outputDir = {
