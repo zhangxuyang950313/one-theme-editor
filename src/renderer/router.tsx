@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter, HashRouter, Route, Switch } from "react-router-dom";
 
 // import { TransitionGroup, CSSTransition } from "react-transition-group";
-import Starter from "./views/Starter";
+import Starter from "./views/starter/index";
 import CreateProject from "./views/CreateProject";
 import Editor from "./views/Editor";
 import Test from "./views/Test";

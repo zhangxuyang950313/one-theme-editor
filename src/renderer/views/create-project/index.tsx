@@ -16,10 +16,10 @@ import { IconFolderAdd } from "@arco-design/web-react/icon";
 import { FILE_TEMPLATE_TYPE } from "src/enum";
 import { ProjectInput } from "@/components/Forms";
 import Steps from "@/components/Steps";
-import ResourceConfigManager from "@/components/Starter/ResourceConfigManager";
 import * as electronStore from "src/store";
 import RootWrapper from "@/RootWrapper";
 import useFetchScenarioConfig from "@/hooks/resource/useFetchScenarioConfig";
+import ResourceConfigManager from "@/components/ResourceConfigManager";
 
 // 表单默认值
 // const txt = `测试${UUID()}`;

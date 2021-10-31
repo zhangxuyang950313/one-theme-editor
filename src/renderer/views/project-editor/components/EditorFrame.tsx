@@ -22,14 +22,14 @@ import { StyleTopDrag } from "@/style";
 import { TOOLS_BAR_BUTTON } from "src/enum";
 import { useToggle } from "ahooks";
 import { useEditorSelector } from "@/store/editor";
-import PageSelector from "@/components/Editor/PageSelector";
-import Previewer from "@/components/Editor/Previewer";
-import ResourcePanel from "@/components/Editor/ResourcePanel/index";
-import ModuleSelector from "@/components/Editor/ModuleSelector";
-import EditorToolsBar from "@/components/Editor/ToolsBar";
-import StatusBar from "@/components/Editor/StatusBar";
 import usePackProject from "@/hooks/project/usePackProject";
-import { TypeIconButtonOption } from "../IconButton";
+import { TypeIconButtonOption } from "@/components/IconButton";
+import ResourcePanel from "./ResourcePanel";
+import Previewer from "./Previewer";
+import ModuleSelector from "./ModuleSelector";
+import EditorToolsBar from "./ToolsBar";
+import StatusBar from "./StatusBar";
+import PageSelector from "./PageSelector";
 
 // 编辑区域框架
 const EditorFrame: React.FC = () => {

@@ -7,9 +7,9 @@ import useFetchScenarioOptionList from "@/hooks/resource/useFetchScenarioOptionL
 import useFetchResOptionList from "@/hooks/resource/useFetchResOptionList";
 
 import RootWrapper from "@/RootWrapper";
-import Sidebar from "@/components/Starter/Sidebar";
-import ProjectManager from "@/components/Starter/ProjectManager";
 import { StyleTopDrag } from "@/style";
+import ProjectManager from "./components/ProjectManager";
+import Sidebar from "./components/Sidebar";
 
 // 开始页面
 const Starter: React.FC = () => {

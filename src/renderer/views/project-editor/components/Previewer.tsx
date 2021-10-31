@@ -13,7 +13,7 @@ import { useCurrentPageConfig } from "@/hooks/resource";
 import { useEditorSelector } from "@/store/editor";
 import ColorUtil from "src/common/utils/ColorUtil";
 import useSubscribeFile from "@/hooks/project/useSubscribeFile";
-import { DynamicBothSourceImage } from "../ImageCollection";
+import { DynamicBothSourceImage } from "@/components/ImageCollection";
 
 // function computeLayout(
 //   data: TypeLayoutData,

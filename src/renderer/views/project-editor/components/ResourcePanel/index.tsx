@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { Tabs } from "@/components/One";
+import { Tabs } from "@/components/one-ui";
 import { RESOURCE_TAG } from "src/enum";
 import { TypePageConfig } from "src/types/resource.config";
 import { TypeResourceDefinition } from "src/types/resource.page";

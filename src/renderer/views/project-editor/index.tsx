@@ -3,13 +3,13 @@ import React, { useEffect } from "react";
 import { remote } from "electron";
 import styled from "styled-components";
 import { Empty, Spin } from "antd";
-import { Button } from "@/components/One";
+import { Button } from "@/components/one-ui";
 import { useInitProject } from "@/hooks/project/index";
 import { LOAD_STATUS } from "src/enum";
 import { StyleTopDrag } from "@/style";
 import RootWrapper from "@/RootWrapper";
-import EditorFrame from "@/components/Editor/index";
 import electronStoreConfig from "src/store/config";
+import EditorFrame from "./components/EditorFrame";
 
 const ProjectEditor: React.FC = () => {
   const [project, status, handleFetch] = useInitProject();

@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import { TypeProjectDataDoc, TypeProjectInfo } from "src/types/project";
 import ImgDefault from "@/assets/img-default.png";
-import { LazyImage } from "../ImageCollection";
+import { LazyImage } from "@/components/ImageCollection";
 
 type TypeProps = {
   hoverable?: boolean;

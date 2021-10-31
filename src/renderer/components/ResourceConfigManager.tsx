@@ -1,16 +1,43 @@
+import path from "path";
 import React from "react";
 import styled from "styled-components";
 import { Empty } from "@arco-design/web-react";
 import { CheckCircleTwoTone } from "@ant-design/icons";
 import { TypeResourceOption } from "src/types/resource.config";
 import { useStarterSelector } from "@/store/starter";
-import ResourceConfigCard from "./ResourceConfigCard";
+import { useImagePrefix } from "@/hooks/image";
+import { useResConfigDir } from "@/hooks/resource";
+import { LazyImage } from "./ImageCollection";
+
+type TypeProps = {
+  resourceOption: TypeResourceOption;
+};
+
+// 配置卡片
+export const ResourceConfigCard: React.FC<TypeProps> = props => {
+  const { resourceOption } = props;
+  const { namespace, preview } = resourceOption;
+  const imgPrefix = useImagePrefix();
+  const resourceDir = useResConfigDir();
+  const imgUrl = imgPrefix + path.join(resourceDir, namespace, preview);
+  return (
+    <StyleResourceConfigCard>
+      <LazyImage style={{ width: "100%" }} src={imgUrl} />
+      <div>{resourceOption.name}</div>
+      <div>{resourceOption.uiVersion.name}</div>
+    </StyleResourceConfigCard>
+  );
+};
+
+const StyleResourceConfigCard = styled.div`
+  cursor: pointer;
+`;
 
 // 配置管理
 const ResourceConfigManager: React.FC<{
   selectedKey: string;
   onSelected: (config?: TypeResourceOption) => void;
-}> = props => {
+}> & { Card: typeof ResourceConfigCard } = props => {
   // 配置列表
   const optionList = useStarterSelector(state => state.resourceOptionList);
 
@@ -76,5 +103,6 @@ const StyleCardContainer = styled.div<TypeCardContainerProps>`
     transition: 0.1s all ease;
   }
 `;
+ResourceConfigManager.Card = ResourceConfigCard;
 
 export default ResourceConfigManager;
