@@ -25,7 +25,8 @@ enum IPC_EVENT {
   $copyFile = "$copyFile",
   $deleteFile = "$deleteFile",
   $writeXmlTemplate = "$writeXmlTemplate",
-  $getFileData = "$getFileData"
+  $getFileData = "$getFileData",
+  $getFileDataSync = "$getFileDataSync"
 }
 
 export default IPC_EVENT;

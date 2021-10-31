@@ -37,14 +37,18 @@ const ResourcePanel: React.FC<{
         {currentResourceList.map((resource, key) => {
           switch (resource.tag) {
             case RESOURCE_TAG.File: {
-              return <FileBlocker key={key} data={resource} />;
+              return <FileBlocker key={key + resource.key} data={resource} />;
             }
             case RESOURCE_TAG.String:
             case RESOURCE_TAG.Number:
             case RESOURCE_TAG.Color:
             case RESOURCE_TAG.Boolean: {
               return (
-                <XmlValueBlocker key={key} className="item" data={resource} />
+                <XmlValueBlocker
+                  key={key + resource.key}
+                  className="item"
+                  data={resource}
+                />
               );
             }
             default: {

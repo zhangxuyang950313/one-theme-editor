@@ -1,3 +1,4 @@
+import { message } from "antd";
 import {
   BrowserWindowConstructorOptions,
   ipcRenderer,
@@ -51,7 +52,11 @@ function generateIpcSync<S, R>(event: IPC_EVENT) {
 }
 
 function generateIpcInvoke<S, R>(event: IPC_EVENT) {
-  return async (data: S): Promise<R> => await ipcRenderer.invoke(event, data);
+  return async (data: S): Promise<R> =>
+    await ipcRenderer.invoke(event, data).catch(err => {
+      console.log(err);
+      throw new Error(err.message);
+    });
 }
 
 const rendererIpc = {
@@ -159,7 +164,12 @@ const rendererIpc = {
   >(IPC_EVENT.$writeXmlTemplate),
 
   // 获取文件数据
-  getFileData: generateIpcInvoke<string, TypeFileData>(IPC_EVENT.$getFileData)
+  getFileData: generateIpcInvoke<string, TypeFileData>(IPC_EVENT.$getFileData),
+
+  // 同步获取文件数据
+  getFileDataSync: generateIpcSync<string, TypeFileData>(
+    IPC_EVENT.$getFileDataSync
+  )
 };
 
 export default rendererIpc;

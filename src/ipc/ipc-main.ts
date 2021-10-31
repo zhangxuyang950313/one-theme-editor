@@ -167,6 +167,12 @@ const mainIpc = {
       IPC_EVENT.$getFileData,
       async file => getFileData(file)
     );
+
+    // 同步获取文件数据
+    generateIpcSync<string, TypeFileData>(
+      IPC_EVENT.$getFileDataSync,
+      getFileData
+    );
   }
 };
 

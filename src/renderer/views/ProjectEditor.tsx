@@ -10,11 +10,8 @@ import { StyleTopDrag } from "@/style";
 import createRoot from "@/Root";
 import EditorFrame from "@/components/Editor/index";
 import electronStoreConfig from "src/store/config";
-import { useEditorDispatch } from "@/store/editor";
-import { ActionPatchFileDataMap } from "@/store/editor/action";
 
 const ProjectEditor: React.FC = () => {
-  const dispatch = useEditorDispatch();
   const [project, status, handleFetch] = useInitProject();
   useEffect(() => {
     return () => {
@@ -34,19 +31,6 @@ const ProjectEditor: React.FC = () => {
     );
     window.$reactiveProjectState.set("resourcePath", resourcePath);
   }, [project.resourceConfig]);
-
-  useEffect(() => {
-    window.$server.useFilesChange(({ src, data }) => {
-      switch (data.fileType) {
-        case "image/png":
-        case "image/jpeg":
-        case "application/xml": {
-          dispatch(ActionPatchFileDataMap({ src, fileData: data }));
-          break;
-        }
-      }
-    });
-  }, []);
 
   switch (status) {
     case LOAD_STATUS.INITIAL:

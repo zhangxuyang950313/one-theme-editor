@@ -9,11 +9,9 @@ import {
   UndoOutlined
 } from "@ant-design/icons";
 import { TypeFileBlocker, TypeFileItem } from "src/types/resource.page";
-import { useEditorDispatch, useEditorSelector } from "@/store/editor";
+import { useEditorSelector } from "@/store/editor";
 import { useProjectAbsolutePath } from "@/hooks/project/index";
 import useSubscribeFile from "@/hooks/project/useSubscribeFile";
-import ERR_CODE from "src/constant/errorCode";
-import { ActionPatchFileDataMap } from "@/store/editor/action";
 import ImageDisplay from "./ImageDisplay";
 import InfoDisplay from "./InfoDisplay";
 
@@ -22,7 +20,6 @@ const FileItem: React.FC<{
   data: TypeFileItem;
 }> = props => {
   const { data, className } = props;
-  const dispatch = useEditorDispatch();
   const projectPath = useProjectAbsolutePath(data.sourceData.src);
   const [src, setSrc] = useState(data.sourceData.src);
   const fileData = useEditorSelector(state => {
@@ -31,16 +28,6 @@ const FileItem: React.FC<{
 
   useSubscribeFile(data.sourceData.src, () => {
     setSrc(`${data.sourceData.src}?t=${Date.now()}`);
-    window.$server.getFileData(projectPath).then(fileData => {
-      switch (fileData.fileType) {
-        case "image/png":
-        case "image/jpeg":
-        case "application/xml": {
-          dispatch(ActionPatchFileDataMap({ src, fileData }));
-          break;
-        }
-      }
-    });
   });
 
   // TODO 为何不响应切换
@@ -144,8 +131,8 @@ const FileItem: React.FC<{
           <DeleteOutlined
             className="press btn-delete"
             onClick={() => {
-              window.$server.deleteFile(projectPath).catch(err => {
-                notification.warn({ message: ERR_CODE[4007] });
+              window.$server.deleteFile(projectPath).catch((err: Error) => {
+                notification.warn({ message: err.message, top: 100 });
               });
             }}
           />
