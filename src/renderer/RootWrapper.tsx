@@ -7,6 +7,8 @@ import styled, { createGlobalStyle, ThemeProvider } from "styled-components";
 import "antd/dist/antd.css"; // antd 样式
 import zhCN from "antd/lib/locale/zh_CN"; // antd 中文
 
+import "@arco-design/theme-one-editor/css/arco.css"; // arco.design
+
 import { ConfigProvider } from "antd";
 import * as electronStore from "src/store";
 import { GlobalStore } from "./store/global/index";
@@ -36,6 +38,7 @@ import DarkTheme from "./theme/dark";
 const Root: React.FC = props => {
   const [theme, setTheme] = useState(DarkTheme);
   useEffect(() => {
+    document.body.setAttribute("arco-theme", "dark");
     localStorage.setItem("debug", "socket.io-client:socket");
     console.log(logSymbols.success, `主进程id ${window.$server.getPID()}`);
     console.log(logSymbols.success, `渲染进程启动 ${process.pid}`);
@@ -92,7 +95,7 @@ const StyleContainer = styled.div`
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-  background-color: ${({ theme }) => theme["@background-color"]};
+  background-color: var(--color-bg-1);
   display: flex;
   .auto-margin {
     margin: auto;
@@ -101,7 +104,7 @@ const StyleContainer = styled.div`
 
 // if (module.hot) module.hot.accept();
 
-export default function createRoot(Index: React.FC): void {
+export default function RootWrapper(Index: React.FC): void {
   ReactDOM.render(
     <Root>
       <Index />

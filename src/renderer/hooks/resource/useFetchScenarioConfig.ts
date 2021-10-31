@@ -1,6 +1,5 @@
-import { notification } from "antd";
-import { useState, useCallback, useEffect } from "react";
-import { useEditorDispatch, useEditorSelector } from "@/store/editor";
+import { useState, useEffect } from "react";
+import { useEditorDispatch } from "@/store/editor";
 import { ActionSetScenarioConfig } from "@/store/editor/action";
 import { LOAD_STATUS } from "src/enum";
 import { TypeScenarioConfig } from "src/types/scenario.config";
@@ -11,18 +10,14 @@ import ERR_CODE from "src/constant/errorCode";
  * 获取当前工程资源配置(projectData.resourceSrc)
  * @returns
  */
-export default function useFetchScenarioConfig(): [
-  TypeScenarioConfig,
-  LOAD_STATUS,
-  () => Promise<void>
-] {
+export default function useFetchScenarioConfig(
+  scenarioSrc: string,
+  callback?: (config: TypeScenarioConfig) => void
+): [TypeScenarioConfig, LOAD_STATUS] {
   const dispatch = useEditorDispatch();
-  const scenarioSrc = useEditorSelector(state => state.projectData.scenarioSrc);
   const [status, setStatus] = useState(LOAD_STATUS.INITIAL);
-  const [scenarioConfig, setScenarioConfig] = useState(
-    ScenarioConfigData.default
-  );
-  const doFetchData = useCallback(async () => {
+  const [config, setConfig] = useState(ScenarioConfigData.default);
+  useEffect(() => {
     if (!scenarioSrc) return;
     setStatus(LOAD_STATUS.LOADING);
     window.$server
@@ -31,17 +26,13 @@ export default function useFetchScenarioConfig(): [
         if (!data) throw new Error(ERR_CODE[3002]);
         console.log(`加载场景配置: ${scenarioSrc}`, data);
         dispatch(ActionSetScenarioConfig(data));
-        setScenarioConfig(data);
+        setConfig(data);
+        callback && callback(data);
         setStatus(LOAD_STATUS.SUCCESS);
       })
       .catch(() => {
         setStatus(LOAD_STATUS.FAILED);
       });
   }, [scenarioSrc]);
-  useEffect(() => {
-    doFetchData().catch(err => {
-      notification.error({ message: err.message });
-    });
-  }, [scenarioSrc]);
-  return [scenarioConfig, status, doFetchData];
+  return [config, status];
 }

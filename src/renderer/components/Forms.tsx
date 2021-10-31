@@ -6,7 +6,7 @@ import {
   InputProps,
   Select,
   SelectProps
-} from "antd";
+} from "@arco-design/web-react";
 import { projectInfoConfig } from "@/config/editor";
 
 function getRuleNormalized(label: React.ReactNode) {
@@ -20,9 +20,9 @@ function getInputForm(formItemProps: FormItemProps, inputProps: InputProps) {
   ];
   return (
     <Form.Item
-      {...formItemProps}
       rules={rules}
       shouldUpdate={(prevValues, currentValues) => prevValues !== currentValues}
+      {...formItemProps}
     >
       <Input
         placeholder={`请填写${formItemProps.label || ""}`}
@@ -35,7 +35,7 @@ function getInputForm(formItemProps: FormItemProps, inputProps: InputProps) {
 
 function getSelectForm(
   props: FormItemProps,
-  selectProps: SelectProps<any>,
+  selectProps: SelectProps,
   selectList: { value: string; label: string }[]
 ) {
   return (
@@ -60,34 +60,34 @@ function getSelectForm(
 
 //
 export function ProjectInput(
-  props: { label: string; name: string } & InputProps
+  props: { label: string; field: string } & InputProps
 ): JSX.Element {
-  const { label, name } = props;
-  return getInputForm({ label, name }, props);
+  const { label, field } = props;
+  return getInputForm({ label, field }, props);
 }
 
 // 主题名称
 export function ProjectName(inputProps: InputProps): JSX.Element {
-  const { name: label, key: name } = projectInfoConfig.name;
-  return getInputForm({ label, name }, inputProps);
+  const { name: label, key: field } = projectInfoConfig.name;
+  return getInputForm({ label, field }, inputProps);
 }
 
 // 设计师
 export function ProjectDesigner(inputProps: InputProps): JSX.Element {
-  const { name: label, key: name } = projectInfoConfig.designer;
-  return getInputForm({ label, name }, inputProps);
+  const { name: label, key: field } = projectInfoConfig.designer;
+  return getInputForm({ label, field }, inputProps);
 }
 
 // 制作者
 export function ProjectAuthor(inputProps: InputProps): JSX.Element {
-  const { name: label, key: name } = projectInfoConfig.author;
-  return getInputForm({ label, name }, inputProps);
+  const { name: label, key: field } = projectInfoConfig.author;
+  return getInputForm({ label, field }, inputProps);
 }
 
 // 版本
 export function ProjectVersion(inputProps: InputProps): JSX.Element {
-  const { name: label, key: name } = projectInfoConfig.version;
-  return getInputForm({ label, name }, inputProps);
+  const { name: label, key: field } = projectInfoConfig.version;
+  return getInputForm({ label, field }, inputProps);
 }
 
 /**
@@ -97,16 +97,16 @@ export function ProjectVersion(inputProps: InputProps): JSX.Element {
  * @returns
  */
 export function ProjectUIVersion(props: {
-  uiVersions: Array<{ code: string; name: string }>;
-  onChange: SelectProps<any>["onChange"];
+  uiVersions: Array<{ code: string; field: string }>;
+  onChange: SelectProps["onChange"];
 }): JSX.Element {
-  const { name: label, key: name } = projectInfoConfig.uiVersion;
+  const { name: label, key: field } = projectInfoConfig.uiVersion;
   return getSelectForm(
-    { label, name },
+    { label, field },
     { onChange: props.onChange },
     props.uiVersions.map(item => ({
       value: item.code || "",
-      label: item.name || ""
+      label: item.field || ""
     }))
   );
 }
@@ -114,8 +114,8 @@ export function ProjectUIVersion(props: {
 // 本地路径
 export const ProjectLocalDir: React.FC<InputProps> = props => {
   const label = "本地目录";
-  const name = "local";
-  return getInputForm({ label, name }, props);
+  const field = "local";
+  return getInputForm({ label, field }, props);
 };
 
 // 输入颜色

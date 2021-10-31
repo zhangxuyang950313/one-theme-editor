@@ -1,3 +1,4 @@
+import { useQuey } from "@/hooks";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { notification } from "antd";
@@ -17,12 +18,8 @@ export default function useFetchProjectData(): [
   LOAD_STATUS,
   () => Promise<void>
 ] {
-  const [uuid, setUuid] = useState("");
-  useEffect(() => {
-    // 从路由参数中获得工程 uuid
-    const uuid = new URL(window.location.href).searchParams.get("uuid");
-    if (uuid) setUuid(uuid);
-  }, []);
+  // 从 URL 参数中获得工程 uuid
+  const { uuid = "" } = useQuey<{ uuid?: string }>();
   const dispatch = useEditorDispatch();
   const projectData = useEditorSelector(state => state.projectData);
   const [status, setStatus] = useState<LOAD_STATUS>(LOAD_STATUS.INITIAL);

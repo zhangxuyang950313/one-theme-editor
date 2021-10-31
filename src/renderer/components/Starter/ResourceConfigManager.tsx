@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Empty } from "antd";
+import { Empty } from "@arco-design/web-react";
 import { CheckCircleTwoTone } from "@ant-design/icons";
 import { TypeResourceOption } from "src/types/resource.config";
 import { useStarterSelector } from "@/store/starter";
@@ -17,11 +17,7 @@ const ResourceConfigManager: React.FC<{
   if (optionList.length === 0) {
     return (
       <StyleResourceConfigManager>
-        <Empty
-          className="center"
-          image={Empty.PRESENTED_IMAGE_SIMPLE}
-          description={`暂无模板`}
-        />
+        <Empty className="center" description={`暂无模板`} />
       </StyleResourceConfigManager>
     );
   }

@@ -6,7 +6,7 @@ import useFetchProjectList from "@/hooks/project/useFetchProjectList";
 import useFetchScenarioOptionList from "@/hooks/resource/useFetchScenarioOptionList";
 import useFetchResOptionList from "@/hooks/resource/useFetchResOptionList";
 
-import createRoot from "@/Root";
+import RootWrapper from "@/RootWrapper";
 import Sidebar from "@/components/Starter/Sidebar";
 import ProjectManager from "@/components/Starter/ProjectManager";
 import { StyleTopDrag } from "@/style";
@@ -40,4 +40,4 @@ const StyleStarter = styled.div`
   display: flex;
 `;
 
-createRoot(Starter);
+RootWrapper(Starter);

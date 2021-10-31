@@ -30,6 +30,9 @@ import {
   WDS_SERVER_PORT
 } from "./constant";
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const ArcoWebpackPlugin = require("@arco-design/webpack-plugin");
+
 const webpackDevClientEntry = require.resolve(
   "react-dev-utils/webpackHotDevClient"
 );
@@ -80,6 +83,24 @@ const devServer: WebpackDevServer.Configuration = {
   overlay: true,
   quiet: false
 };
+
+const htmlPluginOpt = (isDev: boolean) => ({
+  cache: false,
+  ...(!isDev && {
+    minify: {
+      removeComments: true,
+      collapseWhitespace: true,
+      removeRedundantAttributes: true,
+      useShortDoctype: true,
+      removeEmptyAttributes: true,
+      removeStyleLinkTypeAttributes: true,
+      keepClosingSlash: true,
+      minifyJS: true,
+      minifyCSS: true,
+      minifyURLs: true
+    }
+  })
+});
 
 const config: webpack.ConfigurationFactory = (env, args) => {
   const isDev = args.mode !== "production";
@@ -269,41 +290,19 @@ const config: webpack.ConfigurationFactory = (env, args) => {
         template: path.resolve(rootDir, "public/index.html"), // 指定模板路径
         filename: "starter.html", // 最终创建的文件名,
         chunks: ["starter"],
-        cache: false,
-        ...(isDev && {
-          minify: {
-            removeComments: true,
-            collapseWhitespace: true,
-            removeRedundantAttributes: true,
-            useShortDoctype: true,
-            removeEmptyAttributes: true,
-            removeStyleLinkTypeAttributes: true,
-            keepClosingSlash: true,
-            minifyJS: true,
-            minifyCSS: true,
-            minifyURLs: true
-          }
-        })
+        ...htmlPluginOpt(isDev)
       }),
       new HtmlWebpackPlugin({
         template: path.resolve(rootDir, "public/index.html"), // 指定模板路径
         filename: "project-editor.html", // 最终创建的文件名
         chunks: ["projectEditor"],
-        cache: false,
-        ...(isDev && {
-          minify: {
-            removeComments: true,
-            collapseWhitespace: true,
-            removeRedundantAttributes: true,
-            useShortDoctype: true,
-            removeEmptyAttributes: true,
-            removeStyleLinkTypeAttributes: true,
-            keepClosingSlash: true,
-            minifyJS: true,
-            minifyCSS: true,
-            minifyURLs: true
-          }
-        })
+        ...htmlPluginOpt(isDev)
+      }),
+      new HtmlWebpackPlugin({
+        template: path.resolve(rootDir, "public/index.html"), // 指定模板路径
+        filename: "create-project.html", // 最终创建的文件名
+        chunks: ["createProject"],
+        ...htmlPluginOpt(isDev)
       }),
       new HappyPack({
         id: "node-loader",
@@ -405,6 +404,9 @@ const config: webpack.ConfigurationFactory = (env, args) => {
           __dirname,
           "../release.dll/antd.manifest.json"
         ))
+      }),
+      new ArcoWebpackPlugin({
+        theme: "@arco-design/theme-one-editor"
       }),
       // 环境区分
       ...(isDev

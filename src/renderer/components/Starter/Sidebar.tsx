@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Menu, MenuItem } from "@/components/One";
+import { Menu } from "@arco-design/web-react";
 
 import { useScenarioOption } from "@/hooks/resource/index";
 import { useStarterSelector } from "@/store/starter";
@@ -11,22 +11,21 @@ const Sidebar: React.FC = () => {
   const scenarioOptionList = useStarterSelector(
     state => state.scenarioOptionList
   );
-  const [scenarioOption, setScenarioOption] = useScenarioOption();
+  const [, setScenarioOption] = useScenarioOption();
 
   return (
     <StyleSidebar>
       {/*  编辑器信息展示 */}
       <TopInfo />
       {/* 场景选择 */}
-      <Menu className="menu" defaultKey={scenarioOption.md5 ?? ""}>
+      <Menu
+        className="menu"
+        defaultSelectedKeys={[scenarioOptionList[0]?.md5 || ""]}
+      >
         {scenarioOptionList.map(item => (
-          <MenuItem
-            key={item.md5}
-            $key={item.md5}
-            onClick={() => setScenarioOption(item)}
-          >
+          <Menu.Item key={item.md5} onClick={() => setScenarioOption(item)}>
             {item.name}
-          </MenuItem>
+          </Menu.Item>
         ))}
       </Menu>
     </StyleSidebar>
@@ -39,9 +38,9 @@ const StyleSidebar = styled.div`
   height: 100%;
   border-right: 1px solid;
   border-right-color: ${({ theme }) => theme["@border-color-thirdly"]};
-  background-color: ${({ theme }) => theme["@sidebar-color"]};
+  background-color: var(--color-menu-light-bg);
   .menu {
-    width: 80%;
+    width: 100%;
     margin: auto;
   }
 `;

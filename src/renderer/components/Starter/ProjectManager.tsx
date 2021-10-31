@@ -6,7 +6,7 @@ import { LOAD_STATUS } from "src/enum";
 import React from "react";
 import styled from "styled-components";
 import { Empty, Spin } from "antd";
-import { Button } from "@/components/One";
+import { Button } from "@arco-design/web-react";
 import { remote } from "electron";
 import ProjectCard from "./ProjectCard";
 

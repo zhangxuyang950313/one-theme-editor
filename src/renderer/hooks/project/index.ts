@@ -56,7 +56,7 @@ export function useInitProject(): [
   () => Promise<TypeInitializedProjectData>
 ] {
   const [projectData, step1Status, handleFetch1] = useFetchProjectData();
-  const [scenarioConfig, step2Status, handleFetch2] = useFetchScenarioConfig();
+  const [scenarioConfig, step2Status] = useFetchScenarioConfig();
   const [resourceConfig, step3Status, handleFetch3] = useFetchResourceConfig();
   const [pageConfigList, step4Status, handleFetch4] = useFetchPageConfList();
   const status = useMergeLoadStatus([
@@ -79,12 +79,7 @@ export function useInitProject(): [
     pageConfigList
   };
   const fetchAll = async () => {
-    await Promise.all([
-      handleFetch1(),
-      handleFetch2(),
-      handleFetch3(),
-      handleFetch4()
-    ]);
+    await Promise.all([handleFetch1(), handleFetch3(), handleFetch4()]);
     return result;
   };
   return [result, status, fetchAll];

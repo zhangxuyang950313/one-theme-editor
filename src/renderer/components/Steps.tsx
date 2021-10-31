@@ -38,9 +38,9 @@ const StyleStep = styled.div<StyleStepProps>`
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: ${({ isStep }) => (isStep ? 1 : 0.5)};
-  color: ${({ theme, isStepped }) =>
-    isStepped ? theme["@primary-color"] : theme["@text-color"]};
+  /* opacity: ${({ isStep }) => (isStep ? 1 : 0.8)}; */
+  color: ${({ isStepped }) =>
+    isStepped ? "var(--color-primary-light-4)" : "var(--color-text-1)"};
   transition: all 0.5s ease;
   .step-item-title {
     white-space: nowrap;
@@ -52,9 +52,9 @@ const StyleStep = styled.div<StyleStepProps>`
     .step-item-divider {
       width: 100%;
       height: 1px;
-      opacity: ${({ isStepped }) => (isStepped ? 1 : 0.5)};
-      background-color: ${({ theme, isStepped }) =>
-        isStepped ? theme["@primary-color"] : theme["@text-color"]};
+      /* opacity: ${({ isStepped }) => (isStepped ? 1 : 0.8)}; */
+      background-color: ${({ isStepped }) =>
+        isStepped ? "var(--color-primary-light-4)" : "var(--color-text-1)"};
     }
   }
 `;

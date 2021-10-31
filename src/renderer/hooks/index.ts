@@ -11,7 +11,6 @@ import { useGlobalSelector, useGlobalDispatch } from "@/store/global";
 import { TypePathConfig } from "src/types/extraConfig";
 import { LOAD_STATUS } from "src/enum";
 import * as electronStore from "src/store";
-import { useLocation } from "react-router";
 
 export function useDocumentTitle(): [string, typeof setTitleMethod] {
   const setTitleMethod = (title: string) => {
@@ -20,10 +19,14 @@ export function useDocumentTitle(): [string, typeof setTitleMethod] {
   return [document.title, setTitleMethod];
 }
 
-export function useQuey<T extends { [k: string]: string }>(): T {
-  const location = useLocation<T>();
-  const search = new URLSearchParams(location.search);
-  return Object.fromEntries(search.entries()) as T;
+// 获取路由参数
+export function useQuey<T extends Partial<{ [x: string]: string }>>(): T {
+  const [query, setQuery] = useState<T>({} as T);
+  useEffect(() => {
+    const search = new URLSearchParams(window.location.search);
+    setQuery(Object.fromEntries(search.entries()) as T);
+  }, [window.location]);
+  return query;
 }
 
 // 获取输入的值

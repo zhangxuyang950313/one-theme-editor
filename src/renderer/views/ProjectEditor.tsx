@@ -7,7 +7,7 @@ import { Button } from "@/components/One";
 import { useInitProject } from "@/hooks/project/index";
 import { LOAD_STATUS } from "src/enum";
 import { StyleTopDrag } from "@/style";
-import createRoot from "@/Root";
+import RootWrapper from "@/RootWrapper";
 import EditorFrame from "@/components/Editor/index";
 import electronStoreConfig from "src/store/config";
 
@@ -96,4 +96,4 @@ const StyleEditorEmpty = styled.div`
   }
 `;
 
-createRoot(ProjectEditor);
+RootWrapper(ProjectEditor);
