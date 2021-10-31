@@ -5,11 +5,12 @@ import { Provider } from "react-redux";
 import styled, { createGlobalStyle, ThemeProvider } from "styled-components";
 
 import "antd/dist/antd.css"; // antd 样式
-import zhCN from "antd/lib/locale/zh_CN"; // antd 中文
+// import zhCN from "antd/lib/locale/zh_CN"; // antd 中文
 
-import "@arco-design/theme-one-editor/css/arco.css"; // arco.design
+// import "@arco-design/theme-one-editor/css/arco.css"; // arco.design
+import "@arco-design/web-react/dist/css/arco.css"; // arco.design
 
-import { ConfigProvider } from "antd";
+// import { ConfigProvider } from "antd";
 import * as electronStore from "src/store";
 import { GlobalStore } from "./store/global/index";
 // import Router from "./router";
@@ -52,42 +53,42 @@ const Root: React.FC = props => {
     <Provider store={GlobalStore.store}>
       <ThemeProvider theme={theme}>
         <StyleGlobal />
-        <ConfigProvider locale={zhCN}>
-          <StyleContainer>{props.children}</StyleContainer>
-        </ConfigProvider>
+        {/* <ConfigProvider locale={zhCN}> */}
+        <StyleContainer>{props.children}</StyleContainer>
+        {/* </ConfigProvider> */}
       </ThemeProvider>
     </Provider>
   );
 };
 
 const StyleGlobal = createGlobalStyle`
-body,
-html {
-    margin: 0;
-    user-select: none;
-    -webkit-app-region: drag;
-}
-body {
-  overflow: hidden;
-}
-*{
-  &::-webkit-scrollbar {/*滚动条整体样式*/
-    width: 5px;     /*高宽分别对应横竖滚动条的尺寸*/
-    height: 5px;
+  body,
+  html {
+      margin: 0;
+      user-select: none;
+      /* -webkit-app-region: drag; */
   }
+  body {
+    overflow: hidden;
+  }
+  *{
+    &::-webkit-scrollbar {/*滚动条整体样式*/
+      width: 5px;     /*高宽分别对应横竖滚动条的尺寸*/
+      height: 5px;
+    }
 
-  &::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
-    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
-    border-radius: 10px;
-    background: ${({ theme }) => theme["@scrollbar-thumb"]};
-  }
+    &::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+      -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+      border-radius: 10px;
+      background: ${({ theme }) => theme["@scrollbar-thumb"]};
+    }
 
-  &::-webkit-scrollbar-track {/*滚动条里面轨道*/
-    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
-    border-radius: 10px;
-    background: ${({ theme }) => theme["@scrollbar-track"]};
+    &::-webkit-scrollbar-track {/*滚动条里面轨道*/
+      -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+      border-radius: 10px;
+      background: ${({ theme }) => theme["@scrollbar-track"]};
+    }
   }
-}
 `;
 
 // 布局容器

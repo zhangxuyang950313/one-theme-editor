@@ -2,7 +2,7 @@ import { URLSearchParams } from "url";
 import { Canceler } from "axios";
 import { useLayoutEffect, useEffect, useState } from "react";
 import { InputProps } from "antd";
-import { remote } from "electron";
+import { ipcRenderer, IpcRendererEvent, remote } from "electron";
 import {
   ActionSetAppConfig,
   ActionSetServerPort
@@ -11,6 +11,8 @@ import { useGlobalSelector, useGlobalDispatch } from "@/store/global";
 import { TypePathConfig } from "src/types/extraConfig";
 import { LOAD_STATUS } from "src/enum";
 import * as electronStore from "src/store";
+import { TypeProjectData } from "src/types/project";
+import IPC_EVENT from "src/ipc/ipc-event";
 
 export function useDocumentTitle(): [string, typeof setTitleMethod] {
   const setTitleMethod = (title: string) => {
@@ -125,4 +127,30 @@ export function useMergeLoadStatus(statusList: LOAD_STATUS[]): LOAD_STATUS {
     status = LOAD_STATUS.UNKNOWN;
   }
   return status;
+}
+
+// 收听广播
+export function useListenerBroadcast(): {
+  onProjectCreated: (callback: (x: TypeProjectData) => void) => void;
+} {
+  // 监听器列表
+  const listenerList: {
+    event: IPC_EVENT;
+    listener: ($event: IpcRendererEvent, $data: any) => void;
+  }[] = [];
+  const [listenerMap] = useState({
+    // 工程创建完成
+    onProjectCreated<T = TypeProjectData>(callback: (x: T) => void) {
+      const listener = ($event: IpcRendererEvent, $data: T) => callback($data);
+      ipcRenderer.on(IPC_EVENT.$projectCreated, listener);
+      listenerList.push({ event: IPC_EVENT.$projectCreated, listener });
+    }
+  });
+  // 清除监听器
+  useEffect(() => {
+    listenerList.forEach(item => {
+      ipcRenderer.removeListener(item.event, item.listener);
+    });
+  }, []);
+  return listenerMap;
 }

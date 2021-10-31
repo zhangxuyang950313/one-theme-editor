@@ -46,8 +46,7 @@ const StyleModuleSelector = styled.div`
       transition: 0.2s all ease;
       &[data-active="true"] {
         opacity: 1;
-        --drop-color: ${({ theme }) => theme["@primary-color"]};
-        filter: drop-shadow(0 0 5px var(--drop-color));
+        filter: drop-shadow(0 0 5px var(--color-primary-light-4));
         transform: scale(1.2);
         transition: 0.2s all ease;
       }

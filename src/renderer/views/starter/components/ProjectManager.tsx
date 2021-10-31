@@ -1,68 +1,34 @@
-import { useScenarioOption } from "@/hooks/resource/index";
-import { useStarterSelector } from "@/store/starter";
-import { TypeProjectInfo } from "src/types/project";
-import { LOAD_STATUS } from "src/enum";
-
-import React from "react";
-import styled from "styled-components";
-import { Empty, Spin } from "antd";
-import { Button } from "@arco-design/web-react";
 import { remote } from "electron";
+import React, { useEffect, useState, useCallback } from "react";
+import styled from "styled-components";
+import { Button, Empty } from "@arco-design/web-react";
+import { useListenerBroadcast } from "@/hooks";
+import { TypeProjectDataDoc } from "src/types/project";
+import { TypeScenarioOption } from "src/types/scenario.config";
 import ProjectCard from "./ProjectCard";
 
 const ProjectManager: React.FC<{
-  status: LOAD_STATUS;
-  onProjectCreated: (data: TypeProjectInfo) => Promise<void>;
+  scenarioOption: TypeScenarioOption;
 }> = props => {
-  const [scenarioOption] = useScenarioOption();
-  const projectList = useStarterSelector(state => state.projectList);
+  const { scenarioOption } = props;
+  const [projectList, setProjectList] = useState<TypeProjectDataDoc[]>([]);
 
-  // 列表加载中、空、正常状态
-  const ProjectListContent: React.FC = () => {
-    switch (props.status) {
-      // 加载状态
-      case LOAD_STATUS.INITIAL:
-      case LOAD_STATUS.LOADING: {
-        return (
-          <StyleCenterContainer>
-            <Spin className="auto-margin" tip="加载中..." spinning />
-          </StyleCenterContainer>
-        );
-      }
-      case LOAD_STATUS.SUCCESS: {
-        if (projectList.length > 0) {
-          return (
-            <StyleProjectList>
-              {projectList.map((item, key) => (
-                <div className="project-card" key={key}>
-                  <ProjectCard
-                    hoverable
-                    data={item}
-                    onClick={async () => {
-                      await window.$server.openProjectEditor(item.uuid);
-                      remote.getCurrentWindow().close();
-                    }}
-                  />
-                </div>
-              ))}
-            </StyleProjectList>
-          );
-        }
-        // 空项目
-        return (
-          <StyleCenterContainer>
-            <Empty
-              className="auto-margin"
-              image={Empty.PRESENTED_IMAGE_SIMPLE}
-              description="空空如也，快去创建一个主题吧"
-            />
-          </StyleCenterContainer>
-        );
-      }
-      default:
-        return null;
-    }
-  };
+  const broadcast = useListenerBroadcast();
+
+  const fetchProjectList = useCallback(() => {
+    window.$server.getProjectListByMd5(scenarioOption.md5).then(setProjectList);
+  }, [scenarioOption]);
+
+  useEffect(() => {
+    // 监听工程创建完成
+    broadcast.onProjectCreated(fetchProjectList);
+  }, []);
+
+  useEffect(() => {
+    console.log("props.scenarioMd5 change", scenarioOption);
+    if (!scenarioOption) return;
+    fetchProjectList();
+  }, [scenarioOption]);
 
   return (
     <StyleProjectManager>
@@ -75,20 +41,36 @@ const ProjectManager: React.FC<{
             开始创作
           </p>
         </div>
-        {/* 新建主题按钮 */}
-        {/* <CreateProject onProjectCreated={props.onProjectCreated} /> */}
-
         <Button
           type="primary"
           onClick={() => {
-            window.$server.createProject(scenarioOption.src);
+            window.$server.openCreateProjectWindow(scenarioOption.src);
           }}
         >
           开始创作
         </Button>
       </div>
       {/* 工程列表 */}
-      <ProjectListContent />
+      {projectList.length > 0 ? (
+        <StyleProjectList>
+          {projectList.map((item, key) => (
+            <div className="project-card" key={key}>
+              <ProjectCard
+                hoverable
+                data={item}
+                onClick={async () => {
+                  await window.$server.openProjectEditor(item.uuid);
+                  remote.getCurrentWindow().close();
+                }}
+              />
+            </div>
+          ))}
+        </StyleProjectList>
+      ) : (
+        <StyleCenterContainer>
+          <Empty className="auto-margin" description="空空如也，开始创作吧！" />
+        </StyleCenterContainer>
+      )}
     </StyleProjectManager>
   );
 };
@@ -98,6 +80,7 @@ const StyleProjectManager = styled.div`
   flex-direction: column;
   flex-grow: 1;
   box-sizing: border-box;
+  background-color: var(--color-bg-1);
   .top-container {
     display: flex;
     flex-shrink: 0;
@@ -108,12 +91,12 @@ const StyleProjectManager = styled.div`
       flex-shrink: 0;
       margin-right: 20px;
       h2 {
-        color: ${({ theme }) => theme["@text-color"]};
+        color: var(--color-text-1);
       }
       p {
         margin-top: 10px;
         font-size: 14px;
-        color: ${({ theme }) => theme["@text-color-secondary"]};
+        color: var(--color-text-3);
       }
     }
   }
@@ -139,7 +122,7 @@ const StyleCenterContainer = styled.div`
     margin: auto;
   }
   .ant-empty-description {
-    color: ${({ theme }) => theme["@text-color-secondary"]};
+    color: var(--color-text-3);
   }
 `;
 

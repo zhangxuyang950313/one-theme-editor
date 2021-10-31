@@ -405,6 +405,13 @@ const config: webpack.ConfigurationFactory = (env, args) => {
           "../release.dll/antd.manifest.json"
         ))
       }),
+      new DllReferencePlugin({
+        context: process.cwd(),
+        manifest: require(path.join(
+          __dirname,
+          "../release.dll/arco.manifest.json"
+        ))
+      }),
       new ArcoWebpackPlugin({
         theme: "@arco-design/theme-one-editor"
       }),

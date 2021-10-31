@@ -1,35 +1,43 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { PRESET_TITLE } from "src/enum";
-import { useDocumentTitle } from "@/hooks/index";
-import useFetchProjectList from "@/hooks/project/useFetchProjectList";
-import useFetchScenarioOptionList from "@/hooks/resource/useFetchScenarioOptionList";
-import useFetchResOptionList from "@/hooks/resource/useFetchResOptionList";
-
-import RootWrapper from "@/RootWrapper";
 import { StyleTopDrag } from "@/style";
+import { PRESET_TITLE } from "src/enum";
+import { TypeScenarioOption } from "src/types/scenario.config";
+import { ScenarioOption } from "src/data/ScenarioConfig";
+import { useDocumentTitle } from "@/hooks/index";
+import RootWrapper from "@/RootWrapper";
 import ProjectManager from "./components/ProjectManager";
 import Sidebar from "./components/Sidebar";
 
 // 开始页面
 const Starter: React.FC = () => {
   const [, setTitle] = useDocumentTitle();
-  setTitle(PRESET_TITLE.welcome);
+  const [scenarioOption, setScenarioOption] = useState(ScenarioOption.default);
+  const [scenarioList, setScenarioList] = useState<TypeScenarioOption[]>([]);
 
-  useFetchScenarioOptionList();
-  useFetchResOptionList();
-  const projectList = useFetchProjectList();
+  useEffect(() => {
+    setTitle(PRESET_TITLE.welcome);
+  }, []);
+
+  useEffect(() => {
+    window.$server.getScenarioOptionList().then(data => {
+      console.log("获取 scenarioList", data);
+      setScenarioList(data);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!scenarioList[0]) return;
+    setScenarioOption(scenarioList[0]);
+  }, [scenarioList]);
 
   return (
     <StyleStarter>
       <StyleTopDrag height="50px" />
       {/* 侧边栏 */}
-      <Sidebar />
+      <Sidebar scenarioOptionList={scenarioList} onChange={setScenarioOption} />
       {/* 工程管理 */}
-      <ProjectManager
-        status={projectList.status}
-        onProjectCreated={projectList.fetch}
-      />
+      <ProjectManager scenarioOption={scenarioOption} />
     </StyleStarter>
   );
 };

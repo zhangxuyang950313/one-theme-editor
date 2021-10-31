@@ -2,11 +2,7 @@ import path from "path";
 import React from "react";
 import styled from "styled-components";
 import { Empty } from "@arco-design/web-react";
-import { CheckCircleTwoTone } from "@ant-design/icons";
 import { TypeResourceOption } from "src/types/resource.config";
-import { useStarterSelector } from "@/store/starter";
-import { useImagePrefix } from "@/hooks/image";
-import { useResConfigDir } from "@/hooks/resource";
 import { LazyImage } from "./ImageCollection";
 
 type TypeProps = {
@@ -17,31 +13,33 @@ type TypeProps = {
 export const ResourceConfigCard: React.FC<TypeProps> = props => {
   const { resourceOption } = props;
   const { namespace, preview } = resourceOption;
-  const imgPrefix = useImagePrefix();
-  const resourceDir = useResConfigDir();
-  const imgUrl = imgPrefix + path.join(resourceDir, namespace, preview);
+  const resourceDir =
+    window.$electronStore.config.get("pathConfig").RESOURCE_CONFIG_DIR;
   return (
     <StyleResourceConfigCard>
-      <LazyImage style={{ width: "100%" }} src={imgUrl} />
-      <div>{resourceOption.name}</div>
-      <div>{resourceOption.uiVersion.name}</div>
+      <LazyImage
+        style={{ width: "100%" }}
+        src={`local://${path.join(resourceDir, namespace, preview)}`}
+      />
+      {/* <div className="r-title">{resourceOption.name}</div>
+      <div className="r-desc">{resourceOption.uiVersion.name}</div> */}
     </StyleResourceConfigCard>
   );
 };
 
 const StyleResourceConfigCard = styled.div`
   cursor: pointer;
+  color: var(--color-text-1);
 `;
 
 // 配置管理
 const ResourceConfigManager: React.FC<{
+  className: string;
+  resourceOptionList: TypeResourceOption[];
   selectedKey: string;
   onSelected: (config?: TypeResourceOption) => void;
 }> & { Card: typeof ResourceConfigCard } = props => {
-  // 配置列表
-  const optionList = useStarterSelector(state => state.resourceOptionList);
-
-  if (optionList.length === 0) {
+  if (props.resourceOptionList.length === 0) {
     return (
       <StyleResourceConfigManager>
         <Empty className="center" description={`暂无模板`} />
@@ -50,8 +48,8 @@ const ResourceConfigManager: React.FC<{
   }
 
   return (
-    <StyleResourceConfigManager>
-      {optionList.map((item, key) => {
+    <StyleResourceConfigManager className={props.className}>
+      {props.resourceOptionList.map((item, key) => {
         const isActive = props.selectedKey === item.key;
         const isInit = !props.selectedKey;
         return (
@@ -65,7 +63,6 @@ const ResourceConfigManager: React.FC<{
             }}
           >
             <ResourceConfigCard resourceOption={item} />
-            <CheckCircleTwoTone className="check-icon" />
           </StyleCardContainer>
         );
       })}
@@ -77,7 +74,6 @@ const StyleResourceConfigManager = styled.div`
   display: flex;
   flex-wrap: wrap;
   width: 100%;
-  height: 100%;
   overflow-y: auto;
   .center {
     margin: auto;
@@ -87,21 +83,19 @@ const StyleResourceConfigManager = styled.div`
 type TypeCardContainerProps = { isActive: boolean; isInit: boolean };
 const StyleCardContainer = styled.div<TypeCardContainerProps>`
   width: 120px;
-  margin: 10px;
+  margin: 0 10px 10px 0;
   /* opacity: ${({ isInit, isActive }) =>
     0.5 + 0.5 * Number(isInit || isActive)};
   transition: 0.3s opacity ease-in; */
   position: relative;
   flex-shrink: 0;
-  .check-icon {
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    font-size: 25px;
-    opacity: ${({ isInit, isActive }) => Number(isActive || isInit)};
-    transform: ${({ isActive }) => (isActive ? "scale(1)" : "scale(0)")};
-    transition: 0.1s all ease;
-  }
+  transition: 0.1s all ease;
+  border: 2px solid;
+  border-color: ${({ isActive }) =>
+    isActive ? "var(--color-primary-light-4)" : "var(--color-border-1)"};
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: var(--color-bg);
 `;
 ResourceConfigManager.Card = ResourceConfigCard;
 

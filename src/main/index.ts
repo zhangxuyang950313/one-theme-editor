@@ -1,10 +1,17 @@
-import { app, BrowserWindow } from "electron";
+import { app, BrowserWindow, ipcMain } from "electron";
 import { registerReactiveStateMain } from "src/preload/ReactiveState";
 import mainIpc from "src/ipc/ipc-main";
 // import autoProjectWatcher from "./autoProjectWatcher";
 import registerProtocol from "./protocol";
 import createWindows from "./windows";
 import { moveWindowToCenter, saveCurrentDisplayCenter } from "./utils";
+
+// 桥接窗口间广播
+ipcMain.on("broadcast", ($event, $data: { event: string; data: unknown }) => {
+  BrowserWindow.getAllWindows().forEach(item => {
+    item.webContents.send($data.event, $data.data);
+  });
+});
 
 app.on("window-all-closed", () => {
   app.quit();

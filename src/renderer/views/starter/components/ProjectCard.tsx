@@ -20,15 +20,16 @@ function ProjectCard(props: TypeProps): JSX.Element {
       onClick={() => props.onClick && props.onClick(projectInfo)}
     >
       <LazyImage className="preview" src={ImgDefault} />
-      <div className="name">{projectInfo.name}</div>
+      {<div className="name">{projectInfo.name || "未命名"}</div>}
     </StyleProjectCard>
   );
 }
 
 const StyleProjectCard = styled.div`
   cursor: pointer;
-  width: 160px;
-  height: 260px;
+  position: relative;
+  width: 140px;
+  height: 240px;
   border: 1px solid;
   border-color: ${({ theme }) => theme["@border-color-base"]};
   border-radius: ${({ theme }) => theme["@border-radius-base"]};
@@ -36,19 +37,24 @@ const StyleProjectCard = styled.div`
   overflow: hidden;
   .preview {
     width: 100%;
-    height: 60%;
+    height: 100%;
     object-fit: cover;
   }
   .name {
-    height: 40%;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
     padding: 10px;
-    color: ${({ theme }) => theme["@text-color"]};
-    /* white-space: nowrap;
+    color: var(--color-text-1);
+    font-weight: 800;
+    white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis; */
+    text-overflow: ellipsis;
+    background: var(--color-border-4);
   }
   &:hover[data-hoverable] {
     transform: translateY(-5px);
+    transition: 0.3s all ease-out;
     box-shadow: 5px;
   }
   transition: 0.3s all ease-in;

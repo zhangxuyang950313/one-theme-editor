@@ -24,6 +24,7 @@ const StyleEditorInfo = styled.div`
     width: 100px;
     /* height: 60px; */
     margin: 30px 0;
+    filter: drop-shadow(0 0 5px var(--color-primary-light-4));
   }
   .title {
     font-size: 14px;

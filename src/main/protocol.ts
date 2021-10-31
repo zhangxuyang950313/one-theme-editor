@@ -78,18 +78,24 @@ async function getFilePicResponseData(
 
 export default function registerProtocol(): void {
   console.log("注册协议");
-  protocol.registerFileProtocol("local-resource", (request, callback) => {
-    const url = request.url.replace(/^local-resource:\/\//, "file://");
-    // Decode URL to prevent errors when loading filenames with UTF-8 chars or chars like "#"
-    const decodedUrl = decodeURI(url); // Needed in case URL contains spaces
-    try {
-      return callback(decodedUrl);
-    } catch (error) {
-      console.error(
-        "ERROR: registerLocalResourceProtocol: Could not get file path:",
-        error
-      );
-    }
+  // protocol.registerFileProtocol("local-resource", (request, callback) => {
+  //   const url = request.url.replace(/^local-resource:/, "file:");
+  //   // Decode URL to prevent errors when loading filenames with UTF-8 chars or chars like "#"
+  //   const decodedUrl = decodeURI(url); // Needed in case URL contains spaces
+  //   console.log(decodedUrl);
+  //   try {
+  //     return callback(decodedUrl);
+  //   } catch (error) {
+  //     console.error(
+  //       "ERROR: registerLocalResourceProtocol: Could not get file path:",
+  //       error
+  //     );
+  //   }
+  // });
+
+  protocol.registerBufferProtocol("local", async (request, response) => {
+    const data = await getFilePicResponseData(request.url, "");
+    response(data);
   });
 
   protocol.registerBufferProtocol("resource", async (request, response) => {

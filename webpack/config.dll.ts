@@ -7,6 +7,7 @@ module.exports = {
   entry: {
     react: ["react", "react-dom"],
     styled: ["styled-components"],
+    arco: ["@arco-design/web-react/icon", "@arco-design/web-react"],
     antd: ["antd"]
   },
   output: {

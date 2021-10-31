@@ -14,7 +14,7 @@
     "clean": "rm -rf release.*",
     "build:webpack": "tsc --project webpack/tsconfig.json",
     "build:builder": "tsc --project scripts/tsconfig.json",
-    "webpack:dll": "webpack --mode=production --config release.webpack/config.dll.js",
+    "webpack:dll": "npm run build:webpack && webpack --mode=production --config release.webpack/config.dll.js",
     "webpack:main:dev": "webpack --mode=development --watch --config release.webpack/config.main.js",
     "webpack:main:pro": "webpack --mode=production  --config release.webpack/config.main.js",
     "webpack:render:pro": "webpack --mode=production --config release.webpack/config.renderer.js --display-used-exports",

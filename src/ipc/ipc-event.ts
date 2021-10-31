@@ -2,15 +2,18 @@ enum IPC_EVENT {
   $getPID = "$getPid",
   $getScenarioOptionList = "$getScenarioOptionList",
   $getResourceOptionList = "$getResourceOptionList",
-  $getScenarioConfig = "$getScenarioOption",
+  $getScenarioOption = "$getScenarioOption",
+  $getScenarioConfig = "$getScenarioConfig",
   $getResourceConfig = "$getResourceConfig",
   $getPageConfig = "$getPageConfig",
 
   $createProject = "$createProject",
+  $projectCreated = "$projectCreated",
   $getProjectList = "$getProjectList",
   $getProject = "$getProject",
   $updateProjectInfo = "$updateProjectInfo",
 
+  $openCreateProjectWindow = "$openCreateProjectWindow",
   $openProjectEditor = "$openProjectEditor",
   $openStarter = "$openStarter",
 

@@ -1,11 +1,14 @@
-import { message } from "antd";
 import {
   BrowserWindowConstructorOptions,
   ipcRenderer,
   IpcRendererEvent
 } from "electron";
 import { FILE_EVENT } from "src/enum";
-import { TypeProjectDataDoc } from "src/types/project";
+import {
+  TypeCreateProjectPayload,
+  TypeProjectData,
+  TypeProjectDataDoc
+} from "src/types/project";
 import { TypeWriteXmlTempPayload } from "src/types/request";
 import {
   TypePageConfig,
@@ -63,14 +66,19 @@ const rendererIpc = {
   // 获取进程 id
   getPID: generateIpcSync<void, number>(IPC_EVENT.$getPID),
 
-  // 获取场景选项列表
-  getScenarioOptionList: generateIpcInvoke<void, TypeScenarioOption[]>(
-    IPC_EVENT.$getScenarioOptionList
+  // 获取场景选项
+  getScenarioOption: generateIpcInvoke<string, TypeScenarioOption>(
+    IPC_EVENT.$getScenarioOption
   ),
 
   // 获取场景配置
   getScenarioConfig: generateIpcInvoke<string, TypeScenarioConfig>(
     IPC_EVENT.$getScenarioConfig
+  ),
+
+  // 获取场景选项列表
+  getScenarioOptionList: generateIpcInvoke<void, TypeScenarioOption[]>(
+    IPC_EVENT.$getScenarioOptionList
   ),
 
   // 获取资源选项列表
@@ -90,7 +98,7 @@ const rendererIpc = {
   >(IPC_EVENT.$getPageConfig),
 
   // 获取工程列表
-  getProjectList: generateIpcInvoke<string, TypeProjectDataDoc[]>(
+  getProjectListByMd5: generateIpcInvoke<string, TypeProjectDataDoc[]>(
     IPC_EVENT.$getProjectList
   ),
 
@@ -100,7 +108,12 @@ const rendererIpc = {
   ),
 
   // 打开创建工程窗口
-  createProject: generateIpcInvoke<string, TypeProjectDataDoc>(
+  openCreateProjectWindow: generateIpcInvoke<string, TypeProjectDataDoc>(
+    IPC_EVENT.$openCreateProjectWindow
+  ),
+
+  // 创建工程
+  createProject: generateIpcInvoke<TypeCreateProjectPayload, TypeProjectData>(
     IPC_EVENT.$createProject
   ),
 
@@ -169,7 +182,17 @@ const rendererIpc = {
   // 同步获取文件数据
   getFileDataSync: generateIpcSync<string, TypeFileData>(
     IPC_EVENT.$getFileDataSync
-  )
+  ),
+
+  // 给所有窗口发送广播
+  sendBroadcast: {
+    [IPC_EVENT.$projectCreated](data: TypeProjectData): void {
+      ipcRenderer.send("broadcast", {
+        event: IPC_EVENT.$projectCreated,
+        data
+      });
+    }
+  }
 };
 
 export default rendererIpc;

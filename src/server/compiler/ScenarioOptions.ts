@@ -100,4 +100,24 @@ export default class ScenarioOptions extends XmlCompilerExtra {
         .create();
     });
   }
+
+  getOption(src: string): TypeScenarioOption {
+    const scenarioNode = this.getScenarioNodes().find(
+      item => item.getAttributeOf("src") === src
+    );
+    if (!scenarioNode) return ScenarioOption.default;
+    const name = scenarioNode.getAttributeOf("name");
+    const scenarioConfig = ScenarioConfigCompiler.from(src);
+    const packageConfig = scenarioConfig.getPackageConfig();
+    const applyConfig = scenarioConfig.getApplyConfig();
+    const fileTemp = scenarioConfig.getFileTempList();
+    return new ScenarioOption()
+      .set("src", src)
+      .set("name", name)
+      .set("md5", md5(name))
+      .set("packageConfig", packageConfig)
+      .set("applyConfig", applyConfig)
+      .set("fileTempList", fileTemp)
+      .create();
+  }
 }

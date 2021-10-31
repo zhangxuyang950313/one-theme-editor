@@ -23,7 +23,7 @@ export default function useFetchProjectList(): {
     setProjectList([]);
     // await sleep(300);
     window.$server
-      .getProjectList(scenarioOption.md5)
+      .getProjectListByMd5(scenarioOption.md5)
       .then(projects => {
         console.log("工程列表", projects);
         setProjectList(projects);

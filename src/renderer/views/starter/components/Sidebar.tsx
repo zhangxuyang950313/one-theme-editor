@@ -2,32 +2,32 @@ import React from "react";
 import styled from "styled-components";
 import { Menu } from "@arco-design/web-react";
 
-import { useScenarioOption } from "@/hooks/resource/index";
-import { useStarterSelector } from "@/store/starter";
+import { TypeScenarioOption } from "src/types/scenario.config";
 import TopInfo from "./TopInfo";
 
 // 欢迎页侧边栏
-const Sidebar: React.FC = () => {
-  const scenarioOptionList = useStarterSelector(
-    state => state.scenarioOptionList
-  );
-  const [, setScenarioOption] = useScenarioOption();
-
+const Sidebar: React.FC<{
+  scenarioOptionList: TypeScenarioOption[];
+  onChange: (x: TypeScenarioOption) => void;
+}> = props => {
+  const { scenarioOptionList, onChange } = props;
   return (
     <StyleSidebar>
       {/*  编辑器信息展示 */}
       <TopInfo />
       {/* 场景选择 */}
-      <Menu
-        className="menu"
-        defaultSelectedKeys={[scenarioOptionList[0]?.md5 || ""]}
-      >
-        {scenarioOptionList.map(item => (
-          <Menu.Item key={item.md5} onClick={() => setScenarioOption(item)}>
-            {item.name}
-          </Menu.Item>
-        ))}
-      </Menu>
+      {scenarioOptionList.length > 0 && (
+        <Menu
+          className="menu"
+          defaultSelectedKeys={[scenarioOptionList[0].md5]}
+        >
+          {scenarioOptionList.map(item => (
+            <Menu.Item key={item.md5} onClick={() => onChange(item)}>
+              {item.name}
+            </Menu.Item>
+          ))}
+        </Menu>
+      )}
     </StyleSidebar>
   );
 };
