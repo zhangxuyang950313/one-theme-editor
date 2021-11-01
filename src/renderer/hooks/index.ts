@@ -1,16 +1,8 @@
 import { URLSearchParams } from "url";
+import { useEffect, useState } from "react";
+import { ipcRenderer, IpcRendererEvent } from "electron";
 import { Canceler } from "axios";
-import { useLayoutEffect, useEffect, useState } from "react";
-import { InputProps } from "antd";
-import { ipcRenderer, IpcRendererEvent, remote } from "electron";
-import {
-  ActionSetAppConfig,
-  ActionSetServerPort
-} from "@/store/global/modules/base/action";
-import { useGlobalSelector, useGlobalDispatch } from "@/store/global";
-import { TypePathCollection } from "src/types/extraConfig";
 import { LOAD_STATUS } from "src/enum";
-import * as electronStore from "src/store";
 import { TypeProjectData } from "src/types/project";
 import IPC_EVENT from "src/ipc/ipc-event";
 
@@ -29,19 +21,6 @@ export function useQuey<T extends Partial<{ [x: string]: string }>>(): T {
     setQuery(Object.fromEntries(search.entries()) as T);
   }, [window.location]);
   return query;
-}
-
-// 获取输入的值
-type TypeUseInputValueReturn = {
-  value: string;
-  onChange: InputProps["onChange"];
-};
-export function useInputValue(initialVal: string): TypeUseInputValueReturn {
-  const [value, updateVal] = useState(initialVal);
-  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    updateVal(event.currentTarget.value);
-  };
-  return { value, onChange };
 }
 
 /**
@@ -68,11 +47,6 @@ export function useAsyncUpdater(): (updater: () => void) => void {
     if (isDestroyed) return;
     updater();
   };
-}
-
-// 获取编辑器路径配置
-export function usePathConfig(): Partial<TypePathCollection> {
-  return useGlobalSelector(state => state.base.appPath);
 }
 
 // 合并多个 status 状态

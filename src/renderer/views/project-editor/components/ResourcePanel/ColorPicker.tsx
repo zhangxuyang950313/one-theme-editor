@@ -7,7 +7,6 @@ import { RGBColor, SketchPicker } from "react-color";
 import ColorUtil, { HEX_FORMAT } from "src/common/utils/ColorUtil";
 import { StyleGirdBackground } from "@/style";
 import * as electronStore from "src/store";
-import { useCurrentPageConfig } from "@/hooks/resource";
 
 // 颜色小方块
 const ColorBox: React.FC<{
@@ -61,13 +60,13 @@ const sketch2rgba = (sketch: RGBColor): RgbaObject => {
 function ColorPickerBox(props: {
   color: string; // RGBAHex
   tipColor: string;
+  colorFormat: HEX_FORMAT;
   onChange?: (color: string) => void;
   onDisabled?: (color: string) => void;
 }): JSX.Element {
-  const { color, tipColor, onChange, onDisabled } = props;
+  const { color, colorFormat, tipColor, onChange, onDisabled } = props;
   const [colorRGBAHex, setColorRGBAHex] = useState(color);
   const [colorRecently, setColorRecently] = useState<string[]>([]);
-  const pageConfig = useCurrentPageConfig();
 
   useEffect(() => {
     setColorRGBAHex(color);
@@ -82,7 +81,7 @@ function ColorPickerBox(props: {
     const arr = Array.from(new Set([colorRGBAHex, ...colorRecently])).filter(
       item => {
         try {
-          ColorUtil.create(item, pageConfig?.colorFormat || HEX_FORMAT.RGBA);
+          ColorUtil.create(item, colorFormat);
           return true;
         } catch (err) {
           return false;
@@ -146,10 +145,10 @@ const StyleColorPickerBox = styled.div`
 const ColorPicker: React.FC<{
   value: string;
   defaultValue: string;
-  format: HEX_FORMAT;
+  colorFormat: HEX_FORMAT;
   onChange: (x: string) => void;
 }> = props => {
-  const { value, defaultValue, format, onChange } = props;
+  const { value, defaultValue, colorFormat, onChange } = props;
   const [defaultColor, setDefaultColor] = useState("");
   const [colorRGBAHex, setColorRGBAHex] = useState("");
   const [inputColor, setInputColor] = useState("");
@@ -162,7 +161,7 @@ const ColorPicker: React.FC<{
   // 生成默认 formatter 规定的颜色
   useEffect(() => {
     try {
-      setDefaultColor(ColorUtil.create(defaultValue, format).toRGBAHex());
+      setDefaultColor(ColorUtil.create(defaultValue, colorFormat).toRGBAHex());
     } catch (err: any) {
       console.log(err);
       message.warn(`默认颜色格式错误"${defaultValue}"`);
@@ -172,7 +171,7 @@ const ColorPicker: React.FC<{
   // 生成 formatter 规定的颜色
   useEffect(() => {
     try {
-      setColorRGBAHex(ColorUtil.create(value, format).toRGBAHex());
+      setColorRGBAHex(ColorUtil.create(value, colorFormat).toRGBAHex());
       setInputColor(value);
     } catch (err: any) {
       // console.log("value", err);
@@ -184,7 +183,7 @@ const ColorPicker: React.FC<{
   useEffect(() => {
     try {
       setInputColor(
-        ColorUtil.create(colorRGBAHex, HEX_FORMAT.RGBA).format(format)
+        ColorUtil.create(colorRGBAHex, HEX_FORMAT.RGBA).format(colorFormat)
       );
     } catch (err: any) {
       // console.log("colorRGBAHex", err);
@@ -195,7 +194,7 @@ const ColorPicker: React.FC<{
   // 输入框与选色器联动
   useEffect(() => {
     try {
-      setColorRGBAHex(ColorUtil.create(inputColor, format).toRGBAHex());
+      setColorRGBAHex(ColorUtil.create(inputColor, colorFormat).toRGBAHex());
     } catch (err: any) {
       setColorRGBAHex("");
       // console.log("inputColor", err);
@@ -206,7 +205,7 @@ const ColorPicker: React.FC<{
   const onInputBlur = (val: string) => {
     try {
       if (inputColor !== "") {
-        setColorRGBAHex(ColorUtil.create(val, format).toRGBAHex());
+        setColorRGBAHex(ColorUtil.create(val, colorFormat).toRGBAHex());
       }
       onChange(inputColor);
     } catch (err: any) {
@@ -226,6 +225,7 @@ const ColorPicker: React.FC<{
         <ColorPickerBox
           color={colorRGBAHex}
           tipColor={inputColor}
+          colorFormat={colorFormat}
           onDisabled={() => onChange(inputColor)}
           onChange={setColorRGBAHex}
         />

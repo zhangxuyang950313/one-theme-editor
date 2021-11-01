@@ -14,6 +14,8 @@ import { FileData, ImageFileData, XmlFileData } from "src/data/ResourceConfig";
 import XmlFileCompiler from "src/common/compiler/XmlFileCompiler";
 import XmlCompilerExtra from "src/common/compiler/XmlCompilerExtra";
 
+export const isDev = process.env.NODE_ENV !== "production";
+
 export const base64Regex = /^data:image\/\w+;base64,/;
 
 // 随机字符串，最多11位

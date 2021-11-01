@@ -2,7 +2,7 @@ import path from "path";
 import fse from "fs-extra";
 import { dialog, remote } from "electron";
 
-import { isDev } from "@/core/constant";
+import { isDev } from "src/common/utils/index";
 import { useQuey } from "@/hooks";
 import { TypeProjectInfo } from "src/types/project";
 import { TypeResourceOption } from "src/types/resource.config";
@@ -15,7 +15,7 @@ import { FILE_TEMPLATE_TYPE } from "src/enum";
 import Steps from "@/components/Steps";
 import RootWrapper from "@/RootWrapper";
 import ResourceConfigManager from "@/components/ResourceConfigManager";
-import useFetchResOptionList from "@/hooks/resource/useFetchResOptionList";
+import useFetchResourceOptionList from "@/hooks/resource/useFetchResourceOptionList";
 import useFetchScenarioOption from "@/hooks/resource/useFetchScenarioOption";
 import pathUtil from "src/common/utils/pathUtil";
 import ProjectForm from "./components/ProjectForm";
@@ -68,7 +68,7 @@ const CreateProject: React.FC = () => {
   const [scenarioOption] = useFetchScenarioOption(scenarioSrc);
 
   // 配置列表
-  const [resourceOptionList] = useFetchResOptionList(scenarioSrc);
+  const [resourceOptionList] = useFetchResourceOptionList(scenarioSrc);
 
   // 工程信息配置
   const projectInfoConfig = scenarioOption.fileTempList.find(

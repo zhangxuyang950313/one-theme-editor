@@ -10,8 +10,8 @@ import {
 } from "@ant-design/icons";
 import { TypeFileBlocker, TypeFileItem } from "src/types/resource.page";
 import { useEditorSelector } from "@/store/editor";
-import { useProjectAbsolutePath } from "@/hooks/project/index";
 import useSubscribeFile from "@/hooks/project/useSubscribeFile";
+import { resolveProjectPath } from "src/common/utils/pathUtil";
 import ImageDisplay from "./ImageDisplay";
 import InfoDisplay from "./InfoDisplay";
 
@@ -20,7 +20,7 @@ const FileItem: React.FC<{
   data: TypeFileItem;
 }> = props => {
   const { data, className } = props;
-  const projectPath = useProjectAbsolutePath(data.sourceData.src);
+  const projectPath = resolveProjectPath(data.sourceData.src);
   const [src, setSrc] = useState(data.sourceData.src);
   const fileData = useEditorSelector(state => {
     return state.fileDataMap[data.sourceData.src];

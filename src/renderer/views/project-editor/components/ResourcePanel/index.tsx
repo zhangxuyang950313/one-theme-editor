@@ -48,6 +48,7 @@ const ResourcePanel: React.FC<{
                   key={key + resource.key}
                   className="item"
                   data={resource}
+                  colorFormat={pageConfig.colorFormat}
                 />
               );
             }

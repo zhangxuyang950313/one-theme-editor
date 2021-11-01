@@ -146,10 +146,10 @@ const config: webpack.ConfigurationFactory = (env, args) => {
     },
     optimization: {
       minimize: !isDev,
-      runtimeChunk: "multiple",
-      // runtimeChunk: {
-      //   name: ({ name }) => `runtime-${name}`
-      // }
+      // runtimeChunk: "multiple",
+      runtimeChunk: {
+        name: ({ name }) => `runtime-${name}`
+      },
       splitChunks: {
         /**
          * 表示哪些代码需要优化，有三个可选值：
@@ -172,7 +172,7 @@ const config: webpack.ConfigurationFactory = (env, args) => {
         // 命名连接符
         automaticNameDelimiter: "-",
         // 拆分出来块的名字，默认由块名和hash值自动生成
-        name: false,
+        name: true,
         // 缓存组。缓存组的属性除上面所有属性外，还有test, priority
         cacheGroups: {
           defaultVendors: {

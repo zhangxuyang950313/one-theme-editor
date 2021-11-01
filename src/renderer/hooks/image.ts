@@ -1,12 +1,4 @@
 import { useState, useEffect, useRef } from "react";
-import * as electronStore from "src/store";
-
-// 返回图片前缀
-export function useImagePrefix(): string {
-  const hostname = electronStore.config.get("hostname");
-  return `http://${hostname}/image?filepath=`;
-  // return `one://`;
-}
 
 /**
  * 预加载图片，加载完成后刷新 url,防止切换闪烁或者从上到下加载不好的体验
@@ -67,45 +59,4 @@ export function useLoadImageLazy(
   }, [url]);
 
   return imageRef;
-}
-
-/**
- * 使用图片路径来预加载图片，基于 useLoadImage
- * @param filepath
- * @returns
- */
-export function useLoadImageByPath(filepath: string): string {
-  const imageUrl = useImageUrl(filepath)[0];
-  return useLoadImage(imageUrl);
-}
-
-/**
- * 将本地路径输出为图片服务路径用于展示
- * @param filepathVal
- * @returns
- */
-export function useImageUrl(filepath: string): string {
-  const prefix = useImagePrefix();
-  return filepath ? prefix + filepath : "";
-}
-
-/**
- * 图片参数改变实现强制重载
- * @param imageUrl
- * @returns
- */
-export function useForceUpdateImageUrl(imageUrl: string): [string, () => void] {
-  const [url, updateUrl] = useState(imageUrl);
-  const [count, updateCount] = useState(0);
-
-  const forceUpdate = () => {
-    updateUrl(imageUrl ? `${imageUrl}&count=${count}` : "");
-    updateCount(count + 1);
-  };
-
-  useEffect(() => {
-    forceUpdate();
-  }, [imageUrl]);
-
-  return [url, forceUpdate];
 }

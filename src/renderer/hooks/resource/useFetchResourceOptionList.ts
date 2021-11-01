@@ -10,7 +10,7 @@ import ERR_CODE from "src/common/errorCode";
  * 获取编辑器资源选项列表列表
  * @returns
  */
-export default function useFetchResOptionList(
+export default function useFetchResourceOptionList(
   scenarioSrc: string
 ): [TypeResourceOption[], LOAD_STATUS, () => Promise<void>] {
   const [state, setState] = useState<TypeResourceOption[]>([]);

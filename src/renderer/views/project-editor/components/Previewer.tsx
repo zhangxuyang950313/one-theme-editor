@@ -9,7 +9,6 @@ import {
 } from "src/enum";
 import { TypePageConfig } from "src/types/resource.config";
 import { TypeLayoutData, TypeLayoutTextElement } from "src/types/resource.page";
-import { useCurrentPageConfig } from "@/hooks/resource";
 import { useEditorSelector } from "@/store/editor";
 import ColorUtil from "src/common/utils/ColorUtil";
 import useSubscribeFile from "@/hooks/project/useSubscribeFile";
@@ -111,11 +110,11 @@ const LayoutTextElement: React.FC<{
   scale: number;
   useDash: boolean;
   canClick: boolean;
+  colorFormat: HEX_FORMAT;
 }> = props => {
-  const { element, scale, useDash, canClick } = props;
+  const { element, scale, colorFormat, useDash, canClick } = props;
   const [defaultColor, setDefaultColor] = useState("#000000");
   const [color, setColor] = useState(defaultColor);
-  const pageConfig = useCurrentPageConfig();
   const xmlValMapper = useEditorSelector(state => {
     const data = state.fileDataMap[element.sourceData.src];
     return data?.fileType === "application/xml" ? data.valueMapper : {};
@@ -123,7 +122,6 @@ const LayoutTextElement: React.FC<{
 
   useSubscribeFile(element.sourceData.src);
 
-  const colorFormat = pageConfig?.colorFormat || HEX_FORMAT.RGBA;
   const layoutStyle = computeLayoutStyle(element.layout, scale);
 
   useEffect(() => {
@@ -222,6 +220,7 @@ const Previewer: React.FC<{
                     key={k}
                     element={element}
                     scale={scale}
+                    colorFormat={props.pageConfig.colorFormat}
                     canClick={props.canClick}
                     useDash={props.useDash}
                   />

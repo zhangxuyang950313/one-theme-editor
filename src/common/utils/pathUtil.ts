@@ -86,8 +86,16 @@ const pathUtil: TypePathCollection = {
 
 export default pathUtil;
 
-export function resolveSourcePath(relative: string): string {
+export function resolveResourceConfigPath(relative: string): string {
   return path.join(pathUtil.RESOURCE_CONFIG_DIR, relative);
+}
+
+export function resolveResourcePath(relative: string): string {
+  return path.join($reactiveState.get("resourcePath"), relative);
+}
+
+export function resolveProjectPath(relative: string): string {
+  return path.join($reactiveState.get("projectPath"), relative);
 }
 
 export function getSCDescriptionByNamespace(namespace: string): string {

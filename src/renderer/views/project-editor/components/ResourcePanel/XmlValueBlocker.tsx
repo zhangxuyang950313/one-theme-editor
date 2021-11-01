@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import { CloseOutlined } from "@ant-design/icons";
-import { useCurrentPageConfig } from "@/hooks/resource";
 import { useEditorDispatch, useEditorSelector } from "@/store/editor";
 import { HEX_FORMAT, RESOURCE_TAG } from "src/enum/index";
 import {
@@ -10,8 +9,8 @@ import {
   TypeXmlValueTags
 } from "src/types/resource.page";
 import useSubscribeFile from "@/hooks/project/useSubscribeFile";
-import { useProjectAbsolutePath } from "@/hooks/project";
 import { ActionPatchFileDataMap } from "@/store/editor/action";
+import { resolveProjectPath } from "src/common/utils/pathUtil";
 import ColorPicker from "./ColorPicker";
 import BooleanSelector from "./BooleanSelector";
 import NumberInput from "./NumberInput";
@@ -22,10 +21,10 @@ const XmlValueEditor: React.FC<{
   defaultValue: string;
   value: string;
   use: TypeXmlValueTags;
+  colorFormat: HEX_FORMAT;
   onChange: (v: string) => void;
 }> = props => {
-  const { value, defaultValue, onChange } = props;
-  const pageConfig = useCurrentPageConfig();
+  const { value, defaultValue, colorFormat, onChange } = props;
 
   switch (props.use) {
     // 颜色选择器
@@ -34,7 +33,7 @@ const XmlValueEditor: React.FC<{
         <ColorPicker
           value={value}
           defaultValue={defaultValue}
-          format={pageConfig?.colorFormat || HEX_FORMAT.RGBA}
+          colorFormat={colorFormat}
           onChange={onChange}
         />
       );
@@ -78,6 +77,7 @@ const XmlValueItem: React.FC<{
   value: string;
   comment: string;
   valueTemplate: string;
+  colorFormat: HEX_FORMAT;
   use: TypeXmlValueTags;
   from: string;
   onChange: (v: string) => void;
@@ -93,6 +93,7 @@ const XmlValueItem: React.FC<{
         <XmlValueEditor
           defaultValue={props.defaultValue}
           value={props.value}
+          colorFormat={props.colorFormat}
           use={props.use}
           onChange={props.onChange}
         />
@@ -145,65 +146,70 @@ const StyleXmlValueItem = styled.div`
  * @param props
  * @returns
  */
-const XmlItem: React.FC<{ xmlItem: TypeXmlItem; use: TypeXmlValueTags }> =
-  props => {
-    const { xmlItem, use } = props;
-    const dispatch = useEditorDispatch();
-    const projectPath = useProjectAbsolutePath(xmlItem.sourceData.src);
-    const xmlValMapper = useEditorSelector(state => {
-      const data = state.fileDataMap[xmlItem.sourceData.src];
-      return data?.fileType === "application/xml" ? data.valueMapper : {};
-    });
+const XmlItem: React.FC<{
+  xmlItem: TypeXmlItem;
+  use: TypeXmlValueTags;
+  colorFormat: HEX_FORMAT;
+}> = props => {
+  const { xmlItem, use, colorFormat } = props;
+  const dispatch = useEditorDispatch();
+  const projectPath = resolveProjectPath(xmlItem.sourceData.src);
+  const xmlValMapper = useEditorSelector(state => {
+    const data = state.fileDataMap[xmlItem.sourceData.src];
+    return data?.fileType === "application/xml" ? data.valueMapper : {};
+  });
 
-    useSubscribeFile(xmlItem.sourceData.src, data => {
-      window.$server.getFileData(projectPath).then(data => {
-        switch (data.fileType) {
-          case "image/png":
-          case "image/jpeg":
-          case "application/xml": {
-            dispatch(
-              ActionPatchFileDataMap({
-                src: xmlItem.sourceData.src,
-                fileData: data
-              })
-            );
-            break;
-          }
-        }
-      });
-    });
-
-    return (
-      <>
-        {xmlItem.valueItems.map((valueItem, key) => {
-          return (
-            <XmlValueItem
-              key={key}
-              defaultValue={valueItem.value}
-              value={xmlValMapper[valueItem.template] || ""}
-              valueTemplate={valueItem.template}
-              comment={valueItem.comment}
-              use={use}
-              from={xmlItem.sourceData.src}
-              onChange={value => {
-                // 写入 xml
-                window.$server.writeXmlTemplate({
-                  tag: valueItem.tag,
-                  attributes: valueItem.attributes,
-                  value: value,
-                  src: xmlItem.sourceData.src
-                });
-              }}
-            />
+  useSubscribeFile(xmlItem.sourceData.src, data => {
+    window.$server.getFileData(projectPath).then(data => {
+      switch (data.fileType) {
+        case "image/png":
+        case "image/jpeg":
+        case "application/xml": {
+          dispatch(
+            ActionPatchFileDataMap({
+              src: xmlItem.sourceData.src,
+              fileData: data
+            })
           );
-        })}
-      </>
-    );
-  };
+          break;
+        }
+      }
+    });
+  });
+
+  return (
+    <>
+      {xmlItem.valueItems.map((valueItem, key) => {
+        return (
+          <XmlValueItem
+            key={key}
+            defaultValue={valueItem.value}
+            value={xmlValMapper[valueItem.template] || ""}
+            valueTemplate={valueItem.template}
+            comment={valueItem.comment}
+            use={use}
+            colorFormat={colorFormat}
+            from={xmlItem.sourceData.src}
+            onChange={value => {
+              // 写入 xml
+              window.$server.writeXmlTemplate({
+                tag: valueItem.tag,
+                attributes: valueItem.attributes,
+                value: value,
+                src: xmlItem.sourceData.src
+              });
+            }}
+          />
+        );
+      })}
+    </>
+  );
+};
 
 const XmlValueBlocker: React.FC<{
   className?: string;
   data: TypeXmlBlocker;
+  colorFormat: HEX_FORMAT;
 }> = props => {
   // const value = useProjectXmlValueBySrc(name, sourceData.src);
   return (
@@ -213,7 +219,12 @@ const XmlValueBlocker: React.FC<{
       </div>
       <div className="list">
         {props.data.items.map((xmlItem, key) => (
-          <XmlItem key={key} xmlItem={xmlItem} use={props.data.tag} />
+          <XmlItem
+            key={key}
+            xmlItem={xmlItem}
+            use={props.data.tag}
+            colorFormat={props.colorFormat}
+          />
         ))}
       </div>
     </StyleXmlValueBlocker>
