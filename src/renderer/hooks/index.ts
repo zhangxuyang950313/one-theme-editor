@@ -8,7 +8,7 @@ import {
   ActionSetServerPort
 } from "@/store/global/modules/base/action";
 import { useGlobalSelector, useGlobalDispatch } from "@/store/global";
-import { TypePathConfig } from "src/types/extraConfig";
+import { TypePathCollection } from "src/types/extraConfig";
 import { LOAD_STATUS } from "src/enum";
 import * as electronStore from "src/store";
 import { TypeProjectData } from "src/types/project";
@@ -71,40 +71,8 @@ export function useAsyncUpdater(): (updater: () => void) => void {
 }
 
 // 获取编辑器路径配置
-export function usePathConfig(): Partial<TypePathConfig> {
+export function usePathConfig(): Partial<TypePathCollection> {
   return useGlobalSelector(state => state.base.appPath);
-}
-
-// 初始化编辑器配置数据
-export function useInitEditorConfig(): [LOAD_STATUS, () => Promise<void>] {
-  const [status, setStatus] = useState(LOAD_STATUS.INITIAL);
-  const dispatch = useGlobalDispatch();
-  const fetch = async () => {
-    setStatus(LOAD_STATUS.LOADING);
-    const pathConfig: TypePathConfig = {
-      ...electronStore.config.get("pathConfig"),
-      ELECTRON_LOCAL: remote.app.getLocale(),
-      ELECTRON_TEMP: remote.app.getPath("temp"),
-      ELECTRON_HOME: remote.app.getPath("home"),
-      ELECTRON_DESKTOP: remote.app.getPath("desktop"),
-      ELECTRON_CACHE: remote.app.getPath("cache"),
-      ELECTRON_APP_DATA: remote.app.getPath("appData"),
-      ELECTRON_DOCUMENTS: remote.app.getPath("documents"),
-      ELECTRON_DOWNLOADS: remote.app.getPath("downloads"),
-      ELECTRON_EXE: remote.app.getPath("exe"),
-      ELECTRON_LOGS: remote.app.getPath("logs"),
-      ELECTRON_APP_PATH: remote.app.getAppPath()
-    };
-    electronStore.config.set("pathConfig", pathConfig);
-    dispatch(ActionSetServerPort(electronStore.config.get("serverPort")));
-    dispatch(ActionSetAppConfig(pathConfig));
-    // await sleep(300);
-    setStatus(LOAD_STATUS.SUCCESS);
-  };
-  useLayoutEffect(() => {
-    fetch();
-  }, []);
-  return [status, fetch];
 }
 
 // 合并多个 status 状态
@@ -153,4 +121,28 @@ export function useListenerBroadcast(): {
     });
   }, []);
   return listenerMap;
+}
+
+// 创建带状态的异步函数
+export function useCreatePromiseHook<T>(
+  promise: () => Promise<T>,
+  defaultVal: T
+): [T, LOAD_STATUS, () => Promise<T>] {
+  const [state, setState] = useState<T>(defaultVal);
+  const [status, setStatus] = useState<LOAD_STATUS>(LOAD_STATUS.INITIAL);
+  const handleFetch: () => Promise<T> = async () => {
+    setStatus(LOAD_STATUS.LOADING);
+    // await sleep(300);
+    return promise()
+      .then(data => {
+        setState(data);
+        setStatus(LOAD_STATUS.SUCCESS);
+        return data;
+      })
+      .catch(err => {
+        setStatus(LOAD_STATUS.FAILED);
+        throw err;
+      });
+  };
+  return [state, status, handleFetch];
 }

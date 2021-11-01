@@ -2,7 +2,7 @@ import logSymbols from "log-symbols";
 import pathUtil from "server/utils/pathUtil";
 import PathCollection from "src/data/PathCollection";
 import {
-  TypePathConfig,
+  TypePathCollection,
   TypePathConfigInDoc,
   TypeServerConfig
 } from "src/types/extraConfig";
@@ -15,7 +15,7 @@ console.debug(logSymbols.info, "扩展数据库文件：", pathUtil.EXTRA_DATA_D
 const extraData = createNedb(pathUtil.EXTRA_DATA_DB, { timestampData: false });
 
 // 获取路径配置数据
-export async function getPathConfig(): Promise<TypePathConfig> {
+export async function getPathConfig(): Promise<TypePathCollection> {
   const pathConfig = await extraData.findOne<TypePathConfigInDoc>({
     type: EXTRA_DATA_TYPE.PATH_CONFIG
   });
@@ -24,9 +24,9 @@ export async function getPathConfig(): Promise<TypePathConfig> {
 
 // 添加路径配置
 export async function updatePathConfig(
-  data: Partial<TypePathConfig>
-): Promise<TypePathConfig> {
-  await extraData.update<TypePathConfig>(
+  data: Partial<TypePathCollection>
+): Promise<TypePathCollection> {
+  await extraData.update<TypePathCollection>(
     { type: EXTRA_DATA_TYPE.PATH_CONFIG },
     { type: EXTRA_DATA_TYPE.PATH_CONFIG, ...data },
     { multi: true, upsert: true /*更新所有匹配项目，不存在则创建*/ }
@@ -46,7 +46,7 @@ export async function getServerConfig(): Promise<TypeServerConfig> {
 export async function updateServerConfig(
   data: Partial<TypeServerConfig>
 ): Promise<TypeServerConfig> {
-  await extraData.update<TypePathConfig>(
+  await extraData.update<TypePathCollection>(
     { type: EXTRA_DATA_TYPE.SERVER_CONFIG },
     { type: EXTRA_DATA_TYPE.SERVER_CONFIG, ...data },
     { multi: true, upsert: true /*更新所有匹配项目，不存在则创建*/ }

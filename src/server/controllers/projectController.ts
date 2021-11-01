@@ -181,7 +181,7 @@ export default function projectController(service: Express): void {
     const { query } = request;
     checkParamsKey(query, apiConfig.GET_PROJECT_FILE_DATA.query);
     const { filepath } = query;
-    const root = $reactiveProjectState.get("projectPath");
+    const root = $reactiveState.get("projectPath");
     const fileData = getFileData(path.join(root, filepath));
     response.send(result.success(fileData));
   });

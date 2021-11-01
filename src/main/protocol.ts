@@ -99,21 +99,21 @@ export default function registerProtocol(): void {
   });
 
   protocol.registerBufferProtocol("resource", async (request, response) => {
-    const root = $reactiveProjectState.get("resourcePath");
+    const root = $reactiveState.get("resourcePath");
     const data = await getFilePicResponseData(request.url, root);
     response(data);
   });
 
   protocol.registerBufferProtocol("project", async (request, response) => {
-    const root = $reactiveProjectState.get("projectPath");
+    const root = $reactiveState.get("projectPath");
     const data = await getFilePicResponseData(request.url, root);
     response(data);
   });
 
   // 双向选择协议
   protocol.registerBufferProtocol("src", async (request, response) => {
-    const projectPath = $reactiveProjectState.get("projectPath");
-    const resourcePath = $reactiveProjectState.get("resourcePath");
+    const projectPath = $reactiveState.get("projectPath");
+    const resourcePath = $reactiveState.get("resourcePath");
     const data = await getFilePicResponseData(
       request.url,
       projectPath,

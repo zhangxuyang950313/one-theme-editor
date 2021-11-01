@@ -1,4 +1,4 @@
-import { TypePathConfig } from "src/types/extraConfig";
+import { TypePathCollection } from "src/types/extraConfig";
 import ACTION_TYPES from "@/store/global/actionType";
 
 type TypeActionSetServerPort = {
@@ -8,7 +8,7 @@ type TypeActionSetServerPort = {
 
 type TypeActionSetAppPath = {
   type: typeof ACTION_TYPES.SET_PATH_CONFIG;
-  payload: TypePathConfig;
+  payload: TypePathCollection;
 };
 
 export type TypeActions = TypeActionSetServerPort | TypeActionSetAppPath;
@@ -22,7 +22,7 @@ export function ActionSetServerPort(
 
 // 设置编辑器路径配置
 export function ActionSetAppConfig(
-  payload: TypePathConfig
+  payload: TypePathCollection
 ): TypeActionSetAppPath {
   return { type: ACTION_TYPES.SET_PATH_CONFIG, payload };
 }

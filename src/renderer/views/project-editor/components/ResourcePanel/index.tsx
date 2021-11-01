@@ -9,9 +9,9 @@ import XmlValueBlocker from "./XmlValueBlocker";
 
 const ResourcePanel: React.FC<{
   pageConfig: TypePageConfig;
-  resourceDefList: TypeResourceDefinition[];
+  resourceList: TypeResourceDefinition[];
 }> = props => {
-  const { pageConfig, resourceDefList } = props;
+  const { pageConfig, resourceList: resourceDefList } = props;
   const [selectTabIndex, setSelectTabIndex] = useState(0);
 
   const currentResourceList = resourceDefList[selectTabIndex]?.children || [];

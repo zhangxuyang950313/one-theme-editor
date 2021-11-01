@@ -1,12 +1,12 @@
 import ACTION_TYPES from "@/store/global/actionType";
 import { updateState } from "@/store/utils";
-import { TypePathConfig } from "src/types/extraConfig";
+import { TypePathCollection } from "src/types/extraConfig";
 import PathCollection from "src/data/PathCollection";
 import { TypeActions } from "./action";
 
 type TypeBaseState = {
   port: number;
-  appPath: TypePathConfig;
+  appPath: TypePathCollection;
 };
 
 const baseState: Required<TypeBaseState> = {

@@ -38,7 +38,6 @@ import {
   LAYOUT_ELEMENT_TAG,
   HEX_FORMAT
 } from "src/enum/index";
-import * as electronStore from "src/store";
 import XMLNodeElement from "server/compiler/XMLNodeElement";
 import pathUtil from "server/utils/pathUtil";
 import RegexpUtil from "src/common/utils/RegexpUtil";
@@ -104,7 +103,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
   }
 
   private resolveProjectPath(pathname: string): string {
-    return path.join($reactiveProjectState.get("projectData").root, pathname);
+    return path.join($reactiveState.get("projectData").root, pathname);
   }
 
   // 相对于当前页面目录的路径转为正确的绝对路径

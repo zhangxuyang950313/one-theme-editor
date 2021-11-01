@@ -116,7 +116,7 @@ const FileItem: React.FC<{
             className="press btn-reset"
             onClick={() => {
               const resourcePath = path.join(
-                window.$reactiveProjectState.get("resourcePath"),
+                window.$reactiveState.get("resourcePath"),
                 data.sourceData.src
               );
               window.$server.copyFile({

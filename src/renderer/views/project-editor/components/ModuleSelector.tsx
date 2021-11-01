@@ -7,11 +7,16 @@ import { StaticResourceImage } from "@/components/ImageCollection";
 // 模块选择器
 const ModuleSelector: React.FC<{
   className?: string;
-  moduleList: TypeModuleConfig[];
+  moduleConfigList: TypeModuleConfig[];
   currentModule: TypeModuleConfig;
   onChange: (data: TypeModuleConfig) => void;
 }> = props => {
-  const { className, moduleList, currentModule, onChange } = props;
+  const {
+    className,
+    moduleConfigList: moduleList,
+    currentModule,
+    onChange
+  } = props;
 
   return (
     <StyleModuleSelector className={className}>

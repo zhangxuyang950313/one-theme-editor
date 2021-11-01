@@ -2,7 +2,7 @@ import path from "path";
 import { remote } from "electron";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { message, notification } from "antd";
+import { Empty, Notification, Message } from "@arco-design/web-react";
 import {
   ExportOutlined,
   InfoCircleOutlined,
@@ -12,143 +12,178 @@ import {
   TagsOutlined,
   TabletOutlined
 } from "@ant-design/icons";
-import {
-  useCurrentPageConfig,
-  useModuleConfig,
-  useCurrentResourceDefList,
-  useCurrentModuleList
-} from "@/hooks/resource";
+import { useToggle } from "ahooks";
 import { StyleTopDrag } from "@/style";
 import { TOOLS_BAR_BUTTON } from "src/enum";
-import { useToggle } from "ahooks";
-import { useEditorSelector } from "@/store/editor";
-import usePackProject from "@/hooks/project/usePackProject";
+import { ModuleConfig, PageConfig } from "src/data/ResourceConfig";
+import { TypePageConfig } from "src/types/resource.config";
 import { TypeIconButtonOption } from "@/components/IconButton";
-import ResourcePanel from "./ResourcePanel";
-import Previewer from "./Previewer";
-import ModuleSelector from "./ModuleSelector";
+import { asyncQueue } from "src/common/utils";
+import useFetchProjectData from "@/hooks/project/useFetchProjectData";
+import useFetchResourceConfig from "@/hooks/resource/useFetchResourceConfig";
+import useFetchScenarioConfig from "@/hooks/resource/useFetchScenarioConfig";
+import ProjectData from "src/data/ProjectData";
+import pathUtil from "src/server/utils/pathUtil";
 import EditorToolsBar from "./ToolsBar";
-import StatusBar from "./StatusBar";
+import ModuleSelector from "./ModuleSelector";
 import PageSelector from "./PageSelector";
+import Previewer from "./Previewer";
+import ResourcePanel from "./ResourcePanel";
+import StatusBar from "./StatusBar";
 
 // 编辑区域框架
-const EditorFrame: React.FC = () => {
-  const resourceList = useCurrentResourceDefList();
-  const moduleList = useCurrentModuleList();
-  const pageConfig = useCurrentPageConfig();
-  const [currentModule, setCurrentModule] = useModuleConfig();
-  const projectData = useEditorSelector(state => state.projectData);
-  const packageConfig = useEditorSelector(
-    state => state.scenarioConfig.packageConfig
-  );
-  // const packProject = usePackProject();
+const EditorFrame: React.FC<{ uuid: string }> = props => {
   const [projectInfoVisible, setProjectInfoVisible] = useState(false);
 
-  const [moduleSelector, setModuleSelector] = useToggle(true);
-  const [pageSelector, setPageSelector] = useToggle(true);
-  const [previewSelector, setPreviewSelector] = useToggle(true);
+  const [projectData] = useFetchProjectData(props.uuid);
+  const [resourceConfig] = useFetchResourceConfig(projectData.resourceSrc);
+  const [scenarioConfig] = useFetchScenarioConfig(projectData.scenarioSrc);
 
-  const [leftButtons, setLeftButtons] = useState<TypeIconButtonOption[]>([]);
-  const [rightButtons, setRightButtons] = useState<TypeIconButtonOption[]>([]);
+  // 栏目开关
+  const [displayModuleSelector, setModuleSelector] = useToggle(true);
+  const [displayPageSelector, setPageSelector] = useToggle(true);
+  const [displayPreviewSelector, setPreviewSelector] = useToggle(true);
 
-  // const removeCallback = window.$server.useFilesChange(data => {
-  //   callbackList.current.forEach(item => {
-  //     if (data.root === projectRoot && item.pathname === data.src) {
-  //       item.callback(data.event);
-  //       const fileData = getFileData(path.join(projectRoot, data.src));
-  //       switch (fileData.fileType) {
-  //         case "image/png":
-  //         case "image/jpeg":
-  //         case "application/xml": {
-  //           fileDataMapRef.current[data.src] = fileData;
-  //           dispatch(ActionPatchFileDataMap({ src: data.src, fileData }));
-  //           break;
-  //         }
-  //       }
-  //     }
-  //   });
-  // });
-  // 生命周期结束取消监听
-  // return () => {
-  //   removeCallback();
-  //   callbackList.current = [];
-  // };
+  // 当前模块
+  const [moduleConfig, setModuleConfig] = useState(ModuleConfig.default);
+  // 当前页面
+  const [pageConfig, setPageConfig] = useState(PageConfig.default);
+
+  const moduleConfigList = resourceConfig?.moduleList || [];
+  const [pageConfigList, setPageConfigList] = useState<TypePageConfig[]>([]);
+  const resourceList = pageConfig.resourceList;
+
+  // // 加载当前模块页面配置
+  // const [pageConfigList] = useFetchPageConfList(
+  //   projectData.resourceSrc,
+  //   moduleConfig.pageList.map(item => item.src)
+  // );
+
+  // 添加进程间响应式数据
+  useEffect(() => {
+    if (!projectData) return;
+    window.$reactiveState.set("projectData", projectData);
+    window.$reactiveState.set("projectPath", projectData.root);
+    return () => {
+      window.$reactiveState.set("projectData", ProjectData.default);
+      window.$reactiveState.set("projectPath", "");
+    };
+  }, [projectData]);
 
   useEffect(() => {
-    setLeftButtons([
-      {
-        name: TOOLS_BAR_BUTTON.MODULE_TOGGLE,
-        icon: <DeploymentUnitOutlined />,
-        defaultToggle: moduleSelector,
-        onClick: setModuleSelector.toggle
-      },
-      {
-        name: TOOLS_BAR_BUTTON.PAGE_TOGGLE,
-        icon: <TagsOutlined />,
-        defaultToggle: pageSelector,
-        onClick: setPageSelector.toggle
-      },
-      {
-        name: TOOLS_BAR_BUTTON.PREVIEW_TOGGLE,
-        icon: <TabletOutlined />,
-        defaultToggle: previewSelector,
-        onClick: setPreviewSelector.toggle
+    if (!resourceConfig) return;
+    const resourcePath = path.join(
+      pathUtil.RESOURCE_CONFIG_DIR,
+      resourceConfig.namespace
+    );
+    window.$reactiveState.set("resourcePath", resourcePath);
+  }, [resourceConfig]);
+
+  // 模块默认选第一个
+  useEffect(() => {
+    if (!moduleConfigList[0]) return;
+    setModuleConfig(moduleConfigList[0]);
+  }, [moduleConfigList]);
+
+  // 页面默认选第一个, 没有使用默认
+  useEffect(() => {
+    setPageConfig(pageConfigList[0] || PageConfig.default);
+  }, [pageConfigList]);
+
+  // 加载当前模块页面配置
+  useEffect(() => {
+    if (!projectData.resourceSrc) return;
+    const pageConfDataQueue = moduleConfig.pageList.map(item => async () => {
+      const data = await window.$server.getPageConfigList({
+        namespace: path.dirname(projectData.resourceSrc),
+        config: item.src
+      });
+      // dispatch(ActionPatchPageConfMap(data));
+      return data;
+    });
+    asyncQueue(pageConfDataQueue)
+      .then(setPageConfigList)
+      .catch(err => Notification.error({ content: err.message }));
+  }, [projectData.resourceSrc, moduleConfig]);
+
+  // useEffect(() => {},[pageConfig])
+
+  // 工具栏按钮左侧
+  const [leftButtons] = useState<TypeIconButtonOption[]>([
+    {
+      name: TOOLS_BAR_BUTTON.MODULE_TOGGLE,
+      icon: <DeploymentUnitOutlined />,
+      defaultToggle: displayModuleSelector,
+      onClick: setModuleSelector.toggle
+    },
+    {
+      name: TOOLS_BAR_BUTTON.PAGE_TOGGLE,
+      icon: <TagsOutlined />,
+      defaultToggle: displayPageSelector,
+      onClick: setPageSelector.toggle
+    },
+    {
+      name: TOOLS_BAR_BUTTON.PREVIEW_TOGGLE,
+      icon: <TabletOutlined />,
+      defaultToggle: displayPreviewSelector,
+      onClick: setPreviewSelector.toggle
+    }
+    // { name: TOOLS_BAR_BUTTON.PLACEHOLDER, icon: <div /> }
+    // { name: TOOLS_BAR_BUTTON.DARK, icon: <InfoCircleOutlined /> },
+    // { name: TOOLS_BAR_BUTTON.LIGHT, icon: <InfoCircleOutlined /> }
+  ]);
+  // 工具栏按钮右侧
+  const [rightButtons] = useState<TypeIconButtonOption[]>([
+    { name: TOOLS_BAR_BUTTON.APPLY, icon: <MobileOutlined /> },
+    { name: TOOLS_BAR_BUTTON.SAVE, icon: <FolderOutlined /> },
+    {
+      name: TOOLS_BAR_BUTTON.EXPORT,
+      icon: <ExportOutlined />,
+      onClick: () => {
+        const { root, description, scenarioSrc } = projectData;
+        const { extname } = scenarioConfig.packageConfig;
+        const defaultPath = path.join(
+          path.dirname(projectData.root),
+          `${description.name}.${extname}`
+        );
+        remote.dialog
+          // https://www.electronjs.org/docs/api/dialog#dialogshowopendialogsyncbrowserwindow-options
+          .showSaveDialog({
+            properties: ["createDirectory"],
+            defaultPath,
+            filters: [{ name: extname, extensions: [extname] }]
+          })
+          .then(result => {
+            if (result.canceled) return;
+            if (!result.filePath) {
+              Message.info("未指定任何文件");
+              return;
+            }
+            // packProject(
+            //   {
+            //     scenarioSrc,
+            //     packDir: root,
+            //     outputFile: result.filePath
+            //   },
+            //   data => {
+            //     notification.info({
+            //       message: data.msg,
+            //       description: data.data
+            //     });
+            //   }
+            // );
+          });
       }
-      // { name: TOOLS_BAR_BUTTON.PLACEHOLDER, icon: <div /> }
-      // { name: TOOLS_BAR_BUTTON.DARK, icon: <InfoCircleOutlined /> },
-      // { name: TOOLS_BAR_BUTTON.LIGHT, icon: <InfoCircleOutlined /> }
-    ]);
-    setRightButtons([
-      { name: TOOLS_BAR_BUTTON.APPLY, icon: <MobileOutlined /> },
-      { name: TOOLS_BAR_BUTTON.SAVE, icon: <FolderOutlined /> },
-      {
-        name: TOOLS_BAR_BUTTON.EXPORT,
-        icon: <ExportOutlined />,
-        onClick: () => {
-          const { root, description, scenarioSrc } = projectData;
-          const { extname } = packageConfig;
-          const defaultPath = path.join(
-            path.dirname(projectData.root),
-            `${description.name}.${extname}`
-          );
-          remote.dialog
-            // https://www.electronjs.org/docs/api/dialog#dialogshowopendialogsyncbrowserwindow-options
-            .showSaveDialog({
-              properties: ["createDirectory"],
-              defaultPath,
-              filters: [{ name: extname, extensions: [extname] }]
-            })
-            .then(result => {
-              if (result.canceled) return;
-              if (!result.filePath) {
-                message.info("未指定任何文件");
-                return;
-              }
-              // packProject(
-              //   {
-              //     scenarioSrc,
-              //     packDir: root,
-              //     outputFile: result.filePath
-              //   },
-              //   data => {
-              //     notification.info({
-              //       message: data.msg,
-              //       description: data.data
-              //     });
-              //   }
-              // );
-            });
-        }
-      },
-      {
-        name: TOOLS_BAR_BUTTON.INFO,
-        icon: <InfoCircleOutlined />,
-        onClick: () => {
-          setProjectInfoVisible(true);
-        }
+    },
+    {
+      name: TOOLS_BAR_BUTTON.INFO,
+      icon: <InfoCircleOutlined />,
+      onClick: () => {
+        setProjectInfoVisible(true);
       }
-    ]);
-  }, []);
+    }
+  ]);
+
   return (
     <StyleEditorFrame>
       <StyleTopBar height="30px">
@@ -170,14 +205,18 @@ const EditorFrame: React.FC = () => {
       /> */}
       <div className="editor__container">
         {/* 模块选择器 */}
-        {moduleSelector && (
+        {displayModuleSelector && (
           <div className="editor__module-selector right-border-line">
-            <ModuleSelector
-              className="editor__module-content"
-              moduleList={moduleList}
-              currentModule={currentModule}
-              onChange={setCurrentModule}
-            />
+            {moduleConfigList.length ? (
+              <ModuleSelector
+                className="editor__module-content"
+                moduleConfigList={moduleConfigList}
+                currentModule={moduleConfig}
+                onChange={setModuleConfig}
+              />
+            ) : (
+              <div className="no-config">无模块</div>
+            )}
           </div>
         )}
         {/* 编辑区域 */}
@@ -185,23 +224,24 @@ const EditorFrame: React.FC = () => {
           {/* 主编辑区域 */}
           <div className="editor__content">
             {/* 页面选择器 */}
-            {pageSelector && (
+            {displayPageSelector && (
               <div className="editor__page-selector right-border-line">
-                {currentModule.pageList.length ? (
+                {moduleConfig.pageList.length ? (
                   <PageSelector
                     className="editor__page-content"
-                    pageList={currentModule.pageList}
+                    pageConfigList={pageConfigList}
+                    onChange={setPageConfig}
                   />
                 ) : (
-                  <div className="no-config">无配置</div>
+                  <div className="no-config">无页面</div>
                 )}
               </div>
             )}
             {/* 预览 */}
             {/* TODO: 占位图 */}
-            {previewSelector && (
+            {displayPreviewSelector && (
               <div className="editor__previewer right-border-line">
-                {pageConfig ? (
+                {pageConfig.config ? (
                   <Previewer
                     className="previewer__content"
                     pageConfig={pageConfig}
@@ -209,19 +249,19 @@ const EditorFrame: React.FC = () => {
                     useDash
                   />
                 ) : (
-                  <div className="no-config">未选择页面</div>
+                  <div className="no-config">无预览</div>
                 )}
               </div>
             )}
             {/* 资源编辑区 */}
             <div className="resource-panel ">
-              {pageConfig ? (
+              {pageConfig.config ? (
                 <ResourcePanel
                   pageConfig={pageConfig}
-                  resourceDefList={resourceList}
+                  resourceList={resourceList}
                 />
               ) : (
-                <div className="no-config">无资源数据</div>
+                <Empty className="no-config" description="无资源配置" />
               )}
             </div>
           </div>
@@ -312,9 +352,9 @@ const StyleEditorFrame = styled.div`
           padding: 20px;
           overflow-y: auto;
           width: 340px;
+          background-color: var(--bg-color-secondary);
           .previewer__content {
             width: 300px;
-            background-color: var(--bg-color-secondary);
           }
         }
         .resource-panel {

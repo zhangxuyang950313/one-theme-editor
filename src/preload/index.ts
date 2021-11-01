@@ -1,10 +1,15 @@
 import * as electronStore from "src/store";
-import rendererIpc from "src/ipc/ipc-renderer";
-import { registerReactiveStateRenderer } from "./ReactiveState";
+import { registerRendererIpcToGlobal } from "src/ipc/ipc-renderer";
+import { registerReactiveStateToGlobal } from "./ReactiveState";
 
-Object.assign(global, {
-  $server: rendererIpc,
-  $electronStore: electronStore
-});
+function registerElectronStoreInstanceToGlobal(): void {
+  Object.assign(global, {
+    $electronStore: electronStore
+  });
+}
 
-registerReactiveStateRenderer();
+registerElectronStoreInstanceToGlobal();
+
+registerRendererIpcToGlobal();
+
+registerReactiveStateToGlobal();

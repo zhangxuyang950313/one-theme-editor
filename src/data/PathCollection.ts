@@ -1,12 +1,8 @@
-import {
-  TypeElectronPath,
-  TypePathConfig,
-  TypeServerPath
-} from "src/types/extraConfig";
+import { TypePathCollection } from "src/types/extraConfig";
 import { AbstractDataModel } from "./AbstractDataModel";
 
-export class ElectronPathCollection extends AbstractDataModel<TypeElectronPath> {
-  protected data: TypeElectronPath = {
+export default class PathCollection extends AbstractDataModel<TypePathCollection> {
+  protected data: TypePathCollection = {
     ELECTRON_APP_DATA: "",
     ELECTRON_APP_PATH: "",
     ELECTRON_CACHE: "",
@@ -17,15 +13,8 @@ export class ElectronPathCollection extends AbstractDataModel<TypeElectronPath> 
     ELECTRON_HOME: "",
     ELECTRON_LOCAL: "",
     ELECTRON_LOGS: "",
-    ELECTRON_TEMP: ""
-  };
-  static get default(): TypeElectronPath {
-    return new ElectronPathCollection().create();
-  }
-}
+    ELECTRON_TEMP: "",
 
-export class ServerPathCollection extends AbstractDataModel<TypeServerPath> {
-  protected data: TypeServerPath = {
     CLIENT_DATA: "",
     CLIENT_STATIC: "",
     CLIENT_CACHE: "",
@@ -40,17 +29,7 @@ export class ServerPathCollection extends AbstractDataModel<TypeServerPath> {
     ADB_TOOL: "",
     PACK_TEMPORARY: ""
   };
-  static get default(): TypeServerPath {
-    return new ServerPathCollection().create();
-  }
-}
-
-export default class PathCollection extends AbstractDataModel<TypePathConfig> {
-  protected data: TypePathConfig = {
-    ...new ElectronPathCollection().create(),
-    ...new ServerPathCollection().create()
-  };
-  static get default(): TypePathConfig {
+  static get default(): TypePathCollection {
     return new PathCollection().create();
   }
 }

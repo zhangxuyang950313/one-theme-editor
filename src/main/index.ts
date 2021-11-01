@@ -1,7 +1,6 @@
 import { app, BrowserWindow, ipcMain } from "electron";
-import { registerReactiveStateMain } from "src/preload/ReactiveState";
+import { registerReactiveStateToGlobal } from "src/preload/ReactiveState";
 import mainIpc from "src/ipc/ipc-main";
-// import autoProjectWatcher from "./autoProjectWatcher";
 import registerProtocol from "./protocol";
 import createWindows from "./windows";
 import { moveWindowToCenter, saveCurrentDisplayCenter } from "./utils";
@@ -39,7 +38,7 @@ app.on("ready", async () => {
   // 注册 ipc 服务
   mainIpc.registerServer();
   // 注册主进程响应式数据
-  registerReactiveStateMain();
+  registerReactiveStateToGlobal();
   // 注册工程目录监听器
   // autoProjectWatcher();
   await createWindows.starter();

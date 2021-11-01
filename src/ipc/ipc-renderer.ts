@@ -103,7 +103,7 @@ const rendererIpc = {
   ),
 
   // 获取工程数据
-  getProject: generateIpcInvoke<string, TypeProjectDataDoc>(
+  getProjectDataByUUID: generateIpcInvoke<string, TypeProjectDataDoc>(
     IPC_EVENT.$getProject
   ),
 
@@ -196,3 +196,9 @@ const rendererIpc = {
 };
 
 export default rendererIpc;
+
+export function registerRendererIpcToGlobal(): void {
+  Object.assign(global, {
+    $server: rendererIpc
+  });
+}

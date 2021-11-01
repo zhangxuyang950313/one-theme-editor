@@ -1,13 +1,13 @@
 import ElectronStore from "electron-store";
 import PathCollection from "src/data/PathCollection";
 import defaultTheme from "src/renderer/theme/dark";
-import { TypePathConfig } from "src/types/extraConfig";
+import { TypePathCollection } from "src/types/extraConfig";
 import { Point } from "electron";
 
 type TypeStore = {
   serverPort: number;
   hostname: string;
-  pathConfig: TypePathConfig;
+  pathConfig: TypePathCollection;
   colorRecently: string[];
   themeConfig: typeof defaultTheme;
   screenCenter: Partial<Point>;

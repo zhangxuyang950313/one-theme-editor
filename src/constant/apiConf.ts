@@ -7,7 +7,7 @@ import {
   TypeProjectInfo,
   TypeUiVersion
 } from "src/types/project";
-import { TypePathConfig } from "src/types/extraConfig";
+import { TypePathCollection } from "src/types/extraConfig";
 
 type TypeApiConf<T, Q extends string[]> = Readonly<{
   path: string;
@@ -35,9 +35,9 @@ const apiConfig = {
   SWOP_PATH_CONFIG: createApiConf({
     path: "/path/config/swop",
     bodyKeys: Object.keys(new ElectronPathCollection().create()) as [
-      ...Array<keyof TypePathConfig>
+      ...Array<keyof TypePathCollection>
     ],
-    body: {} as TypePathConfig
+    body: {} as TypePathCollection
   }),
 
   /**

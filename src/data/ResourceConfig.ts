@@ -201,6 +201,10 @@ export class PageConfig extends AbstractDataModel<TypePageConfig> {
     resourceList: [],
     layoutElementList: []
   };
+
+  static get default(): TypePageConfig {
+    return new PageConfig().create();
+  }
 }
 
 // export class ResPageGroup extends AbstractDataModel<TypeResPageGroup> {

@@ -17,7 +17,7 @@ import {
 export async function writeXmlTemplate(
   data: TypeWriteXmlTempPayload
 ): Promise<Record<string, string>> {
-  const project = $reactiveProjectState.get("projectData");
+  const project = $reactiveState.get("projectData");
   const { tag, attributes, value, src } = data;
   const resourceXmlFile = path.join(
     pathUtil.RESOURCE_CONFIG_DIR,

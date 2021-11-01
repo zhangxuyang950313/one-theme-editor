@@ -1,7 +1,7 @@
 import { EXTRA_DATA_TYPE } from "../enum/index";
 import { TypeDatabase } from "../types/index";
 
-export type TypeElectronPath = Readonly<{
+export type TypePathCollection = Readonly<{
   ELECTRON_CACHE: string;
   ELECTRON_TEMP: string;
   ELECTRON_APP_DATA: string;
@@ -13,9 +13,6 @@ export type TypeElectronPath = Readonly<{
   ELECTRON_LOGS: string;
   ELECTRON_APP_PATH: string;
   ELECTRON_LOCAL: string;
-}>;
-
-export type TypeServerPath = Readonly<{
   CLIENT_DATA: string;
   CLIENT_STATIC: string;
   CLIENT_CACHE: string;
@@ -31,11 +28,9 @@ export type TypeServerPath = Readonly<{
   ADB_TOOL: string | null;
 }>;
 
-export type TypePathConfig = Readonly<TypeElectronPath & TypeServerPath>;
-
 export type TypePathConfigInDoc = {
   readonly type: EXTRA_DATA_TYPE.PATH_CONFIG;
-} & TypeDatabase<TypePathConfig>;
+} & TypeDatabase<TypePathCollection>;
 
 export type TypeServerConfig = {
   host: string;

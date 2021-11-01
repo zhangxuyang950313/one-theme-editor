@@ -1,48 +1,39 @@
-import { useQuey } from "@/hooks";
-import { useEffect, useState } from "react";
-import { useParams } from "react-router";
-import { notification } from "antd";
-import { useEditorDispatch, useEditorSelector } from "@/store/editor";
+import { useEffect } from "react";
+import { Notification } from "@arco-design/web-react";
 import { LOAD_STATUS } from "src/enum";
 import { TypeProjectDataDoc } from "src/types/project";
-import { ActionInitEditor, ActionSetProjectData } from "@/store/editor/action";
 import ERR_CODE from "src/constant/errorCode";
+import ProjectData from "src/data/ProjectData";
+import { useCreatePromiseHook } from "../index";
 
 /**
  * 加载工程
  * @param uuid
  * @returns
  */
-export default function useFetchProjectData(): [
-  TypeProjectDataDoc,
-  LOAD_STATUS,
-  () => Promise<void>
-] {
-  // 从 URL 参数中获得工程 uuid
-  const { uuid = "" } = useQuey<{ uuid?: string }>();
-  const dispatch = useEditorDispatch();
-  const projectData = useEditorSelector(state => state.projectData);
-  const [status, setStatus] = useState<LOAD_STATUS>(LOAD_STATUS.INITIAL);
-  const handleFetch = async () => {
-    setStatus(LOAD_STATUS.LOADING);
-    // await sleep(300);
-    return window.$server
-      .getProject(uuid)
-      .then(project => {
-        if (!project) throw new Error(ERR_CODE[2005]);
-        console.log(`载入工程: ${uuid}`, project);
-        dispatch(ActionSetProjectData(project));
-        setStatus(LOAD_STATUS.SUCCESS);
-      })
-      .catch(err => {
-        notification.error({ message: err.message });
-        dispatch(ActionInitEditor());
-        setStatus(LOAD_STATUS.FAILED);
-      });
-  };
+export default function useFetchProjectData(
+  uuid: string
+): [TypeProjectDataDoc, LOAD_STATUS, () => Promise<TypeProjectDataDoc>] {
+  // const dispatch = useEditorDispatch();
+
+  const [projectData, status, doFetch] = useCreatePromiseHook(async () => {
+    try {
+      const project = await window.$server.getProjectDataByUUID(uuid);
+      if (!project) throw new Error(ERR_CODE[2005]);
+      console.log(`载入工程: ${uuid}`, project);
+      // dispatch(ActionSetProjectData(project));
+      return project;
+    } catch (err: any) {
+      Notification.error({ content: err.message });
+      // dispatch(ActionInitEditor());
+      return ProjectData.default;
+    }
+  }, ProjectData.default);
+
   useEffect(() => {
     if (!uuid) return;
-    handleFetch();
+    doFetch();
   }, [uuid]);
-  return [projectData, status, handleFetch];
+
+  return [projectData, status, doFetch];
 }

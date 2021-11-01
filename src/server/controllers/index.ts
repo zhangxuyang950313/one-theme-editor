@@ -6,7 +6,6 @@ import imageController from "./imageController";
 import resourceController from "./resourceController";
 import projectController from "./projectController";
 import fileController from "./fileController";
-import extraController from "./extraController";
 
 const HeaderHandler: RequestHandler = (req, res, next) => {
   //判断路径
@@ -48,9 +47,6 @@ export default function registerServiceController(service: Express): void {
 
   // 文件服务
   fileController(service);
-
-  // 扩展服务
-  extraController(service);
 
   // 包含异步拦截器，一定要放在最后
   service.use(ErrorHandler);

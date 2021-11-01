@@ -1,20 +1,31 @@
 import os from "os";
 import path from "path";
-import { TypeServerPath } from "src/types/extraConfig";
-import * as electronStore from "src/store";
+import { app, ipcRenderer, remote } from "electron";
+import { TypePathCollection } from "src/types/extraConfig";
 
-/**
- * 这些路径是基于 dirname 的相对路径，调用前请确保你的执行路径
- * 目前只是在 server 模块中使用
- */
+// 区分主进程和渲染进程
+const $app = !!ipcRenderer ? remote.app : app;
 
-// const dirname = remote.app.getAppPath();
-const dirname = electronStore.config.get("pathConfig").ELECTRON_APP_PATH;
-const paths: TypeServerPath = {
+const pathUtil: TypePathCollection = {
+  ELECTRON_LOCAL: $app.getLocale(),
+  ELECTRON_TEMP: $app.getPath("temp"),
+  ELECTRON_HOME: $app.getPath("home"),
+  ELECTRON_DESKTOP: $app.getPath("desktop"),
+  ELECTRON_CACHE: $app.getPath("cache"),
+  ELECTRON_APP_DATA: $app.getPath("appData"),
+  ELECTRON_DOCUMENTS: $app.getPath("documents"),
+  ELECTRON_DOWNLOADS: $app.getPath("downloads"),
+  ELECTRON_EXE: $app.getPath("exe"),
+  ELECTRON_LOGS: $app.getPath("logs"),
+  ELECTRON_APP_PATH: $app.getAppPath(),
   // 软件数据
-  CLIENT_DATA: path.resolve(dirname, "../appData"),
+  get CLIENT_DATA(): string {
+    return path.resolve(this.ELECTRON_APP_PATH, "../appData");
+  },
   // 静态资源目录
-  CLIENT_STATIC: path.resolve(dirname, "../static"),
+  get CLIENT_STATIC(): string {
+    return path.resolve(this.ELECTRON_APP_PATH, "../static");
+  },
   // 用户缓存
   get CLIENT_CACHE(): string {
     return path.resolve(this.CLIENT_DATA, "cache");
@@ -72,12 +83,13 @@ const paths: TypeServerPath = {
     return path.resolve(this.BINARY_DIR, ns);
   }
 } as const;
-export default paths;
+
+export default pathUtil;
 
 export function resolveSourcePath(relative: string): string {
-  return path.join(paths.RESOURCE_CONFIG_DIR, relative);
+  return path.join(pathUtil.RESOURCE_CONFIG_DIR, relative);
 }
 
 export function getSCDescriptionByNamespace(namespace: string): string {
-  return path.join(paths.RESOURCE_CONFIG_DIR, namespace, "description.xml");
+  return path.join(pathUtil.RESOURCE_CONFIG_DIR, namespace, "description.xml");
 }

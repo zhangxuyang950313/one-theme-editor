@@ -11,12 +11,12 @@ import ERR_CODE from "src/constant/errorCode";
  * @returns
  */
 export default function useFetchScenarioConfig(
-  scenarioSrc: string,
-  callback?: (config: TypeScenarioConfig) => void
+  scenarioSrc: string | undefined,
+  callback?: (data: TypeScenarioConfig) => void
 ): [TypeScenarioConfig, LOAD_STATUS] {
   const dispatch = useEditorDispatch();
   const [status, setStatus] = useState(LOAD_STATUS.INITIAL);
-  const [config, setConfig] = useState(ScenarioConfigData.default);
+  const [state, setState] = useState(ScenarioConfigData.default);
   useEffect(() => {
     if (!scenarioSrc) return;
     setStatus(LOAD_STATUS.LOADING);
@@ -26,7 +26,7 @@ export default function useFetchScenarioConfig(
         if (!data) throw new Error(ERR_CODE[3002]);
         console.log(`加载场景配置: ${scenarioSrc}`, data);
         dispatch(ActionSetScenarioConfig(data));
-        setConfig(data);
+        setState(data);
         callback && callback(data);
         setStatus(LOAD_STATUS.SUCCESS);
       })
@@ -34,5 +34,5 @@ export default function useFetchScenarioConfig(
         setStatus(LOAD_STATUS.FAILED);
       });
   }, [scenarioSrc]);
-  return [config, status];
+  return [state, status];
 }

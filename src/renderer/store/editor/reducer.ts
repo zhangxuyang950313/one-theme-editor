@@ -14,8 +14,6 @@ import ResourceConfigData, {
 } from "src/data/ResourceConfig";
 import ProjectData from "src/data/ProjectData";
 import ScenarioConfigData from "src/data/ScenarioConfig";
-import * as electronStore from "src/store";
-import pathUtil from "server/utils/pathUtil";
 import { TypeFileData } from "src/types/resource.page";
 import { ACTION_TYPE, TypeEditorActions } from "./action";
 
@@ -56,15 +54,12 @@ export default function EditorReducer(
     // 工程数据
     case ACTION_TYPE.SET_PROJECT_DATA: {
       document.title = action.payload.description.name || document.title;
-      electronStore.config.set("projectData", action.payload);
-      electronStore.config.set("projectPath", action.payload.root);
       return updateState(state, {
         projectData: action.payload
       });
     }
     // 场景数据
     case ACTION_TYPE.SET_SCENARIO_CONFIG: {
-      electronStore.config.set("scenarioConfig", action.payload);
       return updateState(state, {
         scenarioConfig: action.payload
       });
@@ -72,12 +67,6 @@ export default function EditorReducer(
     // 配置数据
     case ACTION_TYPE.SET_RESOURCE_CONFIG: {
       const { moduleList } = action.payload;
-      electronStore.config.set("resourceConfig", action.payload);
-      const resourcePath = path.join(
-        pathUtil.RESOURCE_CONFIG_DIR,
-        action.payload.namespace
-      );
-      electronStore.config.set("resourcePath", resourcePath);
       return updateState(state, {
         resourceConfig: action.payload || defaultState.resourceConfig,
         currentModule: moduleList[0] || defaultState.currentModule,

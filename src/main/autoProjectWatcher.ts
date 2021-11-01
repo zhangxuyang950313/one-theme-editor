@@ -4,7 +4,7 @@ import dirWatcher from "./dirWatcher";
 
 // 监听 electronStore.projectPath 创建和关闭 watcher
 export default function autoProjectWatcher(): void {
-  $reactiveProjectState.addSetterHook((obj, prop, value) => {
+  $reactiveState.addSetterHook((obj, prop, value) => {
     switch (prop) {
       case "projectPath": {
         console.log("change", prop, value);
