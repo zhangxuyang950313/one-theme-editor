@@ -1,14 +1,9 @@
 import path from "path";
 import fse from "fs-extra";
-import apiConfig from "src/constant/apiConf";
-import pathUtil from "server/utils/pathUtil";
-import XmlCompilerExtra from "server/compiler/XmlCompilerExtra";
-import XmlFileCompiler from "server/compiler/XmlFileCompiler";
-import XMLNodeElement from "server/compiler/XMLNodeElement";
-import {
-  TypeWriteXmlTempPayload,
-  UnionTupleToObjectKey
-} from "src/types/request";
+import pathUtil from "src/common/utils/pathUtil";
+import XmlFileCompiler from "src/common/compiler/XmlFileCompiler";
+import XMLNodeElement from "src/common/compiler/XMLNodeElement";
+import { TypeWriteXmlTempPayload } from "src/types/request";
 
 /**
  * 输出被 key value 处理过模板字符串的 xml 模板
@@ -96,16 +91,4 @@ export async function writeXmlTemplate(
   const xmlStr = releaseXml.buildXml();
   fse.writeFileSync(releaseXmlFile, xmlStr);
   return { value, release: releaseXmlFile };
-}
-
-/**
- * 获取 xml 模板 name 属性值对应的 text value
- * @param data
- * @returns
- */
-export function getXmlTempValueByNameAttrVal(
-  data: UnionTupleToObjectKey<typeof apiConfig.GET_XML_TEMP_VALUE.query>
-): string {
-  const xmlElement = new XmlFileCompiler(data.src).getElement();
-  return new XmlCompilerExtra(xmlElement).getValueByName(data.name);
 }

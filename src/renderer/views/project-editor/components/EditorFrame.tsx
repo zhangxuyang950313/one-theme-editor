@@ -23,7 +23,7 @@ import useFetchProjectData from "@/hooks/project/useFetchProjectData";
 import useFetchResourceConfig from "@/hooks/resource/useFetchResourceConfig";
 import useFetchScenarioConfig from "@/hooks/resource/useFetchScenarioConfig";
 import ProjectData from "src/data/ProjectData";
-import pathUtil from "src/server/utils/pathUtil";
+import pathUtil from "src/common/utils/pathUtil";
 import EditorToolsBar from "./ToolsBar";
 import ModuleSelector from "./ModuleSelector";
 import PageSelector from "./PageSelector";

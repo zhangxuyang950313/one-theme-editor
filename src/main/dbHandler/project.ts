@@ -5,10 +5,10 @@ import {
   TypeProjectData,
   TypeProjectDataDoc
 } from "src/types/project";
-import { createNedb } from "server/utils/databaseUtil";
-import ResourceConfigCompiler from "server/compiler/ResourceConfig";
-import pathUtil from "server/utils/pathUtil";
-import ERR_CODE from "src/constant/errorCode";
+import { createNedb } from "src/common/utils/databaseUtil";
+import ResourceConfigCompiler from "src/common/compiler/ResourceConfig";
+import pathUtil from "src/common/utils/pathUtil";
+import ERR_CODE from "src/common/errorCode";
 
 // 频繁修改工程数据，常驻内存
 console.debug(logSymbols.info, "工程数据库文件：", pathUtil.PROJECTS_DB);

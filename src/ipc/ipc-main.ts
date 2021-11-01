@@ -18,14 +18,14 @@ import {
   createProject,
   findProjectByQuery,
   getProjectListByMd5
-} from "server/dbHandler/project";
-import ScenarioConfigCompiler from "src/server/compiler/ScenarioConfig";
-import ResourceConfigCompiler from "server/compiler/ResourceConfig";
-import ScenarioOptions from "server/compiler/ScenarioOptions";
-import PageConfigCompiler from "server/compiler/PageConfig";
-import ERR_CODE from "src/constant/errorCode";
+} from "src/main/dbHandler/project";
+import ScenarioConfigCompiler from "src/common/compiler/ScenarioConfig";
+import ResourceConfigCompiler from "src/common/compiler/ResourceConfig";
+import ScenarioOptions from "src/common/compiler/ScenarioOptions";
+import PageConfigCompiler from "src/common/compiler/PageConfig";
+import ERR_CODE from "src/common/errorCode";
 import { TypeWriteXmlTempPayload } from "src/types/request";
-import { writeXmlTemplate } from "server/services/xmlTemplate";
+import { writeXmlTemplate } from "src/common/xmlTemplate";
 import { TypeFileData } from "src/types/resource.page";
 import { getFileData } from "src/common/utils";
 import IPC_EVENT from "./ipc-event";

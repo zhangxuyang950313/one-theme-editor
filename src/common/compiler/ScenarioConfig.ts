@@ -13,8 +13,8 @@ import ScenarioConfigData, {
   PackageConfig,
   FileTemplate
 } from "src/data/ScenarioConfig";
-import ResourceConfigCompiler from "server/compiler/ResourceConfig";
-import pathUtil from "server/utils/pathUtil";
+import ResourceConfigCompiler from "src/common/compiler/ResourceConfig";
+import pathUtil from "src/common/utils/pathUtil";
 import XmlCompilerExtra from "./XmlCompilerExtra";
 import XmlFileCompiler from "./XmlFileCompiler";
 

@@ -17,7 +17,7 @@ import RootWrapper from "@/RootWrapper";
 import ResourceConfigManager from "@/components/ResourceConfigManager";
 import useFetchResOptionList from "@/hooks/resource/useFetchResOptionList";
 import useFetchScenarioOption from "@/hooks/resource/useFetchScenarioOption";
-import pathUtil from "src/server/utils/pathUtil";
+import pathUtil from "src/common/utils/pathUtil";
 import ProjectForm from "./components/ProjectForm";
 
 // 表单默认值

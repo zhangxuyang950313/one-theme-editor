@@ -38,8 +38,8 @@ import {
   LAYOUT_ELEMENT_TAG,
   HEX_FORMAT
 } from "src/enum/index";
-import XMLNodeElement from "server/compiler/XMLNodeElement";
-import pathUtil from "server/utils/pathUtil";
+import XMLNodeElement from "src/common/compiler/XMLNodeElement";
+import pathUtil from "src/common/utils/pathUtil";
 import RegexpUtil from "src/common/utils/RegexpUtil";
 import TempStringUtil from "src/common/utils/TempStringUtil";
 import XmlFileCompiler from "./XmlFileCompiler";

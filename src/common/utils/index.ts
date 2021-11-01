@@ -6,13 +6,13 @@ import mimeTypes from "mime-types";
 import imageSize from "image-size";
 import dirTree from "directory-tree";
 import ImageData from "src/data/ImageData";
-import ERR_CODE from "src/constant/errorCode";
+import ERR_CODE from "src/common/errorCode";
 import RegexpUtil from "src/common/utils/RegexpUtil";
 import { TypeImageData, TypeImageMapper } from "src/types/project";
 import { TypeFileData } from "src/types/resource.page";
 import { FileData, ImageFileData, XmlFileData } from "src/data/ResourceConfig";
-import XmlFileCompiler from "server/compiler/XmlFileCompiler";
-import XmlCompilerExtra from "server/compiler/XmlCompilerExtra";
+import XmlFileCompiler from "src/common/compiler/XmlFileCompiler";
+import XmlCompilerExtra from "src/common/compiler/XmlCompilerExtra";
 
 export const base64Regex = /^data:image\/\w+;base64,/;
 

@@ -35,7 +35,7 @@
     "typeRoots": ["./types/custom.d.ts"],
     "baseUrl": "./",
     "paths": {
-      "server/*": ["./server/*"],
+      "main/*": ["./main/*"],
       "renderer/*": ["./renderer/*"],
       "src/*": ["./*"],
     }

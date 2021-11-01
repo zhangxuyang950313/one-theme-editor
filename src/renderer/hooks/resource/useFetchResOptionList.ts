@@ -4,7 +4,7 @@ import { useStarterDispatch } from "@/store/starter";
 import { ActionSetResourceOptionList } from "@/store/starter/action";
 import { LOAD_STATUS } from "src/enum";
 import { TypeResourceOption } from "src/types/resource.config";
-import ERR_CODE from "src/constant/errorCode";
+import ERR_CODE from "src/common/errorCode";
 
 /**
  * 获取编辑器资源选项列表列表

@@ -3,7 +3,7 @@ import glob from "glob";
 import fse from "fs-extra";
 import JsZip from "jszip";
 import micromatch from "micromatch";
-import pathUtil from "server/utils/pathUtil";
+import pathUtil from "src/common/utils/pathUtil";
 import { PACK_TYPE } from "src/enum";
 import { asyncQueue } from "src/common/utils";
 import { TypePackConfig } from "src/types/scenario.config";

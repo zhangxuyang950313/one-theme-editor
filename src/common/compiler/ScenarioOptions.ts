@@ -8,11 +8,11 @@ import {
 } from "src/types/scenario.config";
 import { ELEMENT_TAG } from "src/enum/index";
 import ScenarioConfigData, { ScenarioOption } from "src/data/ScenarioConfig";
-import ScenarioConfigCompiler from "server/compiler/ScenarioConfig";
-import XmlCompilerExtra from "server/compiler/XmlCompilerExtra";
-import XmlFileCompiler from "server/compiler/XmlFileCompiler";
-import pathUtil from "server/utils/pathUtil";
-import ERR_CODE from "src/constant/errorCode";
+import ScenarioConfigCompiler from "src/common/compiler/ScenarioConfig";
+import XmlCompilerExtra from "src/common/compiler/XmlCompilerExtra";
+import XmlFileCompiler from "src/common/compiler/XmlFileCompiler";
+import pathUtil from "src/common/utils/pathUtil";
+import ERR_CODE from "src/common/errorCode";
 import XMLNodeElement from "./XMLNodeElement";
 
 export default class ScenarioOptions extends XmlCompilerExtra {

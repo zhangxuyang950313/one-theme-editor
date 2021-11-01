@@ -1,5 +1,5 @@
 import logSymbols from "log-symbols";
-import pathUtil from "server/utils/pathUtil";
+import pathUtil from "src/common/utils/pathUtil";
 import PathCollection from "src/data/PathCollection";
 import {
   TypePathCollection,
@@ -7,7 +7,7 @@ import {
   TypeServerConfig
 } from "src/types/extraConfig";
 import { EXTRA_DATA_TYPE } from "src/enum";
-import { createNedb } from "server/utils/databaseUtil";
+import { createNedb } from "src/common/utils/databaseUtil";
 import ServerConfig from "src/data/ServerConfig";
 
 // 频繁修改工程数据，常驻内存

@@ -4,7 +4,7 @@ import { ActionSetScenarioConfig } from "@/store/editor/action";
 import { LOAD_STATUS } from "src/enum";
 import { TypeScenarioConfig } from "src/types/scenario.config";
 import ScenarioConfigData from "src/data/ScenarioConfig";
-import ERR_CODE from "src/constant/errorCode";
+import ERR_CODE from "src/common/errorCode";
 
 /**
  * 获取当前工程资源配置(projectData.resourceSrc)

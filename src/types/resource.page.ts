@@ -8,7 +8,7 @@ import {
   RESOURCE_PROTOCOL,
   LAYOUT_ELEMENT_TAG
 } from "../enum";
-import XMLNodeBase from "../server/compiler/XMLNodeElement";
+import XMLNodeBase from "../common/compiler/XMLNodeElement";
 import { TypeImageData } from "./project";
 
 /*************************** Resource ***************************/

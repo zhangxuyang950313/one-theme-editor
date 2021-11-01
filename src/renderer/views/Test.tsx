@@ -2,10 +2,10 @@
 
 import React, { useLayoutEffect } from "react";
 import { Button } from "antd";
-import PageConfigCompiler from "server/compiler/PageConfig";
-import XmlCompilerExtra from "server/compiler/XmlCompilerExtra";
-import TempKeyValMapper from "server/compiler/TempKeyValMapper";
-import ResourceConfigCompiler from "server/compiler/ResourceConfig";
+import PageConfigCompiler from "src/common/compiler/PageConfig";
+import XmlCompilerExtra from "src/common/compiler/XmlCompilerExtra";
+import TempKeyValMapper from "src/common/compiler/TempKeyValMapper";
+import ResourceConfigCompiler from "src/common/compiler/ResourceConfig";
 
 const pageFile =
   "/Users/zhangxuyang/mine/one-theme-editor/static/resource/sourceConfig/xiaomi/miui12/wallpaper/desktop.xml";

@@ -1,7 +1,5 @@
 import path from "path";
-import fse from "fs-extra";
 import {
-  app,
   Menu,
   BrowserWindow,
   BrowserWindowConstructorOptions,
@@ -12,8 +10,8 @@ import installExtension, {
   REDUX_DEVTOOLS,
   REACT_DEVELOPER_TOOLS
 } from "electron-devtools-installer";
-import { findProjectByQuery } from "server/dbHandler/project";
 import IPC_EVENT from "src/ipc/ipc-event";
+import { findProjectByQuery } from "src/main/dbHandler/project";
 import { getFileData } from "src/common/utils";
 import { TypeScenarioOption } from "src/types/scenario.config";
 import * as electronStore from "../store/index";

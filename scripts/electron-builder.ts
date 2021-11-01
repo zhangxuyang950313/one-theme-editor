@@ -11,7 +11,6 @@ const buildOptions: Configuration =  {
   files: [
     "release.renderer/**/*", 
     "release.main/**/*", 
-    "release.server/**/*", 
     "static/**/*"
   ],
   // mac: {

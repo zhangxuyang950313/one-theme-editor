@@ -2,7 +2,7 @@ import os from "os";
 import path from "path";
 import childProcess from "child_process";
 import fse from "fs-extra";
-import pathUtil from "server/utils/pathUtil";
+import pathUtil from "src/common/utils/pathUtil";
 
 type TypeRange = readonly [number, number];
 type TypeNinePatchData = {

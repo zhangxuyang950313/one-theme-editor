@@ -1,4 +1,4 @@
-import XMLNodeElement from "server/compiler/XMLNodeElement";
+import XMLNodeElement from "src/common/compiler/XMLNodeElement";
 import {
   TypeResourceConfig,
   TypeResourceOption,

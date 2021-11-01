@@ -16,8 +16,6 @@ export const devtoolsPath = path.resolve(
 
 export const rendererDir = resolvePath("release.renderer");
 
-export const serverFile = resolvePath("release.server/index.js");
-
 export const preloadFile = resolvePath("release.main/preload.js");
 
 export const localUrl = `http://${WDS_SERVER_HOST}:${WDS_SERVER_PORT}`;

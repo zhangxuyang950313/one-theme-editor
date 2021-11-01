@@ -14,7 +14,7 @@ import ResourceConfigData, {
 } from "src/data/ResourceConfig";
 import { TypeUiVersion } from "src/types/project";
 import { ELEMENT_TAG } from "src/enum";
-import pathUtil from "server/utils/pathUtil";
+import pathUtil from "src/common/utils/pathUtil";
 import PageConfigCompiler from "./PageConfig";
 import XMLNodeBase from "./XMLNodeElement";
 import XmlFileCompiler from "./XmlFileCompiler";
