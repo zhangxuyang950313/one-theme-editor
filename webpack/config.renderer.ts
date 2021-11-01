@@ -118,9 +118,9 @@ const config: webpack.ConfigurationFactory = (env, args) => {
      */
     stats: "errors-warnings",
     entry: {
-      starter: entryFile.render.starter,
-      createProject: entryFile.render.createProject,
-      projectEditor: entryFile.render.projectEditor
+      "starter": entryFile.render.starter,
+      "create-project": entryFile.render.createProject,
+      "project-editor": entryFile.render.projectEditor
     },
     output: {
       // 输出目录
@@ -295,13 +295,13 @@ const config: webpack.ConfigurationFactory = (env, args) => {
       new HtmlWebpackPlugin({
         template: path.resolve(rootDir, "public/index.html"), // 指定模板路径
         filename: "project-editor.html", // 最终创建的文件名
-        chunks: ["projectEditor"],
+        chunks: ["project-editor"],
         ...htmlPluginOpt(isDev)
       }),
       new HtmlWebpackPlugin({
         template: path.resolve(rootDir, "public/index.html"), // 指定模板路径
         filename: "create-project.html", // 最终创建的文件名
-        chunks: ["createProject"],
+        chunks: ["create-project"],
         ...htmlPluginOpt(isDev)
       }),
       new HappyPack({

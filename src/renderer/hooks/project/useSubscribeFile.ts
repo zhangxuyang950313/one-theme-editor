@@ -6,7 +6,6 @@ import { ActionPatchFileDataMap } from "@/store/editor/action";
 import { FILE_EVENT } from "src/enum";
 import { TypeFileData } from "src/types/resource.page";
 import { FileData } from "src/data/ResourceConfig";
-import { useProjectRoot } from "./index";
 
 const fileDataMap = new Map<string, { mtime: Date; data: TypeFileData }>();
 
@@ -51,7 +50,7 @@ export default function useSubscribeFile(
   callback?: TypeListener
 ): void {
   const dispatch = useEditorDispatch();
-  const projectRoot = useProjectRoot();
+  const projectRoot = window.$reactiveState.get("projectPath");
   useEffect(() => {
     if (!src) return;
     const file = path.join(projectRoot, src);

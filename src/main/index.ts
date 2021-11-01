@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain } from "electron";
+import { app, BrowserWindow, ipcMain, protocol } from "electron";
 import { registerReactiveStateToGlobal } from "src/preload/ReactiveState";
 import mainIpc from "src/ipc/ipc-main";
 import registerProtocol from "./protocol";
@@ -11,6 +11,11 @@ ipcMain.on("broadcast", ($event, $data: { event: string; data: unknown }) => {
     item.webContents.send($data.event, $data.data);
   });
 });
+
+// Scheme must be registered before the app is ready
+protocol.registerSchemesAsPrivileged([
+  { scheme: "app", privileges: { secure: true, standard: true } }
+]);
 
 app.on("window-all-closed", () => {
   app.quit();

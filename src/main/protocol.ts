@@ -93,6 +93,35 @@ export default function registerProtocol(): void {
   //   }
   // });
 
+  protocol.registerBufferProtocol("app", (request, respond) => {
+    let pathName = new URL(request.url).pathname;
+    pathName = decodeURI(pathName); // Needed in case URL contains spaces
+
+    fse.readFile(path.join(app.getAppPath(), pathName), (error, data) => {
+      if (error) {
+        console.error(`Failed to read ${pathName} on app protocol`, error);
+      }
+      const extension = path.extname(pathName).toLowerCase();
+      let mimeType = "";
+
+      if (extension === ".js") {
+        mimeType = "text/javascript";
+      } else if (extension === ".html") {
+        mimeType = "text/html";
+      } else if (extension === ".css") {
+        mimeType = "text/css";
+      } else if (extension === ".svg" || extension === ".svgz") {
+        mimeType = "image/svg+xml";
+      } else if (extension === ".json") {
+        mimeType = "application/json";
+      } else if (extension === ".wasm") {
+        mimeType = "application/wasm";
+      }
+
+      respond({ mimeType, data });
+    });
+  });
+
   protocol.registerBufferProtocol("local", async (request, response) => {
     const data = await getFilePicResponseData(request.url, "");
     response(data);

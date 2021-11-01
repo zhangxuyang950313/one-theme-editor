@@ -24,6 +24,7 @@ const ButtonGroup: React.FC<{ buttonList: TypeIconButtonOption[] }> = props => {
 const StyleButtonGroup = styled.div`
   display: flex;
   .item {
+    -webkit-app-region: none;
     width: 50px;
     margin: 0 10px;
   }
@@ -52,6 +53,7 @@ const StyleToolsBar = styled.div`
   display: flex;
   flex-shrink: 0;
   box-sizing: border-box;
+  -webkit-app-region: drag;
   .btn-group {
     width: 100%;
     display: flex;

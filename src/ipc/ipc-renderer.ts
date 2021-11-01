@@ -108,9 +108,10 @@ const rendererIpc = {
   ),
 
   // 打开创建工程窗口
-  openCreateProjectWindow: generateIpcInvoke<string, TypeProjectDataDoc>(
-    IPC_EVENT.$openCreateProjectWindow
-  ),
+  openCreateProjectWindow: generateIpcInvoke<
+    TypeScenarioOption,
+    TypeProjectDataDoc
+  >(IPC_EVENT.$openCreateProjectWindow),
 
   // 创建工程
   createProject: generateIpcInvoke<TypeCreateProjectPayload, TypeProjectData>(
@@ -123,8 +124,8 @@ const rendererIpc = {
   ),
 
   // 打开工程编辑器
-  openProjectEditor: generateIpcInvoke<string, void>(
-    IPC_EVENT.$openProjectEditor
+  openProjectEditorWindow: generateIpcInvoke<string, void>(
+    IPC_EVENT.$openProjectEditorWindow
   ),
 
   // 打开启动页面

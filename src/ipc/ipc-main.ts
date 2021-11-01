@@ -139,16 +139,16 @@ const mainIpc = {
     );
 
     // 打开创建工程窗口
-    generateIpcHandle<string, Promise<void>>(
+    generateIpcHandle<TypeScenarioOption, Promise<void>>(
       IPC_EVENT.$openCreateProjectWindow,
-      async scenarioSrc => {
-        await createWindows.createProject(scenarioSrc);
+      async scenarioOption => {
+        await createWindows.createProject(scenarioOption);
       }
     );
 
     // 启动工程编辑器
     generateIpcHandle<string, Promise<void>>(
-      IPC_EVENT.$openProjectEditor,
+      IPC_EVENT.$openProjectEditorWindow,
       async uuid => {
         await createWindows.projectEditor(uuid);
       }

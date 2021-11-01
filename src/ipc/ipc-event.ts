@@ -14,7 +14,7 @@ enum IPC_EVENT {
   $updateProjectInfo = "$updateProjectInfo",
 
   $openCreateProjectWindow = "$openCreateProjectWindow",
-  $openProjectEditor = "$openProjectEditor",
+  $openProjectEditorWindow = "$openProjectEditorWindow",
   $openStarter = "$openStarter",
 
   $startWatchDir = "$watchDirFiles",

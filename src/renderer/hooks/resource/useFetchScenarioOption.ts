@@ -3,17 +3,17 @@ import { ScenarioOption } from "src/data/ScenarioConfig";
 import { TypeScenarioOption } from "src/types/scenario.config";
 
 export default function useFetchScenarioOption(
-  scenarioSrc: string
+  scenarioMd5: string
 ): [TypeScenarioOption] {
   const [state, setState] = useState<TypeScenarioOption>(
     ScenarioOption.default
   );
   useEffect(() => {
-    if (!scenarioSrc) return;
-    window.$server.getScenarioOption(scenarioSrc).then(option => {
+    if (!scenarioMd5) return;
+    window.$server.getScenarioOption(scenarioMd5).then(option => {
       console.log("获取场景选项", option);
       setState(option);
     });
-  }, [scenarioSrc]);
+  }, [scenarioMd5]);
   return [state];
 }

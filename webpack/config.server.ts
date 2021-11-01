@@ -10,8 +10,8 @@ const config: webpack.ConfigurationFactory = (env, args) => {
   return {
     target: "electron-preload",
     node: {
-      __filename: false,
-      __dirname: false
+      __filename: true,
+      __dirname: true
     },
     devtool: false,
     watchOptions: {

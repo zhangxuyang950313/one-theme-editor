@@ -1,6 +1,4 @@
 import { ipcMain, IpcMainEvent, ipcRenderer } from "electron";
-import { usePathConfig } from "renderer/hooks";
-import PathCollection from "src/data/PathCollection";
 import ProjectData from "src/data/ProjectData";
 import IPC_EVENT from "src/ipc/ipc-event";
 

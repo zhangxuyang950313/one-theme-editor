@@ -5,9 +5,9 @@ import { Form } from "@arco-design/web-react";
 import { TypeProjectInfo } from "src/types/project";
 import { TypeFileTempConfig } from "src/types/scenario.config";
 import { ProjectInput } from "@/components/Forms";
+import pathUtil from "src/server/utils/pathUtil";
 
-const defaultPath =
-  window.$electronStore.config.get("pathConfig").ELECTRON_DESKTOP;
+const defaultPath = pathUtil.ELECTRON_DESKTOP;
 
 const ProjectForm: React.FC<{
   projectInfoConfig: TypeFileTempConfig;

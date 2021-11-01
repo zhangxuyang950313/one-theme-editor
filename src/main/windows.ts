@@ -1,4 +1,5 @@
 import path from "path";
+import fse from "fs-extra";
 import {
   app,
   Menu,
@@ -14,13 +15,11 @@ import installExtension, {
 import { findProjectByQuery } from "server/dbHandler/project";
 import IPC_EVENT from "src/ipc/ipc-event";
 import { getFileData } from "src/common/utils";
+import { TypeScenarioOption } from "src/types/scenario.config";
 import * as electronStore from "../store/index";
-import { getUrl, isDev } from "./constant";
+import { preloadFile, getUrl, isDev } from "./constant";
 import menuTemplate from "./menu";
 import dirWatcher from "./dirWatcher";
-
-// const preload = path.resolve(app.getAppPath(), "../release.server/index");
-const preload = path.resolve(app.getAppPath(), "../release.main/preload");
 
 const backgroundColor =
   electronStore.config.get("themeConfig")?.["@background-color"] ?? "white";
@@ -60,7 +59,7 @@ const windowNormalizeOptions: BrowserWindowConstructorOptions = {
     enableRemoteModule: true,
     contextIsolation: false,
     devTools: isDev || true,
-    preload,
+    preload: preloadFile,
     zoomFactor: 1.0
     // maximize: true
   },
@@ -88,9 +87,9 @@ const createWindows = {
       ...windowNormalizeOptions,
       resizable: false,
       fullscreenable: false,
-      show: false
+      show: true
     });
-    devToolsHandler(win);
+    // devToolsHandler(win);
     win.loadURL(getUrl.starter());
     // win.loadURL(getUrl.projectEditor("6d312b14-2013-42e2-93d3-3e64beda25d1"));
     win.on("ready-to-show", () => win.show());
@@ -98,7 +97,9 @@ const createWindows = {
   },
 
   // 创建工程窗口
-  async createProject(scenarioSrc: string): Promise<BrowserWindow> {
+  async createProject(
+    scenarioOption: TypeScenarioOption
+  ): Promise<BrowserWindow> {
     const win = new BrowserWindow({
       ...windowNormalizeOptions,
       width: 500,
@@ -110,7 +111,7 @@ const createWindows = {
       modal: true
     });
     devToolsHandler(win);
-    await win.loadURL(getUrl.createProject(scenarioSrc));
+    await win.loadURL(getUrl.createProject(scenarioOption));
     return win;
   },
 

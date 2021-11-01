@@ -2,7 +2,6 @@ import path from "path";
 import fse from "fs-extra";
 import { dialog, remote } from "electron";
 
-import * as electronStore from "src/store";
 import { isDev } from "@/core/constant";
 import { useQuey } from "@/hooks";
 import { TypeProjectInfo } from "src/types/project";
@@ -18,6 +17,7 @@ import RootWrapper from "@/RootWrapper";
 import ResourceConfigManager from "@/components/ResourceConfigManager";
 import useFetchResOptionList from "@/hooks/resource/useFetchResOptionList";
 import useFetchScenarioOption from "@/hooks/resource/useFetchScenarioOption";
+import pathUtil from "src/server/utils/pathUtil";
 import ProjectForm from "./components/ProjectForm";
 
 // 表单默认值
@@ -31,7 +31,7 @@ const initialValues = {
   uiVersion: "10"
 };
 
-const defaultPath = electronStore.config.get("pathConfig").ELECTRON_DESKTOP;
+const defaultPath = pathUtil.ELECTRON_DESKTOP;
 
 const closeCurrentWindow = (beforeClose?: () => boolean) => {
   if (beforeClose && beforeClose()) {
@@ -47,7 +47,8 @@ const closeCurrentWindow = (beforeClose?: () => boolean) => {
 
 // 创建主题按钮
 const CreateProject: React.FC = () => {
-  const { scenarioSrc = "" } = useQuey<{ scenarioSrc?: string }>();
+  const { scenarioSrc = "", scenarioName = "" } =
+    useQuey<{ scenarioSrc?: string; scenarioName?: string }>();
   // 当前步骤
   const [curStep, setCurStep] = useState(0);
   // 创建状态
@@ -67,7 +68,7 @@ const CreateProject: React.FC = () => {
   const [scenarioOption] = useFetchScenarioOption(scenarioSrc);
 
   // 配置列表
-  const { state: resourceOptionList } = useFetchResOptionList(scenarioSrc);
+  const [resourceOptionList] = useFetchResOptionList(scenarioSrc);
 
   // 工程信息配置
   const projectInfoConfig = scenarioOption.fileTempList.find(
@@ -324,7 +325,7 @@ const CreateProject: React.FC = () => {
   return (
     <StyleCreateProject>
       <span className="title">
-        创建工程
+        创建{decodeURI(scenarioName) || "工程"}
         <IconClose
           className="close-btn"
           onClick={() => closeCurrentWindow(() => true)}

@@ -1,7 +1,7 @@
 import { Configuration } from 'electron-builder'
 const buildOptions: Configuration =  {
   productName: "one-theme-editor",
-  appId: "com.editor.theme.TypeSourceOriginPageConf",
+  appId: "com.editor.theme.one",
   copyright: "sunny-20200321",
   extends: null,
   compression: "store",

@@ -43,9 +43,7 @@ const ProjectManager: React.FC<{
         </div>
         <Button
           type="primary"
-          onClick={() => {
-            window.$server.openCreateProjectWindow(scenarioOption.src);
-          }}
+          onClick={() => window.$server.openCreateProjectWindow(scenarioOption)}
         >
           开始创作
         </Button>
@@ -59,7 +57,7 @@ const ProjectManager: React.FC<{
                 hoverable
                 data={item}
                 onClick={async () => {
-                  await window.$server.openProjectEditor(item.uuid);
+                  await window.$server.openProjectEditorWindow(item.uuid);
                   remote.getCurrentWindow().close();
                 }}
               />

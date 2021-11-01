@@ -10,11 +10,9 @@ import ERR_CODE from "src/constant/errorCode";
  * 获取编辑器资源选项列表列表
  * @returns
  */
-export default function useFetchResOptionList(scenarioSrc: string): {
-  state: TypeResourceOption[];
-  status: LOAD_STATUS;
-  fetch: () => Promise<void>;
-} {
+export default function useFetchResOptionList(
+  scenarioSrc: string
+): [TypeResourceOption[], LOAD_STATUS, () => Promise<void>] {
   const [state, setState] = useState<TypeResourceOption[]>([]);
   const [status, setStatus] = useState(LOAD_STATUS.INITIAL);
   const dispatch = useStarterDispatch();
@@ -40,5 +38,5 @@ export default function useFetchResOptionList(scenarioSrc: string): {
   useLayoutEffect(() => {
     fetch();
   }, [scenarioSrc]);
-  return { state, status, fetch };
+  return [state, status, fetch];
 }
