@@ -16,14 +16,14 @@ import ScenarioConfigData, {
 import ResourceConfigCompiler from "src/common/compiler/ResourceConfig";
 import pathUtil from "src/common/utils/pathUtil";
 import XmlCompilerExtra from "./XmlCompilerExtra";
-import XmlFileCompiler from "./XmlFileCompiler";
+import XmlCompiler from "./XmlCompiler";
 
 // 解析场景配置
 export default class ScenarioConfigCompiler extends XmlCompilerExtra {
   // 从文件创建实例
   static from(src: string): ScenarioConfigCompiler {
     const file = path.join(pathUtil.RESOURCE_CONFIG_DIR, src);
-    const element = new XmlFileCompiler(file).getElement();
+    const element = new XmlCompiler(file).getElement();
     return new ScenarioConfigCompiler(element);
   }
 

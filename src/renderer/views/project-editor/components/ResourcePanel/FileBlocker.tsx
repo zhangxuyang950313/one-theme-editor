@@ -2,7 +2,8 @@ import path from "path";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { remote } from "electron";
-import { notification, Tooltip } from "antd";
+import { Tooltip } from "antd";
+import { Notification } from "@arco-design/web-react";
 import {
   DeleteOutlined,
   ImportOutlined,
@@ -14,6 +15,7 @@ import useSubscribeFile from "@/hooks/project/useSubscribeFile";
 import { resolveProjectPath } from "src/common/utils/pathUtil";
 import ImageDisplay from "./ImageDisplay";
 import InfoDisplay from "./InfoDisplay";
+import StickyTab from "./StickyTab";
 
 const FileItem: React.FC<{
   className?: string;
@@ -132,7 +134,7 @@ const FileItem: React.FC<{
             className="press btn-delete"
             onClick={() => {
               window.$server.deleteFile(projectPath).catch((err: Error) => {
-                notification.warn({ message: err.message, top: 100 });
+                Notification.warning({ content: err.message });
               });
             }}
           />
@@ -203,9 +205,7 @@ const FileBlocker: React.FC<{
 
   return (
     <StyleFileBlocker className={className}>
-      <div className="title-container">
-        <span className="title">{data.name}</span>
-      </div>
+      <StickyTab content={data.name} />
       <div className="list">
         {data.items.map((item, key) => (
           <FileItem className="item" key={key} data={item} />
@@ -218,20 +218,6 @@ const FileBlocker: React.FC<{
 const StyleFileBlocker = styled.div`
   margin-bottom: 20px;
   padding: 20px 0;
-  .title-container {
-    z-index: 2;
-    position: sticky;
-    top: 0px;
-    padding: 6px 20px;
-    background-color: ${({ theme }) => theme["@background-color-thirdly"]};
-    margin-bottom: 20px;
-    border-bottom: 1px solid;
-    border-bottom-color: ${({ theme }) => theme["@border-color-thirdly"]};
-    .title {
-      color: ${({ theme }) => theme["@text-color"]};
-      font-size: ${({ theme }) => theme["@text-size-title"]};
-    }
-  }
   .list {
     display: flex;
     flex-wrap: wrap;

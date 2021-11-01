@@ -1,5 +1,5 @@
 import { useState, useLayoutEffect } from "react";
-import { message } from "antd";
+import { Message } from "@arco-design/web-react";
 import { useStarterDispatch } from "@/store/starter";
 import { ActionSetResourceOptionList } from "@/store/starter/action";
 import { LOAD_STATUS } from "src/enum";
@@ -30,7 +30,7 @@ export default function useFetchResourceOptionList(
       })
       .catch(err => {
         const content = ERR_CODE[3002];
-        message.error({ content });
+        Message.error({ content });
         console.log(`${content}: ${err}`);
         setStatus(LOAD_STATUS.FAILED);
       });

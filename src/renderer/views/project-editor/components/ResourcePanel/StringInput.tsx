@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Input } from "antd";
+import { Input } from "@arco-design/web-react";
 import { RightCircleOutlined } from "@ant-design/icons";
 
 const StringInput: React.FC<{
@@ -20,7 +20,7 @@ const StringInput: React.FC<{
         className="input"
         placeholder={defaultValue}
         value={value}
-        onChange={e => onChange(e.target.value)}
+        onChange={value => onChange(value)}
       />
     </StyleNumberInput>
   );

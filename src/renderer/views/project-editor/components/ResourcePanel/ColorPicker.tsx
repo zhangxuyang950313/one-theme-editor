@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { RgbaObject } from "hex-rgb";
-import { Input, message, Tooltip } from "antd";
-import { RightCircleOutlined } from "@ant-design/icons";
+import { Tooltip } from "antd";
+import { Input, Message } from "@arco-design/web-react";
+import { IconRight } from "@arco-design/web-react/icon";
 import { RGBColor, SketchPicker } from "react-color";
 import ColorUtil, { HEX_FORMAT } from "src/common/utils/ColorUtil";
 import { StyleGirdBackground } from "@/style";
@@ -34,15 +35,26 @@ const StyleColorBox = styled(StyleGirdBackground)<{ color: string }>`
   height: 36px;
   border-radius: 6px;
   border: 3px solid;
-  border-color: ${({ theme }) => theme["@border-color-base"]};
+  border-color: ${({ color }) =>
+    color ? "var(--color-secondary-disabled)" : "transparent"};
   box-sizing: border-box;
+  &::before {
+    content: "×";
+    position: absolute;
+    color: var(--color-text-2);
+    font-size: 25px;
+    width: 100%;
+    height: 100%;
+    line-height: 100%;
+    text-align: center;
+  }
   &::after {
     content: "";
     position: absolute;
     width: 100%;
     height: 100%;
     border-radius: 4px;
-    background-color: ${({ color }) => color};
+    background-color: ${({ color }) => color || "transparent"};
   }
 `;
 
@@ -164,7 +176,7 @@ const ColorPicker: React.FC<{
       setDefaultColor(ColorUtil.create(defaultValue, colorFormat).toRGBAHex());
     } catch (err: any) {
       console.log(err);
-      message.warn(`默认颜色格式错误"${defaultValue}"`);
+      Message.warning(`默认颜色格式错误"${defaultValue}"`);
     }
   }, [defaultValue]);
 
@@ -210,7 +222,7 @@ const ColorPicker: React.FC<{
       onChange(inputColor);
     } catch (err: any) {
       setInputColor(value);
-      message.warn(err.message);
+      Message.warning(err.message);
     }
   };
 
@@ -218,10 +230,12 @@ const ColorPicker: React.FC<{
     <StyleColorPicker>
       <div className="content-wrapper">
         <ColorBox color={defaultColor} tipColor={defaultValue} />
-        <RightCircleOutlined
-          className="middle-button"
-          onClick={() => onChange(defaultValue)}
-        />
+        <Tooltip title="恢复默认">
+          <IconRight
+            className="middle-button"
+            onClick={() => onChange(defaultValue)}
+          />
+        </Tooltip>
         <ColorPickerBox
           color={colorRGBAHex}
           tipColor={inputColor}
@@ -234,7 +248,7 @@ const ColorPicker: React.FC<{
           className="color-input"
           defaultValue={inputColor}
           placeholder={defaultValue}
-          onChange={e => setInputColor(e.target.value)}
+          onChange={value => setInputColor(value)}
           onBlur={e => onInputBlur(e.target.value)}
         />
       </div>

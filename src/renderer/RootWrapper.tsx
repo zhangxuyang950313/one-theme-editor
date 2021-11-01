@@ -7,8 +7,8 @@ import styled, { createGlobalStyle, ThemeProvider } from "styled-components";
 import "antd/dist/antd.css"; // antd 样式
 // import zhCN from "antd/lib/locale/zh_CN"; // antd 中文
 
-// import "@arco-design/theme-one-editor/css/arco.css"; // arco.design
-import "@arco-design/web-react/dist/css/arco.css"; // arco.design
+import "@arco-design/theme-one-editor/css/arco.css"; // arco.design
+// import "@arco-design/web-react/dist/css/arco.css"; // arco.design
 
 // import { ConfigProvider } from "antd";
 import * as electronStore from "src/store";

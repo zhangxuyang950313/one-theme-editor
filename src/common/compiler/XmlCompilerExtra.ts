@@ -3,7 +3,7 @@ import { getPlaceholderVal } from "src/common/utils/index";
 import { TypeXmlTempKeyValMap } from "src/types/resource.page";
 import { TypeKeyValue } from "src/types";
 import XMLNodeElement from "./XMLNodeElement";
-import XmlFileCompiler from "./XmlFileCompiler";
+import XmlCompiler from "./XmlCompiler";
 import TempKeyValMapper from "./TempKeyValMapper";
 
 export default class XmlCompilerExtra extends XMLNodeElement {
@@ -41,9 +41,7 @@ export default class XmlCompilerExtra extends XMLNodeElement {
    */
   public replacePlaceholderByValFile(valuesFile: string): XMLNodeElement {
     const kvList = new TempKeyValMapper(valuesFile).getKeyValList();
-    return super.createInstance(
-      XmlFileCompiler.compile(this.generateXmlByKeyVal(kvList))
-    );
+    return XmlCompiler.fromString(this.generateXmlByKeyVal(kvList));
   }
 
   /**
@@ -65,8 +63,7 @@ export default class XmlCompilerExtra extends XMLNodeElement {
    * @returns
    */
   public getNameValueMapObj(kvList: TypeKeyValue[]): TypeXmlTempKeyValMap {
-    return super
-      .createInstance(XmlFileCompiler.compile(this.generateXmlByKeyVal(kvList)))
+    return XmlCompiler.fromString(this.generateXmlByKeyVal(kvList))
       .getChildrenFirstElementNode()
       .getChildrenNodes()
       .reduce<TypeXmlTempKeyValMap>((obj, item) => {

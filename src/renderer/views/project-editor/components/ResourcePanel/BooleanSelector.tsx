@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Radio } from "antd";
+import { Radio } from "@arco-design/web-react";
 
 const BooleanSelector: React.FC<{
   value: string;
@@ -10,7 +10,11 @@ const BooleanSelector: React.FC<{
 
   return (
     <StyleBooleanSelector>
-      <Radio.Group value={value} onChange={e => onChange(e.target.value)}>
+      <Radio.Group
+        type="button"
+        value={value}
+        onChange={value => onChange(value)}
+      >
         <Radio value="">缺省</Radio>
         <Radio value="true">true</Radio>
         <Radio value="false">false</Radio>

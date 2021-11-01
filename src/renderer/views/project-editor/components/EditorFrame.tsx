@@ -17,7 +17,7 @@ import { StyleTopDrag } from "@/style";
 import { TOOLS_BAR_BUTTON } from "src/enum";
 import { ModuleConfig, PageConfig } from "src/data/ResourceConfig";
 import { TypePageConfig } from "src/types/resource.config";
-import { TypeIconButtonOption } from "@/components/IconButton";
+import { TypeIconButtonOption } from "@/components/one-ui/IconButton";
 import { asyncQueue } from "src/common/utils";
 import useFetchProjectData from "@/hooks/project/useFetchProjectData";
 import useFetchResourceConfig from "@/hooks/resource/useFetchResourceConfig";
@@ -278,8 +278,8 @@ const StyleTopBar = styled(StyleTopDrag)`
   flex-shrink: 0;
   padding: 0 100px;
   display: flex;
-  background-color: ${({ theme }) => theme["@background-color-thirdly"]};
-  border-bottom: 1px solid ${({ theme }) => theme["@border-color-thirdly"]};
+  background-color: var(--color-bg-4);
+  border-bottom: 1px solid var(--color-secondary);
   .title {
     margin: auto;
     color: ${({ theme }) => theme["@text-color"]};
@@ -291,11 +291,8 @@ const StyleEditorFrame = styled.div`
   height: 100vh;
   display: flex;
   flex-direction: column;
-  --border-color-thirdly: ${({ theme }) => theme["@border-color-thirdly"]};
-  --bg-color-thirdly: ${({ theme }) => theme["@background-color-thirdly"]};
-  --bg-color-secondary: ${({ theme }) => theme["@background-color-secondary"]};
   .right-border-line {
-    border-right: 1px solid var(--border-color-thirdly);
+    border-right: 1px solid var(--color-secondary);
   }
   .no-config {
     width: 100%;
@@ -303,11 +300,11 @@ const StyleEditorFrame = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    color: ${({ theme }) => theme["@disabled-color"]};
+    color: var(--color-text-4);
   }
   .editor__tools-bar {
-    background-color: var(--bg-color-thirdly);
-    border-bottom: 1px solid var(--border-color-thirdly);
+    background-color: var(--color-bg-4);
+    border-bottom: 1px solid var(--color-secondary);
   }
   .editor__container {
     height: 100%;
@@ -319,7 +316,7 @@ const StyleEditorFrame = styled.div`
       width: 80px;
       overflow-y: auto;
       overflow-x: hidden;
-      background-color: var(--bg-color-thirdly);
+      background-color: var(--color-bg-5);
       .editor__module-content {
         width: 80px;
         margin: 0 auto;
@@ -342,7 +339,7 @@ const StyleEditorFrame = styled.div`
           width: 120px;
           padding: 10px;
           overflow-y: auto;
-          background-color: var(--bg-color-secondary);
+          background-color: var(--color-bg-2);
           .editor__page-content {
             width: 100px;
           }
@@ -352,7 +349,7 @@ const StyleEditorFrame = styled.div`
           padding: 20px;
           overflow-y: auto;
           width: 340px;
-          background-color: var(--bg-color-secondary);
+          background-color: var(--color-bg-3);
           .previewer__content {
             width: 300px;
           }
@@ -361,7 +358,7 @@ const StyleEditorFrame = styled.div`
           flex: 1;
           flex-shrink: 0;
           overflow-y: auto;
-          background-color: var(--bg-color-thirdly);
+          background-color: var(--color-bg-5);
         }
       }
     }
@@ -370,8 +367,8 @@ const StyleEditorFrame = styled.div`
     flex-grow: 1;
     flex-shrink: 0;
     height: 30px;
-    border-top: 1px solid var(--border-color-thirdly);
-    background-color: var(--bg-color-thirdly);
+    border-top: 1px solid var(--color-secondary-disabled);
+    background-color: var(--color-bg-4);
   }
 `;
 

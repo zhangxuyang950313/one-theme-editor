@@ -17,7 +17,7 @@ import { ELEMENT_TAG } from "src/enum";
 import pathUtil from "src/common/utils/pathUtil";
 import PageConfigCompiler from "./PageConfig";
 import XMLNodeBase from "./XMLNodeElement";
-import XmlFileCompiler from "./XmlFileCompiler";
+import XmlCompiler from "./XmlCompiler";
 
 /**
  * 解析 配置模板的配置文件 ResourceConfig.src
@@ -25,7 +25,7 @@ import XmlFileCompiler from "./XmlFileCompiler";
  * <ResourceConfig src="xiaomi/miui12/description.xml"/>
  * ```
  */
-export default class ResourceConfigCompiler extends XmlFileCompiler {
+export default class ResourceConfigCompiler extends XmlCompiler {
   // xiaomi/miui12
   private namespace: string;
   constructor(pathname: string) {

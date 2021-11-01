@@ -4,7 +4,7 @@ import { TypeScenarioOption } from "src/types/scenario.config";
 import { WDS_SERVER_HOST, WDS_SERVER_PORT } from "../../webpack/constant";
 
 function resolvePath(src: string) {
-  return path.join(app.getAppPath(), isDev ? ".." : "", src);
+  return path.join(app.getAppPath(), "..", src);
 }
 
 export const isDev = process.env.NODE_ENV !== "production";

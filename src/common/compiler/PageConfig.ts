@@ -42,7 +42,7 @@ import XMLNodeElement from "src/common/compiler/XMLNodeElement";
 import pathUtil from "src/common/utils/pathUtil";
 import RegexpUtil from "src/common/utils/RegexpUtil";
 import TempStringUtil from "src/common/utils/TempStringUtil";
-import XmlFileCompiler from "./XmlFileCompiler";
+import XmlCompiler from "./XmlCompiler";
 import XmlCompilerExtra from "./XmlCompilerExtra";
 
 export default class PageConfigCompiler extends XMLNodeElement {
@@ -62,7 +62,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
       data.namespace,
       data.config
     );
-    super(new XmlFileCompiler(file).getElement());
+    super(new XmlCompiler(file).getElement());
     this.configFile = file;
     this.pageNamespace = path.dirname(data.config);
     this.pageConfig = path.normalize(data.config);
@@ -463,7 +463,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
           let defaultVal = this.xmlValueCache.get(cacheKey);
           if (!defaultVal) {
             defaultVal = new XmlCompilerExtra(
-              XmlFileCompiler.from(
+              XmlCompiler.fromFile(
                 this.resolveResourcePath(sourceData.src)
               ).getElement()
             ).findTextByTagAndAttrs(tagname, attributes);

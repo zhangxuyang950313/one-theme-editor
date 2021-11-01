@@ -4,7 +4,9 @@
 import React, { useRef } from "react";
 import styled from "styled-components";
 
-import IconButton, { TypeIconButtonOption } from "@/components/IconButton";
+import IconButton, {
+  TypeIconButtonOption
+} from "@/components/one-ui/IconButton";
 import { TOOLS_BAR_BUTTON } from "src/enum";
 
 const ButtonGroup: React.FC<{ buttonList: TypeIconButtonOption[] }> = props => {
@@ -49,7 +51,7 @@ const ToolsBar: React.FC<{
 
 const StyleToolsBar = styled.div`
   width: 100%;
-  padding: 10px 10px 5px 10px;
+  padding: 15px 10px 10px 10px;
   display: flex;
   flex-shrink: 0;
   box-sizing: border-box;

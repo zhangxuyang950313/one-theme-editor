@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { InputNumber } from "antd";
+import { InputNumber } from "@arco-design/web-react";
 import { RightCircleOutlined } from "@ant-design/icons";
 
 const NumberInput: React.FC<{
@@ -13,19 +13,18 @@ const NumberInput: React.FC<{
   return (
     <StyleNumberInput>
       <div className="content-wrapper">
-        <InputNumber disabled keyboard className="input" value={defaultValue} />
+        <InputNumber disabled className="input" value={defaultValue} />
         <RightCircleOutlined
           className="middle-button"
           onClick={() => onChange(defaultValue)}
         />
         <InputNumber
-          keyboard
           className="input"
           placeholder={defaultValue}
           value={value}
           onChange={val => {
             if (isNaN(Number(val))) return;
-            onChange(val);
+            onChange(String(val));
           }}
         />
       </div>

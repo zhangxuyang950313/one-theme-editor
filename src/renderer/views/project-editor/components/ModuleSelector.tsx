@@ -11,16 +11,11 @@ const ModuleSelector: React.FC<{
   currentModule: TypeModuleConfig;
   onChange: (data: TypeModuleConfig) => void;
 }> = props => {
-  const {
-    className,
-    moduleConfigList: moduleList,
-    currentModule,
-    onChange
-  } = props;
+  const { className, moduleConfigList, currentModule, onChange } = props;
 
   return (
     <StyleModuleSelector className={className}>
-      {moduleList.map((item, key) => (
+      {moduleConfigList.map((item, key) => (
         <Tooltip key={key} title={item.name} placement="right">
           <div className="icon-wrapper" onClick={() => onChange(item)}>
             <StaticResourceImage

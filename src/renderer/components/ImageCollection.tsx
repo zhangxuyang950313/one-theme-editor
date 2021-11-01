@@ -1,26 +1,9 @@
 import React, { useState, forwardRef, useImperativeHandle } from "react";
-import {
-  useLoadImageLazy,
-  useLoadImageByPath,
-  useLoadImage
-} from "@/hooks/image";
+import { useLoadImageLazy, useLoadImage } from "@/hooks/image";
 import useSubscribeFile from "@/hooks/project/useSubscribeFile";
 import { FILE_EVENT } from "src/enum";
 
 type TypeReactImageElement = JSX.IntrinsicElements["img"];
-
-/**
- * 封装 img
- * 用于显示本地路径的图片
- * @param props 和 img 标签具有相同的属性
- */
-export const LocalImage = forwardRef<HTMLImageElement, TypeReactImageElement>(
-  function LocalImage(props, ref) {
-    const url = useLoadImageByPath(props.src || "");
-    const show = url && props.src;
-    return show ? <img ref={ref} {...props} src={url} alt={props.src} /> : null;
-  }
-);
 
 /**
  * 封装 img 为预加载图片

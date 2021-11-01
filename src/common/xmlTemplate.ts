@@ -1,9 +1,10 @@
 import path from "path";
 import fse from "fs-extra";
 import pathUtil from "src/common/utils/pathUtil";
-import XmlFileCompiler from "src/common/compiler/XmlFileCompiler";
+import XmlCompiler from "src/common/compiler/XmlCompiler";
 import XMLNodeElement from "src/common/compiler/XMLNodeElement";
 import { TypeWriteXmlTempPayload } from "src/types/request";
+import { Element } from "xml-js";
 
 /**
  * 输出被 key value 处理过模板字符串的 xml 模板
@@ -38,13 +39,13 @@ export async function writeXmlTemplate(
     textNode.setTextNodeValue(value);
   }
 
-  const releaseXml = XmlFileCompiler.from(releaseXmlFile);
+  const releaseXml = XmlCompiler.fromFile(releaseXmlFile);
 
   // 职责链
   const duty = {
     // 文件存在但为空
     fileIsEmpty() {
-      const templateNode = XmlFileCompiler.from(resourceXmlFile);
+      const templateNode = XmlCompiler.fromFile(resourceXmlFile);
       templateNode
         .getChildrenFirstElementNode()
         .removeChildren()
@@ -91,4 +92,20 @@ export async function writeXmlTemplate(
   const xmlStr = releaseXml.buildXml();
   fse.writeFileSync(releaseXmlFile, xmlStr);
   return { value, release: releaseXmlFile };
+}
+
+export function xmlElementTextModify(xmlStr: string, value: string): string {
+  console.log(
+    XmlCompiler.fromString(xmlStr)
+      .getChildrenFirstElementNode()
+      .removeChildren()
+      .appendChild(XMLNodeElement.createTextNode(value))
+      .buildXml()
+  );
+  const xmlCompiler = XmlCompiler.fromString(xmlStr);
+  xmlCompiler
+    .getChildrenFirstElementNode()
+    .removeChildren()
+    .appendChild(XMLNodeElement.createTextNode(value));
+  return xmlCompiler.buildXml();
 }

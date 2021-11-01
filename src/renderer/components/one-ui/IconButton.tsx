@@ -47,23 +47,23 @@ const StyleIconButton = styled.div`
     border-radius: 3px;
     width: 40px;
     height: 22px;
-    background: ${({ theme }) => theme["@border-color-secondary"]};
-    color: ${({ theme }) => theme["@text-color-secondary"]};
+    background: var(--color-secondary);
+    color: var(--color-text-2);
     transition: 0.3s ease-out;
     &[data-toggle="true"] {
-      background: ${({ theme }) => theme["@primary-color"]};
-      color: ${({ theme }) => theme["@background-color-thirdly"]};
+      background: rgba(var(--primary-6));
+      color: var(--color-bg-4);
       transform: 0.3s ease-in;
     }
     &:hover {
-      opacity: 0.6;
+      background: var(--color-secondary-hover);
     }
     &:active {
-      opacity: 0.4;
+      background: var(--color-secondary-active);
     }
   }
   .btn-name {
-    color: ${({ theme }) => theme["@text-color-secondary"]};
+    color: var(--color-text-2);
     margin-top: 3px;
     font-size: 11px;
   }

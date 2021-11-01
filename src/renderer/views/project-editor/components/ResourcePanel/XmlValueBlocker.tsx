@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { CloseOutlined } from "@ant-design/icons";
+import { IconClose } from "@arco-design/web-react/icon";
 import { useEditorDispatch, useEditorSelector } from "@/store/editor";
 import { HEX_FORMAT, RESOURCE_TAG } from "src/enum/index";
 import {
@@ -11,10 +11,12 @@ import {
 import useSubscribeFile from "@/hooks/project/useSubscribeFile";
 import { ActionPatchFileDataMap } from "@/store/editor/action";
 import { resolveProjectPath } from "src/common/utils/pathUtil";
+import { xmlElementTextModify } from "src/common/xmlTemplate";
 import ColorPicker from "./ColorPicker";
 import BooleanSelector from "./BooleanSelector";
 import NumberInput from "./NumberInput";
 import StringInput from "./StringInput";
+import StickyTab from "./StickyTab";
 
 // 分类编辑控件
 const XmlValueEditor: React.FC<{
@@ -82,27 +84,34 @@ const XmlValueItem: React.FC<{
   from: string;
   onChange: (v: string) => void;
 }> = props => {
+  const {
+    defaultValue,
+    value,
+    comment,
+    valueTemplate,
+    colorFormat,
+    use,
+    // from,
+    onChange
+  } = props;
   return (
     <StyleXmlValueItem>
       <div className="info-wrapper">
-        <div className="name">{props.comment}</div>
-        <div className="file">{props.valueTemplate}</div>
-        {/* <div className="file">{props.from}</div> */}
+        <div className="name">{comment}</div>
+        <div className="file">{xmlElementTextModify(valueTemplate, value)}</div>
+        {/* <div className="file">{from}</div> */}
       </div>
       <div className="item">
         <XmlValueEditor
-          defaultValue={props.defaultValue}
-          value={props.value}
-          colorFormat={props.colorFormat}
-          use={props.use}
-          onChange={props.onChange}
+          defaultValue={defaultValue}
+          value={value}
+          colorFormat={colorFormat}
+          use={use}
+          onChange={onChange}
         />
         <div className="handle-wrapper">
           {/* 删除 */}
-          <CloseOutlined
-            className="delete"
-            onClick={() => props.onChange("")}
-          />
+          <IconClose className="delete" onClick={() => onChange("")} />
         </div>
       </div>
     </StyleXmlValueItem>
@@ -112,16 +121,16 @@ const XmlValueItem: React.FC<{
 const StyleXmlValueItem = styled.div`
   margin-bottom: 20px;
   border-bottom: 1px solid;
-  border-bottom-color: ${({ theme }) => theme["@border-color-secondary"]};
+  border-bottom-color: var(--color-secondary-disabled);
   .info-wrapper {
     display: inline-block;
     .name {
-      color: ${({ theme }) => theme["@text-color"]};
-      font-size: ${({ theme }) => theme["@text-size-big"]};
+      color: var(--color-text-2);
+      font-size: 16px;
     }
     .file {
-      color: ${({ theme }) => theme["@text-color-secondary"]};
-      font-size: ${({ theme }) => theme["@text-size-main"]};
+      color: var(--color-text-3);
+      font-size: 14px;
     }
   }
   .item {
@@ -132,11 +141,18 @@ const StyleXmlValueItem = styled.div`
     /* margin-bottom: 20px; */
   }
   .handle-wrapper {
+    display: flex;
+    align-items: center;
     padding-left: 20px;
     border-left: 1px solid;
-    border-left-color: ${({ theme }) => theme["@border-color-base"]};
+    border-left-color: var(--color-secondary-disabled);
     .delete {
+      cursor: pointer;
       color: red;
+      font-size: 16px;
+      &:hover {
+        opacity: 0.6;
+      }
     }
   }
 `;
@@ -214,9 +230,7 @@ const XmlValueBlocker: React.FC<{
   // const value = useProjectXmlValueBySrc(name, sourceData.src);
   return (
     <StyleXmlValueBlocker className={props.className}>
-      <div className="title-wrapper">
-        <span className="name">{props.data.name}</span>
-      </div>
+      <StickyTab content={props.data.name} />
       <div className="list">
         {props.data.items.map((xmlItem, key) => (
           <XmlItem
@@ -236,18 +250,6 @@ const StyleXmlValueBlocker = styled.div`
   box-sizing: content-box;
   margin-bottom: 20px;
   padding: 20px 0;
-  .title-wrapper {
-    margin-bottom: 20px;
-    position: sticky;
-    z-index: 2;
-    top: 0px;
-    padding: 6px 20px;
-    background-color: ${({ theme }) => theme["@background-color-thirdly"]};
-    .name {
-      color: ${({ theme }) => theme["@text-color"]};
-      font-size: ${({ theme }) => theme["@text-size-title"]};
-    }
-  }
   .list {
     padding: 0 30px;
   }

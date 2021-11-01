@@ -39,7 +39,7 @@ const Tabs: React.FC<
 
 const StyleTab = styled.div`
   overflow-x: auto;
-  border-bottom: 1px solid ${({ theme }) => theme["@border-color-secondary"]};
+  border-bottom: 1px solid var(--color-secondary-disabled);
   .tabs {
     display: flex;
     width: 100%;
@@ -50,7 +50,8 @@ const StyleTab = styled.div`
     flex-shrink: 0;
     padding: 15px 20px;
     transition: 0.2s ease;
-    color: ${({ theme }) => theme["@text-color"]};
+    color: var(--color-text-2);
+    line-height: 100%;
     &::after {
       transition: 0.2s ease;
       position: absolute;
@@ -63,7 +64,7 @@ const StyleTab = styled.div`
     }
     &[data-active="true"] {
       transition: 0.2s ease;
-      color: ${({ theme }) => theme["@primary-color"]};
+      color: rgb(var(--primary-6));
       position: relative;
       font-weight: 600;
       &::after {
@@ -75,7 +76,7 @@ const StyleTab = styled.div`
         left: 50%;
         width: 60%;
         height: 3px;
-        background-color: ${({ theme }) => theme["@primary-color"]};
+        background-color: rgb(var(--primary-6));
         border-radius: 3px;
         transform: translateX(-50%);
       }

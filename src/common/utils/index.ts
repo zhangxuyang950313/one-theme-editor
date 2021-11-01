@@ -11,7 +11,7 @@ import RegexpUtil from "src/common/utils/RegexpUtil";
 import { TypeImageData, TypeImageMapper } from "src/types/project";
 import { TypeFileData } from "src/types/resource.page";
 import { FileData, ImageFileData, XmlFileData } from "src/data/ResourceConfig";
-import XmlFileCompiler from "src/common/compiler/XmlFileCompiler";
+import XmlCompiler from "src/common/compiler/XmlCompiler";
 import XmlCompilerExtra from "src/common/compiler/XmlCompilerExtra";
 
 export const isDev = process.env.NODE_ENV !== "production";
@@ -351,7 +351,7 @@ export function getFileData(
       return imageFileData;
     }
     case "application/xml": {
-      const xmlFileCompiler = XmlFileCompiler.from(file);
+      const xmlFileCompiler = XmlCompiler.fromFile(file);
       // 生成 value 映射
       const valueMapper = xmlFileCompiler
         .getChildrenFirstElementNode()

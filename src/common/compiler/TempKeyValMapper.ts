@@ -4,9 +4,9 @@ import {
   TypeXmlKeyValMapperMap,
   TypeXmlTempKeyValMap
 } from "src/types/resource.page";
-import XmlFileCompiler from "./XmlFileCompiler";
+import XmlCompiler from "./XmlCompiler";
 
-export default class TempKeyValMapper extends XmlFileCompiler {
+export default class TempKeyValMapper extends XmlCompiler {
   private keyValMapData?: TypeXmlKeyValMapperMap;
 
   /**
