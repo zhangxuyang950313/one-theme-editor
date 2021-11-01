@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import Logo from "@/assets/logo1.png";
+import Logo from "@/assets/logo.png";
 
 // 侧边栏顶部信息，暂时使用固定的
 // TODO 用户信息
