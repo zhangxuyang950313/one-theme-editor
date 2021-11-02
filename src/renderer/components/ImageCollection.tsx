@@ -47,7 +47,9 @@ export const DynamicProjectImage = forwardRef<
       setSrc("");
       return;
     }
-    setSrc(`project://${props.src}?${Date.now()}`);
+    const url = new URL(`project://${props.src}`);
+    url.searchParams.set("t", Date.now().toString());
+    setSrc(url.toString());
   });
   return <LazyImage {...props} ref={ref} src={src} alt="" />;
 });
@@ -74,11 +76,16 @@ export const DynamicBothSourceImage = forwardRef<
 >(function DynamicBothSourceImage(props, ref) {
   const [src, setSrc] = useState(`src://${props.src}`);
   useSubscribeFile(props.src, event => {
-    if (event === FILE_EVENT.UNLINK) {
-      setSrc(`resource://${props.src}?t=${Date.now()}`);
-      return;
-    }
-    setSrc(`src://${props.src}?=${Date.now()}`);
+    // if (event === FILE_EVENT.UNLINK) {
+    //   const url = new URL(`resource://${props.src}`);
+    //   url.searchParams.set("t", Date.now().toString());
+    //   setSrc(url.toString());
+    //   return;
+    // }
+    // setSrc(`src://${props.src}?=${Date.now()}`);
+    const url = new URL(`src://${props.src}`);
+    url.searchParams.set("t", Date.now().toString());
+    setSrc(url.toString());
   });
   return <PreloadImage {...props} ref={ref} src={src} alt="" />;
 });

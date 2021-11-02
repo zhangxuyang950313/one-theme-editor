@@ -1,3 +1,4 @@
+import { URL } from "url";
 import path from "path";
 import { app } from "electron";
 import { TypeScenarioOption } from "src/types/scenario.config";
@@ -27,9 +28,14 @@ export const getUrl = {
     return `${prefix}/starter.html`;
   },
   createProject(scenarioOption: TypeScenarioOption): string {
-    return `${prefix}/create-project.html?scenarioSrc=${scenarioOption.src}&scenarioName=${scenarioOption.name}`;
+    const url = new URL(`${prefix}/create-project.html`);
+    url.searchParams.append("scenarioSrc", scenarioOption.src);
+    url.searchParams.append("scenarioName", scenarioOption.name);
+    return url.toString();
   },
   projectEditor(uuid: string): string {
-    return `${prefix}/project-editor.html?uuid=${uuid}`;
+    const url = new URL(`${prefix}/project-editor.html`);
+    url.searchParams.append("uuid", uuid);
+    return url.toString();
   }
 };

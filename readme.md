@@ -14,11 +14,26 @@
 - mini-css-extract-plugin        @1.4.0
 - @types/mini-css-extract-plugin @1.4.0 
 - postcss-loader                 @4.3.0
+- node-loader                    @1.0.3
+- html-webpack-plugin            @4.5.2
 - 其他参照 package.json
 - 特别注意的在这里补充，不要乱升
 - 升的时候选择 fixable，然后删 node_modules 测试
 
-#### 本地 node 版本 >=14.0.0
+
+#### node-canvas
+参考 https://www.electronjs.org/zh/docs/latest/tutorial/using-native-node-modules
+- 直接安装，但是 abi 和 electron abi 不同导致无法启动，暂时无解
+  - npm install --save canvas --canvas_binary_host_mirror=https://npm.taobao.org/mirrors/node-canvas-prebuilt/
+- 手动编译 (靠谱方案)
+  - brew install pkg-config cairo pango libpng jpeg giflib librsvg
+  - cd node_modules/canvas
+  - HOME=~/.electron-gyp ../node-gyp/bin/node-gyp.js node-gyp rebuild --target=8.5.5 --arch=x64 --dist-url=https://electronjs.org/headers
+
+
+#### 本地 node 版本 >=12.0.0
+配合 electron node 版本，rebuild 原生 node 模块，或 build 的时候，以及 webpack 等本地环境要求。
+但运行时是使用的 electron node 版本，所以进程中只要满足 electron node 版本即可
 image-size        >=12
 electron-builder  >=14
 log-symbols       >=14

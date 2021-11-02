@@ -1,8 +1,10 @@
 import path from "path";
 import { URL } from "url";
 import fse from "fs-extra";
-import { protocol, app, nativeImage } from "electron";
-import { getImgBuffAndFileType } from "../common/utils";
+import { protocol, app, nativeImage, ResizeOptions } from "electron";
+import NinePatchUtil from "src/common/utils/NinePatchUtil";
+import { filenameIs9Patch, getImgBuffAndFileType } from "../common/utils";
+import { createCanvas, loadImage } from "./canvas";
 
 async function getFileIconData(file: string) {
   const data = await app.getFileIcon(file);
@@ -20,23 +22,24 @@ async function getFilePicResponseData(
   url: string,
   root: string,
   backupRoot?: string
-) {
+): Promise<{ mimeType: string; data: Buffer }> {
   let file = "";
-  const options = {
+  const options: Required<ResizeOptions> = {
     width: 0,
     height: 0,
     // `good`, `better`, * or `best`
-    quality: "good"
+    quality: "best"
   };
-  const data = await new Promise<{ mimeType: string; data: Buffer }>(
+  const result = await new Promise<{ mimeType: string; data: Buffer }>(
     async resolve => {
       try {
         const { hostname, pathname, searchParams } = new URL(url);
         options.width = Number(searchParams.get("w") || 0);
         options.height = Number(searchParams.get("h") || 0);
-        options.quality = searchParams.get("q") || "good";
+        options.quality = searchParams.get("q") || "best";
         file = decodeURIComponent(path.join(root, hostname, pathname));
         if (!fse.existsSync(file)) {
+          // 如果获取不到的备份
           if (backupRoot) {
             const data = await getFilePicResponseData(url, backupRoot);
             resolve(data);
@@ -44,36 +47,50 @@ async function getFilePicResponseData(
             throw new Error(`${file} is not exists`);
           }
         }
+        // 获取图片数据
         const { buff, fileType } = await getImgBuffAndFileType(file);
         resolve({ mimeType: fileType.mime, data: buff });
       } catch (err) {
-        const def = {
-          mimeType: "image/png",
-          data: Buffer.from("")
-        };
+        const def = { mimeType: "image/png", data: Buffer.from("") };
+        // 不存在空返回
         if (!fse.existsSync(file)) {
           resolve(def);
+        } else {
+          // 否则使用图标
+          const data = await getFileIconData(file).catch(() => def);
+          resolve(data);
         }
-        const data = await getFileIconData(file).catch(() => def);
-        resolve(data);
       }
     }
   );
-  if (options.width * options.height) {
-    const image = nativeImage.createFromBuffer(data.data).resize(options);
-    switch (data.mimeType) {
-      case "image/jpeg": {
-        data.data = image.toJPEG(1);
-        break;
-      }
-      case "image/png":
-      default: {
-        data.data = image.toPNG();
-        break;
+  // 需要重设尺寸
+  if (options.width || options.height) {
+    options.width = Math.floor(options.width);
+    options.height = Math.floor(options.height);
+    // 。9 情况
+    if (filenameIs9Patch(file)) {
+      // console.log(new NinePatchUtil(result.data).decode());
+      const canvas = createCanvas(options.width, options.height);
+      const ctx = canvas.getContext("2d");
+      const image = await loadImage(result.data);
+      ctx.drawImage(image, 0, 0, options.width, options.height);
+      result.data = canvas.toBuffer();
+    } else {
+      const image = nativeImage.createFromBuffer(result.data).resize(options);
+      switch (result.mimeType) {
+        case "image/jpeg": {
+          result.data = image.toJPEG(100);
+          break;
+        }
+        case "image/png":
+        default: {
+          result.data = image.toPNG();
+          break;
+        }
       }
     }
   }
-  return data;
+  return result;
 }
 
 export default function registerProtocol(): void {
@@ -122,33 +139,37 @@ export default function registerProtocol(): void {
     });
   });
 
-  protocol.registerBufferProtocol("local", async (request, response) => {
+  protocol.registerBufferProtocol("image:local", async (request, response) => {
     const data = await getFilePicResponseData(request.url, "");
     response(data);
   });
 
+  // 根路径为资源路径
   protocol.registerBufferProtocol("resource", async (request, response) => {
-    const root = $reactiveState.get("resourcePath");
-    const data = await getFilePicResponseData(request.url, root);
+    const data = await getFilePicResponseData(
+      request.url,
+      $reactiveState.get("resourcePath")
+    );
     response(data);
   });
 
+  // 根路径为工程路径
   protocol.registerBufferProtocol("project", async (request, response) => {
-    const root = $reactiveState.get("projectPath");
-    const data = await getFilePicResponseData(request.url, root);
+    const data = await getFilePicResponseData(
+      request.url,
+      $reactiveState.get("projectPath")
+    );
     response(data);
   });
 
   // 双向选择协议
   protocol.registerBufferProtocol("src", async (request, response) => {
-    const projectPath = $reactiveState.get("projectPath");
-    const resourcePath = $reactiveState.get("resourcePath");
     const data = await getFilePicResponseData(
       request.url,
-      projectPath,
-      resourcePath
+      $reactiveState.get("projectPath"),
+      $reactiveState.get("resourcePath")
     );
-    response(data.data);
+    response(data);
   });
   // protocol.registerFileProtocol("one", (request, callback) => {
   //   console.log(request);

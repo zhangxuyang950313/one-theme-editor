@@ -47,6 +47,10 @@ export default class NinePatchUtil {
     this.buff = buff;
   }
 
+  static isNinePatch(buff: Buffer): boolean {
+    return new NinePatchUtil(buff).isNinePatch();
+  }
+
   // 读取 buff 区间
   private readBuffByRange(range: TypeRange): Buffer {
     return this.buff.slice(...range);

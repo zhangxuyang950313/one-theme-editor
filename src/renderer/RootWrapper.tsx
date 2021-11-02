@@ -43,6 +43,21 @@ const Root: React.FC = props => {
     localStorage.setItem("debug", "socket.io-client:socket");
     console.log(logSymbols.success, `主进程id ${window.$server.getPID()}`);
     console.log(logSymbols.success, `渲染进程启动 ${process.pid}`);
+    // electron 版本
+    console.log("process.versions.electron", process.versions.electron);
+    // ABI版本
+    console.log("process.versions.modules", process.versions.modules);
+    // NODE版本
+    console.log("process.versions.node", process.versions.node);
+    // V8 引擎版本
+    console.log("process.versions.v8", process.versions.v8);
+    // chrome版本
+    console.log("process.versions.chrome", process.versions.chrome);
+    // 架构信息
+    console.log(
+      "process.env.PROCESSOR_ARCHITECTURE",
+      process.env.PROCESSOR_ARCHITECTURE
+    );
     // localStorage.debug = "*.io-client:socket";
     // localStorage.debug = "*";
     electronStore.config.set("themeConfig", DarkTheme);

@@ -201,16 +201,22 @@ const Previewer: React.FC<{
               // 图片类型预览
               case LAYOUT_ELEMENT_TAG.Image: {
                 const layoutStyle = computeLayoutStyle(element.layout, scale);
+                const src = `${
+                  element.sourceData.src
+                }?w=${layoutStyle.width.replace(
+                  "px",
+                  ""
+                )}&h=${layoutStyle.height.replace("px", "")}&q=best`;
                 return (
                   <DynamicBothSourceImage
                     key={k}
-                    id={`preview-${element.sourceData.src}`}
+                    id={`preview:${src}`}
                     data-dash={props.useDash}
                     data-click={props.canClick}
                     className="image"
                     style={layoutStyle}
                     alt=""
-                    src={element.sourceData.src}
+                    src={src}
                   />
                 );
               }

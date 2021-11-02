@@ -11,8 +11,8 @@
     <!-- 模块定义 -->
     <Module name="图标和壁纸" icon="icons/res/drawable-xxhdpi//com.android.thememanager.png">
         <!-- 页面定义 -->
-        <Page name="桌面1" src="wallpaper/desktop.xml"/>
         <Page name="桌面2" src="wallpaper/desktop2.xml"/>
+        <Page name="桌面1" src="wallpaper/desktop.xml"/>
         <!-- <Page name="桌面1" src="wallpaper/desktop-test.xml"/> -->
         <!-- <Page name="桌面2" src="wallpaper/desktop2.xml"/> -->
         <!-- <Page name="桌面2" src="wallpaper/desktop2.xml"/> -->

@@ -11,7 +11,6 @@ class DirWatcher {
   create(root: string, callback: TypeCallback, options?: WatchOptions) {
     if (!path.isAbsolute(root)) return;
     this.callbackMap.set(root, callback);
-    console.log(this.watcherMap.has(root));
     if (this.watcherMap.has(root)) return;
     console.log("创建 watcher", root);
     const watcher = new FSWatcher({

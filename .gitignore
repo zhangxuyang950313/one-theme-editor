@@ -2,7 +2,6 @@
 node_modules
 dist
 build
-release
 release.*
 appData
 
@@ -28,3 +27,6 @@ pnpm-debug.log*
 
 .eslintcache
 .npmc
+
+!src/main/canvas/build
+!src/main/canvas/node_modules

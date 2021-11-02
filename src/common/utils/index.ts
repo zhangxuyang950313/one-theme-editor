@@ -194,7 +194,7 @@ export function getImageData(file: string): TypeImageData {
     .set("height", height)
     .set("size", getFileSize(file))
     .set("filename", path.basename(file))
-    .set("ninePatch", filenameIsNinePatch(file))
+    .set("ninePatch", filenameIs9Patch(file))
     .create();
 }
 
@@ -214,7 +214,7 @@ export function getImageMapper(file: string, root: string): TypeImageMapper {
 }
 
 // is .9 path
-export function filenameIsNinePatch(file: string): boolean {
+export function filenameIs9Patch(file: string): boolean {
   return /\.9\.png$/.test(file);
 }
 
@@ -345,7 +345,7 @@ export function getFileData(
         .set("width", imageData.width)
         .set("height", imageData.height)
         .set("size", imageData.size)
-        .set("is9patch", filenameIsNinePatch(file))
+        .set("is9patch", filenameIs9Patch(file))
         .create();
       fileDataMap.set(file, { mtime, data: imageFileData });
       return imageFileData;
