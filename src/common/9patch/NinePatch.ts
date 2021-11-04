@@ -1,9 +1,4 @@
-import {
-  loadImage,
-  getImageEl,
-  scaleNinePatch,
-  decodeFromCanvasSync
-} from "./core";
+import { loadImage, scaleNinePatchCanvas, decodeCanvas } from "./core";
 
 export default class NinePatch {
   private url: iNinePatch.url;
@@ -13,34 +8,26 @@ export default class NinePatch {
   originHeight: number;
   ninePatchData: iNinePatch.ninePatch.data | null;
   private scaledCanvas: HTMLCanvasElement | null;
-  private _targetWidth: number;
-  private _targetHeight: number;
+  private width: number;
+  private height: number;
   constructor(url: iNinePatch.url) {
     this.url = url;
     this.originEl = null;
     this.originWidth = 0;
     this.originHeight = 0;
-    this._targetWidth = 0;
-    this._targetHeight = 0;
+    this.width = 0;
+    this.height = 0;
     this.originCanvas = null;
     this.scaledCanvas = null;
     this.ninePatchData = null;
   }
 
   get targetWidth() {
-    return this._targetWidth || this.originEl.width;
+    return this.width || this.originEl.width;
   }
 
   get targetHeight() {
-    return this._targetHeight || this.originEl.height;
-  }
-
-  set width(val: number) {
-    this._targetWidth = val;
-  }
-
-  set height(val: number) {
-    this._targetHeight = val;
+    return this.height || this.originEl.height;
   }
 
   hasInitially() {
@@ -48,7 +35,7 @@ export default class NinePatch {
   }
 
   async init() {
-    this.originEl = await getImageEl(this.url);
+    this.originEl = await loadImage(this.url);
     if (!this.originEl) throw new Error(`未找到元素${this.url}`);
     const image = await loadImage(this.originEl);
     this.originWidth = image.width;
@@ -58,7 +45,7 @@ export default class NinePatch {
     canvas.setAttribute("height", `${this.originHeight}px`);
     canvas.getContext("2d").drawImage(image, 0, 0);
     this.originCanvas = canvas;
-    this.ninePatchData = await decodeFromCanvasSync(this.originCanvas);
+    this.ninePatchData = await decodeCanvas(this.originCanvas);
     return this;
   }
 
@@ -66,7 +53,7 @@ export default class NinePatch {
     if (this.hasInitially) await this.init(); // 初始化耗时操作，缓存下来.9信息和canvas
     if (w >= 0) this.width = w;
     if (h >= 0) this.height = h;
-    this.scaledCanvas = await scaleNinePatch(
+    this.scaledCanvas = await scaleNinePatchCanvas(
       this.originCanvas,
       this.ninePatchData,
       this.targetWidth,
@@ -77,12 +64,12 @@ export default class NinePatch {
 
   async getBlob() {
     return await new Promise((resolve: BlobCallback) => {
-      this.scaledCanvas.toBlob(resolve);
+      this.scaledCanvas?.toBlob(resolve);
     });
   }
 
   getBase64() {
-    return this.scaledCanvas.toDataURL();
+    return this.scaledCanvas?.toDataURL();
   }
 
   getScaledCanvas() {

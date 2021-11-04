@@ -52,22 +52,12 @@
 //   return imgEl;
 // }
 
-export async function getImageEl(imageUrl: string) {
+export async function loadImage(imageUrl: string): Promise<HTMLImageElement> {
   const image = new Image();
   await new Promise((resolve, reject) => {
     image.onload = resolve;
     image.onerror = reject;
     image.src = imageUrl;
-  });
-  return image;
-}
-
-export async function loadImage(img: HTMLImageElement) {
-  const image = new Image();
-  await new Promise((resolve, reject) => {
-    image.onload = resolve;
-    image.onerror = reject;
-    image.src = img.src;
   });
   image.onload = null;
   image.onerror = null;
@@ -75,7 +65,9 @@ export async function loadImage(img: HTMLImageElement) {
 }
 
 // 像素信息二维数组化，每一个元素储存 1px 信息
-export function pixelToDoubleDimensionalArray(pixelData: Uint8ClampedArray) {
+export function pixelToDoubleDimensionalArray(
+  pixelData: Uint8ClampedArray
+): number[][] {
   const arr: number[][] = [];
   const pixelArr = Array.from(pixelData);
   const count = pixelArr.length / 4;
@@ -152,7 +144,6 @@ function sequenceComputer(centerPix: number[][]) {
 // 废除夹逼计算，采用顺序计算，只取第一个 div 片段数据作为 pad 数据
 function computePad(unit8Arr: Uint8ClampedArray) {
   const centerPix = getCenterPixFromUnit8Arr(unit8Arr);
-  // const squeeze = squeezeComputer(centerPix);
   const sequence = sequenceComputer(centerPix);
   return sequence;
 }
@@ -179,7 +170,7 @@ function computeDivs(unit8Arr: Uint8ClampedArray) {
   return arr;
 }
 
-type allDirectUnit8Array = {
+type TypeAllDirectUnit8Array = {
   top: Uint8ClampedArray;
   right: Uint8ClampedArray;
   bottom: Uint8ClampedArray;
@@ -199,8 +190,8 @@ type allDirectUnit8Array = {
 //   return { padLeft, padRight, padTop, padBottom, xDivs, yDivs };
 // }
 // 异步方法
-async function computeNinePatchSync(
-  pixels: allDirectUnit8Array
+async function computeNinePatch(
+  pixels: TypeAllDirectUnit8Array
 ): Promise<iNinePatch.ninePatch.data> {
   const { top, right, bottom, left } = pixels;
   const [
@@ -209,29 +200,31 @@ async function computeNinePatchSync(
     { front: padLeft, behind: padRight },
     { front: padTop, behind: padBottom }
   ] = await Promise.all([
-    asyncToSync(() => computeDivs(top)),
-    asyncToSync(() => computeDivs(left)),
-    asyncToSync(() => computePad(bottom)),
-    asyncToSync(() => computePad(right))
+    syncToAsync(() => computeDivs(top)),
+    syncToAsync(() => computeDivs(left)),
+    syncToAsync(() => computePad(bottom)),
+    syncToAsync(() => computePad(right))
   ]);
-  return { padLeft, padRight, padTop, padBottom, xDivs, yDivs };
+  return {
+    padLeft,
+    padRight,
+    padTop,
+    padBottom,
+    xDivs,
+    yDivs
+  };
 }
 
 function createCanvas(width: number, height: number) {
-  let canvas: HTMLCanvasElement | OffscreenCanvas = null;
-  if (window.OffscreenCanvas) {
-    canvas = new OffscreenCanvas(width, height);
-  } else {
-    canvas = document.createElement("canvas");
-    canvas.setAttribute("width", `${width}px`);
-    canvas.setAttribute("height", `${height}px`);
-  }
+  const canvas = document.createElement("canvas");
+  canvas.setAttribute("width", `${width}px`);
+  canvas.setAttribute("height", `${height}px`);
   return canvas;
 }
 
 // 提取 canvas 指定区域
 function getCanvasArea(
-  cvs: HTMLCanvasElement | OffscreenCanvas,
+  cvs: HTMLCanvasElement,
   left: number,
   top: number,
   width: number,
@@ -239,12 +232,12 @@ function getCanvasArea(
 ) {
   const canvas = createCanvas(width, height);
   const ctx = canvas.getContext("2d");
-  ctx.drawImage(cvs, left, top, width, height, 0, 0, width, height);
+  ctx?.drawImage(cvs, left, top, width, height, 0, 0, width, height);
   return canvas;
 }
 
 // 获取内容区域
-function getContentCanvas(cvs: HTMLCanvasElement | OffscreenCanvas) {
+function getContentCanvas(cvs: HTMLCanvasElement) {
   return getCanvasArea(cvs, 1, 1, cvs.width - 2, cvs.height - 2);
 }
 
@@ -260,16 +253,19 @@ function getContentCanvas(cvs: HTMLCanvasElement | OffscreenCanvas) {
 //   return computeNinePatch({ top, bottom, left, right });
 // }
 // 异步方法
-export async function decodeFromCanvasSync(
-  canvas: HTMLCanvasElement | OffscreenCanvas
-) {
+export async function decodeCanvas(
+  canvas: HTMLCanvasElement
+): Promise<iNinePatch.ninePatch.data> {
   const { width, height } = canvas;
   const ctx = canvas.getContext("2d");
+  if (!ctx) {
+    throw new Error("ctx is null");
+  }
   const top = ctx.getImageData(0, 0, width, 1).data;
   const bottom = ctx.getImageData(0, height - 1, width, 1).data;
   const left = ctx.getImageData(0, 0, 1, height).data;
   const right = ctx.getImageData(width - 1, 0, 1, height).data;
-  return await computeNinePatchSync({ top, bottom, left, right });
+  return await computeNinePatch({ top, bottom, left, right });
 }
 
 function doubleMapper<T>(
@@ -349,7 +345,7 @@ function computeDirectScaled(
 }
 
 // 同步任务转异步任务
-async function asyncToSync<T>(asyncFuncs: () => T): Promise<T> {
+async function syncToAsync<T>(asyncFuncs: () => T): Promise<T> {
   return new Promise(resolve => setTimeout(() => resolve(asyncFuncs()), 0));
 }
 // 同步队列转异步队列
@@ -359,14 +355,14 @@ async function asyncToSync<T>(asyncFuncs: () => T): Promise<T> {
 // }
 
 // 缩放 canvas
-function scaleCanvas(
-  cvs: HTMLCanvasElement | OffscreenCanvas,
-  width: number,
-  height: number
-) {
+function scaleCanvas(cvs: HTMLCanvasElement, width: number, height: number) {
   if (cvs.width === 0 || cvs.height === 0) return cvs;
   const canvas = createCanvas(width, height);
-  canvas.getContext("2d").drawImage(cvs, 0, 0, width, height);
+  const ctx = canvas.getContext("2d");
+  if (!ctx) {
+    throw new Error("ctx is null");
+  }
+  ctx.drawImage(cvs, 0, 0, width, height);
   return canvas;
 }
 
@@ -374,14 +370,14 @@ function scaleCanvas(
  * 缩放轴线
  * @param pixelsData 像素区域数据，就是控制.9黑色像素区域
  * @param direct 缩放轴，align / alignV，和 pixelsData 的属性同名
- * @param cvs 要缩放的图片数据
+ * @param canvas 要缩放的图片数据
  * @param targetWidth 目标宽度
  * @param targetHeight 目标高度
  */
 async function handleScaleDirect(
   pixelsData: iNinePatch.directPixelsData,
   direct: keyof iNinePatch.directPixelsData,
-  cvs: HTMLCanvasElement | OffscreenCanvas,
+  canvas: HTMLCanvasElement,
   targetWidth: number,
   targetHeight: number
 ) {
@@ -390,16 +386,19 @@ async function handleScaleDirect(
   scaleDirectCanvas.setAttribute("width", `${targetWidth}px`);
   scaleDirectCanvas.setAttribute("height", `${targetHeight}px`);
   const scaleDirectCtx = scaleDirectCanvas.getContext("2d");
-  const chunksScaleQueue = [];
+  if (!scaleDirectCtx) {
+    throw new Error("scaleDirectCtx is null");
+  }
+  const chunksScaleQueue: Promise<HTMLCanvasElement>[] = [];
   pixelsData[direct].forEach(({ space, spaceScaled }) => {
     const [start, end] = space;
     const count = end - start;
-    const [startOffset, endOffset] = spaceScaled;
+    const [startOffset, endOffset] = spaceScaled || [0, 0];
     const countScaled = endOffset - startOffset;
     if (direct === "align") {
-      const chunkCanvas = getCanvasArea(cvs, start, 0, count, cvs.height);
-      const scaleChunk = asyncToSync(() =>
-        scaleCanvas(chunkCanvas, countScaled, cvs.height)
+      const chunkCanvas = getCanvasArea(canvas, start, 0, count, canvas.height);
+      const scaleChunk = syncToAsync(() =>
+        scaleCanvas(chunkCanvas, countScaled, canvas.height)
       );
       chunksScaleQueue.push(scaleChunk);
       scaleChunk.then(scaledCanvas => {
@@ -408,9 +407,9 @@ async function handleScaleDirect(
       });
     }
     if (direct === "alignV") {
-      const chunkCanvas = getCanvasArea(cvs, 0, start, cvs.width, count);
-      const scaleChunk = asyncToSync(() =>
-        scaleCanvas(chunkCanvas, cvs.width, countScaled)
+      const chunkCanvas = getCanvasArea(canvas, 0, start, canvas.width, count);
+      const scaleChunk = syncToAsync(() =>
+        scaleCanvas(chunkCanvas, canvas.width, countScaled)
       );
       chunksScaleQueue.push(scaleChunk);
       scaleChunk.then(scaledCanvas => {
@@ -424,23 +423,25 @@ async function handleScaleDirect(
 }
 
 // 缩放 .9 图
-export async function scaleNinePatch(
+export async function scaleNinePatchCanvas(
   canvas: HTMLCanvasElement,
-  npData: iNinePatch.ninePatch.data,
   targetWidth: number,
   targetHeight: number
 ): Promise<HTMLCanvasElement | null> {
   if (targetWidth * targetHeight === 0) {
-    return asyncToSync(() => null);
+    return null;
   }
+  console.log(canvas);
+  const npData = await decodeCanvas(canvas);
+  console.log({ npData });
   // 同步方法
   // const ninePatchData = decodeFromCanvas(canvas); // 从 canvas 解析 .9 信息
   // const contentCanvas = getContentCanvas(canvas); // 生成去除 .9 信息的图内容区域画布
 
   // 异步优化 将两个同步计算转为并行
   const [ninePatchData, contentCanvas] = await Promise.all([
-    npData ? asyncToSync(() => npData) : decodeFromCanvasSync(canvas), // 从 canvas解析 或者缓存获得 .9 信息
-    asyncToSync(() => getContentCanvas(canvas)) // 生成去除 .9 信息的图内容区域画布
+    npData ? syncToAsync(() => npData) : decodeCanvas(canvas), // 从 canvas解析 或者缓存获得 .9 信息
+    syncToAsync(() => getContentCanvas(canvas)) // 生成去除 .9 信息的图内容区域画布
   ]);
 
   const { width: originWidth, height: originHeight } = contentCanvas;
@@ -455,8 +456,8 @@ export async function scaleNinePatch(
   const pixelsDataScaled: iNinePatch.directPixelsData = await new Promise(
     resolve => {
       Promise.all([
-        asyncToSync(() => computeDirectScaled(xDivs, originWidth, targetWidth)),
-        asyncToSync(() =>
+        syncToAsync(() => computeDirectScaled(xDivs, originWidth, targetWidth)),
+        syncToAsync(() =>
           computeDirectScaled(yDivs, originHeight, targetHeight)
         )
       ]).then(([align, alignV]) => resolve({ align, alignV }));

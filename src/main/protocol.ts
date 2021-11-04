@@ -3,8 +3,8 @@ import { URL } from "url";
 import fse from "fs-extra";
 import { protocol, app, nativeImage, ResizeOptions } from "electron";
 import NinePatchUtil from "src/common/utils/NinePatchUtil";
+// import { createCanvas, loadImage } from "canvas";
 import { filenameIs9Patch, getImgBuffAndFileType } from "../common/utils";
-import { createCanvas, loadImage } from "./canvas";
 
 async function getFileIconData(file: string) {
   const data = await app.getFileIcon(file);
@@ -68,25 +68,26 @@ async function getFilePicResponseData(
     options.width = Math.floor(options.width);
     options.height = Math.floor(options.height);
     // 。9 情况
-    if (filenameIs9Patch(file)) {
-      // console.log(new NinePatchUtil(result.data).decode());
-      const canvas = createCanvas(options.width, options.height);
-      const ctx = canvas.getContext("2d");
-      const image = await loadImage(result.data);
-      ctx.drawImage(image, 0, 0, options.width, options.height);
-      result.data = canvas.toBuffer();
-    } else {
-      const image = nativeImage.createFromBuffer(result.data).resize(options);
-      switch (result.mimeType) {
-        case "image/jpeg": {
-          result.data = image.toJPEG(100);
-          break;
-        }
-        case "image/png":
-        default: {
-          result.data = image.toPNG();
-          break;
-        }
+    // if (filenameIs9Patch(file)) {
+    //   // console.log(new NinePatchUtil(result.data).decode());
+    //   // const canvas = createCanvas(options.width, options.height);
+    //   // const ctx = canvas.getContext("2d");
+    //   // const image = await loadImage(result.data);
+    //   // ctx.drawImage(image, 0, 0, options.width, options.height);
+    //   // result.data = canvas.toBuffer();
+    // } else {
+    // }
+
+    const image = nativeImage.createFromBuffer(result.data).resize(options);
+    switch (result.mimeType) {
+      case "image/jpeg": {
+        result.data = image.toJPEG(100);
+        break;
+      }
+      case "image/png":
+      default: {
+        result.data = image.toPNG();
+        break;
       }
     }
   }

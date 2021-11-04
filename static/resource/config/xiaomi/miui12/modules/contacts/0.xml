@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+    单页面配置
+    screenWidth: 预览的屏幕基准
+    colorFormat: 颜色格式
+-->
+<Page version="1.0.0" name="desktop2" screenWidth="1080" colorFormat="ARGB"  forceStaticPreview="true">
+
+    <!-- 静态预览图 -->
+    <Preview src="resource://modules/contacts/page_dial_0.jpg"/>
+
+    <!-- 
+        资源定义：按照顺序生成 tab
+    -->
+    <Resource name="图片" :key="image">
+        <File name="拨号" :key="contacts">
+            <!-- 全局大背景 -->
+            <Item :key="window_bg_light" src="src://com.android.contacts/framework-miui-res/res/drawable-xxhdpi/window_bg_light.9.png"/>
+            <!-- 输入号码顶栏背景 -->
+            <Item :key="dialer_title_bg_9" src="src://com.android.contacts/drawable-xxhdpi/dialer_title_bg.9.png"/>
+            <!-- 返回按钮 -->
+            <Item :key="action_bar_back_light" src="src://com.android.contacts/framework-miui-res/res/drawable-xxhdpi/action_bar_back_light.png"/>
+            <!-- 拨号时电话号码背景 -->
+            <Item :key="dialerpad_background_9" src="src://com.android.contacts/res/drawable-xxhdpi/dialerpad_background.9.png"/>
+        </File> 
+    </Resource>
+
+
+    <!-- 预览结构配置 -->
+    <Layout>
+        <Image 
+            x="0" y="0" w="1080" h="2340"
+            src="${image/contacts/window_bg_light}"
+        />
+        <Image
+            x="0" y="0" w="1080" h="237"
+            src="${image/contacts/action_bar_bg_light_9}"
+        />
+        <Image
+            x="80" y="100"
+            src="${image/contacts/action_bar_back_light}"
+        />
+        <Image
+            x="0" y="2340" w="1080" h="1248" alignV="bottom"
+            src="${image/contacts/dialerpad_background_9}"
+        />
+    </Layout>
+</Page>

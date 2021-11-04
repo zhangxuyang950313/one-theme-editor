@@ -1,10 +1,10 @@
 import { useState, useLayoutEffect } from "react";
 import { Message } from "@arco-design/web-react";
-import { useStarterDispatch } from "@/store/starter";
-import { ActionSetResourceOptionList } from "@/store/starter/action";
 import { LOAD_STATUS } from "src/enum";
 import { TypeResourceOption } from "src/types/resource.config";
 import ERR_CODE from "src/common/errorCode";
+import { ActionSetResourceOptionList } from "@/store/starter/action";
+import { useStarterDispatch } from "@/store/starter";
 
 /**
  * 获取编辑器资源选项列表列表

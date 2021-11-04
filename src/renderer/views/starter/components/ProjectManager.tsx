@@ -2,10 +2,10 @@ import { remote } from "electron";
 import React, { useEffect, useState, useCallback } from "react";
 import styled from "styled-components";
 import { Button, Empty } from "@arco-design/web-react";
-import { useListenerBroadcast } from "@/hooks";
 import { TypeProjectDataDoc } from "src/types/project";
 import { TypeScenarioOption } from "src/types/scenario.config";
 import ProjectCard from "./ProjectCard";
+import { useListenerBroadcast } from "@/hooks";
 
 const ProjectManager: React.FC<{
   scenarioOption: TypeScenarioOption;

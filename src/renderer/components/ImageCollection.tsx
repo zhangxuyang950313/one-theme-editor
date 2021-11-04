@@ -1,7 +1,7 @@
 import React, { useState, forwardRef, useImperativeHandle } from "react";
+import { FILE_EVENT } from "src/enum";
 import { useLoadImageLazy, useLoadImage } from "@/hooks/image";
 import useSubscribeFile from "@/hooks/project/useSubscribeFile";
-import { FILE_EVENT } from "src/enum";
 
 type TypeReactImageElement = JSX.IntrinsicElements["img"];
 

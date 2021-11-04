@@ -13,15 +13,10 @@ import {
   TabletOutlined
 } from "@ant-design/icons";
 import { useToggle } from "ahooks";
-import { StyleTopDrag } from "@/style";
 import { TOOLS_BAR_BUTTON } from "src/enum";
 import { ModuleConfig, PageConfig } from "src/data/ResourceConfig";
 import { TypePageConfig } from "src/types/resource.config";
-import { TypeIconButtonOption } from "@/components/one-ui/IconButton";
 import { asyncQueue } from "src/common/utils";
-import useFetchProjectData from "@/hooks/project/useFetchProjectData";
-import useFetchResourceConfig from "@/hooks/resource/useFetchResourceConfig";
-import useFetchScenarioConfig from "@/hooks/resource/useFetchScenarioConfig";
 import ProjectData from "src/data/ProjectData";
 import pathUtil from "src/common/utils/pathUtil";
 import EditorToolsBar from "./ToolsBar";
@@ -30,6 +25,11 @@ import PageSelector from "./PageSelector";
 import Previewer from "./Previewer";
 import ResourcePanel from "./ResourcePanel";
 import StatusBar from "./StatusBar";
+import useFetchScenarioConfig from "@/hooks/resource/useFetchScenarioConfig";
+import useFetchResourceConfig from "@/hooks/resource/useFetchResourceConfig";
+import useFetchProjectData from "@/hooks/project/useFetchProjectData";
+import { TypeIconButtonOption } from "@/components/one-ui/IconButton";
+import { StyleTopDrag } from "@/style";
 
 // 编辑区域框架
 const EditorFrame: React.FC<{ uuid: string }> = props => {
@@ -98,6 +98,7 @@ const EditorFrame: React.FC<{ uuid: string }> = props => {
         namespace: path.dirname(projectData.resourceSrc),
         config: item.src
       });
+      console.log("加载当前模块页面配置：", data);
       // dispatch(ActionPatchPageConfMap(data));
       return data;
     });
@@ -135,7 +136,10 @@ const EditorFrame: React.FC<{ uuid: string }> = props => {
   // 工具栏按钮右侧
   const [rightButtons] = useState<TypeIconButtonOption[]>([
     { name: TOOLS_BAR_BUTTON.APPLY, icon: <MobileOutlined /> },
-    { name: TOOLS_BAR_BUTTON.SAVE, icon: <FolderOutlined /> },
+    {
+      name: TOOLS_BAR_BUTTON.SAVE,
+      icon: <FolderOutlined />
+    },
     {
       name: TOOLS_BAR_BUTTON.EXPORT,
       icon: <ExportOutlined />,

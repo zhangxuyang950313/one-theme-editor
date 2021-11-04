@@ -9,10 +9,12 @@ import {
 } from "src/enum";
 import { TypePageConfig } from "src/types/resource.config";
 import { TypeLayoutData, TypeLayoutTextElement } from "src/types/resource.page";
-import { useEditorSelector } from "@/store/editor";
 import ColorUtil from "src/common/utils/ColorUtil";
+import { filenameIs9Patch } from "src/common/utils";
+import { useEditorSelector } from "@/store/editor";
 import useSubscribeFile from "@/hooks/project/useSubscribeFile";
 import { DynamicBothSourceImage } from "@/components/ImageCollection";
+import NinePatchCanvas from "@/components/NinePatchCanvas";
 
 // function computeLayout(
 //   data: TypeLayoutData,
@@ -70,11 +72,11 @@ function computeLayoutStyle(
     top: `${Number(layout.y) * scale}px`,
     get width(): LayoutStyleComputed["width"] {
       const num = Number(layout.w);
-      return num ? `${(num * scale).toFixed(2)}px` : "auto";
+      return num ? `${(num * scale).toFixed(0)}px` : "auto";
     },
     get height(): LayoutStyleComputed["height"] {
       const num = Number(layout.h);
-      return num ? `${(num * scale).toFixed(2)}px` : "auto";
+      return num ? `${(num * scale).toFixed(0)}px` : "auto";
     },
     get transform(): LayoutStyleComputed["transform"] {
       let transformX = "0";
@@ -201,13 +203,24 @@ const Previewer: React.FC<{
               // 图片类型预览
               case LAYOUT_ELEMENT_TAG.Image: {
                 const layoutStyle = computeLayoutStyle(element.layout, scale);
-                const src = `${
-                  element.sourceData.src
-                }?w=${layoutStyle.width.replace(
-                  "px",
-                  ""
-                )}&h=${layoutStyle.height.replace("px", "")}&q=best`;
-                return (
+                const computedWidth = layoutStyle.width.replace("px", "");
+                const computedHeight = layoutStyle.height.replace("px", "");
+                console.log({
+                  computedWidth,
+                  computedHeight,
+                  l: element.layout
+                });
+                const src = `${element.sourceData.src}?w=${computedWidth}&h=${computedHeight}&q=best`;
+                return filenameIs9Patch(element.source) ? (
+                  <NinePatchCanvas
+                    key={k}
+                    className="image"
+                    style={layoutStyle}
+                    src={element.sourceData.src}
+                    width={Number(computedWidth)}
+                    height={Number(computedHeight)}
+                  />
+                ) : (
                   <DynamicBothSourceImage
                     key={k}
                     id={`preview:${src}`}

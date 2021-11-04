@@ -1,11 +1,11 @@
 import path from "path";
 import fse from "fs-extra";
 import { useEffect } from "react";
-import { useEditorDispatch } from "@/store/editor";
-import { ActionPatchFileDataMap } from "@/store/editor/action";
 import { FILE_EVENT } from "src/enum";
 import { TypeFileData } from "src/types/resource.page";
 import { FileData } from "src/data/ResourceConfig";
+import { ActionPatchFileDataMap } from "@/store/editor/action";
+import { useEditorDispatch } from "@/store/editor";
 
 const fileDataMap = new Map<string, { mtime: Date; data: TypeFileData }>();
 
