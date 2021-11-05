@@ -135,7 +135,13 @@ const EditorFrame: React.FC<{ uuid: string }> = props => {
   ]);
   // 工具栏按钮右侧
   const [rightButtons] = useState<TypeIconButtonOption[]>([
-    { name: TOOLS_BAR_BUTTON.APPLY, icon: <MobileOutlined /> },
+    {
+      name: TOOLS_BAR_BUTTON.APPLY,
+      icon: <MobileOutlined />,
+      onClick: () => {
+        // PackAgeUtil.pack();
+      }
+    },
     {
       name: TOOLS_BAR_BUTTON.SAVE,
       icon: <FolderOutlined />
@@ -246,12 +252,15 @@ const EditorFrame: React.FC<{ uuid: string }> = props => {
             {displayPreviewSelector && (
               <div className="editor__previewer right-border-line">
                 {pageConfig.config ? (
-                  <Previewer
-                    className="previewer__content"
-                    pageConfig={pageConfig}
-                    canClick
-                    useDash
-                  />
+                  <>
+                    <Previewer
+                      className="previewer__content"
+                      pageConfig={pageConfig}
+                      canClick
+                      useDash
+                    />
+                    <div className="previewer__name">{pageConfig.name}</div>
+                  </>
                 ) : (
                   <div className="no-config">无预览</div>
                 )}
@@ -356,6 +365,11 @@ const StyleEditorFrame = styled.div`
           background-color: var(--color-bg-3);
           .previewer__content {
             width: 300px;
+          }
+          .previewer__name {
+            margin: 10px;
+            text-align: center;
+            color: var(--color-text-1);
           }
         }
         .resource-panel {

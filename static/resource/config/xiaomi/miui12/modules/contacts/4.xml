@@ -5,7 +5,7 @@
     screenWidth: 预览的屏幕基准
     colorFormat: 颜色格式
 -->
-<Page version="1.0.0" name="desktop2" screenWidth="1080" colorFormat="ARGB"  forceStaticPreview="true">
+<Page version="1.0.0" name="设置列表/大背景" screenWidth="1080" colorFormat="ARGB"  forceStaticPreview="true">
 
     <!-- 静态预览图 -->
     <Preview src="resource://modules/contacts/page_miui_2.jpg"/>

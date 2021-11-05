@@ -38,6 +38,7 @@
       "main/*": ["./main/*"],
       "renderer/*": ["./renderer/*"],
       "src/*": ["./*"],
-    }
+    },
+    "excludes": ["main/canvas/**/*"]
   }
 }

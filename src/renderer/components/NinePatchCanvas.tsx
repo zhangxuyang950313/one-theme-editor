@@ -49,7 +49,12 @@ const NinePatchCanvas: React.FC<
   }, [src, width, height]);
 
   return (
-    <img {...props} className={props.className} src={canvas.toDataURL()} />
+    <img
+      {...props}
+      className={props.className}
+      alt=""
+      src={canvas.toDataURL()}
+    />
   );
 };
 

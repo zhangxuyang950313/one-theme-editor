@@ -14,13 +14,13 @@
         <Page name="桌面壁纸和图标" src="modules/wallpaper-icons/desktop.xml"/>
     </Module>
     <Module name="拨号与联系人" icon="icons/res/drawable-xxhdpi/com.android.contacts.activities.TwelveKeyDialer.png">
-        <Page name="拨号1" src="modules/contacts/0.xml"/>
-        <Page name="拨号2" src="modules/contacts/1.xml"/>
-        <Page name="通话列表" src="modules/contacts/2.xml"/>
-        <Page name="搜索结果/文本选择" src="modules/contacts/3.xml"/>
-        <Page name="设置列表/大背景" src="modules/contacts/4.xml"/>
-        <Page name="底部弹窗/其他" src="modules/contacts/5.xml"/>
-        <Page name="近手弹窗" src="modules/contacts/6.xml"/>
+        <Page src="modules/contacts/0.xml"/>
+        <Page src="modules/contacts/1.xml"/>
+        <Page src="modules/contacts/2.xml"/>
+        <Page src="modules/contacts/3.xml"/>
+        <Page src="modules/contacts/4.xml"/>
+        <Page src="modules/contacts/5.xml"/>
+        <Page src="modules/contacts/6.xml"/>
     </Module>
     <Module name="短信" icon="icons/res/drawable-xxhdpi/com.android.mms.png">
     </Module>

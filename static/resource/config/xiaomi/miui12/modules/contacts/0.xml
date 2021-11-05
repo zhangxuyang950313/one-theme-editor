@@ -2,10 +2,18 @@
 
 <!-- 
     单页面配置
+    name: 页面名称
     screenWidth: 预览的屏幕基准
     colorFormat: 颜色格式
+    forceStaticPreview: 是否强制使用 preview 图片
 -->
-<Page version="1.0.0" name="desktop2" screenWidth="1080" colorFormat="ARGB"  forceStaticPreview="true">
+<Page 
+    version="1.0.0" 
+    name="拨号盘 - 输入号码" 
+    screenWidth="1080" 
+    colorFormat="ARGB"  
+    forceStaticPreview="true"
+>
 
     <!-- 静态预览图 -->
     <Preview src="resource://modules/contacts/page_dial_0.jpg"/>
