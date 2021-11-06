@@ -60,7 +60,7 @@ export default function useSubscribeFile(
     callback && callback(FILE_EVENT.ADD, src, fileData);
     dispatch(ActionPatchFileDataMap({ src, fileData }));
 
-    const removeListener = window.$server.useFilesChange(data => {
+    const removeListener = window.$invoker.useFilesChange(data => {
       if (data.root !== projectRoot) return;
       if (data.src !== src) return;
       callback && callback(data.event, src, data.data);

@@ -84,8 +84,11 @@ const devServer: WebpackDevServer.Configuration = {
   quiet: false
 };
 
-const htmlPluginOpt = (isDev: boolean) => ({
+const htmlPluginOpt: (
+  isDev: boolean
+) => Partial<HtmlWebpackPlugin.ProcessedOptions> = (isDev: boolean) => ({
   cache: false,
+  scriptLoading: "defer",
   ...(!isDev && {
     minify: {
       removeComments: true,

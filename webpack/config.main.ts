@@ -1,5 +1,5 @@
 import path from "path";
-import CopyWebpackPlugin from "copy-webpack-plugin";
+// import CopyWebpackPlugin from "copy-webpack-plugin";
 import webpack, { DefinePlugin } from "webpack";
 import WebpackBar from "webpackbar";
 import DotEnvPlugin from "dotenv-webpack";
@@ -30,7 +30,6 @@ const config: webpack.ConfigurationFactory = (env, args) => {
     },
     externals: {
       fsevents: "fsevents"
-      // canvas: "canvas"
     },
     optimization: {
       minimize: !isDev
@@ -73,21 +72,15 @@ const config: webpack.ConfigurationFactory = (env, args) => {
     },
     plugins: [
       new CleanWebpackPlugin(),
-      new CopyWebpackPlugin({
-        patterns: [
-          {
-            from: path.resolve(rootDir, "node_modules/canvas"),
-            to: path.resolve(outputDir.main, "canvas"),
-            toType: "dir"
-          }
-          // // 将 static 移动至 app 以加密 app.asar
-          // {
-          //   from: path.resolve(rootDir, "static"),
-          //   to: path.resolve(reactOutputDir, "static"),
-          //   force: true
-          // }
-        ]
-      }),
+      // new CopyWebpackPlugin({
+      //   patterns: [
+      //     {
+      //       from: path.resolve(rootDir, "node_modules/canvas"),
+      //       to: path.resolve(outputDir.main, "canvas"),
+      //       toType: "dir"
+      //     }
+      //   ]
+      // }),
       new WebpackBar({
         name: `主进程编译中...(${args.mode})`,
         color: "yellow",

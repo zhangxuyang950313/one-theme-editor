@@ -205,11 +205,6 @@ const Previewer: React.FC<{
                 const layoutStyle = computeLayoutStyle(element.layout, scale);
                 const computedWidth = layoutStyle.width.replace("px", "");
                 const computedHeight = layoutStyle.height.replace("px", "");
-                console.log({
-                  computedWidth,
-                  computedHeight,
-                  l: element.layout
-                });
                 const src = `${element.sourceData.src}?w=${computedWidth}&h=${computedHeight}&q=best`;
                 return filenameIs9Patch(element.source) ? (
                   <NinePatchCanvas

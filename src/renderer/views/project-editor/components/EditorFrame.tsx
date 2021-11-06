@@ -94,7 +94,7 @@ const EditorFrame: React.FC<{ uuid: string }> = props => {
   useEffect(() => {
     if (!projectData.resourceSrc) return;
     const pageConfDataQueue = moduleConfig.pageList.map(item => async () => {
-      const data = await window.$server.getPageConfigList({
+      const data = await window.$server.getPageConfig({
         namespace: path.dirname(projectData.resourceSrc),
         config: item.src
       });

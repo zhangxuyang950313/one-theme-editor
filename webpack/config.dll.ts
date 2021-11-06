@@ -5,7 +5,6 @@ import { DllPlugin } from "webpack";
 
 module.exports = {
   entry: {
-    canvas: ["canvas"],
     react: ["react", "react-dom"],
     styled: ["styled-components"],
     arco: ["@arco-design/web-react/icon", "@arco-design/web-react"],

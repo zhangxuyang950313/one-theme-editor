@@ -90,7 +90,6 @@
     "babel-plugin-react-scoped-css": "^1.1.1",
     "babel-plugin-styled-components": "^1.13.2",
     "babel-plugin-transform-class-properties": "^6.24.1",
-    "canvas": "^2.8.0",
     "chokidar": "^3.5.2",
     "clean-webpack-plugin": "^3.0.0",
     "concurrently": "^6.3.0",

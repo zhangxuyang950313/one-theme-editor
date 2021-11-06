@@ -3,10 +3,7 @@ import ProjectData from "src/data/ProjectData";
 import IPC_EVENT from "src/ipc/ipc-event";
 
 // 构建进程间响应数据
-export default class ReactiveState<
-  T extends Record<string, unknown>,
-  K extends keyof T
-> {
+class ReactiveState<T extends Record<string, unknown>, K extends keyof T> {
   private state: T;
   private $replyEvent: IpcMainEvent | null = null;
   private hooks = new Set<(obj: T, prop: K, value: T[K]) => void>();
@@ -68,14 +65,8 @@ export default class ReactiveState<
   }
 }
 
-export const reactiveState = new ReactiveState({
+export default new ReactiveState({
   projectData: ProjectData.default,
   resourcePath: "",
   projectPath: ""
 });
-
-export function registerReactiveStateToGlobal(): void {
-  Object.assign(global, {
-    $reactiveState: reactiveState
-  });
-}

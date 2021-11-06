@@ -78,7 +78,7 @@ const windowNormalizeOptions: BrowserWindowConstructorOptions = {
 Menu.buildFromTemplate(menuTemplate);
 // Menu.setApplicationMenu(menu);
 
-const createWindows = {
+export const createWindows = {
   // 开始窗口
   async starter(): Promise<BrowserWindow> {
     const win = new BrowserWindow({
@@ -87,7 +87,7 @@ const createWindows = {
       fullscreenable: false,
       show: true
     });
-    // devToolsHandler(win);
+    devToolsHandler(win);
     win.loadURL(getUrl.starter());
     // win.loadURL(getUrl.projectEditor("6d312b14-2013-42e2-93d3-3e64beda25d1"));
     win.on("ready-to-show", () => win.show());
@@ -149,4 +149,3 @@ const createWindows = {
     return win;
   }
 };
-export default createWindows;

@@ -79,6 +79,6 @@ export const alias = {
   data: path.resolve(rootDir, "src/data"),
   types: path.resolve(rootDir, "src/types"),
   common: path.resolve(rootDir, "src/common"),
-  server: path.resolve(rootDir, "src/server"),
+  main: path.resolve(rootDir, "src/main"),
   renderer: path.resolve(rootDir, "src/renderer")
 };
