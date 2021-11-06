@@ -19,11 +19,14 @@ import {
   TypeCreateProjectPayload,
   TypePackPayload,
   TypePackProcess,
-  TypeProjectData,
   TypeProjectDataDoc,
   TypeUnpackPayload
 } from "src/types/project";
-import { TypePageConfig, TypeResourceConfig } from "src/types/resource.config";
+import {
+  TypePageConfig,
+  TypeResourceConfig,
+  TypeResourceOption
+} from "src/types/resource.config";
 import {
   TypeScenarioConfig,
   TypeScenarioOption
@@ -72,8 +75,9 @@ class IpcServer extends IpcCreator {
   // 获取场景配置数据
   getScenarioConfig = this.createIpcAsync<string, TypeScenarioConfig>({
     event: IPC_EVENT.$getScenarioConfig,
-    server: async scenarioSrc =>
-      ScenarioConfigCompiler.from(scenarioSrc).getConfig()
+    server: async scenarioSrc => {
+      return ScenarioConfigCompiler.from(scenarioSrc).getConfig();
+    }
   });
 
   // 获取资源配置
@@ -81,6 +85,22 @@ class IpcServer extends IpcCreator {
     event: IPC_EVENT.$getResourceConfig,
     server: async scenarioSrc =>
       ResourceConfigCompiler.from(scenarioSrc).getConfig()
+  });
+
+  // 获取资源配置列表
+  getResourceConfigList = this.createIpcAsync<string, TypeResourceConfig[]>({
+    event: IPC_EVENT.$getResourceConfigList,
+    server: async scenarioSrc => {
+      return ScenarioConfigCompiler.from(scenarioSrc).getResourceConfigList();
+    }
+  });
+
+  // 获取资源选项列表
+  getResourceOptionList = this.createIpcAsync<string, TypeResourceOption[]>({
+    event: IPC_EVENT.$getResourceOptionList,
+    server: async scenarioSrc => {
+      return ScenarioConfigCompiler.from(scenarioSrc).getResourceOptionList();
+    }
   });
 
   // 获取页面配置列表
@@ -95,7 +115,7 @@ class IpcServer extends IpcCreator {
   // 创建工程
   createProject = this.createIpcAsync<
     TypeCreateProjectPayload,
-    TypeProjectData
+    TypeProjectDataDoc
   >({
     event: IPC_EVENT.$createProject,
     server: async data => await createProject(data)

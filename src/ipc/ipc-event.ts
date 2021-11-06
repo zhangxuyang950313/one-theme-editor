@@ -6,6 +6,7 @@ enum IPC_EVENT {
   // 配置
   $getScenarioOptionList = "$getScenarioOptionList",
   $getResourceOptionList = "$getResourceOptionList",
+  $getResourceConfigList = "$getResourceConfigList",
   $getScenarioOption = "$getScenarioOption",
   $getScenarioConfig = "$getScenarioConfig",
   $getResourceConfig = "$getResourceConfig",

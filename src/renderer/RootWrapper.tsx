@@ -1,5 +1,5 @@
 import logSymbols from "log-symbols";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import styled, { createGlobalStyle, ThemeProvider } from "styled-components";
@@ -38,28 +38,17 @@ import DarkTheme from "./theme/dark";
 
 const Root: React.FC = props => {
   const [theme, setTheme] = useState(DarkTheme);
-  useEffect(() => {
+  useLayoutEffect(() => {
     document.body.setAttribute("arco-theme", "dark");
-    localStorage.setItem("debug", "socket.io-client:socket");
+  }, []);
+  useEffect(() => {
     console.log(logSymbols.success, `主进程id ${window.$server.getPID()}`);
     console.log(logSymbols.success, `渲染进程启动 ${process.pid}`);
-    // electron 版本
-    console.log("process.versions.electron", process.versions.electron);
-    // ABI版本
-    console.log("process.versions.modules", process.versions.modules);
-    // NODE版本
-    console.log("process.versions.node", process.versions.node);
-    // V8 引擎版本
-    console.log("process.versions.v8", process.versions.v8);
-    // chrome版本
-    console.log("process.versions.chrome", process.versions.chrome);
-    // 架构信息
-    console.log(
-      "process.env.PROCESSOR_ARCHITECTURE",
-      process.env.PROCESSOR_ARCHITECTURE
-    );
-    // localStorage.debug = "*.io-client:socket";
-    // localStorage.debug = "*";
+    console.log("process.versions.electron", process.versions.electron); // electron 版本
+    console.log("process.versions.modules", process.versions.modules); // ABI版本
+    console.log("process.versions.node", process.versions.node); // NODE版本
+    console.log("process.versions.v8", process.versions.v8); // V8 引擎版本
+    console.log("process.versions.chrome", process.versions.chrome); // chrome版本
     electronStore.config.set("themeConfig", DarkTheme);
     const thm = electronStore.config.get("themeConfig");
     if (thm) setTheme(thm);
@@ -87,6 +76,12 @@ const StyleGlobal = createGlobalStyle`
     overflow: hidden;
   }
   *{
+    .arco-btn-primary:not(.arco-btn-disabled){
+      color: var(--color-bg-1);
+    }
+    .arco-btn-primary:not(.arco-btn-disabled):not(.arco-btn-loading):hover {
+      color: var(--color-bg-1);
+    }
     &::-webkit-scrollbar {/*滚动条整体样式*/
       width: 5px;     /*高宽分别对应横竖滚动条的尺寸*/
       height: 5px;
@@ -113,9 +108,6 @@ const StyleContainer = styled.div`
   overflow: hidden;
   background-color: var(--color-bg-1);
   display: flex;
-  .auto-margin {
-    margin: auto;
-  }
 `;
 
 // if (module.hot) module.hot.accept();

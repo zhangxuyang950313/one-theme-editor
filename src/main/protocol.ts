@@ -36,6 +36,7 @@ async function getFilePicResponseData(
         options.height = Number(searchParams.get("h") || 0);
         options.quality = searchParams.get("q") || "best";
         file = decodeURIComponent(path.join(root, hostname, pathname));
+        console.log(file);
         if (!fse.existsSync(file)) {
           // 如果获取不到的备份
           if (backupRoot) {
@@ -128,7 +129,7 @@ export default function registerProtocol(): void {
     });
   });
 
-  protocol.registerBufferProtocol("image:local", async (request, response) => {
+  protocol.registerBufferProtocol("local", async (request, response) => {
     const data = await getFilePicResponseData(request.url, "");
     response(data);
   });

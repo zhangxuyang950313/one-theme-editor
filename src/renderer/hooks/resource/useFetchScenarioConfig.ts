@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import { useEditorDispatch } from "@/store/editor";
-import { ActionSetScenarioConfig } from "@/store/editor/action";
 import { LOAD_STATUS } from "src/enum";
 import { TypeScenarioConfig } from "src/types/scenario.config";
 import ScenarioConfigData from "src/data/ScenarioConfig";
 import ERR_CODE from "src/common/errorCode";
+import { ActionSetScenarioConfig } from "@/store/editor/action";
+import { useEditorDispatch } from "@/store/editor";
 
 /**
  * 获取当前工程资源配置(projectData.resourceSrc)
@@ -24,7 +24,6 @@ export default function useFetchScenarioConfig(
       .getScenarioConfig(scenarioSrc)
       .then(data => {
         if (!data) throw new Error(ERR_CODE[3002]);
-        console.log(`加载场景配置: ${scenarioSrc}`, data);
         dispatch(ActionSetScenarioConfig(data));
         setState(data);
         callback && callback(data);

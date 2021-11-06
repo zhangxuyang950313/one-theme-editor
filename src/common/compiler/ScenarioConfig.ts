@@ -6,7 +6,10 @@ import {
   TypePackConfig,
   TypeScenarioConfig
 } from "src/types/scenario.config";
-import { TypeResourceOption } from "src/types/resource.config";
+import {
+  TypeResourceConfig,
+  TypeResourceOption
+} from "src/types/resource.config";
 import { ELEMENT_TAG, PACK_TYPE } from "src/enum/index";
 import ScenarioConfigData, {
   ApplyConfig,
@@ -105,7 +108,7 @@ export default class ScenarioConfigCompiler extends XmlCompilerExtra {
     return new ApplyConfig().set("steps", steps).create();
   }
 
-  // 解析编辑器资源配置列表
+  // 解析编辑器资源选项列表
   getResourceOptionList(): TypeResourceOption[] {
     return super
       .getChildrenFirstElementNode()
@@ -116,6 +119,20 @@ export default class ScenarioConfigCompiler extends XmlCompilerExtra {
           path.join(pathUtil.RESOURCE_CONFIG_DIR, src)
         );
         return isExists ? [ResourceConfigCompiler.from(src).getOption()] : [];
+      });
+  }
+
+  // 解析编辑器资源配置列表
+  getResourceConfigList(): TypeResourceConfig[] {
+    return super
+      .getChildrenFirstElementNode()
+      .getChildrenNodesByTagname(ELEMENT_TAG.ResourceConfig)
+      .flatMap(node => {
+        const src = node.getAttributeOf("src");
+        const isExists = fse.pathExistsSync(
+          path.join(pathUtil.RESOURCE_CONFIG_DIR, src)
+        );
+        return isExists ? [ResourceConfigCompiler.from(src).getConfig()] : [];
       });
   }
 

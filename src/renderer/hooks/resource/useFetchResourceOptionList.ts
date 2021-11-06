@@ -23,7 +23,6 @@ export default function useFetchResourceOptionList(
     window.$server
       .getResourceOptionList(scenarioSrc)
       .then(data => {
-        console.log("配置列表", data);
         setState(data);
         dispatch(ActionSetResourceOptionList(data));
         setStatus(LOAD_STATUS.SUCCESS);

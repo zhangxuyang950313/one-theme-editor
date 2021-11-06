@@ -1,24 +1,31 @@
 import path from "path";
 import fse from "fs-extra";
-import { dialog, remote } from "electron";
+import { dialog } from "electron";
 
 import { isDev } from "src/common/utils/index";
-import { TypeProjectInfo } from "src/types/project";
-import { TypeResourceOption } from "src/types/resource.config";
+import { TypeProjectDataDoc, TypeProjectInfo } from "src/types/project";
+import { TypeResourceConfig } from "src/types/resource.config";
 
 import styled from "styled-components";
 import React, { useEffect, useRef, useState } from "react";
-import { Modal, Form, Input, Message, Button } from "@arco-design/web-react";
-import { IconClose, IconFolderAdd } from "@arco-design/web-react/icon";
+import {
+  Modal,
+  Form,
+  Input,
+  Message,
+  Button,
+  Drawer,
+  DrawerProps
+} from "@arco-design/web-react";
+import { IconFolderAdd } from "@arco-design/web-react/icon";
 import { FILE_TEMPLATE_TYPE } from "src/enum";
+import { TypeScenarioOption } from "src/types/scenario.config";
 import pathUtil from "src/common/utils/pathUtil";
-import ProjectForm from "./components/ProjectForm";
+import { useToggle } from "ahooks";
+import TemplateList from "./TemplateLIst";
 import Steps from "@/components/Steps";
-import RootWrapper from "@/RootWrapper";
-import ResourceConfigManager from "@/components/ResourceConfigManager";
-import useFetchResourceOptionList from "@/hooks/resource/useFetchResourceOptionList";
-import useFetchScenarioOption from "@/hooks/resource/useFetchScenarioOption";
-import { useQuey } from "@/hooks";
+import ProjectForm from "@/components/ProjectForm";
+import ResourceConfigList from "@/components/ResourceConfigList";
 
 // 表单默认值
 const txt = `测试text`;
@@ -32,57 +39,63 @@ const initialValues = {
 
 const defaultPath = pathUtil.ELECTRON_DESKTOP;
 
-const closeCurrentWindow = (beforeClose?: () => boolean) => {
-  if (beforeClose && beforeClose()) {
-    Modal.confirm({
-      title: "提示",
-      content: "填写的信息将不被保存，确定取消创建主题？",
-      onOk: () => remote.getCurrentWindow().close()
-    });
-  } else {
-    remote.getCurrentWindow().close();
-  }
-};
+// const closeCurrentWindow = (beforeClose?: () => boolean) => {
+//   if (beforeClose && beforeClose()) {
+//     Modal.confirm({
+//       title: "提示",
+//       content: "填写的信息将不被保存，确定取消创建主题？",
+//       onOk: () => remote.getCurrentWindow().close()
+//     });
+//   } else {
+//     remote.getCurrentWindow().close();
+//   }
+// };
 
 // 创建主题按钮
-const CreateProject: React.FC = () => {
-  const { scenarioSrc = "", scenarioName = "" } =
-    useQuey<{ scenarioSrc?: string; scenarioName?: string }>();
+const CreateProject: React.FC<
+  DrawerProps & {
+    scenarioOption: TypeScenarioOption;
+    onCreated: (x: TypeProjectDataDoc) => void;
+  }
+> = props => {
+  const { scenarioOption, onCreated } = props;
   // 当前步骤
   const [curStep, setCurStep] = useState(0);
   // 创建状态
-  const [isCreating, updateCreating] = useState(false);
+  const [isCreating, creatingStatus] = useToggle(false);
   // 表单实例
   const [form] = Form.useForm<TypeProjectInfo>();
   // 选择的模板
-  const [resourceConfig, setResourceConfig] = useState<TypeResourceOption>();
+  const [resourceConfig, setResourceConfig] = useState<TypeResourceConfig>();
   // 填写本地目录
-  const [localPathForSave, setLocalPathForSave] = useState(
+  const [localPath, setLocalPath] = useState(
     path.join(defaultPath, initialValues.name)
   );
   // 表单错误列表
   // const [fieldsError, setFieldsError] = useState([]);
-
-  // 机型配置
-  const [scenarioOption] = useFetchScenarioOption(scenarioSrc);
-
-  // 配置列表
-  const [resourceOptionList] = useFetchResourceOptionList(scenarioSrc);
-
+  const [resourceList, setResourceList] = useState<TypeResourceConfig[]>([]);
   // 工程信息配置
   const projectInfoConfig = scenarioOption.fileTempList.find(
     item => item.type === FILE_TEMPLATE_TYPE.INFO
   );
 
   // projectInfo
-  const projectInfoRef = useRef<TypeProjectInfo>({});
+  const projectInfoRef = useRef<TypeProjectInfo>(initialValues);
 
   useEffect(() => {
-    if (!localPathForSave) {
+    if (!localPath) {
       Message.info("路径不能为空");
-      setLocalPathForSave(path.join(defaultPath, form.getFieldValue("name")));
+      setLocalPath(path.join(defaultPath, form.getFieldValue("name")));
     }
-  }, [localPathForSave]);
+  }, [localPath]);
+
+  // 获取资源配置列表
+  useEffect(() => {
+    if (!scenarioOption.src) return;
+    window.$server
+      .getResourceConfigList(scenarioOption.src)
+      .then(setResourceList);
+  }, [scenarioOption.src]);
 
   // 步骤控制
   const nextStep = () => setCurStep(curStep + 1);
@@ -105,7 +118,7 @@ const CreateProject: React.FC = () => {
       })
       .then(result => {
         if (result.canceled) return;
-        setLocalPathForSave(
+        setLocalPath(
           path.join(result.filePaths[0], form.getFieldValue("name"))
         );
       });
@@ -120,8 +133,8 @@ const CreateProject: React.FC = () => {
           {projectInfoConfig && (
             <ProjectForm
               projectInfoConfig={projectInfoConfig}
-              initialValues={initialValues}
-              onLocalPathSuggestion={setLocalPathForSave}
+              initialValues={projectInfoRef.current}
+              onLocalPathSuggestion={setLocalPath}
               onFormValuesChange={fieldsValue => {
                 form.setFieldsValue(fieldsValue);
                 Object.assign(projectInfoRef.current, fieldsValue);
@@ -129,16 +142,16 @@ const CreateProject: React.FC = () => {
             />
           )}
           {/* 填写信息 */}
-          <StyleSetLocalPath>
-            <p>本地目录</p>
+          <div className="local-path">
+            <p>保存位置</p>
             <div className="input-area">
               <Input
                 placeholder="输入或选择目录"
                 allowClear
-                value={localPathForSave}
+                value={localPath}
                 onChange={value => {
                   // form.setFieldsValue({ projectRoot: e.target.value });
-                  setLocalPathForSave(value);
+                  setLocalPath(value);
                 }}
               />
               <Button
@@ -149,13 +162,13 @@ const CreateProject: React.FC = () => {
                 选择
               </Button>
             </div>
-          </StyleSetLocalPath>
+          </div>
         </StyleFillInfo>
       ),
       // 取消
       cancel: {
         disabled: isCreating,
-        handleCancel: () => closeCurrentWindow(() => true)
+        handleCancel: () => props.onCancel && props.onCancel()
       },
       next: {
         disabled:
@@ -173,9 +186,8 @@ const CreateProject: React.FC = () => {
     {
       name: "选择配置",
       Context: (
-        <ResourceConfigManager
-          className="resource-config-manager"
-          resourceOptionList={resourceOptionList}
+        <ResourceConfigList
+          resourceConfigList={resourceList}
           selectedKey={resourceConfig?.key || ""}
           onSelected={setResourceConfig}
         />
@@ -197,7 +209,7 @@ const CreateProject: React.FC = () => {
     },
     {
       name: "选择模板",
-      Context: null,
+      Context: <TemplateList />,
       prev: {
         disabled: isCreating,
         handlePrev: prevStep
@@ -206,23 +218,23 @@ const CreateProject: React.FC = () => {
       start: {
         disabled: isCreating,
         async handleStart() {
-          if (!localPathForSave) throw new Error("请选择正确的本地路径");
-          if (!fse.existsSync(localPathForSave)) {
+          if (!localPath) throw new Error("请选择正确的本地路径");
+          if (!fse.existsSync(localPath)) {
             await new Promise<void>(resolve => {
               Modal.confirm({
                 title: "提示",
-                content: `目录"${localPathForSave}"不存在，是否创建？`,
+                content: `目录"${localPath}"不存在，是否创建？`,
                 onOk: () => {
-                  fse.ensureDirSync(localPathForSave);
+                  fse.ensureDirSync(localPath);
                   resolve();
                 }
               });
             });
-          } else if (fse.readdirSync(localPathForSave).length > 0) {
+          } else if (fse.readdirSync(localPath).length > 0) {
             await new Promise<void>(resolve => {
               Modal.confirm({
                 title: "提示",
-                content: `目录"${localPathForSave}"为非空目录，可能不是主题目录，是否仍然继续使用此目录？`,
+                content: `目录"${localPath}"为非空目录，可能不是主题目录，是否仍然继续使用此目录？`,
                 onOk: () => {
                   resolve();
                 }
@@ -232,14 +244,14 @@ const CreateProject: React.FC = () => {
           if (!resourceConfig) {
             throw new Error("未选择配置模板");
           }
-          updateCreating(true);
+          creatingStatus.setRight();
           const resourceConfigPath = path.join(
             resourceConfig.namespace,
             resourceConfig.config
           );
           return window.$server
             .createProject({
-              root: localPathForSave,
+              root: localPath,
               description: projectInfoRef.current,
               scenarioMd5: scenarioOption.md5,
               scenarioSrc: scenarioOption.src,
@@ -247,11 +259,12 @@ const CreateProject: React.FC = () => {
             })
             .then(data => {
               console.log("创建工程：", data);
-              closeCurrentWindow();
-              window.$invoker.sendBroadcast.$projectCreated(data);
+              onCreated(data);
+              // closeCurrentWindow();
+              // window.$invoker.sendBroadcast.$projectCreated(data);
             })
             .finally(() => {
-              updateCreating(false);
+              creatingStatus.setLeft();
               setTimeout(init, 300);
             });
         }
@@ -295,7 +308,7 @@ const CreateProject: React.FC = () => {
         className="button-item"
         onClick={step.next.handleNext}
         disabled={step.next.disabled}
-        // loading={isCreating}
+        loading={isCreating}
       >
         下一步
       </Button>
@@ -314,7 +327,7 @@ const CreateProject: React.FC = () => {
             .catch(err => Message.error({ content: err.Message }));
         }}
         disabled={step.start.disabled}
-        // loading={isCreating}
+        loading={isCreating}
       >
         开始
       </Button>
@@ -322,26 +335,26 @@ const CreateProject: React.FC = () => {
   };
 
   return (
-    <StyleCreateProject>
-      <span className="title">
-        创建{decodeURI(scenarioName) || "工程"}
-        <IconClose
-          className="close-btn"
-          onClick={() => closeCurrentWindow(() => true)}
-        />
-      </span>
-      <div className="content">
-        <StyleSteps steps={steps.map(o => o.name)} current={curStep} />
-        {step.Context}
-      </div>
-      {/* 弹框底部控制按钮 */}
-      <div className="footer-buttons">
-        <CancelButton key="cancel" />
-        <PrevButton key="prev" />
-        <NextButton key="next" />
+    <Drawer
+      width="50%"
+      title={`创建${scenarioOption.name}`}
+      unmountOnExit
+      closable={false}
+      footer={[
+        <CancelButton key="cancel" />,
+        <PrevButton key="prev" />,
+        <NextButton key="next" />,
         <StartButton key="start" />
-      </div>
-    </StyleCreateProject>
+      ]}
+      {...props}
+    >
+      <StyleCreateProject>
+        <div className="container">
+          <StyleSteps steps={steps.map(o => o.name)} current={curStep} />
+          <div className="content">{step.Context}</div>
+        </div>
+      </StyleCreateProject>
+    </Drawer>
   );
 };
 
@@ -350,65 +363,44 @@ const StyleCreateProject = styled.div`
   flex-direction: column;
   width: 100%;
   height: 100%;
-  .title {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 14px 20px;
-    color: var(--color-text-1);
-    border-bottom: 1px var(--color-border-1) solid;
-    .close-btn {
-      font-size: 20px;
-      &:hover {
-        cursor: pointer;
-        background-color: var(--color-border-1);
-      }
-    }
-  }
-  .content {
+  .container {
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
     flex-shrink: 1;
     flex-grow: 1;
     overflow: hidden;
-    .resource-config-manager {
-      padding: 0 30px;
-    }
-  }
-  .footer-buttons {
-    display: flex;
-    justify-content: flex-end;
-    padding: 15px 30px;
-    border-top: 1px var(--color-border-1) solid;
-    .button-item {
-      margin-left: 10px;
+    .content {
+      height: 100%;
+      padding: 20px;
+      overflow: hidden;
+      overflow-y: auto;
     }
   }
 `;
 
 const StyleSteps = styled(Steps)`
-  padding: 20px 30px;
-`;
-
-const StyleSetLocalPath = styled.div`
-  border-top: 0.5px var(--color-border-1) solid;
-  padding-top: 20px;
-  color: var(--color-text-1);
-  .input-area {
-    display: flex;
-  }
+  padding: 0 20px;
 `;
 
 const StyleFillInfo = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 0 30px 30px 30px;
+  /* padding: 0 10px 10px 10px; */
   width: 100%;
+  overflow-x: hidden;
   overflow-y: auto;
   .project-input {
     margin-right: 20px;
   }
+  .local-path {
+    border-top: 0.5px var(--color-primary-light-1) solid;
+    padding-top: 20px;
+    color: var(--color-text-1);
+    .input-area {
+      display: flex;
+    }
+  }
 `;
 
-RootWrapper(CreateProject);
+export default CreateProject;

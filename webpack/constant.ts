@@ -33,10 +33,9 @@ export const entryFile = {
   main: path.resolve(rootDir, "src/main/index.ts"),
   preload: path.resolve(rootDir, "src/preload/index.ts"),
   render: {
-    starter: path.resolve(rootDir, "src/renderer/views/starter/index.tsx"),
-    createProject: path.resolve(
+    projectManager: path.resolve(
       rootDir,
-      "src/renderer/views/create-project/index.tsx"
+      "src/renderer/views/project-manager/index.tsx"
     ),
     projectEditor: path.resolve(
       rootDir,

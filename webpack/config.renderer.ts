@@ -121,8 +121,7 @@ const config: webpack.ConfigurationFactory = (env, args) => {
      */
     stats: "errors-warnings",
     entry: {
-      "starter": entryFile.render.starter,
-      "create-project": entryFile.render.createProject,
+      "project-manager": entryFile.render.projectManager,
       "project-editor": entryFile.render.projectEditor
     },
     output: {
@@ -290,21 +289,15 @@ const config: webpack.ConfigurationFactory = (env, args) => {
         overrideConfigFile: eslintConfigFile
       }),
       new HtmlWebpackPlugin({
-        template: path.resolve(rootDir, "public/index.html"), // 指定模板路径
-        filename: "starter.html", // 最终创建的文件名,
-        chunks: ["starter"],
+        template: path.resolve(rootDir, "public/index.html"),
+        filename: "project-manager.html",
+        chunks: ["project-manager"],
         ...htmlPluginOpt(isDev)
       }),
       new HtmlWebpackPlugin({
-        template: path.resolve(rootDir, "public/index.html"), // 指定模板路径
-        filename: "project-editor.html", // 最终创建的文件名
+        template: path.resolve(rootDir, "public/index.html"),
+        filename: "project-editor.html",
         chunks: ["project-editor"],
-        ...htmlPluginOpt(isDev)
-      }),
-      new HtmlWebpackPlugin({
-        template: path.resolve(rootDir, "public/index.html"), // 指定模板路径
-        filename: "create-project.html", // 最终创建的文件名
-        chunks: ["create-project"],
         ...htmlPluginOpt(isDev)
       }),
       new HappyPack({

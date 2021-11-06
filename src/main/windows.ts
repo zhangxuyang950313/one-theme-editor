@@ -88,7 +88,7 @@ export const createWindows = {
       show: true
     });
     devToolsHandler(win);
-    win.loadURL(getUrl.starter());
+    win.loadURL(getUrl.projectManager());
     // win.loadURL(getUrl.projectEditor("6d312b14-2013-42e2-93d3-3e64beda25d1"));
     win.on("ready-to-show", () => win.show());
     return win;

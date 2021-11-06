@@ -26,6 +26,8 @@
 
     <!-- 编辑器资源配置 -->
     <ResourceConfig src="xiaomi/miui12/description.xml"/>
+    <ResourceConfig src="xiaomi/miui12/description.xml"/>
+    <ResourceConfig src="xiaomi/miui12/description.xml"/>
 
     <!-- 
         打包配置 

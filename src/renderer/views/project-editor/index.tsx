@@ -42,9 +42,9 @@ const EditorFrame: React.FC = props => {
   const [scenarioConfig] = useFetchScenarioConfig(projectData.scenarioSrc);
 
   // 栏目开关
-  const [displayModuleSelector, setModuleSelector] = useToggle(true);
-  const [displayPageSelector, setPageSelector] = useToggle(true);
-  const [displayPreviewSelector, setPreviewSelector] = useToggle(true);
+  const [displayModuleSelector, toggleModuleSelector] = useToggle(true);
+  const [displayPageSelector, togglePageSelector] = useToggle(true);
+  const [displayPreviewSelector, togglePreviewSelector] = useToggle(true);
 
   // 当前模块
   const [moduleConfig, setModuleConfig] = useState(ModuleConfig.default);
@@ -115,19 +115,19 @@ const EditorFrame: React.FC = props => {
       name: TOOLS_BAR_BUTTON.MODULE_TOGGLE,
       icon: <DeploymentUnitOutlined />,
       defaultToggle: displayModuleSelector,
-      onClick: setModuleSelector.toggle
+      onClick: toggleModuleSelector.toggle
     },
     {
       name: TOOLS_BAR_BUTTON.PAGE_TOGGLE,
       icon: <TagsOutlined />,
       defaultToggle: displayPageSelector,
-      onClick: setPageSelector.toggle
+      onClick: togglePageSelector.toggle
     },
     {
       name: TOOLS_BAR_BUTTON.PREVIEW_TOGGLE,
       icon: <TabletOutlined />,
       defaultToggle: displayPreviewSelector,
-      onClick: setPreviewSelector.toggle
+      onClick: togglePreviewSelector.toggle
     }
     // { name: TOOLS_BAR_BUTTON.PLACEHOLDER, icon: <div /> }
     // { name: TOOLS_BAR_BUTTON.DARK, icon: <InfoCircleOutlined /> },

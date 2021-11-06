@@ -1,4 +1,5 @@
 import { ipcMain, ipcRenderer } from "electron";
+import { isDev } from "../common/utils/index";
 import IPC_EVENT from "./ipc-event";
 
 // type TypeCallbackReply<T> = {
@@ -88,7 +89,17 @@ export default class IpcCreator {
         $event.returnValue = params.server($data);
       });
     });
-    return (data?: Params): Result => ipcRenderer.sendSync(params.event, data);
+    return (data?: Params): Result => {
+      const result = ipcRenderer.sendSync(params.event, data);
+      if (isDev) {
+        console.log("---------ipc---------");
+        console.log("sync", params.event);
+        console.log("params", data);
+        console.log("result", result);
+        console.log("---------------------");
+      }
+      return result;
+    };
   }
 
   // 创建异步 ipc 调用
@@ -103,11 +114,21 @@ export default class IpcCreator {
       );
     });
 
-    return async (data: Params): Promise<Result> =>
-      await ipcRenderer.invoke(params.event, data).catch(err => {
+    return async (data: Params): Promise<Result> => {
+      const result = await ipcRenderer.invoke(params.event, data).catch(err => {
         console.log(err);
         throw new Error(err.message);
       });
+
+      if (isDev) {
+        console.log("---------ipc---------");
+        console.log("async", params.event);
+        console.log("params", data);
+        console.log("result", result);
+        console.log("---------------------");
+      }
+      return result;
+    };
   }
 
   // 创建回调 ipc 调用，用于多频次回调
@@ -124,6 +145,13 @@ export default class IpcCreator {
     });
     return (data: Params, callback: (x: CP) => void) => {
       ipcRenderer.on(params.event, ($event, $data) => {
+        if (isDev) {
+          console.log("---------ipc---------");
+          console.log("callback", params.event);
+          console.log("params", data);
+          console.log("result", $data);
+          console.log("---------------------");
+        }
         callback($data);
       });
       ipcRenderer.send(params.event, data);

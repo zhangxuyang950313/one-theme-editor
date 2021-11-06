@@ -24,18 +24,23 @@ export const localUrl = `http://${WDS_SERVER_HOST}:${WDS_SERVER_PORT}`;
 const prefix = isDev ? localUrl : `app://./release.renderer`;
 
 export const getUrl = {
-  starter(): string {
-    return `${prefix}/starter.html`;
-  },
-  createProject(scenarioOption: TypeScenarioOption): string {
-    const url = new URL(`${prefix}/create-project.html`);
-    url.searchParams.append("scenarioSrc", scenarioOption.src);
-    url.searchParams.append("scenarioName", scenarioOption.name);
-    return url.toString();
+  projectManager(): string {
+    return `${prefix}/project-manager.html`;
   },
   projectEditor(uuid: string): string {
     const url = new URL(`${prefix}/project-editor.html`);
     url.searchParams.append("uuid", uuid);
+    return url.toString();
+  },
+  /**
+   * @deprecated
+   * @param scenarioOption
+   * @returns
+   */
+  createProject(scenarioOption: TypeScenarioOption): string {
+    const url = new URL(`${prefix}/create-project.html`);
+    url.searchParams.append("scenarioSrc", scenarioOption.src);
+    url.searchParams.append("scenarioName", scenarioOption.name);
     return url.toString();
   }
 };

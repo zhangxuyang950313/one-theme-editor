@@ -41,7 +41,7 @@ export const StyleGirdBackground = styled.span<{ girdSize?: number }>`
 // 顶部 drag 组件
 export const StyleTopDrag = styled.div<{ height: string }>`
   z-index: 9999;
-  position: absolute;
+  position: fixed;
   top: 0;
   width: 100%;
   height: ${({ height }) => height || "30px"};
