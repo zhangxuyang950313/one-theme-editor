@@ -1,4 +1,4 @@
-import { TypeKeyValue } from "src/types/index";
+import { TypeKeyValue } from "src/types/utils";
 import {
   TypeXmlKeyValConfig,
   TypeXmlKeyValMapperMap,

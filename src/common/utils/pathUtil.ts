@@ -1,7 +1,7 @@
 import os from "os";
 import path from "path";
 import { app, ipcRenderer, remote } from "electron";
-import { TypePathCollection } from "src/types/extraConfig";
+import { TypePathCollection } from "src/types/config.extra";
 
 // 区分主进程和渲染进程
 const $app = !!ipcRenderer ? remote.app : app;

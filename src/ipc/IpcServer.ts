@@ -17,8 +17,11 @@ import ScenarioOptions from "src/common/compiler/ScenarioOptions";
 import ERR_CODE from "src/common/errorCode";
 import {
   TypeCreateProjectPayload,
+  TypePackPayload,
+  TypePackProcess,
   TypeProjectData,
-  TypeProjectDataDoc
+  TypeProjectDataDoc,
+  TypeUnpackPayload
 } from "src/types/project";
 import { TypePageConfig, TypeResourceConfig } from "src/types/resource.config";
 import {
@@ -29,6 +32,7 @@ import { TypeWriteXmlTempPayload } from "src/types/request";
 import { writeXmlTemplate } from "src/common/xmlTemplate";
 import { getFileData } from "src/common/utils";
 import { TypeFileData } from "src/types/resource.page";
+import PackageUtil from "src/common/utils/PackageUtil";
 import IPC_EVENT from "./ipc-event";
 import IpcCreator from "./IpcCreator";
 
@@ -184,8 +188,25 @@ class IpcServer extends IpcCreator {
     event: IPC_EVENT.$getFileDataSync,
     server: getFileData
   });
-  // 应用
-  // apply= createIpcCallback({
+
+  // 打包并导出
+  packProject = this.createIpcCallback<TypePackPayload, TypePackProcess>({
+    event: IPC_EVENT.$packProject,
+    server: (params, callback) => {
+      PackageUtil.pack(params, callback);
+    }
+  });
+
+  // 解包
+  unpackProject = this.createIpcCallback<TypeUnpackPayload, TypePackProcess>({
+    event: IPC_EVENT.$unpackProject,
+    server: (params, callback) => {
+      PackageUtil.unpack(params, callback);
+    }
+  });
+
+  // // 应用
+  // apply = this.createIpcCallback({
   //   event: IPC_EVENT.$apply,
   //   server: () => {
   //     //

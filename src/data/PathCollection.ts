@@ -1,4 +1,4 @@
-import { TypePathCollection } from "src/types/extraConfig";
+import { TypePathCollection } from "src/types/config.extra";
 import { AbstractDataModel } from "./AbstractDataModel";
 
 export default class PathCollection extends AbstractDataModel<TypePathCollection> {

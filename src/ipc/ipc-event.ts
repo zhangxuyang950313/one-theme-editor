@@ -17,7 +17,9 @@ enum IPC_EVENT {
   $getProjectList = "$getProjectList",
   $getProject = "$getProject",
   $updateProjectInfo = "$updateProjectInfo",
-  $apply = "$apply",
+  $applyProject = "$applyProject",
+  $packProject = "$packProject",
+  $unpackProject = "$unpackProject",
 
   // 窗口管理
   $openCreateProjectWindow = "$openCreateProjectWindow",

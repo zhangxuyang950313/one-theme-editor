@@ -22,7 +22,7 @@ export default function IconButton(
         className="icon-btn"
         data-toggle={Boolean(toggle)}
         onClick={() => {
-          setToggle(!toggle);
+          if ("defaultToggle" in props) setToggle(!toggle);
           props?.onClick && props.onClick(!toggle);
         }}
       >

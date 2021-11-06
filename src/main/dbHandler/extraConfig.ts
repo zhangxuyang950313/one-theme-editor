@@ -5,7 +5,7 @@ import {
   TypePathCollection,
   TypePathConfigInDoc,
   TypeServerConfig
-} from "src/types/extraConfig";
+} from "src/types/config.extra";
 import { EXTRA_DATA_TYPE } from "src/enum";
 import { createNedb } from "src/common/utils/databaseUtil";
 import ServerConfig from "src/data/ServerConfig";

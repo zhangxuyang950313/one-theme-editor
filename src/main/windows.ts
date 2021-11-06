@@ -29,7 +29,7 @@ async function setupDevTools() {
 }
 
 async function devToolsHandler(win: BrowserWindow): Promise<void> {
-  await new Promise(resolve => win.on("ready-to-show", resolve));
+  // await new Promise(resolve => win.on("ready-to-show", resolve));
   if (isDev) {
     // 打开 dev 工具
     win.webContents.openDevTools();
@@ -56,7 +56,7 @@ const windowNormalizeOptions: BrowserWindowConstructorOptions = {
     nodeIntegrationInWorker: true,
     enableRemoteModule: true,
     contextIsolation: false,
-    devTools: isDev || true,
+    devTools: isDev,
     preload: preloadFile,
     zoomFactor: 1.0
     // maximize: true

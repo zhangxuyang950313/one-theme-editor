@@ -1,5 +1,5 @@
 import apiConfig from "src/constant/apiConf";
-import { TypePathCollection } from "src/types/extraConfig";
+import { TypePathCollection } from "src/types/config.extra";
 import { createHttp } from "./axios";
 
 /**
