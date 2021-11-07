@@ -30,7 +30,7 @@ export async function createProject(
   });
 }
 
-// md5 筛选所有工程
+// 筛选工程
 export async function findProjectListByQuery(
   query: Partial<TypeProjectDataDoc>
 ): Promise<TypeProjectDataDoc[]> {
@@ -48,7 +48,7 @@ export async function findProjectByQuery(
 
 // 更新工程数据
 export async function updateProject<
-  T = Partial<TypeProjectData>,
+  T extends Partial<TypeProjectData>,
   O = { [K in keyof T]: T[K] }
 >(
   uuid: string,
@@ -61,16 +61,11 @@ export async function updateProject<
     | { $set: O }
     | { $unset: O }
 ): Promise<TypeProjectDataDoc> {
-  const updated = await projectDB.update<TypeProjectData>(
-    { uuid },
-    { projectInfo: data },
-    {
-      multi: false, // 更新所有匹配项目
-      upsert: false, // 不存在则创建
-      returnUpdatedDocs: true
-    }
-  );
-  console.log({ updated });
+  const updated = await projectDB.update<TypeProjectData>({ uuid }, data, {
+    multi: false, // 更新所有匹配项目
+    upsert: false, // 不存在则创建
+    returnUpdatedDocs: true
+  });
   if (updated) return updated;
   else throw new Error(ERR_CODE[2004]);
 }

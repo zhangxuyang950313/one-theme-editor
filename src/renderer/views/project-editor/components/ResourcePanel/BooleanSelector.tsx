@@ -12,6 +12,7 @@ const BooleanSelector: React.FC<{
     <StyleBooleanSelector>
       <Radio.Group
         type="button"
+        size="large"
         value={value}
         onChange={value => onChange(value)}
       >

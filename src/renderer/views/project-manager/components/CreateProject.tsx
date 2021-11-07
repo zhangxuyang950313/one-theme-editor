@@ -241,7 +241,7 @@ const CreateProject: React.FC<
           creatingStatus.setRight();
           const resourceConfigPath = path.join(
             resourceConfig.namespace,
-            resourceConfig.config
+            resourceConfig.src
           );
           return window.$server
             .createProject({

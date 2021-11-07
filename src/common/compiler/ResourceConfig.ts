@@ -155,7 +155,7 @@ export default class ResourceConfigCompiler extends XmlCompiler {
     return new ResourceOption()
       .set("key", UUID())
       .set("namespace", this.namespace)
-      .set("config", path.basename(this.getDescFile()))
+      .set("src", path.basename(this.getDescFile()))
       .set("name", this.getName())
       .set("version", this.getVersion())
       .set("preview", this.getPreviewPic())

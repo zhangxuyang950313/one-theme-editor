@@ -1,6 +1,11 @@
+import path from "path";
 import { ipcMain, IpcMainEvent, ipcRenderer } from "electron";
+import ResourceConfig from "src/data/ResourceConfig";
 import ProjectData from "src/data/ProjectData";
 import IPC_EVENT from "src/ipc/ipc-event";
+import ScenarioConfig from "src/data/ScenarioConfig";
+import ResourceConfigCompiler from "src/common/compiler/ResourceConfig";
+import pathUtil from "src/common/utils/pathUtil";
 
 // 构建进程间响应数据
 class ReactiveState<T extends Record<string, unknown>, K extends keyof T> {
@@ -41,7 +46,9 @@ class ReactiveState<T extends Record<string, unknown>, K extends keyof T> {
     if (this.isMain && this.$replyEvent) {
       this.$replyEvent.sender.send(IPC_EVENT.$reactiveStateSet, payload);
     }
-    this.state[prop] = value;
+    if (prop in this.state) {
+      this.state[prop] = value;
+    }
   }
 
   get<K extends keyof T>(prop: K): T[K] {
@@ -65,8 +72,33 @@ class ReactiveState<T extends Record<string, unknown>, K extends keyof T> {
   }
 }
 
-export default new ReactiveState({
+const reactiveState = new ReactiveState({
   projectData: ProjectData.default,
-  resourcePath: "",
-  projectPath: ""
+  resourceConfig: ResourceConfig.default,
+  scenarioConfig: ScenarioConfig.default,
+  projectPath: "",
+  resourcePath: ""
 });
+
+// reactiveState.addSetterHook((obj, prop, value) => {
+//   if (prop === "projectData") {
+//     const { projectData } = obj;
+//     if (projectData.root) {
+//       reactiveState.set("projectPath", projectData.root);
+//     }
+//     if (projectData.resourceSrc) {
+//       reactiveState.set(
+//         "resourceConfig",
+//         ResourceConfigCompiler.from(projectData.resourceSrc).getConfig()
+//       );
+//     }
+//     if (obj.resourceConfig.namespace) {
+//       reactiveState.set(
+//         "resourcePath",
+//         path.join(pathUtil.RESOURCE_CONFIG_DIR, obj.resourceConfig.namespace)
+//       );
+//     }
+//   }
+// });
+
+export default reactiveState;

@@ -14,6 +14,7 @@ enum IPC_EVENT {
 
   // 工程
   $createProject = "$createProject",
+  $updateProject = "$updateProject",
   $projectCreated = "$projectCreated",
   $getProjectList = "$getProjectList",
   $getProject = "$getProject",

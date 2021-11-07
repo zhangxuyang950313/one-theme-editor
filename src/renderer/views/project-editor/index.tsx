@@ -2,7 +2,7 @@ import path from "path";
 import { remote } from "electron";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { Empty, Notification, Message } from "@arco-design/web-react";
+import { Empty, Message } from "@arco-design/web-react";
 import {
   InfoCircleOutlined,
   MobileOutlined,
@@ -14,100 +14,45 @@ import {
 import { useToggle } from "ahooks";
 import { TOOLS_BAR_BUTTON } from "src/enum";
 import { ModuleConfig, PageConfig } from "src/data/ResourceConfig";
-import { TypePageConfig } from "src/types/resource.config";
-import { asyncQueue } from "src/common/utils";
-import ProjectData from "src/data/ProjectData";
-import pathUtil from "src/common/utils/pathUtil";
 import EditorToolsBar from "./components/ToolsBar";
 import ModuleSelector from "./components/ModuleSelector";
 import PageSelector from "./components/PageSelector";
 import Previewer from "./components/Previewer";
 import ResourcePanel from "./components/ResourcePanel";
 import StatusBar from "./components/StatusBar";
-import useFetchScenarioConfig from "@/hooks/useFetchScenarioConfig";
-import useFetchResourceConfig from "@/hooks/useFetchResourceConfig";
-import useFetchProjectData from "@/hooks/useFetchProjectData";
+import { useLoadPageConfigList, useLoadProject } from "./hooks";
 import { TypeIconButtonOption } from "@/components/one-ui/IconButton";
 import { StyleTopDrag } from "@/style";
 import RootWrapper from "@/RootWrapper";
 import { useQuey } from "@/hooks";
 
 // 编辑区域框架
-const EditorFrame: React.FC = props => {
+const EditorFrame: React.FC = () => {
   const { uuid = "" } = useQuey<{ uuid?: string }>();
-  const [projectInfoVisible, setProjectInfoVisible] = useState(false);
-
-  const [projectData] = useFetchProjectData(uuid);
-  const [resourceConfig] = useFetchResourceConfig(projectData.resourceSrc);
-  const [scenarioConfig] = useFetchScenarioConfig(projectData.scenarioSrc);
-
+  const [, toggleProjectInfo] = useToggle(false);
   // 栏目开关
   const [displayModuleSelector, toggleModuleSelector] = useToggle(true);
   const [displayPageSelector, togglePageSelector] = useToggle(true);
   const [displayPreviewSelector, togglePreviewSelector] = useToggle(true);
 
+  // 加载工程
+  const { projectData, resourceConfig, scenarioConfig } = useLoadProject(uuid);
+  const { namespace, moduleList } = resourceConfig;
   // 当前模块
   const [moduleConfig, setModuleConfig] = useState(ModuleConfig.default);
   // 当前页面
   const [pageConfig, setPageConfig] = useState(PageConfig.default);
+  const pageConfigList = useLoadPageConfigList(namespace, moduleConfig);
 
-  const moduleConfigList = resourceConfig?.moduleList || [];
-  const [pageConfigList, setPageConfigList] = useState<TypePageConfig[]>([]);
-  const resourceList = pageConfig.resourceList;
-
-  // // 加载当前模块页面配置
-  // const [pageConfigList] = useFetchPageConfList(
-  //   projectData.resourceSrc,
-  //   moduleConfig.pageList.map(item => item.src)
-  // );
-
-  // 添加进程间响应式数据
+  // 模块默认选第一个, 空则使用默认
   useEffect(() => {
-    if (!projectData) return;
-    window.$reactiveState.set("projectData", projectData);
-    window.$reactiveState.set("projectPath", projectData.root);
-    return () => {
-      window.$reactiveState.set("projectData", ProjectData.default);
-      window.$reactiveState.set("projectPath", "");
-    };
-  }, [projectData]);
+    setModuleConfig(moduleList[0] || ModuleConfig.default);
+  }, [moduleList]);
 
-  useEffect(() => {
-    if (!resourceConfig) return;
-    const resourcePath = path.join(
-      pathUtil.RESOURCE_CONFIG_DIR,
-      resourceConfig.namespace
-    );
-    window.$reactiveState.set("resourcePath", resourcePath);
-  }, [resourceConfig]);
-
-  // 模块默认选第一个
-  useEffect(() => {
-    if (!moduleConfigList[0]) return;
-    setModuleConfig(moduleConfigList[0]);
-  }, [moduleConfigList]);
-
-  // 页面默认选第一个, 没有使用默认
+  // 页面默认选第一个, 空则使用默认
   useEffect(() => {
     setPageConfig(pageConfigList[0] || PageConfig.default);
   }, [pageConfigList]);
-
-  // 加载当前模块页面配置
-  useEffect(() => {
-    if (!projectData.resourceSrc) return;
-    const pageConfDataQueue = moduleConfig.pageList.map(item => async () => {
-      const data = await window.$server.getPageConfig({
-        namespace: path.dirname(projectData.resourceSrc),
-        config: item.src
-      });
-      console.log("加载当前模块页面配置：", data);
-      // dispatch(ActionPatchPageConfMap(data));
-      return data;
-    });
-    asyncQueue(pageConfDataQueue)
-      .then(setPageConfigList)
-      .catch(err => Notification.error({ content: err.message }));
-  }, [projectData.resourceSrc, moduleConfig]);
 
   // 工具栏按钮左侧
   const [leftButtons] = useState<TypeIconButtonOption[]>([
@@ -151,7 +96,6 @@ const EditorFrame: React.FC = props => {
         icon: <FolderOutlined />,
         onClick: () => {
           const { root, description } = projectData;
-          console.log(projectData, scenarioConfig.packageConfig);
           const { extname } = scenarioConfig.packageConfig;
           const defaultPath = path.join(
             path.dirname(projectData.root),
@@ -187,7 +131,7 @@ const EditorFrame: React.FC = props => {
         name: TOOLS_BAR_BUTTON.INFO,
         icon: <InfoCircleOutlined />,
         onClick: () => {
-          setProjectInfoVisible(true);
+          toggleProjectInfo.setRight();
         }
       }
     ]);
@@ -216,10 +160,10 @@ const EditorFrame: React.FC = props => {
         {/* 模块选择器 */}
         {displayModuleSelector && (
           <div className="editor__module-selector right-border-line">
-            {moduleConfigList.length ? (
+            {moduleList.length ? (
               <ModuleSelector
                 className="editor__module-content"
-                moduleConfigList={moduleConfigList}
+                moduleConfigList={moduleList}
                 currentModule={moduleConfig}
                 onChange={setModuleConfig}
               />
@@ -268,10 +212,7 @@ const EditorFrame: React.FC = props => {
             {/* 资源编辑区 */}
             <div className="resource-panel ">
               {pageConfig.config ? (
-                <ResourcePanel
-                  pageConfig={pageConfig}
-                  resourceList={resourceList}
-                />
+                <ResourcePanel pageConfig={pageConfig} />
               ) : (
                 <Empty className="no-config" description="无资源配置" />
               )}

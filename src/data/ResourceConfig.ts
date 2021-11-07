@@ -245,7 +245,7 @@ export class ResourceOption extends AbstractDataModel<TypeResourceOption> {
   protected data: TypeResourceOption = {
     key: "",
     namespace: "",
-    config: "",
+    src: "",
     name: "",
     preview: "",
     version: "",

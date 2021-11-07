@@ -6,8 +6,8 @@ import { Input, Message } from "@arco-design/web-react";
 import { IconRight } from "@arco-design/web-react/icon";
 import { RGBColor, SketchPicker } from "react-color";
 import ColorUtil, { HEX_FORMAT } from "src/common/utils/ColorUtil";
-import { StyleGirdBackground } from "@/style";
 import * as electronStore from "src/store";
+import { StyleGirdBackground } from "@/style";
 
 // 颜色小方块
 const ColorBox: React.FC<{

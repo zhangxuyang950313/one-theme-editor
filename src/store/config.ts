@@ -5,16 +5,12 @@ import { TypePathCollection } from "src/types/config.extra";
 import { Point } from "electron";
 
 type TypeStore = {
-  serverPort: number;
-  hostname: string;
   pathConfig: TypePathCollection;
   colorRecently: string[];
   themeConfig: typeof defaultTheme;
   screenCenter: Partial<Point>;
 };
 const defaultState: TypeStore = {
-  serverPort: 0,
-  hostname: "127.0.0.1:0",
   pathConfig: PathCollection.default,
   colorRecently: [],
   themeConfig: defaultTheme,

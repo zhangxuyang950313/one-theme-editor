@@ -1,15 +1,7 @@
 import { TypeProjectDataDoc } from "src/types/project";
-import {
-  TypeModuleConfig,
-  TypePageOption,
-  TypePageConfig,
-  TypeResourceConfig
-} from "src/types/resource.config";
+import { TypePageConfig, TypeResourceConfig } from "src/types/resource.config";
 import { TypeScenarioConfig } from "src/types/scenario.config";
-import ResourceConfigData, {
-  ModuleConfig,
-  PageOption
-} from "src/data/ResourceConfig";
+import ResourceConfigData from "src/data/ResourceConfig";
 import ProjectData from "src/data/ProjectData";
 import ScenarioConfig from "src/data/ScenarioConfig";
 import { TypeFileData } from "src/types/resource.page";
@@ -21,8 +13,6 @@ export type TypeEditorState = {
   projectData: TypeProjectDataDoc;
   scenarioConfig: TypeScenarioConfig;
   resourceConfig: TypeResourceConfig;
-  currentModule: TypeModuleConfig;
-  currentPage: TypePageOption;
   pageConfigMap: Record<string, TypePageConfig | undefined>;
   fileDataMap: Record<string, TypeFileData | undefined>;
 };
@@ -31,8 +21,6 @@ const defaultState: TypeEditorState = {
   projectData: ProjectData.default,
   scenarioConfig: ScenarioConfig.default,
   resourceConfig: ResourceConfigData.default,
-  currentModule: ModuleConfig.default,
-  currentPage: PageOption.default,
   pageConfigMap: {},
   fileDataMap: {}
 };
@@ -52,7 +40,6 @@ export default function EditorReducer(
     }
     // 工程数据
     case ACTION_TYPE.SET_PROJECT_DATA: {
-      document.title = action.payload.description.name || document.title;
       return updateState(state, {
         projectData: action.payload
       });
@@ -65,24 +52,8 @@ export default function EditorReducer(
     }
     // 配置数据
     case ACTION_TYPE.SET_RESOURCE_CONFIG: {
-      const { moduleList } = action.payload;
       return updateState(state, {
-        resourceConfig: action.payload || defaultState.resourceConfig,
-        currentModule: moduleList[0] || defaultState.currentModule,
-        currentPage: moduleList[0]?.pageList?.[0] || defaultState.currentPage
-      });
-    }
-    // 模块配置
-    case ACTION_TYPE.SET_MODULE_CONFIG: {
-      return updateState(state, {
-        currentModule: action.payload || defaultState.currentModule,
-        currentPage: action.payload.pageList[0] || defaultState.currentPage
-      });
-    }
-    // 页面配置
-    case ACTION_TYPE.SET_PAGE_OPTION: {
-      return updateState(state, {
-        currentPage: action.payload || defaultState.currentPage
+        resourceConfig: action.payload
       });
     }
     // 页面配置数据

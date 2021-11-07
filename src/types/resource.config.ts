@@ -26,7 +26,7 @@ export type TypePageConfig = {
 export type TypeResourceOption = {
   key: string;
   namespace: string;
-  config: string;
+  src: string;
   name: string;
   preview: string;
   version: string;

@@ -19,10 +19,6 @@ export enum ACTION_TYPE {
   SET_SCENARIO_CONFIG = "SET_SCENARIO_CONFIG",
   // 设置资源配置
   SET_RESOURCE_CONFIG = "SET_RESOURCE_CONFIG",
-  // 设置模块配置
-  SET_MODULE_CONFIG = "SET_MODULE_CONFIG",
-  // 设置页面配置
-  SET_PAGE_OPTION = "SET_PAGE_OPTION",
   // 添加页面配置数据映射
   PATCH_PAGE_CONFIG = "PATCH_PAGE_CONFIG",
   // 添加 xml 文件数据
@@ -54,17 +50,6 @@ type TypeActionSetResourceConfig = {
   type: typeof ACTION_TYPE.SET_RESOURCE_CONFIG;
   payload: TypeResourceConfig;
 };
-// 设置模块
-type TypeActionSetModuleConf = {
-  type: typeof ACTION_TYPE.SET_MODULE_CONFIG;
-  payload: TypeModuleConfig;
-};
-
-// 设置页面
-type TypeActionSetPageConf = {
-  type: typeof ACTION_TYPE.SET_PAGE_OPTION;
-  payload: TypePageOption;
-};
 
 // 更新页面配置表
 type TypeActionPatchPageConfMap = {
@@ -84,8 +69,6 @@ export type TypeEditorActions =
   | TypeActionSetProjectInfo
   | TypeActionSetScenarioConfig
   | TypeActionSetResourceConfig
-  | TypeActionSetModuleConf
-  | TypeActionSetPageConf
   | TypeActionPatchPageConfMap
   | TypeActionPatchFileDataMap;
 
@@ -105,20 +88,6 @@ export function ActionSetResourceConfig(
   payload: TypeResourceConfig
 ): TypeActionSetResourceConfig {
   return { type: ACTION_TYPE.SET_RESOURCE_CONFIG, payload };
-}
-
-// 设置当前模块配置
-export function ActionSetCurrentModule(
-  payload: TypeModuleConfig
-): TypeActionSetModuleConf {
-  return { type: ACTION_TYPE.SET_MODULE_CONFIG, payload };
-}
-
-// 设置当前页面配置
-export function ActionSetCurrentPage(
-  payload: TypePageOption
-): TypeActionSetPageConf {
-  return { type: ACTION_TYPE.SET_PAGE_OPTION, payload };
 }
 
 // 设置工程数据

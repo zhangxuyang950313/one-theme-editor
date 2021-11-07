@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { InputNumber } from "@arco-design/web-react";
-import { RightCircleOutlined } from "@ant-design/icons";
+import { IconRight } from "@arco-design/web-react/icon";
 
 const NumberInput: React.FC<{
   defaultValue: string;
@@ -14,7 +14,7 @@ const NumberInput: React.FC<{
     <StyleNumberInput>
       <div className="content-wrapper">
         <InputNumber disabled className="input" value={defaultValue} />
-        <RightCircleOutlined
+        <IconRight
           className="middle-button"
           onClick={() => onChange(defaultValue)}
         />

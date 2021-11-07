@@ -4,7 +4,8 @@ import { ipcMain, ipcRenderer, app } from "electron";
 import {
   createProject,
   findProjectByQuery,
-  findProjectListByQuery
+  findProjectListByQuery,
+  updateProject
 } from "main/dbHandler/project";
 import PageConfigCompiler from "src/common/compiler/PageConfig";
 import ResourceConfigCompiler from "src/common/compiler/ResourceConfig";
@@ -119,6 +120,16 @@ class IpcController extends ipcCreator {
         return project;
       }
     });
+
+  updateProject = this.createIpcAsync<
+    { uuid: string; data: TypeProjectDataDoc },
+    TypeProjectDataDoc
+  >({
+    event: IPC_EVENT.$updateProject,
+    server: async ({ uuid, data }) => {
+      return updateProject<TypeProjectDataDoc>(uuid, data);
+    }
+  });
 
   // 获取工程列表
   findProjectListByQuery = this

@@ -1,24 +1,23 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { Tabs } from "@/components/one-ui";
 import { RESOURCE_TAG } from "src/enum";
 import { TypePageConfig } from "src/types/resource.config";
-import { TypeResourceDefinition } from "src/types/resource.page";
 import FileBlocker from "./FileBlocker";
 import XmlValueBlocker from "./XmlValueBlocker";
+import { Tabs } from "@/components/one-ui";
 
 const ResourcePanel: React.FC<{
   pageConfig: TypePageConfig;
-  resourceList: TypeResourceDefinition[];
 }> = props => {
-  const { pageConfig, resourceList: resourceDefList } = props;
+  const { pageConfig } = props;
+  const { resourceList } = pageConfig;
   const [selectTabIndex, setSelectTabIndex] = useState(0);
 
-  const currentResourceList = resourceDefList[selectTabIndex]?.children || [];
+  const currentResourceList = resourceList[selectTabIndex]?.children || [];
 
   useEffect(() => {
     setSelectTabIndex(0);
-  }, [resourceDefList]);
+  }, [resourceList]);
 
   return (
     <StyleResourcePanel>
@@ -26,7 +25,7 @@ const ResourcePanel: React.FC<{
         <Tabs
           className="tabs"
           defaultIndex={selectTabIndex}
-          data={resourceDefList.map((item, index) => ({
+          data={resourceList.map((item, index) => ({
             index: index,
             label: item.name
           }))}
