@@ -82,6 +82,10 @@ export const createWindows = {
   async projectManager(): Promise<BrowserWindow> {
     const win = new BrowserWindow({
       ...windowNormalizeOptions,
+      width: 1080,
+      height: 720,
+      minWidth: 1080,
+      minHeight: 720,
       resizable: false,
       fullscreenable: false,
       show: true

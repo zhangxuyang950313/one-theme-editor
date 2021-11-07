@@ -7,23 +7,39 @@ import ProjectCard from "./ProjectCard";
 
 const ProjectList: React.FC<{ list: TypeProjectDataDoc[] }> = props => {
   const { list } = props;
+
+  const uiVersionMap = list.reduce((prev, item) => {
+    const c = prev.get(item.uiVersion.name);
+    if (c) prev.set(item.uiVersion.name, [...c, item]);
+    else prev.set(item.uiVersion.name, [item]);
+    return prev;
+  }, new Map<string, TypeProjectDataDoc[]>());
+  const uiVersionWrap = Array.from(uiVersionMap.entries());
+
   return (
     <StyleProjectList>
-      {list.length > 0 ? (
-        <div className="list">
-          {list.map((item, key) => (
-            <div className="project-card" key={key}>
-              <ProjectCard
-                hoverable
-                data={item}
-                onClick={async () => {
-                  await window.$server.openProjectEditorWindow(item.uuid);
-                  remote.getCurrentWindow().close();
-                }}
-              />
+      {uiVersionWrap.length > 0 ? (
+        uiVersionWrap.map(uiVersionItem => (
+          <>
+            <h3 className="ui-version">{uiVersionItem[0]}</h3>
+            <div className="list-wrapper">
+              <div className="list">
+                {uiVersionItem[1].map((item, key) => (
+                  <div className="project-card" key={key}>
+                    <ProjectCard
+                      hoverable
+                      data={item}
+                      onClick={async () => {
+                        await window.$server.openProjectEditorWindow(item.uuid);
+                        remote.getCurrentWindow().close();
+                      }}
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
-          ))}
-        </div>
+          </>
+        ))
       ) : (
         <Empty className="empty" description="空空如也，开始创作吧！" />
       )}
@@ -33,14 +49,27 @@ const ProjectList: React.FC<{ list: TypeProjectDataDoc[] }> = props => {
 
 const StyleProjectList = styled.div`
   height: 100%;
-  .list {
-    display: flex;
-    flex-wrap: wrap;
-    flex-grow: 0;
-    padding: 20px 30px 0 30px;
-    overflow-y: auto;
-    .project-card {
-      margin: 0 20px 20px 0;
+  overflow-y: auto;
+  .ui-version {
+    z-index: 2;
+    position: sticky;
+    top: 0;
+    padding: 10px 30px;
+    margin: 0;
+    color: var(--color-text-1);
+    background-color: var(--color-bg-1);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .list-wrapper {
+    padding: 10px 30px;
+    flex-shrink: 0;
+    .list {
+      display: flex;
+      flex-wrap: wrap;
+      flex-grow: 1;
+      .project-card {
+        margin: 0 8px 8px 0;
+      }
     }
   }
   .empty {

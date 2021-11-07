@@ -28,11 +28,11 @@ function ProjectCard(props: TypeProps): JSX.Element {
 const StyleProjectCard = styled.div`
   cursor: pointer;
   position: relative;
-  width: 140px;
-  height: 240px;
+  width: 120px;
+  height: 200px;
   border: 1px solid;
-  border-color: ${({ theme }) => theme["@border-color-base"]};
-  border-radius: ${({ theme }) => theme["@border-radius-base"]};
+  border-color: var(--color-secondary);
+  border-radius: 6px;
   box-sizing: content-box;
   overflow: hidden;
   .preview {
