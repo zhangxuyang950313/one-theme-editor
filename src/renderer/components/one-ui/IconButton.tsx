@@ -47,19 +47,19 @@ const StyleIconButton = styled.div`
     border-radius: 3px;
     width: 40px;
     height: 22px;
-    background: var(--color-secondary);
+    background-color: var(--color-secondary);
     color: var(--color-text-2);
     transition: 0.3s ease-out;
     &[data-toggle="true"] {
-      background: rgba(var(--primary-6));
+      background-color: rgba(var(--primary-6));
       color: var(--color-bg-4);
       transform: 0.3s ease-in;
     }
     &:hover {
-      background: var(--color-secondary-hover);
+      background-color: var(--color-secondary-hover);
     }
     &:active {
-      background: var(--color-secondary-active);
+      background-color: var(--color-secondary-active);
     }
   }
   .btn-name {

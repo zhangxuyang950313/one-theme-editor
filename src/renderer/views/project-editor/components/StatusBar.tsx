@@ -29,7 +29,7 @@ const StyleStatusBar = styled.div`
   display: flex;
   align-items: center;
   padding: 0 10px;
-  color: ${({ theme }) => theme["@text-color"]};
+  color: var(--color-text-1);
   .project-name {
     cursor: pointer;
     .icon {

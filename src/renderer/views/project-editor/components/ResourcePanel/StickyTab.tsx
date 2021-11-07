@@ -20,7 +20,7 @@ const StyleStickyTabStyle = styled.div`
   border-bottom-color: var(--color-secondary);
   .title {
     color: var(--color-text-1);
-    font-size: ${({ theme }) => theme["@text-size-title"]};
+    font-size: 22px;
   }
 `;
 

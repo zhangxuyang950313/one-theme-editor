@@ -1,22 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { IconClose } from "@arco-design/web-react/icon";
 import { HEX_FORMAT, RESOURCE_TAG } from "src/enum/index";
 import {
   TypeXmlItem,
   TypeXmlBlocker,
-  TypeXmlValueTags
+  TypeXmlValueTags,
+  TypeXmlFileData
 } from "src/types/resource.page";
-import { resolveProjectPath } from "src/common/utils/pathUtil";
 import { xmlElementTextModify } from "src/common/xmlTemplate";
-import { ActionPatchFileDataMap } from "../../store/action";
-import { useEditorDispatch, useEditorSelector } from "../../store";
+import { useSubscribeFile } from "../../hooks";
 import ColorPicker from "./ColorPicker";
 import BooleanSelector from "./BooleanSelector";
 import NumberInput from "./NumberInput";
 import StringInput from "./StringInput";
 import StickyTab from "./StickyTab";
-import useSubscribeFile from "@/hooks/useSubscribeFile";
 
 // 分类编辑控件
 const XmlValueEditor: React.FC<{
@@ -168,30 +166,19 @@ const XmlItem: React.FC<{
   colorFormat: HEX_FORMAT;
 }> = props => {
   const { xmlItem, use, colorFormat } = props;
-  const dispatch = useEditorDispatch();
-  const projectPath = resolveProjectPath(xmlItem.sourceData.src);
-  const xmlValMapper = useEditorSelector(state => {
-    const data = state.fileDataMap[xmlItem.sourceData.src];
-    return data?.fileType === "application/xml" ? data.valueMapper : {};
+  // const xmlValMapper = useEditorSelector(state => {
+  //   const data = state.fileDataMap[xmlItem.sourceData.src];
+  //   return data?.fileType === "application/xml" ? data.valueMapper : {};
+  // });
+  const [xmlFileData, setXmlFileData] = useState<TypeXmlFileData>();
+
+  useSubscribeFile(xmlItem.sourceData.src, (event, src, fileData) => {
+    if (fileData.fileType === "application/xml") {
+      setXmlFileData(fileData);
+    }
   });
 
-  useSubscribeFile(xmlItem.sourceData.src, data => {
-    window.$server.getFileData(projectPath).then(data => {
-      switch (data.fileType) {
-        case "image/png":
-        case "image/jpeg":
-        case "application/xml": {
-          dispatch(
-            ActionPatchFileDataMap({
-              src: xmlItem.sourceData.src,
-              fileData: data
-            })
-          );
-          break;
-        }
-      }
-    });
-  });
+  const xmlValMapper = xmlFileData?.valueMapper;
 
   return (
     <>
@@ -200,7 +187,7 @@ const XmlItem: React.FC<{
           <XmlValueItem
             key={key}
             defaultValue={valueItem.value}
-            value={xmlValMapper[valueItem.template] || ""}
+            value={xmlValMapper?.[valueItem.template] || ""}
             valueTemplate={valueItem.template}
             comment={valueItem.comment}
             use={use}

@@ -24,13 +24,13 @@ const StyleInfoDisplay = styled.div`
   white-space: nowrap;
   text-overflow: ellipsis; */
   .main {
-    font-size: ${({ theme }) => theme["@text-size-main"]};
-    color: ${({ theme }) => theme["@text-color"]};
+    font-size: 14px;
+    color: var(--color-text-1);
   }
   .secondary {
     /* user-select: text; */
-    font-size: ${({ theme }) => theme["@text-size-secondary"]};
-    color: ${({ theme }) => theme["@text-color-secondary"]};
+    font-size: 12px;
+    color: var(--color-text-3);
   }
 `;
 

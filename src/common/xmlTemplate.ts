@@ -4,7 +4,6 @@ import pathUtil from "src/common/utils/pathUtil";
 import XmlCompiler from "src/common/compiler/XmlCompiler";
 import XMLNodeElement from "src/common/compiler/XMLNodeElement";
 import { TypeWriteXmlTempPayload } from "src/types/request";
-import { Element } from "xml-js";
 
 /**
  * 输出被 key value 处理过模板字符串的 xml 模板
@@ -95,13 +94,6 @@ export async function writeXmlTemplate(
 }
 
 export function xmlElementTextModify(xmlStr: string, value: string): string {
-  console.log(
-    XmlCompiler.fromString(xmlStr)
-      .getChildrenFirstElementNode()
-      .removeChildren()
-      .appendChild(XMLNodeElement.createTextNode(value))
-      .buildXml()
-  );
   const xmlCompiler = XmlCompiler.fromString(xmlStr);
   xmlCompiler
     .getChildrenFirstElementNode()

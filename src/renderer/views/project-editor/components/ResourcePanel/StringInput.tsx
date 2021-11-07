@@ -31,7 +31,7 @@ const StyleNumberInput = styled.div`
   align-items: center;
   .middle-button {
     cursor: pointer;
-    color: ${({ theme }) => theme["@text-color-secondary"]};
+    color: var(--color-text-3);
     font-size: 20px;
     margin: 10px;
     transition: all 0.3s;

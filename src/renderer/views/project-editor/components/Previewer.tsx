@@ -8,13 +8,17 @@ import {
   LAYOUT_ELEMENT_TAG
 } from "src/enum";
 import { TypePageConfig } from "src/types/resource.config";
-import { TypeLayoutData, TypeLayoutTextElement } from "src/types/resource.page";
+import {
+  TypeLayoutData,
+  TypeLayoutTextElement,
+  TypeXmlFileData
+} from "src/types/resource.page";
 import ColorUtil from "src/common/utils/ColorUtil";
 import { filenameIs9Patch } from "src/common/utils";
 import { useEditorSelector } from "../store";
-import useSubscribeFile from "@/hooks/useSubscribeFile";
-import { DynamicBothSourceImage } from "@/components/ImageCollection";
-import NinePatchCanvas from "@/components/NinePatchCanvas";
+import { useSubscribeFile } from "../hooks";
+import { DynamicBothSourceImage } from "./DynamicImage";
+import NinePatchCanvas from "./NinePatchCanvas";
 
 // function computeLayout(
 //   data: TypeLayoutData,
@@ -117,12 +121,22 @@ const LayoutTextElement: React.FC<{
   const { element, scale, colorFormat, useDash, canClick } = props;
   const [defaultColor, setDefaultColor] = useState("#000000");
   const [color, setColor] = useState(defaultColor);
-  const xmlValMapper = useEditorSelector(state => {
-    const data = state.fileDataMap[element.sourceData.src];
-    return data?.fileType === "application/xml" ? data.valueMapper : {};
+  // const xmlValMapper = useEditorSelector(state => {
+  //   const data = state.fileDataMap[element.sourceData.src];
+  //   return data?.fileType === "application/xml" ? data.valueMapper : {};
+  // });
+
+  // useSubscribeFile(element.sourceData.src);
+
+  const [xmlFileData, setXmlFileData] = useState<TypeXmlFileData>();
+
+  useSubscribeFile(element.sourceData.src, (event, src, fileData) => {
+    if (fileData.fileType === "application/xml") {
+      setXmlFileData(fileData);
+    }
   });
 
-  useSubscribeFile(element.sourceData.src);
+  const xmlValMapper = xmlFileData?.valueMapper;
 
   const layoutStyle = computeLayoutStyle(element.layout, scale);
 
@@ -136,7 +150,7 @@ const LayoutTextElement: React.FC<{
   }, [element.valueData.value]);
 
   useEffect(() => {
-    const color = xmlValMapper[element.valueData.template];
+    const color = xmlValMapper?.[element.valueData.template];
     if (!color) {
       setColor(defaultColor);
       return;
@@ -146,7 +160,7 @@ const LayoutTextElement: React.FC<{
     } catch (err) {
       setColor(defaultColor);
     }
-  }, [xmlValMapper[element.valueData.template]]);
+  }, [xmlValMapper?.[element.valueData.template]]);
 
   return (
     <span
@@ -254,7 +268,7 @@ const Previewer: React.FC<{
 const StylePreviewer = styled.div`
   width: 100%;
   box-sizing: border-box;
-  border: 1px solid ${({ theme }) => theme["@border-color-base"]};
+  border: 1px solid var(--color-secondary);
   .dynamic {
     position: relative;
     transform-origin: 0 0;

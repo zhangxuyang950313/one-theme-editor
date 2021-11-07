@@ -36,10 +36,10 @@ const StyleBaseSingleTab = styled.div`
       line-height: 30px;
     }
     &[is-active="true"] {
-      color: ${({ theme }) => theme["@primary-color"]};
+      color: rgba(var(--primary-6));
     }
     &[is-active="false"] {
-      color: ${({ theme }) => theme["@disabled-color"]};
+      color: var(--color-border);
     }
     &[is-active="true"]::after {
       content: "";
@@ -50,7 +50,7 @@ const StyleBaseSingleTab = styled.div`
       margin: 0 auto;
       width: 50%;
       height: 2px;
-      background-color: ${({ theme }) => theme["@primary-color"]};
+      background-color: rgba(var(--primary-6));
       transition: all 1s;
     }
   }

@@ -1,12 +1,7 @@
-import {
-  TypeResourceConfig,
-  TypeModuleConfig,
-  TypePageOption,
-  TypePageConfig
-} from "src/types/resource.config";
-import { TypeScenarioConfig } from "src/types/scenario.config";
-import { TypeProjectDataDoc, TypeProjectInfo } from "src/types/project";
 import { TypeFileData } from "src/types/resource.page";
+import { TypeScenarioConfig } from "src/types/scenario.config";
+import { TypeResourceConfig, TypePageConfig } from "src/types/resource.config";
+import { TypeProjectDataDoc, TypeProjectInfo } from "src/types/project";
 
 export enum ACTION_TYPE {
   // 初始化

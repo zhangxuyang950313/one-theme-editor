@@ -46,7 +46,7 @@ const StyleSidebar = styled.div`
   width: 230px;
   height: 100%;
   border-right: 1px solid;
-  border-right-color: ${({ theme }) => theme["@border-color-thirdly"]};
+  border-right-color: var(--color-border);
   background-color: var(--color-menu-light-bg);
   .menu {
     width: 100%;

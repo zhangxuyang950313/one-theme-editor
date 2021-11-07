@@ -12,7 +12,7 @@ import installExtension, {
 } from "electron-devtools-installer";
 import IPC_EVENT from "src/ipc/ipc-event";
 import { findProjectByQuery } from "src/main/dbHandler/project";
-import { getFileData } from "src/common/utils";
+import { getFileDataSync } from "src/common/utils";
 import * as electronStore from "../store/index";
 import { preloadFile, getUrl, isDev } from "./constant";
 import menuTemplate from "./menu";
@@ -112,7 +112,7 @@ export const createWindows = {
     // 创建目录监听
     const { root } = await findProjectByQuery({ uuid });
     dirWatcher.create(root, (event, src) => {
-      const data = getFileData(path.join(root, src));
+      const data = getFileDataSync(path.join(root, src));
       win.webContents.send(IPC_EVENT.$fileChange, { root, event, src, data });
     });
 

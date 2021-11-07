@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { Tooltip } from "antd";
 import { TypeModuleConfig } from "src/types/resource.config";
-import { StaticResourceImage } from "@/components/ImageCollection";
+import { StaticResourceImage } from "./DynamicImage";
 
 // 模块选择器
 const ModuleSelector: React.FC<{

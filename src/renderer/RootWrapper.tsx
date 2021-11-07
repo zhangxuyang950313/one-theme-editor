@@ -90,13 +90,13 @@ const StyleGlobal = createGlobalStyle`
     &::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
       -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
       border-radius: 10px;
-      background: ${({ theme }) => theme["@scrollbar-thumb"]};
+      background-color: var(--color-border-4);
     }
 
     &::-webkit-scrollbar-track {/*滚动条里面轨道*/
       -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
       border-radius: 10px;
-      background: ${({ theme }) => theme["@scrollbar-track"]};
+      background-color: var(--color-border-2);
     }
   }
 `;

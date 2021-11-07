@@ -44,7 +44,7 @@ const StyleNumberInput = styled.div`
   }
   .middle-button {
     cursor: pointer;
-    color: ${({ theme }) => theme["@text-color-secondary"]};
+    color: var(--color-text-3);
     font-size: 20px;
     margin: 10px;
     transition: all 0.3s;
@@ -56,8 +56,8 @@ const StyleNumberInput = styled.div`
     width: 100px;
   }
   .error {
-    color: ${({ theme }) => theme["@error-color"]};
-    font-size: ${({ theme }) => theme["@text-size-thirdly"]};
+    color: rgba(var(--red-5));
+    font-size: 11px;
   }
 `;
 

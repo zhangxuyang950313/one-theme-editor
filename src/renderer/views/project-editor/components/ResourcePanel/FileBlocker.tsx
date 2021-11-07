@@ -12,10 +12,10 @@ import {
 import { TypeFileBlocker, TypeFileItem } from "src/types/resource.page";
 import { resolveProjectPath } from "src/common/utils/pathUtil";
 import { useEditorSelector } from "../../store";
+import { useSubscribeFile } from "../../hooks";
 import ImageDisplay from "./ImageDisplay";
 import InfoDisplay from "./InfoDisplay";
 import StickyTab from "./StickyTab";
-import useSubscribeFile from "@/hooks/useSubscribeFile";
 
 const FileItem: React.FC<{
   className?: string;
@@ -186,7 +186,7 @@ const StyleFileItem = styled.div`
       }
     }
     .btn-normal {
-      color: ${({ theme }) => theme["@text-color-secondary"]};
+      color: rgb(var(--red-5));
     }
     .btn-delete {
       color: red;

@@ -216,10 +216,10 @@ const ColorPicker: React.FC<{
   // 在输入框失焦触发变更
   const onInputBlur = (val: string) => {
     try {
-      if (inputColor !== "") {
+      if (val !== "") {
         setColorRGBAHex(ColorUtil.create(val, colorFormat).toRGBAHex());
       }
-      onChange(inputColor);
+      onChange(val);
     } catch (err: any) {
       setInputColor(value);
       Message.warning(err.message);
@@ -233,14 +233,22 @@ const ColorPicker: React.FC<{
         <Tooltip title="恢复默认">
           <IconRight
             className="middle-button"
-            onClick={() => onChange(defaultValue)}
+            onClick={() => {
+              if (value !== defaultValue) {
+                onChange(defaultValue);
+              }
+            }}
           />
         </Tooltip>
         <ColorPickerBox
           color={colorRGBAHex}
           tipColor={inputColor}
           colorFormat={colorFormat}
-          onDisabled={() => onChange(inputColor)}
+          onDisabled={() => {
+            if (value !== inputColor) {
+              onChange(inputColor);
+            }
+          }}
           onChange={setColorRGBAHex}
         />
         <Input
@@ -249,7 +257,11 @@ const ColorPicker: React.FC<{
           defaultValue={inputColor}
           placeholder={defaultValue}
           onChange={value => setInputColor(value)}
-          onBlur={e => onInputBlur(e.target.value)}
+          onBlur={e => {
+            if (value !== e.target.value) {
+              onInputBlur(e.target.value);
+            }
+          }}
         />
       </div>
       {!ColorUtil.isHex(value) && value.length > 0 && (
@@ -286,8 +298,8 @@ const StyleColorPicker = styled.div`
     }
   }
   .error {
-    color: ${({ theme }) => theme["@error-color"]};
-    font-size: ${({ theme }) => theme["@text-size-thirdly"]};
+    color: rgb(var(--red-5));
+    font-size: 11px;
   }
 `;
 

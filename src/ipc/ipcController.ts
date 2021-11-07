@@ -26,15 +26,19 @@ import {
 } from "src/types/scenario.config";
 import { TypeWriteXmlTempPayload } from "src/types/request";
 import { writeXmlTemplate } from "src/common/xmlTemplate";
-import { getFileData } from "src/common/utils";
+import { getFileDataSync } from "src/common/utils";
 import { TypeFileData } from "src/types/resource.page";
 import PackageUtil from "src/common/utils/PackageUtil";
 import pathUtil from "src/common/utils/pathUtil";
+import FileCache from "src/common/FileCache";
 import IPC_EVENT from "./ipc-event";
 import ipcCreator from "./ipcCreator";
 
 if (ipcRenderer) ipcRenderer.setMaxListeners(9999);
 if (ipcMain) ipcMain.setMaxListeners(9999);
+
+// 文件缓存
+const fileDataCache = new FileCache(getFileDataSync);
 
 // createWindows 方法内调用了 electron.app 获取路径方法，
 // 需要在 electron 启动后才能调用，
@@ -216,13 +220,13 @@ class IpcController extends ipcCreator {
   // 获取文件数据
   getFileData = this.createIpcAsync<string, TypeFileData>({
     event: IPC_EVENT.$getFileData,
-    server: async file => getFileData(file)
+    server: async file => getFileDataSync(file)
   });
 
   // 同步获取文件数据
   getFileDataSync = this.createIpcSync<string, TypeFileData>({
     event: IPC_EVENT.$getFileDataSync,
-    server: getFileData
+    server: file => fileDataCache.get(file)
   });
 
   // 打包并导出

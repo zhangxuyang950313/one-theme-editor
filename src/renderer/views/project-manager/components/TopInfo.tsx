@@ -10,7 +10,7 @@ function TopInfo(): JSX.Element {
     <StyleEditorInfo>
       <img className="logo" alt="logo" src={Logo} />
       {/* <p className="title">一个主题编辑器</p> */}
-      {/* <p className="version">版本：{process.env.VERSION}</p> */}
+      <p className="version">版本：{process.env.VERSION}</p>
     </StyleEditorInfo>
   );
 }
@@ -19,7 +19,7 @@ function TopInfo(): JSX.Element {
 const StyleEditorInfo = styled.div`
   /* text-align: center; */
   margin: 30px;
-  color: ${({ theme }) => theme["@text-color"]};
+  color: var(--color-text-1);
   .logo {
     width: 100px;
     /* height: 60px; */

@@ -23,14 +23,14 @@ const StyleWrapper = styled.div`
     display: flex;
     flex-direction: column;
     .description {
-      font-size: ${({ theme }) => theme["@text-size-main"]};
-      color: ${({ theme }) => theme["@text-color"]};
+      font-size: 14px;
+      color: var(--color-text-1);
     }
     .value-name {
       user-select: text;
       margin: 6px 0;
-      font-size: ${({ theme }) => theme["@text-size-secondary"]};
-      color: ${({ theme }) => theme["@text-color-secondary"]};
+      font-size: 12px;
+      color: var(--color-text-3);
     }
   }
 `;

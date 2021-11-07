@@ -25,15 +25,14 @@ const StyleMenuItem = styled.ul`
   cursor: pointer;
   padding: 10px 20px;
   margin: 5px 0;
-  color: ${({ theme }) => theme["@text-color"]};
+  color: var(--color-text);
   box-sizing: content-box;
   border-radius: 6px;
   transition: 0.2s all;
   &[data-active="true"] {
     transition: 0.2s all;
     color: black;
-    /* background-color: ${({ theme }) => theme["@border-color-thirdly"]}; */
-    background-color: ${({ theme }) => theme["@primary-color"]};
+    background-color: rgba(var(--primary-6));
   }
 `;
 

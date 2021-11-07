@@ -30,10 +30,10 @@ const BooleanSelector: React.FC<{
 const StyleBooleanSelector = styled.div`
   display: flex;
   align-items: center;
-  color: ${({ theme }) => theme["@text-color"]};
+  color: var(--color-text-1);
   .error {
-    color: ${({ theme }) => theme["@error-color"]};
-    font-size: ${({ theme }) => theme["@text-size-thirdly"]};
+    color: var(--color-danger-light-4);
+    font-size: 11px;
   }
 `;
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { scaleNinePatchCanvas } from "src/common/9patch/core";
-import useSubscribeFile from "@/hooks/useSubscribeFile";
+import { useSubscribeFile } from "../hooks";
 
 async function loadImage(src: string) {
   const image = new Image();

@@ -26,7 +26,7 @@
             <!-- 全局大背景 -->
             <Item :key="window_bg_light" src="src://com.android.contacts/framework-miui-res/res/drawable-xxhdpi/window_bg_light.9.png"/>
             <!-- 输入号码顶栏背景 -->
-            <Item :key="dialer_title_bg_9" src="src://com.android.contacts/drawable-xxhdpi/dialer_title_bg.9.png"/>
+            <Item :key="dialer_title_bg_9" src="src://com.android.contacts/res/drawable-xxhdpi/dialer_title_bg.9.png"/>
             <!-- 返回按钮 -->
             <Item :key="action_bar_back_light" src="src://com.android.contacts/framework-miui-res/res/drawable-xxhdpi/action_bar_back_light.png"/>
             <!-- 拨号时电话号码背景 -->

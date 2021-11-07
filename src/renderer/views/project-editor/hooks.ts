@@ -5,6 +5,9 @@ import pathUtil from "src/common/utils/pathUtil";
 import ProjectData from "src/data/ProjectData";
 import ResourceConfig from "src/data/ResourceConfig";
 import ScenarioConfig from "src/data/ScenarioConfig";
+import { asyncQueue } from "src/common/utils";
+import { FILE_EVENT } from "src/enum";
+import { TypeFileData } from "src/types/resource.page";
 import { TypeProjectData } from "src/types/project";
 import {
   TypeModuleConfig,
@@ -12,14 +15,13 @@ import {
   TypeResourceConfig
 } from "src/types/resource.config";
 import { TypeScenarioConfig } from "src/types/scenario.config";
-import { asyncQueue } from "src/common/utils";
+import FileCache from "src/common/FileCache";
+import { useEditorDispatch } from "./store";
 import {
-  ActionPatchPageConfMap,
   ActionSetProjectData,
   ActionSetResourceConfig,
   ActionSetScenarioConfig
 } from "./store/action";
-import { useEditorDispatch, useEditorSelector } from "./store";
 
 // 加载工程
 export function useLoadProject(uuid: string): {
@@ -116,33 +118,70 @@ export function useLoadProject(uuid: string): {
   return { projectData, resourceConfig, scenarioConfig };
 }
 
+const pageConfigMap = new Map<string, TypePageConfig>();
+
 // 加载页面配置列表
-export function useLoadPageConfigList(
+export function usePageConfigList(
   namespace: string,
   moduleConfig: TypeModuleConfig
 ): TypePageConfig[] {
-  const dispatch = useEditorDispatch();
   const [pageConfigList, setPageConfigList] = useState<TypePageConfig[]>([]);
-  const pageConfigMap = useEditorSelector(state => state.pageConfigMap);
   // 依次加载当前模块页面配置
   useEffect(() => {
     if (!namespace) return;
-    const pageConfDataQueue = moduleConfig.pageList.map(item => async () => {
+    const queue = moduleConfig.pageList.map(item => async () => {
       // 使用缓存
-      const configCache = pageConfigMap[item.src];
-      if (configCache) return configCache;
-
+      const configCache = pageConfigMap.get(item.src);
+      if (configCache) {
+        console.log("use cache (pageConfig):", item.src);
+        return configCache;
+      }
+      // 服务获取
       const data = await window.$server.getPageConfig({
         namespace,
         config: item.src
       });
-      dispatch(ActionPatchPageConfMap(data));
+      pageConfigMap.set(item.src, data);
       return data;
     });
-    asyncQueue(pageConfDataQueue)
+    asyncQueue(queue)
       .then(setPageConfigList)
       .catch(err => Notification.error({ content: err.message }));
   }, [namespace, moduleConfig]);
 
   return pageConfigList;
+}
+
+const fileDataCache = new FileCache(window.$server.getFileDataSync);
+
+type TypeListener = (
+  evt: FILE_EVENT,
+  src: string,
+  fileData: TypeFileData
+) => void;
+
+// 监听文件
+export function useSubscribeFile(
+  src: string | undefined,
+  callback?: TypeListener
+): void {
+  const projectRoot = window.$reactiveState.get("projectPath");
+  useEffect(() => {
+    if (!src) return;
+    const file = path.join(projectRoot, src);
+
+    // 首次回调
+    const fileData = fileDataCache.get(file);
+    callback && callback(FILE_EVENT.ADD, src, fileData);
+
+    const removeListener = window.$invoker.useFilesChange(data => {
+      if (data.root !== projectRoot) return;
+      if (data.src !== src) return;
+      callback && callback(data.event, src, data.data);
+    });
+
+    return () => {
+      removeListener();
+    };
+  }, [src]);
 }

@@ -1,18 +1,6 @@
 import path from "path";
 import { URL } from "url";
 import md5 from "md5";
-import type {
-  TypeResourceDefinition,
-  TypeLayoutElement,
-  TypeLayoutImageElement,
-  TypeLayoutTextElement,
-  TypeSourceData,
-  TypeFileBlocker,
-  TypeXmlBlocker,
-  TypeXmlValueTags,
-  TypeFileData,
-  TypeXmlValueItem
-} from "src/types/resource.page";
 import { TypePageConfig } from "src/types/resource.config";
 import { TypeImageData } from "src/types/project";
 import {
@@ -28,7 +16,7 @@ import {
   XmlBlocker,
   XmlValueItem
 } from "src/data/ResourceConfig";
-import { getFileData, getImageData } from "src/common/utils/index";
+import { getFileDataSync, getImageData } from "src/common/utils/index";
 import {
   ELEMENT_TAG,
   ALIGN_VALUE,
@@ -44,6 +32,18 @@ import RegexpUtil from "src/common/utils/RegexpUtil";
 import TempStringUtil from "src/common/utils/TempStringUtil";
 import XmlCompiler from "./XmlCompiler";
 import XmlCompilerExtra from "./XmlCompilerExtra";
+import type {
+  TypeResourceDefinition,
+  TypeLayoutElement,
+  TypeLayoutImageElement,
+  TypeLayoutTextElement,
+  TypeSourceData,
+  TypeFileBlocker,
+  TypeXmlBlocker,
+  TypeXmlValueTags,
+  TypeFileData,
+  TypeXmlValueItem
+} from "src/types/resource.page";
 
 export default class PageConfigCompiler extends XMLNodeElement {
   private configFile: string;
@@ -312,7 +312,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
     const cache = this.fileDataCache.get(file);
     if (cache) return cache;
 
-    const fileData = getFileData(file, { ignoreXmlElement: true });
+    const fileData = getFileDataSync(file, { ignoreXmlElement: true });
 
     this.fileDataCache.set(file, fileData);
 

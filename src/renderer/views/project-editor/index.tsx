@@ -14,13 +14,13 @@ import {
 import { useToggle } from "ahooks";
 import { TOOLS_BAR_BUTTON } from "src/enum";
 import { ModuleConfig, PageConfig } from "src/data/ResourceConfig";
+import { usePageConfigList, useLoadProject } from "./hooks";
 import EditorToolsBar from "./components/ToolsBar";
 import ModuleSelector from "./components/ModuleSelector";
 import PageSelector from "./components/PageSelector";
 import Previewer from "./components/Previewer";
 import ResourcePanel from "./components/ResourcePanel";
 import StatusBar from "./components/StatusBar";
-import { useLoadPageConfigList, useLoadProject } from "./hooks";
 import { TypeIconButtonOption } from "@/components/one-ui/IconButton";
 import { StyleTopDrag } from "@/style";
 import RootWrapper from "@/RootWrapper";
@@ -38,11 +38,12 @@ const EditorFrame: React.FC = () => {
   // 加载工程
   const { projectData, resourceConfig, scenarioConfig } = useLoadProject(uuid);
   const { namespace, moduleList } = resourceConfig;
-  // 当前模块
+  // 当前模块配置
   const [moduleConfig, setModuleConfig] = useState(ModuleConfig.default);
-  // 当前页面
+  // 当前页面配置
   const [pageConfig, setPageConfig] = useState(PageConfig.default);
-  const pageConfigList = useLoadPageConfigList(namespace, moduleConfig);
+  // 根据模块切换的页面配置列表
+  const pageConfigList = usePageConfigList(namespace, moduleConfig);
 
   // 模块默认选第一个, 空则使用默认
   useEffect(() => {
@@ -235,7 +236,7 @@ const StyleTopBar = styled(StyleTopDrag)`
   border-bottom: 1px solid var(--color-secondary);
   .title {
     margin: auto;
-    color: ${({ theme }) => theme["@text-color"]};
+    color: var(--color-text-1);
   }
 `;
 
