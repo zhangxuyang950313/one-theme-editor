@@ -77,8 +77,8 @@ declare module "*.module.sass" {
 }
 
 interface Window {
-  $server: typeof import("src/ipc/IpcServer").default;
-  $invoker: typeof import("src/ipc/IpcInvoker").default;
+  $server: typeof import("src/ipc/ipcController").default;
+  $invoker: typeof import("src/ipc/ipcInvoker").default;
   $electronStore: typeof import("src/store/index");
   $reactiveState: typeof import("src/preload/ReactiveState").reactiveState;
 }

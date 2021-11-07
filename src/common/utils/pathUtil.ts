@@ -1,5 +1,6 @@
 import os from "os";
 import path from "path";
+import fse from "fs-extra";
 import { app, ipcRenderer, remote } from "electron";
 import { TypePathCollection } from "src/types/config.extra";
 
@@ -19,7 +20,7 @@ const pathUtil: TypePathCollection = {
   ELECTRON_LOGS: $app.getPath("logs"),
   ELECTRON_APP_PATH: $app.getAppPath(),
   // 软件数据
-  get CLIENT_DATA(): string {
+  get APP_DATA(): string {
     return path.resolve(this.ELECTRON_APP_PATH, "../appData");
   },
   // 静态资源目录
@@ -28,19 +29,22 @@ const pathUtil: TypePathCollection = {
   },
   // 用户缓存
   get CLIENT_CACHE(): string {
-    return path.resolve(this.CLIENT_DATA, "cache");
+    return path.resolve(this.APP_DATA, "cache");
   },
   // 打包临时目录
   get PACK_TEMPORARY(): string {
-    return path.join(this.CLIENT_DATA, "pack");
+    return path.join(this.APP_DATA, "pack");
   },
   // 扩展数据存储
   get EXTRA_DATA_DB(): string {
-    return path.resolve(this.CLIENT_DATA, "extra-data.nedb");
+    return path.resolve(this.APP_DATA, "extra-data.nedb");
   },
   // 工程列表数据
   get PROJECTS_DB(): string {
-    return path.resolve(this.CLIENT_DATA, "projects.nedb");
+    return path.resolve(this.APP_DATA, "projects.nedb");
+  },
+  get PROJECT_THUMBNAIL_DIR(): string {
+    return path.resolve(this.APP_DATA, "thumbnail");
   },
   // 资源目录
   get RESOURCE_DIR(): string {
@@ -101,3 +105,8 @@ export function resolveProjectPath(relative: string): string {
 export function getSCDescriptionByNamespace(namespace: string): string {
   return path.join(pathUtil.RESOURCE_CONFIG_DIR, namespace, "description.xml");
 }
+
+fse.ensureDirSync(pathUtil.APP_DATA);
+fse.ensureDirSync(pathUtil.PACK_TEMPORARY);
+fse.ensureDirSync(pathUtil.CLIENT_CACHE);
+fse.ensureDirSync(pathUtil.PROJECT_THUMBNAIL_DIR);

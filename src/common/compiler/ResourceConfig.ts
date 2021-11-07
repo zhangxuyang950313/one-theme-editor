@@ -83,6 +83,10 @@ export default class ResourceConfigCompiler extends XmlCompiler {
     );
   }
 
+  getPreviewAbsFile(): string {
+    return this.resolvePath(this.getPreviewPic());
+  }
+
   // UI信息
   getUiVersion(): TypeUiVersion {
     const uiVersionNode = super

@@ -1,11 +1,6 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+import path from "path";
 import fse from "fs-extra";
-import {
-  BrowserWindowConstructorOptions,
-  ipcMain,
-  ipcRenderer,
-  remote
-} from "electron";
+import { ipcMain, ipcRenderer, app } from "electron";
 import {
   createProject,
   findProjectByQuery,
@@ -33,14 +28,15 @@ import { writeXmlTemplate } from "src/common/xmlTemplate";
 import { getFileData } from "src/common/utils";
 import { TypeFileData } from "src/types/resource.page";
 import PackageUtil from "src/common/utils/PackageUtil";
+import pathUtil from "src/common/utils/pathUtil";
 import IPC_EVENT from "./ipc-event";
-import IpcCreator from "./IpcCreator";
+import ipcCreator from "./ipcCreator";
 
 if (ipcRenderer) ipcRenderer.setMaxListeners(9999);
 if (ipcMain) ipcMain.setMaxListeners(9999);
 
 // createWindows 方法内调用了 electron.app 获取路径方法，
-// 需要在 electron 启动后才能调用，因为这里是渲染进程，
+// 需要在 electron 启动后才能调用，
 // 所以要检测是否已经加载窗口，然后异步加载
 function createWindows() {
   // 使用闭包缓存，避免每次都加载
@@ -49,8 +45,8 @@ function createWindows() {
     async get() {
       if (cw) return cw;
       // 处理边界情况：若未启动前调用，则等待 ready
-      if (!remote.app.isReady()) {
-        await new Promise(resolve => remote.app.on("ready", resolve));
+      if (!app.isReady()) {
+        await new Promise(resolve => app.on("ready", resolve));
       }
       cw = (await import("main/windows")).createWindows;
       return cw;
@@ -58,7 +54,7 @@ function createWindows() {
   };
 }
 
-class IpcServer extends IpcCreator {
+class IpcController extends ipcCreator {
   // 获取进程 id
   getPID = this.createIpcSync<void, number>({
     event: IPC_EVENT.$getPID,
@@ -90,51 +86,77 @@ class IpcServer extends IpcCreator {
   // 获取资源配置
   getResourceConfig = this.createIpcAsync<string, TypeResourceConfig>({
     event: IPC_EVENT.$getResourceConfig,
-    server: async resourceConfigSrc =>
-      ResourceConfigCompiler.from(resourceConfigSrc).getConfig()
+    server: async resourceConfigSrc => {
+      return ResourceConfigCompiler.from(resourceConfigSrc).getConfig();
+    }
   });
 
   // 获取页面配置列表
-  getPageConfig = this.createIpcAsync<
-    { namespace: string; config: string },
-    TypePageConfig
-  >({
-    event: IPC_EVENT.$getPageConfig,
-    server: async data => new PageConfigCompiler(data).getData()
-  });
+  getPageConfig = this
+    /**/ .createIpcAsync<{ namespace: string; config: string }, TypePageConfig>(
+      {
+        event: IPC_EVENT.$getPageConfig,
+        server: async data => new PageConfigCompiler(data).getData()
+      }
+    );
 
   // 创建工程
-  createProject = this.createIpcAsync<
-    TypeCreateProjectPayload,
-    TypeProjectDataDoc
-  >({
-    event: IPC_EVENT.$createProject,
-    server: async data => await createProject(data)
-  });
+  createProject = this
+    /**/ .createIpcAsync<TypeCreateProjectPayload, TypeProjectDataDoc>({
+      event: IPC_EVENT.$createProject,
+      server: async data => {
+        const project = await createProject(data);
+        const preview = ResourceConfigCompiler.from(
+          data.resourceSrc
+        ).getPreviewAbsFile();
+        if (fse.existsSync(preview)) {
+          const target = path.join(
+            pathUtil.PROJECT_THUMBNAIL_DIR,
+            project.uuid
+          );
+          fse.copyFile(preview, target);
+        }
+        return project;
+      }
+    });
 
   // 获取工程列表
-  findProjectListByQuery = this.createIpcAsync<
-    Partial<TypeProjectDataDoc>,
-    TypeProjectDataDoc[]
-  >({
-    event: IPC_EVENT.$getProjectList,
-    server: async query => await findProjectListByQuery(query)
-  });
+  findProjectListByQuery = this
+    /**/ .createIpcAsync<Partial<TypeProjectDataDoc>, TypeProjectDataDoc[]>({
+      event: IPC_EVENT.$getProjectList,
+      server: async query => {
+        const list = await findProjectListByQuery(query);
+        // 若不存在缩略图，调用配置的预览图
+        // TODO：需要补充配置也没有预览图的情况的默认图
+        list.forEach(item => {
+          const preview = ResourceConfigCompiler.from(
+            item.resourceSrc
+          ).getPreviewAbsFile();
+          const th = path.join(pathUtil.PROJECT_THUMBNAIL_DIR, item.uuid);
+          if (!fse.existsSync(th) && fse.existsSync(preview)) {
+            fse.copySync(preview, th);
+          }
+        });
+        return list;
+      }
+    });
 
   // 获取工程数据
-  findProjectQuery = this.createIpcAsync<
-    Partial<TypeProjectDataDoc>,
-    TypeProjectDataDoc
-  >({
-    event: IPC_EVENT.$getProject,
-    server: async query => await findProjectByQuery(query)
-  });
+  findProjectQuery = this
+    /**/ .createIpcAsync<Partial<TypeProjectDataDoc>, TypeProjectDataDoc>({
+      event: IPC_EVENT.$getProject,
+      server: async query => await findProjectByQuery(query)
+    });
+
+  // // 设置配置预览图到预览图库
+  // patchProjectPreview = this
+  //   /**/ .createIpcAsync<TypePreviewData, TypePreviewDataDoc>({
+  //     event: IPC_EVENT.$patchPreview,
+  //     server: async uuid => {}
+  //   });
 
   // 打开工程管理页
-  openProjectManager = this.createIpcAsync<
-    void | { windowOptions: BrowserWindowConstructorOptions },
-    void
-  >({
+  openProjectManager = this.createIpcAsync<void, void>({
     event: IPC_EVENT.$openProjectManager,
     server: async () => {
       const cw = await createWindows().get();
@@ -174,13 +196,11 @@ class IpcServer extends IpcCreator {
   });
 
   // 写入 xml 文件
-  writeXmlTemplate = this.createIpcAsync<
-    TypeWriteXmlTempPayload,
-    Record<string, string>
-  >({
-    event: IPC_EVENT.$writeXmlTemplate,
-    server: data => writeXmlTemplate(data)
-  });
+  writeXmlTemplate = this
+    /**/ .createIpcAsync<TypeWriteXmlTempPayload, Record<string, string>>({
+      event: IPC_EVENT.$writeXmlTemplate,
+      server: data => writeXmlTemplate(data)
+    });
 
   // 获取文件数据
   getFileData = this.createIpcAsync<string, TypeFileData>({
@@ -219,4 +239,4 @@ class IpcServer extends IpcCreator {
   // })
 }
 
-export default new IpcServer();
+export default new IpcController();

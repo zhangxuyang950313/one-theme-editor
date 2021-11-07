@@ -2,6 +2,7 @@ import path from "path";
 import { URL } from "url";
 import fse from "fs-extra";
 import { protocol, app, nativeImage, ResizeOptions } from "electron";
+import pathUtil from "src/common/utils/pathUtil";
 import { getImgBuffAndFileType } from "../common/utils";
 
 async function getFileIconData(file: string) {
@@ -36,6 +37,7 @@ async function getFilePicResponseData(
         options.height = Number(searchParams.get("h") || 0);
         options.quality = searchParams.get("q") || "best";
         file = decodeURIComponent(path.join(root, hostname, pathname));
+        console.log({ file });
         if (!fse.existsSync(file)) {
           // 如果获取不到的备份
           if (backupRoot) {
@@ -157,6 +159,17 @@ export default function registerProtocol(): void {
       request.url,
       $reactiveState.get("projectPath"),
       $reactiveState.get("resourcePath")
+    );
+    response(data);
+  });
+
+  protocol.registerBufferProtocol("preview", async (request, response) => {
+    let uuid = new URL(request.url).hostname;
+    uuid = decodeURI(uuid); // Needed in case URL contains spaces
+    console.log(uuid);
+    const data = await getFilePicResponseData(
+      `local://${uuid}`,
+      pathUtil.PROJECT_THUMBNAIL_DIR
     );
     response(data);
   });

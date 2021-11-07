@@ -20,25 +20,28 @@ const ProjectList: React.FC<{ list: TypeProjectDataDoc[] }> = props => {
     <StyleProjectList>
       {uiVersionWrap.length > 0 ? (
         uiVersionWrap.map(uiVersionItem => (
-          <>
+          <div key={uiVersionItem[0]}>
             <h3 className="ui-version">{uiVersionItem[0]}</h3>
             <div className="list-wrapper">
               <div className="list">
                 {uiVersionItem[1].map((item, key) => (
-                  <div className="project-card" key={key}>
+                  <div
+                    className="project-card"
+                    key={key}
+                    onClick={async () => {
+                      await window.$server.openProjectEditorWindow(item.uuid);
+                      remote.getCurrentWindow().close();
+                    }}
+                  >
                     <ProjectCard
-                      hoverable
-                      data={item}
-                      onClick={async () => {
-                        await window.$server.openProjectEditorWindow(item.uuid);
-                        remote.getCurrentWindow().close();
-                      }}
+                      image={`preview://${item.uuid}`}
+                      name={item.description.name}
                     />
                   </div>
                 ))}
               </div>
             </div>
-          </>
+          </div>
         ))
       ) : (
         <Empty className="empty" description="空空如也，开始创作吧！" />
@@ -69,6 +72,12 @@ const StyleProjectList = styled.div`
       flex-grow: 1;
       .project-card {
         margin: 0 8px 8px 0;
+        &:hover {
+          transform: translateY(-5px);
+          transition: 0.3s all ease-out;
+          box-shadow: 5px;
+        }
+        transition: 0.3s all ease-in;
       }
     }
   }

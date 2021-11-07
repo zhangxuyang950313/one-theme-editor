@@ -13,12 +13,13 @@ export type TypePathCollection = Readonly<{
   ELECTRON_LOGS: string;
   ELECTRON_APP_PATH: string;
   ELECTRON_LOCAL: string;
-  CLIENT_DATA: string;
+  APP_DATA: string;
   CLIENT_STATIC: string;
   CLIENT_CACHE: string;
   PACK_TEMPORARY: string;
   EXTRA_DATA_DB: string;
   PROJECTS_DB: string;
+  PROJECT_THUMBNAIL_DIR: string;
   RESOURCE_DIR: string;
   ASSETS_DIR: string;
   BINARY_DIR: string;

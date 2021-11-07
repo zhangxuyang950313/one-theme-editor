@@ -15,11 +15,12 @@ export default class PathCollection extends AbstractDataModel<TypePathCollection
     ELECTRON_LOGS: "",
     ELECTRON_TEMP: "",
 
-    CLIENT_DATA: "",
+    APP_DATA: "",
     CLIENT_STATIC: "",
     CLIENT_CACHE: "",
     EXTRA_DATA_DB: "",
     PROJECTS_DB: "",
+    PROJECT_THUMBNAIL_DIR: "",
     RESOURCE_DIR: "",
     ASSETS_DIR: "",
     BINARY_DIR: "",

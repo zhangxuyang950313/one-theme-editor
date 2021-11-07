@@ -1,6 +1,7 @@
 enum IPC_EVENT {
   $getPID = "$getPid",
 
+  // 响应书数据变化
   $reactiveStateSet = "$reactiveStateSet",
 
   // 配置
@@ -20,6 +21,7 @@ enum IPC_EVENT {
   $applyProject = "$applyProject",
   $packProject = "$packProject",
   $unpackProject = "$unpackProject",
+  $patchPreview = "$patchPreview",
 
   // 窗口管理
   $openProjectEditor = "$openProjectEditor",

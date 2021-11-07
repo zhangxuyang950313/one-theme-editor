@@ -1,26 +1,14 @@
 import React from "react";
 import styled from "styled-components";
 
-import { TypeProjectDataDoc, TypeProjectInfo } from "src/types/project";
-import ImgDefault from "@/assets/img-default.png";
-import { LazyImage } from "@/components/ImageCollection";
+import { PreloadImage } from "@/components/ImageCollection";
 
-type TypeProps = {
-  hoverable?: boolean;
-  data: TypeProjectDataDoc;
-  onClick?: (data: TypeProjectInfo) => void;
-};
 // 工程卡片展示
-function ProjectCard(props: TypeProps): JSX.Element {
-  const projectData = props.data;
-  const projectInfo = projectData.description;
+function ProjectCard(props: { image: string; name: string }): JSX.Element {
   return (
-    <StyleProjectCard
-      data-hoverable={props.hoverable}
-      onClick={() => props.onClick && props.onClick(projectInfo)}
-    >
-      <LazyImage className="preview" src={ImgDefault} />
-      {<div className="name">{projectInfo.name || "未命名"}</div>}
+    <StyleProjectCard>
+      <PreloadImage className="preview" src={props.image} />
+      {<div className="name">{props.name || "未命名"}</div>}
     </StyleProjectCard>
   );
 }
@@ -32,7 +20,7 @@ const StyleProjectCard = styled.div`
   height: 200px;
   border: 1px solid;
   border-color: var(--color-secondary);
-  border-radius: 6px;
+  border-radius: 4px;
   box-sizing: content-box;
   overflow: hidden;
   .preview {
@@ -44,20 +32,14 @@ const StyleProjectCard = styled.div`
     position: absolute;
     bottom: 0;
     width: 100%;
-    padding: 10px;
+    padding: 6px;
     color: var(--color-text-1);
     font-weight: 800;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    background: var(--color-border-4);
+    background-color: rgba(var(--gray-2), 0.8);
   }
-  &:hover[data-hoverable] {
-    transform: translateY(-5px);
-    transition: 0.3s all ease-out;
-    box-shadow: 5px;
-  }
-  transition: 0.3s all ease-in;
 `;
 
 export default ProjectCard;

@@ -1,6 +1,6 @@
 import { app, BrowserWindow, ipcMain, protocol } from "electron";
 import reactiveState from "src/preload/reactiveState";
-import ipcServer from "src/ipc/IpcServer";
+import ipcController from "src/ipc/IpcController";
 import { createWindows } from "./windows";
 import { moveWindowToCenter, saveCurrentDisplayCenter } from "./utils";
 import registerProtocol from "./protocol";
@@ -43,7 +43,7 @@ app.on("ready", async () => {
   // 注册协议
   registerProtocol();
   // 注册 ipc 服务
-  ipcServer.registerIpcServer();
+  ipcController.registerIpcServer();
   // 注册跨进程响应式数据
   Object.assign(global, {
     $reactiveState: reactiveState

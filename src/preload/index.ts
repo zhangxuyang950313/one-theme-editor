@@ -1,11 +1,11 @@
 import * as electronStore from "src/store/index";
-import ipcServer from "src/ipc/IpcServer";
+import ipcController from "src/ipc/IpcController";
 import ipcInvoker from "src/ipc/IpcInvoker";
 import reactiveState from "./reactiveState";
 
 // 注册 ipc 服务调用
 Object.assign(global, {
-  $server: ipcServer,
+  $server: ipcController,
   $invoker: ipcInvoker
 });
 

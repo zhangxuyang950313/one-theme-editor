@@ -70,7 +70,7 @@ import IPC_EVENT from "./ipc-event";
 //   }
 // };
 
-export default class IpcCreator {
+export default class ipcCreator {
   private serverList: Array<() => void> = [];
 
   // 收集服务

@@ -11,7 +11,7 @@ import pathUtil from "src/common/utils/pathUtil";
 import ERR_CODE from "src/common/errorCode";
 
 // 频繁修改工程数据，常驻内存
-console.debug(logSymbols.info, "工程数据库文件：", pathUtil.PROJECTS_DB);
+console.debug(logSymbols.info, "工程数据库：", pathUtil.PROJECTS_DB);
 const projectDB = createNedb(pathUtil.PROJECTS_DB);
 
 // 创建工程
