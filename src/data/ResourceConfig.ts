@@ -220,7 +220,6 @@ export class PageConfig extends AbstractDataModel<TypePageConfig> {
 
 export class ModuleConfig extends AbstractDataModel<TypeModuleConfig> {
   protected data: TypeModuleConfig = {
-    index: 0,
     name: "",
     icon: "",
     pageList: []

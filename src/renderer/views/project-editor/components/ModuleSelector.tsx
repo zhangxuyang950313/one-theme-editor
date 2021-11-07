@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Tooltip } from "antd";
 import { TypeModuleConfig } from "src/types/resource.config";
@@ -8,19 +8,26 @@ import { StaticResourceImage } from "./DynamicImage";
 const ModuleSelector: React.FC<{
   className?: string;
   moduleConfigList: TypeModuleConfig[];
-  currentModule: TypeModuleConfig;
   onChange: (data: TypeModuleConfig) => void;
 }> = props => {
-  const { className, moduleConfigList, currentModule, onChange } = props;
+  const { className, moduleConfigList, onChange } = props;
+
+  const [index, setIndex] = useState(0);
 
   return (
     <StyleModuleSelector className={className}>
       {moduleConfigList.map((item, key) => (
         <Tooltip key={key} title={item.name} placement="right">
-          <div className="icon-wrapper" onClick={() => onChange(item)}>
+          <div
+            className="icon-wrapper"
+            onClick={() => {
+              setIndex(key);
+              onChange(item);
+            }}
+          >
             <StaticResourceImage
               className="icon"
-              data-active={String(currentModule.index === item.index)}
+              is-active={String(index === key)}
               src={item.icon}
             />
           </div>
@@ -44,7 +51,7 @@ const StyleModuleSelector = styled.div`
       width: 46px;
       opacity: 0.4;
       transition: 0.2s all ease;
-      &[data-active="true"] {
+      &[is-active="true"] {
         opacity: 1;
         filter: drop-shadow(0 0 5px var(--color-primary-light-4));
         transform: scale(1.2);

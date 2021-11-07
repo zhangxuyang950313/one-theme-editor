@@ -134,12 +134,11 @@ export default class ResourceConfigCompiler extends XmlCompiler {
     return super
       .getChildrenFirstElementNode()
       .getChildrenNodesByTagname(ELEMENT_TAG.Module)
-      .map((moduleNode, index) => {
+      .map(moduleNode => {
         const pageList = this.getPageList(
           moduleNode.getChildrenNodesByTagname(ELEMENT_TAG.Page)
         );
         return new ModuleConfig()
-          .set("index", index)
           .set("name", moduleNode.getAttributeOf("name"))
           .set("icon", path.normalize(moduleNode.getAttributeOf("icon")))
           .set("pageList", pageList)

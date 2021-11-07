@@ -35,7 +35,6 @@ export type TypeResourceOption = {
 
 // 预览模块
 export type TypeModuleConfig = {
-  index: number;
   name: string;
   icon: string;
   pageList: TypePageOption[];

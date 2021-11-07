@@ -3,36 +3,39 @@ import styled from "styled-components";
 import { TypePageConfig } from "src/types/resource.config";
 import Previewer from "./Previewer";
 
+const selectedMap = new Map<string, number>();
+
 // 页面选择器
 const PageSelector: React.FC<{
   className?: string;
-  defaultSelected?: TypePageConfig;
   pageConfigList: TypePageConfig[];
   onChange: (x: TypePageConfig) => void;
 }> = props => {
-  const { pageConfigList, defaultSelected, onChange } = props;
+  const { pageConfigList, onChange } = props;
 
-  const [selectedIndex, setIndex] = useState(0);
+  const selectedKey = pageConfigList.map(_ => _.config).join("");
+
+  const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    if (!defaultSelected) return;
-    const index = pageConfigList.findIndex(
-      item => item.config === defaultSelected.config
-    );
-    if (index >= 0) setIndex(index);
-  }, []);
+    setIndex(selectedMap.get(selectedKey) || 0);
+  }, [pageConfigList]);
+
+  useEffect(() => {
+    selectedMap.set(selectedKey, index);
+    if (pageConfigList[index]) {
+      onChange(pageConfigList[index]);
+    }
+  }, [index]);
 
   return (
     <StylePageSelector className={props.className}>
-      {pageConfigList.map((pageConfig, index) => (
+      {pageConfigList.map((pageConfig, key) => (
         <span
-          key={index}
-          data-active={selectedIndex === index}
+          key={key}
+          data-active={index === key}
           className="preview"
-          onClick={() => {
-            setIndex(index);
-            onChange(pageConfig);
-          }}
+          onClick={() => setIndex(key)}
         >
           <Previewer
             className="previewer"

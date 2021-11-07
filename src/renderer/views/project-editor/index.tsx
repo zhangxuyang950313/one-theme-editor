@@ -165,7 +165,6 @@ const EditorFrame: React.FC = () => {
               <ModuleSelector
                 className="editor__module-content"
                 moduleConfigList={moduleList}
-                currentModule={moduleConfig}
                 onChange={setModuleConfig}
               />
             ) : (
