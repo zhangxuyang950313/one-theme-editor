@@ -5,7 +5,6 @@ enum IPC_EVENT {
 
   // 配置
   $getScenarioOptionList = "$getScenarioOptionList",
-  $getResourceOptionList = "$getResourceOptionList",
   $getResourceConfigList = "$getResourceConfigList",
   $getScenarioOption = "$getScenarioOption",
   $getScenarioConfig = "$getScenarioConfig",
@@ -23,9 +22,8 @@ enum IPC_EVENT {
   $unpackProject = "$unpackProject",
 
   // 窗口管理
-  $openCreateProjectWindow = "$openCreateProjectWindow",
-  $openProjectEditorWindow = "$openProjectEditorWindow",
-  $openStarter = "$openStarter",
+  $openProjectEditor = "$openProjectEditor",
+  $openProjectManager = "$openProjectManager",
 
   // 监听文件
   $startWatchDir = "$watchDirFiles",

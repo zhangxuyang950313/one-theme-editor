@@ -4,8 +4,8 @@ import { useEffect } from "react";
 import { FILE_EVENT } from "src/enum";
 import { TypeFileData } from "src/types/resource.page";
 import { FileData } from "src/data/ResourceConfig";
-import { ActionPatchFileDataMap } from "@/store/editor/action";
-import { useEditorDispatch } from "@/store/editor";
+// import { ActionPatchFileDataMap } from "../store/action";
+// import { useEditorDispatch } from "../store";
 
 const fileDataMap = new Map<string, { mtime: Date; data: TypeFileData }>();
 
@@ -49,7 +49,7 @@ export default function useSubscribeFile(
   src: string | undefined,
   callback?: TypeListener
 ): void {
-  const dispatch = useEditorDispatch();
+  // const dispatch = useEditorDispatch();
   const projectRoot = window.$reactiveState.get("projectPath");
   useEffect(() => {
     if (!src) return;
@@ -58,7 +58,7 @@ export default function useSubscribeFile(
     // 首次回调
     const fileData = getFileDataWithCache(file);
     callback && callback(FILE_EVENT.ADD, src, fileData);
-    dispatch(ActionPatchFileDataMap({ src, fileData }));
+    // dispatch(ActionPatchFileDataMap({ src, fileData }));
 
     const removeListener = window.$invoker.useFilesChange(data => {
       if (data.root !== projectRoot) return;
@@ -68,7 +68,7 @@ export default function useSubscribeFile(
 
     return () => {
       removeListener();
-      dispatch(ActionPatchFileDataMap({ src, fileData: null }));
+      // dispatch(ActionPatchFileDataMap({ src, fileData: null }));
     };
   }, [src]);
 }

@@ -16,7 +16,6 @@ export type TypeProjectInfo = {
 export type TypeCreateProjectPayload = {
   root: string;
   description: TypeProjectInfo;
-  scenarioMd5: string;
   scenarioSrc: string;
   resourceSrc: string;
 };

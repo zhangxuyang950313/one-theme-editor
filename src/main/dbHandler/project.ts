@@ -18,26 +18,23 @@ const projectDB = createNedb(pathUtil.PROJECTS_DB);
 export async function createProject(
   data: TypeCreateProjectPayload
 ): Promise<TypeProjectDataDoc> {
-  const { description, root, scenarioMd5, scenarioSrc, resourceSrc } = data;
+  const { description, root, scenarioSrc, resourceSrc } = data;
   const uiVersion = ResourceConfigCompiler.from(resourceSrc).getUiVersion();
   return projectDB.insert<TypeProjectData>({
     uuid: UUID(),
     root,
     description,
     uiVersion,
-    scenarioMd5,
     scenarioSrc,
     resourceSrc
   });
 }
 
 // md5 筛选所有工程
-export async function getProjectListByMd5(
-  md5: string
+export async function findProjectListByQuery(
+  query: Partial<TypeProjectDataDoc>
 ): Promise<TypeProjectDataDoc[]> {
-  return projectDB
-    .find<TypeProjectData>({ scenarioMd5: md5 })
-    .sort({ updatedAt: -1 });
+  return projectDB.find<TypeProjectData>(query).sort({ updatedAt: -1 });
 }
 
 // 查找工程

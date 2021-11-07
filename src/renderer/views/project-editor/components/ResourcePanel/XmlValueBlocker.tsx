@@ -1,22 +1,22 @@
 import React from "react";
 import styled from "styled-components";
 import { IconClose } from "@arco-design/web-react/icon";
-import { useEditorDispatch, useEditorSelector } from "@/store/editor";
 import { HEX_FORMAT, RESOURCE_TAG } from "src/enum/index";
 import {
   TypeXmlItem,
   TypeXmlBlocker,
   TypeXmlValueTags
 } from "src/types/resource.page";
-import useSubscribeFile from "@/hooks/project/useSubscribeFile";
-import { ActionPatchFileDataMap } from "@/store/editor/action";
 import { resolveProjectPath } from "src/common/utils/pathUtil";
 import { xmlElementTextModify } from "src/common/xmlTemplate";
+import { ActionPatchFileDataMap } from "../../store/action";
+import { useEditorDispatch, useEditorSelector } from "../../store";
 import ColorPicker from "./ColorPicker";
 import BooleanSelector from "./BooleanSelector";
 import NumberInput from "./NumberInput";
 import StringInput from "./StringInput";
 import StickyTab from "./StickyTab";
+import useSubscribeFile from "@/hooks/useSubscribeFile";
 
 // 分类编辑控件
 const XmlValueEditor: React.FC<{

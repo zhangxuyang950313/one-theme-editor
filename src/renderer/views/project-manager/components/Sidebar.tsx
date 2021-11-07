@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { Menu } from "@arco-design/web-react";
 import { TypeScenarioOption } from "src/types/scenario.config";
@@ -6,22 +6,15 @@ import TopInfo from "./TopInfo";
 
 // 欢迎页侧边栏
 const Sidebar: React.FC<{
+  scenarioList: TypeScenarioOption[];
   onScenarioChange: (x: TypeScenarioOption) => void;
 }> = props => {
-  // 场景列表
-  const [scenarioList, setScenarioList] = useState<TypeScenarioOption[]>([]);
-
-  // 获取场景配置列表
-  useEffect(() => {
-    window.$server.getScenarioOptionList().then(data => {
-      setScenarioList(data);
-    });
-  }, []);
+  const { scenarioList, onScenarioChange } = props;
 
   // 场景列表变化恢复选中第一个
   useEffect(() => {
     if (!scenarioList[0]) return;
-    props.onScenarioChange(scenarioList[0]);
+    onScenarioChange(scenarioList[0]);
   }, [scenarioList]);
 
   return (
@@ -30,11 +23,14 @@ const Sidebar: React.FC<{
       <TopInfo />
       {/* 场景选择 */}
       {scenarioList.length > 0 && (
-        <Menu className="menu" defaultSelectedKeys={[scenarioList[0].md5]}>
-          {scenarioList.map(item => (
+        <Menu
+          className="menu"
+          defaultSelectedKeys={[`${0}.${scenarioList[0].src}`]}
+        >
+          {scenarioList.map((item, key) => (
             <Menu.Item
-              key={item.md5}
-              onClick={() => props.onScenarioChange(item)}
+              key={`${key}.${item.src}`}
+              onClick={() => onScenarioChange(item)}
             >
               {item.name}
             </Menu.Item>

@@ -1,23 +1,42 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { ScenarioOption } from "src/data/ScenarioConfig";
-import ProjectListDisplay from "./components/ProjectListDisplay";
+import { TypeScenarioOption } from "src/types/scenario.config";
+import { Notification } from "@arco-design/web-react";
+import { useProjectManagerDispatch } from "./store";
+import { ActionSetScenario } from "./store/action";
 import Sidebar from "./components/Sidebar";
+import ProjectListDisplay from "./components/ProjectListDisplay";
 import RootWrapper from "@/RootWrapper";
 import { StyleTopDrag } from "@/style";
 
 // 开始页面
 const ProjectManager: React.FC = () => {
-  // 选中的场景
-  const [scenarioOption, setScenarioOption] = useState(ScenarioOption.default);
+  const dispatch = useProjectManagerDispatch();
+  // 场景列表
+  const [scenarioList, setScenarioList] = useState<TypeScenarioOption[]>([]);
+
+  // 获取场景配置列表
+  useEffect(() => {
+    window.$server
+      .getScenarioOptionList()
+      .then(setScenarioList)
+      .catch(err => {
+        Notification.error({ content: err.message });
+      });
+  }, []);
 
   return (
     <StyleProjectManager>
       <StyleTopDrag height="50px" />
       {/* 侧边栏 */}
-      <Sidebar onScenarioChange={setScenarioOption} />
+      <Sidebar
+        scenarioList={scenarioList}
+        onScenarioChange={scenario => {
+          dispatch(ActionSetScenario(scenario));
+        }}
+      />
       {/* 工程管理 */}
-      <ProjectListDisplay scenarioOption={scenarioOption} />
+      <ProjectListDisplay />
     </StyleProjectManager>
   );
 };

@@ -48,5 +48,5 @@ app.on("ready", async () => {
   Object.assign(global, {
     $reactiveState: reactiveState
   });
-  await createWindows.starter();
+  await createWindows.projectManager();
 });

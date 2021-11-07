@@ -1,7 +1,7 @@
 import archiver from "archiver";
 import { FILE_TEMPLATE_TYPE, PACK_TYPE } from "../enum";
+import { TypeResourceConfig } from "./resource.config";
 
-/*************************** scenarioConfig **************************/
 // 工程文件模板配置
 export type TypeFileTempConfig = {
   output: string;
@@ -26,16 +26,15 @@ export type TypePackConfig = {
 export type TypeApplyConfig = {
   steps: Array<{ description: string; command: string }>;
 };
-// 场景配置选项
-export type TypeScenarioOption = {
-  name: string;
-  md5: string;
-  src: string;
-} & TypeScenarioConfig;
 // 场景配置数据
 export type TypeScenarioConfig = {
+  name: string;
   fileTempList: TypeFileTempConfig[];
   packageConfig: TypePackConfig;
   applyConfig: TypeApplyConfig;
+  resourceConfigList: TypeResourceConfig[];
 };
-/*****************************************************/
+
+export type TypeScenarioOption = {
+  src: string;
+} & TypeScenarioConfig;

@@ -19,9 +19,9 @@ import {
 } from "@arco-design/web-react";
 import { IconFolderAdd } from "@arco-design/web-react/icon";
 import { FILE_TEMPLATE_TYPE } from "src/enum";
-import { TypeScenarioOption } from "src/types/scenario.config";
 import pathUtil from "src/common/utils/pathUtil";
 import { useToggle } from "ahooks";
+import { useScenarioSelected } from "../hooks";
 import TemplateList from "./TemplateLIst";
 import Steps from "@/components/Steps";
 import ProjectForm from "@/components/ProjectForm";
@@ -33,8 +33,7 @@ const initialValues = {
   name: isDev ? txt : "",
   designer: isDev ? txt : "",
   author: isDev ? txt : "",
-  version: "1.0.0",
-  uiVersion: "10"
+  version: "1.0.0"
 };
 
 const defaultPath = pathUtil.ELECTRON_DESKTOP;
@@ -54,11 +53,11 @@ const defaultPath = pathUtil.ELECTRON_DESKTOP;
 // 创建主题按钮
 const CreateProject: React.FC<
   DrawerProps & {
-    scenarioOption: TypeScenarioOption;
     onCreated: (x: TypeProjectDataDoc) => void;
   }
 > = props => {
-  const { scenarioOption, onCreated } = props;
+  const { onCreated } = props;
+  const scenario = useScenarioSelected();
   // 当前步骤
   const [curStep, setCurStep] = useState(0);
   // 创建状态
@@ -73,9 +72,12 @@ const CreateProject: React.FC<
   );
   // 表单错误列表
   // const [fieldsError, setFieldsError] = useState([]);
-  const [resourceList, setResourceList] = useState<TypeResourceConfig[]>([]);
+
+  // 资源配置列表
+  const resourceList = scenario.resourceConfigList;
+
   // 工程信息配置
-  const projectInfoConfig = scenarioOption.fileTempList.find(
+  const projectInfoConfig = scenario.fileTempList.find(
     item => item.type === FILE_TEMPLATE_TYPE.INFO
   );
 
@@ -88,14 +90,6 @@ const CreateProject: React.FC<
       setLocalPath(path.join(defaultPath, form.getFieldValue("name")));
     }
   }, [localPath]);
-
-  // 获取资源配置列表
-  useEffect(() => {
-    if (!scenarioOption.src) return;
-    window.$server
-      .getResourceConfigList(scenarioOption.src)
-      .then(setResourceList);
-  }, [scenarioOption.src]);
 
   // 步骤控制
   const nextStep = () => setCurStep(curStep + 1);
@@ -133,7 +127,7 @@ const CreateProject: React.FC<
           {projectInfoConfig && (
             <ProjectForm
               projectInfoConfig={projectInfoConfig}
-              initialValues={projectInfoRef.current}
+              initialValues={initialValues}
               onLocalPathSuggestion={setLocalPath}
               onFormValuesChange={fieldsValue => {
                 form.setFieldsValue(fieldsValue);
@@ -253,8 +247,7 @@ const CreateProject: React.FC<
             .createProject({
               root: localPath,
               description: projectInfoRef.current,
-              scenarioMd5: scenarioOption.md5,
-              scenarioSrc: scenarioOption.src,
+              scenarioSrc: scenario.src,
               resourceSrc: resourceConfigPath
             })
             .then(data => {
@@ -337,7 +330,7 @@ const CreateProject: React.FC<
   return (
     <Drawer
       width="50%"
-      title={`创建${scenarioOption.name}`}
+      title={`创建${scenario.name}`}
       unmountOnExit
       closable={false}
       footer={[

@@ -1,29 +1,29 @@
 import { useState, useLayoutEffect } from "react";
-import { useStarterDispatch } from "@/store/starter";
-import { ActionSetScenarioOptionList } from "@/store/starter/action";
-import { TypeScenarioOption } from "src/types/scenario.config";
+import { TypeScenarioConfig } from "src/types/scenario.config";
 import { LOAD_STATUS } from "src/enum";
-import { useAsyncUpdater } from "..";
+import { useAsyncUpdater } from "./index";
+import { useProjectManagerDispatch } from "@/views/project-manager/store";
+import { ActionSetScenarioOptionList } from "@/views/project-manager/store/action";
 
 /**
  * 获取配置的场景选项列表
  * @returns
  */
 export default function useFetchScenarioOptionList(): {
-  state: TypeScenarioOption[];
+  state: TypeScenarioConfig[];
   status: LOAD_STATUS;
   fetch: () => Promise<void>;
 } {
   const [status, setStatus] = useState(LOAD_STATUS.INITIAL);
-  const [state, setState] = useState<TypeScenarioOption[]>([]);
-  const dispatch = useStarterDispatch();
+  const [state, setState] = useState<TypeScenarioConfig[]>([]);
+  const dispatch = useProjectManagerDispatch();
   const registerUpdater = useAsyncUpdater();
   const fetch = async () => {
     try {
       setStatus(LOAD_STATUS.LOADING);
       const optList = await window.$server.getScenarioOptionList();
       // 去重
-      const list = optList.reduce<TypeScenarioOption[]>((t, o) => {
+      const list = optList.reduce<TypeScenarioConfig[]>((t, o) => {
         if (!t.some(item => item.md5 === o.md5)) t.push(o);
         return t;
       }, []);

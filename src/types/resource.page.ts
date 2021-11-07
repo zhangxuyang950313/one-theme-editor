@@ -1,4 +1,3 @@
-import { HEX_FORMAT } from "src/enum/index";
 import { FileTypeResult, MimeType } from "file-type";
 import { Element } from "xml-js";
 import {

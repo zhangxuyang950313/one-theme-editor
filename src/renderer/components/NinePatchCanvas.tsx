@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { scaleNinePatchCanvas } from "src/common/9patch/core";
-import useSubscribeFile from "@/hooks/project/useSubscribeFile";
+import useSubscribeFile from "@/hooks/useSubscribeFile";
 
 async function loadImage(src: string) {
   const image = new Image();
@@ -21,7 +21,6 @@ const NinePatchCanvas: React.FC<
     height: number;
   }
 > = props => {
-  console.log({ props });
   const { width, height } = props;
   const [src, setSrc] = useState(`src://${props.src}`);
   const [canvas, setCanvas] = useState(document.createElement("canvas"));

@@ -11,7 +11,7 @@ import {
   TypeResourceOption
 } from "src/types/resource.config";
 import { ELEMENT_TAG, PACK_TYPE } from "src/enum/index";
-import ScenarioConfigData, {
+import ScenarioConfig, {
   ApplyConfig,
   PackageConfig,
   FileTemplate
@@ -28,6 +28,10 @@ export default class ScenarioConfigCompiler extends XmlCompilerExtra {
     const file = path.join(pathUtil.RESOURCE_CONFIG_DIR, src);
     const element = new XmlCompiler(file).getElement();
     return new ScenarioConfigCompiler(element);
+  }
+
+  getName(): string {
+    return super.getChildrenFirstElementNode().getAttributeOf("name");
   }
 
   // 解析描述文件配置
@@ -108,39 +112,41 @@ export default class ScenarioConfigCompiler extends XmlCompilerExtra {
     return new ApplyConfig().set("steps", steps).create();
   }
 
-  // 解析编辑器资源选项列表
-  getResourceOptionList(): TypeResourceOption[] {
+  // 解析资源配置路径
+  getResourceConfigSrcList(): string[] {
     return super
       .getChildrenFirstElementNode()
       .getChildrenNodesByTagname(ELEMENT_TAG.ResourceConfig)
       .flatMap(node => {
         const src = node.getAttributeOf("src");
-        const isExists = fse.pathExistsSync(
-          path.join(pathUtil.RESOURCE_CONFIG_DIR, src)
-        );
-        return isExists ? [ResourceConfigCompiler.from(src).getOption()] : [];
+        return fse.pathExistsSync(path.join(pathUtil.RESOURCE_CONFIG_DIR, src))
+          ? [src]
+          : [];
       });
+  }
+
+  // 解析编辑器资源选项列表
+  getResourceOptionList(): TypeResourceOption[] {
+    return this.getResourceConfigSrcList().map(src =>
+      ResourceConfigCompiler.from(src).getOption()
+    );
   }
 
   // 解析编辑器资源配置列表
   getResourceConfigList(): TypeResourceConfig[] {
-    return super
-      .getChildrenFirstElementNode()
-      .getChildrenNodesByTagname(ELEMENT_TAG.ResourceConfig)
-      .flatMap(node => {
-        const src = node.getAttributeOf("src");
-        const isExists = fse.pathExistsSync(
-          path.join(pathUtil.RESOURCE_CONFIG_DIR, src)
-        );
-        return isExists ? [ResourceConfigCompiler.from(src).getConfig()] : [];
-      });
+    return this.getResourceConfigSrcList().map(src =>
+      ResourceConfigCompiler.from(src).getConfig()
+    );
   }
 
   getConfig(): TypeScenarioConfig {
-    return new ScenarioConfigData()
+    const name = this.getName();
+    return new ScenarioConfig()
+      .set("name", name)
       .set("applyConfig", this.getApplyConfig())
       .set("fileTempList", this.getFileTempList())
       .set("packageConfig", this.getPackageConfig())
+      .set("resourceConfigList", this.getResourceConfigList())
       .create();
   }
 }

@@ -1,4 +1,4 @@
-<Configuration>
+<Configuration name="小米主题">
 
     <!-- 
         文件模板 
@@ -20,7 +20,7 @@
             <Item name="designer"   description="设计师"/>
             <Item name="author"     description="制作者"/>
             <Item name="version"    description="版本号"/>
-            <Item name="uiVersion"  description="UI版本" disabled="true" visible="true"/>
+            <Item name="uiVersion"  description="UI版本" disabled="true" visible="false"/>
         </Items>
     </FileTemplate>
 

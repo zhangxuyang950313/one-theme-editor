@@ -10,12 +10,12 @@ import {
   UndoOutlined
 } from "@ant-design/icons";
 import { TypeFileBlocker, TypeFileItem } from "src/types/resource.page";
-import { useEditorSelector } from "@/store/editor";
-import useSubscribeFile from "@/hooks/project/useSubscribeFile";
 import { resolveProjectPath } from "src/common/utils/pathUtil";
+import { useEditorSelector } from "../../store";
 import ImageDisplay from "./ImageDisplay";
 import InfoDisplay from "./InfoDisplay";
 import StickyTab from "./StickyTab";
+import useSubscribeFile from "@/hooks/useSubscribeFile";
 
 const FileItem: React.FC<{
   className?: string;

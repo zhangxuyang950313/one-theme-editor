@@ -38,7 +38,6 @@ const ProjectForm: React.FC<{
         form={form}
         colon={false}
         labelAlign="right"
-        // labelCol={{ span: 5 }}
         initialValues={initialValues}
         onValuesChange={changedValue => {
           const projectName = changedValue.name;

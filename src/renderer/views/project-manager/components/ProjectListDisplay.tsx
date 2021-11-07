@@ -3,42 +3,42 @@ import styled from "styled-components";
 import { useToggle } from "ahooks";
 import { Button } from "@arco-design/web-react";
 import { TypeProjectDataDoc } from "src/types/project";
-import { TypeScenarioOption } from "src/types/scenario.config";
+import { useProjectManagerSelector } from "../store";
 import CreateProject from "./CreateProject";
 import ProjectList from "./ProjectList";
 
-const ProjectListDisplay: React.FC<{
-  scenarioOption: TypeScenarioOption;
-}> = props => {
-  const { scenarioOption } = props;
+const ProjectListDisplay: React.FC = () => {
+  const scenario = useProjectManagerSelector(state => state.scenarioSelected);
   const [projectList, setProjectList] = useState<TypeProjectDataDoc[]>([]);
-  const [createProjectVisible, createProjectToggle] = useToggle(false);
+  const [visible, visibleToggle] = useToggle(false);
 
   const fetchProjectList = useCallback(() => {
-    window.$server.getProjectListByMd5(scenarioOption.md5).then(setProjectList);
-  }, [scenarioOption]);
+    window.$server
+      .findProjectListByQuery({ scenarioSrc: scenario.src })
+      .then(setProjectList);
+  }, [scenario.src]);
 
   useEffect(() => {
-    if (!scenarioOption) return;
+    if (!scenario) return;
     fetchProjectList();
-  }, [scenarioOption.md5]);
+  }, [scenario.src]);
 
   return (
     <StyleProjectListDisplay>
       <div className="top-container">
         <div className="title">
-          <h2>{scenarioOption?.name || ""}列表</h2>
+          <h2>{scenario?.name || ""}列表</h2>
           <p>
             新建{projectList.length > 0 ? "或选择" : ""}一个
-            {scenarioOption.name}
+            {scenario.name}
             开始创作
           </p>
         </div>
         <Button
           type="primary"
           onClick={() => {
-            // window.$server.openCreateProjectWindow(scenarioOption);
-            createProjectToggle.setRight();
+            // window.$server.openCreateProjectWindow(scenarioConfig);
+            visibleToggle.setRight();
           }}
         >
           开始创作
@@ -47,12 +47,11 @@ const ProjectListDisplay: React.FC<{
       <ProjectList list={projectList} />
       {/* 创建工程抽屉 */}
       <CreateProject
-        visible={createProjectVisible}
-        scenarioOption={scenarioOption}
-        onCancel={createProjectToggle.toggle}
+        visible={visible}
+        onCancel={visibleToggle.toggle}
         onCreated={() => {
           fetchProjectList();
-          createProjectToggle.setLeft();
+          visibleToggle.setLeft();
         }}
       />
     </StyleProjectListDisplay>

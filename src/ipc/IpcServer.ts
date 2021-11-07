@@ -3,17 +3,18 @@ import fse from "fs-extra";
 import {
   BrowserWindowConstructorOptions,
   ipcMain,
-  ipcRenderer
+  ipcRenderer,
+  remote
 } from "electron";
 import {
   createProject,
   findProjectByQuery,
-  getProjectListByMd5
+  findProjectListByQuery
 } from "main/dbHandler/project";
 import PageConfigCompiler from "src/common/compiler/PageConfig";
 import ResourceConfigCompiler from "src/common/compiler/ResourceConfig";
 import ScenarioConfigCompiler from "src/common/compiler/ScenarioConfig";
-import ScenarioOptions from "src/common/compiler/ScenarioOptions";
+import ScenarioOptionCompiler from "src/common/compiler/ScenarioOption";
 import ERR_CODE from "src/common/errorCode";
 import {
   TypeCreateProjectPayload,
@@ -22,11 +23,7 @@ import {
   TypeProjectDataDoc,
   TypeUnpackPayload
 } from "src/types/project";
-import {
-  TypePageConfig,
-  TypeResourceConfig,
-  TypeResourceOption
-} from "src/types/resource.config";
+import { TypePageConfig, TypeResourceConfig } from "src/types/resource.config";
 import {
   TypeScenarioConfig,
   TypeScenarioOption
@@ -42,14 +39,21 @@ import IpcCreator from "./IpcCreator";
 if (ipcRenderer) ipcRenderer.setMaxListeners(9999);
 if (ipcMain) ipcMain.setMaxListeners(9999);
 
+// createWindows 方法内调用了 electron.app 获取路径方法，
+// 需要在 electron 启动后才能调用，因为这里是渲染进程，
+// 所以要检测是否已经加载窗口，然后异步加载
 function createWindows() {
+  // 使用闭包缓存，避免每次都加载
   let cw: typeof import("main/windows").createWindows;
   return {
     async get() {
       if (cw) return cw;
-      const { createWindows } = await import("main/windows");
-      cw = createWindows;
-      return createWindows;
+      // 处理边界情况：若未启动前调用，则等待 ready
+      if (!remote.app.isReady()) {
+        await new Promise(resolve => remote.app.on("ready", resolve));
+      }
+      cw = (await import("main/windows")).createWindows;
+      return cw;
     }
   };
 }
@@ -64,14 +68,9 @@ class IpcServer extends IpcCreator {
   // 获取场景选项列表
   getScenarioOptionList = this.createIpcAsync<void, TypeScenarioOption[]>({
     event: IPC_EVENT.$getScenarioOptionList,
-    server: async () => ScenarioOptions.readScenarioOptionList()
+    server: async () => ScenarioOptionCompiler.def.getScenarioOptionList()
   });
 
-  // 获取场景选项
-  getScenarioOption = this.createIpcAsync<string, TypeScenarioOption>({
-    event: IPC_EVENT.$getScenarioOption,
-    server: async scenarioSrc => ScenarioOptions.def.getOption(scenarioSrc)
-  });
   // 获取场景配置数据
   getScenarioConfig = this.createIpcAsync<string, TypeScenarioConfig>({
     event: IPC_EVENT.$getScenarioConfig,
@@ -80,27 +79,19 @@ class IpcServer extends IpcCreator {
     }
   });
 
+  // 获取资源配置列表
+  getResourceConfigList = this.createIpcAsync<string[], TypeResourceConfig[]>({
+    event: IPC_EVENT.$getResourceConfigList,
+    server: async srcList => {
+      return srcList.map(src => ResourceConfigCompiler.from(src).getConfig());
+    }
+  });
+
   // 获取资源配置
   getResourceConfig = this.createIpcAsync<string, TypeResourceConfig>({
     event: IPC_EVENT.$getResourceConfig,
-    server: async scenarioSrc =>
-      ResourceConfigCompiler.from(scenarioSrc).getConfig()
-  });
-
-  // 获取资源配置列表
-  getResourceConfigList = this.createIpcAsync<string, TypeResourceConfig[]>({
-    event: IPC_EVENT.$getResourceConfigList,
-    server: async scenarioSrc => {
-      return ScenarioConfigCompiler.from(scenarioSrc).getResourceConfigList();
-    }
-  });
-
-  // 获取资源选项列表
-  getResourceOptionList = this.createIpcAsync<string, TypeResourceOption[]>({
-    event: IPC_EVENT.$getResourceOptionList,
-    server: async scenarioSrc => {
-      return ScenarioConfigCompiler.from(scenarioSrc).getResourceOptionList();
-    }
+    server: async resourceConfigSrc =>
+      ResourceConfigCompiler.from(resourceConfigSrc).getConfig()
   });
 
   // 获取页面配置列表
@@ -122,13 +113,16 @@ class IpcServer extends IpcCreator {
   });
 
   // 获取工程列表
-  getProjectListByMd5 = this.createIpcAsync<string, TypeProjectDataDoc[]>({
+  findProjectListByQuery = this.createIpcAsync<
+    Partial<TypeProjectDataDoc>,
+    TypeProjectDataDoc[]
+  >({
     event: IPC_EVENT.$getProjectList,
-    server: async scenarioMd5 => await getProjectListByMd5(scenarioMd5)
+    server: async query => await findProjectListByQuery(query)
   });
 
   // 获取工程数据
-  getProject = this.createIpcAsync<
+  findProjectQuery = this.createIpcAsync<
     Partial<TypeProjectDataDoc>,
     TypeProjectDataDoc
   >({
@@ -136,30 +130,21 @@ class IpcServer extends IpcCreator {
     server: async query => await findProjectByQuery(query)
   });
 
-  // 打开启动页面
-  openStarter = this.createIpcAsync<
+  // 打开工程管理页
+  openProjectManager = this.createIpcAsync<
     void | { windowOptions: BrowserWindowConstructorOptions },
     void
   >({
-    event: IPC_EVENT.$openStarter,
+    event: IPC_EVENT.$openProjectManager,
     server: async () => {
       const cw = await createWindows().get();
-      await cw.starter();
-    }
-  });
-
-  // 打开创建工程窗口
-  openCreateProjectWindow = this.createIpcAsync<TypeScenarioOption, void>({
-    event: IPC_EVENT.$openCreateProjectWindow,
-    server: async scenarioOption => {
-      const cw = await createWindows().get();
-      await cw.createProject(scenarioOption);
+      await cw.projectManager();
     }
   });
 
   // 启动工程编辑器
   openProjectEditorWindow = this.createIpcAsync<string, void>({
-    event: IPC_EVENT.$openProjectEditorWindow,
+    event: IPC_EVENT.$openProjectEditor,
     server: async uuid => {
       const cw = await createWindows().get();
       await cw.projectEditor(uuid);

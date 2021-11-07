@@ -1,7 +1,6 @@
 import { URL } from "url";
 import path from "path";
 import { app } from "electron";
-import { TypeScenarioOption } from "src/types/scenario.config";
 import { WDS_SERVER_HOST, WDS_SERVER_PORT } from "../../webpack/constant";
 
 function resolvePath(src: string) {
@@ -30,17 +29,6 @@ export const getUrl = {
   projectEditor(uuid: string): string {
     const url = new URL(`${prefix}/project-editor.html`);
     url.searchParams.append("uuid", uuid);
-    return url.toString();
-  },
-  /**
-   * @deprecated
-   * @param scenarioOption
-   * @returns
-   */
-  createProject(scenarioOption: TypeScenarioOption): string {
-    const url = new URL(`${prefix}/create-project.html`);
-    url.searchParams.append("scenarioSrc", scenarioOption.src);
-    url.searchParams.append("scenarioName", scenarioOption.name);
     return url.toString();
   }
 };

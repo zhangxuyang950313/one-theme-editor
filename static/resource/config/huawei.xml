@@ -1,2 +1,4 @@
-<Configuration>
+<Configuration name="华为主题">
+    <!-- 编辑器资源配置 -->
+    <ResourceConfig src="xiaomi/miui12/description.xml"/>
 </Configuration>

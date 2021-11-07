@@ -11,8 +11,8 @@ import { TypePageConfig } from "src/types/resource.config";
 import { TypeLayoutData, TypeLayoutTextElement } from "src/types/resource.page";
 import ColorUtil from "src/common/utils/ColorUtil";
 import { filenameIs9Patch } from "src/common/utils";
-import { useEditorSelector } from "@/store/editor";
-import useSubscribeFile from "@/hooks/project/useSubscribeFile";
+import { useEditorSelector } from "../store";
+import useSubscribeFile from "@/hooks/useSubscribeFile";
 import { DynamicBothSourceImage } from "@/components/ImageCollection";
 import NinePatchCanvas from "@/components/NinePatchCanvas";
 

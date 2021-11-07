@@ -108,18 +108,23 @@ export default class IpcCreator {
     server: (p: Params) => Promise<Result>;
   }): (data: Params) => Promise<Result> {
     this.addServerList(() => {
-      ipcMain.handle(
-        params.event,
-        async ($event, $data: Params) => await params.server($data)
-      );
-    });
-
-    return async (data: Params): Promise<Result> => {
-      const result = await ipcRenderer.invoke(params.event, data).catch(err => {
-        console.log(err);
-        throw new Error(err.message);
+      // 直接 throw 会带上 invoke 原本的错误信息
+      ipcMain.handle(params.event, async ($event, $data: Params) => {
+        try {
+          return {
+            status: "success",
+            data: await params.server($data)
+          };
+        } catch (err: any) {
+          return {
+            status: "failed",
+            data: err.message
+          };
+        }
       });
-
+    });
+    return async (data: Params): Promise<Result> => {
+      const result = await ipcRenderer.invoke(params.event, data);
       if (isDev) {
         console.log("---------ipc---------");
         console.log("async", params.event);
@@ -127,7 +132,10 @@ export default class IpcCreator {
         console.log("result", result);
         console.log("---------------------");
       }
-      return result;
+      if (result.status === "failed") {
+        throw new Error(result.data);
+      }
+      return result.data;
     };
   }
 

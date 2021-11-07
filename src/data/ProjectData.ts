@@ -16,7 +16,6 @@ export default class ProjectData extends AbstractDataModel<TypeProjectDataDoc> {
     root: "",
     description: ProjectInfo.default,
     uiVersion: UiVersion.default,
-    scenarioMd5: "",
     scenarioSrc: "",
     resourceSrc: "",
     _id: "",

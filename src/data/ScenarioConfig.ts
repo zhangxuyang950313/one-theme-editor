@@ -45,27 +45,16 @@ export class ApplyConfig extends AbstractDataModel<TypeApplyConfig> {
   }
 }
 
-// 场景选项列表配置
-export default class ScenarioConfigData extends AbstractDataModel<TypeScenarioConfig> {
+// 场景配置
+export default class ScenarioConfig extends AbstractDataModel<TypeScenarioConfig> {
   protected data: TypeScenarioConfig = {
+    name: "",
     fileTempList: [],
     packageConfig: PackageConfig.default,
-    applyConfig: ApplyConfig.default
+    applyConfig: ApplyConfig.default,
+    resourceConfigList: []
   };
   static get default(): TypeScenarioConfig {
-    return new ScenarioConfigData().create();
-  }
-}
-
-// 场景配置
-export class ScenarioOption extends AbstractDataModel<TypeScenarioOption> {
-  protected data: TypeScenarioOption = {
-    name: "",
-    md5: "",
-    src: "",
-    ...ScenarioConfigData.default
-  };
-  static get default(): TypeScenarioOption {
-    return new ScenarioOption().create();
+    return new ScenarioConfig().create();
   }
 }

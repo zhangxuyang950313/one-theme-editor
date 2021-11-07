@@ -1,5 +1,3 @@
-import path from "path";
-import { updateState } from "@/store/utils";
 import { TypeProjectDataDoc } from "src/types/project";
 import {
   TypeModuleConfig,
@@ -13,9 +11,10 @@ import ResourceConfigData, {
   PageOption
 } from "src/data/ResourceConfig";
 import ProjectData from "src/data/ProjectData";
-import ScenarioConfigData from "src/data/ScenarioConfig";
+import ScenarioConfig from "src/data/ScenarioConfig";
 import { TypeFileData } from "src/types/resource.page";
 import { ACTION_TYPE, TypeEditorActions } from "./action";
+import { updateState } from "@/store/utils";
 
 // main states
 export type TypeEditorState = {
@@ -30,7 +29,7 @@ export type TypeEditorState = {
 
 const defaultState: TypeEditorState = {
   projectData: ProjectData.default,
-  scenarioConfig: ScenarioConfigData.default,
+  scenarioConfig: ScenarioConfig.default,
   resourceConfig: ResourceConfigData.default,
   currentModule: ModuleConfig.default,
   currentPage: PageOption.default,

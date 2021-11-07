@@ -13,7 +13,6 @@ import installExtension, {
 import IPC_EVENT from "src/ipc/ipc-event";
 import { findProjectByQuery } from "src/main/dbHandler/project";
 import { getFileData } from "src/common/utils";
-import { TypeScenarioOption } from "src/types/scenario.config";
 import * as electronStore from "../store/index";
 import { preloadFile, getUrl, isDev } from "./constant";
 import menuTemplate from "./menu";
@@ -80,7 +79,7 @@ Menu.buildFromTemplate(menuTemplate);
 
 export const createWindows = {
   // 开始窗口
-  async starter(): Promise<BrowserWindow> {
+  async projectManager(): Promise<BrowserWindow> {
     const win = new BrowserWindow({
       ...windowNormalizeOptions,
       resizable: false,
@@ -91,25 +90,6 @@ export const createWindows = {
     win.loadURL(getUrl.projectManager());
     // win.loadURL(getUrl.projectEditor("6d312b14-2013-42e2-93d3-3e64beda25d1"));
     win.on("ready-to-show", () => win.show());
-    return win;
-  },
-
-  // 创建工程窗口
-  async createProject(
-    scenarioOption: TypeScenarioOption
-  ): Promise<BrowserWindow> {
-    const win = new BrowserWindow({
-      ...windowNormalizeOptions,
-      width: 500,
-      height: 600,
-      minWidth: 500,
-      minHeight: 600,
-      resizable: false,
-      parent: BrowserWindow.getFocusedWindow() || undefined,
-      modal: true
-    });
-    devToolsHandler(win);
-    await win.loadURL(getUrl.createProject(scenarioOption));
     return win;
   },
 
@@ -135,7 +115,7 @@ export const createWindows = {
     // 编辑器窗口管理回到开始页面
     win.on("close", async () => {
       await dirWatcher.closeWatcher(root);
-      await this.starter();
+      await this.projectManager();
     });
 
     // 监听状态栏最大化和最小化事件

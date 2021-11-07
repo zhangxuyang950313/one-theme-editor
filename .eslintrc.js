@@ -89,7 +89,21 @@ module.exports = {
     "no-useless-concat": "error", // 进制没必要的字符串拼接
     "no-duplicate-imports": "warn", // 禁止重复导入
     // import 排序  https://github.com/benmosher/eslint-plugin-import/tree/v2.22.1
-    "import/order": "warn",
+    "import/order": [
+      "warn",
+      {
+        groups: [
+          "builtin",
+          "external",
+          "internal",
+          "parent",
+          "sibling",
+          "object",
+          "index",
+          "type"
+        ]
+      }
+    ],
     "import/newline-after-import": ["warn", { count: 1 }] // import 后空一行
   },
   overrides: [

@@ -4,7 +4,7 @@ import { LOAD_STATUS } from "src/enum";
 import { TypeProjectDataDoc } from "src/types/project";
 import ERR_CODE from "src/common/errorCode";
 import ProjectData from "src/data/ProjectData";
-import { useCreatePromiseHook } from "../index";
+import { useCreatePromiseHook } from "./index";
 
 /**
  * 加载工程
@@ -18,7 +18,7 @@ export default function useFetchProjectData(
 
   const [projectData, status, doFetch] = useCreatePromiseHook(async () => {
     try {
-      const project = await window.$server.getProject({ uuid });
+      const project = await window.$server.findProjectQuery({ uuid });
       if (!project) throw new Error(ERR_CODE[2005]);
       console.log(`载入工程: ${uuid}`, project);
       // dispatch(ActionSetProjectData(project));
