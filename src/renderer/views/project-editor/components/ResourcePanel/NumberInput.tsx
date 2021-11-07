@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { InputNumber } from "@arco-design/web-react";
 import { IconRight } from "@arco-design/web-react/icon";
@@ -9,6 +9,11 @@ const NumberInput: React.FC<{
   onChange: (val: string) => void;
 }> = props => {
   const { defaultValue, value, onChange } = props;
+  const [inputVal, setInputVal] = useState(value);
+
+  useEffect(() => {
+    setInputVal(value);
+  }, [value]);
 
   return (
     <StyleNumberInput>
@@ -21,15 +26,22 @@ const NumberInput: React.FC<{
         <InputNumber
           className="input"
           placeholder={defaultValue}
-          value={value}
+          value={inputVal}
           onChange={val => {
-            if (isNaN(Number(val))) return;
-            onChange(String(val));
+            if (isNaN(Number(val))) {
+              setInputVal("0");
+            } else {
+              setInputVal(String(val));
+            }
+          }}
+          onBlur={e => {
+            if (isNaN(Number(e.target.value))) return;
+            onChange(String(e.target.value));
           }}
         />
       </div>
-      {isNaN(Number(value)) && (
-        <div className="error">{`非合法数字类型("${value}")`}</div>
+      {isNaN(Number(inputVal)) && (
+        <div className="error">{`非合法数字类型("${inputVal}")`}</div>
       )}
     </StyleNumberInput>
   );

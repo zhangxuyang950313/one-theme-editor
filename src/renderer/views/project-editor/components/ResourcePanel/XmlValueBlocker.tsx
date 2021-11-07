@@ -183,22 +183,24 @@ const XmlItem: React.FC<{
   return (
     <>
       {xmlItem.valueItems.map((valueItem, key) => {
+        const value = xmlValMapper?.[valueItem.template] || "";
         return (
           <XmlValueItem
             key={key}
             defaultValue={valueItem.value}
-            value={xmlValMapper?.[valueItem.template] || ""}
+            value={value}
             valueTemplate={valueItem.template}
             comment={valueItem.comment}
             use={use}
             colorFormat={colorFormat}
             from={xmlItem.sourceData.src}
-            onChange={value => {
+            onChange={val => {
+              if (value === val) return;
               // 写入 xml
               window.$server.writeXmlTemplate({
                 tag: valueItem.tag,
                 attributes: valueItem.attributes,
-                value: value,
+                value: val,
                 src: xmlItem.sourceData.src
               });
             }}

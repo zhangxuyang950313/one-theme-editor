@@ -186,7 +186,7 @@ const StyleFileItem = styled.div`
       }
     }
     .btn-normal {
-      color: rgb(var(--red-5));
+      color: var(--color-text-2);
     }
     .btn-delete {
       color: red;

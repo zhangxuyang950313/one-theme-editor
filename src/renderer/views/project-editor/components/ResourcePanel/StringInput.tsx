@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Input } from "@arco-design/web-react";
 import { IconRight } from "@arco-design/web-react/icon";
@@ -9,18 +9,33 @@ const StringInput: React.FC<{
   onChange: (e: string) => void;
 }> = props => {
   const { defaultValue, value, onChange } = props;
+  const [inputVal, setInputVal] = useState(value);
+
+  useEffect(() => {
+    setInputVal(value);
+  }, [value]);
+
   return (
     <StyleNumberInput>
       <Input className="input" disabled value={defaultValue} />
       <IconRight
         className="middle-button"
-        onClick={() => onChange(defaultValue)}
+        onClick={() => {
+          if (defaultValue !== value) {
+            onChange(defaultValue);
+          }
+        }}
       />
       <Input
         className="input"
         placeholder={defaultValue}
-        value={value}
-        onChange={value => onChange(value)}
+        value={inputVal}
+        onChange={setInputVal}
+        onBlur={e => {
+          if (e.target.value !== value) {
+            onChange(e.target.value);
+          }
+        }}
       />
     </StyleNumberInput>
   );

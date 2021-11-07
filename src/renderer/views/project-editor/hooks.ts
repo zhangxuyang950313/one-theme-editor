@@ -1,5 +1,5 @@
 import path from "path";
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { Notification } from "@arco-design/web-react";
 import pathUtil from "src/common/utils/pathUtil";
 import ProjectData from "src/data/ProjectData";
@@ -36,7 +36,7 @@ export function useLoadProject(uuid: string): {
   const [scenarioConfig, setScenarioConfig] = useState(ScenarioConfig.default);
 
   // 获取工程信息
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!uuid) return;
     window.$server
       .findProjectQuery({ uuid })
@@ -47,13 +47,13 @@ export function useLoadProject(uuid: string): {
   }, [uuid]);
 
   // 更新一下时间
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!projectData.uuid) return;
     window.$server.updateProject({ uuid: projectData.uuid, data: projectData });
   }, [projectData.uuid]);
 
   // 获取资源配置
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!projectData.resourceSrc) return;
     window.$server
       .getResourceConfig(projectData.resourceSrc)
@@ -64,7 +64,7 @@ export function useLoadProject(uuid: string): {
   }, [projectData.resourceSrc]);
 
   // 获取场景配置
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!projectData.scenarioSrc) return;
     window.$server
       .getScenarioConfig(projectData.scenarioSrc)
@@ -75,7 +75,7 @@ export function useLoadProject(uuid: string): {
   }, [projectData.scenarioSrc]);
 
   // 设置进程间响应式数据
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!projectData.uuid) return;
     window.$reactiveState.set("projectData", projectData);
     window.$reactiveState.set("projectPath", projectData.root);
@@ -86,7 +86,7 @@ export function useLoadProject(uuid: string): {
   }, [projectData.uuid]);
 
   // 设置进程间响应式数据
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!resourceConfig) return;
     const resourcePath = path.join(
       pathUtil.RESOURCE_CONFIG_DIR,
@@ -100,17 +100,17 @@ export function useLoadProject(uuid: string): {
     };
   }, [resourceConfig]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!projectData.uuid) return;
     dispatch(ActionSetProjectData(projectData));
   }, [projectData.uuid]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!resourceConfig.src) return;
     dispatch(ActionSetResourceConfig(resourceConfig));
   }, [resourceConfig.src]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!scenarioConfig.name) return;
     dispatch(ActionSetScenarioConfig(scenarioConfig));
   }, [scenarioConfig.name]);
@@ -127,7 +127,7 @@ export function usePageConfigList(
 ): TypePageConfig[] {
   const [pageConfigList, setPageConfigList] = useState<TypePageConfig[]>([]);
   // 依次加载当前模块页面配置
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!namespace) return;
     const queue = moduleConfig.pageList.map(item => async () => {
       // 使用缓存
@@ -166,7 +166,7 @@ export function useSubscribeFile(
   callback?: TypeListener
 ): void {
   const projectRoot = window.$reactiveState.get("projectPath");
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!src) return;
     const file = path.join(projectRoot, src);
 

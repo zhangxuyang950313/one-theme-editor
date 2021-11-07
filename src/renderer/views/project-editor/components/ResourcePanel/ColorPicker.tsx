@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import styled from "styled-components";
 import { RgbaObject } from "hex-rgb";
 import { Tooltip } from "antd";
@@ -171,7 +171,7 @@ const ColorPicker: React.FC<{
   };
 
   // 生成默认 formatter 规定的颜色
-  useEffect(() => {
+  useLayoutEffect(() => {
     try {
       setDefaultColor(ColorUtil.create(defaultValue, colorFormat).toRGBAHex());
     } catch (err: any) {
@@ -181,7 +181,7 @@ const ColorPicker: React.FC<{
   }, [defaultValue]);
 
   // 生成 formatter 规定的颜色
-  useEffect(() => {
+  useLayoutEffect(() => {
     try {
       setColorRGBAHex(ColorUtil.create(value, colorFormat).toRGBAHex());
       setInputColor(value);
@@ -192,7 +192,7 @@ const ColorPicker: React.FC<{
   }, [value]);
 
   // 选色器和输入框联动
-  useEffect(() => {
+  useLayoutEffect(() => {
     try {
       setInputColor(
         ColorUtil.create(colorRGBAHex, HEX_FORMAT.RGBA).format(colorFormat)
@@ -204,7 +204,7 @@ const ColorPicker: React.FC<{
   }, [colorRGBAHex]);
 
   // 输入框与选色器联动
-  useEffect(() => {
+  useLayoutEffect(() => {
     try {
       setColorRGBAHex(ColorUtil.create(inputColor, colorFormat).toRGBAHex());
     } catch (err: any) {
