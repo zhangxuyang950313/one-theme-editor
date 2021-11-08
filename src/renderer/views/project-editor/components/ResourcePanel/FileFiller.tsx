@@ -2,8 +2,13 @@ import React, { ReactNode } from "react";
 import styled from "styled-components";
 import { remote } from "electron";
 import { Tooltip } from "antd";
-import { Notification, Descriptions } from "@arco-design/web-react";
-import { IconDelete, IconRefresh, IconPlus } from "@arco-design/web-react/icon";
+import { Notification, Descriptions, Divider } from "@arco-design/web-react";
+import {
+  IconDelete,
+  IconRefresh,
+  IconPlus,
+  IconArrowRight
+} from "@arco-design/web-react/icon";
 import { TypeFileData, TypeFileItem } from "src/types/resource.page";
 import { FILE_EVENT } from "src/enum";
 import ImageDisplay from "./ImageDisplay";
@@ -36,7 +41,12 @@ const FileDisplay: React.FC<{
     <StyleFileDisplay>
       <div className="display-wrapper">
         {props.deleteVisible ? (
-          <Tooltip overlay={props.primaryToolTipOverlay} placement="top">
+          <Tooltip
+            overlayStyle={{ maxWidth: "none" }}
+            destroyTooltipOnHide
+            overlay={props.primaryToolTipOverlay}
+            placement="top"
+          >
             {/* 主要展示区域 */}
             <div className="primary-display">
               <ImageDisplay
@@ -54,7 +64,12 @@ const FileDisplay: React.FC<{
             <IconPlus className="plugs-icon" />
           </div>
         )}
-        <Tooltip overlay={props.floatToolTipOverlay} placement="top">
+        <Tooltip
+          overlayStyle={{ maxWidth: "none" }}
+          destroyTooltipOnHide
+          overlay={props.floatToolTipOverlay}
+          placement="top"
+        >
           {/* 左上角悬浮展示 */}
           <div className="float-display">
             <ImageDisplay
@@ -71,7 +86,7 @@ const FileDisplay: React.FC<{
       </div>
       <div className="handler">
         {props.deleteVisible && props.exportVisible && (
-          <Tooltip overlay="导入" placement="right">
+          <Tooltip destroyTooltipOnHide overlay="导入" placement="right">
             {/* 导入按钮 */}
             <IconPlus className="press btn-normal" onClick={props.onExport} />
           </Tooltip>
@@ -80,13 +95,13 @@ const FileDisplay: React.FC<{
         {/* <FormOutlined className="press edit" onClick={() => {}} /> */}
         {/* 恢复默认按钮 */}
         {props.deleteVisible && props.resetVisible && (
-          <Tooltip overlay="默认" placement="right">
+          <Tooltip destroyTooltipOnHide overlay="默认" placement="right">
             <IconRefresh className="press btn-reset" onClick={props.onReset} />
           </Tooltip>
         )}
         {/* 删除按钮 */}
         {props.deleteVisible && (
-          <Tooltip overlay="删除" placement="right">
+          <Tooltip destroyTooltipOnHide overlay="删除" placement="right">
             <IconDelete className="press btn-delete" onClick={props.onDelete} />
           </Tooltip>
         )}
@@ -190,44 +205,102 @@ const FileFiller: React.FC<{ data: TypeFileItem }> = ({ data }) => {
 
   const description = getDescription(data.fileData);
 
+  const floatUrl = `resource://${data.sourceData.src}`;
+  const primaryUrl = projectFile.url;
+
   return (
     <FileDisplay
       name={data.comment}
       description={description}
-      floatUrl={`resource://${data.sourceData.src}`}
-      primaryUrl={projectFile.url}
+      floatUrl={floatUrl}
+      primaryUrl={primaryUrl}
       exportVisible={true}
       resetVisible={true}
       deleteVisible={projectFile.state !== FILE_EVENT.UNLINK}
       primaryToolTipOverlay={
-        <Descriptions
-          column={1}
-          size="mini"
-          data={[
-            { label: "名称", value: data.comment },
-            { label: "路径", value: data.sourceData.src },
-            {
-              label: "大小",
-              value: `${(projectFile.fileData.size / 1024).toFixed(2)}kb`
-            },
-            { label: "尺寸", value: getDescription(projectFile.fileData) }
-          ]}
-        />
+        <>
+          <Descriptions
+            title="变更详情"
+            column={1}
+            size="mini"
+            data={[
+              { label: "名称", value: data.comment },
+              { label: "路径", value: data.sourceData.src },
+              { label: "", value: <Divider /> },
+              {
+                label: "",
+                value: (
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <div style={{ width: "80px", textAlign: "center" }}>
+                      原始资源
+                    </div>
+                    <div style={{ width: "50px" }}></div>
+                    <div style={{ width: "80px", textAlign: "center" }}>
+                      当前资源
+                    </div>
+                  </div>
+                )
+              },
+              {
+                label: "",
+                value: (
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <img style={{ width: "80px" }} src={floatUrl} />
+                    <IconArrowRight style={{ width: "50px" }} />
+                    <img style={{ width: "80px" }} src={primaryUrl} />
+                  </div>
+                )
+              },
+              {
+                label: "尺寸",
+                value: (
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <div style={{ width: "80px", textAlign: "center" }}>
+                      {description}
+                    </div>
+                    <div style={{ width: "50px" }} />
+                    <div style={{ width: "80px", textAlign: "center" }}>
+                      {getDescription(projectFile.fileData)}
+                    </div>
+                  </div>
+                )
+              },
+              {
+                label: "大小",
+                value: (
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <div style={{ width: "80px", textAlign: "center" }}>
+                      {`${(data.fileData.size / 1024).toFixed(2)}kb`}
+                    </div>
+                    <div style={{ width: "50px" }} />
+                    <div style={{ width: "80px", textAlign: "center" }}>{`${(
+                      projectFile.fileData.size / 1024
+                    ).toFixed(2)}kb`}</div>
+                  </div>
+                )
+              }
+            ]}
+          />
+        </>
       }
       floatToolTipOverlay={
-        <Descriptions
-          column={1}
-          size="mini"
-          data={[
-            { label: "名称", value: data.comment },
-            { label: "路径", value: data.sourceData.src },
-            {
-              label: "大小",
-              value: `${(data.fileData.size / 1024).toFixed(2)}kb`
-            },
-            { label: "尺寸", value: description }
-          ]}
-        />
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <Descriptions
+            title="原始资源"
+            column={1}
+            size="mini"
+            data={[
+              { label: "名称", value: data.comment },
+              { label: "路径", value: data.sourceData.src },
+              { label: "尺寸", value: description },
+              {
+                label: "大小",
+                value: `${(data.fileData.size / 1024).toFixed(2)}kb`
+              }
+            ]}
+          />
+          <img style={{ width: "80px" }} src={floatUrl} />
+        </div>
       }
       // 点击导入
       onExport={() => {
