@@ -43,6 +43,7 @@ const StyleTab = styled.div`
   .tabs {
     display: flex;
     width: 100%;
+    box-sizing: border-box;
   }
   .tab {
     cursor: pointer;

@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import { TypeProjectInfo } from "src/types/project";
 
-import { Divider } from "antd";
+import { Divider } from "@arco-design/web-react";
 import { projectInfoConfig } from "@/config/editor";
 
 type TypeProps = {

@@ -31,7 +31,7 @@ import {
 } from "./constant";
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const ArcoWebpackPlugin = require("@arco-design/webpack-plugin");
+// const ArcoWebpackPlugin = require("@arco-design/webpack-plugin");
 
 const webpackDevClientEntry = require.resolve(
   "react-dev-utils/webpackHotDevClient"
@@ -217,32 +217,6 @@ const config: webpack.ConfigurationFactory = (env, args) => {
       noParse: [/react\.min\.js$/],
       rules: [
         {
-          test: /\.node$/,
-          use: "happypack/loader?id=node-loader"
-        },
-        {
-          // npm i babel-loader @babel/core @babel/preset-env -D
-          test: /\.(js|mjs|jsx|ts|tsx)$/,
-          exclude: /node_modules/,
-          // https://webpack.docschina.org/loaders/babel-loader/
-          use: "happypack/loader?id=babel-loader"
-        },
-        {
-          test: /\.(png|svg|jpg|jpeg|gif)$/i,
-          use: {
-            loader: "url-loader",
-            options: {
-              limit: 10 * 1024,
-              name: "[name].[contenthash:8].[ext]",
-              outputPath: "assets/images"
-            }
-          }
-        },
-        {
-          test: /\.(woff|woff2|eot|ttf|otf)$/,
-          use: "happypack/loader?id=file-loader"
-        },
-        {
           test: /\.css$/,
           /**
            * importLoaders
@@ -264,6 +238,32 @@ const config: webpack.ConfigurationFactory = (env, args) => {
             ...getCssLoaders({ importLoaders: 3, isDev }),
             { loader: "happypack/loader?id=less-loader" }
           ]
+        },
+        {
+          test: /\.(png|svg|jpg|jpeg|gif)$/i,
+          use: {
+            loader: "url-loader",
+            options: {
+              limit: 10 * 1024,
+              name: "[name].[contenthash:8].[ext]",
+              outputPath: "assets/images"
+            }
+          }
+        },
+        {
+          test: /\.(woff|woff2|eot|ttf|otf)$/,
+          use: "happypack/loader?id=file-loader"
+        },
+        {
+          test: /\.node$/,
+          use: "happypack/loader?id=node-loader"
+        },
+        {
+          // npm i babel-loader @babel/core @babel/preset-env -D
+          test: /\.(js|mjs|jsx|ts|tsx)$/,
+          exclude: /node_modules/,
+          // https://webpack.docschina.org/loaders/babel-loader/
+          use: "happypack/loader?id=babel-loader"
         }
       ]
     },
@@ -301,47 +301,6 @@ const config: webpack.ConfigurationFactory = (env, args) => {
         ...htmlPluginOpt(isDev)
       }),
       new HappyPack({
-        id: "node-loader",
-        loaders: ["node-loader"]
-      }),
-      new HappyPack({
-        id: "babel-loader",
-        loaders: [
-          {
-            loader: "babel-loader",
-            options: {
-              cacheDirectory: true,
-              cacheCompression: true,
-              presets: [
-                "@babel/preset-env",
-                "@babel/preset-react",
-                "@babel/preset-typescript"
-              ],
-              plugins: [
-                "transform-class-properties",
-                "@babel/plugin-transform-runtime",
-                "babel-plugin-styled-components",
-                "babel-plugin-react-scoped-css",
-                isDev && "react-refresh/babel"
-              ].filter(Boolean)
-            }
-          }
-        ]
-      }),
-      new HappyPack({
-        id: "file-loader",
-        loaders: [
-          {
-            loader: "file-loader",
-            options: {
-              limit: 10 * 1024,
-              name: "[name].[contenthash:8].[ext]",
-              outputPath: "assets/fonts"
-            }
-          }
-        ]
-      }),
-      new HappyPack({
         id: "style-loader",
         loaders: ["style-loader"]
       }),
@@ -362,6 +321,56 @@ const config: webpack.ConfigurationFactory = (env, args) => {
         chunkFilename: isDev
           ? "css/[name].chunk.css"
           : "css/[name].[contenthash:8].chunk.css"
+      }),
+      new HappyPack({
+        id: "file-loader",
+        loaders: [
+          {
+            loader: "file-loader",
+            options: {
+              limit: 10 * 1024,
+              name: "[name].[contenthash:8].[ext]",
+              outputPath: "assets/fonts"
+            }
+          }
+        ]
+      }),
+      new HappyPack({
+        id: "node-loader",
+        loaders: ["node-loader"]
+      }),
+      new HappyPack({
+        id: "babel-loader",
+        loaders: [
+          {
+            loader: "babel-loader",
+            options: {
+              cacheDirectory: true,
+              cacheCompression: true,
+              presets: [
+                "@babel/preset-env",
+                "@babel/preset-react",
+                "@babel/preset-typescript"
+              ],
+              plugins: [
+                [
+                  "babel-plugin-import",
+                  {
+                    libraryName: "@arco-design/web-react",
+                    libraryDirectory: "es",
+                    camel2DashComponentName: false,
+                    style: true // 样式按需加载
+                  }
+                ],
+                "transform-class-properties",
+                "@babel/plugin-transform-runtime",
+                "babel-plugin-styled-components",
+                "babel-plugin-react-scoped-css",
+                isDev && "react-refresh/babel"
+              ].filter(Boolean)
+            }
+          }
+        ]
       }),
       new WebpackBar({
         name: `渲染进程编译中...(${args.mode})`,
@@ -384,33 +393,19 @@ const config: webpack.ConfigurationFactory = (env, args) => {
         context: process.cwd(),
         manifest: require(path.join(
           __dirname,
-          "../release.dll/react.manifest.json"
+          "../release.dll/renderer.manifest.json"
         ))
       }),
       new DllReferencePlugin({
         context: process.cwd(),
         manifest: require(path.join(
           __dirname,
-          "../release.dll/styled.manifest.json"
+          "../release.dll/main.manifest.json"
         ))
       }),
-      new DllReferencePlugin({
-        context: process.cwd(),
-        manifest: require(path.join(
-          __dirname,
-          "../release.dll/antd.manifest.json"
-        ))
-      }),
-      new DllReferencePlugin({
-        context: process.cwd(),
-        manifest: require(path.join(
-          __dirname,
-          "../release.dll/arco.manifest.json"
-        ))
-      }),
-      new ArcoWebpackPlugin({
-        theme: "@arco-design/theme-one-editor"
-      }),
+      // new ArcoWebpackPlugin({
+      //   theme: "@arco-design/theme-one-editor"
+      // }),
       // 环境区分
       ...(isDev
         ? [

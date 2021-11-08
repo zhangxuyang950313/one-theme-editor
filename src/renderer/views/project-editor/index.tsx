@@ -292,6 +292,7 @@ const StyleEditorFrame = styled.div`
           width: 120px;
           padding: 10px;
           overflow-y: auto;
+          box-sizing: border-box;
           background-color: var(--color-bg-2);
           .editor__page-content {
             width: 100px;
@@ -299,9 +300,10 @@ const StyleEditorFrame = styled.div`
         }
         .editor__previewer {
           flex-shrink: 0;
-          padding: 20px;
-          overflow-y: auto;
           width: 340px;
+          padding: 20px;
+          box-sizing: border-box;
+          overflow-y: auto;
           background-color: var(--color-bg-3);
           .previewer__content {
             width: 300px;

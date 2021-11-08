@@ -43,6 +43,7 @@ log-symbols       >=14
 
 ```bash
 npm install
+npm run webpack:dll
 ```
 
 #### 启动

@@ -50,12 +50,12 @@ const StyleModuleSelector = styled.div`
       cursor: pointer;
       width: 46px;
       opacity: 0.4;
-      transition: 0.2s all ease;
+      transition: 0.2s all ease-in;
       &[is-active="true"] {
         opacity: 1;
         filter: drop-shadow(0 0 5px var(--color-primary-light-4));
         transform: scale(1.2);
-        transition: 0.2s all ease;
+        transition: 0.2s all ease-out;
       }
     }
     .name {

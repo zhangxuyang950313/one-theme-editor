@@ -1,6 +1,6 @@
 import path from "path";
 // import CopyWebpackPlugin from "copy-webpack-plugin";
-import webpack, { DefinePlugin } from "webpack";
+import webpack, { DefinePlugin, DllReferencePlugin } from "webpack";
 import WebpackBar from "webpackbar";
 import DotEnvPlugin from "dotenv-webpack";
 import { CleanWebpackPlugin } from "clean-webpack-plugin";
@@ -97,7 +97,21 @@ const config: webpack.ConfigurationFactory = (env, args) => {
       }),
       new DefinePlugin({
         "process.env.NODE_ENV": `'${args.mode}'`
-      })
+      }),
+      new DllReferencePlugin({
+        context: process.cwd(),
+        manifest: require(path.join(
+          __dirname,
+          "../release.dll/main.manifest.json"
+        ))
+      }),
+      new DllReferencePlugin({
+        context: process.cwd(),
+        manifest: require(path.join(
+          __dirname,
+          "../release.dll/renderer.manifest.json"
+        ))
+      }),
     ]
   };
 };
