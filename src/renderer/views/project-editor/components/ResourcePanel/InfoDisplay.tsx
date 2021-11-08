@@ -2,14 +2,13 @@ import React from "react";
 import styled from "styled-components";
 
 const InfoDisplay: React.FC<{
-  className?: string;
   main?: string;
   secondary?: string;
 }> = props => {
-  const { main, secondary, className } = props;
+  const { main, secondary } = props;
 
   return (
-    <StyleInfoDisplay className={className}>
+    <StyleInfoDisplay>
       {main && <div className="main">{main}</div>}
       {secondary && <div className="secondary">{secondary}</div>}
     </StyleInfoDisplay>

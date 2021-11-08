@@ -1,6 +1,7 @@
 import { FileTypeResult, MimeType } from "file-type";
 import { Element } from "xml-js";
 import {
+  HEX_FORMAT,
   ALIGN_VALUE,
   ALIGN_V_VALUE,
   RESOURCE_TAG,
@@ -83,7 +84,7 @@ export type TypeXmlValueTags =
   | RESOURCE_TAG.Number
   | RESOURCE_TAG.Boolean;
 
-export type TypeXmlBlocker<T = TypeXmlValueTags> = {
+export type TypeValueBlock<T = TypeXmlValueTags> = {
   readonly tag: T;
   key: string;
   name: string;
@@ -91,16 +92,22 @@ export type TypeXmlBlocker<T = TypeXmlValueTags> = {
 };
 
 // String
-export type TypeStringBlocker = TypeXmlBlocker<RESOURCE_TAG.String>;
-// Color
-export type TypeColorBlocker = TypeXmlBlocker<RESOURCE_TAG.Color>;
+export type TypeStringBlock = TypeValueBlock<RESOURCE_TAG.String>;
 // Number
-export type TypeNumberBlocker = TypeXmlBlocker<RESOURCE_TAG.Number>;
+export type TypeNumberBlock = TypeValueBlock<RESOURCE_TAG.Number>;
 // Boolean
-export type TypeBooleanBlocker = TypeXmlBlocker<RESOURCE_TAG.Boolean>;
+export type TypeBooleanBlock = TypeValueBlock<RESOURCE_TAG.Boolean>;
+// Color
+export type TypeColorBlock = {
+  readonly tag: RESOURCE_TAG.Color;
+  key: string;
+  name: string;
+  format: HEX_FORMAT;
+  items: TypeXmlItem[];
+};
 
-// Image
-export type TypeFileBlocker = {
+// File
+export type TypeFileBlock = {
   readonly tag: RESOURCE_TAG.File;
   key: string;
   name: string;
@@ -114,18 +121,20 @@ export type TypeFileItem = {
   fileData: TypeFileData;
 };
 
+// 块
+export type TypeBlockCollection =
+  | TypeFileBlock
+  | TypeStringBlock
+  | TypeColorBlock
+  | TypeNumberBlock
+  | TypeBooleanBlock;
+
 // Resource
 export type TypeResourceDefinition = {
   key: string;
   name: string;
   extra: Record<string, string>; // 备用字段
-  children: Array<
-    | TypeFileBlocker
-    | TypeStringBlocker
-    | TypeColorBlocker
-    | TypeNumberBlocker
-    | TypeBooleanBlocker
-  >;
+  children: Array<TypeBlockCollection>;
 };
 
 /*************************** Layout ***************************/

@@ -1,11 +1,11 @@
-import path from "path";
+// import path from "path";
 import { ipcMain, IpcMainEvent, ipcRenderer } from "electron";
 import ResourceConfig from "src/data/ResourceConfig";
 import ProjectData from "src/data/ProjectData";
 import IPC_EVENT from "src/ipc/ipc-event";
 import ScenarioConfig from "src/data/ScenarioConfig";
-import ResourceConfigCompiler from "src/common/compiler/ResourceConfig";
-import pathUtil from "src/common/utils/pathUtil";
+// import ResourceConfigCompiler from "src/common/compiler/ResourceConfig";
+// import pathUtil from "src/common/utils/pathUtil";
 
 // 构建进程间响应数据
 class ReactiveState<T extends Record<string, unknown>, K extends keyof T> {

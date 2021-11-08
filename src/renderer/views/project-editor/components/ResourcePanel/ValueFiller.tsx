@@ -4,20 +4,18 @@ import { IconClose } from "@arco-design/web-react/icon";
 import { HEX_FORMAT, RESOURCE_TAG } from "src/enum/index";
 import {
   TypeXmlItem,
-  TypeXmlBlocker,
   TypeXmlValueTags,
   TypeXmlFileData
 } from "src/types/resource.page";
 import { xmlElementTextModify } from "src/common/xmlTemplate";
-import { useSubscribeFile } from "../../hooks";
+import { useSubscribeProjectFile } from "../../hooks";
 import ColorPicker from "./ColorPicker";
 import BooleanSelector from "./BooleanSelector";
 import NumberInput from "./NumberInput";
 import StringInput from "./StringInput";
-import StickyTab from "./StickyTab";
 
 // 分类编辑控件
-const XmlValueEditor: React.FC<{
+const ValueEditor: React.FC<{
   defaultValue: string;
   value: string;
   use: TypeXmlValueTags;
@@ -72,7 +70,7 @@ const XmlValueEditor: React.FC<{
  * @param props
  * @returns
  */
-const XmlValueItem: React.FC<{
+const ValueFillerItem: React.FC<{
   defaultValue: string;
   value: string;
   comment: string;
@@ -93,14 +91,14 @@ const XmlValueItem: React.FC<{
     onChange
   } = props;
   return (
-    <StyleXmlValueItem>
+    <StyleValueFillerItem>
       <div className="info-wrapper">
         <div className="name">{comment}</div>
         <div className="file">{xmlElementTextModify(valueTemplate, value)}</div>
         {/* <div className="file">{from}</div> */}
       </div>
       <div className="item">
-        <XmlValueEditor
+        <ValueEditor
           defaultValue={defaultValue}
           value={value}
           colorFormat={colorFormat}
@@ -112,11 +110,11 @@ const XmlValueItem: React.FC<{
           <IconClose className="delete" onClick={() => onChange("")} />
         </div>
       </div>
-    </StyleXmlValueItem>
+    </StyleValueFillerItem>
   );
 };
 
-const StyleXmlValueItem = styled.div`
+const StyleValueFillerItem = styled.div`
   margin-bottom: 20px;
   border-bottom: 1px solid;
   border-bottom-color: var(--color-secondary-disabled);
@@ -160,7 +158,7 @@ const StyleXmlValueItem = styled.div`
  * @param props
  * @returns
  */
-const XmlItem: React.FC<{
+const ValueFiller: React.FC<{
   xmlItem: TypeXmlItem;
   use: TypeXmlValueTags;
   colorFormat: HEX_FORMAT;
@@ -172,20 +170,22 @@ const XmlItem: React.FC<{
   // });
   const [xmlFileData, setXmlFileData] = useState<TypeXmlFileData>();
 
-  useSubscribeFile(xmlItem.sourceData.src, (event, src, fileData) => {
+  useSubscribeProjectFile(xmlItem.sourceData.src, (event, src, fileData) => {
     if (fileData.fileType === "application/xml") {
       setXmlFileData(fileData);
     }
   });
 
-  const xmlValMapper = xmlFileData?.valueMapper;
+  if (!xmlFileData) return null;
+
+  const { valueMapper } = xmlFileData;
 
   return (
     <>
       {xmlItem.valueItems.map((valueItem, key) => {
-        const value = xmlValMapper?.[valueItem.template] || "";
+        const value = valueMapper[valueItem.template] || "";
         return (
-          <XmlValueItem
+          <ValueFillerItem
             key={key}
             defaultValue={valueItem.value}
             value={value}
@@ -211,37 +211,4 @@ const XmlItem: React.FC<{
   );
 };
 
-const XmlValueBlocker: React.FC<{
-  className?: string;
-  data: TypeXmlBlocker;
-  colorFormat: HEX_FORMAT;
-}> = props => {
-  // const value = useProjectXmlValueBySrc(name, sourceData.src);
-  return (
-    <StyleXmlValueBlocker className={props.className}>
-      <StickyTab content={props.data.name} />
-      <div className="list">
-        {props.data.items.map((xmlItem, key) => (
-          <XmlItem
-            key={key}
-            xmlItem={xmlItem}
-            use={props.data.tag}
-            colorFormat={props.colorFormat}
-          />
-        ))}
-      </div>
-    </StyleXmlValueBlocker>
-  );
-};
-
-const StyleXmlValueBlocker = styled.div`
-  flex-shrink: 0;
-  box-sizing: content-box;
-  margin-bottom: 20px;
-  padding: 20px 0;
-  .list {
-    padding: 0 30px;
-  }
-`;
-
-export default XmlValueBlocker;
+export default ValueFiller;

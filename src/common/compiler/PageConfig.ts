@@ -11,7 +11,7 @@ import {
   SourceData,
   FileItem,
   ResourceDefinition,
-  FileBlocker,
+  FileFillerWrapper,
   XmlItem,
   XmlBlocker,
   XmlValueItem
@@ -38,8 +38,8 @@ import type {
   TypeLayoutImageElement,
   TypeLayoutTextElement,
   TypeSourceData,
-  TypeFileBlocker,
-  TypeXmlBlocker,
+  TypeFileBlock,
+  TypeValueBlock,
   TypeXmlValueTags,
   TypeFileData,
   TypeXmlValueItem
@@ -209,7 +209,6 @@ export default class PageConfigCompiler extends XMLNodeElement {
       | "name"
       | "screenWidth"
       | "disableTab"
-      | "colorFormat"
       | "forceStaticPreview"
   ): T {
     return this.getChildrenFirstElementNode().getAttributeOf<T>(attribute);
@@ -229,10 +228,6 @@ export default class PageConfigCompiler extends XMLNodeElement {
 
   getDisableTabs(): boolean {
     return this.getRootAttribute("disableTab") === "true";
-  }
-
-  getColorFormat(): HEX_FORMAT {
-    return this.getRootAttribute<HEX_FORMAT>("colorFormat");
   }
 
   getForceStaticPreview(): boolean {
@@ -408,10 +403,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
     return textElement.create();
   }
 
-  private getFileBlocker(
-    node: XMLNodeElement,
-    rootKey: string
-  ): TypeFileBlocker {
+  private getFileBlocker(node: XMLNodeElement, rootKey: string): TypeFileBlock {
     const imageKey = node.getAttributeOf(":key");
     const imageItems = node.getChildrenNodes().flatMap((item, key, arr) => {
       // 不接受非 Item 节点
@@ -431,7 +423,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
         .set("fileData", fileData)
         .create();
     });
-    return new FileBlocker()
+    return new FileFillerWrapper()
       .set("key", imageKey)
       .set("name", node.getAttributeOf("name"))
       .set("items", imageItems)
@@ -443,7 +435,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
     node: XMLNodeElement,
     tag: TypeXmlValueTags,
     rootKey: string
-  ): TypeXmlBlocker {
+  ): TypeValueBlock {
     const xmlItemKey = node.getAttributeOf(":key");
     const xmlItems = node.getChildrenNodes().flatMap((item, k, arr) => {
       // 不接受非 Xml 节点
@@ -507,6 +499,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
     return new XmlBlocker()
       .set("tag", tag)
       .set("key", xmlItemKey)
+      .set("format", node.getAttributeOf("format"))
       .set("name", node.getAttributeOf("name"))
       .set("items", xmlItems)
       .create();
@@ -613,7 +606,6 @@ export default class PageConfigCompiler extends XMLNodeElement {
       .set("name", this.getPageName())
       .set("screenWidth", this.getScreenWidth())
       .set("disableTabs", this.getDisableTabs())
-      .set("colorFormat", this.getColorFormat())
       .set("forceStaticPreview", this.getForceStaticPreview())
       .set("previewList", this.getPreviewList())
       .set("resourceList", this.getResourceList())

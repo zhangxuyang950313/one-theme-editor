@@ -1,9 +1,10 @@
 import path from "path";
+import fse from "fs-extra";
 import { useLayoutEffect, useState } from "react";
 import { Notification } from "@arco-design/web-react";
 import pathUtil from "src/common/utils/pathUtil";
 import ProjectData from "src/data/ProjectData";
-import ResourceConfig from "src/data/ResourceConfig";
+import ResourceConfig, { FileData } from "src/data/ResourceConfig";
 import ScenarioConfig from "src/data/ScenarioConfig";
 import { asyncQueue } from "src/common/utils";
 import { FILE_EVENT } from "src/enum";
@@ -129,19 +130,19 @@ export function usePageConfigList(
   // 依次加载当前模块页面配置
   useLayoutEffect(() => {
     if (!namespace) return;
-    const queue = moduleConfig.pageList.map(item => async () => {
+    const queue = moduleConfig.pageList.map(page => async () => {
       // 使用缓存
-      const configCache = pageConfigMap.get(item.src);
+      const configCache = pageConfigMap.get(page.src);
       if (configCache) {
-        console.log("use cache (pageConfig):", item.src);
+        console.log("use cache (pageConfig):", page.src);
         return configCache;
       }
       // 服务获取
       const data = await window.$server.getPageConfig({
         namespace,
-        config: item.src
+        config: page.src
       });
-      pageConfigMap.set(item.src, data);
+      pageConfigMap.set(page.src, data);
       return data;
     });
     asyncQueue(queue)
@@ -161,7 +162,7 @@ type TypeListener = (
 ) => void;
 
 // 监听文件
-export function useSubscribeFile(
+export function useSubscribeProjectFile(
   src: string | undefined,
   callback?: TypeListener
 ): void {
@@ -170,13 +171,20 @@ export function useSubscribeFile(
     if (!src) return;
     const file = path.join(projectRoot, src);
 
-    // 首次回调
-    const fileData = fileDataCache.get(file);
-    callback && callback(FILE_EVENT.ADD, src, fileData);
+    // 首次若文件存在则回调
+    if (callback) {
+      if (fse.existsSync(file)) {
+        const fileData = fileDataCache.get(file);
+        callback(FILE_EVENT.ADD, src, fileData);
+      } else {
+        callback(FILE_EVENT.UNLINK, src, FileData.default);
+      }
+    }
 
     const removeListener = window.$invoker.useFilesChange(data => {
       if (data.root !== projectRoot) return;
       if (data.src !== src) return;
+      console.log(`file [${data.event}]:`, data);
       callback && callback(data.event, src, data.data);
     });
 

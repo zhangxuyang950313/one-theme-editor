@@ -15,7 +15,6 @@ const StyleStickyTabStyle = styled.div`
   top: 0px;
   padding: 6px 20px;
   background-color: var(--color-bg-5);
-  margin-bottom: 20px;
   border-bottom: 1px solid;
   border-bottom-color: var(--color-secondary);
   .title {

@@ -4,16 +4,16 @@ import styled from "styled-components";
 import { PreloadImage } from "@/components/ImageCollection";
 
 // 工程卡片展示
-function ProjectCard(props: { image: string; name: string }): JSX.Element {
+function ProjectDisplay(props: { image: string; name: string }): JSX.Element {
   return (
-    <StyleProjectCard>
+    <StyleProjectDisplay>
       <PreloadImage className="preview" src={props.image} />
       {<div className="name">{props.name || "未命名"}</div>}
-    </StyleProjectCard>
+    </StyleProjectDisplay>
   );
 }
 
-const StyleProjectCard = styled.div`
+const StyleProjectDisplay = styled.div`
   cursor: pointer;
   position: relative;
   width: 120px;
@@ -42,4 +42,4 @@ const StyleProjectCard = styled.div`
   }
 `;
 
-export default ProjectCard;
+export default ProjectDisplay;

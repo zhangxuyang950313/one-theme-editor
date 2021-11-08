@@ -12,7 +12,6 @@ export const StyleBorderRight = styled.div`
 
 export const StyleGirdBackground = styled.span<{ girdSize?: number }>`
   /* background-color: #c2c2c2; */
-  border: 1px solid var(--color-secondary);
   background-color: rgb(var(--color-bg-1));
   background-image: linear-gradient(
       45deg,

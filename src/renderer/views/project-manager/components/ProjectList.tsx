@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { remote } from "electron";
 import { Empty } from "@arco-design/web-react";
 import { TypeProjectDataDoc } from "src/types/project";
-import ProjectCard from "./ProjectCard";
+import ProjectDisplay from "./ProjectDisplay";
 
 const ProjectList: React.FC<{ list: TypeProjectDataDoc[] }> = props => {
   const { list } = props;
@@ -33,7 +33,7 @@ const ProjectList: React.FC<{ list: TypeProjectDataDoc[] }> = props => {
                       remote.getCurrentWindow().close();
                     }}
                   >
-                    <ProjectCard
+                    <ProjectDisplay
                       image={`preview://${item.uuid}`}
                       name={item.description.name}
                     />

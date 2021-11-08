@@ -210,7 +210,7 @@ const EditorFrame: React.FC = () => {
               </div>
             )}
             {/* 资源编辑区 */}
-            <div className="resource-panel ">
+            <div className="editor__resource-panel ">
               {pageConfig.config ? (
                 <ResourcePanel pageConfig={pageConfig} />
               ) : (
@@ -314,7 +314,7 @@ const StyleEditorFrame = styled.div`
             color: var(--color-text-1);
           }
         }
-        .resource-panel {
+        .editor__resource-panel {
           flex: 1;
           flex-shrink: 0;
           overflow-y: auto;

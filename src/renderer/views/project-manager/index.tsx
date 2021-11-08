@@ -5,7 +5,7 @@ import { Notification } from "@arco-design/web-react";
 import { useProjectManagerDispatch } from "./store";
 import { ActionSetScenario } from "./store/action";
 import Sidebar from "./components/Sidebar";
-import ProjectListDisplay from "./components/ProjectListDisplay";
+import ProjectDisplayTable from "./components/ProjectDisplayTable";
 import RootWrapper from "@/RootWrapper";
 import { StyleTopDrag } from "@/style";
 
@@ -36,7 +36,7 @@ const ProjectManager: React.FC = () => {
         }}
       />
       {/* 工程管理 */}
-      <ProjectListDisplay />
+      <ProjectDisplayTable />
     </StyleProjectManager>
   );
 };

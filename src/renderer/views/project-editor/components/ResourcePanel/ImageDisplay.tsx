@@ -8,13 +8,12 @@ import { StyleGirdBackground } from "@/style";
  */
 
 const ImageDisplay: React.FC<{
-  className?: string;
   src?: string;
   useDash?: boolean;
   girdSize?: number;
   onClick?: () => void;
 }> = props => {
-  const { src, onClick, className, useDash, girdSize } = props;
+  const { src, onClick, useDash, girdSize } = props;
 
   const [display, setDisplay] = useState(true);
 
@@ -23,11 +22,7 @@ const ImageDisplay: React.FC<{
   }, [src]);
 
   return (
-    <StyleImageDisplay
-      girdSize={girdSize}
-      className={className}
-      onClick={() => onClick && onClick()}
-    >
+    <StyleImageDisplay girdSize={girdSize} onClick={() => onClick && onClick()}>
       <LazyImage
         className="preview"
         alt=""
@@ -69,6 +64,7 @@ const StyleImageDisplay = styled(StyleImageBackground)`
       &:hover {
         transform: scale(0.9);
         transition: transform 0.1s ease;
+        filter: drop-shadow(0 0 1px var(--color-primary-light-4));
       }
     }
   }

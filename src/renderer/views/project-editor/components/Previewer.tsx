@@ -16,7 +16,7 @@ import {
 import ColorUtil from "src/common/utils/ColorUtil";
 import { filenameIs9Patch } from "src/common/utils";
 import { useEditorSelector } from "../store";
-import { useSubscribeFile } from "../hooks";
+import { useSubscribeProjectFile } from "../hooks";
 import { DynamicBothSourceImage } from "./DynamicImage";
 import NinePatchCanvas from "./NinePatchCanvas";
 
@@ -130,7 +130,7 @@ const LayoutTextElement: React.FC<{
 
   const [xmlFileData, setXmlFileData] = useState<TypeXmlFileData>();
 
-  useSubscribeFile(element.sourceData.src, (event, src, fileData) => {
+  useSubscribeProjectFile(element.sourceData.src, (event, src, fileData) => {
     if (fileData.fileType === "application/xml") {
       setXmlFileData(fileData);
     }

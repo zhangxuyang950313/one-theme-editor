@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { RESOURCE_TAG } from "src/enum";
 import { TypePageConfig } from "src/types/resource.config";
-import FileBlocker from "./FileBlocker";
-import XmlValueBlocker from "./XmlValueBlocker";
+import FillerWrapper from "./FillerWrapper";
+import StickyTab from "@/components/StickyTab";
 import { Tabs } from "@/components/one-ui";
 
 const ResourcePanel: React.FC<{
@@ -13,17 +12,15 @@ const ResourcePanel: React.FC<{
   const { resourceList } = pageConfig;
   const [selectTabIndex, setSelectTabIndex] = useState(0);
 
-  const currentResourceList = resourceList[selectTabIndex]?.children || [];
-
   useEffect(() => {
     setSelectTabIndex(0);
   }, [resourceList]);
 
   return (
     <StyleResourcePanel>
-      {pageConfig?.disableTabs !== true && (
+      {pageConfig.disableTabs !== true && (
         <Tabs
-          className="tabs"
+          className="resource__tab"
           defaultIndex={selectTabIndex}
           data={resourceList.map((item, index) => ({
             index: index,
@@ -32,30 +29,15 @@ const ResourcePanel: React.FC<{
           onChange={index => setSelectTabIndex(index)}
         />
       )}
-      <div className="resource-container">
-        {currentResourceList.map((resource, key) => {
-          switch (resource.tag) {
-            case RESOURCE_TAG.File: {
-              return <FileBlocker key={key + resource.key} data={resource} />;
-            }
-            case RESOURCE_TAG.String:
-            case RESOURCE_TAG.Number:
-            case RESOURCE_TAG.Color:
-            case RESOURCE_TAG.Boolean: {
-              return (
-                <XmlValueBlocker
-                  key={key + resource.key}
-                  className="item"
-                  data={resource}
-                  colorFormat={pageConfig.colorFormat}
-                />
-              );
-            }
-            default: {
-              return null;
-            }
-          }
-        })}
+      <div className="resource__content">
+        {(resourceList[selectTabIndex]?.children || []).map(
+          (blockItem, key) => (
+            <div className="resource__block" key={`${key}.${blockItem.key}`}>
+              <StickyTab content={blockItem.name} />
+              <FillerWrapper data={blockItem} />
+            </div>
+          )
+        )}
       </div>
     </StyleResourcePanel>
   );
@@ -68,23 +50,10 @@ const StyleResourcePanel = styled.div`
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  .tabs {
+  .resource__tab {
     padding: 0 10px;
-    flex-shrink: 0;
   }
-  .image-container {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 0;
-    flex-wrap: nowrap;
-    padding: 20px;
-    overflow-x: hidden;
-    overflow-y: auto;
-    .item {
-      margin: 0 20px 20px 0;
-    }
-  }
-  .resource-container {
+  .resource__content {
     display: flex;
     flex-grow: 0;
     flex-wrap: nowrap;
@@ -92,6 +61,9 @@ const StyleResourcePanel = styled.div`
     /* padding: 20px; */
     overflow-x: hidden;
     overflow-y: auto;
+    .resource__block {
+      margin-top: 20px;
+    }
   }
 `;
 

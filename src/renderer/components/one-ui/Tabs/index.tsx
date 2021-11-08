@@ -38,6 +38,7 @@ const Tabs: React.FC<
 };
 
 const StyleTab = styled.div`
+  flex-shrink: 0;
   overflow-x: auto;
   border-bottom: 1px solid var(--color-secondary-disabled);
   .tabs {

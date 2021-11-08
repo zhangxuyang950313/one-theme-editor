@@ -7,7 +7,7 @@ import { useProjectManagerSelector } from "../store";
 import CreateProject from "./CreateProject";
 import ProjectList from "./ProjectList";
 
-const ProjectListDisplay: React.FC = () => {
+const ProjectDisplayTable: React.FC = () => {
   const scenario = useProjectManagerSelector(state => state.scenarioSelected);
   const [projectList, setProjectList] = useState<TypeProjectDataDoc[]>([]);
   const [visible, visibleToggle] = useToggle(false);
@@ -24,7 +24,7 @@ const ProjectListDisplay: React.FC = () => {
   }, [scenario.src]);
 
   return (
-    <StyleProjectListDisplay>
+    <StyleProjectDisplayTable>
       <div className="top-container">
         <div className="title">
           <h2>{scenario?.name || ""}列表</h2>
@@ -54,11 +54,11 @@ const ProjectListDisplay: React.FC = () => {
           visibleToggle.setLeft();
         }}
       />
-    </StyleProjectListDisplay>
+    </StyleProjectDisplayTable>
   );
 };
 
-const StyleProjectListDisplay = styled.div`
+const StyleProjectDisplayTable = styled.div`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
@@ -85,4 +85,4 @@ const StyleProjectListDisplay = styled.div`
   }
 `;
 
-export default ProjectListDisplay;
+export default ProjectDisplayTable;

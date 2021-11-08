@@ -14,12 +14,12 @@ import {
   TypeSourceData,
   TypeImageUrlData,
   TypeFileItem,
-  TypeFileBlocker,
-  TypeStringBlocker,
-  TypeNumberBlocker,
-  TypeBooleanBlocker,
+  TypeFileBlock,
+  TypeStringBlock,
+  TypeNumberBlock,
+  TypeBooleanBlock,
   TypeXmlItem,
-  TypeXmlBlocker,
+  TypeValueBlock,
   TypeXmlValueItem,
   TypeFileData,
   TypeImageFileData,
@@ -118,17 +118,18 @@ export class XmlItem extends AbstractDataModel<TypeXmlItem> {
   };
 }
 
-export class XmlBlocker extends AbstractDataModel<TypeXmlBlocker> {
-  protected data: TypeXmlBlocker = {
+export class XmlBlocker extends AbstractDataModel<TypeValueBlock> {
+  protected data: TypeValueBlock = {
     tag: RESOURCE_TAG.String,
     key: "",
     name: "",
+    format: "",
     items: []
   };
 }
 
-export class FileBlocker extends AbstractDataModel<TypeFileBlocker> {
-  protected data: TypeFileBlocker = {
+export class FileFillerWrapper extends AbstractDataModel<TypeFileBlock> {
+  protected data: TypeFileBlock = {
     tag: RESOURCE_TAG.File,
     key: "",
     name: "",
@@ -136,29 +137,32 @@ export class FileBlocker extends AbstractDataModel<TypeFileBlocker> {
   };
 }
 
-export class StringBlock extends AbstractDataModel<TypeStringBlocker> {
-  protected data: TypeStringBlocker = {
+export class StringBlock extends AbstractDataModel<TypeStringBlock> {
+  protected data: TypeStringBlock = {
     tag: RESOURCE_TAG.String,
     key: "",
     name: "",
+    format: "",
     items: []
   };
 }
 
-export class NumberBlock extends AbstractDataModel<TypeNumberBlocker> {
-  protected data: TypeNumberBlocker = {
+export class NumberBlock extends AbstractDataModel<TypeNumberBlock> {
+  protected data: TypeNumberBlock = {
     tag: RESOURCE_TAG.Number,
     key: "",
     name: "",
+    format: "",
     items: []
   };
 }
 
-export class BooleanBlock extends AbstractDataModel<TypeBooleanBlocker> {
-  protected data: TypeBooleanBlocker = {
+export class BooleanBlock extends AbstractDataModel<TypeBooleanBlock> {
+  protected data: TypeBooleanBlock = {
     tag: RESOURCE_TAG.Boolean,
     key: "",
     name: "",
+    format: "",
     items: []
   };
 }
