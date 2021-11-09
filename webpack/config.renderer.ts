@@ -109,7 +109,7 @@ const config: webpack.ConfigurationFactory = (env, args) => {
   const isDev = args.mode !== "production";
   return {
     target: "electron-renderer",
-    devtool: isDev ? "source-map" : false,
+    devtool: isDev ? "eval-source-map" : false,
     watchOptions: {
       ignored: "**/node_modules"
     },

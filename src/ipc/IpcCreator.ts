@@ -80,22 +80,22 @@ export default class ipcCreator {
   }
 
   // 创建同步 ipc 调用
-  protected createIpcSync<Params, Result>(params: {
+  protected createIpcSync<Params, Result>(option: {
     event: IPC_EVENT;
     server: (p: Params) => Result;
-  }): (data?: Params) => Result {
+  }): (params: Params) => Result {
     this.addServerList(() => {
-      ipcMain.on(params.event, ($event, $data: Params) => {
-        $event.returnValue = params.server($data);
+      ipcMain.on(option.event, ($event, $data: Params) => {
+        $event.returnValue = option.server($data);
       });
     });
-    return (data?: Params): Result => {
+    return (params: Params): Result => {
       const start = process.uptime();
-      const result = ipcRenderer.sendSync(params.event, data);
+      const result = ipcRenderer.sendSync(option.event, params);
       // if (isDev) {
       const time = (process.uptime() - start) * 1000;
-      LogUtil.ipc("sync", `${params.event}(${time.toFixed(5)}ms)`);
-      console.log("→", data);
+      LogUtil.ipc("sync", `${option.event}(${time.toFixed(5)}ms)`);
+      console.log("→", params);
       console.log("←", result);
       // }
       return result;
@@ -103,17 +103,17 @@ export default class ipcCreator {
   }
 
   // 创建异步 ipc 调用
-  protected createIpcAsync<Params, Result>(params: {
+  protected createIpcAsync<Params, Result>(option: {
     event: IPC_EVENT;
     server: (p: Params) => Promise<Result>;
-  }): (data: Params) => Promise<Result> {
+  }): (params: Params) => Promise<Result> {
     this.addServerList(() => {
       // 直接 throw 会带上 invoke 原本的错误信息
-      ipcMain.handle(params.event, async ($event, $data: Params) => {
+      ipcMain.handle(option.event, async ($event, $data: Params) => {
         try {
           return {
             status: "success",
-            data: await params.server($data)
+            data: await option.server($data)
           };
         } catch (err: any) {
           return {
@@ -123,13 +123,13 @@ export default class ipcCreator {
         }
       });
     });
-    return async (data: Params): Promise<Result> => {
+    return async (params: Params): Promise<Result> => {
       const start = process.uptime();
-      const result = await ipcRenderer.invoke(params.event, data);
+      const result = await ipcRenderer.invoke(option.event, params);
       // if (isDev) {
       const time = (process.uptime() - start) * 1000;
-      LogUtil.ipc("async", `${params.event}(${time.toFixed(5)}ms)`);
-      console.log("→", data);
+      LogUtil.ipc("async", `${option.event}(${time.toFixed(5)}ms)`);
+      console.log("→", params);
       console.log("←", result);
       // }
       if (result.status === "failed") {
@@ -140,29 +140,29 @@ export default class ipcCreator {
   }
 
   // 创建回调 ipc 调用，用于多频次回调
-  protected createIpcCallback<Params, CP>(params: {
+  protected createIpcCallback<Params, CP>(option: {
     event: IPC_EVENT;
-    server: (params: Params, cb: (x: CP) => void) => void;
-  }): (data: Params, callback: (x: CP) => void) => void {
+    server: (p: Params, cb: (cp: CP) => void) => void;
+  }): (params: Params, callback: (cp: CP) => void) => void {
     this.addServerList(() => {
-      ipcMain.on(params.event, async ($event, $data: Params) => {
-        params.server($data, data => {
-          $event.reply(params.event, data);
+      ipcMain.on(option.event, async ($event, $data: Params) => {
+        option.server($data, data => {
+          $event.reply(option.event, data);
         });
       });
     });
-    return (data: Params, callback: (x: CP) => void) => {
+    return (params: Params, callback: (x: CP) => void) => {
       const start = process.uptime();
-      ipcRenderer.on(params.event, ($event, $data) => {
+      ipcRenderer.on(option.event, ($event, $data) => {
         // if (isDev) {
         const time = (process.uptime() - start) * 1000;
-        LogUtil.ipc("callback", `${params.event}(${time.toFixed(5)}ms)`);
-        console.log("→", data);
+        LogUtil.ipc("callback", `${option.event}(${time.toFixed(5)}ms)`);
+        console.log("→", params);
         console.log("←", $data);
         // }
         callback($data);
       });
-      ipcRenderer.send(params.event, data);
+      ipcRenderer.send(option.event, params);
     };
   }
 

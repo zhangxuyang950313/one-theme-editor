@@ -6,7 +6,7 @@ import {
   ipcMain
 } from "electron";
 import IPC_EVENT from "src/ipc/ipc-event";
-import { findProjectByQuery } from "src/main/database/project";
+import projectDB from "src/main/database/project";
 import { getFileData, isPackaged } from "src/common/utils";
 import * as electronStore from "../store/index";
 import { preloadFile, getUrl } from "./constant";
@@ -113,7 +113,7 @@ export const createWindow = {
     await win.loadURL(getUrl.projectEditor(uuid));
 
     // 创建目录监听
-    const { root } = await findProjectByQuery({ uuid });
+    const { root } = await projectDB.findProjectByQuery({ uuid });
     await dirWatcher.closeWatcher(root);
     dirWatcher.create(root, (event, src) => {
       const data = getFileData(path.join(root, src));

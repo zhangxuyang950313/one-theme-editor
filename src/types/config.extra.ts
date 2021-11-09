@@ -18,7 +18,6 @@ export type TypePathCollection = Readonly<{
   CLIENT_STATIC: string;
   CLIENT_CACHE: string;
   PACK_TEMPORARY: string;
-  EXTRA_DB: string;
   PROJECTS_DB: string;
   PROJECT_THUMBNAIL_DIR: string;
   RESOURCE_DIR: string;

@@ -10,7 +10,7 @@ const config: webpack.ConfigurationFactory = (env, args) => {
   const isDev = args.mode !== "production";
   return {
     target: "electron-main",
-    devtool: isDev ? "inline-source-map" : false,
+    devtool: isDev ? "eval-source-map" : false,
     node: {
       __dirname: false
     },

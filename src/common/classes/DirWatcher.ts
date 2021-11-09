@@ -3,7 +3,10 @@ import { FSWatcher, WatchOptions } from "chokidar";
 import { FILE_EVENT } from "../enums";
 
 type TypeCallback = (event: FILE_EVENT, src: string) => void;
-type TypeWatchedRecord = Record<string, ReturnType<FSWatcher["getWatched"]>>;
+export type TypeWatchedRecord = Record<
+  string,
+  ReturnType<FSWatcher["getWatched"]>
+>;
 
 /**
  * 目录监听器，单实例支持创建多个目录的监听

@@ -1,12 +1,6 @@
 import path from "path";
 import fse from "fs-extra";
-import { ipcMain, ipcRenderer, app } from "electron";
-import {
-  createProject,
-  findProjectByQuery,
-  findProjectListByQuery,
-  updateProject
-} from "src/main/database/project";
+import { ipcMain, ipcRenderer } from "electron";
 import PageConfigCompiler from "src/common/classes/PageConfigCompiler";
 import ResourceConfigCompiler from "src/common/classes/ResourceConfigCompiler";
 import ScenarioConfigCompiler from "src/common/classes/ScenarioConfigCompiler";
@@ -26,36 +20,22 @@ import {
 } from "src/types/config.scenario";
 import { TypeWriteXmlTempPayload } from "src/types/request";
 import XmlTemplateUtil from "src/common/utils/XmlTemplateUtil";
-import { getFileData } from "src/common/utils";
 import { TypeFileData } from "src/types/file-data";
 import PackageUtil from "src/common/utils/PackageUtil";
 import PathUtil from "src/common/utils/PathUtil";
-import dirWatcher from "main/singletons/dirWatcher";
-import fileDataCache from "main/singletons/fileCache";
+import {
+  chunkCreateWindow,
+  chunkDirWatcher,
+  chunkFileCache,
+  chunkProjectDB
+} from "src/common/asyncChunk";
+import { TypeWatchedRecord } from "src/common/classes/DirWatcher";
+import fileDataCache from "src/main/singletons/fileCache";
 import IPC_EVENT from "./ipc-event";
 import ipcCreator from "./ipcCreator";
 
 if (ipcRenderer) ipcRenderer.setMaxListeners(9999);
 if (ipcMain) ipcMain.setMaxListeners(9999);
-
-// createWindows 方法内调用了 electron.app 获取路径方法，
-// 需要在 electron 启动后才能调用，
-// 所以要检测是否已经加载窗口，然后异步加载
-function createWindows() {
-  // 使用闭包缓存，避免每次都加载
-  let cw: typeof import("main/windowManager").createWindow;
-  return {
-    async get() {
-      if (cw) return cw;
-      // 处理边界情况：若未启动前调用，则等待 ready
-      if (!app.isReady()) {
-        await new Promise(resolve => app.on("ready", resolve));
-      }
-      cw = (await import("main/windowManager")).createWindow;
-      return cw;
-    }
-  };
-}
 
 class IpcController extends ipcCreator {
   // 获取进程 id
@@ -108,7 +88,8 @@ class IpcController extends ipcCreator {
     /**/ .createIpcAsync<TypeCreateProjectPayload, TypeProjectDataDoc>({
       event: IPC_EVENT.$createProject,
       server: async data => {
-        const project = await createProject(data);
+        const projectDB = await chunkProjectDB();
+        const project = await projectDB.createProject(data);
         const preview = ResourceConfigCompiler.from(
           data.resourceSrc
         ).getPreviewAbsFile();
@@ -129,7 +110,8 @@ class IpcController extends ipcCreator {
   >({
     event: IPC_EVENT.$updateProject,
     server: async ({ uuid, data }) => {
-      return updateProject<TypeProjectDataDoc>(uuid, data);
+      const projectDB = await chunkProjectDB();
+      return projectDB.updateProject<TypeProjectDataDoc>(uuid, data);
     }
   });
 
@@ -138,7 +120,8 @@ class IpcController extends ipcCreator {
     /**/ .createIpcAsync<Partial<TypeProjectDataDoc>, TypeProjectDataDoc[]>({
       event: IPC_EVENT.$getProjectList,
       server: async query => {
-        const list = await findProjectListByQuery(query);
+        const projectDB = await chunkProjectDB();
+        const list = await projectDB.findProjectListByQuery(query);
         // 若不存在缩略图，调用配置的预览图
         // TODO：需要补充配置也没有预览图的情况的默认图
         list.forEach(item => {
@@ -158,7 +141,10 @@ class IpcController extends ipcCreator {
   findProjectQuery = this
     /**/ .createIpcAsync<Partial<TypeProjectDataDoc>, TypeProjectDataDoc>({
       event: IPC_EVENT.$getProject,
-      server: async query => await findProjectByQuery(query)
+      server: async query => {
+        const projectDB = await chunkProjectDB();
+        return await projectDB.findProjectByQuery(query);
+      }
     });
 
   // // 设置配置预览图到预览图库
@@ -172,8 +158,8 @@ class IpcController extends ipcCreator {
   openProjectManager = this.createIpcAsync<void, void>({
     event: IPC_EVENT.$openProjectManager,
     server: async () => {
-      const cw = await createWindows().get();
-      await cw.projectManager();
+      const createWindow = await chunkCreateWindow();
+      await createWindow.projectManager();
     }
   });
 
@@ -181,17 +167,17 @@ class IpcController extends ipcCreator {
   openProjectEditorWindow = this.createIpcAsync<string, void>({
     event: IPC_EVENT.$openProjectEditor,
     server: async uuid => {
-      const cw = await createWindows().get();
-      await cw.projectEditor(uuid);
+      const createWindow = await chunkCreateWindow();
+      await createWindow.projectEditor(uuid);
     }
   });
 
-  getWatchedMapper = this.createIpcSync<
-    void,
-    ReturnType<typeof dirWatcher.getWatchedRecord>
-  >({
+  getWatchedMapper = this.createIpcAsync<void, TypeWatchedRecord>({
     event: IPC_EVENT.$getWatchedMapper,
-    server: () => dirWatcher.getWatchedRecord()
+    server: async () => {
+      const dirWatcher = await chunkDirWatcher();
+      return dirWatcher.getWatchedRecord();
+    }
   });
 
   // 拷贝文件
@@ -226,7 +212,10 @@ class IpcController extends ipcCreator {
   // 获取文件数据
   getFileData = this.createIpcAsync<string, TypeFileData>({
     event: IPC_EVENT.$getFileData,
-    server: async file => getFileData(file)
+    server: async file => {
+      const fileDataCache = await chunkFileCache();
+      return fileDataCache.get(file);
+    }
   });
 
   // 同步获取文件数据
