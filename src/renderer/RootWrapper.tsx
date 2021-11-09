@@ -1,5 +1,4 @@
-import logSymbols from "log-symbols";
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import styled, { createGlobalStyle, ThemeProvider } from "styled-components";
@@ -11,6 +10,7 @@ import "@arco-design/theme-one-editor/css/arco.css"; // arco.design
 // import "@arco-design/web-react/dist/css/arco.css"; // arco.design
 
 // import { ConfigProvider } from "antd";
+import LogUtil from "src/common/utils/LogUtil";
 import * as electronStore from "src/store";
 import DarkTheme from "src/common/theme/dark";
 import { GlobalStore } from "./store/global/index";
@@ -38,20 +38,21 @@ import { GlobalStore } from "./store/global/index";
 
 const Root: React.FC = props => {
   const [theme, setTheme] = useState(DarkTheme);
+
   useLayoutEffect(() => {
     document.body.setAttribute("arco-theme", "dark");
-  }, []);
-  useEffect(() => {
-    console.log(logSymbols.success, `主进程id ${window.$one.$server.getPID()}`);
-    console.log(logSymbols.success, `渲染进程启动 ${process.pid}`);
-    console.log("process.versions.electron", process.versions.electron); // electron 版本
-    console.log("process.versions.modules", process.versions.modules); // ABI版本
-    console.log("process.versions.node", process.versions.node); // NODE版本
-    console.log("process.versions.v8", process.versions.v8); // V8 引擎版本
-    console.log("process.versions.chrome", process.versions.chrome); // chrome版本
     electronStore.config.set("themeConfig", DarkTheme);
     const thm = electronStore.config.get("themeConfig");
     if (thm) setTheme(thm);
+  }, []);
+  useLayoutEffect(() => {
+    LogUtil.init("[version]electron", process.versions.electron); // electron 版本
+    LogUtil.init("[version]modules", process.versions.modules); // ABI版本
+    LogUtil.init("[version]node", process.versions.node); // NODE版本
+    LogUtil.init("[version]v8", process.versions.v8); // V8 引擎版本
+    LogUtil.init("[version]chrome", process.versions.chrome); // chrome版本
+    LogUtil.init(`[pid]main`, window.$one.$server.getPID());
+    LogUtil.init(`[pid]render`, process.pid);
   }, []);
   return (
     <Provider store={GlobalStore.store}>

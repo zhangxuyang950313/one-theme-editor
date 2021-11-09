@@ -1,4 +1,5 @@
 import { ipcMain, ipcRenderer } from "electron";
+import LogUtil from "src/common/utils/LogUtil";
 import IPC_EVENT from "./ipc-event";
 
 // type TypeCallbackReply<T> = {
@@ -89,13 +90,13 @@ export default class ipcCreator {
       });
     });
     return (data?: Params): Result => {
+      const start = process.uptime();
       const result = ipcRenderer.sendSync(params.event, data);
       // if (isDev) {
-      console.log("---------ipc---------");
-      console.log("sync", params.event);
-      console.log("params", data);
-      console.log("result", result);
-      console.log("---------------------");
+      const time = (process.uptime() - start) * 1000;
+      LogUtil.ipc("sync", `${params.event}(${time.toFixed(5)}ms)`);
+      console.log("→", data);
+      console.log("←", result);
       // }
       return result;
     };
@@ -123,13 +124,13 @@ export default class ipcCreator {
       });
     });
     return async (data: Params): Promise<Result> => {
+      const start = process.uptime();
       const result = await ipcRenderer.invoke(params.event, data);
       // if (isDev) {
-      console.log("---------ipc---------");
-      console.log("async", params.event);
-      console.log("params", data);
-      console.log("result", result);
-      console.log("---------------------");
+      const time = (process.uptime() - start) * 1000;
+      LogUtil.ipc("async", `${params.event}(${time.toFixed(5)}ms)`);
+      console.log("→", data);
+      console.log("←", result);
       // }
       if (result.status === "failed") {
         throw new Error(result.data);
@@ -151,13 +152,13 @@ export default class ipcCreator {
       });
     });
     return (data: Params, callback: (x: CP) => void) => {
+      const start = process.uptime();
       ipcRenderer.on(params.event, ($event, $data) => {
         // if (isDev) {
-        console.log("---------ipc---------");
-        console.log("callback", params.event);
-        console.log("params", data);
-        console.log("result", $data);
-        console.log("---------------------");
+        const time = (process.uptime() - start) * 1000;
+        LogUtil.ipc("callback", `${params.event}(${time.toFixed(5)}ms)`);
+        console.log("→", data);
+        console.log("←", $data);
         // }
         callback($data);
       });

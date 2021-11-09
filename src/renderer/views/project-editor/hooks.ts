@@ -17,6 +17,7 @@ import {
 } from "src/types/config.resource";
 import { TypeScenarioConfig } from "src/types/config.scenario";
 import FileDataCache from "src/common/classes/FileDataCache";
+import LogUtil from "src/common/utils/LogUtil";
 import { useEditorDispatch } from "./store";
 import {
   ActionSetProjectData,
@@ -137,7 +138,8 @@ export function usePageConfigList(
       // 使用缓存
       const configCache = pageConfigMap.get(page.src);
       if (configCache) {
-        console.log("use cache (pageConfig):", page.src);
+        LogUtil.cache("pageConfig");
+        console.log(page.src);
         return configCache;
       }
       // 服务获取

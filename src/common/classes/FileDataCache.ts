@@ -1,6 +1,7 @@
 import fse from "fs-extra";
 import { FileData } from "src/data/ResourceConfig";
 import { TypeFileData } from "src/types/file-data";
+import LogUtil from "../utils/LogUtil";
 
 type TypeGetFileMethod = (file: string) => TypeFileData;
 
@@ -23,7 +24,9 @@ export default class FileDataCache {
     const { mtime } = fse.statSync(file);
     const cache = this.fileDataMap.get(file);
     if (cache && cache.mtime >= mtime) {
-      console.log("use cache (fileData):", file);
+      LogUtil.cache("fileData");
+      console.log(file);
+      // console.log(cache.data);
       return cache.data;
     }
 
