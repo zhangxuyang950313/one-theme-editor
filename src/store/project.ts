@@ -1,8 +1,8 @@
 import ElectronStore from "electron-store";
 import ProjectData from "src/data/ProjectData";
 import { TypeProjectData } from "src/types/project";
-import { TypeResourceConfig } from "src/types/resource.config";
-import { TypeScenarioConfig } from "src/types/scenario.config";
+import { TypeResourceConfig } from "src/types/config.resource";
+import { TypeScenarioConfig } from "src/types/config.scenario";
 import { ScenarioOption } from "src/data/ScenarioConfig";
 import ResourceConfigData from "src/data/ResourceConfig";
 

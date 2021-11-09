@@ -10,10 +10,10 @@ const config: webpack.ConfigurationFactory = (env, args) => {
   const isDev = args.mode !== "production";
   return {
     target: "electron-main",
+    devtool: isDev ? "inline-source-map" : false,
     node: {
       __dirname: false
     },
-    devtool: false,
     watchOptions: {
       ignored: "**/node_modules"
     },
@@ -26,7 +26,8 @@ const config: webpack.ConfigurationFactory = (env, args) => {
     output: {
       // 输出目录: release.main
       path: outputDir.main,
-      filename: "[name].js"
+      filename: isDev ? "[name].js" : "[name].[contenthash:8].js",
+      chunkFilename: isDev ? "[id].chunk.js" : "[id].[contenthash:8].chunk.js"
     },
     externals: {
       fsevents: "fsevents"
@@ -111,7 +112,7 @@ const config: webpack.ConfigurationFactory = (env, args) => {
           __dirname,
           "../release.dll/renderer.manifest.json"
         ))
-      }),
+      })
     ]
   };
 };

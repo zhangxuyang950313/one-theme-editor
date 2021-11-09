@@ -3,7 +3,7 @@ import { URL } from "url";
 import fse from "fs-extra";
 import { protocol, app, nativeImage, ResizeOptions } from "electron";
 import pathUtil from "src/common/utils/pathUtil";
-import { getImgBuffAndFileType } from "../common/utils";
+import { getBufferAndFileType } from "../common/utils";
 
 async function getFileIconData(file: string) {
   const data = await app.getFileIcon(file);
@@ -47,7 +47,7 @@ async function getFilePicResponseData(
           }
         }
         // 获取图片数据
-        const { buff, fileType } = await getImgBuffAndFileType(file);
+        const { buff, fileType } = await getBufferAndFileType(file);
         resolve({ mimeType: fileType.mime, data: buff });
       } catch (err) {
         const def = { mimeType: "image/png", data: Buffer.from("") };

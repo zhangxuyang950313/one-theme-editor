@@ -6,7 +6,7 @@ import micromatch from "micromatch";
 import pathUtil from "src/common/utils/pathUtil";
 import { PACK_TYPE } from "src/enum";
 import { asyncQueue } from "src/common/utils";
-import { TypePackConfig } from "src/types/scenario.config";
+import { TypePackConfig } from "src/types/config.scenario";
 import {
   TypePackPayload,
   TypePackProcess,

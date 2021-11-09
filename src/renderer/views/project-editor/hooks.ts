@@ -8,14 +8,14 @@ import ResourceConfig, { FileData } from "src/data/ResourceConfig";
 import ScenarioConfig from "src/data/ScenarioConfig";
 import { asyncQueue } from "src/common/utils";
 import { FILE_EVENT } from "src/enum";
-import { TypeFileData } from "src/types/resource.page";
+import { TypeFileData } from "src/types/file-data";
 import { TypeProjectData } from "src/types/project";
 import {
   TypeModuleConfig,
   TypePageConfig,
   TypeResourceConfig
-} from "src/types/resource.config";
-import { TypeScenarioConfig } from "src/types/scenario.config";
+} from "src/types/config.resource";
+import { TypeScenarioConfig } from "src/types/config.scenario";
 import FileCache from "src/common/FileCache";
 import { useEditorDispatch } from "./store";
 import {

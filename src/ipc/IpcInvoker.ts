@@ -1,7 +1,7 @@
 import { ipcRenderer, IpcRendererEvent } from "electron";
 import { FILE_EVENT } from "src/enum";
 import { TypeProjectData } from "src/types/project";
-import { TypeFileData } from "src/types/resource.page";
+import { TypeFileData } from "src/types/file-data";
 import IPC_EVENT from "./ipc-event";
 
 class IpcInvoker {
@@ -30,9 +30,6 @@ class IpcInvoker {
     };
   };
 
-  // getWatcherWatched: generateIpcSync<void, { [x: string]: string[] }>(
-  //   IPC_EVENT.$getWatcherWatched
-  // ),
   // 给所有窗口发送广播
   sendBroadcast = {
     [IPC_EVENT.$projectCreated](data: TypeProjectData): void {

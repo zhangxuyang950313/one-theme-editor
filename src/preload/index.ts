@@ -1,6 +1,6 @@
 import * as electronStore from "src/store/index";
-import ipcController from "src/ipc/IpcController";
-import ipcInvoker from "src/ipc/IpcInvoker";
+import ipcController from "src/ipc/ipcController";
+import ipcInvoker from "src/ipc/ipcInvoker";
 import reactiveState from "./reactiveState";
 
 // 注册 ipc 服务调用

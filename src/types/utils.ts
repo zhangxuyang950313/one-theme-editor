@@ -9,3 +9,7 @@ export type TypeKeyValue = { key: string; value: string };
 
 // 枚举对象 key
 export type KeysEnum<T> = [...Array<keyof T>];
+
+export type Diff<T, U> = T extends U ? never : T;
+
+export type PickType<T, U> = T extends U ? T : never;

@@ -1,6 +1,6 @@
 import fse from "fs-extra";
 import { ELEMENT_TAG } from "src/enum/index";
-import { TypeScenarioOption } from "src/types/scenario.config";
+import { TypeScenarioOption } from "src/types/config.scenario";
 import ScenarioConfigCompiler from "src/common/compiler/ScenarioConfig";
 import XmlCompilerExtra from "src/common/compiler/XmlCompilerExtra";
 import XmlCompiler from "src/common/compiler/XmlCompiler";

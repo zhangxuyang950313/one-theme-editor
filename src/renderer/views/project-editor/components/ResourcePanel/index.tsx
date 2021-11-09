@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { TypePageConfig } from "src/types/resource.config";
+import { TypePageConfig } from "src/types/config.resource";
 import FillerWrapper from "./FillerWrapper";
 import StickyTab from "@/components/StickyTab";
 import { Tabs } from "@/components/one-ui";

@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import pathUtil from "src/common/utils/pathUtil";
 import { Form } from "@arco-design/web-react";
 import { TypeProjectInfo } from "src/types/project";
-import { TypeFileTempConfig } from "src/types/scenario.config";
+import { TypeFileTempConfig } from "src/types/config.scenario";
 import { ProjectInput } from "@/components/Forms";
 
 const defaultPath = pathUtil.ELECTRON_DESKTOP;

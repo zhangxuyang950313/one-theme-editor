@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { HEX_FORMAT, RESOURCE_TAG } from "src/enum";
-import { TypeBlockCollection } from "src/types/resource.page";
+import { TypeBlockCollection } from "src/types/config.page";
 import FileFiller from "./FileFiller";
 import ValueFiller from "./ValueFiller";
 

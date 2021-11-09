@@ -7,12 +7,9 @@ import {
   HEX_FORMAT,
   LAYOUT_ELEMENT_TAG
 } from "src/enum";
-import { TypePageConfig } from "src/types/resource.config";
-import {
-  TypeLayoutData,
-  TypeLayoutTextElement,
-  TypeXmlFileData
-} from "src/types/resource.page";
+import { TypePageConfig } from "src/types/config.resource";
+import { TypeLayoutData, TypeLayoutTextElement } from "src/types/config.page";
+import { TypeXmlFileData } from "src/types/file-data";
 import ColorUtil from "src/common/utils/ColorUtil";
 import { filenameIs9Patch } from "src/common/utils";
 import { useEditorSelector } from "../store";
@@ -131,7 +128,7 @@ const LayoutTextElement: React.FC<{
   const [xmlFileData, setXmlFileData] = useState<TypeXmlFileData>();
 
   useSubscribeProjectFile(element.sourceData.src, (event, src, fileData) => {
-    if (fileData.fileType === "application/xml") {
+    if (fileData.filetype === "application/xml") {
       setXmlFileData(fileData);
     }
   });

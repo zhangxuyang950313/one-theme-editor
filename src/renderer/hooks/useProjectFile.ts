@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { FILE_EVENT } from "src/enum";
 import { FileData } from "src/data/ResourceConfig";
-import { TypeFileData } from "src/types/resource.page";
+import { TypeFileData } from "src/types/file-data";
 import { useSubscribeProjectFile } from "@/views/project-editor/hooks";
 
 // 监听文件变化，返回动态的 url state fileData

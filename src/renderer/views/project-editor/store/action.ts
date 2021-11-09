@@ -1,6 +1,6 @@
-import { TypeFileData } from "src/types/resource.page";
-import { TypeScenarioConfig } from "src/types/scenario.config";
-import { TypeResourceConfig, TypePageConfig } from "src/types/resource.config";
+import { TypeFileData } from "src/types/file-data";
+import { TypeScenarioConfig } from "src/types/config.scenario";
+import { TypeResourceConfig, TypePageConfig } from "src/types/config.resource";
 import { TypeProjectDataDoc, TypeProjectInfo } from "src/types/project";
 
 export enum ACTION_TYPE {

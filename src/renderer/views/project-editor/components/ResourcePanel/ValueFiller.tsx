@@ -2,11 +2,8 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { IconClose } from "@arco-design/web-react/icon";
 import { HEX_FORMAT, RESOURCE_TAG } from "src/enum/index";
-import {
-  TypeXmlItem,
-  TypeXmlValueTags,
-  TypeXmlFileData
-} from "src/types/resource.page";
+import { TypeXmlItem, TypeXmlValueTags } from "src/types/config.page";
+import { TypeXmlFileData } from "src/types/file-data";
 import { xmlElementTextModify } from "src/common/xmlTemplate";
 import { useSubscribeProjectFile } from "../../hooks";
 import ColorPicker from "./ColorPicker";
@@ -171,7 +168,7 @@ const ValueFiller: React.FC<{
   const [xmlFileData, setXmlFileData] = useState<TypeXmlFileData>();
 
   useSubscribeProjectFile(xmlItem.sourceData.src, (event, src, fileData) => {
-    if (fileData.fileType === "application/xml") {
+    if (fileData.filetype === "application/xml") {
       setXmlFileData(fileData);
     }
   });

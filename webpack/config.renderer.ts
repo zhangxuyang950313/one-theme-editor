@@ -109,7 +109,7 @@ const config: webpack.ConfigurationFactory = (env, args) => {
   const isDev = args.mode !== "production";
   return {
     target: "electron-renderer",
-    devtool: isDev ? "cheap-module-eval-source-map" : false,
+    devtool: isDev ? "source-map" : false,
     watchOptions: {
       ignored: "**/node_modules"
     },
@@ -128,10 +128,12 @@ const config: webpack.ConfigurationFactory = (env, args) => {
       // 输出目录
       path: outputDir.render,
       // publicPath: "http://localhost:30000/image?file=",
-      filename: isDev ? "js/[name].js" : "js/[name].[contenthash:8].js",
+      filename: isDev
+        ? "scripts/[name].js"
+        : "scripts/[name].[contenthash:8].js",
       chunkFilename: isDev
-        ? "js/[name].chunk.js"
-        : "js/[name].[contenthash:8].chunk.js",
+        ? "scripts/[name].chunk.js"
+        : "scripts/[name].[contenthash:8].chunk.js",
       hotUpdateChunkFilename: "hmr/[id].hot-update.js",
       hotUpdateMainFilename: "hmr/runtime.hot-update.json",
       /**
@@ -150,7 +152,7 @@ const config: webpack.ConfigurationFactory = (env, args) => {
       minimize: !isDev,
       // runtimeChunk: "multiple",
       runtimeChunk: {
-        name: ({ name }) => `runtime-${name}`
+        name: ({ name }) => `${name}.runtime`
       },
       splitChunks: {
         /**

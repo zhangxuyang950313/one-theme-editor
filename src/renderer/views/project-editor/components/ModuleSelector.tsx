@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { Tooltip } from "antd";
-import { TypeModuleConfig } from "src/types/resource.config";
+import { TypeModuleConfig } from "src/types/config.resource";
 import { StaticResourceImage } from "./DynamicImage";
 
 // 模块选择器

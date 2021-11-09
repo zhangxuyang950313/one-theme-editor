@@ -1,4 +1,5 @@
-import { TypePackConfig } from "./scenario.config";
+import { MimeType } from "file-type";
+import { TypePackConfig } from "./config.scenario";
 import { TypeDatabase } from "./utils";
 
 // 版本信息
@@ -20,21 +21,6 @@ export type TypeCreateProjectPayload = {
   resourceSrc: string;
 };
 
-// 图片数据
-export type TypeImageData = {
-  // md5: string;
-  width: number;
-  height: number;
-  size: number;
-  filename: string;
-  ninePatch: boolean;
-};
-
-// 图片映射信息
-export type TypeImageMapper = TypeImageData & {
-  target: string;
-};
-
 export type TypeXmlMapper = {
   content: string;
   target: string;
@@ -45,9 +31,6 @@ export type TypeProjectData = TypeCreateProjectPayload & {
   uuid: string;
   uiVersion: TypeUiVersion;
 };
-
-// 在数据库中的图片数据
-export type TypeImageDataDoc = TypeDatabase<TypeImageData>;
 
 // 在数据库中的工程信息
 export type TypeProjectDataDoc = TypeDatabase<TypeProjectData>;

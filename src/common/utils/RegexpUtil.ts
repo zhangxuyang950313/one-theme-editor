@@ -19,4 +19,6 @@ export default class RegexpUtil {
   // hex 所有匹配颜色
   static hexRegexp =
     /^#([a-fA-F\d]{3}|[a-fA-F\d]{4}|[a-fA-F\d]{6}|[a-fA-F\d]{8})$/;
+
+  static extOf9Patch = /\.9\.png$/;
 }

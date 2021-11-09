@@ -5,11 +5,14 @@ import FileType, { FileTypeResult, MimeType } from "file-type";
 import mimeTypes from "mime-types";
 import imageSize from "image-size";
 import dirTree from "directory-tree";
-import ImageData from "src/data/ImageData";
 import ERR_CODE from "src/common/errorCode";
 import RegexpUtil from "src/common/utils/RegexpUtil";
-import { TypeImageData, TypeImageMapper } from "src/types/project";
-import { TypeFileData } from "src/types/resource.page";
+import {
+  TypeFileData,
+  TypeImageFileData,
+  TypeImageFiletype,
+  TypeXmlFileData
+} from "src/types/file-data";
 import { FileData, ImageFileData, XmlFileData } from "src/data/ResourceConfig";
 import XmlCompiler from "src/common/compiler/XmlCompiler";
 import XmlCompilerExtra from "src/common/compiler/XmlCompilerExtra";
@@ -170,7 +173,7 @@ export function getImageSize(file: string): {
 }
 
 // 获取文件大小
-export async function getFileSizeOfAsync(file: string): Promise<number> {
+export async function getFileSizeAsync(file: string): Promise<number> {
   const buff = await fse.readFile(file);
   return buff.byteLength;
 }
@@ -180,42 +183,9 @@ export function getFileSize(file: string): number {
   return fse.readFileSync(file).byteLength;
 }
 
-// 获取图片信息
-export function getImageData(file: string): TypeImageData {
-  if (!file) {
-    throw new Error(`${ERR_CODE[4000]}: ${file}`);
-  }
-  if (!fse.existsSync(file)) {
-    throw new Error(`${ERR_CODE[4003]}: ${file}`);
-  }
-  const { width, height } = getImageSize(file);
-  return new ImageData()
-    .set("width", width)
-    .set("height", height)
-    .set("size", getFileSize(file))
-    .set("filename", path.basename(file))
-    .set("ninePatch", filenameIs9Patch(file))
-    .create();
-}
-
-// 获取图片映射信息
-export function getImageMapper(file: string, root: string): TypeImageMapper {
-  const imageData = getImageData(file);
-  // TODO: 大集合解构小集合不报错？ 先这么写
-  return {
-    // md5: imageData.md5,
-    width: imageData.width,
-    height: imageData.height,
-    size: imageData.size,
-    filename: imageData.filename,
-    ninePatch: imageData.ninePatch,
-    target: path.relative(root, file)
-  };
-}
-
 // is .9 path
 export function filenameIs9Patch(file: string): boolean {
-  return /\.9\.png$/.test(file);
+  return RegexpUtil.extOf9Patch.test(file);
 }
 
 const IMAGE_EXT = Object.freeze(["png", "jpg", "jpeg", "webp"]);
@@ -231,15 +201,16 @@ export function filenameIsImage(filename: string): boolean {
 }
 
 /**
+ * 文件真实数据是否是图片
  * 从文件流中获取图片类型，无视文件名称
  * @param file
  * @returns
  */
-export async function fileIsImageAsync(file: string): Promise<boolean> {
+export async function fileIsImage(file: string): Promise<boolean> {
   try {
-    const fileType = await FileType.fromFile(file);
-    if (!fileType?.ext) return false;
-    return IMAGE_EXT.includes(fileType?.ext);
+    const filetype = await FileType.fromFile(file);
+    if (!filetype?.ext) return false;
+    return IMAGE_EXT.includes(filetype?.ext);
   } catch (err) {
     return false;
   }
@@ -253,6 +224,21 @@ export function filenameIsXml(filename: string): boolean {
   return path.extname(filename) === ".xml";
 }
 
+/**
+ * 文件真实是否是 xml
+ * 从文件里中获取文件类型，无视文件名称
+ * @param file
+ * @returns
+ */
+export async function fileIsXml(file: string): Promise<boolean> {
+  try {
+    const filetype = await FileType.fromFile(file);
+    return filetype?.ext === "xml";
+  } catch (err) {
+    return false;
+  }
+}
+
 // 获取一个目录下所有文件
 export function getDirAllFiles(dir: string): dirTree.DirectoryTree[] {
   const result: dirTree.DirectoryTree[] = [];
@@ -262,8 +248,8 @@ export function getDirAllFiles(dir: string): dirTree.DirectoryTree[] {
   return result;
 }
 
-// 两个数组的并集
-export function union(arr1: string[], arr2: string[]): string[] {
+// 两个数组的并集并去重
+export function unionArray(arr1: string[], arr2: string[]): string[] {
   return Array.from(new Set([...arr1, ...arr2]));
 }
 
@@ -298,7 +284,12 @@ export function isURL(str: string): boolean {
   return RegexpUtil.urlRegexp.test(str);
 }
 
-export async function getImgBuffAndFileType(
+/**
+ * 一次获取文件的 buffer 和 filetype 数据
+ * @param file
+ * @returns
+ */
+export async function getBufferAndFileType(
   file: string
 ): Promise<{ buff: Buffer; fileType: FileTypeResult }> {
   if (!fse.existsSync(file)) {
@@ -307,9 +298,72 @@ export async function getImgBuffAndFileType(
   const buff = fse.readFileSync(file);
   const fileType = await FileType.fromBuffer(buff);
   if (!fileType) {
-    throw new Error(ERR_CODE[4003]);
+    throw new Error(ERR_CODE[4001]);
   }
   return { buff, fileType };
+}
+
+/**
+ * 获取图片文件数据
+ * @param file
+ * @returns
+ */
+export function getImageFileData(file: string): TypeImageFileData {
+  if (!file) {
+    throw new Error(`${ERR_CODE[4000]}: ${file}`);
+  }
+  if (!fse.existsSync(file)) {
+    throw new Error(`${ERR_CODE[4003]}: ${file}`);
+  }
+  const mimeType = (mimeTypes.lookup(file) || "") as TypeImageFiletype;
+  const { width, height } = getImageSize(file);
+  return new ImageFileData()
+    .set("filetype", mimeType)
+    .set("filename", path.basename(file))
+    .set("width", width)
+    .set("height", height)
+    .set("size", getFileSize(file))
+    .set("is9patch", filenameIs9Patch(file))
+    .create();
+}
+
+/**
+ * 获取 xml 文件数据
+ * @param file
+ * @param options
+ * @returns
+ */
+export function getXmlFileData(
+  file: string,
+  options?: { ignoreXmlElement?: boolean }
+): TypeXmlFileData {
+  if (!file) {
+    throw new Error(`${ERR_CODE[4000]}: ${file}`);
+  }
+  if (!fse.existsSync(file)) {
+    throw new Error(`${ERR_CODE[4003]}: ${file}`);
+  }
+  const xmlFileCompiler = XmlCompiler.fromFile(file);
+  // 生成 value 映射
+  const valueMapper = xmlFileCompiler
+    .getChildrenFirstElementNode()
+    .getChildrenNodes()
+    .reduce<Record<string, string>>((prev, item) => {
+      if (!item.isElement) return prev;
+      const template = XmlCompilerExtra.generateXmlNodeStr({
+        tag: item.getTagname(),
+        attributes: item.getAttributes()
+      });
+      prev[template] = item.getChildrenFirstTextValue();
+      return prev;
+    }, {});
+  const xmlFileData = new XmlFileData()
+    .set("size", getFileSize(file))
+    .set("valueMapper", valueMapper);
+  if (!options?.ignoreXmlElement) {
+    xmlFileData.set("element", xmlFileCompiler.getElement());
+  }
+  return xmlFileData.create();
 }
 
 /**
@@ -318,25 +372,19 @@ export async function getImgBuffAndFileType(
  * @param options { ignoreXmlElement:boolean // 忽略解析 xml  element，返回为空，默认为 true }
  * @returns
  */
-export function getFileDataSync(
+export function getFileData(
   file: string,
   options?: { ignoreXmlElement?: boolean }
 ): TypeFileData {
-  const mimeType = (mimeTypes.lookup(file) || "") as MimeType;
-  switch (mimeType) {
+  const filetype = (mimeTypes.lookup(file) || "") as MimeType;
+  switch (filetype) {
     case "image/webp":
     case "image/png":
     case "image/gif":
     case "image/jpeg": {
-      const imageData = getImageData(file);
-      const imageFileData = new ImageFileData()
-        .set("fileType", mimeType)
-        .set("width", imageData.width)
-        .set("height", imageData.height)
-        .set("size", imageData.size)
-        .set("is9patch", filenameIs9Patch(file))
-        .create();
-      return imageFileData;
+      return fse.existsSync(file)
+        ? getImageFileData(file)
+        : ImageFileData.default;
     }
     case "application/xml": {
       const xmlFileCompiler = XmlCompiler.fromFile(file);
@@ -354,17 +402,18 @@ export function getFileDataSync(
           return prev;
         }, {});
       const xmlFileData = new XmlFileData()
-        .set("fileType", mimeType)
         .set("size", getFileSize(file))
         .set("valueMapper", valueMapper);
       if (!options?.ignoreXmlElement) {
         xmlFileData.set("element", xmlFileCompiler.getElement());
       }
-      const data = xmlFileData.create();
-      return data;
+      return xmlFileData.create();
     }
     default: {
-      return FileData.default;
+      return new FileData()
+        .set("filetype", filetype)
+        .set("size", getFileSize(file))
+        .create();
     }
   }
 }

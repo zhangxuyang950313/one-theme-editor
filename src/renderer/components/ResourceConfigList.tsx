@@ -2,7 +2,7 @@ import path from "path";
 import React from "react";
 import styled from "styled-components";
 import { Descriptions, Empty } from "@arco-design/web-react";
-import { TypeResourceConfig } from "src/types/resource.config";
+import { TypeResourceConfig } from "src/types/config.resource";
 import { PreloadImage } from "./ImageCollection";
 
 // 配置卡片

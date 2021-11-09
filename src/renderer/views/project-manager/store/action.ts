@@ -1,4 +1,4 @@
-import { TypeScenarioOption } from "src/types/scenario.config";
+import { TypeScenarioOption } from "src/types/config.scenario";
 
 export enum ACTION_TYPES {
   SET_SCENARIO_SELECTED = "SET_SCENARIO_SELECTED" // 当前选择的场景

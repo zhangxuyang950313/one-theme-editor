@@ -1,5 +1,5 @@
 import { useState, useLayoutEffect } from "react";
-import { TypeScenarioConfig } from "src/types/scenario.config";
+import { TypeScenarioConfig } from "src/types/config.scenario";
 import { LOAD_STATUS } from "src/enum";
 import { useAsyncUpdater } from "./index";
 import { useProjectManagerDispatch } from "@/views/project-manager/store";

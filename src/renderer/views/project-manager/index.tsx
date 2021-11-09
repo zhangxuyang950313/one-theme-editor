@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { TypeScenarioOption } from "src/types/scenario.config";
+import { TypeScenarioOption } from "src/types/config.scenario";
 import { Notification } from "@arco-design/web-react";
 import { useProjectManagerDispatch } from "./store";
 import { ActionSetScenario } from "./store/action";

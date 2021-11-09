@@ -19,17 +19,18 @@ import {
   TypeProjectDataDoc,
   TypeUnpackPayload
 } from "src/types/project";
-import { TypePageConfig, TypeResourceConfig } from "src/types/resource.config";
+import { TypePageConfig, TypeResourceConfig } from "src/types/config.resource";
 import {
   TypeScenarioConfig,
   TypeScenarioOption
-} from "src/types/scenario.config";
+} from "src/types/config.scenario";
 import { TypeWriteXmlTempPayload } from "src/types/request";
 import { writeXmlTemplate } from "src/common/xmlTemplate";
-import { getFileDataSync } from "src/common/utils";
-import { TypeFileData } from "src/types/resource.page";
+import { getFileData } from "src/common/utils";
+import { TypeFileData } from "src/types/file-data";
 import PackageUtil from "src/common/utils/PackageUtil";
 import pathUtil from "src/common/utils/pathUtil";
+import dirWatcher from "main/dirWatcher";
 import fileDataCache from "./fileCache";
 import IPC_EVENT from "./ipc-event";
 import ipcCreator from "./ipcCreator";
@@ -42,7 +43,7 @@ if (ipcMain) ipcMain.setMaxListeners(9999);
 // 所以要检测是否已经加载窗口，然后异步加载
 function createWindows() {
   // 使用闭包缓存，避免每次都加载
-  let cw: typeof import("main/windows").createWindows;
+  let cw: typeof import("main/windowManager").createWindow;
   return {
     async get() {
       if (cw) return cw;
@@ -50,7 +51,7 @@ function createWindows() {
       if (!app.isReady()) {
         await new Promise(resolve => app.on("ready", resolve));
       }
-      cw = (await import("main/windows")).createWindows;
+      cw = (await import("main/windowManager")).createWindow;
       return cw;
     }
   };
@@ -185,6 +186,14 @@ class IpcController extends ipcCreator {
     }
   });
 
+  getWatchedMapper = this.createIpcSync<
+    void,
+    ReturnType<typeof dirWatcher.getWatchedMap>
+  >({
+    event: IPC_EVENT.$getWatchedMapper,
+    server: () => dirWatcher.getWatchedMap()
+  });
+
   // 拷贝文件
   copyFile = this.createIpcAsync<{ from: string; to: string }, void>({
     event: IPC_EVENT.$copyFile,
@@ -217,7 +226,7 @@ class IpcController extends ipcCreator {
   // 获取文件数据
   getFileData = this.createIpcAsync<string, TypeFileData>({
     event: IPC_EVENT.$getFileData,
-    server: async file => getFileDataSync(file)
+    server: async file => getFileData(file)
   });
 
   // 同步获取文件数据

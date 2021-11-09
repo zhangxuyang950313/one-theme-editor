@@ -1,7 +1,7 @@
 import { app, BrowserWindow, ipcMain, protocol } from "electron";
 import reactiveState from "src/preload/reactiveState";
-import ipcController from "src/ipc/IpcController";
-import { createWindows } from "./windows";
+import ipcController from "src/ipc/ipcController";
+import { createWindow } from "./windowManager";
 import { moveWindowToCenter, saveCurrentDisplayCenter } from "./utils";
 import registerProtocol from "./protocol";
 
@@ -48,5 +48,5 @@ app.on("ready", async () => {
   Object.assign(global, {
     $reactiveState: reactiveState
   });
-  await createWindows.projectManager();
+  await createWindow.projectManager();
 });

@@ -4,7 +4,7 @@ import { dialog } from "electron";
 
 import { isDev } from "src/common/utils/index";
 import { TypeProjectDataDoc, TypeProjectInfo } from "src/types/project";
-import { TypeResourceConfig } from "src/types/resource.config";
+import { TypeResourceConfig } from "src/types/config.resource";
 
 import styled from "styled-components";
 import React, { useEffect, useRef, useState } from "react";

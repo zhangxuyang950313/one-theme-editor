@@ -5,11 +5,11 @@ import {
   TypeFileTempConfig,
   TypePackConfig,
   TypeScenarioConfig
-} from "src/types/scenario.config";
+} from "src/types/config.scenario";
 import {
   TypeResourceConfig,
   TypeResourceOption
-} from "src/types/resource.config";
+} from "src/types/config.resource";
 import { ELEMENT_TAG, PACK_TYPE } from "src/enum/index";
 import ScenarioConfig, {
   ApplyConfig,

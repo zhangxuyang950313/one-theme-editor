@@ -54,6 +54,14 @@ class DirWatcher {
     this.watcherMap.clear();
     console.log("关闭所有 watcher");
   }
+
+  getWatchedMap() {
+    const result: Record<string, ReturnType<FSWatcher["getWatched"]>> = {};
+    this.watcherMap.forEach((watcher, root) => {
+      result[root] = watcher.getWatched();
+    });
+    return result;
+  }
 }
 
 export default new DirWatcher();

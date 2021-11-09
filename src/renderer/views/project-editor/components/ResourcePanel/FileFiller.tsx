@@ -9,7 +9,8 @@ import {
   IconPlus,
   IconArrowRight
 } from "@arco-design/web-react/icon";
-import { TypeFileData, TypeFileItem } from "src/types/resource.page";
+import { TypeFileItem } from "src/types/config.page";
+import { TypeFileData } from "src/types/file-data";
 import { FILE_EVENT } from "src/enum";
 import ImageDisplay from "./ImageDisplay";
 import InfoDisplay from "./InfoDisplay";
@@ -184,7 +185,7 @@ const StyleFileDisplay = styled.div`
 `;
 
 const getDescription = (fileData: TypeFileData) => {
-  switch (fileData.fileType) {
+  switch (fileData.filetype) {
     case "image/webp":
     case "image/jpeg":
     case "image/gif":
@@ -220,7 +221,7 @@ const FileFiller: React.FC<{ data: TypeFileItem }> = ({ data }) => {
       primaryToolTipOverlay={
         <>
           <Descriptions
-            title="变更详情"
+            title="当前资源"
             column={1}
             size="mini"
             data={[
@@ -245,9 +246,23 @@ const FileFiller: React.FC<{ data: TypeFileItem }> = ({ data }) => {
                 label: "",
                 value: (
                   <div style={{ display: "flex", alignItems: "center" }}>
-                    <img style={{ width: "80px" }} src={floatUrl} />
+                    <img
+                      style={{
+                        width: "80px",
+                        maxHeight: "100px",
+                        objectFit: "contain"
+                      }}
+                      src={floatUrl}
+                    />
                     <IconArrowRight style={{ width: "50px" }} />
-                    <img style={{ width: "80px" }} src={primaryUrl} />
+                    <img
+                      style={{
+                        width: "80px",
+                        maxHeight: "100px",
+                        objectFit: "contain"
+                      }}
+                      src={primaryUrl}
+                    />
                   </div>
                 )
               },
@@ -299,7 +314,10 @@ const FileFiller: React.FC<{ data: TypeFileItem }> = ({ data }) => {
               }
             ]}
           />
-          <img style={{ width: "80px" }} src={floatUrl} />
+          <img
+            style={{ width: "80px", maxHeight: "100px", objectFit: "contain" }}
+            src={floatUrl}
+          />
         </div>
       }
       // 点击导入

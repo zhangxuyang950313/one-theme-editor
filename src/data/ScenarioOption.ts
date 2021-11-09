@@ -1,6 +1,6 @@
 // 场景选项
 
-import { TypeScenarioOption } from "src/types/scenario.config";
+import { TypeScenarioOption } from "src/types/config.scenario";
 import { AbstractDataModel } from "./AbstractDataModel";
 import ScenarioConfig from "./ScenarioConfig";
 

@@ -1,8 +1,7 @@
 import path from "path";
 import { URL } from "url";
 import md5 from "md5";
-import { TypePageConfig } from "src/types/resource.config";
-import { TypeImageData } from "src/types/project";
+import { TypePageConfig } from "src/types/config.resource";
 import {
   ElementLayoutConfig,
   LayoutImageElement,
@@ -16,7 +15,7 @@ import {
   XmlBlocker,
   XmlValueItem
 } from "src/data/ResourceConfig";
-import { getFileDataSync, getImageData } from "src/common/utils/index";
+import { getFileData, getImageFileData } from "src/common/utils/index";
 import {
   ELEMENT_TAG,
   ALIGN_VALUE,
@@ -30,6 +29,7 @@ import XMLNodeElement from "src/common/compiler/XMLNodeElement";
 import pathUtil from "src/common/utils/pathUtil";
 import RegexpUtil from "src/common/utils/RegexpUtil";
 import TempStringUtil from "src/common/utils/TempStringUtil";
+import { TypeImageFileData, TypeFileData } from "src/types/file-data";
 import XmlCompiler from "./XmlCompiler";
 import XmlCompilerExtra from "./XmlCompilerExtra";
 import type {
@@ -41,9 +41,8 @@ import type {
   TypeFileBlock,
   TypeValueBlock,
   TypeXmlValueTags,
-  TypeFileData,
   TypeXmlValueItem
-} from "src/types/resource.page";
+} from "src/types/config.page";
 
 export default class PageConfigCompiler extends XMLNodeElement {
   private configFile: string;
@@ -53,7 +52,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
   private sourceKeyValCache: Map<string, string>;
   private sourceDataCache: Map<string, TypeSourceData>;
   private fileDataCache: Map<string, TypeFileData>;
-  private imageDataCache: Map<string, TypeImageData>;
+  private imageDataCache: Map<string, TypeImageFileData>;
   private xmlValueCache: Map<string, string>;
   private xmlValueItemCache: Map<string, TypeXmlValueItem>;
   constructor(data: { namespace: string; config: string }) {
@@ -247,9 +246,12 @@ export default class PageConfigCompiler extends XMLNodeElement {
     );
   }
 
-  private getImageData(file: string): TypeImageData {
+  private getImageFileData(file: string): TypeImageFileData {
     const cache = this.imageDataCache.get(file);
-    return cache || getImageData(file);
+    if (cache) return cache;
+    const data = getImageFileData(file);
+    this.imageDataCache.set(file, data);
+    return data;
   }
 
   // // 获取定义的资源配置数据
@@ -307,7 +309,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
     const cache = this.fileDataCache.get(file);
     if (cache) return cache;
 
-    const fileData = getFileDataSync(file, { ignoreXmlElement: true });
+    const fileData = getFileData(file, { ignoreXmlElement: true });
 
     this.fileDataCache.set(file, fileData);
 
@@ -350,7 +352,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
     const sourceData = this.getUrlSourceData(source);
     const size = { width: "0", height: "0" };
     try {
-      const imageData = this.getImageData(
+      const imageData = this.getImageFileData(
         this.resolveResourcePath(sourceData.src)
       );
       size.width = String(imageData.width);
@@ -499,7 +501,6 @@ export default class PageConfigCompiler extends XMLNodeElement {
     return new XmlBlocker()
       .set("tag", tag)
       .set("key", xmlItemKey)
-      .set("format", node.getAttributeOf("format"))
       .set("name", node.getAttributeOf("name"))
       .set("items", xmlItems)
       .create();
@@ -579,24 +580,6 @@ export default class PageConfigCompiler extends XMLNodeElement {
           }
         }
       });
-  }
-
-  /**
-   * @deprecated
-   * @returns
-   */
-  getResPathList(): string[] {
-    return this.getResourceList().map(item => {
-      return item.key;
-      // if (item.resType === RESOURCE_TAG.Image) {
-      //   // item.items.forEach(o => {
-      //   // prev.push(o.sourceData.src);
-      //   // });
-      // }
-      // if (item.resType === RESOURCE_TAG.Color) {
-      //   prev.push(item.sourceData.src);
-      // }
-    });
   }
 
   getData(): TypePageConfig {

@@ -5,7 +5,7 @@ import {
   TypeModuleConfig,
   TypePageOption,
   TypeResourceOption
-} from "src/types/resource.config";
+} from "src/types/config.resource";
 import ResourceConfigData, {
   ResourceOption,
   ModuleConfig,

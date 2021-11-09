@@ -1,5 +1,4 @@
-import { FileTypeResult, MimeType } from "file-type";
-import { Element } from "xml-js";
+import { FileTypeResult } from "file-type";
 import {
   HEX_FORMAT,
   ALIGN_VALUE,
@@ -9,53 +8,15 @@ import {
   LAYOUT_ELEMENT_TAG
 } from "../enum";
 import XMLNodeBase from "../common/compiler/XMLNodeElement";
-import { TypeImageData } from "./project";
+import { TypeFileData, TypeImageFileData } from "./file-data";
 
 /*************************** Resource ***************************/
-type Diff<T, U> = T extends U ? never : T;
-
-type PickType<T, U> = T extends U ? T : never;
 
 // src="src://" 数据
 export type TypeSourceData = {
   protocol: string;
   src: string;
   query: Record<string, string>;
-};
-
-export type TypeImageMimeType =
-  | "image/jpeg"
-  | "image/png"
-  | "image/apng"
-  | "image/gif"
-  | "image/webp";
-
-// fileData
-export type TypeFileData =
-  | {
-      fileType:
-        | Diff<
-            MimeType,
-            TypeImageFileData["fileType"] | TypeXmlFileData["fileType"]
-          >
-        | "";
-      size: number;
-    }
-  | TypeImageFileData
-  | TypeXmlFileData;
-
-export type TypeImageFileData = {
-  fileType: TypeImageMimeType | "";
-  width: number;
-  height: number;
-  size: number;
-  is9patch: boolean;
-};
-export type TypeXmlFileData = {
-  fileType: "application/xml" | "";
-  size: number;
-  element: Element;
-  valueMapper: Record<string, string | undefined>;
 };
 
 // Xml 节点
@@ -134,7 +95,7 @@ export type TypeResourceDefinition = {
   key: string;
   name: string;
   extra: Record<string, string>; // 备用字段
-  children: Array<TypeBlockCollection>;
+  children: Array<TypeFileBlock | TypeValueBlock<TypeXmlValueTags>>;
 };
 
 /*************************** Layout ***************************/
@@ -182,7 +143,7 @@ export type TypeUrlData<T> = {
   extra: T | null;
 };
 
-export type TypeImageUrlData = TypeUrlData<TypeImageData>;
+export type TypeImageUrlData = TypeUrlData<TypeImageFileData>;
 export type TypeXmlValUrlData = TypeUrlData<{ value: string }>;
 
 /*************************** utils ***************************/

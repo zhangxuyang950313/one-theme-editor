@@ -1,10 +1,10 @@
 import { TypeProjectDataDoc } from "src/types/project";
-import { TypePageConfig, TypeResourceConfig } from "src/types/resource.config";
-import { TypeScenarioConfig } from "src/types/scenario.config";
+import { TypePageConfig, TypeResourceConfig } from "src/types/config.resource";
+import { TypeScenarioConfig } from "src/types/config.scenario";
 import ResourceConfigData from "src/data/ResourceConfig";
 import ProjectData from "src/data/ProjectData";
 import ScenarioConfig from "src/data/ScenarioConfig";
-import { TypeFileData } from "src/types/resource.page";
+import { TypeFileData } from "src/types/file-data";
 import { ACTION_TYPE, TypeEditorActions } from "./action";
 import { updateState } from "@/store/utils";
 

@@ -5,7 +5,7 @@ import {
   TypeModuleConfig,
   TypePageOption,
   TypePageConfig
-} from "../types/resource.config";
+} from "../types/config.resource";
 import {
   TypeResourceDefinition,
   TypeLayoutData,
@@ -20,11 +20,13 @@ import {
   TypeBooleanBlock,
   TypeXmlItem,
   TypeValueBlock,
-  TypeXmlValueItem,
+  TypeXmlValueItem
+} from "../types/config.page";
+import {
   TypeFileData,
   TypeImageFileData,
   TypeXmlFileData
-} from "../types/resource.page";
+} from "../types/file-data";
 import { TypeUiVersion } from "../types/project";
 import {
   ALIGN_VALUE,
@@ -48,17 +50,21 @@ export class SourceData extends AbstractDataModel<TypeSourceData> {
 
 export class ImageFileData extends AbstractDataModel<TypeImageFileData> {
   protected data: TypeImageFileData = {
-    fileType: "",
+    filename: "",
+    filetype: "",
     width: 0,
     height: 0,
     size: 0,
     is9patch: false
   };
+  static get default(): TypeImageFileData {
+    return new ImageFileData().create();
+  }
 }
 
 export class XmlFileData extends AbstractDataModel<TypeXmlFileData> {
   protected data: TypeXmlFileData = {
-    fileType: "",
+    filetype: "application/xml",
     size: 0,
     element: XMLNodeElement.createEmptyNode().getElement(),
     valueMapper: {}
@@ -70,7 +76,7 @@ export class XmlFileData extends AbstractDataModel<TypeXmlFileData> {
 
 export class FileData extends AbstractDataModel<TypeFileData> {
   protected data: TypeFileData = {
-    fileType: "",
+    filetype: "",
     size: 0
   };
 
@@ -123,7 +129,6 @@ export class XmlBlocker extends AbstractDataModel<TypeValueBlock> {
     tag: RESOURCE_TAG.String,
     key: "",
     name: "",
-    format: "",
     items: []
   };
 }
@@ -142,7 +147,6 @@ export class StringBlock extends AbstractDataModel<TypeStringBlock> {
     tag: RESOURCE_TAG.String,
     key: "",
     name: "",
-    format: "",
     items: []
   };
 }
@@ -152,7 +156,6 @@ export class NumberBlock extends AbstractDataModel<TypeNumberBlock> {
     tag: RESOURCE_TAG.Number,
     key: "",
     name: "",
-    format: "",
     items: []
   };
 }
@@ -162,7 +165,6 @@ export class BooleanBlock extends AbstractDataModel<TypeBooleanBlock> {
     tag: RESOURCE_TAG.Boolean,
     key: "",
     name: "",
-    format: "",
     items: []
   };
 }

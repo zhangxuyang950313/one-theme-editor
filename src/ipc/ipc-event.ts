@@ -31,7 +31,7 @@ enum IPC_EVENT {
   // 监听文件
   $startWatchDir = "$watchDirFiles",
   $fileChange = "$fileChange",
-  $getWatcherWatched = "$getWatcherWatched",
+  $getWatchedMapper = "$getWatchedMapper",
   $closeWatcher = "$closeWatcher",
   $closeAllWatcher = "$closeAllWatcher",
 

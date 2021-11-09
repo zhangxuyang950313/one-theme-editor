@@ -1,6 +1,6 @@
 import fse from "fs-extra";
 import { FileData } from "src/data/ResourceConfig";
-import { TypeFileData } from "src/types/resource.page";
+import { TypeFileData } from "src/types/file-data";
 
 type TypeGetFileMethod = (file: string) => TypeFileData;
 
@@ -28,7 +28,7 @@ export default class FileCache {
 
     // 获取 fileData
     const fileData = this.getFileMethod(file);
-    switch (fileData.fileType) {
+    switch (fileData.filetype) {
       case "image/webp":
       case "image/apng":
       case "image/png":
