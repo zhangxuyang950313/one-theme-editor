@@ -24,9 +24,7 @@ export default class FileDataCache {
     const { mtime } = fse.statSync(file);
     const cache = this.fileDataMap.get(file);
     if (cache && cache.mtime >= mtime) {
-      LogUtil.cache("fileData");
-      console.log(file);
-      // console.log(cache.data);
+      LogUtil.cache("fileData", file);
       return cache.data;
     }
 

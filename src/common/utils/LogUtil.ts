@@ -34,10 +34,10 @@ export default class LogUtil {
     );
   }
 
-  static cache(content: unknown): void {
+  static cache(title: string, content: unknown): void {
     if (!content) return;
     console.log(
-      `%c[cache]%c${content}%c`,
+      `%c[cache]${title}%c${content}%c`,
       "background: #ff9a00; padding: 1px 5px; border-radius: 3px 0 0 3px;  color: #fff",
       "background: #35495e; padding: 1px 5px; border-radius: 0 3px 3px 0;  color: #fff",
       "background: transparent"

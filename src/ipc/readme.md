@@ -25,8 +25,9 @@ generateIpcRendererSync<S, R>("event")("S 类型参数"); // 同步返回 R 类�
 
 #### 调用
 
-在 preload 中预加载 Object.assign(window, { $server }) 在渲染进程直接调用
+在 preload 中预加载 Object.assign(window, { $one }) 在渲染进程直接调用
 
 ```ts
 window.$one.$server.xxx();
+window.$one.$invoker.xxx();
 ```

@@ -138,8 +138,7 @@ export function usePageConfigList(
       // 使用缓存
       const configCache = pageConfigMap.get(page.src);
       if (configCache) {
-        LogUtil.cache("pageConfig");
-        console.log(page.src);
+        LogUtil.cache("pageConfig", page.src);
         return configCache;
       }
       // 服务获取

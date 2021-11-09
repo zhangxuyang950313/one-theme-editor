@@ -49,10 +49,6 @@ const PathUtil: TypePathCollection = {
   get PACK_TEMPORARY(): string {
     return path.join(this.APP_DATA, "pack");
   },
-  // 扩展数据存储
-  get EXTRA_DB(): string {
-    return path.resolve(this.APP_DATA, "extra.nedb");
-  },
   // 工程列表数据
   get PROJECTS_DB(): string {
     return path.resolve(this.APP_DATA, "projects.nedb");

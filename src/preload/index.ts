@@ -12,7 +12,7 @@ Object.defineProperty(global, "$one", {
       // 注册跨进程响应式数据
       $reactiveState: reactiveState,
       $path: PathUtil
-    },
+    } as typeof $one,
     {
       // 禁止外部更改
       set() {
