@@ -40,4 +40,4 @@ class IpcInvoker {
     }
   };
 }
-export default new IpcInvoker();
+export default Object.freeze(new IpcInvoker());

@@ -26,7 +26,7 @@ const config: webpack.ConfigurationFactory = (env, args) => {
     output: {
       // 输出目录: release.main
       path: outputDir.main,
-      filename: isDev ? "[name].js" : "[name].[contenthash:8].js",
+      filename: "[name].js",
       chunkFilename: isDev ? "[id].chunk.js" : "[id].[contenthash:8].chunk.js"
     },
     externals: {

@@ -7,7 +7,7 @@ import { TypePathCollection } from "src/types/config.extra";
 // 区分主进程和渲染进程
 const $app = !!ipcRenderer ? remote.app : app;
 
-const pathUtil: TypePathCollection = {
+const PathUtil: TypePathCollection = {
   ELECTRON_LOCAL: $app.getLocale(),
   ELECTRON_TEMP: $app.getPath("temp"),
   ELECTRON_HOME: $app.getPath("home"),
@@ -19,13 +19,27 @@ const pathUtil: TypePathCollection = {
   ELECTRON_EXE: $app.getPath("exe"),
   ELECTRON_LOGS: $app.getPath("logs"),
   ELECTRON_APP_PATH: $app.getAppPath(),
+  // 纠正打包后和测试环境根路径
+  get MAIN_PATH(): string {
+    return path.join(
+      this.ELECTRON_APP_PATH,
+      $app.isPackaged ? "release.main" : ""
+    );
+  },
   // 软件数据
   get APP_DATA(): string {
-    return path.resolve(this.ELECTRON_APP_PATH, "../appData");
+    return path.resolve(this.ELECTRON_APP_PATH, "../app.data");
+  },
+  // 配置资源目录
+  get RESOURCE_DIR(): string {
+    return path.resolve(
+      this.APP_DATA,
+      $app.isPackaged ? "../app.resource" : "../resource"
+    );
   },
   // 静态资源目录
   get CLIENT_STATIC(): string {
-    return path.resolve(this.ELECTRON_APP_PATH, "../static");
+    return path.resolve(this.MAIN_PATH, "../static");
   },
   // 用户缓存
   get CLIENT_CACHE(): string {
@@ -36,19 +50,16 @@ const pathUtil: TypePathCollection = {
     return path.join(this.APP_DATA, "pack");
   },
   // 扩展数据存储
-  get EXTRA_DATA_DB(): string {
-    return path.resolve(this.APP_DATA, "extra-data.nedb");
+  get EXTRA_DB(): string {
+    return path.resolve(this.APP_DATA, "extra.nedb");
   },
   // 工程列表数据
   get PROJECTS_DB(): string {
     return path.resolve(this.APP_DATA, "projects.nedb");
   },
+  // 缩略图
   get PROJECT_THUMBNAIL_DIR(): string {
     return path.resolve(this.APP_DATA, "thumbnail");
-  },
-  // 资源目录
-  get RESOURCE_DIR(): string {
-    return path.resolve(this.CLIENT_STATIC, "resource");
   },
   // 静态图片素材
   get ASSETS_DIR(): string {
@@ -88,25 +99,25 @@ const pathUtil: TypePathCollection = {
   }
 } as const;
 
-export default pathUtil;
+export default Object.freeze(PathUtil);
 
 export function resolveResourceConfigPath(relative: string): string {
-  return path.join(pathUtil.RESOURCE_CONFIG_DIR, relative);
+  return path.join(PathUtil.RESOURCE_CONFIG_DIR, relative);
 }
 
 export function resolveResourcePath(relative: string): string {
-  return path.join($reactiveState.get("resourcePath"), relative);
+  return path.join($one.$reactiveState.get("resourcePath"), relative);
 }
 
 export function resolveProjectPath(relative: string): string {
-  return path.join($reactiveState.get("projectPath"), relative);
+  return path.join($one.$reactiveState.get("projectPath"), relative);
 }
 
 export function getSCDescriptionByNamespace(namespace: string): string {
-  return path.join(pathUtil.RESOURCE_CONFIG_DIR, namespace, "description.xml");
+  return path.join(PathUtil.RESOURCE_CONFIG_DIR, namespace, "description.xml");
 }
 
-fse.ensureDirSync(pathUtil.APP_DATA);
-fse.ensureDirSync(pathUtil.PACK_TEMPORARY);
-fse.ensureDirSync(pathUtil.CLIENT_CACHE);
-fse.ensureDirSync(pathUtil.PROJECT_THUMBNAIL_DIR);
+fse.ensureDirSync(PathUtil.APP_DATA);
+fse.ensureDirSync(PathUtil.PACK_TEMPORARY);
+fse.ensureDirSync(PathUtil.CLIENT_CACHE);
+fse.ensureDirSync(PathUtil.PROJECT_THUMBNAIL_DIR);

@@ -29,12 +29,14 @@ const ProjectList: React.FC<{ list: TypeProjectDataDoc[] }> = props => {
                     className="project-card"
                     key={key}
                     onClick={async () => {
-                      await window.$server.openProjectEditorWindow(item.uuid);
+                      await window.$one.$server.openProjectEditorWindow(
+                        item.uuid
+                      );
                       remote.getCurrentWindow().close();
                     }}
                   >
                     <ProjectDisplay
-                      image={`preview://${item.uuid}`}
+                      image={`thumbnail://${item.uuid}`}
                       name={item.description.name}
                     />
                   </div>

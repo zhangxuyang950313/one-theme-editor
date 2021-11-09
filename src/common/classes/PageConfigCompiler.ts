@@ -26,7 +26,7 @@ import {
   HEX_FORMAT
 } from "src/common/enums/index";
 import XMLNodeElement from "src/common/classes/XMLNodeElement";
-import pathUtil from "src/common/utils/pathUtil";
+import PathUtil from "src/common/utils/PathUtil";
 import RegexpUtil from "src/common/utils/RegexpUtil";
 import TempStringUtil from "src/common/utils/TempStringUtil";
 import { TypeImageFileData, TypeFileData } from "src/types/file-data";
@@ -57,7 +57,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
   private xmlValueItemCache: Map<string, TypeXmlValueItem>;
   constructor(data: { namespace: string; config: string }) {
     const file = path.join(
-      pathUtil.RESOURCE_CONFIG_DIR,
+      PathUtil.RESOURCE_CONFIG_DIR,
       data.namespace,
       data.config
     );
@@ -65,7 +65,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
     this.configFile = file;
     this.pageNamespace = path.dirname(data.config);
     this.pageConfig = path.normalize(data.config);
-    this.resourceRoot = path.join(pathUtil.RESOURCE_CONFIG_DIR, data.namespace);
+    this.resourceRoot = path.join(PathUtil.RESOURCE_CONFIG_DIR, data.namespace);
     this.sourceKeyValCache = new Map();
     this.sourceDataCache = new Map();
     this.fileDataCache = new Map();
@@ -102,7 +102,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
   }
 
   private resolveProjectPath(pathname: string): string {
-    return path.join($reactiveState.get("projectData").root, pathname);
+    return path.join($one.$reactiveState.get("projectData").root, pathname);
   }
 
   // 相对于当前页面目录的路径转为正确的绝对路径
@@ -161,7 +161,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
   // 处理当前页面资源的相对路径
   private relativeResourcePath(pathname: string): string {
     const relative = path.relative(
-      pathUtil.RESOURCE_CONFIG_DIR,
+      PathUtil.RESOURCE_CONFIG_DIR,
       path.dirname(this.configFile)
     );
     return path.join(relative, pathname);

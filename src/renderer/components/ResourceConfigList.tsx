@@ -2,6 +2,7 @@ import path from "path";
 import React from "react";
 import styled from "styled-components";
 import { Descriptions, Empty } from "@arco-design/web-react";
+import PathUtil from "src/common/utils/PathUtil";
 import { TypeResourceConfig } from "src/types/config.resource";
 import { PreloadImage } from "./ImageCollection";
 
@@ -13,8 +14,7 @@ export const ResourceConfigCard: React.FC<
 > = props => {
   const { resourceConfig } = props;
   const { namespace, preview } = resourceConfig;
-  const resourceDir =
-    window.$electronStore.config.get("pathConfig").RESOURCE_CONFIG_DIR;
+  const resourceDir = PathUtil.RESOURCE_CONFIG_DIR;
 
   return (
     <StyleResourceConfigCard {...props}>

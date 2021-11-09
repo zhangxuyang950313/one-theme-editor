@@ -14,7 +14,7 @@ import ResourceConfigData, {
 } from "src/data/ResourceConfig";
 import { TypeUiVersion } from "src/types/project";
 import { ELEMENT_TAG } from "src/common/enums";
-import pathUtil from "src/common/utils/pathUtil";
+import PathUtil from "src/common/utils/PathUtil";
 import PageConfigCompiler from "./PageConfigCompiler";
 import XMLNodeBase from "./XMLNodeElement";
 import XmlCompiler from "./XmlCompiler";
@@ -29,9 +29,9 @@ export default class ResourceConfigCompiler extends XmlCompiler {
   // xiaomi/miui12
   private namespace: string;
   constructor(pathname: string) {
-    super(path.join(pathUtil.RESOURCE_CONFIG_DIR, pathname));
+    super(path.join(PathUtil.RESOURCE_CONFIG_DIR, pathname));
     this.namespace = path.relative(
-      pathUtil.RESOURCE_CONFIG_DIR,
+      PathUtil.RESOURCE_CONFIG_DIR,
       path.dirname(this.getDescFile())
     );
   }

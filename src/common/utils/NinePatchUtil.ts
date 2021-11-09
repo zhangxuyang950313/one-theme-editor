@@ -2,7 +2,7 @@ import os from "os";
 import path from "path";
 import childProcess from "child_process";
 import fse from "fs-extra";
-import pathUtil from "src/common/utils/pathUtil";
+import PathUtil from "src/common/utils/PathUtil";
 
 type TypeRange = readonly [number, number];
 type TypeNinePatchData = {
@@ -186,7 +186,7 @@ export async function compactNinePatch(
   fromDir: string,
   toDir: string
 ): Promise<void> {
-  const { AAPT_TOOL } = pathUtil;
+  const { AAPT_TOOL } = PathUtil;
   if (!AAPT_TOOL) {
     throw new Error(`未知系统类型：${os.type()}`);
   }

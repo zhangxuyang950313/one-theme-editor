@@ -16,8 +16,13 @@ import {
 import { FileData, ImageFileData, XmlFileData } from "src/data/ResourceConfig";
 import XmlCompiler from "src/common/classes/XmlCompiler";
 import XmlCompilerExtra from "src/common/classes/XmlCompilerExtra";
+import { app, ipcRenderer, remote } from "electron";
 
 export const isDev = process.env.NODE_ENV !== "production";
+
+export const $app = !!ipcRenderer ? remote.app : app;
+
+export const isPackaged = $app.isPackaged;
 
 export const base64Regex = /^data:image\/\w+;base64,/;
 

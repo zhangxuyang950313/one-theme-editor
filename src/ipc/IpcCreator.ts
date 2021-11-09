@@ -1,5 +1,4 @@
 import { ipcMain, ipcRenderer } from "electron";
-import { isDev } from "../common/utils/index";
 import IPC_EVENT from "./ipc-event";
 
 // type TypeCallbackReply<T> = {
@@ -91,13 +90,13 @@ export default class ipcCreator {
     });
     return (data?: Params): Result => {
       const result = ipcRenderer.sendSync(params.event, data);
-      if (isDev) {
-        console.log("---------ipc---------");
-        console.log("sync", params.event);
-        console.log("params", data);
-        console.log("result", result);
-        console.log("---------------------");
-      }
+      // if (isDev) {
+      console.log("---------ipc---------");
+      console.log("sync", params.event);
+      console.log("params", data);
+      console.log("result", result);
+      console.log("---------------------");
+      // }
       return result;
     };
   }
@@ -125,13 +124,13 @@ export default class ipcCreator {
     });
     return async (data: Params): Promise<Result> => {
       const result = await ipcRenderer.invoke(params.event, data);
-      if (isDev) {
-        console.log("---------ipc---------");
-        console.log("async", params.event);
-        console.log("params", data);
-        console.log("result", result);
-        console.log("---------------------");
-      }
+      // if (isDev) {
+      console.log("---------ipc---------");
+      console.log("async", params.event);
+      console.log("params", data);
+      console.log("result", result);
+      console.log("---------------------");
+      // }
       if (result.status === "failed") {
         throw new Error(result.data);
       }
@@ -153,13 +152,13 @@ export default class ipcCreator {
     });
     return (data: Params, callback: (x: CP) => void) => {
       ipcRenderer.on(params.event, ($event, $data) => {
-        if (isDev) {
-          console.log("---------ipc---------");
-          console.log("callback", params.event);
-          console.log("params", data);
-          console.log("result", $data);
-          console.log("---------------------");
-        }
+        // if (isDev) {
+        console.log("---------ipc---------");
+        console.log("callback", params.event);
+        console.log("params", data);
+        console.log("result", $data);
+        console.log("---------------------");
+        // }
         callback($data);
       });
       ipcRenderer.send(params.event, data);

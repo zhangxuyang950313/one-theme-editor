@@ -42,7 +42,7 @@ const Root: React.FC = props => {
     document.body.setAttribute("arco-theme", "dark");
   }, []);
   useEffect(() => {
-    console.log(logSymbols.success, `主进程id ${window.$server.getPID()}`);
+    console.log(logSymbols.success, `主进程id ${window.$one.$server.getPID()}`);
     console.log(logSymbols.success, `渲染进程启动 ${process.pid}`);
     console.log("process.versions.electron", process.versions.electron); // electron 版本
     console.log("process.versions.modules", process.versions.modules); // ABI版本

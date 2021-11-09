@@ -1,5 +1,4 @@
 import { app, BrowserWindow, ipcMain, protocol } from "electron";
-import reactiveState from "src/common/singletons/reactiveState";
 import ipcController from "src/ipc/ipcController";
 import { createWindow } from "./windowManager";
 import { moveWindowToCenter, saveCurrentDisplayCenter } from "./utils";
@@ -44,9 +43,5 @@ app.on("ready", async () => {
   registerProtocol();
   // 注册 ipc 服务
   ipcController.registerIpcServer();
-  // 注册跨进程响应式数据
-  Object.assign(global, {
-    $reactiveState: reactiveState
-  });
   await createWindow.projectManager();
 });

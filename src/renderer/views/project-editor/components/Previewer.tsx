@@ -229,7 +229,7 @@ const Previewer: React.FC<{
                 ) : (
                   <DynamicBothSourceImage
                     key={k}
-                    id={`preview:${src}`}
+                    id={`thumbnail:${src}`}
                     data-dash={props.useDash}
                     data-click={props.canClick}
                     className="image"

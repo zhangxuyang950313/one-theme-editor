@@ -1,6 +1,6 @@
 import path from "path";
 import fse from "fs-extra";
-import pathUtil from "src/common/utils/pathUtil";
+import PathUtil from "src/common/utils/PathUtil";
 import XmlCompiler from "src/common/classes/XmlCompiler";
 import XMLNodeElement from "src/common/classes/XMLNodeElement";
 import { TypeWriteXmlTempPayload } from "src/types/request";
@@ -13,10 +13,10 @@ class XmlTemplateUtil {
   static async writeXmlTemplate(
     data: TypeWriteXmlTempPayload
   ): Promise<Record<string, string>> {
-    const project = $reactiveState.get("projectData");
+    const project = $one.$reactiveState.get("projectData");
     const { tag, attributes, value, src } = data;
     const resourceXmlFile = path.join(
-      pathUtil.RESOURCE_CONFIG_DIR,
+      PathUtil.RESOURCE_CONFIG_DIR,
       path.dirname(project.resourceSrc),
       src
     );

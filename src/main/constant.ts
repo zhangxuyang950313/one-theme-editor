@@ -1,13 +1,12 @@
 import { URL } from "url";
 import path from "path";
 import { app } from "electron";
+import { isDev } from "src/common/utils";
 import { WDS_SERVER_HOST, WDS_SERVER_PORT } from "../../webpack/constant";
 
 function resolvePath(src: string) {
-  return path.join(app.getAppPath(), "..", src);
+  return path.join(app.getAppPath(), isDev ? ".." : "", src);
 }
-
-export const isDev = process.env.NODE_ENV !== "production";
 
 export const devtoolsPath = path.resolve(
   process.cwd(),

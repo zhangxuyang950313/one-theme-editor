@@ -16,7 +16,7 @@ import ScenarioConfig, {
   PackageConfig,
   FileTemplate
 } from "src/data/ScenarioConfig";
-import pathUtil from "src/common/utils/pathUtil";
+import PathUtil from "src/common/utils/PathUtil";
 import ResourceConfigCompiler from "./ResourceConfigCompiler";
 import XmlCompilerExtra from "./XmlCompilerExtra";
 import XmlCompiler from "./XmlCompiler";
@@ -25,7 +25,7 @@ import XmlCompiler from "./XmlCompiler";
 export default class ScenarioConfigCompiler extends XmlCompilerExtra {
   // 从文件创建实例
   static from(src: string): ScenarioConfigCompiler {
-    const file = path.join(pathUtil.RESOURCE_CONFIG_DIR, src);
+    const file = path.join(PathUtil.RESOURCE_CONFIG_DIR, src);
     const element = new XmlCompiler(file).getElement();
     return new ScenarioConfigCompiler(element);
   }
@@ -119,7 +119,7 @@ export default class ScenarioConfigCompiler extends XmlCompilerExtra {
       .getChildrenNodesByTagname(ELEMENT_TAG.ResourceConfig)
       .flatMap(node => {
         const src = node.getAttributeOf("src");
-        return fse.pathExistsSync(path.join(pathUtil.RESOURCE_CONFIG_DIR, src))
+        return fse.pathExistsSync(path.join(PathUtil.RESOURCE_CONFIG_DIR, src))
           ? [src]
           : [];
       });

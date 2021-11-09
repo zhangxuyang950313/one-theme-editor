@@ -3,7 +3,7 @@ import glob from "glob";
 import fse from "fs-extra";
 import JsZip from "jszip";
 import micromatch from "micromatch";
-import pathUtil from "src/common/utils/pathUtil";
+import PathUtil from "src/common/utils/PathUtil";
 import { PACK_TYPE } from "src/common/enums";
 import { asyncQueue } from "src/common/utils";
 import { TypePackConfig } from "src/types/config.scenario";
@@ -156,7 +156,7 @@ export class PackUtil {
    */
   async pack(outputFile: string): Promise<string[]> {
     const temporaryPath = path.join(
-      pathUtil.PACK_TEMPORARY,
+      PathUtil.PACK_TEMPORARY,
       path.basename(this.packDir)
     );
     this.emitProcess({ msg: "工程目录: ", data: this.packDir });

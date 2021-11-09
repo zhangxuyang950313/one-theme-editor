@@ -29,7 +29,7 @@ import XmlTemplateUtil from "src/common/utils/XmlTemplateUtil";
 import { getFileData } from "src/common/utils";
 import { TypeFileData } from "src/types/file-data";
 import PackageUtil from "src/common/utils/PackageUtil";
-import pathUtil from "src/common/utils/pathUtil";
+import PathUtil from "src/common/utils/PathUtil";
 import dirWatcher from "main/singletons/dirWatcher";
 import fileDataCache from "main/singletons/fileCache";
 import IPC_EVENT from "./ipc-event";
@@ -114,7 +114,7 @@ class IpcController extends ipcCreator {
         ).getPreviewAbsFile();
         if (fse.existsSync(preview)) {
           const target = path.join(
-            pathUtil.PROJECT_THUMBNAIL_DIR,
+            PathUtil.PROJECT_THUMBNAIL_DIR,
             project.uuid
           );
           fse.copyFile(preview, target);
@@ -145,7 +145,7 @@ class IpcController extends ipcCreator {
           const preview = ResourceConfigCompiler.from(
             item.resourceSrc
           ).getPreviewAbsFile();
-          const th = path.join(pathUtil.PROJECT_THUMBNAIL_DIR, item.uuid);
+          const th = path.join(PathUtil.PROJECT_THUMBNAIL_DIR, item.uuid);
           if (!fse.existsSync(th) && fse.existsSync(preview)) {
             fse.copySync(preview, th);
           }
@@ -260,4 +260,4 @@ class IpcController extends ipcCreator {
   // })
 }
 
-export default new IpcController();
+export default Object.freeze(new IpcController());

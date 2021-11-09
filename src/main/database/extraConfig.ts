@@ -1,5 +1,5 @@
 import logSymbols from "log-symbols";
-import pathUtil from "src/common/utils/pathUtil";
+import PathUtil from "src/common/utils/PathUtil";
 import PathCollection from "src/data/PathCollection";
 import {
   TypePathCollection,
@@ -11,8 +11,8 @@ import { createNedb } from "src/common/utils/databaseUtil";
 import ServerConfig from "src/data/ServerConfig";
 
 // 频繁修改工程数据，常驻内存
-console.debug(logSymbols.info, "扩展数据库文件：", pathUtil.EXTRA_DATA_DB);
-const extraData = createNedb(pathUtil.EXTRA_DATA_DB, { timestampData: false });
+console.debug(logSymbols.info, "扩展数据库文件：", PathUtil.EXTRA_DB);
+const extraData = createNedb(PathUtil.EXTRA_DB, { timestampData: false });
 
 // 获取路径配置数据
 export async function getPathConfig(): Promise<TypePathCollection> {

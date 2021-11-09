@@ -17,13 +17,9 @@ const defaultState: TypeStore = {
   screenCenter: {}
 };
 
-const electronStoreConfig = new ElectronStore<TypeStore>({ name: "config" });
-
-// 若 key 不存在给个默认值
-for (const key in defaultState) {
-  if (!defaultState[key as keyof TypeStore]) {
-    electronStoreConfig.set(key, defaultState[key as keyof TypeStore]);
-  }
-}
+const electronStoreConfig = new ElectronStore<TypeStore>({
+  name: "config",
+  defaults: defaultState
+});
 
 export default electronStoreConfig;

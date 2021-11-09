@@ -6,13 +6,19 @@ const buildOptions: Configuration =  {
   extends: null,
   compression: "store",
   asar: false,
-  // extraResources: [{ from: "static", to: "app/static" }],
+  directories: {
+    app: ".",
+    output: "./build",
+    buildResources: "./static"
+  },
+  extraResources: [{ from: "resource", to: "app.resource" }],
   extraMetadata: { main: "release.main/index.js" },
   files: [
     "release.renderer/**/*", 
     "release.main/**/*", 
     "static/**/*"
   ],
+  // asarUnpack: ["static/resource/*/**"],
   // mac: {
   //   target: "dmg",
   //   icon: "icons/icon.png"
@@ -33,11 +39,6 @@ const buildOptions: Configuration =  {
   //   target: ["AppImage", "deb"],
   //   icon: "icons/icon.png"
   // },
-  directories: {
-    app: ".",
-    output: "./build",
-    buildResources: "./static"
-  },
   /**
    * 这个nsis的配置指的是安装过程的配置，其实还是很重要的
    * 如果不配置nsis那么应用程序就会自动的安装在C盘。
@@ -50,7 +51,7 @@ const buildOptions: Configuration =  {
     menuCategory: true,
     createDesktopShortcut: true, // 创建桌面图标
     createStartMenuShortcut: true, // 创建开始菜单图标
-    shortcutName: "" // 图标名称
+    shortcutName: "one" // 图标名称
     // include: "build/script/installer.nsh", // 包含的自定义nsis脚本 这个对于构建需求严格得安装过程相当有用。
     // script: "build/script/installer.nsh", // NSIS脚本的路径，用于自定义安装程序。 默认为build / installer.nsi
   }

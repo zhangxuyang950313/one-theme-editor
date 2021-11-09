@@ -330,7 +330,7 @@ const FileFiller: React.FC<{ data: TypeFileItem }> = ({ data }) => {
           })
           .then(result => {
             if (result.canceled) return;
-            window.$server.copyFile({
+            window.$one.$server.copyFile({
               from: result.filePaths[0],
               to: absoluteProjectFile
             });
@@ -338,20 +338,22 @@ const FileFiller: React.FC<{ data: TypeFileItem }> = ({ data }) => {
       }}
       // 删除
       onDelete={() => {
-        window.$server.deleteFile(absoluteProjectFile).catch((err: Error) => {
-          Notification.warning({ content: err.message });
-        });
+        window.$one.$server
+          .deleteFile(absoluteProjectFile)
+          .catch((err: Error) => {
+            Notification.warning({ content: err.message });
+          });
       }}
       // 恢复默认按钮
       onReset={() => {
-        window.$server.copyFile({
+        window.$one.$server.copyFile({
           from: absoluteResourceFile,
           to: absoluteProjectFile
         });
       }}
       // 小图点击使用默认
       onFloatClick={() => {
-        window.$server.copyFile({
+        window.$one.$server.copyFile({
           from: absoluteResourceFile,
           to: absoluteProjectFile
         });

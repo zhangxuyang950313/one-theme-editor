@@ -7,12 +7,12 @@ import {
 } from "src/types/project";
 import { createNedb } from "src/common/utils/databaseUtil";
 import ResourceConfigCompiler from "src/common/classes/ResourceConfigCompiler";
-import pathUtil from "src/common/utils/pathUtil";
+import PathUtil from "src/common/utils/PathUtil";
 import ERR_CODE from "src/common/enums/ErrorCode";
 
 // 频繁修改工程数据，常驻内存
-console.debug(logSymbols.info, "工程数据库：", pathUtil.PROJECTS_DB);
-const projectDB = createNedb(pathUtil.PROJECTS_DB);
+console.debug(logSymbols.info, "工程数据库：", PathUtil.PROJECTS_DB);
+const projectDB = createNedb(PathUtil.PROJECTS_DB);
 
 // 创建工程
 export async function createProject(

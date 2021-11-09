@@ -2,7 +2,7 @@ import path from "path";
 import fse from "fs-extra";
 import { useLayoutEffect, useState } from "react";
 import { Notification } from "@arco-design/web-react";
-import pathUtil from "src/common/utils/pathUtil";
+import PathUtil from "src/common/utils/PathUtil";
 import ProjectData from "src/data/ProjectData";
 import ResourceConfig, { FileData } from "src/data/ResourceConfig";
 import ScenarioConfig from "src/data/ScenarioConfig";
@@ -39,7 +39,7 @@ export function useLoadProject(uuid: string): {
   // 获取工程信息
   useLayoutEffect(() => {
     if (!uuid) return;
-    window.$server
+    window.$one.$server
       .findProjectQuery({ uuid })
       .then(setProjectData)
       .catch(err => {
@@ -50,13 +50,16 @@ export function useLoadProject(uuid: string): {
   // 更新一下时间
   useLayoutEffect(() => {
     if (!projectData.uuid) return;
-    window.$server.updateProject({ uuid: projectData.uuid, data: projectData });
+    window.$one.$server.updateProject({
+      uuid: projectData.uuid,
+      data: projectData
+    });
   }, [projectData.uuid]);
 
   // 获取资源配置
   useLayoutEffect(() => {
     if (!projectData.resourceSrc) return;
-    window.$server
+    window.$one.$server
       .getResourceConfig(projectData.resourceSrc)
       .then(setResourceConfig)
       .catch(err => {
@@ -67,7 +70,7 @@ export function useLoadProject(uuid: string): {
   // 获取场景配置
   useLayoutEffect(() => {
     if (!projectData.scenarioSrc) return;
-    window.$server
+    window.$one.$server
       .getScenarioConfig(projectData.scenarioSrc)
       .then(setScenarioConfig)
       .catch(err => {
@@ -78,11 +81,11 @@ export function useLoadProject(uuid: string): {
   // 设置进程间响应式数据
   useLayoutEffect(() => {
     if (!projectData.uuid) return;
-    window.$reactiveState.set("projectData", projectData);
-    window.$reactiveState.set("projectPath", projectData.root);
+    window.$one.$reactiveState.set("projectData", projectData);
+    window.$one.$reactiveState.set("projectPath", projectData.root);
     return () => {
-      window.$reactiveState.set("projectData", ProjectData.default);
-      window.$reactiveState.set("projectPath", "");
+      window.$one.$reactiveState.set("projectData", ProjectData.default);
+      window.$one.$reactiveState.set("projectPath", "");
     };
   }, [projectData.uuid]);
 
@@ -90,14 +93,14 @@ export function useLoadProject(uuid: string): {
   useLayoutEffect(() => {
     if (!resourceConfig) return;
     const resourcePath = path.join(
-      pathUtil.RESOURCE_CONFIG_DIR,
+      PathUtil.RESOURCE_CONFIG_DIR,
       resourceConfig.namespace
     );
-    window.$reactiveState.set("resourceConfig", resourceConfig);
-    window.$reactiveState.set("resourcePath", resourcePath);
+    window.$one.$reactiveState.set("resourceConfig", resourceConfig);
+    window.$one.$reactiveState.set("resourcePath", resourcePath);
     return () => {
-      window.$reactiveState.set("resourceConfig", ResourceConfig.default);
-      window.$reactiveState.set("resourcePath", "");
+      window.$one.$reactiveState.set("resourceConfig", ResourceConfig.default);
+      window.$one.$reactiveState.set("resourcePath", "");
     };
   }, [resourceConfig]);
 
@@ -138,7 +141,7 @@ export function usePageConfigList(
         return configCache;
       }
       // 服务获取
-      const data = await window.$server.getPageConfig({
+      const data = await window.$one.$server.getPageConfig({
         namespace,
         config: page.src
       });
@@ -153,7 +156,7 @@ export function usePageConfigList(
   return pageConfigList;
 }
 
-const fileDataCache = new FileDataCache(window.$server.getFileDataSync);
+const fileDataCache = new FileDataCache(window.$one.$server.getFileDataSync);
 
 type TypeListener = (
   evt: FILE_EVENT,
@@ -166,7 +169,7 @@ export function useSubscribeProjectFile(
   src: string | undefined,
   callback?: TypeListener
 ): void {
-  const projectRoot = window.$reactiveState.get("projectPath");
+  const projectRoot = window.$one.$reactiveState.get("projectPath");
   useLayoutEffect(() => {
     if (!src) return;
     const file = path.join(projectRoot, src);
@@ -181,7 +184,7 @@ export function useSubscribeProjectFile(
       }
     }
 
-    const removeListener = window.$invoker.useFilesChange(data => {
+    const removeListener = window.$one.$invoker.useFilesChange(data => {
       if (data.root !== projectRoot) return;
       if (data.src !== src) return;
       console.log(`file [${data.event}]:`, data);

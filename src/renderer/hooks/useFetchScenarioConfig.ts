@@ -20,7 +20,7 @@ export default function useFetchScenarioConfig(
   useEffect(() => {
     if (!scenarioSrc) return;
     setStatus(LOAD_STATUS.LOADING);
-    window.$server
+    window.$one.$server
       .getScenarioConfig(scenarioSrc)
       .then(data => {
         if (!data) throw new Error(ERR_CODE[3002]);

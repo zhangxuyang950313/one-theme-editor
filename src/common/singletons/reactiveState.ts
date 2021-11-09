@@ -4,7 +4,7 @@ import ProjectData from "src/data/ProjectData";
 import ScenarioConfig from "src/data/ScenarioConfig";
 import ProcessReactiveState from "src/common/classes/ProcessReactiveState";
 // import ResourceConfigCompiler from "src/common/classes/ResourceConfigCompiler";
-// import pathUtil from "src/common/utils/pathUtil";
+// import PathUtil from "src/common/utils/PathUtil";
 
 const reactiveState = new ProcessReactiveState({
   projectData: ProjectData.default,
@@ -29,7 +29,7 @@ const reactiveState = new ProcessReactiveState({
 //     if (obj.resourceConfig.namespace) {
 //       reactiveState.set(
 //         "resourcePath",
-//         path.join(pathUtil.RESOURCE_CONFIG_DIR, obj.resourceConfig.namespace)
+//         path.join(PathUtil.RESOURCE_CONFIG_DIR, obj.resourceConfig.namespace)
 //       );
 //     }
 //   }

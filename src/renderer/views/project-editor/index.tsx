@@ -115,7 +115,7 @@ const EditorFrame: React.FC = () => {
                 Message.info("未指定任何文件");
                 return;
               }
-              window.$server.packProject(
+              window.$one.$server.packProject(
                 {
                   packDir: root,
                   outputFile: result.filePath,

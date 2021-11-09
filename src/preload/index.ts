@@ -1,20 +1,25 @@
-import * as electronStore from "src/store/index";
 import ipcController from "src/ipc/ipcController";
 import ipcInvoker from "src/ipc/ipcInvoker";
 import reactiveState from "src/common/singletons/reactiveState";
+import PathUtil from "src/common/utils/PathUtil";
 
-// 注册 ipc 服务调用
-Object.assign(global, {
-  $server: ipcController,
-  $invoker: ipcInvoker
-});
-
-// 注册 electron store 实例
-Object.assign(global, {
-  $electronStore: electronStore
-});
-
-// 注册跨进程响应式数据
-Object.assign(global, {
-  $reactiveState: reactiveState
+Object.defineProperty(global, "$one", {
+  value: new Proxy(
+    {
+      // 注册 ipc 服务
+      $server: ipcController,
+      $invoker: ipcInvoker,
+      // 注册跨进程响应式数据
+      $reactiveState: reactiveState,
+      $path: PathUtil
+    },
+    {
+      // 禁止外部更改
+      set() {
+        return false;
+      }
+    }
+  ),
+  writable: false,
+  configurable: false
 });

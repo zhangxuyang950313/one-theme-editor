@@ -13,7 +13,7 @@ const ProjectDisplayTable: React.FC = () => {
   const [visible, visibleToggle] = useToggle(false);
 
   const fetchProjectList = useCallback(() => {
-    window.$server
+    window.$one.$server
       .findProjectListByQuery({ scenarioSrc: scenario.src })
       .then(setProjectList);
   }, [scenario.src]);
@@ -37,7 +37,7 @@ const ProjectDisplayTable: React.FC = () => {
         <Button
           type="primary"
           onClick={() => {
-            // window.$server.openCreateProjectWindow(scenarioConfig);
+            // window.$one.$server.openCreateProjectWindow(scenarioConfig);
             visibleToggle.setRight();
           }}
         >

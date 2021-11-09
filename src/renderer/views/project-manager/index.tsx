@@ -17,7 +17,7 @@ const ProjectManager: React.FC = () => {
 
   // 获取场景配置列表
   useEffect(() => {
-    window.$server
+    window.$one.$server
       .getScenarioOptionList()
       .then(setScenarioList)
       .catch(err => {

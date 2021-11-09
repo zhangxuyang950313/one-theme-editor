@@ -63,7 +63,7 @@ const ValueEditor: React.FC<{
 
 /**
  *
- * static/comment/5071634098731_.pic.jpg
+ * comment/5071634098731_.pic.jpg
  * @param props
  * @returns
  */
@@ -153,7 +153,7 @@ const StyleValueFillerItem = styled.div`
 `;
 
 /**
- * static/comment/5081634098844_.pic.jpg
+ * comment/5081634098844_.pic.jpg
  * @param props
  * @returns
  */
@@ -196,7 +196,7 @@ const ValueFiller: React.FC<{
             onChange={val => {
               if (value === val) return;
               // 写入 xml
-              window.$server.writeXmlTemplate({
+              window.$one.$server.writeXmlTemplate({
                 tag: valueItem.tag,
                 attributes: valueItem.attributes,
                 value: val,

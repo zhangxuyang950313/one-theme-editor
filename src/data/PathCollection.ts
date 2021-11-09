@@ -18,7 +18,7 @@ export default class PathCollection extends AbstractDataModel<TypePathCollection
     APP_DATA: "",
     CLIENT_STATIC: "",
     CLIENT_CACHE: "",
-    EXTRA_DATA_DB: "",
+    EXTRA_DB: "",
     PROJECTS_DB: "",
     PROJECT_THUMBNAIL_DIR: "",
     RESOURCE_DIR: "",

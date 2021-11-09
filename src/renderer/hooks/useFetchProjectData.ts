@@ -18,7 +18,7 @@ export default function useFetchProjectData(
 
   const [projectData, status, doFetch] = useCreatePromiseHook(async () => {
     try {
-      const project = await window.$server.findProjectQuery({ uuid });
+      const project = await window.$one.$server.findProjectQuery({ uuid });
       if (!project) throw new Error(ERR_CODE[2005]);
       console.log(`载入工程: ${uuid}`, project);
       // dispatch(ActionSetProjectData(project));

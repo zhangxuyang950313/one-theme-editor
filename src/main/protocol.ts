@@ -2,7 +2,8 @@ import path from "path";
 import { URL } from "url";
 import fse from "fs-extra";
 import { protocol, app, nativeImage, ResizeOptions } from "electron";
-import pathUtil from "src/common/utils/pathUtil";
+import PathUtil from "src/common/utils/PathUtil";
+import reactiveState from "src/common/singletons/reactiveState";
 import { getBufferAndFileType } from "../common/utils";
 
 async function getFileIconData(file: string) {
@@ -138,7 +139,7 @@ export default function registerProtocol(): void {
   protocol.registerBufferProtocol("resource", async (request, response) => {
     const data = await getFilePicResponseData(
       request.url,
-      $reactiveState.get("resourcePath")
+      reactiveState.get("resourcePath")
     );
     response(data);
   });
@@ -147,7 +148,7 @@ export default function registerProtocol(): void {
   protocol.registerBufferProtocol("project", async (request, response) => {
     const data = await getFilePicResponseData(
       request.url,
-      $reactiveState.get("projectPath")
+      reactiveState.get("projectPath")
     );
     response(data);
   });
@@ -156,18 +157,18 @@ export default function registerProtocol(): void {
   protocol.registerBufferProtocol("src", async (request, response) => {
     const data = await getFilePicResponseData(
       request.url,
-      $reactiveState.get("projectPath"),
-      $reactiveState.get("resourcePath")
+      reactiveState.get("projectPath"),
+      reactiveState.get("resourcePath")
     );
     response(data);
   });
 
-  protocol.registerBufferProtocol("preview", async (request, response) => {
-    let uuid = new URL(request.url).hostname;
-    uuid = decodeURI(uuid); // Needed in case URL contains spaces
+  protocol.registerBufferProtocol("thumbnail", async (request, response) => {
+    // let uuid = new URL(request.url).hostname;
+    // uuid = decodeURI(uuid); // Needed in case URL contains spaces
     const data = await getFilePicResponseData(
-      `local://${uuid}`,
-      pathUtil.PROJECT_THUMBNAIL_DIR
+      request.url,
+      PathUtil.PROJECT_THUMBNAIL_DIR
     );
     response(data);
   });

@@ -1,13 +1,13 @@
 import path from "path";
 import fse from "fs-extra";
 import React, { useState, useEffect } from "react";
-import pathUtil from "src/common/utils/pathUtil";
+import PathUtil from "src/common/utils/PathUtil";
 import { Form } from "@arco-design/web-react";
 import { TypeProjectInfo } from "src/types/project";
 import { TypeFileTempConfig } from "src/types/config.scenario";
 import { ProjectInput } from "@/components/Forms";
 
-const defaultPath = pathUtil.ELECTRON_DESKTOP;
+const defaultPath = PathUtil.ELECTRON_DESKTOP;
 
 const ProjectForm: React.FC<{
   projectInfoConfig: TypeFileTempConfig;

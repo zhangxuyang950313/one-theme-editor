@@ -1,8 +1,7 @@
 import fse from "fs-extra";
 import { ELEMENT_TAG } from "src/common/enums/index";
 import { TypeScenarioOption } from "src/types/config.scenario";
-import pathUtil from "src/common/utils/pathUtil";
-import ERR_CODE from "src/common/enums/ErrorCode";
+import PathUtil from "src/common/utils/PathUtil";
 import ScenarioOption from "src/data/ScenarioOption";
 import ScenarioConfigCompiler from "./ScenarioConfigCompiler";
 import XmlCompilerExtra from "./XmlCompilerExtra";
@@ -12,13 +11,13 @@ import XMLNodeElement from "./XMLNodeElement";
 export default class ScenarioOptionCompiler extends XmlCompilerExtra {
   // 默认配置路径
   static get def(): ScenarioOptionCompiler {
-    return ScenarioOptionCompiler.from(pathUtil.RESOURCE_CONFIG_FILE);
+    return ScenarioOptionCompiler.from(PathUtil.RESOURCE_CONFIG_FILE);
   }
 
   // 从文件创建实例
   static from(file: string): ScenarioOptionCompiler {
     if (!fse.existsSync(file)) {
-      throw new Error(ERR_CODE[4003]);
+      throw new Error(`场景配置文件不存在: ${file}`);
     }
     const element = new XmlCompiler(file).getElement();
     return new ScenarioOptionCompiler(element);

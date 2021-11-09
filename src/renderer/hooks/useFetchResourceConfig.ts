@@ -24,7 +24,7 @@ export default function useFetchResourceConfig(
   const [resourceConfig, status, doFetch] = useCreatePromiseHook(async () => {
     try {
       if (!resourceSrc) return;
-      const data = await window.$server.getResourceConfig(resourceSrc);
+      const data = await window.$one.$server.getResourceConfig(resourceSrc);
       if (!data) throw new Error(ERR_CODE[3002]);
       console.log(`加载资源配置: ${resourceSrc}`, data);
       // dispatch(ActionSetResourceConfig(data));

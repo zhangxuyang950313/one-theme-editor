@@ -19,7 +19,7 @@ import {
 } from "@arco-design/web-react";
 import { IconFolderAdd } from "@arco-design/web-react/icon";
 import { FILE_TEMPLATE_TYPE } from "src/common/enums";
-import pathUtil from "src/common/utils/pathUtil";
+import PathUtil from "src/common/utils/PathUtil";
 import { useToggle } from "ahooks";
 import { useScenarioSelected } from "../hooks";
 import TemplateList from "./TemplateLIst";
@@ -36,7 +36,7 @@ const initialValues = {
   version: "1.0.0"
 };
 
-const defaultPath = pathUtil.ELECTRON_DESKTOP;
+const defaultPath = PathUtil.ELECTRON_DESKTOP;
 
 // const closeCurrentWindow = (beforeClose?: () => boolean) => {
 //   if (beforeClose && beforeClose()) {
@@ -243,7 +243,7 @@ const CreateProject: React.FC<
             resourceConfig.namespace,
             resourceConfig.src
           );
-          return window.$server
+          return window.$one.$server
             .createProject({
               root: localPath,
               description: projectInfoRef.current,
@@ -254,7 +254,7 @@ const CreateProject: React.FC<
               console.log("创建工程：", data);
               onCreated(data);
               // closeCurrentWindow();
-              // window.$invoker.sendBroadcast.$projectCreated(data);
+              // window.$one.$invoker.sendBroadcast.$projectCreated(data);
             })
             .finally(() => {
               creatingStatus.setLeft();
