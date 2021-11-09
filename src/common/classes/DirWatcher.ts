@@ -1,17 +1,26 @@
 import path from "path";
 import { FSWatcher, WatchOptions } from "chokidar";
-import { FILE_EVENT } from "src/enum";
+import { FILE_EVENT } from "../enums";
 
 type TypeCallback = (event: FILE_EVENT, src: string) => void;
+type TypeWatchedRecord = Record<string, ReturnType<FSWatcher["getWatched"]>>;
 
+/**
+ * 目录监听器，单实例支持创建多个目录的监听
+ */
 class DirWatcher {
   private watcherMap = new Map<string, FSWatcher>();
   private callbackMap = new Map<string, TypeCallback>();
 
-  create(root: string, callback: TypeCallback, options?: WatchOptions) {
-    if (!path.isAbsolute(root)) return;
+  create(
+    root: string,
+    callback: TypeCallback,
+    options?: WatchOptions
+  ): FSWatcher | null {
+    if (!path.isAbsolute(root)) return null;
     this.callbackMap.set(root, callback);
-    if (this.watcherMap.has(root)) return;
+    const same = this.watcherMap.get(root);
+    if (same) return same;
     console.log("创建 watcher", root);
     const watcher = new FSWatcher({
       cwd: root,
@@ -37,6 +46,7 @@ class DirWatcher {
       .add("./**/*{.xml,.png,.9.png,.jpg,.jpeg,.webp}");
 
     this.watcherMap.set(root, watcher);
+    return watcher;
   }
 
   async closeWatcher(root: string): Promise<void> {
@@ -55,8 +65,8 @@ class DirWatcher {
     console.log("关闭所有 watcher");
   }
 
-  getWatchedMap() {
-    const result: Record<string, ReturnType<FSWatcher["getWatched"]>> = {};
+  getWatchedRecord(): TypeWatchedRecord {
+    const result: TypeWatchedRecord = {};
     this.watcherMap.forEach((watcher, root) => {
       result[root] = watcher.getWatched();
     });
@@ -64,4 +74,4 @@ class DirWatcher {
   }
 }
 
-export default new DirWatcher();
+export default DirWatcher;

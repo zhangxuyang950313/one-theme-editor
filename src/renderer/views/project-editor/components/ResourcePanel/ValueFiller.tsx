@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { IconClose } from "@arco-design/web-react/icon";
-import { HEX_FORMAT, RESOURCE_TAG } from "src/enum/index";
+import { HEX_FORMAT, RESOURCE_TAG } from "src/common/enums/index";
 import { TypeXmlItem, TypeXmlValueTags } from "src/types/config.page";
 import { TypeXmlFileData } from "src/types/file-data";
-import { xmlElementTextModify } from "src/common/xmlTemplate";
+import XmlTemplateUtil from "src/common/utils/XmlTemplateUtil";
 import { useSubscribeProjectFile } from "../../hooks";
 import ColorPicker from "./ColorPicker";
 import BooleanSelector from "./BooleanSelector";
@@ -91,7 +91,9 @@ const ValueFillerItem: React.FC<{
     <StyleValueFillerItem>
       <div className="info-wrapper">
         <div className="name">{comment}</div>
-        <div className="file">{xmlElementTextModify(valueTemplate, value)}</div>
+        <div className="file">
+          {XmlTemplateUtil.xmlElementTextModify(valueTemplate, value)}
+        </div>
         {/* <div className="file">{from}</div> */}
       </div>
       <div className="item">

@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import { LOAD_STATUS } from "src/enum";
+import { LOAD_STATUS } from "src/common/enums";
 import { TypeScenarioConfig } from "src/types/config.scenario";
 import ScenarioConfig from "src/data/ScenarioConfig";
-import ERR_CODE from "src/common/errorCode";
+import ERR_CODE from "src/common/enums/ErrorCode";
 // import { ActionSetScenarioConfig } from "@/store/editor/action";
 // import { useEditorDispatch } from "@/store/editor";
 

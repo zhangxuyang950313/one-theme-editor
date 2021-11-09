@@ -1,5 +1,5 @@
 import { ipcRenderer, IpcRendererEvent } from "electron";
-import { FILE_EVENT } from "src/enum";
+import { FILE_EVENT } from "src/common/enums";
 import { TypeProjectData } from "src/types/project";
 import { TypeFileData } from "src/types/file-data";
 import IPC_EVENT from "./ipc-event";

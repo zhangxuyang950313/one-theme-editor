@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FILE_EVENT } from "src/enum";
+import { FILE_EVENT } from "src/common/enums";
 import { FileData } from "src/data/ResourceConfig";
 import { TypeFileData } from "src/types/file-data";
 import { useSubscribeProjectFile } from "@/views/project-editor/hooks";

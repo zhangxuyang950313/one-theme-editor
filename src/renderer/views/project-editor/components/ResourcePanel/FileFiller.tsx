@@ -11,7 +11,7 @@ import {
 } from "@arco-design/web-react/icon";
 import { TypeFileItem } from "src/types/config.page";
 import { TypeFileData } from "src/types/file-data";
-import { FILE_EVENT } from "src/enum";
+import { FILE_EVENT } from "src/common/enums";
 import ImageDisplay from "./ImageDisplay";
 import InfoDisplay from "./InfoDisplay";
 import useProjectFile from "@/hooks/useProjectFile";

@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { HEX_FORMAT, RESOURCE_TAG } from "src/enum";
+import { HEX_FORMAT, RESOURCE_TAG } from "src/common/enums";
 import { TypeBlockCollection } from "src/types/config.page";
 import FileFiller from "./FileFiller";
 import ValueFiller from "./ValueFiller";

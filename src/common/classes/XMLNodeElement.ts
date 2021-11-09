@@ -1,5 +1,5 @@
 import { js2xml, Element, Attributes, Options } from "xml-js";
-import { ELEMENT_TYPE } from "src/enum/index";
+import { ELEMENT_TYPE } from "src/common/enums/index";
 
 const js2xmlOptions: Options.JS2XML = {
   spaces: 2,

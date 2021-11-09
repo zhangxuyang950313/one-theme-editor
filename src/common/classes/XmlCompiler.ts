@@ -1,6 +1,6 @@
 import path from "path";
 import fse from "fs-extra";
-import ERR_CODE from "src/common/errorCode";
+import ERR_CODE from "src/common/enums/ErrorCode";
 import { xml2js, Element, Options } from "xml-js";
 import XMLNodeElement from "./XMLNodeElement";
 

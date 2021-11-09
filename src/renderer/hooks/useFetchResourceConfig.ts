@@ -1,9 +1,9 @@
 import { Notification } from "@arco-design/web-react";
 import { useEffect } from "react";
-import { LOAD_STATUS } from "src/enum";
+import { LOAD_STATUS } from "src/common/enums";
 import { TypeResourceConfig } from "src/types/config.resource";
 import ResourceConfigData from "src/data/ResourceConfig";
-import ERR_CODE from "src/common/errorCode";
+import ERR_CODE from "src/common/enums/ErrorCode";
 import { useCreatePromiseHook } from "./index";
 // import { ActionSetResourceConfig } from "@/store/editor/action";
 // import { useEditorDispatch } from "@/store/editor";

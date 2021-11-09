@@ -7,7 +7,7 @@ import ProjectData from "src/data/ProjectData";
 import ResourceConfig, { FileData } from "src/data/ResourceConfig";
 import ScenarioConfig from "src/data/ScenarioConfig";
 import { asyncQueue } from "src/common/utils";
-import { FILE_EVENT } from "src/enum";
+import { FILE_EVENT } from "src/common/enums";
 import { TypeFileData } from "src/types/file-data";
 import { TypeProjectData } from "src/types/project";
 import {
@@ -16,7 +16,7 @@ import {
   TypeResourceConfig
 } from "src/types/config.resource";
 import { TypeScenarioConfig } from "src/types/config.scenario";
-import FileCache from "src/common/FileCache";
+import FileDataCache from "src/common/classes/FileDataCache";
 import { useEditorDispatch } from "./store";
 import {
   ActionSetProjectData,
@@ -153,7 +153,7 @@ export function usePageConfigList(
   return pageConfigList;
 }
 
-const fileDataCache = new FileCache(window.$server.getFileDataSync);
+const fileDataCache = new FileDataCache(window.$server.getFileDataSync);
 
 type TypeListener = (
   evt: FILE_EVENT,

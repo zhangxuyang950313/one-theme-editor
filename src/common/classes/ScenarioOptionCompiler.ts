@@ -1,12 +1,12 @@
 import fse from "fs-extra";
-import { ELEMENT_TAG } from "src/enum/index";
+import { ELEMENT_TAG } from "src/common/enums/index";
 import { TypeScenarioOption } from "src/types/config.scenario";
-import ScenarioConfigCompiler from "src/common/compiler/ScenarioConfig";
-import XmlCompilerExtra from "src/common/compiler/XmlCompilerExtra";
-import XmlCompiler from "src/common/compiler/XmlCompiler";
 import pathUtil from "src/common/utils/pathUtil";
-import ERR_CODE from "src/common/errorCode";
+import ERR_CODE from "src/common/enums/ErrorCode";
 import ScenarioOption from "src/data/ScenarioOption";
+import ScenarioConfigCompiler from "./ScenarioConfigCompiler";
+import XmlCompilerExtra from "./XmlCompilerExtra";
+import XmlCompiler from "./XmlCompiler";
 import XMLNodeElement from "./XMLNodeElement";
 
 export default class ScenarioOptionCompiler extends XmlCompilerExtra {

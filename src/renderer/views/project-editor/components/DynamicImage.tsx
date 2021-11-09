@@ -1,5 +1,5 @@
 import React, { useState, forwardRef } from "react";
-import { FILE_EVENT } from "src/enum";
+import { FILE_EVENT } from "src/common/enums";
 import { useSubscribeProjectFile } from "../hooks";
 import { LazyImage, PreloadImage } from "@/components/ImageCollection";
 

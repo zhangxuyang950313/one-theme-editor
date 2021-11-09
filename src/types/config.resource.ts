@@ -1,4 +1,4 @@
-import { HEX_FORMAT } from "src/enum";
+import { HEX_FORMAT } from "src/common/enums";
 import { TypeUiVersion } from "./project";
 import { TypeLayoutElement, TypeResourceDefinition } from "./config.page";
 

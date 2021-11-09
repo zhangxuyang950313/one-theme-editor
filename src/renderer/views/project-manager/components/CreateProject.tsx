@@ -18,7 +18,7 @@ import {
   DrawerProps
 } from "@arco-design/web-react";
 import { IconFolderAdd } from "@arco-design/web-react/icon";
-import { FILE_TEMPLATE_TYPE } from "src/enum";
+import { FILE_TEMPLATE_TYPE } from "src/common/enums";
 import pathUtil from "src/common/utils/pathUtil";
 import { useToggle } from "ahooks";
 import { useScenarioSelected } from "../hooks";

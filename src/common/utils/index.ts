@@ -5,7 +5,7 @@ import FileType, { FileTypeResult, MimeType } from "file-type";
 import mimeTypes from "mime-types";
 import imageSize from "image-size";
 import dirTree from "directory-tree";
-import ERR_CODE from "src/common/errorCode";
+import ERR_CODE from "src/common/enums/ErrorCode";
 import RegexpUtil from "src/common/utils/RegexpUtil";
 import {
   TypeFileData,
@@ -14,8 +14,8 @@ import {
   TypeXmlFileData
 } from "src/types/file-data";
 import { FileData, ImageFileData, XmlFileData } from "src/data/ResourceConfig";
-import XmlCompiler from "src/common/compiler/XmlCompiler";
-import XmlCompilerExtra from "src/common/compiler/XmlCompilerExtra";
+import XmlCompiler from "src/common/classes/XmlCompiler";
+import XmlCompilerExtra from "src/common/classes/XmlCompilerExtra";
 
 export const isDev = process.env.NODE_ENV !== "production";
 

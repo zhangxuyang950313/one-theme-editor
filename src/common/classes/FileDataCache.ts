@@ -4,7 +4,8 @@ import { TypeFileData } from "src/types/file-data";
 
 type TypeGetFileMethod = (file: string) => TypeFileData;
 
-export default class FileCache {
+// 文件数据缓存
+export default class FileDataCache {
   private fileDataMap = new Map<string, { mtime: Date; data: TypeFileData }>();
   private getFileMethod: TypeGetFileMethod;
   constructor(getFileMethod: TypeGetFileMethod) {

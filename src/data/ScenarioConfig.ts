@@ -5,7 +5,7 @@ import {
   TypeScenarioConfig,
   TypeScenarioOption
 } from "src/types/config.scenario";
-import { FILE_TEMPLATE_TYPE } from "src/enum";
+import { FILE_TEMPLATE_TYPE } from "src/common/enums";
 import { AbstractDataModel } from "./AbstractDataModel";
 
 // 文件模板模板数据

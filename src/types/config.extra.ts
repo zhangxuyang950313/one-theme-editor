@@ -1,4 +1,4 @@
-import { EXTRA_DATA_TYPE } from "../enum/index";
+import { EXTRA_DATA_TYPE } from "../common/enums/index";
 import { TypeDatabase } from "../types/utils";
 
 export type TypePathCollection = Readonly<{

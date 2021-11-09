@@ -10,14 +10,14 @@ import {
   TypeResourceConfig,
   TypeResourceOption
 } from "src/types/config.resource";
-import { ELEMENT_TAG, PACK_TYPE } from "src/enum/index";
+import { ELEMENT_TAG, PACK_TYPE } from "src/common/enums/index";
 import ScenarioConfig, {
   ApplyConfig,
   PackageConfig,
   FileTemplate
 } from "src/data/ScenarioConfig";
-import ResourceConfigCompiler from "src/common/compiler/ResourceConfig";
 import pathUtil from "src/common/utils/pathUtil";
+import ResourceConfigCompiler from "./ResourceConfigCompiler";
 import XmlCompilerExtra from "./XmlCompilerExtra";
 import XmlCompiler from "./XmlCompiler";
 

@@ -4,7 +4,7 @@
 import React, { useRef } from "react";
 import styled from "styled-components";
 
-import { TOOLS_BAR_BUTTON } from "src/enum";
+import { TOOLS_BAR_BUTTON } from "src/common/enums";
 import IconButton, {
   TypeIconButtonOption
 } from "@/components/one-ui/IconButton";

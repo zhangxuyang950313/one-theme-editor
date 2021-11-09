@@ -1,7 +1,7 @@
 import { Attributes, Element } from "xml-js";
 import { getPlaceholderVal } from "src/common/utils/index";
 import { TypeXmlTempKeyValMap } from "src/types/config.page";
-import { TypeKeyValue } from "src/types";
+import { TypeKeyValue } from "src/types/utils";
 import XMLNodeElement from "./XMLNodeElement";
 import XmlCompiler from "./XmlCompiler";
 import TempKeyValMapper from "./TempKeyValMapper";

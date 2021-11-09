@@ -13,9 +13,9 @@ import ResourceConfigData, {
   UiVersion
 } from "src/data/ResourceConfig";
 import { TypeUiVersion } from "src/types/project";
-import { ELEMENT_TAG } from "src/enum";
+import { ELEMENT_TAG } from "src/common/enums";
 import pathUtil from "src/common/utils/pathUtil";
-import PageConfigCompiler from "./PageConfig";
+import PageConfigCompiler from "./PageConfigCompiler";
 import XMLNodeBase from "./XMLNodeElement";
 import XmlCompiler from "./XmlCompiler";
 

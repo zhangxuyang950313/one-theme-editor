@@ -1,4 +1,4 @@
-import XMLNodeElement from "src/common/compiler/XMLNodeElement";
+import XMLNodeElement from "src/common/classes/XMLNodeElement";
 import {
   TypeResourceConfig,
   TypeResourceOption,
@@ -34,7 +34,7 @@ import {
   HEX_FORMAT,
   LAYOUT_ELEMENT_TAG,
   RESOURCE_TAG
-} from "../enum/index";
+} from "../common/enums/index";
 import { AbstractDataModel } from "./AbstractDataModel";
 
 export class SourceData extends AbstractDataModel<TypeSourceData> {

@@ -6,9 +6,9 @@ import {
   TypeProjectDataDoc
 } from "src/types/project";
 import { createNedb } from "src/common/utils/databaseUtil";
-import ResourceConfigCompiler from "src/common/compiler/ResourceConfig";
+import ResourceConfigCompiler from "src/common/classes/ResourceConfigCompiler";
 import pathUtil from "src/common/utils/pathUtil";
-import ERR_CODE from "src/common/errorCode";
+import ERR_CODE from "src/common/enums/ErrorCode";
 
 // 频繁修改工程数据，常驻内存
 console.debug(logSymbols.info, "工程数据库：", pathUtil.PROJECTS_DB);

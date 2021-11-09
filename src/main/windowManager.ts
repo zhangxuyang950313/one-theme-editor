@@ -6,12 +6,12 @@ import {
   ipcMain
 } from "electron";
 import IPC_EVENT from "src/ipc/ipc-event";
-import { findProjectByQuery } from "src/main/dbHandler/project";
+import { findProjectByQuery } from "src/main/database/project";
 import { getFileData } from "src/common/utils";
 import * as electronStore from "../store/index";
 import { preloadFile, getUrl, isDev } from "./constant";
 import menuTemplate from "./menu";
-import dirWatcher from "./dirWatcher";
+import dirWatcher from "./singletons/dirWatcher";
 
 const backgroundColor =
   electronStore.config.get("themeConfig")?.["@background-color"] ?? "white";

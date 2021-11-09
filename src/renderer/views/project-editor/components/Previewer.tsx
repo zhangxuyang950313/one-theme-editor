@@ -6,7 +6,7 @@ import {
   ALIGN_V_VALUE,
   HEX_FORMAT,
   LAYOUT_ELEMENT_TAG
-} from "src/enum";
+} from "src/common/enums";
 import { TypePageConfig } from "src/types/config.resource";
 import { TypeLayoutData, TypeLayoutTextElement } from "src/types/config.page";
 import { TypeXmlFileData } from "src/types/file-data";

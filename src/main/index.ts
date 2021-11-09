@@ -1,5 +1,5 @@
 import { app, BrowserWindow, ipcMain, protocol } from "electron";
-import reactiveState from "src/preload/reactiveState";
+import reactiveState from "src/common/singletons/reactiveState";
 import ipcController from "src/ipc/ipcController";
 import { createWindow } from "./windowManager";
 import { moveWindowToCenter, saveCurrentDisplayCenter } from "./utils";

@@ -12,7 +12,7 @@ import {
   TabletOutlined
 } from "@ant-design/icons";
 import { useToggle } from "ahooks";
-import { TOOLS_BAR_BUTTON } from "src/enum";
+import { TOOLS_BAR_BUTTON } from "src/common/enums";
 import { ModuleConfig, PageConfig } from "src/data/ResourceConfig";
 import { usePageConfigList, useLoadProject } from "./hooks";
 import EditorToolsBar from "./components/ToolsBar";

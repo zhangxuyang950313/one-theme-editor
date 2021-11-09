@@ -24,8 +24,8 @@ import {
   RESOURCE_PROTOCOL,
   LAYOUT_ELEMENT_TAG,
   HEX_FORMAT
-} from "src/enum/index";
-import XMLNodeElement from "src/common/compiler/XMLNodeElement";
+} from "src/common/enums/index";
+import XMLNodeElement from "src/common/classes/XMLNodeElement";
 import pathUtil from "src/common/utils/pathUtil";
 import RegexpUtil from "src/common/utils/RegexpUtil";
 import TempStringUtil from "src/common/utils/TempStringUtil";

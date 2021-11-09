@@ -6,12 +6,12 @@ import {
   findProjectByQuery,
   findProjectListByQuery,
   updateProject
-} from "main/dbHandler/project";
-import PageConfigCompiler from "src/common/compiler/PageConfig";
-import ResourceConfigCompiler from "src/common/compiler/ResourceConfig";
-import ScenarioConfigCompiler from "src/common/compiler/ScenarioConfig";
-import ScenarioOptionCompiler from "src/common/compiler/ScenarioOption";
-import ERR_CODE from "src/common/errorCode";
+} from "src/main/database/project";
+import PageConfigCompiler from "src/common/classes/PageConfigCompiler";
+import ResourceConfigCompiler from "src/common/classes/ResourceConfigCompiler";
+import ScenarioConfigCompiler from "src/common/classes/ScenarioConfigCompiler";
+import ScenarioOptionCompiler from "src/common/classes/ScenarioOptionCompiler";
+import ERR_CODE from "src/common/enums/ErrorCode";
 import {
   TypeCreateProjectPayload,
   TypePackPayload,
@@ -25,13 +25,13 @@ import {
   TypeScenarioOption
 } from "src/types/config.scenario";
 import { TypeWriteXmlTempPayload } from "src/types/request";
-import { writeXmlTemplate } from "src/common/xmlTemplate";
+import XmlTemplateUtil from "src/common/utils/XmlTemplateUtil";
 import { getFileData } from "src/common/utils";
 import { TypeFileData } from "src/types/file-data";
 import PackageUtil from "src/common/utils/PackageUtil";
 import pathUtil from "src/common/utils/pathUtil";
-import dirWatcher from "main/dirWatcher";
-import fileDataCache from "./fileCache";
+import dirWatcher from "main/singletons/dirWatcher";
+import fileDataCache from "main/singletons/fileCache";
 import IPC_EVENT from "./ipc-event";
 import ipcCreator from "./ipcCreator";
 
@@ -188,10 +188,10 @@ class IpcController extends ipcCreator {
 
   getWatchedMapper = this.createIpcSync<
     void,
-    ReturnType<typeof dirWatcher.getWatchedMap>
+    ReturnType<typeof dirWatcher.getWatchedRecord>
   >({
     event: IPC_EVENT.$getWatchedMapper,
-    server: () => dirWatcher.getWatchedMap()
+    server: () => dirWatcher.getWatchedRecord()
   });
 
   // 拷贝文件
@@ -220,7 +220,7 @@ class IpcController extends ipcCreator {
   writeXmlTemplate = this
     /**/ .createIpcAsync<TypeWriteXmlTempPayload, Record<string, string>>({
       event: IPC_EVENT.$writeXmlTemplate,
-      server: data => writeXmlTemplate(data)
+      server: data => XmlTemplateUtil.writeXmlTemplate(data)
     });
 
   // 获取文件数据

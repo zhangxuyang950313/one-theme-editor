@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { Notification } from "@arco-design/web-react";
-import { LOAD_STATUS } from "src/enum";
+import { LOAD_STATUS } from "src/common/enums";
 import { TypeProjectDataDoc } from "src/types/project";
-import ERR_CODE from "src/common/errorCode";
+import ERR_CODE from "src/common/enums/ErrorCode";
 import ProjectData from "src/data/ProjectData";
 import { useCreatePromiseHook } from "./index";
 

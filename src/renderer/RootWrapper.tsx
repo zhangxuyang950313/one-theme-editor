@@ -12,11 +12,11 @@ import "@arco-design/theme-one-editor/css/arco.css"; // arco.design
 
 // import { ConfigProvider } from "antd";
 import * as electronStore from "src/store";
+import DarkTheme from "src/common/theme/dark";
 import { GlobalStore } from "./store/global/index";
 // import Router from "./router";
 // import { useInitEditorConfig } from "./hooks";
 // import { LOAD_STATUS } from "src/enum";
-import DarkTheme from "./theme/dark";
 
 // const Index: React.FC = () => {
 //   // const socket = useSocket();

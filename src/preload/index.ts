@@ -1,7 +1,7 @@
 import * as electronStore from "src/store/index";
 import ipcController from "src/ipc/ipcController";
 import ipcInvoker from "src/ipc/ipcInvoker";
-import reactiveState from "./reactiveState";
+import reactiveState from "src/common/singletons/reactiveState";
 
 // 注册 ipc 服务调用
 Object.assign(global, {

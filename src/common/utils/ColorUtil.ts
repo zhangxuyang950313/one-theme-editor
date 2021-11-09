@@ -1,6 +1,6 @@
 import rgb2hex from "rgb-hex";
 import hex2rgb, { RgbaObject } from "hex-rgb";
-import { HEX_FORMAT } from "src/enum/index";
+import { HEX_FORMAT } from "src/common/enums/index";
 import RegexpUtil from "src/common/utils/RegexpUtil";
 
 export { HEX_FORMAT };

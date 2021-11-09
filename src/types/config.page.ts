@@ -6,7 +6,7 @@ import {
   RESOURCE_TAG,
   RESOURCE_PROTOCOL,
   LAYOUT_ELEMENT_TAG
-} from "../enum";
+} from "../common/enums";
 import XMLNodeBase from "../common/compiler/XMLNodeElement";
 import { TypeFileData, TypeImageFileData } from "./file-data";
 
