@@ -9,11 +9,12 @@ import { StyleGirdBackground } from "@/style";
 
 const ImageDisplay: React.FC<{
   src?: string;
-  useDash?: boolean;
+  dash?: boolean;
+  scale?: boolean;
   girdSize?: number;
   onClick?: () => void;
 }> = props => {
-  const { src, onClick, useDash, girdSize } = props;
+  const { src, scale, dash, girdSize, onClick } = props;
 
   const [display, setDisplay] = useState(true);
 
@@ -22,13 +23,16 @@ const ImageDisplay: React.FC<{
   }, [src]);
 
   return (
-    <StyleImageDisplay girdSize={girdSize} onClick={() => onClick && onClick()}>
+    <StyleImageDisplay
+      girdSize={girdSize || 17}
+      onClick={() => onClick && onClick()}
+    >
       <LazyImage
         className="preview"
         alt=""
         src={src}
-        use-dash={String(!!(useDash && display))}
-        can-click={String(!!onClick)}
+        data-dash={String(!!(dash && display))}
+        data-scale={String(!!onClick && scale)}
       />
     </StyleImageDisplay>
   );
@@ -53,11 +57,11 @@ const StyleImageDisplay = styled(StyleImageBackground)`
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
-    &[use-dash="true"] {
+    &[data-dash="true"] {
       border: 1px dashed red;
     }
     /* background: center/contain no-repeat; */
-    &[can-click="true"] {
+    &[data-scale="true"] {
       cursor: pointer;
       transform: scale(0.8);
       transition: transform 0.3s ease;

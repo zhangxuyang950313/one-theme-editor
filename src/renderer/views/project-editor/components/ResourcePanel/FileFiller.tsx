@@ -13,35 +13,125 @@ import { TypeFileItem } from "src/types/config.page";
 import { TypeFileData } from "src/types/file-data";
 import { FILE_EVENT } from "src/common/enums";
 import ImageDisplay from "./ImageDisplay";
-import InfoDisplay from "./InfoDisplay";
 import useProjectFile from "@/hooks/useProjectFile";
 import useResolveProjectPath from "@/hooks/useResolveProjectPath";
 import useResolveResourcePath from "@/hooks/useResolveResourcePath";
+import { PreloadImage } from "@/components/ImageCollection";
+
+const getDescription = (fileData: TypeFileData) => {
+  switch (fileData.filetype) {
+    case "image/webp":
+    case "image/jpeg":
+    case "image/gif":
+    case "image/png": {
+      return `${fileData.width}×${fileData.height}`;
+    }
+    default: {
+      return `${(fileData.size / 1024).toFixed(2)}kb`;
+    }
+  }
+};
+
+const onExport = (to: string) => {
+  // 选择图片导入
+  remote.dialog
+    .showOpenDialog({
+      title: "选择素材",
+      properties: ["openFile", "createDirectory"]
+    })
+    .then(result => {
+      if (result.canceled) return;
+      window.$one.$server.copyFile({
+        from: result.filePaths[0],
+        to
+      });
+    });
+};
 
 // 文件操作区
-// const FileHandler: React.FC<{}>;
-
-// 文件展示
-const FileDisplay: React.FC<{
-  name: string;
-  description: string;
-  floatUrl: string;
-  primaryUrl: string;
-  primaryToolTipOverlay: ReactNode;
-  floatToolTipOverlay: ReactNode;
+const FileHandler: React.FC<{
   exportVisible: boolean;
   resetVisible: boolean;
   deleteVisible: boolean;
   onExport: () => void; // 导出
   onDelete: () => void; // 删除
   onReset: () => void; // 恢复
+}> = props => {
+  return (
+    <StyleFileHandler>
+      {props.deleteVisible && props.exportVisible && (
+        <Tooltip destroyTooltipOnHide overlay="导入" placement="right">
+          {/* 导入按钮 */}
+          <IconPlus className="press btn-normal" onClick={props.onExport} />
+        </Tooltip>
+      )}
+      {/* .9编辑按钮 */}
+      {/* <FormOutlined className="press edit" onClick={() => {}} /> */}
+      {/* 恢复默认按钮 */}
+      {props.deleteVisible && props.resetVisible && (
+        <Tooltip destroyTooltipOnHide overlay="默认" placement="right">
+          <IconRefresh className="press btn-reset" onClick={props.onReset} />
+        </Tooltip>
+      )}
+      {/* 删除按钮 */}
+      {props.deleteVisible && (
+        <Tooltip destroyTooltipOnHide overlay="删除" placement="right">
+          <IconDelete className="press btn-delete" onClick={props.onDelete} />
+        </Tooltip>
+      )}
+    </StyleFileHandler>
+  );
+};
+
+const StyleFileHandler = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 26px;
+  .press {
+    cursor: pointer;
+    margin: 5px;
+    font-size: 16px;
+    &:hover {
+      opacity: 0.8;
+    }
+    &:active {
+      opacity: 0.5;
+    }
+  }
+  .btn-normal {
+    color: var(--color-text-2);
+  }
+  .btn-delete {
+    color: red;
+  }
+  .btn-reset {
+    color: green;
+  }
+`;
+
+// 文件展示
+const FileDisplay: React.FC<{
+  floatUrl: string;
+  primaryUrl: string;
+  floatToolTipOverlay: ReactNode;
+  primaryToolTipOverlay: ReactNode;
+  floatIsEmpty: boolean;
+  primaryIsEmpty: boolean;
   onFloatClick: () => void; // 点击小图图标
   onPrimaryClick: () => void; // 点击大图
+  onPrimaryEmptyClick: () => void; // 空状态的点击
 }> = props => {
   return (
     <StyleFileDisplay>
       <div className="display-wrapper">
-        {props.deleteVisible ? (
+        {props.primaryIsEmpty ? (
+          <div
+            className="primary-display empty-display"
+            onClick={props.onPrimaryEmptyClick}
+          >
+            <IconPlus className="plugs-icon" />
+          </div>
+        ) : (
           <Tooltip
             overlayStyle={{ maxWidth: "none" }}
             destroyTooltipOnHide
@@ -52,18 +142,13 @@ const FileDisplay: React.FC<{
             <div className="primary-display">
               <ImageDisplay
                 src={props.primaryUrl}
+                scale
+                dash
                 girdSize={17}
                 onClick={props.onPrimaryClick}
               />
             </div>
           </Tooltip>
-        ) : (
-          <div
-            className="primary-display empty-display"
-            onClick={props.onExport}
-          >
-            <IconPlus className="plugs-icon" />
-          </div>
         )}
         <Tooltip
           overlayStyle={{ maxWidth: "none" }}
@@ -75,37 +160,13 @@ const FileDisplay: React.FC<{
           <div className="float-display">
             <ImageDisplay
               girdSize={10}
-              useDash={false}
+              scale={false}
+              dash={false}
               src={props.floatUrl}
               onClick={props.onFloatClick}
             />
           </div>
         </Tooltip>
-        <div className="info">
-          <InfoDisplay main={props.name} secondary={props.description} />
-        </div>
-      </div>
-      <div className="handler">
-        {props.deleteVisible && props.exportVisible && (
-          <Tooltip destroyTooltipOnHide overlay="导入" placement="right">
-            {/* 导入按钮 */}
-            <IconPlus className="press btn-normal" onClick={props.onExport} />
-          </Tooltip>
-        )}
-        {/* .9编辑按钮 */}
-        {/* <FormOutlined className="press edit" onClick={() => {}} /> */}
-        {/* 恢复默认按钮 */}
-        {props.deleteVisible && props.resetVisible && (
-          <Tooltip destroyTooltipOnHide overlay="默认" placement="right">
-            <IconRefresh className="press btn-reset" onClick={props.onReset} />
-          </Tooltip>
-        )}
-        {/* 删除按钮 */}
-        {props.deleteVisible && (
-          <Tooltip destroyTooltipOnHide overlay="删除" placement="right">
-            <IconDelete className="press btn-delete" onClick={props.onDelete} />
-          </Tooltip>
-        )}
       </div>
     </StyleFileDisplay>
   );
@@ -154,49 +215,150 @@ const StyleFileDisplay = styled.div`
       }
     }
   }
-  .info {
-    margin: 5px 0;
-  }
-  .handler {
+`;
+
+const ModifierDescriptions: React.FC<{
+  name: string;
+  path: string;
+  origin: {
+    url: string;
+    resolution: string;
+    size: number;
+  };
+  current: {
+    url: string;
+    resolution: string;
+    size: number;
+  };
+}> = props => {
+  return (
+    <StyleModifierDescriptions
+      title="当前资源"
+      column={1}
+      size="mini"
+      data={[
+        { label: "名称", value: props.name },
+        { label: "路径", value: props.path },
+        { label: "", value: <Divider /> },
+        {
+          label: "",
+          value: (
+            <div className="flex-alignV-center">
+              <div className="item-place">原始资源</div>
+              <div style={{ width: "50px" }}></div>
+              <div className="item-place">当前资源</div>
+            </div>
+          )
+        },
+        {
+          label: "",
+          value: (
+            <div className="flex-alignV-center">
+              <div className="img">
+                <ImageDisplay src={props.origin.url} />
+              </div>
+              <IconArrowRight className="placeholder" />
+              <div className="img">
+                <ImageDisplay src={props.current.url} />
+              </div>
+            </div>
+          )
+        },
+        {
+          label: "尺寸",
+          value: (
+            <div className="flex-alignV-center">
+              <div className="item-place">{props.origin.resolution}</div>
+              <div className="placeholder" />
+              <div className="item-place">{props.current.resolution}</div>
+            </div>
+          )
+        },
+        {
+          label: "大小",
+          value: (
+            <div className="flex-alignV-center">
+              <div className="item-place">
+                {`${(props.origin.size / 1024).toFixed(2)}kb`}
+              </div>
+              <div className="placeholder" />
+              <div className="item-place">{`${(
+                props.current.size / 1024
+              ).toFixed(2)}kb`}</div>
+            </div>
+          )
+        }
+      ]}
+    />
+  );
+};
+
+const ResourceDescriptions: React.FC<{
+  name: string;
+  path: string;
+  resolution: string;
+  size: number;
+  url: string;
+}> = props => {
+  return (
+    <StyleResourceDescriptions>
+      <Descriptions
+        title="原始资源"
+        column={1}
+        size="mini"
+        data={[
+          { label: "名称", value: props.name },
+          { label: "路径", value: props.path },
+          { label: "尺寸", value: props.resolution },
+          {
+            label: "大小",
+            value: `${(props.size / 1024).toFixed(2)}kb`
+          }
+        ]}
+      />
+      <div className="img">
+        <ImageDisplay src={props.url} />
+      </div>
+    </StyleResourceDescriptions>
+  );
+};
+
+const StyleModifierDescriptions = styled(Descriptions)`
+  .flex-alignV-center {
     display: flex;
-    flex-direction: column;
-    width: 26px;
-    .press {
-      cursor: pointer;
-      margin: 5px;
-      font-size: 16px;
-      &:hover {
-        opacity: 0.8;
-      }
-      &:active {
-        opacity: 0.5;
-      }
-    }
-    .btn-normal {
-      color: var(--color-text-2);
-    }
-    .btn-delete {
-      color: red;
-    }
-    .btn-reset {
-      color: green;
-    }
+    align-items: center;
+  }
+  .item-place {
+    width: 80px;
+    text-align: center;
+  }
+  .placeholder {
+    width: 50px;
+  }
+  .img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    overflow: hidden;
+    border-radius: 10px;
+    border: 1px solid var(--color-border-2);
+    background-color: gainsboro;
   }
 `;
 
-const getDescription = (fileData: TypeFileData) => {
-  switch (fileData.filetype) {
-    case "image/webp":
-    case "image/jpeg":
-    case "image/gif":
-    case "image/png": {
-      return `${fileData.width}×${fileData.height}`;
-    }
-    default: {
-      return `${(fileData.size / 1024).toFixed(2)}kb`;
-    }
+const StyleResourceDescriptions = styled.div`
+  display: flex;
+  align-items: center;
+  .img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    overflow: hidden;
+    border-radius: 10px;
+    border: 1px solid var(--color-border-2);
+    background-color: gainsboro;
   }
-};
+`;
 
 // 文件填充器
 const FileFiller: React.FC<{ data: TypeFileItem }> = ({ data }) => {
@@ -210,160 +372,100 @@ const FileFiller: React.FC<{ data: TypeFileItem }> = ({ data }) => {
   const primaryUrl = projectFile.url;
 
   return (
-    <FileDisplay
-      name={data.comment}
-      description={description}
-      floatUrl={floatUrl}
-      primaryUrl={primaryUrl}
-      exportVisible={true}
-      resetVisible={true}
-      deleteVisible={projectFile.state !== FILE_EVENT.UNLINK}
-      primaryToolTipOverlay={
-        <>
-          <Descriptions
-            title="当前资源"
-            column={1}
-            size="mini"
-            data={[
-              { label: "名称", value: data.comment },
-              { label: "路径", value: data.sourceData.src },
-              { label: "", value: <Divider /> },
-              {
-                label: "",
-                value: (
-                  <div style={{ display: "flex", alignItems: "center" }}>
-                    <div style={{ width: "80px", textAlign: "center" }}>
-                      原始资源
-                    </div>
-                    <div style={{ width: "50px" }}></div>
-                    <div style={{ width: "80px", textAlign: "center" }}>
-                      当前资源
-                    </div>
-                  </div>
-                )
-              },
-              {
-                label: "",
-                value: (
-                  <div style={{ display: "flex", alignItems: "center" }}>
-                    <img
-                      style={{
-                        width: "80px",
-                        maxHeight: "100px",
-                        objectFit: "contain"
-                      }}
-                      src={floatUrl}
-                    />
-                    <IconArrowRight style={{ width: "50px" }} />
-                    <img
-                      style={{
-                        width: "80px",
-                        maxHeight: "100px",
-                        objectFit: "contain"
-                      }}
-                      src={primaryUrl}
-                    />
-                  </div>
-                )
-              },
-              {
-                label: "尺寸",
-                value: (
-                  <div style={{ display: "flex", alignItems: "center" }}>
-                    <div style={{ width: "80px", textAlign: "center" }}>
-                      {description}
-                    </div>
-                    <div style={{ width: "50px" }} />
-                    <div style={{ width: "80px", textAlign: "center" }}>
-                      {getDescription(projectFile.fileData)}
-                    </div>
-                  </div>
-                )
-              },
-              {
-                label: "大小",
-                value: (
-                  <div style={{ display: "flex", alignItems: "center" }}>
-                    <div style={{ width: "80px", textAlign: "center" }}>
-                      {`${(data.fileData.size / 1024).toFixed(2)}kb`}
-                    </div>
-                    <div style={{ width: "50px" }} />
-                    <div style={{ width: "80px", textAlign: "center" }}>{`${(
-                      projectFile.fileData.size / 1024
-                    ).toFixed(2)}kb`}</div>
-                  </div>
-                )
-              }
-            ]}
-          />
-        </>
-      }
-      floatToolTipOverlay={
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <Descriptions
-            title="原始资源"
-            column={1}
-            size="mini"
-            data={[
-              { label: "名称", value: data.comment },
-              { label: "路径", value: data.sourceData.src },
-              { label: "尺寸", value: description },
-              {
-                label: "大小",
-                value: `${(data.fileData.size / 1024).toFixed(2)}kb`
-              }
-            ]}
-          />
-          <img
-            style={{ width: "80px", maxHeight: "100px", objectFit: "contain" }}
-            src={floatUrl}
-          />
-        </div>
-      }
-      // 点击导入
-      onExport={() => {
-        // 选择图片导入
-        remote.dialog
-          .showOpenDialog({
-            title: "选择素材",
-            properties: ["openFile", "createDirectory"]
-          })
-          .then(result => {
-            if (result.canceled) return;
+    <StyleFileFiller>
+      <div className="file__display-handler">
+        <FileDisplay
+          floatUrl={floatUrl}
+          primaryUrl={primaryUrl}
+          floatIsEmpty={false}
+          primaryIsEmpty={projectFile.state === FILE_EVENT.UNLINK}
+          primaryToolTipOverlay={
+            // 变更详情
+            <ModifierDescriptions
+              name={data.comment}
+              path={data.sourceData.src}
+              origin={{
+                url: floatUrl,
+                resolution: getDescription(data.fileData),
+                size: data.fileData.size
+              }}
+              current={{
+                url: primaryUrl,
+                resolution: getDescription(projectFile.fileData),
+                size: projectFile.fileData.size
+              }}
+            />
+          }
+          floatToolTipOverlay={
+            // 资源详情
+            <ResourceDescriptions
+              name={data.comment}
+              path={data.sourceData.src}
+              resolution={getDescription(data.fileData)}
+              size={data.fileData.size}
+              url={floatUrl}
+            />
+          }
+          // 小图点击使用默认
+          onFloatClick={() => {
             window.$one.$server.copyFile({
-              from: result.filePaths[0],
+              from: absoluteResourceFile,
               to: absoluteProjectFile
             });
-          });
-      }}
-      // 删除
-      onDelete={() => {
-        window.$one.$server
-          .deleteFile(absoluteProjectFile)
-          .catch((err: Error) => {
-            Notification.warning({ content: err.message });
-          });
-      }}
-      // 恢复默认按钮
-      onReset={() => {
-        window.$one.$server.copyFile({
-          from: absoluteResourceFile,
-          to: absoluteProjectFile
-        });
-      }}
-      // 小图点击使用默认
-      onFloatClick={() => {
-        window.$one.$server.copyFile({
-          from: absoluteResourceFile,
-          to: absoluteProjectFile
-        });
-      }}
-      // 大图点击跳转到图片文件夹
-      onPrimaryClick={() => {
-        remote.shell.showItemInFolder(absoluteProjectFile);
-      }}
-    />
+          }}
+          // 大图点击跳转到图片文件夹
+          onPrimaryClick={() => {
+            remote.shell.showItemInFolder(absoluteProjectFile);
+          }}
+          onPrimaryEmptyClick={() => onExport(absoluteProjectFile)}
+        />
+        <FileHandler
+          exportVisible={true}
+          resetVisible={true}
+          deleteVisible={projectFile.state !== FILE_EVENT.UNLINK}
+          // 点击导入
+          onExport={() => onExport(absoluteProjectFile)}
+          // 删除
+          onDelete={() => {
+            window.$one.$server
+              .deleteFile(absoluteProjectFile)
+              .catch((err: Error) => {
+                Notification.warning({ content: err.message });
+              });
+          }}
+          // 恢复默认按钮
+          onReset={() => {
+            window.$one.$server.copyFile({
+              from: absoluteResourceFile,
+              to: absoluteProjectFile
+            });
+          }}
+        />
+      </div>
+      <div className="info">
+        <div className="main">{data.comment}</div>
+        <div className="secondary">{description}</div>
+      </div>
+    </StyleFileFiller>
   );
 };
+
+const StyleFileFiller = styled.div`
+  .file__display-handler {
+    display: flex;
+  }
+  .info {
+    margin: 5px 0;
+    .main {
+      font-size: 14px;
+      color: var(--color-text-1);
+    }
+    .secondary {
+      /* user-select: text; */
+      font-size: 12px;
+      color: var(--color-text-3);
+    }
+  }
+`;
 
 export default FileFiller;
