@@ -147,3 +147,12 @@ export enum FILE_TEMPLATE_TYPE {
   UNKNOWN = "unknown",
   INFO = "info"
 }
+
+// 协议名称
+export enum PROTOCOL_TYPE {
+  app = "app",
+  resource = "resource",
+  project = "project",
+  src = "src",
+  thumbnail = "thumbnail"
+}

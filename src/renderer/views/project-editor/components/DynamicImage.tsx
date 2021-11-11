@@ -1,6 +1,6 @@
 import React, { useState, forwardRef } from "react";
 import { FILE_EVENT } from "src/common/enums";
-import { useSubscribeProjectFile } from "../hooks";
+import { useSubscribeSrcSingly } from "../hooks";
 import { LazyImage, PreloadImage } from "@/components/ImageCollection";
 
 type TypeReactImageElement = JSX.IntrinsicElements["img"];
@@ -13,7 +13,7 @@ export const DynamicProjectImage = forwardRef<
   TypeReactImageElement
 >(function DynamicProjectImage(props, ref) {
   const [src, setSrc] = useState(props.src);
-  useSubscribeProjectFile(props.src, event => {
+  useSubscribeSrcSingly(props.src, event => {
     if (event === FILE_EVENT.UNLINK) {
       setSrc("");
       return;
@@ -41,12 +41,12 @@ export const StaticResourceImage = forwardRef<
 /**
  * 动态双向源图片
  */
-export const DynamicBothSourceImage = forwardRef<
+export const DynamicBothWayImage = forwardRef<
   HTMLImageElement,
   TypeReactImageElement
 >(function DynamicBothSourceImage(props, ref) {
   const [src, setSrc] = useState(`src://${props.src}`);
-  useSubscribeProjectFile(props.src, event => {
+  useSubscribeSrcSingly(props.src, event => {
     // if (event === FILE_EVENT.UNLINK) {
     //   const url = new URL(`resource://${props.src}`);
     //   url.searchParams.set("t", Date.now().toString());

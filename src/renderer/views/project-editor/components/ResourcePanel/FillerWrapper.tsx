@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { HEX_FORMAT, RESOURCE_TAG } from "src/common/enums";
 import { TypeBlockCollection } from "src/types/config.page";
-import FileFiller from "./FileFiller";
+import FileFiller from "./FileFiller/index";
 import ValueFiller from "./ValueFiller";
 
 const FillerWrapper: React.FC<{ data: TypeBlockCollection }> = props => {
@@ -12,7 +12,7 @@ const FillerWrapper: React.FC<{ data: TypeBlockCollection }> = props => {
       return (
         <StyleFileFillerWrapper>
           {data.items.map((item, key) => (
-            <div className="item" key={key}>
+            <div className="file-display__item" key={key}>
               <FileFiller data={item} />
             </div>
           ))}
@@ -47,7 +47,7 @@ const StyleFileFillerWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
   padding: 20px 30px;
-  .item {
+  .file-display__item {
     margin: 0 20px 20px 0;
   }
 `;

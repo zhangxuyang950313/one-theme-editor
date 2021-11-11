@@ -5,7 +5,7 @@ import { HEX_FORMAT, RESOURCE_TAG } from "src/common/enums/index";
 import { TypeXmlItem, TypeXmlValueTags } from "src/types/config.page";
 import { TypeXmlFileData } from "src/types/file-data";
 import XmlTemplateUtil from "src/common/utils/XmlTemplateUtil";
-import { useSubscribeProjectFile } from "../../hooks";
+import { useSubscribeSrcSingly } from "../../hooks";
 import ColorPicker from "./ColorPicker";
 import BooleanSelector from "./BooleanSelector";
 import NumberInput from "./NumberInput";
@@ -100,8 +100,8 @@ const ValueFillerItem: React.FC<{
         <ValueEditor
           defaultValue={defaultValue}
           value={value}
-          colorFormat={colorFormat}
           use={use}
+          colorFormat={colorFormat}
           onChange={onChange}
         />
         <div className="handle-wrapper">
@@ -169,7 +169,7 @@ const ValueFiller: React.FC<{
   // });
   const [xmlFileData, setXmlFileData] = useState<TypeXmlFileData>();
 
-  useSubscribeProjectFile(xmlItem.sourceData.src, (event, src, fileData) => {
+  useSubscribeSrcSingly(xmlItem.sourceData.src, (event, src, fileData) => {
     if (fileData.filetype === "application/xml") {
       setXmlFileData(fileData);
     }

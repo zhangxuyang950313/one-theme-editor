@@ -6,7 +6,13 @@
     colorFormat: 颜色格式
     forceStaticPreview: 强制使用静态预览图
 -->
-<Page version="1.0.0" name="桌面壁纸和首屏图标" screenWidth="1080" forceStaticPreview="false">
+<Page 
+    version="1.0.0" 
+    name="桌面壁纸和首屏图标" 
+    screenWidth="1080" 
+    colorFormat="ARGB"
+    forceStaticPreview="false"
+>
 
     <!-- 静态预览图 -->
     <Preview src="resource://preview/preview.jpg"/>
@@ -67,7 +73,7 @@
 
 
     <Resource name="颜色值" :key="color">
-        <Color name="桌面模块" :key="home" format="ARGB">
+        <Color name="桌面模块" :key="home">
             <!-- 桌面模块 -->
             <Xml :key="com.miui.home" name="桌面模块xml" src="src://com.miui.home/theme_values.xml">
                 <!-- 桌面图标文字颜色 -->

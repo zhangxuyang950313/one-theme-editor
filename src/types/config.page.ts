@@ -24,13 +24,13 @@ export type TypeXmlItem = {
   tag: string;
   key: string;
   name: string;
-  source: string;
+  sourceUrl: string;
   sourceData: TypeSourceData;
   fileData: TypeFileData;
-  valueItems: TypeXmlValueItem[];
+  valueItems: TypeXmlValueData[];
 };
 // <Xml/> 节点下的子节点
-export type TypeXmlValueItem = {
+export type TypeXmlValueData = {
   md5: string;
   tag: string;
   comment: string;
@@ -77,7 +77,7 @@ export type TypeFileBlock = {
 export type TypeFileItem = {
   key: string;
   comment: string;
-  source: string;
+  sourceUrl: string;
   sourceData: TypeSourceData;
   fileData: TypeFileData;
 };
@@ -112,7 +112,7 @@ export type TypeLayoutData = {
 // 图片元素数据
 export type TypeLayoutImageElement = {
   elementTag: LAYOUT_ELEMENT_TAG.Image;
-  source: string;
+  sourceUrl: string;
   sourceData: TypeSourceData;
   layout: TypeLayoutData;
 };
@@ -123,9 +123,9 @@ export type TypeLayoutTextElement = {
   text: string;
   size: string;
   color: string;
-  source: string;
+  sourceUrl: string;
   sourceData: TypeSourceData;
-  valueData: TypeXmlValueItem;
+  valueData: TypeXmlValueData;
   layout: TypeLayoutData;
 };
 

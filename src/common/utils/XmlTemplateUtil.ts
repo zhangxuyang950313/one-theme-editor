@@ -4,6 +4,7 @@ import PathUtil from "src/common/utils/PathUtil";
 import XmlCompiler from "src/common/classes/XmlCompiler";
 import XMLNodeElement from "src/common/classes/XMLNodeElement";
 import { TypeWriteXmlTempPayload } from "src/types/request";
+import reactiveState from "../singletons/reactiveState";
 
 class XmlTemplateUtil {
   /**
@@ -13,7 +14,7 @@ class XmlTemplateUtil {
   static async writeXmlTemplate(
     data: TypeWriteXmlTempPayload
   ): Promise<Record<string, string>> {
-    const project = $one.$reactiveState.get("projectData");
+    const project = reactiveState.get("projectData");
     const { tag, attributes, value, src } = data;
     const resourceXmlFile = path.join(
       PathUtil.RESOURCE_CONFIG_DIR,

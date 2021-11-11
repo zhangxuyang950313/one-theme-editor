@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { TypePageConfig } from "src/types/config.resource";
-import Previewer from "./Previewer";
+import Previewer from "./Previewer/index";
 
 const selectedMap = new Map<string, number>();
 
@@ -37,12 +37,7 @@ const PageSelector: React.FC<{
           className="preview"
           onClick={() => setIndex(key)}
         >
-          <Previewer
-            className="previewer"
-            pageConfig={pageConfig}
-            useDash={false}
-            canClick={false}
-          />
+          <Previewer className="previewer" pageConfig={pageConfig} />
         </span>
       ))}
     </StylePageSelector>
@@ -55,7 +50,10 @@ const StylePageSelector = styled.div`
   .preview {
     cursor: pointer;
     width: 100%;
-    margin: 5px 0;
+    margin-top: 10px;
+    &:last-child {
+      margin-bottom: 10px;
+    }
     padding: 2px;
     opacity: 0.4;
     border-radius: 6px;
@@ -67,7 +65,7 @@ const StylePageSelector = styled.div`
     }
     .previewer {
       border-radius: 6px;
-      overflow: hidden;
+      /* overflow: hidden; */
       box-sizing: border-box;
     }
     .preview-image {

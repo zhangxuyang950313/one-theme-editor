@@ -25,7 +25,7 @@ export type TypeXmlFileData = {
   readonly filetype: "application/xml";
   size: number;
   element: Element;
-  valueMapper: Record<string, string | undefined>;
+  valueMapper: Record<string, string>;
 };
 
 // 不支持的文件数据

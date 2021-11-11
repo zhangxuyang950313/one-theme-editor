@@ -4,23 +4,18 @@ import { TypeProjectData } from "src/types/project";
 import { TypeFileData } from "src/types/file-data";
 import IPC_EVENT from "./ipc-event";
 
+export type TypeFileChangeCallbackData = {
+  root: string;
+  event: FILE_EVENT;
+  src: string;
+  data: TypeFileData;
+};
+
 class IpcInvoker {
-  useFilesChange = (
-    callback: (data: {
-      root: string;
-      event: FILE_EVENT;
-      src: string;
-      data: TypeFileData;
-    }) => void
-  ) => {
+  onFileChange = (callback: (data: TypeFileChangeCallbackData) => void) => {
     const cb = (
       $event: IpcRendererEvent,
-      $data: {
-        root: string;
-        event: FILE_EVENT;
-        src: string;
-        data: TypeFileData;
-      }
+      $data: TypeFileChangeCallbackData
     ) => {
       callback($data);
     };

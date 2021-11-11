@@ -1,6 +1,6 @@
 import path from "path";
 import fse from "fs-extra";
-import { useLayoutEffect, useState } from "react";
+import { useCallback, useLayoutEffect, useRef, useState } from "react";
 import { Notification } from "@arco-design/web-react";
 import PathUtil from "src/common/utils/PathUtil";
 import ProjectData from "src/data/ProjectData";
@@ -18,6 +18,7 @@ import {
 import { TypeScenarioConfig } from "src/types/config.scenario";
 import FileDataCache from "src/common/classes/FileDataCache";
 import LogUtil from "src/common/utils/LogUtil";
+import { TypeFileChangeCallbackData } from "src/ipc/ipcInvoker";
 import { useEditorDispatch } from "./store";
 import {
   ActionSetProjectData,
@@ -165,18 +166,43 @@ type TypeListener = (
   fileData: TypeFileData
 ) => void;
 
-// 监听文件
-export function useSubscribeProjectFile(
-  src: string | undefined,
-  callback?: TypeListener
-): void {
-  const projectRoot = window.$one.$reactiveState.get("projectPath");
-  useLayoutEffect(() => {
-    if (!src) return;
-    const file = path.join(projectRoot, src);
+export function useSubscribeSrc(options?: {
+  // 立即回调当前状态
+  immediately?: boolean;
+  // 过滤器
+  filter?: (data: TypeFileChangeCallbackData) => boolean;
+}): (src: string, callback: TypeListener) => void {
+  const [projectRoot, setRoot] = useState(
+    window.$one.$reactiveState.get("projectPath")
+  );
+  const list = useRef<Array<{ src: string; callback: TypeListener }>>([]);
 
-    // 首次若文件存在则回调
-    if (callback) {
+  useLayoutEffect(() => {
+    setRoot(window.$one.$reactiveState.get("projectPath"));
+  }, []);
+  useLayoutEffect(() => {
+    // 移除监听器
+    const removeListener = window.$one.$invoker.onFileChange(data => {
+      if (data.root !== projectRoot) return;
+      // 添加过滤器
+      if (options?.filter && options.filter(data)) {
+        return;
+      }
+      console.log(`file [${data.event}]:`, data);
+      list.current.forEach(item => {
+        if (item.src === data.src) {
+          item.callback(data.event, data.src, data.data);
+        }
+      });
+    });
+    return removeListener;
+  }, []);
+
+  return (src: string, callback: TypeListener) => {
+    list.current.push({ src, callback });
+    const file = path.join(projectRoot, src);
+    // 首次回调
+    if (options?.immediately) {
       if (fse.existsSync(file)) {
         const fileData = fileDataCache.get(file);
         callback(FILE_EVENT.ADD, src, fileData);
@@ -184,16 +210,27 @@ export function useSubscribeProjectFile(
         callback(FILE_EVENT.UNLINK, src, FileData.default);
       }
     }
+  };
+}
 
-    const removeListener = window.$one.$invoker.useFilesChange(data => {
-      if (data.root !== projectRoot) return;
-      if (data.src !== src) return;
-      console.log(`file [${data.event}]:`, data);
-      callback && callback(data.event, src, data.data);
-    });
-
-    return () => {
-      removeListener();
-    };
+// 监听单个 src 文件
+export function useSubscribeSrcSingly(
+  src: string | undefined,
+  callback: TypeListener
+): void {
+  const subscribe = useSubscribeSrc({ immediately: true });
+  useLayoutEffect(() => {
+    if (!src) return;
+    subscribe(src, callback);
   }, [src]);
+}
+
+export function useUpdateUrl(def: string): { url: string; update: () => void } {
+  const [url, setUrl] = useState(def);
+  const update = useCallback(() => {
+    const _url = new URL(url);
+    _url.searchParams.set("t", Date.now().toString());
+    setUrl(_url.toString());
+  }, [def]);
+  return { url, update };
 }

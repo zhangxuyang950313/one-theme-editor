@@ -18,7 +18,7 @@ import { usePageConfigList, useLoadProject } from "./hooks";
 import EditorToolsBar from "./components/ToolsBar";
 import ModuleSelector from "./components/ModuleSelector";
 import PageSelector from "./components/PageSelector";
-import Previewer from "./components/Previewer";
+import Previewer from "./components/Previewer/index";
 import ResourcePanel from "./components/ResourcePanel";
 import StatusBar from "./components/StatusBar";
 import { TypeIconButtonOption } from "@/components/one-ui/IconButton";
@@ -199,8 +199,7 @@ const EditorFrame: React.FC = () => {
                     <Previewer
                       className="previewer__content"
                       pageConfig={pageConfig}
-                      canClick
-                      useDash
+                      mouseEffect
                     />
                     <div className="previewer__name">{pageConfig.name}</div>
                   </>

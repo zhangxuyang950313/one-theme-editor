@@ -30,6 +30,7 @@ import PathUtil from "src/common/utils/PathUtil";
 import RegexpUtil from "src/common/utils/RegexpUtil";
 import TempStringUtil from "src/common/utils/TempStringUtil";
 import { TypeImageFileData, TypeFileData } from "src/types/file-data";
+import reactiveState from "../singletons/reactiveState";
 import XmlCompiler from "./XmlCompiler";
 import XmlCompilerExtra from "./XmlCompilerExtra";
 import type {
@@ -41,7 +42,7 @@ import type {
   TypeFileBlock,
   TypeValueBlock,
   TypeXmlValueTags,
-  TypeXmlValueItem
+  TypeXmlValueData
 } from "src/types/config.page";
 
 export default class PageConfigCompiler extends XMLNodeElement {
@@ -54,7 +55,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
   private fileDataCache: Map<string, TypeFileData>;
   private imageDataCache: Map<string, TypeImageFileData>;
   private xmlValueCache: Map<string, string>;
-  private xmlValueItemCache: Map<string, TypeXmlValueItem>;
+  private xmlValueItemCache: Map<string, TypeXmlValueData>;
   constructor(data: { namespace: string; config: string }) {
     const file = path.join(
       PathUtil.RESOURCE_CONFIG_DIR,
@@ -102,7 +103,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
   }
 
   private resolveProjectPath(pathname: string): string {
-    return path.join($one.$reactiveState.get("projectData").root, pathname);
+    return path.join(reactiveState.get("projectData").root, pathname);
   }
 
   // 相对于当前页面目录的路径转为正确的绝对路径
@@ -361,7 +362,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
       console.log(err);
     }
     return new LayoutImageElement()
-      .set("source", source)
+      .set("sourceUrl", source)
       .set("sourceData", sourceData)
       .set("layout", this.layoutConf(node, size))
       .create();
@@ -397,7 +398,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
       if (colorSource) {
         const colorSourceData = this.getUrlSourceData(colorSource);
         textElement.set("sourceData", colorSourceData);
-        textElement.set("source", colorSource);
+        textElement.set("sourceUrl", colorSource);
       }
     } else {
       textElement.set("color", color);
@@ -420,7 +421,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
       return new FileItem()
         .set("key", itemKey)
         .set("comment", arr[key - 1]?.getComment())
-        .set("source", source)
+        .set("sourceUrl", source)
         .set("sourceData", sourceData)
         .set("fileData", fileData)
         .create();
@@ -492,7 +493,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
         .set("tag", item.getTagname())
         .set("key", itemKey)
         .set("name", item.getAttributeOf("name"))
-        .set("source", source)
+        .set("sourceUrl", source)
         .set("sourceData", sourceData)
         .set("fileData", fileData)
         .set("valueItems", valueItems)

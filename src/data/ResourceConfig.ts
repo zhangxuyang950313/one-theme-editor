@@ -20,7 +20,7 @@ import {
   TypeBooleanBlock,
   TypeXmlItem,
   TypeValueBlock,
-  TypeXmlValueItem
+  TypeXmlValueData
 } from "../types/config.page";
 import {
   TypeFileData,
@@ -89,7 +89,7 @@ export class FileItem extends AbstractDataModel<TypeFileItem> {
   protected data: TypeFileItem = {
     key: "",
     comment: "",
-    source: "",
+    sourceUrl: "",
     sourceData: SourceData.default,
     fileData: FileData.default
   };
@@ -98,8 +98,8 @@ export class FileItem extends AbstractDataModel<TypeFileItem> {
   }
 }
 
-export class XmlValueItem extends AbstractDataModel<TypeXmlValueItem> {
-  protected data: TypeXmlValueItem = {
+export class XmlValueItem extends AbstractDataModel<TypeXmlValueData> {
+  protected data: TypeXmlValueData = {
     comment: "",
     md5: "",
     tag: "",
@@ -107,7 +107,7 @@ export class XmlValueItem extends AbstractDataModel<TypeXmlValueItem> {
     value: "",
     template: ""
   };
-  static get default(): TypeXmlValueItem {
+  static get default(): TypeXmlValueData {
     return new XmlValueItem().create();
   }
 }
@@ -117,7 +117,7 @@ export class XmlItem extends AbstractDataModel<TypeXmlItem> {
     tag: "",
     key: "",
     name: "",
-    source: "",
+    sourceUrl: "",
     sourceData: SourceData.default,
     fileData: XmlFileData.default,
     valueItems: []
@@ -292,7 +292,7 @@ export class ElementLayoutConfig extends AbstractDataModel<TypeLayoutData> {
 export class LayoutImageElement extends AbstractDataModel<TypeLayoutImageElement> {
   protected data: TypeLayoutImageElement = {
     elementTag: LAYOUT_ELEMENT_TAG.Image,
-    source: "",
+    sourceUrl: "",
     sourceData: SourceData.default,
     layout: ElementLayoutConfig.default
   };
@@ -307,7 +307,7 @@ export class LayoutTextElement extends AbstractDataModel<TypeLayoutTextElement> 
     text: "",
     size: "36",
     color: "",
-    source: "",
+    sourceUrl: "",
     sourceData: SourceData.default,
     valueData: XmlValueItem.default,
     layout: ElementLayoutConfig.default

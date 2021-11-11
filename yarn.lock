@@ -1328,6 +1328,11 @@
   resolved "https://registry.npmmirror.com/@tootallnate/once/download/@tootallnate/once-1.1.2.tgz?cache=0&sync_timestamp=1632734062895&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2F%40tootallnate%2Fonce%2Fdownload%2F%40tootallnate%2Fonce-1.1.2.tgz#ccb91445360179a04e7fe6aff78c00ffc1eeaf82"
   integrity sha1-zLkURTYBeaBOf+av94wA/8Hur4I=
 
+"@types/animejs@^3.1.4":
+  version "3.1.4"
+  resolved "https://registry.nlark.com/@types/animejs/download/@types/animejs-3.1.4.tgz#92f90d1c800b9041b64a7da9da0e68e690146b0e"
+  integrity sha1-kvkNHIALkEG2Sn2p2g5o5pAUaw4=
+
 "@types/archiver@^5.1.1":
   version "5.1.1"
   resolved "https://registry.nlark.com/@types/archiver/download/@types/archiver-5.1.1.tgz?cache=0&sync_timestamp=1629706910911&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40types%2Farchiver%2Fdownload%2F%40types%2Farchiver-5.1.1.tgz#d6d7610de4386b293abd5c1cb1875e0a4f4e1c30"
@@ -2222,6 +2227,11 @@ ajv@^8.0.1:
     json-schema-traverse "^1.0.0"
     require-from-string "^2.0.2"
     uri-js "^4.2.2"
+
+animejs@^3.2.1:
+  version "3.2.1"
+  resolved "https://registry.nlark.com/animejs/download/animejs-3.2.1.tgz#de9fe2e792f44a777a7fdf6ae160e26604b0cdda"
+  integrity sha1-3p/i55L0Snd6f99q4WDiZgSwzdo=
 
 ansi-align@^3.0.0:
   version "3.0.1"
