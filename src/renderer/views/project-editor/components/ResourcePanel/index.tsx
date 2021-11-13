@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import styled from "styled-components";
 import { TypePageConfig } from "src/types/config.resource";
+import { TypeLayoutElement } from "src/types/config.page";
 import FillerWrapper from "./FillerWrapper";
 import StickyTab from "@/components/StickyTab";
 import { Tabs } from "@/components/one-ui";
+import { previewResourceEmitter, PREVIEW_EVENT } from "@/singletons/emitters";
 
 const ResourcePanel: React.FC<{
   pageConfig: TypePageConfig;
@@ -11,6 +13,20 @@ const ResourcePanel: React.FC<{
   const { pageConfig } = props;
   const { resourceList } = pageConfig;
   const [selectTabIndex, setSelectTabIndex] = useState(0);
+
+  // useLayoutEffect(() => {
+  //   previewResourceEmitter.on(
+  //     PREVIEW_EVENT.locateResource,
+  //     (element: TypeLayoutElement) => {
+  //       const index = resourceList.findIndex(
+  //         item => item.key === element.sourceUrl
+  //       );
+  //       console.log(element);
+  //       setSelectTabIndex(index);
+  //       // PREVIEW_EVENT.locateResource
+  //     }
+  //   );
+  // }, []);
 
   useEffect(() => {
     setSelectTabIndex(0);

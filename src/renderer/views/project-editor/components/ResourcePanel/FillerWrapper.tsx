@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { HEX_FORMAT, RESOURCE_TAG } from "src/common/enums";
 import { TypeBlockCollection } from "src/types/config.page";
 import FileFiller from "./FileFiller/index";
-import ValueFiller from "./ValueFiller";
+import ValueFiller from "./ValueFiller/index";
 
 const FillerWrapper: React.FC<{ data: TypeBlockCollection }> = props => {
   const { data } = props;

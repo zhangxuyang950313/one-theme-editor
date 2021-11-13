@@ -1,6 +1,5 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import styled from "styled-components";
-import anime from "animejs";
 
 import { HEX_FORMAT, LAYOUT_ELEMENT_TAG } from "src/common/enums";
 import { TypeLayoutElement } from "src/types/config.page";
@@ -9,7 +8,6 @@ import NinePatchCanvas from "../NinePatchCanvas";
 import { computeLayoutStyle } from "./utils";
 import TextElement from "./TextElement";
 import ImageElement from "./ImageElement";
-import { previewResourceEmitter } from "@/singletons/emitters";
 
 const LayoutElement: React.FC<{
   element: TypeLayoutElement;
@@ -24,25 +22,6 @@ const LayoutElement: React.FC<{
     onClick
   } = props;
 
-  const elementRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    const listener = (src: string) => {
-      if (element.sourceData.src === src) {
-        anime({
-          targets: elementRef.current,
-          translateX: 250,
-          direction: "alternate",
-          loop: true,
-          easing: "linear"
-        });
-      }
-    };
-    previewResourceEmitter.on("locateByResource", listener);
-    return () => {
-      previewResourceEmitter.removeListener("locateByResource", listener);
-    };
-  }, []);
   let ele: JSX.Element | null = null;
   const layoutStyle = computeLayoutStyle(element.layout, ratio);
   const computedWidth = (Number(element.layout.w) * ratio).toFixed(0);

@@ -8,13 +8,13 @@ import { TypeFileItem } from "src/types/config.page";
 import { TypeFileData } from "src/types/file-data";
 import { FILE_EVENT } from "src/common/enums";
 import ImageElement from "../../Previewer/ImageElement";
-import ImageDisplayFrame from "../ImageDisplayFrame";
+import ImageDisplayFrame from "./ImageDisplayFrame";
 import FileHandler from "./FileHandler";
 import FileDisplayFrame from "./FileDisplayFrame";
 import useSubscribedSrc from "@/hooks/useProjectFile";
 import useResolveProjectPath from "@/hooks/useResolveProjectPath";
 import useResolveResourcePath from "@/hooks/useResolveResourcePath";
-import { previewResourceEmitter } from "@/singletons/emitters";
+import { previewResourceEmitter, PREVIEW_EVENT } from "@/singletons/emitters";
 
 const getDescription = (fileData: TypeFileData) => {
   switch (fileData.filetype) {
@@ -303,7 +303,10 @@ const FileFiller: React.FC<{ data: TypeFileItem }> = ({ data }) => {
         exportVisible={projectFile.state !== FILE_EVENT.UNLINK}
         deleteVisible={projectFile.state !== FILE_EVENT.UNLINK}
         onLocate={() => {
-          previewResourceEmitter.emit("locate:layout", data.sourceUrl);
+          previewResourceEmitter.emit(
+            PREVIEW_EVENT.locateLayout,
+            data.sourceUrl
+          );
         }}
         // 点击导入
         onExport={() => onExport(absoluteProjectFile)}

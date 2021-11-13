@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, { useLayoutEffect, useRef, useState } from "react";
 import md5 from "md5";
 import anime from "animejs";
 import styled from "styled-components";
@@ -77,7 +77,10 @@ const Previewer: React.FC<{
                 ratio={ratio}
                 mouseEffect={mouseEffect}
                 onClick={() => {
-                  //
+                  previewResourceEmitter.emit(
+                    PREVIEW_EVENT.locateResource,
+                    element
+                  );
                 }}
               />
             </span>

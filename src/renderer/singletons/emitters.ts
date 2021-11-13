@@ -6,3 +6,5 @@ export enum PREVIEW_EVENT {
 }
 
 export const previewResourceEmitter = new EventEmitter();
+
+previewResourceEmitter.setMaxListeners(9999);

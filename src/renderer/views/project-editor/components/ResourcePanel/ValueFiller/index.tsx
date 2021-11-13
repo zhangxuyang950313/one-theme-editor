@@ -5,7 +5,7 @@ import { HEX_FORMAT, RESOURCE_TAG } from "src/common/enums/index";
 import { TypeXmlItem, TypeXmlValueTags } from "src/types/config.page";
 import { TypeXmlFileData } from "src/types/file-data";
 import XmlTemplateUtil from "src/common/utils/XmlTemplateUtil";
-import { useSubscribeSrcSingly } from "../../hooks";
+import { useSubscribeSrcSingly } from "../../../hooks";
 import ColorPicker from "./ColorPicker";
 import BooleanSelector from "./BooleanSelector";
 import NumberInput from "./NumberInput";
