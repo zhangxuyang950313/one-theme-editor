@@ -9,22 +9,21 @@ import {
 
 // 文件操作区
 const FileHandler: React.FC<{
-  traceVisible: boolean;
+  locateVisible: boolean;
   exportVisible: boolean;
-  resetVisible: boolean;
   deleteVisible: boolean;
-  onTrace: () => void; // 追踪定位在界面的位置
+  onLocate: () => void; // 追踪定位在界面的位置
   onExport: () => void; // 导出
   onDelete: () => void; // 删除
 }> = props => {
   return (
     <StyleFileHandler>
-      {props.traceVisible && (
-        <Tooltip destroyTooltipOnHide overlay="定位">
-          <IconLocation className="press btn-normal" onClick={props.onTrace} />
+      {props.locateVisible && (
+        <Tooltip destroyTooltipOnHide overlay="定位" placement="right">
+          <IconLocation className="press btn-normal" onClick={props.onLocate} />
         </Tooltip>
       )}
-      {props.deleteVisible && props.exportVisible && (
+      {props.exportVisible && (
         <Tooltip destroyTooltipOnHide overlay="导入" placement="right">
           {/* 导入按钮 */}
           <IconPlus className="press btn-normal" onClick={props.onExport} />

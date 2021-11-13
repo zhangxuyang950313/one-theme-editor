@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import md5 from "md5";
+import anime from "animejs";
 import styled from "styled-components";
 
 import { TypePageConfig } from "src/types/config.resource";
 import LayoutElement from "./LayoutElement";
+import { previewResourceEmitter, PREVIEW_EVENT } from "@/singletons/emitters";
 
 const Previewer: React.FC<{
   className?: string;
@@ -16,12 +19,35 @@ const Previewer: React.FC<{
       screenWidth,
       layoutElementList,
       previewList,
-      forceStaticPreview,
-      colorFormat
+      forceStaticPreview
     }
   } = props;
 
   const [ratio, setRatio] = useState(0);
+  const layoutRef = useRef<HTMLDivElement | null>(null);
+
+  useLayoutEffect(() => {
+    const cb = (src: string) => {
+      const targets = Array.from(layoutRef.current?.children || []).flatMap(
+        child => {
+          return child.getAttribute("data-src-uuid") !== md5(src)
+            ? [child]
+            : [];
+        }
+      );
+      anime({
+        targets,
+        opacity: 0.1,
+        direction: "alternate",
+        duration: 800,
+        easing: "easeOutBack"
+      });
+    };
+    previewResourceEmitter.on(PREVIEW_EVENT.locateLayout, cb);
+    return () => {
+      previewResourceEmitter.removeListener(PREVIEW_EVENT.locateLayout, cb);
+    };
+  }, []);
 
   if (!screenWidth) return null;
 
@@ -37,6 +63,7 @@ const Previewer: React.FC<{
         <img alt="" className="static" src={previewList[0]} />
       ) : (
         <div
+          ref={layoutRef}
           className="dynamic"
           style={{
             width: `${Number(screenWidth) * ratio}px`,
@@ -44,15 +71,16 @@ const Previewer: React.FC<{
           }}
         >
           {layoutElementList.map((element, k) => (
-            <LayoutElement
-              key={k}
-              element={element}
-              ratio={ratio}
-              mouseEffect={mouseEffect}
-              onClick={() => {
-                //
-              }}
-            />
+            <span key={k} data-src-uuid={md5(element.sourceUrl)}>
+              <LayoutElement
+                element={element}
+                ratio={ratio}
+                mouseEffect={mouseEffect}
+                onClick={() => {
+                  //
+                }}
+              />
+            </span>
           ))}
         </div>
       )}

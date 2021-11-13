@@ -21,6 +21,26 @@ export function computeLayoutStyle(
   const numY = Number(layout.y);
   const numW = Number(layout.w);
   const numH = Number(layout.h);
+  // switch (layout.align) {
+  //   case ALIGN_VALUE.CENTER: {
+  //     numX = numX - numW / 2;
+  //     break;
+  //   }
+  //   case ALIGN_VALUE.RIGHT: {
+  //     numX = numX - numW;
+  //     break;
+  //   }
+  // }
+  // switch (layout.alignV) {
+  //   case ALIGN_V_VALUE.CENTER: {
+  //     numY = numY - numH / 2;
+  //     break;
+  //   }
+  //   case ALIGN_V_VALUE.BOTTOM: {
+  //     numY = numY - numH;
+  //     break;
+  //   }
+  // }
   const style: LayoutStyleComputed = {
     display: "inline",
     position: "absolute",

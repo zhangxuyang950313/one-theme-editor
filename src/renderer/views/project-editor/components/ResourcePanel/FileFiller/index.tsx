@@ -187,11 +187,6 @@ const FileFiller: React.FC<{ data: TypeFileItem }> = ({ data }) => {
   const absoluteResourceFile = useResolveResourcePath(data.sourceData.src);
   const projectFile = useSubscribedSrc(data.sourceData.src);
 
-  const description = getDescription(data.fileData);
-
-  const floatUrl = `resource://${data.sourceData.src}`;
-  const primaryUrl = projectFile.url;
-
   const ResourceNode = (
     <ImageDisplayFrame girdSize={16}>
       <ImageElement sourceUrl={data.sourceUrl} sourceData={data.sourceData} />
@@ -300,16 +295,15 @@ const FileFiller: React.FC<{ data: TypeFileItem }> = ({ data }) => {
         />
         <div className="info">
           <div className="main">{data.comment}</div>
-          <div className="secondary">{description}</div>
+          <div className="secondary">{getDescription(data.fileData)}</div>
         </div>
       </div>
       <FileHandler
-        traceVisible
-        exportVisible
-        resetVisible
+        locateVisible
+        exportVisible={projectFile.state !== FILE_EVENT.UNLINK}
         deleteVisible={projectFile.state !== FILE_EVENT.UNLINK}
-        onTrace={() => {
-          previewResourceEmitter.emit("locateByResource", data.sourceData.src);
+        onLocate={() => {
+          previewResourceEmitter.emit("locate:layout", data.sourceUrl);
         }}
         // 点击导入
         onExport={() => onExport(absoluteProjectFile)}
