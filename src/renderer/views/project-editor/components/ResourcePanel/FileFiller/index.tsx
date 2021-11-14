@@ -7,7 +7,6 @@ import { IconArrowRight, IconPlus } from "@arco-design/web-react/icon";
 import { TypeFileItem } from "src/types/config.page";
 import { TypeFileData } from "src/types/file-data";
 import { FILE_EVENT } from "src/common/enums";
-import md5 from "md5";
 import ImageElement from "../../Previewer/ImageElement";
 import ImageDisplayFrame from "./ImageDisplayFrame";
 import FileHandler from "./FileHandler";
@@ -140,10 +139,7 @@ const FileFiller: React.FC<{ data: TypeFileItem }> = ({ data }) => {
         deleteVisible={projectFile.state !== FILE_EVENT.UNLINK}
         onLocate={() => {
           // 定位到预览图位置
-          previewResourceEmitter.emit(
-            PREVIEW_EVENT.locateLayout,
-            md5(JSON.stringify(data.sourceData))
-          );
+          previewResourceEmitter.emit(PREVIEW_EVENT.locateLayout, data.keyPath);
         }}
         // 点击导入
         onExport={() => onExport(absoluteProjectFile)}

@@ -1,13 +1,12 @@
 import { FileTypeResult } from "file-type";
 import {
-  HEX_FORMAT,
   ALIGN_VALUE,
   ALIGN_V_VALUE,
   RESOURCE_TAG,
   RESOURCE_PROTOCOL,
   LAYOUT_ELEMENT_TAG
-} from "../common/enums";
-import XMLNodeBase from "../common/classes/XMLNodeElement";
+} from "src/common/enums";
+import XMLNodeBase from "src/common/classes/XMLNodeElement";
 import { TypeFileData, TypeImageFileData } from "./file-data";
 
 /*************************** Resource ***************************/
@@ -31,8 +30,8 @@ export type TypeXmlNodeData = {
 };
 // <Xml/> 节点下的子节点
 export type TypeXmlValueData = {
-  md5: string;
   tag: string;
+  keyPath: string;
   comment: string;
   attributes: [string, string][];
   value: string;
@@ -59,13 +58,7 @@ export type TypeNumberBlock = TypeValueBlock<RESOURCE_TAG.Number>;
 // Boolean
 export type TypeBooleanBlock = TypeValueBlock<RESOURCE_TAG.Boolean>;
 // Color
-export type TypeColorBlock = {
-  readonly tag: RESOURCE_TAG.Color;
-  key: string;
-  name: string;
-  format: HEX_FORMAT;
-  items: TypeXmlNodeData[];
-};
+export type TypeColorBlock = TypeValueBlock<RESOURCE_TAG.Color>;
 
 // File
 export type TypeFileBlock = {
@@ -76,6 +69,7 @@ export type TypeFileBlock = {
 };
 export type TypeFileItem = {
   key: string;
+  keyPath: string;
   comment: string;
   sourceUrl: string;
   sourceData: TypeSourceData;
@@ -112,6 +106,7 @@ export type TypeLayoutData = {
 // 图片元素数据
 export type TypeLayoutImageElement = {
   tag: LAYOUT_ELEMENT_TAG.Image;
+  keyPath: string;
   sourceUrl: string;
   sourceData: TypeSourceData;
   layout: TypeLayoutData;
@@ -120,7 +115,7 @@ export type TypeLayoutImageElement = {
 // 颜色元素数据
 export type TypeLayoutTextElement = {
   tag: LAYOUT_ELEMENT_TAG.Text;
-  md5: string;
+  keyPath: string;
   text: string;
   size: string;
   color: string;

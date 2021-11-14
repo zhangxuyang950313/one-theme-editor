@@ -5,7 +5,6 @@ import { HEX_FORMAT, RESOURCE_TAG } from "src/common/enums/index";
 import { TypeXmlNodeData, TypeXmlValueTags } from "src/types/config.page";
 import { TypeXmlFileData } from "src/types/file-data";
 import XmlTemplateUtil from "src/common/utils/XmlTemplateUtil";
-import md5 from "md5";
 import { useSubscribeSrcSingly } from "../../../hooks";
 import ColorPicker from "./ColorPicker";
 import BooleanSelector from "./BooleanSelector";
@@ -70,6 +69,7 @@ const ValueEditor: React.FC<{
  * @returns
  */
 const ValueFillerItem: React.FC<{
+  keyPath: string;
   defaultValue: string;
   value: string;
   comment: string;
@@ -80,6 +80,7 @@ const ValueFillerItem: React.FC<{
   onChange: (v: string) => void;
 }> = props => {
   const {
+    keyPath,
     comment,
     valueTemplate,
     defaultValue,
@@ -110,10 +111,7 @@ const ValueFillerItem: React.FC<{
           <IconLocation
             className="btn locate"
             onClick={() => {
-              // previewResourceEmitter.emit(
-              //   PREVIEW_EVENT.locateResource,
-              //   md5(JSON.stringify())
-              // );
+              previewResourceEmitter.emit(PREVIEW_EVENT.locateLayout, keyPath);
             }}
           />
           {/* 删除 */}
@@ -205,6 +203,7 @@ const ValueFiller: React.FC<{
         return (
           <ValueFillerItem
             key={key}
+            keyPath={valueItem.keyPath}
             defaultValue={valueItem.value}
             value={value}
             valueTemplate={valueItem.template}

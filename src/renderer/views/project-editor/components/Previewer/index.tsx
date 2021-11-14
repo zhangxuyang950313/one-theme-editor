@@ -1,5 +1,4 @@
 import React, { useLayoutEffect, useRef, useState } from "react";
-import md5 from "md5";
 import anime from "animejs";
 import styled from "styled-components";
 
@@ -27,10 +26,11 @@ const Previewer: React.FC<{
   const layoutRef = useRef<HTMLDivElement | null>(null);
 
   useLayoutEffect(() => {
-    const cb = (md5: string) => {
+    const cb = (keyPath: string) => {
+      console.log(keyPath);
       const list = Array.from(layoutRef.current?.children || []);
       const targets = list.flatMap(child =>
-        child.getAttribute("data-src-uuid") !== md5 ? [child] : []
+        child.getAttribute("data-key-path") !== keyPath ? [child] : []
       );
       if (targets.length === list.length) return;
       anime({
@@ -70,10 +70,7 @@ const Previewer: React.FC<{
         >
           {layoutElementList.map((element, k) => {
             return (
-              <span
-                key={k}
-                data-src-uuid={md5(JSON.stringify(element.sourceData))}
-              >
+              <span key={k} data-key-path={element.keyPath}>
                 <LayoutElement
                   element={element}
                   ratio={ratio}
@@ -81,7 +78,7 @@ const Previewer: React.FC<{
                   onClick={() => {
                     previewResourceEmitter.emit(
                       PREVIEW_EVENT.locateResource,
-                      element
+                      element.keyPath
                     );
                   }}
                 />

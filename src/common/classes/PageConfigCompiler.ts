@@ -1,6 +1,5 @@
 import path from "path";
 import { URL } from "url";
-import md5 from "md5";
 import { TypePageConfig } from "src/types/config.resource";
 import {
   ElementLayoutConfig,
@@ -22,15 +21,14 @@ import {
   ALIGN_V_VALUE,
   RESOURCE_TAG,
   RESOURCE_PROTOCOL,
-  LAYOUT_ELEMENT_TAG,
-  HEX_FORMAT
+  LAYOUT_ELEMENT_TAG
 } from "src/common/enums/index";
 import XMLNodeElement from "src/common/classes/XMLNodeElement";
 import PathUtil from "src/common/utils/PathUtil";
 import RegexpUtil from "src/common/utils/RegexpUtil";
 import TempStringUtil from "src/common/utils/TempStringUtil";
 import { TypeImageFileData, TypeFileData } from "src/types/file-data";
-import reactiveState from "../singletons/reactiveState";
+import reactiveState from "src/common/singletons/reactiveState";
 import XmlCompiler from "./XmlCompiler";
 import XmlCompilerExtra from "./XmlCompilerExtra";
 import type {
@@ -53,7 +51,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
   private sourceKeyValCache: Map<string, string>;
   private sourceDataCache: Map<string, TypeSourceData>;
   private fileDataCache: Map<string, TypeFileData>;
-  private imageDataCache: Map<string, TypeImageFileData>;
+  private imageFileDataCache: Map<string, TypeImageFileData>;
   private xmlValueCache: Map<string, string>;
   private xmlValueItemCache: Map<string, TypeXmlValueData>;
   constructor(data: { namespace: string; config: string }) {
@@ -70,7 +68,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
     this.sourceKeyValCache = new Map();
     this.sourceDataCache = new Map();
     this.fileDataCache = new Map();
-    this.imageDataCache = new Map();
+    this.imageFileDataCache = new Map();
     this.xmlValueCache = new Map();
     this.xmlValueItemCache = new Map();
   }
@@ -248,10 +246,10 @@ export default class PageConfigCompiler extends XMLNodeElement {
   }
 
   private getImageFileData(file: string): TypeImageFileData {
-    const cache = this.imageDataCache.get(file);
+    const cache = this.imageFileDataCache.get(file);
     if (cache) return cache;
     const data = getImageFileData(file);
-    this.imageDataCache.set(file, data);
+    this.imageFileDataCache.set(file, data);
     return data;
   }
 
@@ -348,8 +346,11 @@ export default class PageConfigCompiler extends XMLNodeElement {
    * @param node
    * @returns
    */
-  private layoutImageElement(node: XMLNodeElement): TypeLayoutImageElement {
-    const source = node.getAttributeOf("src");
+  private layoutImageElement(
+    node: XMLNodeElement,
+    source: string,
+    keyPath: string
+  ): TypeLayoutImageElement {
     const sourceData = this.getUrlSourceData(source);
     const size = { width: "0", height: "0" };
     try {
@@ -362,6 +363,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
       console.log(err);
     }
     return new LayoutImageElement()
+      .set("keyPath", keyPath)
       .set("sourceUrl", source)
       .set("sourceData", sourceData)
       .set("layout", this.layoutConf(node, size))
@@ -380,8 +382,12 @@ export default class PageConfigCompiler extends XMLNodeElement {
    * @param node
    * @returns
    */
-  private layoutTextElement(node: XMLNodeElement): TypeLayoutTextElement {
+  private layoutTextElement(
+    node: XMLNodeElement,
+    keyPath: string
+  ): TypeLayoutTextElement {
     const textElement = new LayoutTextElement()
+      .set("keyPath", keyPath)
       .set("text", node.getAttributeOf("text"))
       .set("size", node.getAttributeOf("size"))
       .setBatchOf("layout", this.layoutConf(node));
@@ -392,7 +398,6 @@ export default class PageConfigCompiler extends XMLNodeElement {
       const valueData = this.xmlValueItemCache.get(sourcePath[1]);
       if (valueData) {
         textElement.set("valueData", valueData);
-        textElement.set("md5", valueData.md5);
       }
       const xmlSource = path.dirname(sourcePath[1]); // valueItem 一定是 Xml 节点的子节点
       const colorSource = this.sourceKeyValCache.get(xmlSource);
@@ -418,9 +423,11 @@ export default class PageConfigCompiler extends XMLNodeElement {
       const fileData = this.getFileData(
         this.resolveResourcePath(sourceData.src)
       );
-      this.sourceKeyValCache.set(path.join(rootKey, imageKey, itemKey), source);
+      const keyPath = path.join(rootKey, imageKey, itemKey);
+      this.sourceKeyValCache.set(keyPath, source);
       return new FileItem()
         .set("key", itemKey)
+        .set("keyPath", keyPath)
         .set("comment", arr[key - 1]?.getComment())
         .set("sourceUrl", source)
         .set("sourceData", sourceData)
@@ -469,18 +476,16 @@ export default class PageConfigCompiler extends XMLNodeElement {
             tag: tagname,
             attributes: Object.fromEntries(attributes)
           });
+          const keyPath = path.join(rootKey, xmlItemKey, itemKey, valueKey);
           const xmlValueItem = new XmlValueData()
-            .set("md5", md5(JSON.stringify({ tag: tagname, attributes })))
             .set("tag", tagname)
+            .set("keyPath", keyPath)
             .set("comment", arr[kk - 1]?.getComment())
             .set("attributes", attributes)
             .set("value", defaultVal)
             .set("template", template)
             .create();
-          this.xmlValueItemCache.set(
-            path.join(rootKey, xmlItemKey, itemKey, valueKey),
-            xmlValueItem
-          );
+          this.xmlValueItemCache.set(keyPath, xmlValueItem);
           return xmlValueItem;
         });
       const fileData = this.getFileData(
@@ -509,7 +514,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
   }
 
   // 解析 Resource 分类定义数据
-  getResourceCategory(): TypeResourceCategory[] {
+  getResourceCategoryList(): TypeResourceCategory[] {
     return this.getRootChildrenNodesByTagname(ELEMENT_TAG.Resource).map(
       Resource => {
         // 扩展配置（备用）
@@ -561,21 +566,25 @@ export default class PageConfigCompiler extends XMLNodeElement {
         // 处理指定属性字符串模板
         // 返回是否替换成功
         const resolveTempStrWithAttr = (attr: string) => {
-          const replaced = TempStringUtil.replace(
-            node.getAttributeOf(attr),
+          const attrVal = node.getAttributeOf(attr);
+          const source = TempStringUtil.replace(
+            attrVal,
             this.sourceKeyValCache
           );
-          node.setAttributeOf(attr, replaced);
-          return !!replaced;
+          const matched = TempStringUtil.match(attrVal);
+          const keyPath = matched?.[0]?.[1] || "";
+          return { source, keyPath };
         };
         switch (node.getTagname()) {
           case LAYOUT_ELEMENT_TAG.Image: {
-            if (!resolveTempStrWithAttr("src")) return [];
-            return this.layoutImageElement(node);
+            const _ = resolveTempStrWithAttr("src");
+            if (!_.source) return [];
+            return this.layoutImageElement(node, _.source, _.keyPath);
           }
           case LAYOUT_ELEMENT_TAG.Text: {
-            // if (!resolveTempStrWithAttr("color")) return [];
-            return this.layoutTextElement(node);
+            const _ = resolveTempStrWithAttr("color");
+            // console.log({ _ });
+            return this.layoutTextElement(node, _.keyPath);
           }
           default: {
             return [];
@@ -593,7 +602,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
       .set("disableTabs", this.getDisableTabs())
       .set("forceStaticPreview", this.getForceStaticPreview())
       .set("previewList", this.getPreviewList())
-      .set("resourceCategoryList", this.getResourceCategory())
+      .set("resourceCategoryList", this.getResourceCategoryList())
       .set("layoutElementList", this.getLayoutElementList())
       .create();
   }

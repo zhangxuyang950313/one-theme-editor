@@ -5,7 +5,7 @@ import {
   TypeModuleConfig,
   TypePageOption,
   TypePageConfig
-} from "../types/config.resource";
+} from "src/types/config.resource";
 import {
   TypeResourceCategory,
   TypeLayoutData,
@@ -21,20 +21,20 @@ import {
   TypeXmlNodeData,
   TypeValueBlock,
   TypeXmlValueData
-} from "../types/config.page";
+} from "src/types/config.page";
 import {
   TypeFileData,
   TypeImageFileData,
   TypeXmlFileData
-} from "../types/file-data";
-import { TypeUiVersion } from "../types/project";
+} from "src/types/file-data";
+import { TypeUiVersion } from "src/types/project";
 import {
   ALIGN_VALUE,
   ALIGN_V_VALUE,
   HEX_FORMAT,
   LAYOUT_ELEMENT_TAG,
   RESOURCE_TAG
-} from "../common/enums/index";
+} from "src/common/enums/index";
 import { AbstractDataModel } from "./AbstractDataModel";
 
 export class SourceData extends AbstractDataModel<TypeSourceData> {
@@ -88,6 +88,7 @@ export class FileData extends AbstractDataModel<TypeFileData> {
 export class FileItem extends AbstractDataModel<TypeFileItem> {
   protected data: TypeFileItem = {
     key: "",
+    keyPath: "",
     comment: "",
     sourceUrl: "",
     sourceData: SourceData.default,
@@ -101,7 +102,7 @@ export class FileItem extends AbstractDataModel<TypeFileItem> {
 export class XmlValueData extends AbstractDataModel<TypeXmlValueData> {
   protected data: TypeXmlValueData = {
     comment: "",
-    md5: "",
+    keyPath: "",
     tag: "",
     attributes: [],
     value: "",
@@ -292,6 +293,7 @@ export class ElementLayoutConfig extends AbstractDataModel<TypeLayoutData> {
 export class LayoutImageElement extends AbstractDataModel<TypeLayoutImageElement> {
   protected data: TypeLayoutImageElement = {
     tag: LAYOUT_ELEMENT_TAG.Image,
+    keyPath: "",
     sourceUrl: "",
     sourceData: SourceData.default,
     layout: ElementLayoutConfig.default
@@ -304,7 +306,7 @@ export class LayoutImageElement extends AbstractDataModel<TypeLayoutImageElement
 export class LayoutTextElement extends AbstractDataModel<TypeLayoutTextElement> {
   protected data: TypeLayoutTextElement = {
     tag: LAYOUT_ELEMENT_TAG.Text,
-    md5: "",
+    keyPath: "",
     text: "",
     size: "36",
     color: "",
