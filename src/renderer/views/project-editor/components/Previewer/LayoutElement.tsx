@@ -27,7 +27,7 @@ const LayoutElement: React.FC<{
   const computedWidth = (Number(element.layout.w) * ratio).toFixed(0);
   const computedHeight = (Number(element.layout.h) * ratio).toFixed(0);
   const sourceUrl = `${element.sourceUrl}?w=${computedWidth}&h=${computedHeight}&q=best`;
-  switch (element.elementTag) {
+  switch (element.tag) {
     // 图片类型预览
     case LAYOUT_ELEMENT_TAG.Image: {
       ele = filenameIs9Patch(element.sourceUrl) ? (

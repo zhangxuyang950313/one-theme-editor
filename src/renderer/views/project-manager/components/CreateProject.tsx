@@ -74,7 +74,7 @@ const CreateProject: React.FC<
   // const [fieldsError, setFieldsError] = useState([]);
 
   // 资源配置列表
-  const resourceList = scenario.resourceConfigList;
+  const { resourceConfigList } = scenario;
 
   // 工程信息配置
   const projectInfoConfig = scenario.fileTempList.find(
@@ -181,7 +181,7 @@ const CreateProject: React.FC<
       name: "选择配置",
       Context: (
         <ResourceConfigList
-          resourceConfigList={resourceList}
+          resourceConfigList={resourceConfigList}
           selectedKey={resourceConfig?.key || ""}
           onSelected={setResourceConfig}
         />

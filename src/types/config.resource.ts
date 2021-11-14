@@ -1,6 +1,6 @@
 import { HEX_FORMAT } from "src/common/enums";
 import { TypeUiVersion } from "./project";
-import { TypeLayoutElement, TypeResourceDefinition } from "./config.page";
+import { TypeLayoutElement, TypeResourceCategory } from "./config.page";
 
 // 预览单个页面配置
 export type TypePageOption = {
@@ -18,7 +18,7 @@ export type TypePageConfig = {
   colorFormat: HEX_FORMAT;
   forceStaticPreview: boolean;
   previewList: string[];
-  resourceList: TypeResourceDefinition[];
+  resourceCategoryList: TypeResourceCategory[];
   layoutElementList: TypeLayoutElement[];
 };
 

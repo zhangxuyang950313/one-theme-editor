@@ -7,7 +7,7 @@ import {
   TypePageConfig
 } from "../types/config.resource";
 import {
-  TypeResourceDefinition,
+  TypeResourceCategory,
   TypeLayoutData,
   TypeLayoutImageElement,
   TypeLayoutTextElement,
@@ -18,7 +18,7 @@ import {
   TypeStringBlock,
   TypeNumberBlock,
   TypeBooleanBlock,
-  TypeXmlItem,
+  TypeXmlNodeData,
   TypeValueBlock,
   TypeXmlValueData
 } from "../types/config.page";
@@ -98,7 +98,7 @@ export class FileItem extends AbstractDataModel<TypeFileItem> {
   }
 }
 
-export class XmlValueItem extends AbstractDataModel<TypeXmlValueData> {
+export class XmlValueData extends AbstractDataModel<TypeXmlValueData> {
   protected data: TypeXmlValueData = {
     comment: "",
     md5: "",
@@ -108,12 +108,12 @@ export class XmlValueItem extends AbstractDataModel<TypeXmlValueData> {
     template: ""
   };
   static get default(): TypeXmlValueData {
-    return new XmlValueItem().create();
+    return new XmlValueData().create();
   }
 }
 
-export class XmlItem extends AbstractDataModel<TypeXmlItem> {
-  protected data: TypeXmlItem = {
+export class XmlNodeData extends AbstractDataModel<TypeXmlNodeData> {
+  protected data: TypeXmlNodeData = {
     tag: "",
     key: "",
     name: "",
@@ -124,7 +124,7 @@ export class XmlItem extends AbstractDataModel<TypeXmlItem> {
   };
 }
 
-export class XmlBlocker extends AbstractDataModel<TypeValueBlock> {
+export class ValueBlocker extends AbstractDataModel<TypeValueBlock> {
   protected data: TypeValueBlock = {
     tag: RESOURCE_TAG.String,
     key: "",
@@ -169,14 +169,14 @@ export class BooleanBlock extends AbstractDataModel<TypeBooleanBlock> {
   };
 }
 
-export class ResourceDefinition extends AbstractDataModel<TypeResourceDefinition> {
-  protected data: TypeResourceDefinition = {
+export class ResourceDefinition extends AbstractDataModel<TypeResourceCategory> {
+  protected data: TypeResourceCategory = {
     key: "",
     name: "",
     extra: {},
     children: []
   };
-  static get default(): TypeResourceDefinition {
+  static get default(): TypeResourceCategory {
     return new ResourceDefinition().create();
   }
 }
@@ -204,7 +204,7 @@ export class PageConfig extends AbstractDataModel<TypePageConfig> {
     colorFormat: HEX_FORMAT.RGBA,
     forceStaticPreview: false,
     previewList: [],
-    resourceList: [],
+    resourceCategoryList: [],
     layoutElementList: []
   };
 
@@ -291,7 +291,7 @@ export class ElementLayoutConfig extends AbstractDataModel<TypeLayoutData> {
 
 export class LayoutImageElement extends AbstractDataModel<TypeLayoutImageElement> {
   protected data: TypeLayoutImageElement = {
-    elementTag: LAYOUT_ELEMENT_TAG.Image,
+    tag: LAYOUT_ELEMENT_TAG.Image,
     sourceUrl: "",
     sourceData: SourceData.default,
     layout: ElementLayoutConfig.default
@@ -303,13 +303,14 @@ export class LayoutImageElement extends AbstractDataModel<TypeLayoutImageElement
 
 export class LayoutTextElement extends AbstractDataModel<TypeLayoutTextElement> {
   protected data: TypeLayoutTextElement = {
-    elementTag: LAYOUT_ELEMENT_TAG.Text,
+    tag: LAYOUT_ELEMENT_TAG.Text,
+    md5: "",
     text: "",
     size: "36",
     color: "",
     sourceUrl: "",
     sourceData: SourceData.default,
-    valueData: XmlValueItem.default,
+    valueData: XmlValueData.default,
     layout: ElementLayoutConfig.default
   };
   static get default(): TypeLayoutTextElement {

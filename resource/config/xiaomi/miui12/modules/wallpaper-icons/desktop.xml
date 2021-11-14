@@ -71,7 +71,6 @@
         </File>
     </Resource>
 
-
     <Resource name="颜色值" :key="color">
         <Color name="桌面模块" :key="home">
             <!-- 桌面模块 -->

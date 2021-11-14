@@ -27,14 +27,12 @@ const Previewer: React.FC<{
   const layoutRef = useRef<HTMLDivElement | null>(null);
 
   useLayoutEffect(() => {
-    const cb = (src: string) => {
-      const targets = Array.from(layoutRef.current?.children || []).flatMap(
-        child => {
-          return child.getAttribute("data-src-uuid") !== md5(src)
-            ? [child]
-            : [];
-        }
+    const cb = (md5: string) => {
+      const list = Array.from(layoutRef.current?.children || []);
+      const targets = list.flatMap(child =>
+        child.getAttribute("data-src-uuid") !== md5 ? [child] : []
       );
+      if (targets.length === list.length) return;
       anime({
         targets,
         opacity: 0.1,
@@ -70,21 +68,26 @@ const Previewer: React.FC<{
             height: `${2340 * ratio}px`
           }}
         >
-          {layoutElementList.map((element, k) => (
-            <span key={k} data-src-uuid={md5(element.sourceUrl)}>
-              <LayoutElement
-                element={element}
-                ratio={ratio}
-                mouseEffect={mouseEffect}
-                onClick={() => {
-                  previewResourceEmitter.emit(
-                    PREVIEW_EVENT.locateResource,
-                    element
-                  );
-                }}
-              />
-            </span>
-          ))}
+          {layoutElementList.map((element, k) => {
+            return (
+              <span
+                key={k}
+                data-src-uuid={md5(JSON.stringify(element.sourceData))}
+              >
+                <LayoutElement
+                  element={element}
+                  ratio={ratio}
+                  mouseEffect={mouseEffect}
+                  onClick={() => {
+                    previewResourceEmitter.emit(
+                      PREVIEW_EVENT.locateResource,
+                      element
+                    );
+                  }}
+                />
+              </span>
+            );
+          })}
         </div>
       )}
     </StylePreviewer>
@@ -98,7 +101,6 @@ const StylePreviewer = styled.div`
   .dynamic {
     width: 100%;
     position: relative;
-    transform-origin: 0 0;
     box-sizing: border-box;
   }
   .static {

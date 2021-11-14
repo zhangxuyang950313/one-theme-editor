@@ -7,6 +7,7 @@ import { IconArrowRight, IconPlus } from "@arco-design/web-react/icon";
 import { TypeFileItem } from "src/types/config.page";
 import { TypeFileData } from "src/types/file-data";
 import { FILE_EVENT } from "src/common/enums";
+import md5 from "md5";
 import ImageElement from "../../Previewer/ImageElement";
 import ImageDisplayFrame from "./ImageDisplayFrame";
 import FileHandler from "./FileHandler";
@@ -15,6 +16,189 @@ import useSubscribedSrc from "@/hooks/useProjectFile";
 import useResolveProjectPath from "@/hooks/useResolveProjectPath";
 import useResolveResourcePath from "@/hooks/useResolveResourcePath";
 import { previewResourceEmitter, PREVIEW_EVENT } from "@/singletons/emitters";
+
+// 文件填充器
+const FileFiller: React.FC<{ data: TypeFileItem }> = ({ data }) => {
+  const absoluteProjectFile = useResolveProjectPath(data.sourceData.src);
+  const absoluteResourceFile = useResolveResourcePath(data.sourceData.src);
+  const projectFile = useSubscribedSrc(data.sourceData.src);
+
+  const ResourceNode = (
+    <ImageDisplayFrame girdSize={16}>
+      <ImageElement sourceUrl={data.sourceUrl} sourceData={data.sourceData} />
+    </ImageDisplayFrame>
+  );
+
+  return (
+    <StyleFileFiller>
+      <div className="file-display-info">
+        <FileDisplayFrame
+          floatNode={
+            <Tooltip
+              overlayStyle={{ maxWidth: "none" }}
+              destroyTooltipOnHide
+              placement="top"
+              overlay={
+                // 资源详情
+                <ResourceDescriptions
+                  name={data.comment}
+                  path={data.sourceData.src}
+                  resolution={getDescription(data.fileData)}
+                  size={data.fileData.size}
+                  PreviewNode={ResourceNode}
+                />
+              }
+            >
+              {/* 左上角悬浮展示 */}
+              <span>
+                <ImageDisplayFrame girdSize={6}>
+                  <img
+                    style={{
+                      display: "inherit",
+                      height: "100%",
+                      cursor: "pointer"
+                    }}
+                    src={data.sourceUrl}
+                    alt=""
+                    onClick={() => {
+                      window.$one.$server.copyFile({
+                        from: absoluteResourceFile,
+                        to: absoluteProjectFile
+                      });
+                    }}
+                  />
+                </ImageDisplayFrame>
+              </span>
+            </Tooltip>
+          }
+          primaryNode={
+            <>
+              {projectFile.state === FILE_EVENT.UNLINK ? (
+                <div
+                  className="empty-display"
+                  onClick={() => onExport(absoluteProjectFile)}
+                >
+                  <IconPlus className="plugs-icon" />
+                </div>
+              ) : (
+                <Tooltip
+                  overlayStyle={{ maxWidth: "none" }}
+                  destroyTooltipOnHide
+                  placement="top"
+                  overlay={
+                    // 变更详情
+                    <ModifierDescriptions
+                      name={data.comment}
+                      path={data.sourceData.src}
+                      origin={{
+                        ImageNode: ResourceNode,
+                        resolution: getDescription(data.fileData),
+                        size: data.fileData.size
+                      }}
+                      current={{
+                        ImageNode: (
+                          <ImageDisplayFrame girdSize={18}>
+                            <ImageElement
+                              sourceUrl={data.sourceUrl}
+                              sourceData={data.sourceData}
+                            />
+                          </ImageDisplayFrame>
+                        ),
+                        resolution: getDescription(projectFile.fileData),
+                        size: projectFile.fileData.size
+                      }}
+                    />
+                  }
+                >
+                  <span>
+                    <ImageDisplayFrame
+                      girdSize={18}
+                      onClick={() => {
+                        remote.shell.showItemInFolder(absoluteProjectFile);
+                      }}
+                    >
+                      <ImageElement
+                        mouseEffect
+                        sourceUrl={data.sourceUrl}
+                        sourceData={data.sourceData}
+                      />
+                    </ImageDisplayFrame>
+                  </span>
+                </Tooltip>
+              )}
+            </>
+          }
+        />
+        <div className="info">
+          <div className="main">{data.comment}</div>
+          <div className="secondary">{getDescription(data.fileData)}</div>
+        </div>
+      </div>
+      <FileHandler
+        locateVisible
+        exportVisible={projectFile.state !== FILE_EVENT.UNLINK}
+        deleteVisible={projectFile.state !== FILE_EVENT.UNLINK}
+        onLocate={() => {
+          // 定位到预览图位置
+          previewResourceEmitter.emit(
+            PREVIEW_EVENT.locateLayout,
+            md5(JSON.stringify(data.sourceData))
+          );
+        }}
+        // 点击导入
+        onExport={() => onExport(absoluteProjectFile)}
+        // 删除
+        onDelete={() => {
+          window.$one.$server
+            .deleteFile(absoluteProjectFile)
+            .catch((err: Error) => {
+              Notification.warning({ content: err.message });
+            });
+        }}
+      />
+    </StyleFileFiller>
+  );
+};
+
+const StyleFileFiller = styled.div`
+  display: flex;
+  .file-display-info {
+    display: flex;
+    flex-direction: column;
+    .empty-display {
+      background-color: var(--color-bg-4);
+      &:hover {
+        .plugs-icon {
+          width: 40%;
+          height: 40%;
+          margin: 30%;
+          transition: 0.2s ease-out;
+        }
+      }
+      .plugs-icon {
+        width: 30%;
+        height: 30%;
+        margin: 35%;
+        color: var(--color-text-3);
+        transition: 0.2s ease-in;
+      }
+    }
+  }
+  .info {
+    margin: 5px 0;
+    .main {
+      font-size: 14px;
+      color: var(--color-text-1);
+    }
+    .secondary {
+      /* user-select: text; */
+      font-size: 12px;
+      color: var(--color-text-3);
+    }
+  }
+`;
+
+export default FileFiller;
 
 const getDescription = (fileData: TypeFileData) => {
   switch (fileData.filetype) {
@@ -180,185 +364,3 @@ const StyleResourceDescriptions = styled.div`
     background-color: gainsboro;
   }
 `;
-
-// 文件填充器
-const FileFiller: React.FC<{ data: TypeFileItem }> = ({ data }) => {
-  const absoluteProjectFile = useResolveProjectPath(data.sourceData.src);
-  const absoluteResourceFile = useResolveResourcePath(data.sourceData.src);
-  const projectFile = useSubscribedSrc(data.sourceData.src);
-
-  const ResourceNode = (
-    <ImageDisplayFrame girdSize={16}>
-      <ImageElement sourceUrl={data.sourceUrl} sourceData={data.sourceData} />
-    </ImageDisplayFrame>
-  );
-
-  return (
-    <StyleFileFiller>
-      <div className="file-display-info">
-        <FileDisplayFrame
-          floatNode={
-            <Tooltip
-              overlayStyle={{ maxWidth: "none" }}
-              destroyTooltipOnHide
-              placement="top"
-              overlay={
-                // 资源详情
-                <ResourceDescriptions
-                  name={data.comment}
-                  path={data.sourceData.src}
-                  resolution={getDescription(data.fileData)}
-                  size={data.fileData.size}
-                  PreviewNode={ResourceNode}
-                />
-              }
-            >
-              {/* 左上角悬浮展示 */}
-              <span>
-                <ImageDisplayFrame girdSize={6}>
-                  <img
-                    style={{
-                      display: "inherit",
-                      height: "100%",
-                      cursor: "pointer"
-                    }}
-                    src={data.sourceUrl}
-                    alt=""
-                    onClick={() => {
-                      window.$one.$server.copyFile({
-                        from: absoluteResourceFile,
-                        to: absoluteProjectFile
-                      });
-                    }}
-                  />
-                </ImageDisplayFrame>
-              </span>
-            </Tooltip>
-          }
-          primaryNode={
-            <>
-              {projectFile.state === FILE_EVENT.UNLINK ? (
-                <div
-                  className="empty-display"
-                  onClick={() => onExport(absoluteProjectFile)}
-                >
-                  <IconPlus className="plugs-icon" />
-                </div>
-              ) : (
-                <Tooltip
-                  overlayStyle={{ maxWidth: "none" }}
-                  destroyTooltipOnHide
-                  placement="top"
-                  overlay={
-                    // 变更详情
-                    <ModifierDescriptions
-                      name={data.comment}
-                      path={data.sourceData.src}
-                      origin={{
-                        ImageNode: ResourceNode,
-                        resolution: getDescription(data.fileData),
-                        size: data.fileData.size
-                      }}
-                      current={{
-                        ImageNode: (
-                          <ImageDisplayFrame girdSize={18}>
-                            <ImageElement
-                              sourceUrl={data.sourceUrl}
-                              sourceData={data.sourceData}
-                            />
-                          </ImageDisplayFrame>
-                        ),
-                        resolution: getDescription(projectFile.fileData),
-                        size: projectFile.fileData.size
-                      }}
-                    />
-                  }
-                >
-                  <span>
-                    <ImageDisplayFrame
-                      girdSize={18}
-                      onClick={() => {
-                        remote.shell.showItemInFolder(absoluteProjectFile);
-                      }}
-                    >
-                      <ImageElement
-                        mouseEffect
-                        sourceUrl={data.sourceUrl}
-                        sourceData={data.sourceData}
-                      />
-                    </ImageDisplayFrame>
-                  </span>
-                </Tooltip>
-              )}
-            </>
-          }
-        />
-        <div className="info">
-          <div className="main">{data.comment}</div>
-          <div className="secondary">{getDescription(data.fileData)}</div>
-        </div>
-      </div>
-      <FileHandler
-        locateVisible
-        exportVisible={projectFile.state !== FILE_EVENT.UNLINK}
-        deleteVisible={projectFile.state !== FILE_EVENT.UNLINK}
-        onLocate={() => {
-          previewResourceEmitter.emit(
-            PREVIEW_EVENT.locateLayout,
-            data.sourceUrl
-          );
-        }}
-        // 点击导入
-        onExport={() => onExport(absoluteProjectFile)}
-        // 删除
-        onDelete={() => {
-          window.$one.$server
-            .deleteFile(absoluteProjectFile)
-            .catch((err: Error) => {
-              Notification.warning({ content: err.message });
-            });
-        }}
-      />
-    </StyleFileFiller>
-  );
-};
-
-const StyleFileFiller = styled.div`
-  display: flex;
-  .file-display-info {
-    display: flex;
-    flex-direction: column;
-    .empty-display {
-      background-color: var(--color-bg-4);
-      &:hover {
-        .plugs-icon {
-          width: 40%;
-          height: 40%;
-          margin: 30%;
-          transition: 0.2s ease-out;
-        }
-      }
-      .plugs-icon {
-        width: 30%;
-        height: 30%;
-        margin: 35%;
-        color: var(--color-text-3);
-        transition: 0.2s ease-in;
-      }
-    }
-  }
-  .info {
-    margin: 5px 0;
-    .main {
-      font-size: 14px;
-      color: var(--color-text-1);
-    }
-    .secondary {
-      /* user-select: text; */
-      font-size: 12px;
-      color: var(--color-text-3);
-    }
-  }
-`;
-
-export default FileFiller;

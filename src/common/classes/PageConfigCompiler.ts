@@ -11,9 +11,9 @@ import {
   FileItem,
   ResourceDefinition,
   FileFillerWrapper,
-  XmlItem,
-  XmlBlocker,
-  XmlValueItem
+  XmlNodeData,
+  ValueBlocker,
+  XmlValueData
 } from "src/data/ResourceConfig";
 import { getFileData, getImageFileData } from "src/common/utils/index";
 import {
@@ -34,7 +34,7 @@ import reactiveState from "../singletons/reactiveState";
 import XmlCompiler from "./XmlCompiler";
 import XmlCompilerExtra from "./XmlCompilerExtra";
 import type {
-  TypeResourceDefinition,
+  TypeResourceCategory,
   TypeLayoutElement,
   TypeLayoutImageElement,
   TypeLayoutTextElement,
@@ -392,6 +392,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
       const valueData = this.xmlValueItemCache.get(sourcePath[1]);
       if (valueData) {
         textElement.set("valueData", valueData);
+        textElement.set("md5", valueData.md5);
       }
       const xmlSource = path.dirname(sourcePath[1]); // valueItem 一定是 Xml 节点的子节点
       const colorSource = this.sourceKeyValCache.get(xmlSource);
@@ -468,7 +469,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
             tag: tagname,
             attributes: Object.fromEntries(attributes)
           });
-          const xmlValueItem = new XmlValueItem()
+          const xmlValueItem = new XmlValueData()
             .set("md5", md5(JSON.stringify({ tag: tagname, attributes })))
             .set("tag", tagname)
             .set("comment", arr[kk - 1]?.getComment())
@@ -489,7 +490,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
         path.join(rootKey, xmlItemKey, itemKey),
         source
       );
-      return new XmlItem()
+      return new XmlNodeData()
         .set("tag", item.getTagname())
         .set("key", itemKey)
         .set("name", item.getAttributeOf("name"))
@@ -499,7 +500,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
         .set("valueItems", valueItems)
         .create();
     });
-    return new XmlBlocker()
+    return new ValueBlocker()
       .set("tag", tag)
       .set("key", xmlItemKey)
       .set("name", node.getAttributeOf("name"))
@@ -507,8 +508,8 @@ export default class PageConfigCompiler extends XMLNodeElement {
       .create();
   }
 
-  // 解析 Resource 定义数据
-  getResourceList(): TypeResourceDefinition[] {
+  // 解析 Resource 分类定义数据
+  getResourceCategory(): TypeResourceCategory[] {
     return this.getRootChildrenNodesByTagname(ELEMENT_TAG.Resource).map(
       Resource => {
         // 扩展配置（备用）
@@ -592,7 +593,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
       .set("disableTabs", this.getDisableTabs())
       .set("forceStaticPreview", this.getForceStaticPreview())
       .set("previewList", this.getPreviewList())
-      .set("resourceList", this.getResourceList())
+      .set("resourceCategoryList", this.getResourceCategory())
       .set("layoutElementList", this.getLayoutElementList())
       .create();
   }

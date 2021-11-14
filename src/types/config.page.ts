@@ -20,7 +20,7 @@ export type TypeSourceData = {
 };
 
 // Xml 节点
-export type TypeXmlItem = {
+export type TypeXmlNodeData = {
   tag: string;
   key: string;
   name: string;
@@ -49,7 +49,7 @@ export type TypeValueBlock<T = TypeXmlValueTags> = {
   readonly tag: T;
   key: string;
   name: string;
-  items: TypeXmlItem[];
+  items: TypeXmlNodeData[];
 };
 
 // String
@@ -64,7 +64,7 @@ export type TypeColorBlock = {
   key: string;
   name: string;
   format: HEX_FORMAT;
-  items: TypeXmlItem[];
+  items: TypeXmlNodeData[];
 };
 
 // File
@@ -90,12 +90,12 @@ export type TypeBlockCollection =
   | TypeNumberBlock
   | TypeBooleanBlock;
 
-// Resource
-export type TypeResourceDefinition = {
+// Resource 分类
+export type TypeResourceCategory = {
   key: string;
   name: string;
   extra: Record<string, string>; // 备用字段
-  children: Array<TypeFileBlock | TypeValueBlock<TypeXmlValueTags>>;
+  children: Array<TypeBlockCollection>;
 };
 
 /*************************** Layout ***************************/
@@ -111,7 +111,7 @@ export type TypeLayoutData = {
 
 // 图片元素数据
 export type TypeLayoutImageElement = {
-  elementTag: LAYOUT_ELEMENT_TAG.Image;
+  tag: LAYOUT_ELEMENT_TAG.Image;
   sourceUrl: string;
   sourceData: TypeSourceData;
   layout: TypeLayoutData;
@@ -119,7 +119,8 @@ export type TypeLayoutImageElement = {
 
 // 颜色元素数据
 export type TypeLayoutTextElement = {
-  elementTag: LAYOUT_ELEMENT_TAG.Text;
+  tag: LAYOUT_ELEMENT_TAG.Text;
+  md5: string;
   text: string;
   size: string;
   color: string;

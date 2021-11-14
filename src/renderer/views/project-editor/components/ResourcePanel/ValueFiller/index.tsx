@@ -1,15 +1,17 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { IconClose } from "@arco-design/web-react/icon";
+import { IconClose, IconLocation } from "@arco-design/web-react/icon";
 import { HEX_FORMAT, RESOURCE_TAG } from "src/common/enums/index";
-import { TypeXmlItem, TypeXmlValueTags } from "src/types/config.page";
+import { TypeXmlNodeData, TypeXmlValueTags } from "src/types/config.page";
 import { TypeXmlFileData } from "src/types/file-data";
 import XmlTemplateUtil from "src/common/utils/XmlTemplateUtil";
+import md5 from "md5";
 import { useSubscribeSrcSingly } from "../../../hooks";
 import ColorPicker from "./ColorPicker";
 import BooleanSelector from "./BooleanSelector";
 import NumberInput from "./NumberInput";
 import StringInput from "./StringInput";
+import { previewResourceEmitter, PREVIEW_EVENT } from "@/singletons/emitters";
 
 // 分类编辑控件
 const ValueEditor: React.FC<{
@@ -78,10 +80,10 @@ const ValueFillerItem: React.FC<{
   onChange: (v: string) => void;
 }> = props => {
   const {
-    defaultValue,
-    value,
     comment,
     valueTemplate,
+    defaultValue,
+    value,
     colorFormat,
     use,
     // from,
@@ -105,8 +107,17 @@ const ValueFillerItem: React.FC<{
           onChange={onChange}
         />
         <div className="handle-wrapper">
+          <IconLocation
+            className="btn locate"
+            onClick={() => {
+              // previewResourceEmitter.emit(
+              //   PREVIEW_EVENT.locateResource,
+              //   md5(JSON.stringify())
+              // );
+            }}
+          />
           {/* 删除 */}
-          <IconClose className="delete" onClick={() => onChange("")} />
+          <IconClose className="btn delete" onClick={() => onChange("")} />
         </div>
       </div>
     </StyleValueFillerItem>
@@ -141,13 +152,21 @@ const StyleValueFillerItem = styled.div`
     padding-left: 20px;
     border-left: 1px solid;
     border-left-color: var(--color-secondary-disabled);
-    .delete {
+    .btn {
       cursor: pointer;
-      color: red;
       font-size: 16px;
+      &:not(:last-child) {
+        margin-right: 10px;
+      }
       &:hover {
         opacity: 0.6;
       }
+    }
+    .locate {
+      color: var(--color-text-2);
+    }
+    .delete {
+      color: red;
     }
   }
 `;
@@ -158,7 +177,7 @@ const StyleValueFillerItem = styled.div`
  * @returns
  */
 const ValueFiller: React.FC<{
-  xmlItem: TypeXmlItem;
+  xmlItem: TypeXmlNodeData;
   use: TypeXmlValueTags;
   colorFormat: HEX_FORMAT;
 }> = props => {

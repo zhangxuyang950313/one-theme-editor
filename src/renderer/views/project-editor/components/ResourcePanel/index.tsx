@@ -11,7 +11,7 @@ const ResourcePanel: React.FC<{
   pageConfig: TypePageConfig;
 }> = props => {
   const { pageConfig } = props;
-  const { resourceList } = pageConfig;
+  const { resourceCategoryList } = pageConfig;
   const [selectTabIndex, setSelectTabIndex] = useState(0);
 
   // useLayoutEffect(() => {
@@ -30,7 +30,7 @@ const ResourcePanel: React.FC<{
 
   useEffect(() => {
     setSelectTabIndex(0);
-  }, [resourceList]);
+  }, [resourceCategoryList]);
 
   return (
     <StyleResourcePanel>
@@ -38,7 +38,7 @@ const ResourcePanel: React.FC<{
         <Tabs
           className="resource__tab"
           defaultIndex={selectTabIndex}
-          data={resourceList.map((item, index) => ({
+          data={resourceCategoryList.map((item, index) => ({
             index: index,
             label: item.name
           }))}
@@ -46,7 +46,7 @@ const ResourcePanel: React.FC<{
         />
       )}
       <div className="resource__content">
-        {(resourceList[selectTabIndex]?.children || []).map(
+        {(resourceCategoryList[selectTabIndex]?.children || []).map(
           (blockItem, key) => (
             <div className="resource__block" key={`${key}.${blockItem.key}`}>
               <StickyTab content={blockItem.name} />

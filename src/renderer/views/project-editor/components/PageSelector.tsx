@@ -56,11 +56,11 @@ const StylePageSelector = styled.div`
     }
     padding: 2px;
     opacity: 0.4;
-    border-radius: 6px;
     box-sizing: border-box;
-    border: 1px solid;
+    outline: 1px solid;
+    border-radius: 6px;
     &[data-active="true"] {
-      border-color: rgb(var(--primary-6));
+      outline-color: rgb(var(--primary-6));
       opacity: 1;
     }
     .previewer {
