@@ -1,30 +1,41 @@
 import React, { ReactNode } from "react";
 import styled from "styled-components";
-import { remote } from "electron";
 import { Tooltip } from "antd";
-import { Notification, Descriptions, Divider } from "@arco-design/web-react";
+import { Descriptions, Divider } from "@arco-design/web-react";
 import { IconArrowRight, IconPlus } from "@arco-design/web-react/icon";
 import { TypeFileItem } from "src/types/config.page";
 import { TypeFileData } from "src/types/file-data";
-import { FILE_EVENT } from "src/common/enums";
+import { FILE_EVENT, PROTOCOL_TYPE } from "src/common/enums";
 import ImageElement from "../../Previewer/ImageElement";
 import ImageDisplayFrame from "./ImageDisplayFrame";
 import FileHandler from "./FileHandler";
 import FileDisplayFrame from "./FileDisplayFrame";
 import useSubscribedSrc from "@/hooks/useProjectFile";
-import useResolveProjectPath from "@/hooks/useResolveProjectPath";
-import useResolveResourcePath from "@/hooks/useResolveResourcePath";
-import { previewResourceEmitter, PREVIEW_EVENT } from "@/singletons/emitters";
 
 // 文件填充器
-const FileFiller: React.FC<{ data: TypeFileItem }> = ({ data }) => {
-  const absoluteProjectFile = useResolveProjectPath(data.sourceData.src);
-  const absoluteResourceFile = useResolveResourcePath(data.sourceData.src);
+const FileFiller: React.FC<{
+  data: TypeFileItem;
+  onFloatClick: () => void;
+  onPrimaryClick: () => void;
+  onLocate: () => void;
+  onImport: () => void;
+  onDelete: () => void;
+}> = props => {
+  const {
+    data, //
+    onFloatClick,
+    onPrimaryClick,
+    onLocate,
+    onImport,
+    onDelete
+  } = props;
   const projectFile = useSubscribedSrc(data.sourceData.src);
 
-  const ResourceNode = (
+  const resourceUrl = `${PROTOCOL_TYPE.resource}://${data.sourceData.src}`;
+
+  const ResourceImageDisplay = (
     <ImageDisplayFrame girdSize={16}>
-      <ImageElement sourceUrl={data.sourceUrl} sourceData={data.sourceData} />
+      <ImageElement sourceUrl={resourceUrl} sourceData={data.sourceData} />
     </ImageDisplayFrame>
   );
 
@@ -44,39 +55,18 @@ const FileFiller: React.FC<{ data: TypeFileItem }> = ({ data }) => {
                   path={data.sourceData.src}
                   resolution={getDescription(data.fileData)}
                   size={data.fileData.size}
-                  PreviewNode={ResourceNode}
+                  PreviewNode={ResourceImageDisplay}
                 />
               }
             >
               {/* 左上角悬浮展示 */}
-              <span>
-                <ImageDisplayFrame girdSize={6}>
-                  <img
-                    style={{
-                      display: "inherit",
-                      height: "100%",
-                      cursor: "pointer"
-                    }}
-                    src={data.sourceUrl}
-                    alt=""
-                    onClick={() => {
-                      window.$one.$server.copyFile({
-                        from: absoluteResourceFile,
-                        to: absoluteProjectFile
-                      });
-                    }}
-                  />
-                </ImageDisplayFrame>
-              </span>
+              <span onClick={onFloatClick}>{ResourceImageDisplay}</span>
             </Tooltip>
           }
           primaryNode={
             <>
               {projectFile.state === FILE_EVENT.UNLINK ? (
-                <div
-                  className="empty-display"
-                  onClick={() => onExport(absoluteProjectFile)}
-                >
+                <div className="empty-display" onClick={onImport}>
                   <IconPlus className="plugs-icon" />
                 </div>
               ) : (
@@ -90,7 +80,7 @@ const FileFiller: React.FC<{ data: TypeFileItem }> = ({ data }) => {
                       name={data.comment}
                       path={data.sourceData.src}
                       origin={{
-                        ImageNode: ResourceNode,
+                        ImageNode: ResourceImageDisplay,
                         resolution: getDescription(data.fileData),
                         size: data.fileData.size
                       }}
@@ -98,6 +88,7 @@ const FileFiller: React.FC<{ data: TypeFileItem }> = ({ data }) => {
                         ImageNode: (
                           <ImageDisplayFrame girdSize={18}>
                             <ImageElement
+                              shouldSubscribe
                               sourceUrl={data.sourceUrl}
                               sourceData={data.sourceData}
                             />
@@ -110,14 +101,10 @@ const FileFiller: React.FC<{ data: TypeFileItem }> = ({ data }) => {
                   }
                 >
                   <span>
-                    <ImageDisplayFrame
-                      girdSize={18}
-                      onClick={() => {
-                        remote.shell.showItemInFolder(absoluteProjectFile);
-                      }}
-                    >
+                    <ImageDisplayFrame girdSize={18} onClick={onPrimaryClick}>
                       <ImageElement
                         mouseEffect
+                        shouldSubscribe
                         sourceUrl={data.sourceUrl}
                         sourceData={data.sourceData}
                       />
@@ -137,20 +124,9 @@ const FileFiller: React.FC<{ data: TypeFileItem }> = ({ data }) => {
         locateVisible={!!data.keyPath}
         exportVisible={projectFile.state !== FILE_EVENT.UNLINK}
         deleteVisible={projectFile.state !== FILE_EVENT.UNLINK}
-        onLocate={() => {
-          // 定位到预览图位置
-          previewResourceEmitter.emit(PREVIEW_EVENT.locateLayout, data.keyPath);
-        }}
-        // 点击导入
-        onExport={() => onExport(absoluteProjectFile)}
-        // 删除
-        onDelete={() => {
-          window.$one.$server
-            .deleteFile(absoluteProjectFile)
-            .catch((err: Error) => {
-              Notification.warning({ content: err.message });
-            });
-        }}
+        onLocate={onLocate} // 定位资源
+        onImport={onImport} // 导入资源
+        onDelete={onDelete} // 删除资源
       />
     </StyleFileFiller>
   );
@@ -208,22 +184,6 @@ const getDescription = (fileData: TypeFileData) => {
       return `${(fileData.size / 1024).toFixed(2)}kb`;
     }
   }
-};
-
-const onExport = (to: string) => {
-  // 选择图片导入
-  remote.dialog
-    .showOpenDialog({
-      title: "选择素材",
-      properties: ["openFile", "createDirectory"]
-    })
-    .then(result => {
-      if (result.canceled) return;
-      window.$one.$server.copyFile({
-        from: result.filePaths[0],
-        to
-      });
-    });
 };
 
 const ModifierDescriptions: React.FC<{

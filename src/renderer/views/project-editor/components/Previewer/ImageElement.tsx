@@ -6,13 +6,16 @@ import { useSubscribeSrc } from "../../hooks";
 
 const ImageElement: React.FC<{
   mouseEffect?: boolean;
+  shouldSubscribe?: boolean;
   sourceUrl: string;
   sourceData: TypeSourceData;
 }> = props => {
   const [url, setUrl] = useState(props.sourceUrl);
-  const { mouseEffect, sourceData } = props;
+  const { mouseEffect, shouldSubscribe, sourceData } = props;
   const subscribe = useSubscribeSrc({ immediately: true });
   useLayoutEffect(() => {
+    console.log({ shouldSubscribe });
+    if (!shouldSubscribe) return;
     if (
       sourceData.protocol === PROTOCOL_TYPE.src ||
       sourceData.protocol === PROTOCOL_TYPE.project

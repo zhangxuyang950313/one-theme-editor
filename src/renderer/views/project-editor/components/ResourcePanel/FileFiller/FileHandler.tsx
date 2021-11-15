@@ -13,7 +13,7 @@ const FileHandler: React.FC<{
   exportVisible: boolean;
   deleteVisible: boolean;
   onLocate: () => void; // 追踪定位在界面的位置
-  onExport: () => void; // 导出
+  onImport: () => void; // 导入
   onDelete: () => void; // 删除
 }> = props => {
   return (
@@ -26,7 +26,7 @@ const FileHandler: React.FC<{
       {props.exportVisible && (
         <Tooltip destroyTooltipOnHide overlay="导入" placement="right">
           {/* 导入按钮 */}
-          <IconPlus className="press btn-normal" onClick={props.onExport} />
+          <IconPlus className="press btn-normal" onClick={props.onImport} />
         </Tooltip>
       )}
       {/* .9编辑按钮 */}
