@@ -134,7 +134,7 @@ const FileFiller: React.FC<{ data: TypeFileItem }> = ({ data }) => {
         </div>
       </div>
       <FileHandler
-        locateVisible
+        locateVisible={!!data.keyPath}
         exportVisible={projectFile.state !== FILE_EVENT.UNLINK}
         deleteVisible={projectFile.state !== FILE_EVENT.UNLINK}
         onLocate={() => {

@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { IconClose, IconLocation } from "@arco-design/web-react/icon";
 import { HEX_FORMAT, RESOURCE_TAG } from "src/common/enums/index";
 import { TypeXmlNodeData, TypeXmlValueTags } from "src/types/config.page";
 import { TypeXmlFileData } from "src/types/file-data";
 import XmlTemplateUtil from "src/common/utils/XmlTemplateUtil";
-import { useSubscribeSrcSingly } from "../../../hooks";
 import ColorPicker from "./ColorPicker";
 import BooleanSelector from "./BooleanSelector";
 import NumberInput from "./NumberInput";
 import StringInput from "./StringInput";
+import ValueHandler from "./ValueHandler";
+import { useSubscribeSrcSingly } from "@/views/project-editor/hooks";
 import { previewResourceEmitter, PREVIEW_EVENT } from "@/singletons/emitters";
 
 // 分类编辑控件
@@ -107,16 +107,15 @@ const ValueFillerItem: React.FC<{
           colorFormat={colorFormat}
           onChange={onChange}
         />
-        <div className="handle-wrapper">
-          <IconLocation
-            className="btn locate"
-            onClick={() => {
-              previewResourceEmitter.emit(PREVIEW_EVENT.locateLayout, keyPath);
-            }}
-          />
-          {/* 删除 */}
-          <IconClose className="btn delete" onClick={() => onChange("")} />
-        </div>
+
+        <ValueHandler
+          locateVisible={!!keyPath}
+          deleteVisible
+          onLocate={() => {
+            previewResourceEmitter.emit(PREVIEW_EVENT.locateLayout, keyPath);
+          }}
+          onDelete={() => onChange("")}
+        />
       </div>
     </StyleValueFillerItem>
   );
@@ -143,29 +142,6 @@ const StyleValueFillerItem = styled.div`
     justify-content: space-between;
     height: 70px;
     /* margin-bottom: 20px; */
-  }
-  .handle-wrapper {
-    display: flex;
-    align-items: center;
-    padding-left: 20px;
-    border-left: 1px solid;
-    border-left-color: var(--color-secondary-disabled);
-    .btn {
-      cursor: pointer;
-      font-size: 16px;
-      &:not(:last-child) {
-        margin-right: 10px;
-      }
-      &:hover {
-        opacity: 0.6;
-      }
-    }
-    .locate {
-      color: var(--color-text-2);
-    }
-    .delete {
-      color: red;
-    }
   }
 `;
 

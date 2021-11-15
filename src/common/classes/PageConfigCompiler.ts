@@ -423,7 +423,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
       const fileData = this.getFileData(
         this.resolveResourcePath(sourceData.src)
       );
-      const keyPath = path.join(rootKey, imageKey, itemKey);
+      const keyPath = itemKey ? path.join(rootKey, imageKey, itemKey) : "";
       this.sourceKeyValCache.set(keyPath, source);
       return new FileItem()
         .set("key", itemKey)
@@ -476,7 +476,9 @@ export default class PageConfigCompiler extends XMLNodeElement {
             tag: tagname,
             attributes: Object.fromEntries(attributes)
           });
-          const keyPath = path.join(rootKey, xmlItemKey, itemKey, valueKey);
+          const keyPath = valueKey
+            ? path.join(rootKey, xmlItemKey, itemKey, valueKey)
+            : "";
           const xmlValueItem = new XmlValueData()
             .set("tag", tagname)
             .set("keyPath", keyPath)
