@@ -28,7 +28,6 @@ const Previewer: React.FC<{
 
   useLayoutEffect(() => {
     const cb = (keyPath: string) => {
-      console.log(keyPath);
       const list = Array.from(layoutRef.current?.children || []);
       const targets = list.flatMap(child =>
         child.getAttribute("data-key-path") !== keyPath ? [child] : []

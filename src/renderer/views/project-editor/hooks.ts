@@ -190,9 +190,9 @@ export function useSubscribeSrc(options?: {
       if (options?.filter && options.filter(data)) {
         return;
       }
-      console.log(`file [${data.event}]:`, data);
       list.current.forEach(item => {
         if (item.src === data.src) {
+          console.log(`file [${data.event}]:`, data);
           item.callback(data.event, data.src, data.data);
         }
       });

@@ -15,7 +15,6 @@ const ImageElement: React.FC<{
   const { mouseEffect, shouldSubscribe, sourceData } = props;
   const subscribe = useSubscribeSrc({ immediately: true });
   useLayoutEffect(() => {
-    console.log({ shouldSubscribe });
     if (!shouldSubscribe) return;
     if (
       sourceData.protocol === PROTOCOL_TYPE.src ||

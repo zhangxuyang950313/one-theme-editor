@@ -40,6 +40,7 @@ const LayoutElement: React.FC<{
         />
       ) : (
         <ImageElement
+          shouldSubscribe
           mouseEffect={mouseEffect}
           sourceUrl={sourceUrl}
           sourceData={element.sourceData}
