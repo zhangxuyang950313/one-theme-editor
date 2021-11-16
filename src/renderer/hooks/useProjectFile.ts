@@ -2,6 +2,7 @@ import { useLayoutEffect, useState } from "react";
 import { FILE_EVENT, PROTOCOL_TYPE } from "src/common/enums";
 import { FileData } from "src/data/ResourceConfig";
 import { TypeFileData } from "src/types/file-data";
+
 import { useSubscribeSrc } from "@/views/project-editor/hooks";
 
 // 监听文件变化，返回动态的 url state fileData

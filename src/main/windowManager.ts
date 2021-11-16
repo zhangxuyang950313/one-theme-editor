@@ -1,4 +1,5 @@
 import path from "path";
+
 import {
   Menu,
   BrowserWindow,
@@ -8,7 +9,9 @@ import {
 import IPC_EVENT from "src/ipc/ipc-event";
 import projectDB from "src/main/database/project";
 import { getFileData, isPackaged } from "src/common/utils";
+
 import * as electronStore from "../store/index";
+
 import { preloadFile, getUrl } from "./constant";
 import menuTemplate from "./menu";
 import dirWatcher from "./singletons/dirWatcher";

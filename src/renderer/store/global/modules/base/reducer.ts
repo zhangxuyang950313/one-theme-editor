@@ -1,6 +1,8 @@
 import { TypePathCollection } from "src/types/config.extra";
 import PathCollection from "src/data/PathCollection";
+
 import { TypeActions } from "./action";
+
 import { updateState } from "@/store/utils";
 import ACTION_TYPES from "@/store/global/actionType";
 

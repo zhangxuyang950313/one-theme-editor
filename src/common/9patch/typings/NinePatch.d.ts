@@ -1,4 +1,5 @@
-/// <reference path="../types/index.d.ts" />
+import "../types/index.d.ts";
+
 export default class NinePatch {
   private url;
   private originEl;

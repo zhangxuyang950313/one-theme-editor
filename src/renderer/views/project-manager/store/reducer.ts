@@ -1,6 +1,8 @@
 import { TypeScenarioOption } from "src/types/config.scenario";
 import ScenarioOption from "src/data/ScenarioOption";
+
 import { ACTION_TYPES, TypeStarterActions } from "./action";
+
 import { updateState } from "@/store/utils";
 
 export type TypeStarterState = {

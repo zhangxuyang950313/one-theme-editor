@@ -39,7 +39,7 @@
     "render:analyzer": "npm run build:webpack && npm run webpack:render:pro:analyze",
     "rebuild": "electron-rebuild canvas",
     "postinstall": " electron-builder install-app-deps",
-    "lint:eslint": "eslint --config .eslintrc.js --fix --ext .js,.jsx,.ts,.tsx,.less",
+    "lint:eslint": "eslint --config .eslintrc.js --fix --ext .js,.jsx,.ts,.tsx,.less ./",
     "lint:style": "stylelint --config .stylelintrc.js **/*"
   },
   "devDependencies": {

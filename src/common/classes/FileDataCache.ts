@@ -1,6 +1,7 @@
 import fse from "fs-extra";
 import { FileData } from "src/data/ResourceConfig";
 import { TypeFileData } from "src/types/file-data";
+
 import LogUtil from "../utils/LogUtil";
 
 type TypeGetFileMethod = (file: string) => TypeFileData;

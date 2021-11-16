@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { TypePageConfig } from "src/types/config.resource";
+
 import Previewer from "./Previewer/index";
 
 const selectedMap = new Map<string, number>();

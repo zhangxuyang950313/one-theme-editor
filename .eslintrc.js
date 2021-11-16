@@ -92,16 +92,17 @@ module.exports = {
     "import/order": [
       "warn",
       {
-        groups: [
+        "groups": [
           "builtin",
           "external",
           "internal",
           "parent",
           "sibling",
-          "object",
           "index",
-          "type"
-        ]
+          "type",
+          "object"
+        ],
+        "newlines-between": "always-and-inside-groups"
       }
     ],
     "import/newline-after-import": ["warn", { count: 1 }] // import 后空一行

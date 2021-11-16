@@ -1,9 +1,10 @@
 import React, { useLayoutEffect, useRef, useState } from "react";
 import anime from "animejs";
 import styled from "styled-components";
-
 import { TypePageConfig } from "src/types/config.resource";
+
 import LayoutElement from "./LayoutElement";
+
 import { previewResourceEmitter, PREVIEW_EVENT } from "@/singletons/emitters";
 
 const Previewer: React.FC<{

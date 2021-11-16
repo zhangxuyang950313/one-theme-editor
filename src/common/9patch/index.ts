@@ -1,7 +1,8 @@
 /* eslint-disable no-undef */
-/// <reference path="../types/index.d.ts"/>
+import "../types/index.d.ts";
 
 import { VueConstructor } from "vue";
+
 import NinePatch from "./NinePatch";
 
 type iBorderBoxSize = { offsetWidth: number; offsetHeight: number };

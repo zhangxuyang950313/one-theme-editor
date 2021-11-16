@@ -3,6 +3,7 @@ import styled from "styled-components";
 import ColorUtil from "src/common/utils/ColorUtil";
 import { HEX_FORMAT } from "src/common/enums";
 import { TypeSourceData, TypeXmlValueData } from "src/types/config.page";
+
 import { useSubscribeSrc } from "../../hooks";
 
 const TextElement: React.FC<{

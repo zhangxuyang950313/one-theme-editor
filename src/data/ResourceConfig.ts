@@ -35,6 +35,7 @@ import {
   LAYOUT_ELEMENT_TAG,
   RESOURCE_TAG
 } from "src/common/enums/index";
+
 import { AbstractDataModel } from "./AbstractDataModel";
 
 export class SourceData extends AbstractDataModel<TypeSourceData> {

@@ -4,11 +4,13 @@ import { HEX_FORMAT, RESOURCE_TAG } from "src/common/enums/index";
 import { TypeXmlNodeData, TypeXmlValueTags } from "src/types/config.page";
 import { TypeXmlFileData } from "src/types/file-data";
 import XmlTemplateUtil from "src/common/utils/XmlTemplateUtil";
+
 import ColorPicker from "./ColorPicker";
 import BooleanSelector from "./BooleanSelector";
 import NumberInput from "./NumberInput";
 import StringInput from "./StringInput";
 import ValueHandler from "./ValueHandler";
+
 import { useSubscribeSrcSingly } from "@/views/project-editor/hooks";
 import { previewResourceEmitter, PREVIEW_EVENT } from "@/singletons/emitters";
 

@@ -4,6 +4,7 @@ import {
   TypeXmlKeyValMapperMap,
   TypeXmlTempKeyValMap
 } from "src/types/config.page";
+
 import XmlCompiler from "./XmlCompiler";
 
 export default class TempKeyValMapper extends XmlCompiler {

@@ -1,4 +1,5 @@
 import path from "path";
+
 import fse from "fs-extra";
 import {
   TypeApplyConfig,
@@ -17,6 +18,7 @@ import ScenarioConfig, {
   FileTemplate
 } from "src/data/ScenarioConfig";
 import PathUtil from "src/common/utils/PathUtil";
+
 import ResourceConfigCompiler from "./ResourceConfigCompiler";
 import XmlCompilerExtra from "./XmlCompilerExtra";
 import XmlCompiler from "./XmlCompiler";

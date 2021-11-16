@@ -1,1 +1,1 @@
-export default function decode(buff: Buffer) {}
+// export default function decode(buff: Buffer) {}

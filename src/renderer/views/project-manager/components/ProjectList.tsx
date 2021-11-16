@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { remote } from "electron";
 import { Empty } from "@arco-design/web-react";
 import { TypeProjectDataDoc } from "src/types/project";
+
 import ProjectDisplay from "./ProjectDisplay";
 
 const ProjectList: React.FC<{ list: TypeProjectDataDoc[] }> = props => {

@@ -1,4 +1,5 @@
 import path from "path";
+
 import fse from "fs-extra";
 import { useCallback, useLayoutEffect, useRef, useState } from "react";
 import { Notification } from "@arco-design/web-react";
@@ -19,6 +20,7 @@ import { TypeScenarioConfig } from "src/types/config.scenario";
 import FileDataCache from "src/common/classes/FileDataCache";
 import LogUtil from "src/common/utils/LogUtil";
 import { TypeFileChangeCallbackData } from "src/ipc/ipcInvoker";
+
 import { useEditorDispatch } from "./store";
 import {
   ActionSetProjectData,

@@ -1,4 +1,5 @@
 import { TypeServerConfig } from "src/types/config.extra";
+
 import { AbstractDataModel } from "./AbstractDataModel";
 
 export default class ServerConfig extends AbstractDataModel<TypeServerConfig> {

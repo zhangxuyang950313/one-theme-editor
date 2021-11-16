@@ -1,5 +1,7 @@
 import path from "path";
+
 import { FSWatcher, WatchOptions } from "chokidar";
+
 import { FILE_EVENT } from "../enums";
 
 type TypeCallback = (event: FILE_EVENT, src: string) => void;

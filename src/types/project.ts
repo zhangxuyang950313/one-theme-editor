@@ -1,4 +1,3 @@
-import { MimeType } from "file-type";
 import { TypePackConfig } from "./config.scenario";
 import { TypeDatabase } from "./utils";
 

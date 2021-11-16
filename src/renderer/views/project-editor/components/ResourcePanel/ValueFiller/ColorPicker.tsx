@@ -7,6 +7,7 @@ import { IconRight } from "@arco-design/web-react/icon";
 import { RGBColor, SketchPicker } from "react-color";
 import ColorUtil, { HEX_FORMAT } from "src/common/utils/ColorUtil";
 import * as electronStore from "src/store";
+
 import { StyleGirdBackground } from "@/style";
 
 // 颜色小方块

@@ -2,6 +2,7 @@ import { remote } from "electron";
 import React from "react";
 import styled from "styled-components";
 import { FolderOpenOutlined } from "@ant-design/icons";
+
 import { useEditorSelector } from "../store";
 
 const StatusBar: React.FC<React.HTMLAttributes<HTMLDivElement>> = props => {

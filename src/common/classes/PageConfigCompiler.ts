@@ -1,6 +1,6 @@
 import path from "path";
 import { URL } from "url";
-import { TypePageConfig } from "src/types/config.resource";
+
 import {
   ElementLayoutConfig,
   LayoutImageElement,
@@ -27,10 +27,13 @@ import XMLNodeElement from "src/common/classes/XMLNodeElement";
 import PathUtil from "src/common/utils/PathUtil";
 import RegexpUtil from "src/common/utils/RegexpUtil";
 import TempStringUtil from "src/common/utils/TempStringUtil";
-import { TypeImageFileData, TypeFileData } from "src/types/file-data";
 import reactiveState from "src/common/singletons/reactiveState";
+import { TypeImageFileData, TypeFileData } from "src/types/file-data";
+import { TypePageConfig } from "src/types/config.resource";
+
 import XmlCompiler from "./XmlCompiler";
 import XmlCompilerExtra from "./XmlCompilerExtra";
+
 import type {
   TypeResourceCategory,
   TypeLayoutElement,

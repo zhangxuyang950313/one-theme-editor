@@ -1,4 +1,5 @@
 import { app } from "electron";
+
 import type projectDatabase from "main/database/project";
 import type dirWatcher from "main/singletons/dirWatcher";
 import type fileCache from "main/singletons/fileCache";

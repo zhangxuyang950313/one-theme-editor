@@ -1,4 +1,5 @@
 import path from "path";
+
 import glob from "glob";
 import fse from "fs-extra";
 import JsZip from "jszip";
@@ -12,6 +13,7 @@ import {
   TypePackProcess,
   TypeUnpackPayload
 } from "src/types/project";
+
 import { compactNinePatch } from "./NinePatchUtil";
 
 export class PackUtil {

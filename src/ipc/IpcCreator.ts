@@ -1,5 +1,6 @@
 import { ipcMain, ipcRenderer } from "electron";
 import LogUtil from "src/common/utils/LogUtil";
+
 import IPC_EVENT from "./ipc-event";
 
 // type TypeCallbackReply<T> = {

@@ -1,12 +1,15 @@
 import path from "path";
+
 import React from "react";
 import styled from "styled-components";
 import { remote } from "electron";
 import { Notification } from "@arco-design/web-react";
 import { HEX_FORMAT, RESOURCE_TAG } from "src/common/enums";
 import { TypeBlockCollection } from "src/types/config.page";
+
 import FileFiller from "./FileFiller/index";
 import ValueFiller from "./ValueFiller/index";
+
 import { previewResourceEmitter, PREVIEW_EVENT } from "@/singletons/emitters";
 
 function resolveResourceFile(relative: string): string {

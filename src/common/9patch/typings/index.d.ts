@@ -1,5 +1,6 @@
-/// <reference path="../types/index.d.ts" />
+import "../types/index.d.ts";
 import { VueConstructor } from "vue";
+
 import NinePatch from "./NinePatch";
 
 declare const _default: {

@@ -1,4 +1,5 @@
 import path from "path";
+
 import { useState, useEffect } from "react";
 
 function useResolveProjectPath(src: string): string {

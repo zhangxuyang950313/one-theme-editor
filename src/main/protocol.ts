@@ -1,9 +1,11 @@
 import path from "path";
 import { URL } from "url";
+
 import fse from "fs-extra";
 import { protocol, app, nativeImage, ResizeOptions } from "electron";
 import PathUtil from "src/common/utils/PathUtil";
 import reactiveState from "src/common/singletons/reactiveState";
+
 import { getBufferAndFileType } from "../common/utils";
 
 async function getFileIconData(file: string) {

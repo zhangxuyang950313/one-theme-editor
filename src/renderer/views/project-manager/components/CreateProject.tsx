@@ -1,11 +1,10 @@
 import path from "path";
+
 import fse from "fs-extra";
 import { dialog } from "electron";
-
 import { isDev } from "src/common/utils/index";
 import { TypeProjectDataDoc, TypeProjectInfo } from "src/types/project";
 import { TypeResourceConfig } from "src/types/config.resource";
-
 import styled from "styled-components";
 import React, { useEffect, useRef, useState } from "react";
 import {
@@ -21,8 +20,11 @@ import { IconFolderAdd } from "@arco-design/web-react/icon";
 import { FILE_TEMPLATE_TYPE } from "src/common/enums";
 import PathUtil from "src/common/utils/PathUtil";
 import { useToggle } from "ahooks";
+
 import { useScenarioSelected } from "../hooks";
+
 import TemplateList from "./TemplateLIst";
+
 import Steps from "@/components/Steps";
 import ProjectForm from "@/components/ProjectForm";
 import ResourceConfigList from "@/components/ResourceConfigList";

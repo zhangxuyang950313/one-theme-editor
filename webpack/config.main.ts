@@ -1,9 +1,11 @@
 import path from "path";
+
 // import CopyWebpackPlugin from "copy-webpack-plugin";
 import webpack, { DefinePlugin, DllReferencePlugin } from "webpack";
 import WebpackBar from "webpackbar";
 import DotEnvPlugin from "dotenv-webpack";
 import { CleanWebpackPlugin } from "clean-webpack-plugin";
+
 import { extensions, entryFile, outputDir, alias, rootDir } from "./constant";
 
 const config: webpack.ConfigurationFactory = (env, args) => {

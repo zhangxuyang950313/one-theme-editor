@@ -1,4 +1,5 @@
 import path from "path";
+
 import { PLACEHOLDER } from "../enums/index";
 import RegexpUtil from "../utils/RegexpUtil";
 // import PATHS_CONFIG from "../types/config.extra";

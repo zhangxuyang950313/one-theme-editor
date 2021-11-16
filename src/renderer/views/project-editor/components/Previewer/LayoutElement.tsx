@@ -1,10 +1,11 @@
 import React from "react";
 import styled from "styled-components";
-
 import { HEX_FORMAT, LAYOUT_ELEMENT_TAG } from "src/common/enums";
 import { TypeLayoutElement } from "src/types/config.page";
 import { filenameIs9Patch } from "src/common/utils";
+
 import NinePatchCanvas from "../NinePatchCanvas";
+
 import { computeLayoutStyle } from "./utils";
 import TextElement from "./TextElement";
 import ImageElement from "./ImageElement";

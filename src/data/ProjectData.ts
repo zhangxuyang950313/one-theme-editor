@@ -1,4 +1,5 @@
 import { TypeProjectDataDoc, TypeProjectInfo } from "src/types/project";
+
 import { AbstractDataModel } from "./AbstractDataModel";
 import { UiVersion } from "./ResourceConfig";
 

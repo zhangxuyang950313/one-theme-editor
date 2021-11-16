@@ -1,4 +1,5 @@
 import path from "path";
+
 import { remote } from "electron";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
@@ -14,6 +15,7 @@ import {
 import { useToggle } from "ahooks";
 import { TOOLS_BAR_BUTTON } from "src/common/enums";
 import { ModuleConfig, PageConfig } from "src/data/ResourceConfig";
+
 import { usePageConfigList, useLoadProject } from "./hooks";
 import EditorToolsBar from "./components/ToolsBar";
 import ModuleSelector from "./components/ModuleSelector";
@@ -21,6 +23,7 @@ import PageSelector from "./components/PageSelector";
 import Previewer from "./components/Previewer/index";
 import ResourcePanel from "./components/ResourcePanel";
 import StatusBar from "./components/StatusBar";
+
 import { TypeIconButtonOption } from "@/components/one-ui/IconButton";
 import { StyleTopDrag } from "@/style";
 import RootWrapper from "@/RootWrapper";

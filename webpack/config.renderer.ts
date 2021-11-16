@@ -1,4 +1,5 @@
 import path from "path";
+
 import WebpackBar from "webpackbar";
 import webpack, {
   DefinePlugin,
@@ -17,6 +18,7 @@ import HappyPack from "happypack";
 // import FriendlyErrorsWebpackPlugin from "friendly-errors-webpack-plugin";
 import { CleanWebpackPlugin } from "clean-webpack-plugin";
 import ReactRefreshPlugin from "@pmmmwh/react-refresh-webpack-plugin";
+
 import {
   alias,
   rootDir,

@@ -1,4 +1,5 @@
 import path from "path";
+
 import fse from "fs-extra";
 import { ipcMain, ipcRenderer } from "electron";
 import PageConfigCompiler from "src/common/classes/PageConfigCompiler";
@@ -31,6 +32,7 @@ import {
 } from "src/common/asyncChunk";
 import { TypeWatchedRecord } from "src/common/classes/DirWatcher";
 import fileDataCache from "src/main/singletons/fileCache";
+
 import IPC_EVENT from "./ipc-event";
 import ipcCreator from "./ipcCreator";
 

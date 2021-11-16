@@ -7,6 +7,7 @@ import {
   Select,
   SelectProps
 } from "@arco-design/web-react";
+
 import { projectInfoConfig } from "@/config/editor";
 
 function getRuleNormalized(label: React.ReactNode) {

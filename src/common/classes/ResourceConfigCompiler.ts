@@ -1,4 +1,5 @@
 import path from "path";
+
 import { v4 as UUID } from "uuid";
 import {
   TypeResourceConfig,
@@ -15,6 +16,7 @@ import ResourceConfigData, {
 import { TypeUiVersion } from "src/types/project";
 import { ELEMENT_TAG } from "src/common/enums";
 import PathUtil from "src/common/utils/PathUtil";
+
 import PageConfigCompiler from "./PageConfigCompiler";
 import XMLNodeBase from "./XMLNodeElement";
 import XmlCompiler from "./XmlCompiler";

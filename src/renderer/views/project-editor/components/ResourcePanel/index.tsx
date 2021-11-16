@@ -1,11 +1,13 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { TypePageConfig } from "src/types/config.resource";
-import { TypeLayoutElement } from "src/types/config.page";
+// import { TypeLayoutElement } from "src/types/config.page";
+
 import FillerWrapper from "./FillerWrapper";
+
 import StickyTab from "@/components/StickyTab";
 import { Tabs } from "@/components/one-ui";
-import { previewResourceEmitter, PREVIEW_EVENT } from "@/singletons/emitters";
+// import { previewResourceEmitter, PREVIEW_EVENT } from "@/singletons/emitters";
 
 const ResourcePanel: React.FC<{
   pageConfig: TypePageConfig;

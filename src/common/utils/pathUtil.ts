@@ -1,5 +1,6 @@
 import os from "os";
 import path from "path";
+
 import fse from "fs-extra";
 import { app, ipcRenderer, remote } from "electron";
 import { TypePathCollection } from "src/types/config.extra";

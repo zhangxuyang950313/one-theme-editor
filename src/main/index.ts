@@ -1,5 +1,6 @@
 import { app, BrowserWindow, ipcMain, protocol } from "electron";
 import ipcController from "src/ipc/ipcController";
+
 import { createWindow } from "./windowManager";
 import { moveWindowToCenter, saveCurrentDisplayCenter } from "./utils";
 import registerProtocol from "./protocol";

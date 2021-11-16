@@ -1,5 +1,7 @@
 import archiver from "archiver";
+
 import { FILE_TEMPLATE_TYPE, PACK_TYPE } from "../common/enums";
+
 import { TypeResourceConfig } from "./config.resource";
 
 // 工程文件模板配置

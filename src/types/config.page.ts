@@ -7,6 +7,7 @@ import {
   LAYOUT_ELEMENT_TAG
 } from "src/common/enums";
 import XMLNodeBase from "src/common/classes/XMLNodeElement";
+
 import { TypeFileData, TypeImageFileData } from "./file-data";
 
 /*************************** Resource ***************************/

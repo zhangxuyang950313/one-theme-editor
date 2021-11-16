@@ -6,10 +6,13 @@ import { IconArrowRight, IconPlus } from "@arco-design/web-react/icon";
 import { TypeFileItem } from "src/types/config.page";
 import { TypeFileData } from "src/types/file-data";
 import { FILE_EVENT, PROTOCOL_TYPE } from "src/common/enums";
+
 import ImageElement from "../../Previewer/ImageElement";
+
 import ImageDisplayFrame from "./ImageDisplayFrame";
 import FileHandler from "./FileHandler";
 import FileDisplayFrame from "./FileDisplayFrame";
+
 import useSubscribedSrc from "@/hooks/useProjectFile";
 
 // 文件填充器
