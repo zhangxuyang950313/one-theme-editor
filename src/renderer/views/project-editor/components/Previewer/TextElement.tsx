@@ -13,7 +13,7 @@ const TextElement: React.FC<{
   sourceData: TypeSourceData;
   valueData: TypeXmlValueData;
   mouseEffect?: boolean;
-  isFocused: boolean;
+  isBlur?: boolean;
 }> = props => {
   const {
     text,
@@ -22,7 +22,7 @@ const TextElement: React.FC<{
     sourceData,
     colorFormat,
     mouseEffect,
-    isFocused
+    isBlur
   } = props;
   const [defaultColor, setDefaultColor] = useState("");
   const [color, setColor] = useState(defaultColor);
@@ -63,7 +63,7 @@ const TextElement: React.FC<{
   return (
     <StyleSpan
       data-mouse-effect={mouseEffect}
-      data-is-focus={isFocused}
+      data-is-blur={isBlur}
       style={{ display: "inherit", fontSize, color }}
     >
       {text}
@@ -83,7 +83,7 @@ const StyleSpan = styled.span`
     outline: 2px solid var(--color-primary-light-4);
     transition: all 0.3s ease;
   }
-  &:not([data-is-focus="true"]) {
+  &[data-is-blur="true"] {
     opacity: 0.5;
     filter: blur(2px);
     outline: none;

@@ -46,11 +46,7 @@ const FileFiller: React.FC<{
 
   const ResourceImageDisplay = (
     <ImageDisplay girdSize={13}>
-      <ImageElement
-        isFocused
-        sourceUrl={resourceUrl}
-        sourceData={data.sourceData}
-      />
+      <ImageElement sourceUrl={resourceUrl} sourceData={data.sourceData} />
     </ImageDisplay>
   );
 
@@ -58,6 +54,7 @@ const FileFiller: React.FC<{
     <StyleFileFiller>
       <div className="file-display-info">
         <FileDisplayFrame
+          isFocus={iconEyeFocus}
           floatNode={
             <Tooltip
               overlayStyle={{ maxWidth: "none" }}
@@ -112,7 +109,6 @@ const FileFiller: React.FC<{
                         ImageNode: (
                           <ImageDisplay girdSize={18}>
                             <ImageElement
-                              isFocused
                               shouldSubscribe
                               sourceUrl={data.sourceUrl}
                               sourceData={data.sourceData}
@@ -128,7 +124,6 @@ const FileFiller: React.FC<{
                   <span>
                     <ImageDisplay girdSize={18} onClick={onPrimaryClick}>
                       <ImageElement
-                        isFocused
                         mouseEffect
                         shouldSubscribe
                         sourceUrl={data.sourceUrl}

@@ -5,11 +5,14 @@ import styled from "styled-components";
 const FileDisplayFrame: React.FC<{
   floatNode: ReactNode;
   primaryNode: ReactNode;
+  isFocus?: boolean;
 }> = props => {
   return (
     <StyleFileDisplay>
       {/* 主要展示区域 */}
-      <div className="primary-display">{props.primaryNode}</div>
+      <div className="primary-display" data-is-focus={props.isFocus}>
+        {props.primaryNode}
+      </div>
       {/* 左上角悬浮展示 */}
       <div className="float-display">{props.floatNode}</div>
     </StyleFileDisplay>
@@ -37,6 +40,9 @@ const StyleFileDisplay = styled.div`
     overflow: hidden;
     border-radius: 10px;
     border: 1px solid var(--color-border-2);
+    &[data-is-focus="true"] {
+      border: 1px solid rgb(var(--primary-6));
+    }
   }
 `;
 export default FileDisplayFrame;

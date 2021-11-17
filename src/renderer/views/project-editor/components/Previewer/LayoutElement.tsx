@@ -17,12 +17,14 @@ const LayoutElement: React.FC<{
   ratio: number;
   mouseEffect?: boolean;
   onClick: () => void;
+  onChange: (keyPath: string) => void;
 }> = props => {
   const {
     element, // 换行
     ratio,
     mouseEffect,
-    onClick
+    onClick,
+    onChange
   } = props;
 
   const focusKeyPath = useEditorSelector(state => state.focusKeyPath);
@@ -32,7 +34,7 @@ const LayoutElement: React.FC<{
   const computedWidth = (Number(element.layout.w) * ratio).toFixed(0);
   const computedHeight = (Number(element.layout.h) * ratio).toFixed(0);
   const sourceUrl = `${element.sourceUrl}?w=${computedWidth}&h=${computedHeight}&q=best`;
-  const isFocused = focusKeyPath ? element.keyPath === focusKeyPath : true;
+  const isBlur = focusKeyPath ? element.keyPath !== focusKeyPath : false;
   switch (element.tag) {
     // 图片类型预览
     case LAYOUT_ELEMENT_TAG.Image: {
@@ -49,7 +51,10 @@ const LayoutElement: React.FC<{
           mouseEffect={mouseEffect}
           sourceUrl={sourceUrl}
           sourceData={element.sourceData}
-          isFocused={isFocused}
+          isBlur={isBlur}
+          onChange={() => {
+            onChange(element.keyPath);
+          }}
         />
       );
       break;
@@ -65,7 +70,7 @@ const LayoutElement: React.FC<{
           sourceData={element.sourceData}
           colorFormat={HEX_FORMAT.ARGB}
           mouseEffect={mouseEffect}
-          isFocused={isFocused}
+          isBlur={isBlur}
         />
       );
       break;

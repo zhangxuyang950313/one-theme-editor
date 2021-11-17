@@ -72,7 +72,7 @@ const FillerWrapper: React.FC<{
                   }}
                   // 定位按钮
                   onLocate={() => {
-                    dispatch(ActionSetFocusKeyPath(item.keyPath));
+                    dispatch(ActionSetFocusKeyPath({ keyPath: item.keyPath }));
                   }}
                   // 导入按钮
                   onImport={() => {
@@ -105,7 +105,7 @@ const FillerWrapper: React.FC<{
               xmlItem={xmlItem}
               use={data.tag}
               colorFormat={HEX_FORMAT.ARGB}
-              onLocate={keyPath => dispatch(ActionSetFocusKeyPath(keyPath))}
+              onLocate={keyPath => dispatch(ActionSetFocusKeyPath({ keyPath }))}
             />
           ))}
         </StyleValueFillerWrapper>

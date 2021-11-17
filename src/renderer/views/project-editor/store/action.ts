@@ -50,7 +50,10 @@ type TypeActionSetResourceConfig = {
 
 type TypeActionSetFocusKeyPath = {
   type: typeof ACTION_TYPE.SET_FOCUS_KEY_PATH;
-  payload: string;
+  payload: {
+    keyPath: string;
+    ignoreDuplicate?: boolean;
+  };
 };
 
 // 更新页面配置表
@@ -108,7 +111,7 @@ export function ActionSetDescription(
 }
 
 export function ActionSetFocusKeyPath(
-  payload: string
+  payload: TypeActionSetFocusKeyPath["payload"]
 ): TypeActionSetFocusKeyPath {
   return { type: ACTION_TYPE.SET_FOCUS_KEY_PATH, payload };
 }

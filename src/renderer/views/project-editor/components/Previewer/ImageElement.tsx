@@ -10,14 +10,16 @@ const ImageElement: React.FC<{
   sourceData: TypeSourceData;
   shouldSubscribe?: boolean;
   mouseEffect?: boolean;
-  isFocused: boolean;
+  isBlur?: boolean;
+  onChange?: () => void;
 }> = props => {
   const [url, setUrl] = useState(props.sourceUrl);
   const {
     mouseEffect, //
-    isFocused,
+    isBlur,
     shouldSubscribe,
-    sourceData
+    sourceData,
+    onChange
   } = props;
   const subscribe = useSubscribeSrc({ immediately: true });
   useLayoutEffect(() => {
@@ -29,6 +31,7 @@ const ImageElement: React.FC<{
       subscribe(sourceData.src, () => {
         const u = new URL(url);
         u.searchParams.set("t", Date.now().toString());
+        onChange?.();
         setUrl(u.toString());
       });
     }
@@ -38,7 +41,7 @@ const ImageElement: React.FC<{
     <StyleImage
       alt=""
       src={url}
-      data-is-focus={isFocused}
+      data-is-blur={isBlur}
       data-mouse-effect={mouseEffect}
     />
   );
@@ -49,17 +52,18 @@ const StyleImage = styled.img`
   /* width: 100%; */
   height: 100%;
   object-fit: contain;
+  transition: all 0.2s ease-in;
   &[data-mouse-effect="true"] {
     outline: 1px dashed var(--color-primary-light-4);
   }
-  transition: all 0.2s ease-in;
   &[data-mouse-effect="true"]:hover {
     cursor: pointer;
+    opacity: 1;
     filter: drop-shadow(0 0 10px var(--color-primary-light-4));
     outline: 2px solid var(--color-primary-light-4);
     transition: all 0.2s ease-out;
   }
-  &:not([data-is-focus="true"]) {
+  &[data-is-blur="true"] {
     opacity: 0.5;
     filter: blur(2px);
     outline: none;

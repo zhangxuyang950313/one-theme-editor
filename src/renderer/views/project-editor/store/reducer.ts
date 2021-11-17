@@ -62,11 +62,14 @@ export default function EditorReducer(
     }
     // 设置聚焦的 keyPath
     case ACTION_TYPE.SET_FOCUS_KEY_PATH: {
+      const { keyPath, ignoreDuplicate } = action.payload;
+      let focusKeyPath = keyPath;
+      // 重复是否重置
+      if (!ignoreDuplicate) {
+        focusKeyPath = state.focusKeyPath === keyPath ? "" : keyPath;
+      }
       return updateState(state, {
-        focusKeyPath:
-          state.focusKeyPath === action.payload //
-            ? ""
-            : action.payload
+        focusKeyPath
       });
     }
     // 页面配置数据

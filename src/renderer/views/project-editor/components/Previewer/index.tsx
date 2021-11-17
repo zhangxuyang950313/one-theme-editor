@@ -2,7 +2,11 @@ import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import { TypePageConfig } from "src/types/config.resource";
 
-import { useEditorDispatch } from "../../store";
+import {
+  useEditorDispatch,
+  useEditorSelector,
+  useEditorStore
+} from "../../store";
 import { ActionSetFocusKeyPath } from "../../store/action";
 
 import LayoutElement from "./LayoutElement";
@@ -23,6 +27,8 @@ const Previewer: React.FC<{
     }
   } = props;
   const dispatch = useEditorDispatch();
+  const store = useEditorStore();
+  const focusKeyPath = useEditorSelector(state => state.focusKeyPath);
   const [ratio, setRatio] = useState(0);
   const layoutRef = useRef<HTMLDivElement | null>(null);
 
@@ -55,11 +61,17 @@ const Previewer: React.FC<{
                 ratio={ratio}
                 mouseEffect={mouseEffect}
                 onClick={() => {
-                  dispatch(ActionSetFocusKeyPath(element.keyPath));
-                  // previewResourceEmitter.emit(
-                  //   PREVIEW_EVENT.locateResource,
-                  //   element.keyPath
-                  // );
+                  dispatch(ActionSetFocusKeyPath({ keyPath: element.keyPath }));
+                }}
+                onChange={keyPath => {
+                  if (store.getState().focusKeyPath) {
+                    dispatch(
+                      ActionSetFocusKeyPath({
+                        keyPath: element.keyPath,
+                        ignoreDuplicate: true
+                      })
+                    );
+                  }
                 }}
               />
             );
