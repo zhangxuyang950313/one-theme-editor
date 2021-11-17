@@ -4,17 +4,19 @@ import { remote } from "electron";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Empty, Message } from "@arco-design/web-react";
-import {
-  InfoCircleOutlined,
-  MobileOutlined,
-  FolderOutlined,
-  DeploymentUnitOutlined,
-  TagsOutlined,
-  TabletOutlined
-} from "@ant-design/icons";
 import { useToggle } from "ahooks";
 import { TOOLS_BAR_BUTTON } from "src/common/enums";
 import { ModuleConfig, PageConfig } from "src/data/ResourceConfig";
+
+import {
+  IconExport,
+  IconEye,
+  IconEyeInvisible,
+  IconFile,
+  IconInfoCircle,
+  IconMindMapping,
+  IconMobile
+} from "@arco-design/web-react/icon";
 
 import { usePageConfigList, useLoadProject } from "./hooks";
 import EditorToolsBar from "./components/ToolsBar";
@@ -62,19 +64,19 @@ const EditorFrame: React.FC = () => {
   const [leftButtons] = useState<TypeIconButtonOption[]>([
     {
       name: TOOLS_BAR_BUTTON.MODULE_TOGGLE,
-      icon: <DeploymentUnitOutlined />,
+      icon: <IconMindMapping />,
       defaultToggle: displayModuleSelector,
       onClick: toggleModuleSelector.toggle
     },
     {
       name: TOOLS_BAR_BUTTON.PAGE_TOGGLE,
-      icon: <TagsOutlined />,
+      icon: <IconFile />,
       defaultToggle: displayPageSelector,
       onClick: togglePageSelector.toggle
     },
     {
       name: TOOLS_BAR_BUTTON.PREVIEW_TOGGLE,
-      icon: <TabletOutlined />,
+      icon: displayPreviewSelector ? <IconEye /> : <IconEyeInvisible />,
       defaultToggle: displayPreviewSelector,
       onClick: togglePreviewSelector.toggle
     }
@@ -89,7 +91,7 @@ const EditorFrame: React.FC = () => {
     setRightButtons([
       {
         name: TOOLS_BAR_BUTTON.APPLY,
-        icon: <MobileOutlined />
+        icon: <IconMobile />
       },
       // {
       //   name: TOOLS_BAR_BUTTON.SAVE,
@@ -97,7 +99,7 @@ const EditorFrame: React.FC = () => {
       // },
       {
         name: TOOLS_BAR_BUTTON.EXPORT,
-        icon: <FolderOutlined />,
+        icon: <IconExport />,
         onClick: () => {
           const { root, description } = projectData;
           const { extname } = scenarioConfig.packageConfig;
@@ -133,7 +135,7 @@ const EditorFrame: React.FC = () => {
       },
       {
         name: TOOLS_BAR_BUTTON.INFO,
-        icon: <InfoCircleOutlined />,
+        icon: <IconInfoCircle />,
         onClick: () => {
           toggleProjectInfo.setRight();
         }
@@ -214,7 +216,10 @@ const EditorFrame: React.FC = () => {
             {/* 资源编辑区 */}
             <div className="editor__resource-panel ">
               {pageConfig.config ? (
-                <ResourcePanel pageConfig={pageConfig} />
+                <ResourcePanel
+                  pageConfig={pageConfig}
+                  iconEyeVisible={displayPreviewSelector}
+                />
               ) : (
                 <Empty className="no-config" description="无资源配置" />
               )}

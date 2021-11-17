@@ -47,6 +47,7 @@ const StyleIconButton = styled.div`
     border-radius: 3px;
     width: 40px;
     height: 22px;
+    font-size: 16px;
     background-color: var(--color-secondary);
     color: var(--color-text-2);
     transition: 0.3s ease-out;

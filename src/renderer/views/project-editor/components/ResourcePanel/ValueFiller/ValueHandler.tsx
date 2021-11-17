@@ -1,5 +1,5 @@
 import React from "react";
-import { IconClose, IconLocation } from "@arco-design/web-react/icon";
+import { IconClose, IconEye } from "@arco-design/web-react/icon";
 import styled from "styled-components";
 
 const ValueHandler: React.FC<{
@@ -7,12 +7,18 @@ const ValueHandler: React.FC<{
   deleteVisible?: boolean;
   onLocate?: () => void;
   onDelete?: () => void;
+  iconEyeFocus: boolean;
 }> = props => {
-  const { locateVisible, deleteVisible, onLocate, onDelete } = props;
+  const { locateVisible, deleteVisible, onLocate, onDelete, iconEyeFocus } =
+    props;
   return (
     <StyleValueHandler>
       {locateVisible && (
-        <IconLocation className="btn locate" onClick={onLocate} />
+        <IconEye
+          className="btn locate focus"
+          data-eye-focus={iconEyeFocus}
+          onClick={onLocate}
+        />
       )}
       {/* 删除 */}
       {deleteVisible && <IconClose className="btn delete" onClick={onDelete} />}
@@ -26,6 +32,11 @@ const StyleValueHandler = styled.div`
   padding-left: 20px;
   border-left: 1px solid;
   border-left-color: var(--color-secondary-disabled);
+  .focus {
+    &[data-eye-focus="true"] {
+      color: rgba(var(--primary-6));
+    }
+  }
   .btn {
     cursor: pointer;
     font-size: 16px;

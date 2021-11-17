@@ -1,9 +1,9 @@
-import { TypeProjectDataDoc } from "src/types/project";
-import { TypePageConfig, TypeResourceConfig } from "src/types/config.resource";
-import { TypeScenarioConfig } from "src/types/config.scenario";
 import ResourceConfigData from "src/data/ResourceConfig";
 import ProjectData from "src/data/ProjectData";
 import ScenarioConfig from "src/data/ScenarioConfig";
+import { TypeProjectDataDoc } from "src/types/project";
+import { TypePageConfig, TypeResourceConfig } from "src/types/config.resource";
+import { TypeScenarioConfig } from "src/types/config.scenario";
 import { TypeFileData } from "src/types/file-data";
 
 import { ACTION_TYPE, TypeEditorActions } from "./action";
@@ -15,6 +15,7 @@ export type TypeEditorState = {
   projectData: TypeProjectDataDoc;
   scenarioConfig: TypeScenarioConfig;
   resourceConfig: TypeResourceConfig;
+  focusKeyPath: string;
   pageConfigMap: Record<string, TypePageConfig | undefined>;
   fileDataMap: Record<string, TypeFileData | undefined>;
 };
@@ -23,6 +24,7 @@ const defaultState: TypeEditorState = {
   projectData: ProjectData.default,
   scenarioConfig: ScenarioConfig.default,
   resourceConfig: ResourceConfigData.default,
+  focusKeyPath: "",
   pageConfigMap: {},
   fileDataMap: {}
 };
@@ -56,6 +58,15 @@ export default function EditorReducer(
     case ACTION_TYPE.SET_RESOURCE_CONFIG: {
       return updateState(state, {
         resourceConfig: action.payload
+      });
+    }
+    // 设置聚焦的 keyPath
+    case ACTION_TYPE.SET_FOCUS_KEY_PATH: {
+      return updateState(state, {
+        focusKeyPath:
+          state.focusKeyPath === action.payload //
+            ? ""
+            : action.payload
       });
     }
     // 页面配置数据

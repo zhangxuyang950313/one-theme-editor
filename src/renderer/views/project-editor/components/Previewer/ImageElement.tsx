@@ -6,13 +6,19 @@ import { TypeSourceData } from "src/types/config.page";
 import { useSubscribeSrc } from "../../hooks";
 
 const ImageElement: React.FC<{
-  mouseEffect?: boolean;
-  shouldSubscribe?: boolean;
   sourceUrl: string;
   sourceData: TypeSourceData;
+  shouldSubscribe?: boolean;
+  mouseEffect?: boolean;
+  isFocused: boolean;
 }> = props => {
   const [url, setUrl] = useState(props.sourceUrl);
-  const { mouseEffect, shouldSubscribe, sourceData } = props;
+  const {
+    mouseEffect, //
+    isFocused,
+    shouldSubscribe,
+    sourceData
+  } = props;
   const subscribe = useSubscribeSrc({ immediately: true });
   useLayoutEffect(() => {
     if (!shouldSubscribe) return;
@@ -28,7 +34,14 @@ const ImageElement: React.FC<{
     }
   }, []);
 
-  return <StyleImage data-mouse-effect={mouseEffect} alt="" src={url} />;
+  return (
+    <StyleImage
+      alt=""
+      src={url}
+      data-is-focus={isFocused}
+      data-mouse-effect={mouseEffect}
+    />
+  );
 };
 
 const StyleImage = styled.img`
@@ -44,6 +57,12 @@ const StyleImage = styled.img`
     cursor: pointer;
     filter: drop-shadow(0 0 10px var(--color-primary-light-4));
     outline: 2px solid var(--color-primary-light-4);
+    transition: all 0.2s ease-out;
+  }
+  &:not([data-is-focus="true"]) {
+    opacity: 0.5;
+    filter: blur(2px);
+    outline: none;
     transition: all 0.2s ease-out;
   }
 `;

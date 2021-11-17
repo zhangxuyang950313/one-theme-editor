@@ -11,8 +11,9 @@ import { Tabs } from "@/components/one-ui";
 
 const ResourcePanel: React.FC<{
   pageConfig: TypePageConfig;
+  iconEyeVisible: boolean;
 }> = props => {
-  const { pageConfig } = props;
+  const { pageConfig, iconEyeVisible } = props;
   const { resourceCategoryList } = pageConfig;
   const [selectTabIndex, setSelectTabIndex] = useState(0);
 
@@ -52,7 +53,7 @@ const ResourcePanel: React.FC<{
           (blockItem, key) => (
             <div className="resource__block" key={`${key}.${blockItem.key}`}>
               <StickyTab content={blockItem.name} />
-              <FillerWrapper data={blockItem} />
+              <FillerWrapper data={blockItem} iconEyeVisible={iconEyeVisible} />
             </div>
           )
         )}

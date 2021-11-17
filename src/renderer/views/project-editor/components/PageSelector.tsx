@@ -48,6 +48,7 @@ const PageSelector: React.FC<{
 const StylePageSelector = styled.div`
   display: flex;
   flex-direction: column;
+  height: 100%;
   .preview {
     cursor: pointer;
     width: 100%;

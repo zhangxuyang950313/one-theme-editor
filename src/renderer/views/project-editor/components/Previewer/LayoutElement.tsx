@@ -6,6 +6,8 @@ import { filenameIs9Patch } from "src/common/utils";
 
 import NinePatchCanvas from "../NinePatchCanvas";
 
+import { useEditorSelector } from "../../store";
+
 import { computeLayoutStyle } from "./utils";
 import TextElement from "./TextElement";
 import ImageElement from "./ImageElement";
@@ -23,11 +25,14 @@ const LayoutElement: React.FC<{
     onClick
   } = props;
 
+  const focusKeyPath = useEditorSelector(state => state.focusKeyPath);
+
   let ele: JSX.Element | null = null;
   const layoutStyle = computeLayoutStyle(element.layout, ratio);
   const computedWidth = (Number(element.layout.w) * ratio).toFixed(0);
   const computedHeight = (Number(element.layout.h) * ratio).toFixed(0);
   const sourceUrl = `${element.sourceUrl}?w=${computedWidth}&h=${computedHeight}&q=best`;
+  const isFocused = focusKeyPath ? element.keyPath === focusKeyPath : true;
   switch (element.tag) {
     // 图片类型预览
     case LAYOUT_ELEMENT_TAG.Image: {
@@ -44,6 +49,7 @@ const LayoutElement: React.FC<{
           mouseEffect={mouseEffect}
           sourceUrl={sourceUrl}
           sourceData={element.sourceData}
+          isFocused={isFocused}
         />
       );
       break;
@@ -59,6 +65,7 @@ const LayoutElement: React.FC<{
           sourceData={element.sourceData}
           colorFormat={HEX_FORMAT.ARGB}
           mouseEffect={mouseEffect}
+          isFocused={isFocused}
         />
       );
       break;

@@ -2,14 +2,18 @@ import React, { ReactNode } from "react";
 import styled from "styled-components";
 import { Tooltip } from "antd";
 import { Descriptions, Divider } from "@arco-design/web-react";
-import { IconArrowRight, IconPlus } from "@arco-design/web-react/icon";
+import {
+  IconArrowRight,
+  IconPlus,
+  IconUndo
+} from "@arco-design/web-react/icon";
 import { TypeFileItem } from "src/types/config.page";
 import { TypeFileData } from "src/types/file-data";
 import { FILE_EVENT, PROTOCOL_TYPE } from "src/common/enums";
 
 import ImageElement from "../../Previewer/ImageElement";
 
-import ImageDisplayFrame from "./ImageDisplayFrame";
+import ImageDisplay from "./ImageDisplay";
 import FileHandler from "./FileHandler";
 import FileDisplayFrame from "./FileDisplayFrame";
 
@@ -23,6 +27,8 @@ const FileFiller: React.FC<{
   onLocate: () => void;
   onImport: () => void;
   onDelete: () => void;
+  iconEyeFocus: boolean;
+  iconEyeVisible: boolean;
 }> = props => {
   const {
     data, //
@@ -30,16 +36,22 @@ const FileFiller: React.FC<{
     onPrimaryClick,
     onLocate,
     onImport,
-    onDelete
+    onDelete,
+    iconEyeFocus,
+    iconEyeVisible
   } = props;
   const projectFile = useSubscribedSrc(data.sourceData.src);
 
   const resourceUrl = `${PROTOCOL_TYPE.resource}://${data.sourceData.src}`;
 
   const ResourceImageDisplay = (
-    <ImageDisplayFrame girdSize={16}>
-      <ImageElement sourceUrl={resourceUrl} sourceData={data.sourceData} />
-    </ImageDisplayFrame>
+    <ImageDisplay girdSize={13}>
+      <ImageElement
+        isFocused
+        sourceUrl={resourceUrl}
+        sourceData={data.sourceData}
+      />
+    </ImageDisplay>
   );
 
   return (
@@ -63,7 +75,16 @@ const FileFiller: React.FC<{
               }
             >
               {/* 左上角悬浮展示 */}
-              <span onClick={onFloatClick}>{ResourceImageDisplay}</span>
+              <span className="float-content">
+                {ResourceImageDisplay}
+                <Tooltip
+                  destroyTooltipOnHide
+                  title="使用默认素材"
+                  placement="bottom"
+                >
+                  <IconUndo className="popup-icon" onClick={onFloatClick} />
+                </Tooltip>
+              </span>
             </Tooltip>
           }
           primaryNode={
@@ -89,13 +110,14 @@ const FileFiller: React.FC<{
                       }}
                       current={{
                         ImageNode: (
-                          <ImageDisplayFrame girdSize={18}>
+                          <ImageDisplay girdSize={18}>
                             <ImageElement
+                              isFocused
                               shouldSubscribe
                               sourceUrl={data.sourceUrl}
                               sourceData={data.sourceData}
                             />
-                          </ImageDisplayFrame>
+                          </ImageDisplay>
                         ),
                         resolution: getDescription(projectFile.fileData),
                         size: projectFile.fileData.size
@@ -104,14 +126,15 @@ const FileFiller: React.FC<{
                   }
                 >
                   <span>
-                    <ImageDisplayFrame girdSize={18} onClick={onPrimaryClick}>
+                    <ImageDisplay girdSize={18} onClick={onPrimaryClick}>
                       <ImageElement
+                        isFocused
                         mouseEffect
                         shouldSubscribe
                         sourceUrl={data.sourceUrl}
                         sourceData={data.sourceData}
                       />
-                    </ImageDisplayFrame>
+                    </ImageDisplay>
                   </span>
                 </Tooltip>
               )}
@@ -124,12 +147,13 @@ const FileFiller: React.FC<{
         </div>
       </div>
       <FileHandler
-        locateVisible={!!data.keyPath}
+        locateVisible={!!data.keyPath && iconEyeVisible}
         exportVisible={projectFile.state !== FILE_EVENT.UNLINK}
         deleteVisible={projectFile.state !== FILE_EVENT.UNLINK}
         onLocate={onLocate} // 定位资源
         onImport={onImport} // 导入资源
         onDelete={onDelete} // 删除资源
+        iconEyeFocus={iconEyeFocus}
       />
     </StyleFileFiller>
   );
@@ -140,6 +164,24 @@ const StyleFileFiller = styled.div`
   .file-display-info {
     display: flex;
     flex-direction: column;
+    .float-content {
+      &:hover {
+        .popup-icon {
+          cursor: pointer;
+          position: absolute;
+          top: 0;
+          right: 0;
+          width: 60%;
+          height: 60%;
+          padding: 2px;
+          line-height: 100%;
+          font-size: 10px;
+          color: rgb(var(--primary-6));
+          background-color: rgba(0, 0, 0, 0.5);
+          border-radius: 100%;
+        }
+      }
+    }
     .empty-display {
       background-color: var(--color-bg-4);
       &:hover {

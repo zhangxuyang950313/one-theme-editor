@@ -14,6 +14,8 @@ export enum ACTION_TYPE {
   SET_SCENARIO_CONFIG = "SET_SCENARIO_CONFIG",
   // 设置资源配置
   SET_RESOURCE_CONFIG = "SET_RESOURCE_CONFIG",
+  // 设置当前选中的 key path
+  SET_FOCUS_KEY_PATH = "SET_FOCUS_KEY_PATH",
   // 添加页面配置数据映射
   PATCH_PAGE_CONFIG = "PATCH_PAGE_CONFIG",
   // 添加 xml 文件数据
@@ -46,6 +48,11 @@ type TypeActionSetResourceConfig = {
   payload: TypeResourceConfig;
 };
 
+type TypeActionSetFocusKeyPath = {
+  type: typeof ACTION_TYPE.SET_FOCUS_KEY_PATH;
+  payload: string;
+};
+
 // 更新页面配置表
 type TypeActionPatchPageConfMap = {
   type: typeof ACTION_TYPE.PATCH_PAGE_CONFIG;
@@ -64,6 +71,7 @@ export type TypeEditorActions =
   | TypeActionSetProjectInfo
   | TypeActionSetScenarioConfig
   | TypeActionSetResourceConfig
+  | TypeActionSetFocusKeyPath
   | TypeActionPatchPageConfMap
   | TypeActionPatchFileDataMap;
 
@@ -97,6 +105,12 @@ export function ActionSetDescription(
   payload: TypeProjectInfo
 ): TypeActionSetProjectInfo {
   return { type: ACTION_TYPE.SET_PROJECT_INFO, payload };
+}
+
+export function ActionSetFocusKeyPath(
+  payload: string
+): TypeActionSetFocusKeyPath {
+  return { type: ACTION_TYPE.SET_FOCUS_KEY_PATH, payload };
 }
 
 // 更新页面数据表

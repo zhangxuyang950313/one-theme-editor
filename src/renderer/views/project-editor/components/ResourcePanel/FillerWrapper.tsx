@@ -7,10 +7,12 @@ import { Notification } from "@arco-design/web-react";
 import { HEX_FORMAT, RESOURCE_TAG } from "src/common/enums";
 import { TypeBlockCollection } from "src/types/config.page";
 
+import { useEditorDispatch, useEditorSelector } from "../../store";
+
+import { ActionSetFocusKeyPath } from "../../store/action";
+
 import FileFiller from "./FileFiller/index";
 import ValueFiller from "./ValueFiller/index";
-
-import { previewResourceEmitter, PREVIEW_EVENT } from "@/singletons/emitters";
 
 function resolveResourceFile(relative: string): string {
   return path.join(window.$one.$reactiveState.get("resourcePath"), relative);
@@ -37,8 +39,13 @@ async function importResource(to: string): Promise<void> {
 
 // 所有填充器的包装器
 // 所有类型及响应都在 switch 处理
-const FillerWrapper: React.FC<{ data: TypeBlockCollection }> = props => {
-  const { data } = props;
+const FillerWrapper: React.FC<{
+  data: TypeBlockCollection;
+  iconEyeVisible: boolean;
+}> = props => {
+  const { data, iconEyeVisible } = props;
+  const dispatch = useEditorDispatch();
+  const focusKeyPath = useEditorSelector(state => state.focusKeyPath);
   switch (data.tag) {
     case RESOURCE_TAG.File: {
       return (
@@ -50,6 +57,8 @@ const FillerWrapper: React.FC<{ data: TypeBlockCollection }> = props => {
               <div className="file-display__item" key={key}>
                 <FileFiller
                   data={item}
+                  iconEyeFocus={focusKeyPath === item.keyPath}
+                  iconEyeVisible={iconEyeVisible}
                   // 小预览图点击
                   onFloatClick={() => {
                     window.$one.$server.copyFile({
@@ -63,11 +72,7 @@ const FillerWrapper: React.FC<{ data: TypeBlockCollection }> = props => {
                   }}
                   // 定位按钮
                   onLocate={() => {
-                    // 定位到预览图位置
-                    previewResourceEmitter.emit(
-                      PREVIEW_EVENT.locateLayout,
-                      item.keyPath
-                    );
+                    dispatch(ActionSetFocusKeyPath(item.keyPath));
                   }}
                   // 导入按钮
                   onImport={() => {
@@ -100,6 +105,7 @@ const FillerWrapper: React.FC<{ data: TypeBlockCollection }> = props => {
               xmlItem={xmlItem}
               use={data.tag}
               colorFormat={HEX_FORMAT.ARGB}
+              onLocate={keyPath => dispatch(ActionSetFocusKeyPath(keyPath))}
             />
           ))}
         </StyleValueFillerWrapper>

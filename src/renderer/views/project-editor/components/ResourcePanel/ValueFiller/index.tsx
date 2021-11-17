@@ -12,7 +12,7 @@ import StringInput from "./StringInput";
 import ValueHandler from "./ValueHandler";
 
 import { useSubscribeSrcSingly } from "@/views/project-editor/hooks";
-import { previewResourceEmitter, PREVIEW_EVENT } from "@/singletons/emitters";
+import { useEditorSelector } from "@/views/project-editor/store";
 
 // 分类编辑控件
 const ValueEditor: React.FC<{
@@ -80,6 +80,8 @@ const ValueFillerItem: React.FC<{
   use: TypeXmlValueTags;
   from: string;
   onChange: (v: string) => void;
+  onLocate: () => void;
+  iconEyeFocus: boolean;
 }> = props => {
   const {
     keyPath,
@@ -89,8 +91,9 @@ const ValueFillerItem: React.FC<{
     value,
     colorFormat,
     use,
-    // from,
-    onChange
+    onChange,
+    onLocate,
+    iconEyeFocus
   } = props;
   return (
     <StyleValueFillerItem>
@@ -113,10 +116,9 @@ const ValueFillerItem: React.FC<{
         <ValueHandler
           locateVisible={!!keyPath}
           deleteVisible
-          onLocate={() => {
-            previewResourceEmitter.emit(PREVIEW_EVENT.locateLayout, keyPath);
-          }}
+          onLocate={onLocate}
           onDelete={() => onChange("")}
+          iconEyeFocus={iconEyeFocus}
         />
       </div>
     </StyleValueFillerItem>
@@ -156,13 +158,15 @@ const ValueFiller: React.FC<{
   xmlItem: TypeXmlNodeData;
   use: TypeXmlValueTags;
   colorFormat: HEX_FORMAT;
+  onLocate: (keyPath: string) => void;
 }> = props => {
-  const { xmlItem, use, colorFormat } = props;
+  const { xmlItem, use, colorFormat, onLocate } = props;
   // const xmlValMapper = useEditorSelector(state => {
   //   const data = state.fileDataMap[xmlItem.sourceData.src];
   //   return data?.fileType === "application/xml" ? data.valueMapper : {};
   // });
   const [xmlFileData, setXmlFileData] = useState<TypeXmlFileData>();
+  const focusKeyPath = useEditorSelector(state => state.focusKeyPath);
 
   useSubscribeSrcSingly(xmlItem.sourceData.src, (event, src, fileData) => {
     if (fileData.filetype === "application/xml") {
@@ -189,6 +193,7 @@ const ValueFiller: React.FC<{
             use={use}
             colorFormat={colorFormat}
             from={xmlItem.sourceData.src}
+            onLocate={() => onLocate(valueItem.keyPath)}
             onChange={val => {
               if (value === val) return;
               // 写入 xml
@@ -199,6 +204,7 @@ const ValueFiller: React.FC<{
                 src: xmlItem.sourceData.src
               });
             }}
+            iconEyeFocus={focusKeyPath === valueItem.keyPath}
           />
         );
       })}

@@ -1,11 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Tooltip } from "antd";
-import {
-  IconDelete,
-  IconPlus,
-  IconLocation
-} from "@arco-design/web-react/icon";
+import { IconDelete, IconEye, IconFile } from "@arco-design/web-react/icon";
 
 // 文件操作区
 const FileHandler: React.FC<{
@@ -15,25 +11,34 @@ const FileHandler: React.FC<{
   onLocate: () => void; // 追踪定位在界面的位置
   onImport: () => void; // 导入
   onDelete: () => void; // 删除
+  iconEyeFocus: boolean;
 }> = props => {
   return (
     <StyleFileHandler>
       {props.locateVisible && (
-        <Tooltip destroyTooltipOnHide overlay="定位" placement="right">
-          <IconLocation className="press btn-normal" onClick={props.onLocate} />
+        <Tooltip
+          destroyTooltipOnHide
+          overlay={props.iconEyeFocus ? "关闭高亮" : "高亮"}
+          placement="right"
+        >
+          <IconEye
+            className="press btn-normal focus"
+            data-eye-focus={props.iconEyeFocus}
+            onClick={props.onLocate}
+          />
         </Tooltip>
       )}
       {props.exportVisible && (
-        <Tooltip destroyTooltipOnHide overlay="导入" placement="right">
+        <Tooltip destroyTooltipOnHide overlay="选择" placement="right">
           {/* 导入按钮 */}
-          <IconPlus className="press btn-normal" onClick={props.onImport} />
+          <IconFile className="press btn-normal" onClick={props.onImport} />
         </Tooltip>
       )}
       {/* .9编辑按钮 */}
       {/* <FormOutlined className="press edit" onClick={() => {}} /> */}
       {/* 删除按钮 */}
       {props.deleteVisible && (
-        <Tooltip destroyTooltipOnHide overlay="删除" placement="right">
+        <Tooltip destroyTooltipOnHide overlay="移除" placement="right">
           <IconDelete className="press btn-delete" onClick={props.onDelete} />
         </Tooltip>
       )}
@@ -45,10 +50,15 @@ const StyleFileHandler = styled.div`
   display: flex;
   flex-direction: column;
   width: 26px;
+  .focus {
+    &[data-eye-focus="true"] {
+      color: rgba(var(--primary-6));
+    }
+  }
   .press {
     cursor: pointer;
     margin: 5px;
-    font-size: 16px;
+    font-size: 18px;
     &:hover {
       opacity: 0.8;
     }

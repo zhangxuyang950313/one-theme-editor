@@ -1,11 +1,11 @@
-import React, { useLayoutEffect, useRef, useState } from "react";
-import anime from "animejs";
+import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import { TypePageConfig } from "src/types/config.resource";
 
-import LayoutElement from "./LayoutElement";
+import { useEditorDispatch } from "../../store";
+import { ActionSetFocusKeyPath } from "../../store/action";
 
-import { previewResourceEmitter, PREVIEW_EVENT } from "@/singletons/emitters";
+import LayoutElement from "./LayoutElement";
 
 const Previewer: React.FC<{
   className?: string;
@@ -22,30 +22,9 @@ const Previewer: React.FC<{
       forceStaticPreview
     }
   } = props;
-
+  const dispatch = useEditorDispatch();
   const [ratio, setRatio] = useState(0);
   const layoutRef = useRef<HTMLDivElement | null>(null);
-
-  useLayoutEffect(() => {
-    const cb = (keyPath: string) => {
-      const list = Array.from(layoutRef.current?.children || []);
-      const targets = list.flatMap(child =>
-        child.getAttribute("data-key-path") !== keyPath ? [child] : []
-      );
-      if (targets.length === list.length) return;
-      anime({
-        targets,
-        opacity: 0.1,
-        direction: "alternate",
-        duration: 800,
-        easing: "easeOutBack"
-      });
-    };
-    previewResourceEmitter.on(PREVIEW_EVENT.locateLayout, cb);
-    return () => {
-      previewResourceEmitter.removeListener(PREVIEW_EVENT.locateLayout, cb);
-    };
-  }, []);
 
   if (!screenWidth) return null;
 
@@ -70,19 +49,19 @@ const Previewer: React.FC<{
         >
           {layoutElementList.map((element, k) => {
             return (
-              <span key={k} data-key-path={element.keyPath}>
-                <LayoutElement
-                  element={element}
-                  ratio={ratio}
-                  mouseEffect={mouseEffect}
-                  onClick={() => {
-                    previewResourceEmitter.emit(
-                      PREVIEW_EVENT.locateResource,
-                      element.keyPath
-                    );
-                  }}
-                />
-              </span>
+              <LayoutElement
+                key={k}
+                element={element}
+                ratio={ratio}
+                mouseEffect={mouseEffect}
+                onClick={() => {
+                  dispatch(ActionSetFocusKeyPath(element.keyPath));
+                  // previewResourceEmitter.emit(
+                  //   PREVIEW_EVENT.locateResource,
+                  //   element.keyPath
+                  // );
+                }}
+              />
             );
           })}
         </div>

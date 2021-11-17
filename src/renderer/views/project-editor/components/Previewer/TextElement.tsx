@@ -13,14 +13,16 @@ const TextElement: React.FC<{
   sourceData: TypeSourceData;
   valueData: TypeXmlValueData;
   mouseEffect?: boolean;
+  isFocused: boolean;
 }> = props => {
   const {
-    text, //
+    text,
     fontSize,
     valueData,
     sourceData,
     colorFormat,
-    mouseEffect
+    mouseEffect,
+    isFocused
   } = props;
   const [defaultColor, setDefaultColor] = useState("");
   const [color, setColor] = useState(defaultColor);
@@ -61,6 +63,7 @@ const TextElement: React.FC<{
   return (
     <StyleSpan
       data-mouse-effect={mouseEffect}
+      data-is-focus={isFocused}
       style={{ display: "inherit", fontSize, color }}
     >
       {text}
@@ -79,6 +82,12 @@ const StyleSpan = styled.span`
     filter: drop-shadow(0 0 10px var(--color-primary-light-4));
     outline: 2px solid var(--color-primary-light-4);
     transition: all 0.3s ease;
+  }
+  &:not([data-is-focus="true"]) {
+    opacity: 0.5;
+    filter: blur(2px);
+    outline: none;
+    transition: all 0.2s ease-out;
   }
 `;
 
