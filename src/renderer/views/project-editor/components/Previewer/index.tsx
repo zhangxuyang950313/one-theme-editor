@@ -2,11 +2,7 @@ import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import { TypePageConfig } from "src/types/config.resource";
 
-import {
-  useEditorDispatch,
-  useEditorSelector,
-  useEditorStore
-} from "../../store";
+import { useEditorDispatch, useEditorStore } from "../../store";
 import { ActionSetFocusKeyPath } from "../../store/action";
 
 import LayoutElement from "./LayoutElement";
@@ -28,7 +24,6 @@ const Previewer: React.FC<{
   } = props;
   const dispatch = useEditorDispatch();
   const store = useEditorStore();
-  const focusKeyPath = useEditorSelector(state => state.focusKeyPath);
   const [ratio, setRatio] = useState(0);
   const layoutRef = useRef<HTMLDivElement | null>(null);
 
@@ -84,6 +79,7 @@ const Previewer: React.FC<{
 
 const StylePreviewer = styled.div`
   width: 100%;
+  background-color: black;
   box-sizing: border-box;
   border: 1px solid var(--color-secondary);
   .dynamic {

@@ -107,7 +107,7 @@ const FileFiller: React.FC<{
                       }}
                       current={{
                         ImageNode: (
-                          <ImageDisplay girdSize={18}>
+                          <ImageDisplay girdSize={13}>
                             <ImageElement
                               shouldSubscribe
                               sourceUrl={data.sourceUrl}
@@ -122,7 +122,7 @@ const FileFiller: React.FC<{
                   }
                 >
                   <span>
-                    <ImageDisplay girdSize={18} onClick={onPrimaryClick}>
+                    <ImageDisplay girdSize={13} onClick={onPrimaryClick}>
                       <ImageElement
                         mouseEffect
                         shouldSubscribe
