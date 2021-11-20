@@ -1,3 +1,6 @@
+/**
+ * 管理异步加载模块
+ */
 import { app } from "electron";
 
 import type projectDatabase from "main/database/project";

@@ -10,7 +10,7 @@ import ERR_CODE from "src/common/enums/ErrorCode";
 import LogUtil from "src/common/utils/LogUtil";
 import Database from "src/common/classes/Database";
 
-console.log(process.pid, ":project");
+console.log(`[database]project`, process.pid);
 
 class ProjectDatabase extends Database {
   constructor() {

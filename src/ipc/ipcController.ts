@@ -31,7 +31,7 @@ import {
   chunkProjectDB
 } from "src/common/asyncChunk";
 import { TypeWatchedRecord } from "src/common/classes/DirWatcher";
-import fileDataCache from "src/main/singletons/fileCache";
+import { fileDataCache } from "src/main/singletons/fileCache";
 
 import IPC_EVENT from "./ipc-event";
 import ipcCreator from "./ipcCreator";

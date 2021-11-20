@@ -6,7 +6,10 @@ import LogUtil from "../utils/LogUtil";
 
 type TypeGetFileMethod = (file: string) => TypeFileData;
 
-// 文件数据缓存
+/**
+ * 文件数据缓存
+ * 传入获取文件数据方法，第一个参数应为 file，返回标准 fileData @TypeGetFileMethod
+ */
 export default class FileDataCache {
   private fileDataMap = new Map<string, { mtime: Date; data: TypeFileData }>();
   private getFileMethod: TypeGetFileMethod;

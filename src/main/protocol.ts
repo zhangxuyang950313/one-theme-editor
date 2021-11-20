@@ -5,8 +5,7 @@ import fse from "fs-extra";
 import { protocol, app, nativeImage, ResizeOptions } from "electron";
 import PathUtil from "src/common/utils/PathUtil";
 import reactiveState from "src/common/singletons/reactiveState";
-
-import { getBufferAndFileType } from "../common/utils";
+import { fileBufferCache } from "src/main/singletons/fileCache";
 
 async function getFileIconData(file: string) {
   const data = await app.getFileIcon(file);
@@ -50,8 +49,8 @@ async function getFilePicResponseData(
           }
         }
         // 获取图片数据
-        const { buff, fileType } = await getBufferAndFileType(file);
-        resolve({ mimeType: fileType.mime, data: buff });
+        const data = await fileBufferCache.getMimeTypedBuffer(file);
+        resolve(data);
       } catch (err) {
         const def = { mimeType: "image/png", data: Buffer.from("") };
         // 不存在空返回

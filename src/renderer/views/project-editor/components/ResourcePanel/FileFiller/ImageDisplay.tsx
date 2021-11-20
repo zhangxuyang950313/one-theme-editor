@@ -38,11 +38,13 @@ const StyleImageBackground = styled(StyleGirdBackground)`
 const StyleImageDisplay = styled(StyleImageBackground)`
   .thumbnail {
     position: relative;
-    left: 0;
     top: 0;
-    /* width: 100%; */
+    left: 0;
+    width: 80%;
     height: 80%;
-    object-fit: contain;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 `;
 

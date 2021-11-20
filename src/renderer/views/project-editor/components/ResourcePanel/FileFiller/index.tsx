@@ -137,7 +137,9 @@ const FileFiller: React.FC<{
           }
         />
         <div className="info">
-          <div className="main">{data.comment}</div>
+          <div className="main" title={data.comment}>
+            {data.comment || "-"}
+          </div>
           <div className="secondary">{getDescription(data.fileData)}</div>
         </div>
       </div>
@@ -159,6 +161,7 @@ const StyleFileFiller = styled.div`
   .file-display-info {
     display: flex;
     flex-direction: column;
+    width: 100px;
     .float-content {
       &:hover {
         .popup-icon {
@@ -198,14 +201,20 @@ const StyleFileFiller = styled.div`
   }
   .info {
     margin: 5px 0;
+    max-width: max-content;
+    white-space: nowrap;
     .main {
       font-size: 14px;
       color: var(--color-text-1);
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .secondary {
       /* user-select: text; */
       font-size: 12px;
       color: var(--color-text-3);
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 `;
@@ -259,7 +268,7 @@ const ModifierDescriptions: React.FC<{
           )
         },
         {
-          label: "",
+          label: "对比",
           value: (
             <div className="flex-alignV-center">
               <div className="img">{props.origin.ImageNode}</div>

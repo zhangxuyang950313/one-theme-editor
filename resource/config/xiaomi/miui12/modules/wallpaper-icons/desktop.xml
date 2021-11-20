@@ -32,6 +32,8 @@
             <Item :key="com.android.contacts.activities.TwelveKeyDialer" src="src://icons/res/drawable-xxhdpi/com.android.contacts.activities.TwelveKeyDialer.png"/>
             <!-- 短信 -->
             <Item :key="com.android.mms" src="src://icons/res/drawable-xxhdpi/com.android.mms.png"/>
+            <!-- 短信com.android.mms -->
+            <Item :key="com.android.mms" src="src://icons/res/drawable-xxhdpi/com.android.mms.png"/>
             <!-- 浏览器 -->
             <Item :key="com.android.browser" src="src://icons/res/drawable-xxhdpi/com.android.browser.png"/>
             <!-- 相机 -->

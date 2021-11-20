@@ -49,8 +49,8 @@ const ImageElement: React.FC<{
 
 const StyleImage = styled.img`
   display: inherit;
-  /* width: 100%; */
-  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
   object-fit: contain;
   transition: all 0.2s ease-in;
   &[data-mouse-effect="true"] {
