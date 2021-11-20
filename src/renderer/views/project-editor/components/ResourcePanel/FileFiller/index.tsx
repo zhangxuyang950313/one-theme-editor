@@ -1,65 +1,85 @@
-import React, { ReactNode } from "react";
+import path from "path";
+
+import { remote } from "electron";
+import React, { ReactNode, useRef } from "react";
 import styled from "styled-components";
 import { Tooltip } from "antd";
-import { Descriptions, Divider } from "@arco-design/web-react";
+import { Descriptions, Divider, Notification } from "@arco-design/web-react";
 import {
   IconArrowRight,
   IconPlus,
   IconUndo
 } from "@arco-design/web-react/icon";
+
 import { TypeFileItem } from "src/types/config.page";
 import { TypeFileData } from "src/types/file-data";
 import { FILE_EVENT, PROTOCOL_TYPE } from "src/common/enums";
-
-import ImageElement from "../../Previewer/ImageElement";
 
 import ImageDisplay from "./ImageDisplay";
 import FileHandler from "./FileHandler";
 import FileDisplayFrame from "./FileDisplayFrame";
 
-import useSubscribedSrc from "@/hooks/useProjectFile";
+import ImageElement from "@/components/Previewer/ImageElement";
+
+import { useSubscribeFileData } from "@/hooks/subscribeFile";
+
+function resolveResourceFile(relative: string): string {
+  return path.join(window.$one.$reactiveState.get("resourcePath"), relative);
+}
+function resolveProjectFile(relative: string): string {
+  return path.join(window.$one.$reactiveState.get("projectPath"), relative);
+}
+
+async function importResource(to: string): Promise<void> {
+  // 选择图片导入
+  remote.dialog
+    .showOpenDialog({
+      title: "选择素材",
+      properties: ["openFile", "createDirectory"]
+    })
+    .then(result => {
+      if (result.canceled) return;
+      window.$one.$server.copyFile({
+        from: result.filePaths[0],
+        to
+      });
+    });
+}
 
 // 文件填充器
 const FileFiller: React.FC<{
   data: TypeFileItem;
-  onFloatClick: () => void;
-  onPrimaryClick: () => void;
-  onLocate: () => void;
-  onImport: () => void;
-  onDelete: () => void;
-  iconEyeFocus: boolean;
-  iconEyeVisible: boolean;
+  isFocus: boolean;
+  onHighlight: (keyPath: string) => void;
 }> = props => {
-  const {
-    data, //
-    onFloatClick,
-    onPrimaryClick,
-    onLocate,
-    onImport,
-    onDelete,
-    iconEyeFocus,
-    iconEyeVisible
-  } = props;
-  const projectFile = useSubscribedSrc(data.sourceData.src);
-
-  const resourceUrl = `${PROTOCOL_TYPE.resource}://${data.sourceData.src}`;
+  const { data, isFocus, onHighlight } = props;
+  const fileFilterRef = useRef<HTMLDivElement | null>(null);
+  const projectFileData = useSubscribeFileData(data.sourceData.src);
+  const projectFile = resolveProjectFile(data.sourceData.src);
+  const resourceFile = resolveResourceFile(data.sourceData.src);
 
   const ResourceImageDisplay = (
     <ImageDisplay girdSize={13}>
-      <ImageElement sourceUrl={resourceUrl} sourceData={data.sourceData} />
+      <ImageElement
+        sourceUrl={`${PROTOCOL_TYPE.resource}://${data.sourceData.src}`}
+        sourceData={data.sourceData}
+      />
     </ImageDisplay>
   );
 
+  const getPopupContainer = () => fileFilterRef.current || document.body;
+
   return (
-    <StyleFileFiller>
+    <StyleFileFiller ref={fileFilterRef}>
       <div className="file-display-info">
         <FileDisplayFrame
-          isFocus={iconEyeFocus}
+          isFocus={isFocus}
           floatNode={
             <Tooltip
-              overlayStyle={{ maxWidth: "none" }}
-              destroyTooltipOnHide
               placement="top"
+              overlayStyle={{ maxWidth: "none" }}
+              getPopupContainer={getPopupContainer}
+              destroyTooltipOnHide
               overlay={
                 // 资源详情
                 <ResourceDescriptions
@@ -75,26 +95,39 @@ const FileFiller: React.FC<{
               <span className="float-content">
                 {ResourceImageDisplay}
                 <Tooltip
-                  destroyTooltipOnHide
                   title="使用默认素材"
                   placement="bottom"
+                  destroyTooltipOnHide
+                  getPopupContainer={getPopupContainer}
                 >
-                  <IconUndo className="popup-icon" onClick={onFloatClick} />
+                  <IconUndo
+                    className="popup-icon"
+                    onClick={() => {
+                      window.$one.$server.copyFile({
+                        from: resourceFile,
+                        to: projectFile
+                      });
+                    }}
+                  />
                 </Tooltip>
               </span>
             </Tooltip>
           }
           primaryNode={
             <>
-              {projectFile.state === FILE_EVENT.UNLINK ? (
-                <div className="empty-display" onClick={onImport}>
+              {projectFileData.state === FILE_EVENT.UNLINK ? (
+                <div
+                  className="empty-display"
+                  onClick={() => importResource(projectFile)}
+                >
                   <IconPlus className="plugs-icon" />
                 </div>
               ) : (
                 <Tooltip
-                  overlayStyle={{ maxWidth: "none" }}
-                  destroyTooltipOnHide
                   placement="top"
+                  destroyTooltipOnHide
+                  getPopupContainer={getPopupContainer}
+                  overlayStyle={{ maxWidth: "none" }}
                   overlay={
                     // 变更详情
                     <ModifierDescriptions
@@ -115,14 +148,17 @@ const FileFiller: React.FC<{
                             />
                           </ImageDisplay>
                         ),
-                        resolution: getDescription(projectFile.fileData),
-                        size: projectFile.fileData.size
+                        resolution: getDescription(projectFileData.fileData),
+                        size: projectFileData.fileData.size
                       }}
                     />
                   }
                 >
                   <span>
-                    <ImageDisplay girdSize={13} onClick={onPrimaryClick}>
+                    <ImageDisplay
+                      girdSize={13}
+                      onClick={() => onHighlight(data.keyPath)}
+                    >
                       <ImageElement
                         mouseEffect
                         shouldSubscribe
@@ -144,13 +180,16 @@ const FileFiller: React.FC<{
         </div>
       </div>
       <FileHandler
-        locateVisible={!!data.keyPath && iconEyeVisible}
-        exportVisible={projectFile.state !== FILE_EVENT.UNLINK}
-        deleteVisible={projectFile.state !== FILE_EVENT.UNLINK}
-        onLocate={onLocate} // 定位资源
-        onImport={onImport} // 导入资源
-        onDelete={onDelete} // 删除资源
-        iconEyeFocus={iconEyeFocus}
+        locateVisible={!!data.keyPath}
+        exportVisible={projectFileData.state !== FILE_EVENT.UNLINK}
+        deleteVisible={projectFileData.state !== FILE_EVENT.UNLINK}
+        onLocate={() => remote.shell.showItemInFolder(projectFile)} // 定位资源
+        onImport={() => importResource(projectFile)} // 导入资源
+        onDelete={() => {
+          window.$one.$server.deleteFile(projectFile).catch((err: Error) => {
+            Notification.warning({ content: err.message });
+          });
+        }}
       />
     </StyleFileFiller>
   );

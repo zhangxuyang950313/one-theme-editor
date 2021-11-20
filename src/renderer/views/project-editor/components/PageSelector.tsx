@@ -1,82 +1,58 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import { TypePageConfig } from "src/types/config.resource";
+import React, { useEffect } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
 
-import Previewer from "./Previewer/index";
+import { TypeModuleConfig, TypePageConfig } from "src/types/config.resource";
 
-const selectedMap = new Map<string, number>();
+import { usePageConfigList } from "../hooks";
+import { projectDataState, selectDataState } from "../store/rescoil/state";
 
-// 页面选择器
-const PageSelector: React.FC<{
-  className?: string;
-  pageConfigList: TypePageConfig[];
-  onChange: (x: TypePageConfig) => void;
-}> = props => {
-  const { pageConfigList, onChange } = props;
+import Interface from "@/components/PageSelector";
 
-  const selectedKey = pageConfigList.map(_ => _.config).join("");
+const pageSelectCache = new WeakMap<TypeModuleConfig, TypePageConfig>();
 
-  const [index, setIndex] = useState(0);
+const PageSelector: React.FC = () => {
+  const {
+    resourceConfig: { namespace }
+  } = useRecoilValue(projectDataState);
+  const [
+    { moduleSelected, pageSelected }, //
+    setSelectData
+  ] = useRecoilState(selectDataState);
+  const { pageConfigList, fetchPageConfigList } = usePageConfigList(namespace);
+
+  // 读取上次选择的页面数据
+  useEffect(() => {
+    fetchPageConfigList(moduleSelected).then(moduleList => {
+      const [pageConfig] = moduleList;
+      if (!pageConfig) {
+        pageSelectCache.delete(moduleSelected);
+        return;
+      }
+      const pageSelected = pageSelectCache.get(moduleSelected);
+      if (
+        pageSelected &&
+        moduleList.some(({ config }) => config === pageSelected.config)
+      ) {
+        setSelectData(state => ({ ...state, pageSelected }));
+      } else {
+        setSelectData(state => ({ ...state, pageSelected: pageConfig }));
+      }
+    });
+  }, [moduleSelected]);
 
   useEffect(() => {
-    setIndex(selectedMap.get(selectedKey) || 0);
-  }, [pageConfigList]);
-
-  useEffect(() => {
-    selectedMap.set(selectedKey, index);
-    if (pageConfigList[index]) {
-      onChange(pageConfigList[index]);
-    }
-  }, [index]);
+    pageSelectCache.set(moduleSelected, pageSelected);
+  }, [pageSelected]);
 
   return (
-    <StylePageSelector className={props.className}>
-      {pageConfigList.map((pageConfig, key) => (
-        <span
-          key={key}
-          data-active={index === key}
-          className="preview"
-          onClick={() => setIndex(key)}
-        >
-          <Previewer className="previewer" pageConfig={pageConfig} />
-        </span>
-      ))}
-    </StylePageSelector>
+    <Interface
+      pageSelect={pageSelected}
+      pageList={pageConfigList}
+      onChange={pageSelected => {
+        setSelectData(state => ({ ...state, pageSelected }));
+      }}
+    />
   );
 };
-
-const StylePageSelector = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  .preview {
-    cursor: pointer;
-    width: 100%;
-    margin-top: 10px;
-    &:last-child {
-      margin-bottom: 10px;
-    }
-    padding: 2px;
-    opacity: 0.4;
-    box-sizing: border-box;
-    outline: 1px solid;
-    border-radius: 6px;
-    &[data-active="true"] {
-      outline-color: rgb(var(--primary-6));
-      opacity: 1;
-    }
-    .previewer {
-      border-radius: 6px;
-      /* overflow: hidden; */
-      box-sizing: border-box;
-    }
-    .preview-image {
-      border-radius: 6px;
-      overflow: hidden;
-      text-align: center;
-      object-fit: cover;
-    }
-  }
-`;
 
 export default PageSelector;

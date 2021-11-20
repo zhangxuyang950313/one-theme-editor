@@ -1,7 +1,7 @@
 import React, { useState, forwardRef } from "react";
 import { FILE_EVENT } from "src/common/enums";
 
-import { useSubscribeSrcSingly } from "../hooks";
+import { useSubscribeSrcSingly } from "@/hooks/subscribeFile";
 
 import { LazyImage, PreloadImage } from "@/components/ImageCollection";
 
@@ -25,19 +25,6 @@ export const DynamicProjectImage = forwardRef<
     setSrc(url.toString());
   });
   return <LazyImage {...props} ref={ref} src={src} alt="" />;
-});
-
-/**
- * 静态素材图片
- * @param props 和 img 标签具有相同的属性
- */
-export const StaticResourceImage = forwardRef<
-  HTMLImageElement,
-  TypeReactImageElement
->(function StaticResourceImage(props, ref) {
-  return (
-    <LazyImage {...props} ref={ref} src={`resource://${props.src}`} alt="" />
-  );
 });
 
 /**

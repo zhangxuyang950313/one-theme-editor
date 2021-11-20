@@ -2,33 +2,32 @@
  * 基础组件
  * 图标按钮，使用 antd—icons
  */
-import React, { useState } from "react";
+import React from "react";
 import { TOOLS_BAR_BUTTON } from "src/common/enums";
 import styled from "styled-components";
 
 export type TypeIconButtonOption = {
   name: TOOLS_BAR_BUTTON;
   icon: JSX.Element;
-  defaultToggle?: boolean;
+  toggle?: boolean;
   onClick?: (toggle: boolean) => void;
 };
 export default function IconButton(
   props: React.PropsWithChildren<TypeIconButtonOption & { className?: string }>
 ): JSX.Element {
-  const [toggle, setToggle] = useState(props.defaultToggle);
+  const { name, icon, toggle, onClick, className } = props;
   return (
-    <StyleIconButton className={props.className}>
+    <StyleIconButton className={className}>
       <div
         className="icon-btn"
         data-toggle={Boolean(toggle)}
         onClick={() => {
-          if ("defaultToggle" in props) setToggle(!toggle);
-          props?.onClick && props.onClick(!toggle);
+          onClick?.(!toggle);
         }}
       >
-        {props.children}
+        {icon}
       </div>
-      {props.name && <span className="btn-name">{props.name}</span>}
+      {name && <span className="btn-name">{name}</span>}
     </StyleIconButton>
   );
 }
@@ -57,6 +56,7 @@ const StyleIconButton = styled.div`
       transform: 0.3s ease-in;
     }
     &:hover {
+      color: var(--color-text-2);
       background-color: var(--color-secondary-hover);
     }
     &:active {

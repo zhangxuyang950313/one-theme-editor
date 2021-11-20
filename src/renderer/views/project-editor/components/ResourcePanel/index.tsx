@@ -3,18 +3,19 @@ import styled from "styled-components";
 import { TypePageConfig } from "src/types/config.resource";
 // import { TypeLayoutElement } from "src/types/config.page";
 
+import { useRecoilValue } from "recoil";
+
+import { selectDataState } from "../../store/rescoil/state";
+
 import FillerWrapper from "./FillerWrapper";
 
 import StickyTab from "@/components/StickyTab";
 import { Tabs } from "@/components/one-ui";
 // import { previewResourceEmitter, PREVIEW_EVENT } from "@/singletons/emitters";
 
-const ResourcePanel: React.FC<{
-  pageConfig: TypePageConfig;
-  iconEyeVisible: boolean;
-}> = props => {
-  const { pageConfig, iconEyeVisible } = props;
-  const { resourceCategoryList } = pageConfig;
+const ResourcePanel: React.FC = () => {
+  const { pageSelected } = useRecoilValue(selectDataState);
+  const { resourceCategoryList } = pageSelected;
   const [selectTabIndex, setSelectTabIndex] = useState(0);
 
   // useLayoutEffect(() => {
@@ -37,7 +38,7 @@ const ResourcePanel: React.FC<{
 
   return (
     <StyleResourcePanel>
-      {pageConfig.disableTabs !== true && (
+      {pageSelected.disableTabs !== true && (
         <Tabs
           className="resource__tab"
           defaultIndex={selectTabIndex}
@@ -53,7 +54,7 @@ const ResourcePanel: React.FC<{
           (blockItem, key) => (
             <div className="resource__block" key={`${key}.${blockItem.key}`}>
               <StickyTab content={blockItem.name} />
-              <FillerWrapper data={blockItem} iconEyeVisible={iconEyeVisible} />
+              <FillerWrapper data={blockItem} />
             </div>
           )
         )}

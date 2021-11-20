@@ -1,15 +1,12 @@
 import path from "path";
 
-import fse from "fs-extra";
-import { useCallback, useLayoutEffect, useRef, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { Notification } from "@arco-design/web-react";
 import PathUtil from "src/common/utils/PathUtil";
 import ProjectData from "src/data/ProjectData";
-import ResourceConfig, { FileData } from "src/data/ResourceConfig";
+import ResourceConfig from "src/data/ResourceConfig";
 import ScenarioConfig from "src/data/ScenarioConfig";
 import { asyncQueue } from "src/common/utils";
-import { FILE_EVENT } from "src/common/enums";
-import { TypeFileData } from "src/types/file-data";
 import { TypeProjectData } from "src/types/project";
 import {
   TypeModuleConfig,
@@ -17,9 +14,7 @@ import {
   TypeResourceConfig
 } from "src/types/config.resource";
 import { TypeScenarioConfig } from "src/types/config.scenario";
-import FileDataCache from "src/common/classes/FileDataCache";
 import LogUtil from "src/common/utils/LogUtil";
-import { TypeFileChangeCallbackData } from "src/ipc/ipcInvoker";
 
 import { useEditorDispatch } from "./store";
 import {
@@ -58,7 +53,7 @@ export function useLoadProject(uuid: string): {
       uuid: projectData.uuid,
       data: projectData
     });
-  }, [projectData.uuid]);
+  }, [projectData, projectData.uuid]);
 
   // 获取资源配置
   useLayoutEffect(() => {
@@ -91,7 +86,7 @@ export function useLoadProject(uuid: string): {
       window.$one.$reactiveState.set("projectData", ProjectData.default);
       window.$one.$reactiveState.set("projectPath", "");
     };
-  }, [projectData.uuid]);
+  }, [projectData, projectData.uuid]);
 
   // 设置进程间响应式数据
   useLayoutEffect(() => {
@@ -111,17 +106,17 @@ export function useLoadProject(uuid: string): {
   useLayoutEffect(() => {
     if (!projectData.uuid) return;
     dispatch(ActionSetProjectData(projectData));
-  }, [projectData.uuid]);
+  }, [dispatch, projectData, projectData.uuid]);
 
   useLayoutEffect(() => {
     if (!resourceConfig.src) return;
     dispatch(ActionSetResourceConfig(resourceConfig));
-  }, [resourceConfig.src]);
+  }, [dispatch, resourceConfig, resourceConfig.src]);
 
   useLayoutEffect(() => {
     if (!scenarioConfig.name) return;
     dispatch(ActionSetScenarioConfig(scenarioConfig));
-  }, [scenarioConfig.name]);
+  }, [dispatch, scenarioConfig, scenarioConfig.name]);
 
   return { projectData, resourceConfig, scenarioConfig };
 }
@@ -129,14 +124,14 @@ export function useLoadProject(uuid: string): {
 const pageConfigMap = new Map<string, TypePageConfig>();
 
 // 加载页面配置列表
-export function usePageConfigList(
-  namespace: string,
-  moduleConfig: TypeModuleConfig
-): TypePageConfig[] {
+export function usePageConfigList(namespace: string): {
+  pageConfigList: TypePageConfig[];
+  fetchPageConfigList: (params: TypeModuleConfig) => Promise<TypePageConfig[]>;
+} {
   const [pageConfigList, setPageConfigList] = useState<TypePageConfig[]>([]);
-  // 依次加载当前模块页面配置
-  useLayoutEffect(() => {
-    if (!namespace) return;
+
+  const fetchPageConfigList = async (moduleConfig: TypeModuleConfig) => {
+    if (!namespace) return [];
     const queue = moduleConfig.pageList.map(page => async () => {
       // 使用缓存
       const configCache = pageConfigMap.get(page.src);
@@ -152,87 +147,15 @@ export function usePageConfigList(
       pageConfigMap.set(page.src, data);
       return data;
     });
-    asyncQueue(queue)
-      .then(setPageConfigList)
-      .catch(err => Notification.error({ content: err.message }));
-  }, [namespace, moduleConfig]);
-
-  return pageConfigList;
-}
-
-const fileDataCache = new FileDataCache(window.$one.$server.getFileDataSync);
-
-type TypeListener = (
-  evt: FILE_EVENT,
-  src: string,
-  fileData: TypeFileData
-) => void;
-
-export function useSubscribeSrc(options?: {
-  // 立即回调当前状态
-  immediately?: boolean;
-  // 过滤器
-  filter?: (data: TypeFileChangeCallbackData) => boolean;
-}): (src: string, callback: TypeListener) => void {
-  const [projectRoot, setRoot] = useState(
-    window.$one.$reactiveState.get("projectPath")
-  );
-  const list = useRef<Array<{ src: string; callback: TypeListener }>>([]);
-
-  useLayoutEffect(() => {
-    setRoot(window.$one.$reactiveState.get("projectPath"));
-  }, []);
-  useLayoutEffect(() => {
-    // 移除监听器
-    const removeListener = window.$one.$invoker.onFileChange(data => {
-      if (data.root !== projectRoot) return;
-      // 添加过滤器
-      if (options?.filter && options.filter(data)) {
-        return;
-      }
-      list.current.forEach(item => {
-        if (item.src === data.src) {
-          console.log(`file [${data.event}]:`, data);
-          item.callback(data.event, data.src, data.data);
-        }
-      });
+    const list = await asyncQueue(queue).catch(err => {
+      Notification.error({ content: err.message });
     });
-    return removeListener;
-  }, []);
-
-  return (src: string, callback: TypeListener) => {
-    list.current.push({ src, callback });
-    const file = path.join(projectRoot, src);
-    // 首次回调
-    if (options?.immediately) {
-      if (fse.existsSync(file)) {
-        const fileData = fileDataCache.get(file);
-        callback(FILE_EVENT.ADD, src, fileData);
-      } else {
-        callback(FILE_EVENT.UNLINK, src, FileData.default);
-      }
-    }
+    setPageConfigList(list || []);
+    return list || [];
   };
-}
 
-// 监听单个 src 文件
-export function useSubscribeSrcSingly(
-  src: string | undefined,
-  callback: TypeListener
-): void {
-  const subscribe = useSubscribeSrc({ immediately: true });
-  useLayoutEffect(() => {
-    if (!src) return;
-    subscribe(src, callback);
-  }, [src]);
-}
-
-export function useUpdateUrl(def: string): { url: string; update: () => void } {
-  const [url, setUrl] = useState(def);
-  const update = useCallback(() => {
-    const _url = new URL(url);
-    _url.searchParams.set("t", Date.now().toString());
-    setUrl(_url.toString());
-  }, [def]);
-  return { url, update };
+  return {
+    pageConfigList,
+    fetchPageConfigList
+  };
 }

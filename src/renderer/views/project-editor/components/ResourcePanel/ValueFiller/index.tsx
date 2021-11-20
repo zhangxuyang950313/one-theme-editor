@@ -11,7 +11,7 @@ import NumberInput from "./NumberInput";
 import StringInput from "./StringInput";
 import ValueHandler from "./ValueHandler";
 
-import { useSubscribeSrcSingly } from "@/views/project-editor/hooks";
+import { useSubscribeSrcSingly } from "@/hooks/subscribeFile";
 import { useEditorSelector } from "@/views/project-editor/store";
 
 // 分类编辑控件
@@ -158,9 +158,9 @@ const ValueFiller: React.FC<{
   xmlItem: TypeXmlNodeData;
   use: TypeXmlValueTags;
   colorFormat: HEX_FORMAT;
-  onLocate: (keyPath: string) => void;
+  onHighlight: (keyPath: string) => void;
 }> = props => {
-  const { xmlItem, use, colorFormat, onLocate } = props;
+  const { xmlItem, use, colorFormat, onHighlight } = props;
   // const xmlValMapper = useEditorSelector(state => {
   //   const data = state.fileDataMap[xmlItem.sourceData.src];
   //   return data?.fileType === "application/xml" ? data.valueMapper : {};
@@ -193,7 +193,7 @@ const ValueFiller: React.FC<{
             use={use}
             colorFormat={colorFormat}
             from={xmlItem.sourceData.src}
-            onLocate={() => onLocate(valueItem.keyPath)}
+            onLocate={() => onHighlight(valueItem.keyPath)}
             onChange={val => {
               if (value === val) return;
               // 写入 xml

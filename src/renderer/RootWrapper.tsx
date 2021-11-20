@@ -14,6 +14,8 @@ import LogUtil from "src/common/utils/LogUtil";
 import * as electronStore from "src/store";
 import DarkTheme from "src/common/theme/dark";
 
+import { RecoilRoot, useRecoilSnapshot } from "recoil";
+
 import { GlobalStore } from "./store/global/index";
 // import Router from "./router";
 // import { useInitEditorConfig } from "./hooks";
@@ -37,15 +39,17 @@ import { GlobalStore } from "./store/global/index";
 //   }
 // };
 
-const Root: React.FC = props => {
-  const [theme, setTheme] = useState(DarkTheme);
-
+function useDebugObserver() {
+  const snapshot = useRecoilSnapshot();
   useLayoutEffect(() => {
-    document.body.setAttribute("arco-theme", "dark");
-    electronStore.config.set("themeConfig", DarkTheme);
-    const thm = electronStore.config.get("themeConfig");
-    if (thm) setTheme(thm);
-  }, []);
+    console.debug("The following atoms were modified:");
+    for (const node of snapshot.getNodes_UNSTABLE({ isModified: true })) {
+      console.debug(node.key, snapshot.getLoadable(node));
+    }
+  }, [snapshot]);
+}
+
+function useLogInfo() {
   useLayoutEffect(() => {
     LogUtil.init("[version]electron", process.versions.electron); // electron 版本
     LogUtil.init("[version]modules", process.versions.modules); // ABI版本
@@ -55,6 +59,23 @@ const Root: React.FC = props => {
     LogUtil.init(`[pid]main`, window.$one.$server.getPID());
     LogUtil.init(`[pid]render`, process.pid);
   }, []);
+}
+
+function useTheme() {
+  const [theme, setTheme] = useState(DarkTheme);
+  useLayoutEffect(() => {
+    document.body.setAttribute("arco-theme", "dark");
+    electronStore.config.set("themeConfig", DarkTheme);
+    const thm = electronStore.config.get("themeConfig");
+    if (thm) setTheme(thm);
+  }, []);
+  return theme;
+}
+
+const Root: React.FC = props => {
+  const theme = useTheme();
+  useLogInfo();
+  useDebugObserver();
   return (
     <Provider store={GlobalStore.store}>
       <ThemeProvider theme={theme}>
@@ -116,9 +137,11 @@ const StyleContainer = styled.div`
 
 export default function RootWrapper(Index: React.FC): void {
   ReactDOM.render(
-    <Root>
-      <Index />
-    </Root>,
+    <RecoilRoot>
+      <Root>
+        <Index />
+      </Root>
+    </RecoilRoot>,
     document.getElementById("root")
   );
 }

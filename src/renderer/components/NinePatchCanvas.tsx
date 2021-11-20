@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { scaleNinePatchCanvas } from "src/common/9patch/core";
 
-import { useSubscribeSrcSingly } from "../hooks";
+// import { useSubscribeSrcSingly } from "../hooks";
 
 async function loadImage(src: string) {
   const image = new Image();
@@ -25,11 +25,11 @@ const NinePatchCanvas: React.FC<
   const { width, height } = props;
   const [src, setSrc] = useState(`src://${props.src}`);
   const [canvas, setCanvas] = useState(document.createElement("canvas"));
-  useSubscribeSrcSingly(props.src, event => {
-    const url = new URL(`src://${props.src}`);
-    url.searchParams.set("t", Date.now().toString());
-    setSrc(url.toString());
-  });
+  // useSubscribeSrcSingly(props.src, event => {
+  //   const url = new URL(`src://${props.src}`);
+  //   url.searchParams.set("t", Date.now().toString());
+  //   setSrc(url.toString());
+  // });
   useEffect(() => {
     setSrc(`src://${props.src}`);
   }, [props.src]);

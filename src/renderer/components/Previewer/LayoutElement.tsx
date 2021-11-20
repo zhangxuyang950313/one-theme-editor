@@ -6,8 +6,6 @@ import { filenameIs9Patch } from "src/common/utils";
 
 import NinePatchCanvas from "../NinePatchCanvas";
 
-import { useEditorSelector } from "../../store";
-
 import { computeLayoutStyle } from "./utils";
 import TextElement from "./TextElement";
 import ImageElement from "./ImageElement";
@@ -16,6 +14,7 @@ const LayoutElement: React.FC<{
   element: TypeLayoutElement;
   ratio: number;
   mouseEffect?: boolean;
+  focusKeyPath?: string;
   onClick: () => void;
   onChange: (keyPath: string) => void;
 }> = props => {
@@ -23,11 +22,10 @@ const LayoutElement: React.FC<{
     element, // 换行
     ratio,
     mouseEffect,
+    focusKeyPath,
     onClick,
     onChange
   } = props;
-
-  const focusKeyPath = useEditorSelector(state => state.focusKeyPath);
 
   let ele: JSX.Element | null = null;
   const layoutStyle = computeLayoutStyle(element.layout, ratio);

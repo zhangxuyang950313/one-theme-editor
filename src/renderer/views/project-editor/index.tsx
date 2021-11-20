@@ -1,147 +1,104 @@
 import path from "path";
 
-import { remote } from "electron";
-import React, { useEffect, useState } from "react";
+import React, { useLayoutEffect } from "react";
 import styled from "styled-components";
-import { Empty, Message } from "@arco-design/web-react";
-import { useToggle } from "ahooks";
-import { TOOLS_BAR_BUTTON } from "src/common/enums";
-import { ModuleConfig, PageConfig } from "src/data/ResourceConfig";
+import { Notification } from "@arco-design/web-react";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 
-import {
-  IconExport,
-  IconEye,
-  IconEyeInvisible,
-  IconFile,
-  IconInfoCircle,
-  IconMindMapping,
-  IconMobile
-} from "@arco-design/web-react/icon";
+import ScenarioConfig from "src/data/ScenarioConfig";
+import ResourceConfig from "src/data/ResourceConfig";
+import ProjectData from "src/data/ProjectData";
+import PathUtil from "src/common/utils/PathUtil";
 
-import { usePageConfigList, useLoadProject } from "./hooks";
 import EditorToolsBar from "./components/ToolsBar";
 import ModuleSelector from "./components/ModuleSelector";
 import PageSelector from "./components/PageSelector";
-import Previewer from "./components/Previewer/index";
+import PrimaryPreviewer from "./components/PrimaryPreviewer";
 import ResourcePanel from "./components/ResourcePanel";
 import StatusBar from "./components/StatusBar";
 
-import { TypeIconButtonOption } from "@/components/one-ui/IconButton";
+import { panelToggleState, projectDataState } from "./store/rescoil/state";
+
 import { StyleTopDrag } from "@/style";
-import RootWrapper from "@/RootWrapper";
 import { useQuey } from "@/hooks";
+import RootWrapper from "@/RootWrapper";
 
 // 编辑区域框架
 const EditorFrame: React.FC = () => {
   const { uuid = "" } = useQuey<{ uuid?: string }>();
-  const [, toggleProjectInfo] = useToggle(false);
-  // 栏目开关
-  const [displayModuleSelector, toggleModuleSelector] = useToggle(true);
-  const [displayPageSelector, togglePageSelector] = useToggle(true);
-  const [displayPreviewSelector, togglePreviewSelector] = useToggle(true);
 
-  // 加载工程
-  const { projectData, resourceConfig, scenarioConfig } = useLoadProject(uuid);
-  const { namespace, moduleList } = resourceConfig;
-  // 当前模块配置
-  const [moduleConfig, setModuleConfig] = useState(ModuleConfig.default);
-  // 当前页面配置
-  const [pageConfig, setPageConfig] = useState(PageConfig.default);
-  // 根据模块切换的页面配置列表
-  const pageConfigList = usePageConfigList(namespace, moduleConfig);
+  const panelDisplayState = useRecoilValue(panelToggleState);
+  const setProjectState = useSetRecoilState(projectDataState);
+  const { projectData, resourceConfig } = useRecoilValue(projectDataState);
 
-  // 模块默认选第一个, 空则使用默认
-  useEffect(() => {
-    setModuleConfig(moduleList[0] || ModuleConfig.default);
-  }, [moduleList]);
+  // 设置进程间响应式数据
+  useLayoutEffect(() => {
+    if (!projectData.uuid) return;
+    window.$one.$reactiveState.set("projectData", projectData);
+    window.$one.$reactiveState.set("projectPath", projectData.root);
+    return () => {
+      window.$one.$reactiveState.set("projectData", ProjectData.default);
+      window.$one.$reactiveState.set("projectPath", "");
+    };
+  }, [projectData, projectData.uuid]);
 
-  // 页面默认选第一个, 空则使用默认
-  useEffect(() => {
-    setPageConfig(pageConfigList[0] || PageConfig.default);
-  }, [pageConfigList]);
+  // 设置进程间响应式数据
+  useLayoutEffect(() => {
+    if (!resourceConfig) return;
+    const resourcePath = path.join(
+      PathUtil.RESOURCE_CONFIG_DIR,
+      resourceConfig.namespace
+    );
+    window.$one.$reactiveState.set("resourceConfig", resourceConfig);
+    window.$one.$reactiveState.set("resourcePath", resourcePath);
+    return () => {
+      window.$one.$reactiveState.set("resourceConfig", ResourceConfig.default);
+      window.$one.$reactiveState.set("resourcePath", "");
+    };
+  }, [resourceConfig]);
 
-  // 工具栏按钮左侧
-  const [leftButtons] = useState<TypeIconButtonOption[]>([
-    {
-      name: TOOLS_BAR_BUTTON.MODULE_TOGGLE,
-      icon: <IconMindMapping />,
-      defaultToggle: displayModuleSelector,
-      onClick: toggleModuleSelector.toggle
-    },
-    {
-      name: TOOLS_BAR_BUTTON.PAGE_TOGGLE,
-      icon: <IconFile />,
-      defaultToggle: displayPageSelector,
-      onClick: togglePageSelector.toggle
-    },
-    {
-      name: TOOLS_BAR_BUTTON.PREVIEW_TOGGLE,
-      icon: displayPreviewSelector ? <IconEye /> : <IconEyeInvisible />,
-      defaultToggle: displayPreviewSelector,
-      onClick: togglePreviewSelector.toggle
-    }
-    // { name: TOOLS_BAR_BUTTON.PLACEHOLDER, icon: <div /> }
-    // { name: TOOLS_BAR_BUTTON.DARK, icon: <InfoCircleOutlined /> },
-    // { name: TOOLS_BAR_BUTTON.LIGHT, icon: <InfoCircleOutlined /> }
-  ]);
-  // 工具栏按钮右侧
-  const [rightButtons, setRightButtons] = useState<TypeIconButtonOption[]>([]);
+  // 获取工程信息
+  useLayoutEffect(() => {
+    if (!uuid) return;
+    const fetchProject = async () => {
+      const projectData = await window.$one.$server
+        .findProjectQuery({ uuid })
+        .catch(err => {
+          Notification.error({
+            title: "获取工程信息失败",
+            content: err.message
+          });
+        });
+      if (!projectData?.resourceSrc) return;
 
-  useEffect(() => {
-    setRightButtons([
-      {
-        name: TOOLS_BAR_BUTTON.APPLY,
-        icon: <IconMobile />
-      },
-      // {
-      //   name: TOOLS_BAR_BUTTON.SAVE,
-      //   icon: <FolderOutlined />
-      // },
-      {
-        name: TOOLS_BAR_BUTTON.EXPORT,
-        icon: <IconExport />,
-        onClick: () => {
-          const { root, description } = projectData;
-          const { extname } = scenarioConfig.packageConfig;
-          const defaultPath = path.join(
-            path.dirname(projectData.root),
-            `${description.name}.${extname}`
-          );
-          remote.dialog
-            // https://www.electronjs.org/docs/api/dialog#dialogshowopendialogsyncbrowserwindow-options
-            .showSaveDialog({
-              properties: ["createDirectory"],
-              defaultPath,
-              filters: [{ name: extname, extensions: [extname] }]
-            })
-            .then(result => {
-              if (result.canceled) return;
-              if (!result.filePath) {
-                Message.info("未指定任何文件");
-                return;
-              }
-              window.$one.$server.packProject(
-                {
-                  packDir: root,
-                  outputFile: result.filePath,
-                  packConfig: scenarioConfig.packageConfig
-                },
-                data => {
-                  console.log(data);
-                }
-              );
-            });
-        }
-      },
-      {
-        name: TOOLS_BAR_BUTTON.INFO,
-        icon: <IconInfoCircle />,
-        onClick: () => {
-          toggleProjectInfo.setRight();
-        }
-      }
-    ]);
-  }, [projectData, scenarioConfig]);
+      const scenarioConfig = await window.$one.$server
+        .getScenarioConfig(projectData.scenarioSrc)
+        .catch(err => {
+          Notification.error({
+            title: "获取场景配置失败",
+            content: err.message
+          });
+          return ScenarioConfig.default;
+        });
+
+      const resourceConfig = await window.$one.$server
+        .getResourceConfig(projectData.resourceSrc)
+        .catch(err => {
+          Notification.error({
+            title: "获取资源配置失败",
+            content: err.message
+          });
+          return ResourceConfig.default;
+        });
+
+      setProjectState(() => ({
+        projectData,
+        resourceConfig,
+        scenarioConfig
+      }));
+    };
+    fetchProject();
+  }, [setProjectState, uuid]);
 
   return (
     <StyleEditorFrame>
@@ -149,10 +106,9 @@ const EditorFrame: React.FC = () => {
         <span className="title">{document.title || "一个主题编辑器"}</span>
       </StyleTopBar>
       {/* 工具栏 */}
-      <EditorToolsBar
-        className="editor__tools-bar"
-        buttonsGroupList={[leftButtons, rightButtons]}
-      />
+      <div className="editor--tools-bar">
+        <EditorToolsBar />
+      </div>
       {/* <ProjectInfoModal
         title="修改主题信息"
         centered
@@ -162,73 +118,47 @@ const EditorFrame: React.FC = () => {
         onCancel={() => setProjectInfoVisible(false)}
         onOk={() => setProjectInfoVisible(false)}
       /> */}
-      <div className="editor__container">
+      <div className="editor--container">
         {/* 模块选择器 */}
-        {displayModuleSelector && (
-          <div className="editor__module-selector right-border-line">
-            {moduleList.length ? (
-              <ModuleSelector
-                className="editor__module-content"
-                moduleConfigList={moduleList}
-                onChange={setModuleConfig}
-              />
-            ) : (
-              <div className="no-config">无模块</div>
-            )}
+        {panelDisplayState.moduleSelector && (
+          <div className="editor--module-selector right-border-line">
+            <div className="editor--module-content">
+              <ModuleSelector />
+            </div>
           </div>
         )}
         {/* 编辑区域 */}
-        <div className="editor__content-wrapper">
+        <div className="editor--content-wrapper">
           {/* 主编辑区域 */}
-          <div className="editor__content">
+          <div className="editor--content">
             {/* 页面选择器 */}
-            {displayPageSelector && (
-              <div className="editor__page-selector right-border-line">
-                {moduleConfig.pageList.length ? (
-                  <PageSelector
-                    className="editor__page-content"
-                    pageConfigList={pageConfigList}
-                    onChange={setPageConfig}
-                  />
-                ) : (
-                  <div className="no-config">无页面</div>
-                )}
+            {panelDisplayState.pageSelector && (
+              <div className="editor--page-selector right-border-line">
+                <div className="editor--page-content">
+                  <PageSelector />
+                </div>
               </div>
             )}
             {/* 预览 */}
             {/* TODO: 占位图 */}
-            {displayPreviewSelector && (
-              <div className="editor__previewer right-border-line">
-                {pageConfig.config ? (
-                  <>
-                    <Previewer
-                      className="previewer__content"
-                      pageConfig={pageConfig}
-                      mouseEffect
-                    />
-                    <div className="previewer__name">{pageConfig.name}</div>
-                  </>
-                ) : (
-                  <div className="no-config">无预览</div>
-                )}
+            {panelDisplayState.pagePreview && (
+              <div className="editor--previewer right-border-line">
+                <div className="previewer--content">
+                  <PrimaryPreviewer />
+                </div>
               </div>
             )}
             {/* 资源编辑区 */}
-            <div className="editor__resource-panel ">
-              {pageConfig.config ? (
-                <ResourcePanel
-                  pageConfig={pageConfig}
-                  iconEyeVisible={displayPreviewSelector}
-                />
-              ) : (
-                <Empty className="no-config" description="无资源配置" />
-              )}
+            <div className="editor--resource-panel ">
+              <ResourcePanel />
             </div>
           </div>
         </div>
       </div>
       {/* 底部工具栏 */}
-      <StatusBar className="editor__status-bar" />
+      <div className="editor--status-bar">
+        <StatusBar />
+      </div>
     </StyleEditorFrame>
   );
 };
@@ -254,74 +184,63 @@ const StyleEditorFrame = styled.div`
   .right-border-line {
     border-right: 1px solid var(--color-secondary);
   }
-  .no-config {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--color-text-4);
-  }
-  .editor__tools-bar {
+  .editor--tools-bar {
     background-color: var(--color-bg-4);
     border-bottom: 1px solid var(--color-secondary);
   }
-  .editor__container {
+  .editor--container {
     height: 100%;
     display: flex;
     overflow-y: hidden;
 
-    .editor__module-selector {
+    .editor--module-selector {
       flex-shrink: 0;
       width: 80px;
       overflow-y: auto;
       overflow-x: hidden;
       background-color: var(--color-bg-5);
-      .editor__module-content {
+      .editor--module-content {
         width: 80px;
         margin: 0 auto;
         padding: 10px 0;
       }
     }
-    .editor__content-wrapper {
+    .editor--content-wrapper {
       flex: 1;
       display: flex;
       flex-direction: column;
       overflow-x: auto;
-      .editor__content {
+      .editor--content {
         display: flex;
         flex-grow: 1;
         overflow-y: auto;
         box-sizing: border-box;
         transition: 0.3s ease-out;
-        .editor__page-selector {
+        .editor--page-selector {
           flex-shrink: 0;
           width: 120px;
           padding: 10px;
           overflow-y: auto;
           box-sizing: border-box;
           background-color: var(--color-bg-2);
-          .editor__page-content {
+          .editor--page-content {
             width: 100px;
+            height: 100%;
           }
         }
-        .editor__previewer {
+        .editor--previewer {
           flex-shrink: 0;
           width: 340px;
           padding: 20px;
           box-sizing: border-box;
           overflow-y: auto;
           background-color: var(--color-bg-3);
-          .previewer__content {
+          .previewer--content {
             width: 300px;
-          }
-          .previewer__name {
-            margin: 10px;
-            text-align: center;
-            color: var(--color-text-1);
+            height: 100%;
           }
         }
-        .editor__resource-panel {
+        .editor--resource-panel {
           flex: 1;
           flex-shrink: 0;
           overflow-y: auto;
@@ -330,7 +249,7 @@ const StyleEditorFrame = styled.div`
       }
     }
   }
-  .editor__status-bar {
+  .editor--status-bar {
     flex-grow: 1;
     flex-shrink: 0;
     height: 30px;

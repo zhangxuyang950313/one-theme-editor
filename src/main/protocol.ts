@@ -52,6 +52,7 @@ async function getFilePicResponseData(
         const data = await fileBufferCache.getMimeTypedBuffer(file);
         resolve(data);
       } catch (err) {
+        console.log(err);
         const def = { mimeType: "image/png", data: Buffer.from("") };
         // 不存在空返回
         if (!fse.existsSync(file)) {

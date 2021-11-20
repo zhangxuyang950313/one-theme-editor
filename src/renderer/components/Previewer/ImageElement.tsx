@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { PROTOCOL_TYPE } from "src/common/enums";
 import { TypeSourceData } from "src/types/config.page";
 
-import { useSubscribeSrc } from "../../hooks";
+import { useSubscribeSrc } from "@/hooks/subscribeFile";
 
 const ImageElement: React.FC<{
   sourceUrl: string;
@@ -60,7 +60,7 @@ const StyleImage = styled.img`
     cursor: pointer;
     opacity: 1;
     filter: drop-shadow(0 0 10px var(--color-primary-light-4));
-    outline: 2px solid var(--color-primary-light-4);
+    outline: 2px dashed var(--color-primary-light-4);
     transition: all 0.2s ease-out;
   }
   &[data-is-blur="true"] {

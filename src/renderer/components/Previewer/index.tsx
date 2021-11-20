@@ -2,19 +2,19 @@ import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import { TypePageConfig } from "src/types/config.resource";
 
-import { useEditorDispatch, useEditorStore } from "../../store";
-import { ActionSetFocusKeyPath } from "../../store/action";
+// import { useEditorDispatch, useEditorStore } from "../../store";
+// import { ActionSetFocusKeyPath } from "../../store/action";
 
 import LayoutElement from "./LayoutElement";
 
 const Previewer: React.FC<{
-  className?: string;
   mouseEffect?: boolean;
+  focusKeyPath?: string;
   pageConfig: TypePageConfig;
 }> = props => {
   const {
-    className,
     mouseEffect,
+    focusKeyPath,
     pageConfig: {
       screenWidth,
       layoutElementList,
@@ -22,16 +22,20 @@ const Previewer: React.FC<{
       forceStaticPreview
     }
   } = props;
-  const dispatch = useEditorDispatch();
-  const store = useEditorStore();
+  // const dispatch = useEditorDispatch();
+  // const store = useEditorStore();
   const [ratio, setRatio] = useState(0);
   const layoutRef = useRef<HTMLDivElement | null>(null);
 
-  if (!screenWidth) return null;
+  if (!screenWidth)
+    return (
+      <StylePreviewer>
+        <div className="no-config">无配置</div>
+      </StylePreviewer>
+    );
 
   return (
     <StylePreviewer
-      className={className}
       ref={divEl => {
         if (!divEl || ratio) return;
         setRatio(divEl.getBoundingClientRect().width / Number(screenWidth));
@@ -55,18 +59,19 @@ const Previewer: React.FC<{
                 element={element}
                 ratio={ratio}
                 mouseEffect={mouseEffect}
+                focusKeyPath={focusKeyPath}
                 onClick={() => {
-                  dispatch(ActionSetFocusKeyPath({ keyPath: element.keyPath }));
+                  // dispatch(ActionSetFocusKeyPath({ keyPath: element.keyPath }));
                 }}
                 onChange={keyPath => {
-                  if (store.getState().focusKeyPath) {
-                    dispatch(
-                      ActionSetFocusKeyPath({
-                        keyPath: element.keyPath,
-                        ignoreDuplicate: true
-                      })
-                    );
-                  }
+                  // if (store.getState().focusKeyPath) {
+                  //   dispatch(
+                  //     ActionSetFocusKeyPath({
+                  //       keyPath: element.keyPath,
+                  //       ignoreDuplicate: true
+                  //     })
+                  //   );
+                  // }
                 }}
               />
             );
@@ -79,16 +84,26 @@ const Previewer: React.FC<{
 
 const StylePreviewer = styled.div`
   width: 100%;
-  background-color: black;
+  flex-grow: 1;
   box-sizing: border-box;
-  border: 1px solid var(--color-secondary);
+  outline: 1px solid var(--color-secondary);
   .dynamic {
     width: 100%;
     position: relative;
     box-sizing: border-box;
+    background-color: black;
   }
   .static {
     width: 100%;
+  }
+  .no-config {
+    width: 100%;
+    height: 100%;
+    margin: auto 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text-4);
   }
 `;
 
