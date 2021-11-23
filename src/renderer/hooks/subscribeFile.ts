@@ -66,12 +66,12 @@ export function useSubscribeSrc(options?: {
   filter?: (data: TypeFileChangeCallbackData) => boolean;
 }): (src: string, callback: TypeListener) => void {
   const [projectRoot, setRoot] = useState(
-    window.$one.$reactiveState.get("projectPath")
+    window.$one.$reactive.get("projectPath")
   );
   const list = useRef<Array<{ src: string; callback: TypeListener }>>([]);
 
   useLayoutEffect(() => {
-    setRoot(window.$one.$reactiveState.get("projectPath"));
+    setRoot(window.$one.$reactive.get("projectPath"));
   }, []);
   useLayoutEffect(() => {
     // 移除监听器

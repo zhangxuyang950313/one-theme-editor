@@ -10,7 +10,7 @@ Object.defineProperty(global, "$one", {
       $server: ipcController,
       $invoker: ipcInvoker,
       // 注册跨进程响应式数据
-      $reactiveState: reactiveState,
+      $reactive: reactiveState,
       $path: PathUtil
     } as typeof $one,
     {

@@ -2,7 +2,7 @@ enum IPC_EVENT {
   $getPID = "$getPid",
 
   // 响应书数据变化
-  $reactiveStateSet = "$reactiveStateSet",
+  $reactiveSet = "$reactiveSet",
 
   // 配置
   $getScenarioOptionList = "$getScenarioOptionList",

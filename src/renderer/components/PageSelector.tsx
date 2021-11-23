@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
 import { TypePageConfig } from "src/types/config.resource";
 
@@ -11,16 +11,25 @@ const PageSelector: React.FC<{
   onChange: (x: TypePageConfig) => void;
 }> = props => {
   const { pageSelect, pageList, onChange } = props;
+  const pageConfigRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    pageConfigRef.current
+      ?.querySelector("div[data-active='true']")
+      ?.scrollIntoView({
+        block: "center",
+        behavior: "smooth"
+      });
+  }, [pageConfigRef.current, pageSelect.config]);
 
   return (
-    <StylePageSelector>
+    <StylePageSelector ref={pageConfigRef}>
       {pageList.length ? (
         pageList.map((pageConfig, key) => (
           <div
             key={key}
             className="page-preview"
-            data-a={pageSelect.config}
-            data-b={pageConfig.config}
+            data-config={pageSelect.config}
             data-active={String(pageSelect.config === pageConfig.config)}
             onClick={() => onChange(pageConfig)}
           >

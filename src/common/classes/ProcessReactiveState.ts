@@ -9,12 +9,12 @@ class ReactiveState<T extends Record<string, unknown>, K extends keyof T> {
   constructor(state: T) {
     this.state = { ...state };
     if (this.isMain) {
-      ipcMain.on(IPC_EVENT.$reactiveStateSet, ($event, $data) => {
+      ipcMain.on(IPC_EVENT.$reactiveSet, ($event, $data) => {
         this.$replyEvent = $event;
       });
     }
     (ipcMain || ipcRenderer).on(
-      IPC_EVENT.$reactiveStateSet,
+      IPC_EVENT.$reactiveSet,
       ($event, $data: { prop: K; value: T[K] }) => {
         this.hooks.forEach(hook => {
           hook(this.state, $data.prop, $data.value);
@@ -35,10 +35,10 @@ class ReactiveState<T extends Record<string, unknown>, K extends keyof T> {
   set<K extends keyof T>(prop: K, value: T[K]): void {
     const payload = { prop, value };
     if (this.isRenderer) {
-      ipcRenderer.send(IPC_EVENT.$reactiveStateSet, payload);
+      ipcRenderer.send(IPC_EVENT.$reactiveSet, payload);
     }
     if (this.isMain && this.$replyEvent) {
-      this.$replyEvent.sender.send(IPC_EVENT.$reactiveStateSet, payload);
+      this.$replyEvent.sender.send(IPC_EVENT.$reactiveSet, payload);
     }
     if (prop in this.state) {
       this.state[prop] = value;

@@ -3,6 +3,8 @@ import { useRecoilState, useRecoilValue } from "recoil";
 
 import { TypeModuleConfig, TypePageConfig } from "src/types/config.resource";
 
+import { PageConfig } from "src/data/ResourceConfig";
+
 import { usePageConfigList } from "../hooks";
 import { projectDataState, selectDataState } from "../store/rescoil/state";
 
@@ -22,21 +24,31 @@ const PageSelector: React.FC = () => {
 
   // 读取上次选择的页面数据
   useEffect(() => {
-    fetchPageConfigList(moduleSelected).then(moduleList => {
-      const [pageConfig] = moduleList;
-      if (!pageConfig) {
-        pageSelectCache.delete(moduleSelected);
-        return;
-      }
-      const pageSelected = pageSelectCache.get(moduleSelected);
-      if (
-        pageSelected &&
-        moduleList.some(({ config }) => config === pageSelected.config)
-      ) {
-        setSelectData(state => ({ ...state, pageSelected }));
-      } else {
-        setSelectData(state => ({ ...state, pageSelected: pageConfig }));
-      }
+    fetchPageConfigList(moduleSelected).then(([pageConfig]) => {
+      setSelectData(state => ({
+        ...state,
+        pageSelected:
+          pageSelectCache.get(moduleSelected) ||
+          pageConfig ||
+          PageConfig.default
+      }));
+      // if (!pageConfig) {
+      //   // pageSelectCache.set(moduleSelected,PageConfig.default);
+      //   setSelectData(state => ({
+      //     ...state,
+      //     pageSelected: PageConfig.default
+      //   }));
+      //   return;
+      // }
+      // const pageSelected = pageSelectCache.get(moduleSelected);
+      // if (
+      //   pageSelected &&
+      //   moduleList.some(({ config }) => config === pageSelected.config)
+      // ) {
+      //   setSelectData(state => ({ ...state, pageSelected }));
+      // } else {
+      //   setSelectData(state => ({ ...state, pageSelected: pageConfig }));
+      // }
     });
   }, [moduleSelected]);
 

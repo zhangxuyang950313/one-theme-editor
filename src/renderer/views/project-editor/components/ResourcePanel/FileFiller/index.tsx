@@ -24,10 +24,10 @@ import ImageElement from "@/components/Previewer/ImageElement";
 import { useSubscribeFileData } from "@/hooks/subscribeFile";
 
 function resolveResourceFile(relative: string): string {
-  return path.join(window.$one.$reactiveState.get("resourcePath"), relative);
+  return path.join(window.$one.$reactive.get("resourcePath"), relative);
 }
 function resolveProjectFile(relative: string): string {
-  return path.join(window.$one.$reactiveState.get("projectPath"), relative);
+  return path.join(window.$one.$reactive.get("projectPath"), relative);
 }
 
 async function importResource(to: string): Promise<void> {

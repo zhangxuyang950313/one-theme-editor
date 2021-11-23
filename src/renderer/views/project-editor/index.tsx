@@ -34,11 +34,11 @@ const EditorFrame: React.FC = () => {
   // 设置进程间响应式数据
   useLayoutEffect(() => {
     if (!projectData.uuid) return;
-    window.$one.$reactiveState.set("projectData", projectData);
-    window.$one.$reactiveState.set("projectPath", projectData.root);
+    window.$one.$reactive.set("projectData", projectData);
+    window.$one.$reactive.set("projectPath", projectData.root);
     return () => {
-      window.$one.$reactiveState.set("projectData", ProjectData.default);
-      window.$one.$reactiveState.set("projectPath", "");
+      window.$one.$reactive.set("projectData", ProjectData.default);
+      window.$one.$reactive.set("projectPath", "");
     };
   }, [projectData, projectData.uuid]);
 
@@ -49,11 +49,11 @@ const EditorFrame: React.FC = () => {
       PathUtil.RESOURCE_CONFIG_DIR,
       resourceConfig.namespace
     );
-    window.$one.$reactiveState.set("resourceConfig", resourceConfig);
-    window.$one.$reactiveState.set("resourcePath", resourcePath);
+    window.$one.$reactive.set("resourceConfig", resourceConfig);
+    window.$one.$reactive.set("resourcePath", resourcePath);
     return () => {
-      window.$one.$reactiveState.set("resourceConfig", ResourceConfig.default);
-      window.$one.$reactiveState.set("resourcePath", "");
+      window.$one.$reactive.set("resourceConfig", ResourceConfig.default);
+      window.$one.$reactive.set("resourcePath", "");
     };
   }, [resourceConfig]);
 

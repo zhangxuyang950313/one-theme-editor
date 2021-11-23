@@ -103,11 +103,11 @@ export function resolveResourceConfigPath(relative: string): string {
 }
 
 export function resolveResourcePath(relative: string): string {
-  return path.join($one.$reactiveState.get("resourcePath"), relative);
+  return path.join($one.$reactive.get("resourcePath"), relative);
 }
 
 export function resolveProjectPath(relative: string): string {
-  return path.join($one.$reactiveState.get("projectPath"), relative);
+  return path.join($one.$reactive.get("projectPath"), relative);
 }
 
 export function getSCDescriptionByNamespace(namespace: string): string {
