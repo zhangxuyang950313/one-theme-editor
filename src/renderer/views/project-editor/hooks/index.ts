@@ -16,12 +16,12 @@ import {
 import { TypeScenarioConfig } from "src/types/config.scenario";
 import LogUtil from "src/common/utils/LogUtil";
 
-import { useEditorDispatch } from "./store";
+import { useEditorDispatch } from "../store";
 import {
   ActionSetProjectData,
   ActionSetResourceConfig,
   ActionSetScenarioConfig
-} from "./store/action";
+} from "../store/action";
 
 // 加载工程
 export function useLoadProject(uuid: string): {

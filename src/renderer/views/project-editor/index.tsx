@@ -11,13 +11,15 @@ import ProjectData from "src/data/ProjectData";
 import PathUtil from "src/common/utils/PathUtil";
 
 import EditorToolsBar from "./components/ToolsBar";
-import ModuleSelector from "./components/ModuleSelector";
-import PageSelector from "./components/PageSelector";
-import PrimaryPreviewer from "./components/PrimaryPreviewer";
 import ResourcePanel from "./components/ResourcePanel";
 import StatusBar from "./components/StatusBar";
 
 import { panelToggleState, projectDataState } from "./store/rescoil/state";
+
+import usePageSelector from "./hooks/usePageSelector";
+import useModuleSelector from "./hooks/useModuleSelector";
+
+import usePrimaryPreviewer from "./hooks/usePrimaryPreviewer";
 
 import { StyleTopDrag } from "@/style";
 import { useQuey } from "@/hooks";
@@ -100,6 +102,10 @@ const EditorFrame: React.FC = () => {
     fetchProject();
   }, [setProjectState, uuid]);
 
+  const { Content: ModuleSelector } = useModuleSelector();
+  const { Content: PageSelector } = usePageSelector();
+  const { Content: PrimaryPreviewer } = usePrimaryPreviewer();
+
   return (
     <StyleEditorFrame>
       <StyleTopBar height="30px">
@@ -122,9 +128,7 @@ const EditorFrame: React.FC = () => {
         {/* 模块选择器 */}
         {panelDisplayState.moduleSelector && (
           <div className="editor--module-selector right-border-line">
-            <div className="editor--module-content">
-              <ModuleSelector />
-            </div>
+            <div className="editor--module-content">{ModuleSelector}</div>
           </div>
         )}
         {/* 编辑区域 */}
@@ -134,18 +138,14 @@ const EditorFrame: React.FC = () => {
             {/* 页面选择器 */}
             {panelDisplayState.pageSelector && (
               <div className="editor--page-selector right-border-line">
-                <div className="editor--page-content">
-                  <PageSelector />
-                </div>
+                <div className="editor--page-content">{PageSelector}</div>
               </div>
             )}
             {/* 预览 */}
             {/* TODO: 占位图 */}
             {panelDisplayState.pagePreview && (
               <div className="editor--previewer right-border-line">
-                <div className="previewer--content">
-                  <PrimaryPreviewer />
-                </div>
+                <div className="previewer--content">{PrimaryPreviewer}</div>
               </div>
             )}
             {/* 资源编辑区 */}

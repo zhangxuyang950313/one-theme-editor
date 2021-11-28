@@ -5,7 +5,7 @@ import {
   IconDelete,
   IconInfoCircle,
   IconFindReplace,
-  IconLocation,
+  IconDriveFile,
   IconBgColors,
   IconEdit
 } from "@arco-design/web-react/icon";
@@ -37,7 +37,7 @@ const FileHandler: React.FC<{
           {/* 查看信息按钮 */}
           <span className="press btn-normal btn-info">
             <IconInfoCircle className="icon" data-btn-info />
-            <IconLocation
+            <IconDriveFile
               className="icon"
               data-btn-jump
               onClick={props.onJumpClick}
