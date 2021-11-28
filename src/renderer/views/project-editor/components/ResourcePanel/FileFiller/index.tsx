@@ -71,47 +71,30 @@ const FileFiller: React.FC<{
 
   return (
     <StyleFileFiller ref={fileFilterRef}>
-      <div className="file-display-info">
+      <div className="file-display-and-info">
         <FileDisplayFrame
           isFocus={isFocus}
           floatNode={
-            <Tooltip
-              placement="top"
-              overlayStyle={{ maxWidth: "none" }}
-              getPopupContainer={getPopupContainer}
-              destroyTooltipOnHide
-              overlay={
-                // 资源详情
-                <ResourceDescriptions
-                  name={data.comment}
-                  path={data.sourceData.src}
-                  resolution={getDescription(data.fileData)}
-                  size={data.fileData.size}
-                  PreviewNode={ResourceImageDisplay}
+            //左上角悬浮展示
+            <span className="float-content">
+              {ResourceImageDisplay}
+              <Tooltip
+                title="使用默认素材"
+                placement="top"
+                destroyTooltipOnHide
+                getPopupContainer={getPopupContainer}
+              >
+                <IconUndo
+                  className="popup-icon"
+                  onClick={() => {
+                    window.$one.$server.copyFile({
+                      from: resourceFile,
+                      to: projectFile
+                    });
+                  }}
                 />
-              }
-            >
-              {/* 左上角悬浮展示 */}
-              <span className="float-content">
-                {ResourceImageDisplay}
-                <Tooltip
-                  title="使用默认素材"
-                  placement="bottom"
-                  destroyTooltipOnHide
-                  getPopupContainer={getPopupContainer}
-                >
-                  <IconUndo
-                    className="popup-icon"
-                    onClick={() => {
-                      window.$one.$server.copyFile({
-                        from: resourceFile,
-                        to: projectFile
-                      });
-                    }}
-                  />
-                </Tooltip>
-              </span>
-            </Tooltip>
+              </Tooltip>
+            </span>
           }
           primaryNode={
             <>
@@ -123,51 +106,17 @@ const FileFiller: React.FC<{
                   <IconPlus className="plugs-icon" />
                 </div>
               ) : (
-                <Tooltip
-                  placement="top"
-                  destroyTooltipOnHide
-                  getPopupContainer={getPopupContainer}
-                  overlayStyle={{ maxWidth: "none" }}
-                  overlay={
-                    // 变更详情
-                    <ModifierDescriptions
-                      name={data.comment}
-                      path={data.sourceData.src}
-                      origin={{
-                        ImageNode: ResourceImageDisplay,
-                        resolution: getDescription(data.fileData),
-                        size: data.fileData.size
-                      }}
-                      current={{
-                        ImageNode: (
-                          <ImageDisplay girdSize={13}>
-                            <ImageElement
-                              shouldSubscribe
-                              sourceUrl={data.sourceUrl}
-                              sourceData={data.sourceData}
-                            />
-                          </ImageDisplay>
-                        ),
-                        resolution: getDescription(projectFileData.fileData),
-                        size: projectFileData.fileData.size
-                      }}
-                    />
-                  }
+                <ImageDisplay
+                  girdSize={13}
+                  onClick={() => onHighlight(data.keyPath)}
                 >
-                  <span>
-                    <ImageDisplay
-                      girdSize={13}
-                      onClick={() => onHighlight(data.keyPath)}
-                    >
-                      <ImageElement
-                        mouseEffect
-                        shouldSubscribe
-                        sourceUrl={data.sourceUrl}
-                        sourceData={data.sourceData}
-                      />
-                    </ImageDisplay>
-                  </span>
-                </Tooltip>
+                  <ImageElement
+                    mouseEffect
+                    shouldSubscribe
+                    sourceUrl={`${PROTOCOL_TYPE.project}://${data.sourceData.src}`}
+                    sourceData={data.sourceData}
+                  />
+                </ImageDisplay>
               )}
             </>
           }
@@ -180,16 +129,42 @@ const FileFiller: React.FC<{
         </div>
       </div>
       <FileHandler
-        locateVisible={!!data.keyPath}
+        fileInfoVisible={true}
+        jumpVisible={!!data.keyPath}
         exportVisible={projectFileData.state !== FILE_EVENT.UNLINK}
         deleteVisible={projectFileData.state !== FILE_EVENT.UNLINK}
-        onLocate={() => remote.shell.showItemInFolder(projectFile)} // 定位资源
-        onImport={() => importResource(projectFile)} // 导入资源
-        onDelete={() => {
+        onJumpClick={() => remote.shell.showItemInFolder(projectFile)} // 定位资源
+        onImportClick={() => importResource(projectFile)} // 导入资源
+        onDeleteClick={() => {
           window.$one.$server.deleteFile(projectFile).catch((err: Error) => {
             Notification.warning({ content: err.message });
           });
         }}
+        fileInfoNode={
+          // 变更详情
+          <ModifierDescriptions
+            name={data.comment}
+            path={data.sourceData.src}
+            origin={{
+              ImageNode: ResourceImageDisplay,
+              resolution: getDescription(data.fileData),
+              size: data.fileData.size
+            }}
+            current={{
+              ImageNode: (
+                <ImageDisplay girdSize={13}>
+                  <ImageElement
+                    shouldSubscribe
+                    sourceUrl={`${PROTOCOL_TYPE.project}://${data.sourceData.src}`}
+                    sourceData={data.sourceData}
+                  />
+                </ImageDisplay>
+              ),
+              resolution: getDescription(projectFileData.fileData),
+              size: projectFileData.fileData.size
+            }}
+          />
+        }
       />
     </StyleFileFiller>
   );
@@ -197,7 +172,7 @@ const FileFiller: React.FC<{
 
 const StyleFileFiller = styled.div`
   display: flex;
-  .file-display-info {
+  .file-display-and-info {
     display: flex;
     flex-direction: column;
     width: 100px;
@@ -219,23 +194,24 @@ const StyleFileFiller = styled.div`
         }
       }
     }
-    .empty-display {
-      background-color: var(--color-bg-4);
-      &:hover {
-        .plugs-icon {
-          width: 40%;
-          height: 40%;
-          margin: 30%;
-          transition: 0.2s ease-out;
-        }
-      }
+  }
+
+  .empty-display {
+    background-color: var(--color-bg-4);
+    &:hover {
       .plugs-icon {
-        width: 30%;
-        height: 30%;
-        margin: 35%;
-        color: var(--color-text-3);
-        transition: 0.2s ease-in;
+        width: 40%;
+        height: 40%;
+        margin: 30%;
+        transition: 0.2s ease-out;
       }
+    }
+    .plugs-icon {
+      width: 30%;
+      height: 30%;
+      margin: 35%;
+      color: var(--color-text-3);
+      transition: 0.2s ease-in;
     }
   }
   .info {
@@ -345,33 +321,6 @@ const ModifierDescriptions: React.FC<{
   );
 };
 
-const ResourceDescriptions: React.FC<{
-  name: string;
-  path: string;
-  resolution: string;
-  size: number;
-  PreviewNode: ReactNode;
-}> = props => {
-  return (
-    <StyleResourceDescriptions>
-      <Descriptions
-        title={props.name}
-        column={1}
-        size="mini"
-        data={[
-          { label: "路径", value: props.path },
-          { label: "尺寸", value: props.resolution },
-          {
-            label: "大小",
-            value: `${(props.size / 1024).toFixed(2)}kb`
-          }
-        ]}
-      />
-      <div className="img">{props.PreviewNode}</div>
-    </StyleResourceDescriptions>
-  );
-};
-
 const StyleModifierDescriptions = styled(Descriptions)`
   .flex-alignV-center {
     display: flex;
@@ -395,16 +344,43 @@ const StyleModifierDescriptions = styled(Descriptions)`
   }
 `;
 
-const StyleResourceDescriptions = styled.div`
-  display: flex;
-  align-items: center;
-  .img {
-    width: 80px;
-    height: 80px;
-    object-fit: contain;
-    overflow: hidden;
-    border-radius: 10px;
-    border: 1px solid var(--color-border-2);
-    background-color: gainsboro;
-  }
-`;
+// const ResourceDescriptions: React.FC<{
+//   name: string;
+//   path: string;
+//   resolution: string;
+//   size: number;
+//   PreviewNode: ReactNode;
+// }> = props => {
+//   return (
+//     <StyleResourceDescriptions>
+//       <Descriptions
+//         title={props.name}
+//         column={1}
+//         size="mini"
+//         data={[
+//           { label: "路径", value: props.path },
+//           { label: "尺寸", value: props.resolution },
+//           {
+//             label: "大小",
+//             value: `${(props.size / 1024).toFixed(2)}kb`
+//           }
+//         ]}
+//       />
+//       <div className="img">{props.PreviewNode}</div>
+//     </StyleResourceDescriptions>
+//   );
+// };
+
+// const StyleResourceDescriptions = styled.div`
+//   display: flex;
+//   align-items: center;
+//   .img {
+//     width: 80px;
+//     height: 80px;
+//     object-fit: contain;
+//     overflow: hidden;
+//     border-radius: 10px;
+//     border: 1px solid var(--color-border-2);
+//     background-color: gainsboro;
+//   }
+// `;

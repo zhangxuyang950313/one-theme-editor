@@ -9,6 +9,7 @@ const FileDisplayFrame: React.FC<{
   isFocus?: boolean;
 }> = props => {
   const primaryRef = useRef<HTMLDivElement>(null);
+
   useUpdateEffect(() => {
     if (!props.isFocus) return;
     primaryRef.current?.scrollIntoView({
