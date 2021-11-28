@@ -6,9 +6,11 @@ import ResourceConfig, {
 } from "src/data/ResourceConfig";
 import ScenarioConfig from "src/data/ScenarioConfig";
 
+import keys from "./keys";
+
 // 面板显示隐藏控制
 export const panelToggleState = atom({
-  key: "panelToggle",
+  key: keys.panelToggle,
   default: {
     moduleSelector: true,
     pageSelector: true,
@@ -18,7 +20,7 @@ export const panelToggleState = atom({
 
 // 工程数据
 export const projectDataState = atom({
-  key: "projectData",
+  key: keys.projectData,
   default: {
     projectData: ProjectData.default,
     resourceConfig: ResourceConfig.default,
@@ -28,8 +30,9 @@ export const projectDataState = atom({
 
 // 选中状态管理
 export const selectDataState = atom({
-  key: "selectData",
+  key: keys.selectData,
   default: {
+    focusKeyPath: "",
     moduleSelected: ModuleConfig.default,
     pageSelected: PageConfig.default
   }

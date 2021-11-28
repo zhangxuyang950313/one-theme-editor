@@ -1,5 +1,5 @@
 import React from "react";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 
 import { selectDataState } from "../store/rescoil/state";
@@ -8,11 +8,22 @@ import Interface from "@/components/Previewer";
 
 // 大预览图
 const PrimaryPreviewer: React.FC = () => {
-  const { pageSelected } = useRecoilValue(selectDataState);
+  const { pageSelected, focusKeyPath } = useRecoilValue(selectDataState);
+  const setSelectData = useSetRecoilState(selectDataState);
 
   return (
     <StylePrimaryPreviewer>
-      <Interface pageConfig={pageSelected} mouseEffect />
+      <Interface
+        mouseEffect
+        pageConfig={pageSelected}
+        focusKeyPath={focusKeyPath}
+        onSelect={keyPath => {
+          setSelectData(state => ({
+            ...state,
+            focusKeyPath: keyPath
+          }));
+        }}
+      />
       <div className="page-name">{pageSelected.name}</div>
     </StylePrimaryPreviewer>
   );

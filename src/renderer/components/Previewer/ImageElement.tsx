@@ -62,7 +62,7 @@ const StyleImage = styled.img`
     outline: 2px dashed var(--color-primary-light-4);
   }
   &[data-is-blur="true"] {
-    opacity: 0.5;
+    /* opacity: 0.5; */
     filter: blur(2px);
     outline: none;
     transition: all 0.2s ease-out;

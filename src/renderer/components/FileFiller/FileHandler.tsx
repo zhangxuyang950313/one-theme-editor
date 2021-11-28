@@ -5,7 +5,7 @@ import {
   IconDelete,
   IconInfoCircle,
   IconFindReplace,
-  IconSearch,
+  IconLocation,
   IconBgColors,
   IconEdit
 } from "@arco-design/web-react/icon";
@@ -37,7 +37,7 @@ const FileHandler: React.FC<{
           {/* 查看信息按钮 */}
           <span className="press btn-normal btn-info">
             <IconInfoCircle className="icon" data-btn-info />
-            <IconSearch
+            <IconLocation
               className="icon"
               data-btn-jump
               onClick={props.onJumpClick}
@@ -46,7 +46,7 @@ const FileHandler: React.FC<{
         </Tooltip>
       )}
       {props.exportVisible && (
-        <Tooltip overlay="选择文件" placement="right">
+        <Tooltip overlay="选择" placement="right">
           {/* 导入按钮 */}
           <IconFindReplace
             className="press btn-normal"

@@ -57,15 +57,6 @@ const FileFiller: React.FC<{
   const projectFile = resolveProjectFile(data.sourceData.src);
   const resourceFile = resolveResourceFile(data.sourceData.src);
 
-  const ResourceImageDisplay = (
-    <ImageDisplay girdSize={13}>
-      <ImageElement
-        sourceUrl={`${PROTOCOL_TYPE.resource}://${data.sourceData.src}`}
-        sourceData={data.sourceData}
-      />
-    </ImageDisplay>
-  );
-
   const getPopupContainer = () => fileFilterRef.current || document.body;
 
   return (
@@ -76,7 +67,12 @@ const FileFiller: React.FC<{
           floatNode={
             //左上角悬浮展示
             <span className="float-content">
-              {ResourceImageDisplay}
+              <ImageDisplay girdSize={6}>
+                <ImageElement
+                  sourceUrl={`${PROTOCOL_TYPE.resource}://${data.sourceData.src}`}
+                  sourceData={data.sourceData}
+                />
+              </ImageDisplay>
               <Tooltip
                 title="使用默认素材"
                 placement="top"
@@ -144,7 +140,14 @@ const FileFiller: React.FC<{
             name={data.comment}
             path={data.sourceData.src}
             origin={{
-              ImageNode: ResourceImageDisplay,
+              ImageNode: (
+                <ImageDisplay girdSize={13}>
+                  <ImageElement
+                    sourceUrl={`${PROTOCOL_TYPE.resource}://${data.sourceData.src}`}
+                    sourceData={data.sourceData}
+                  />
+                </ImageDisplay>
+              ),
               resolution: getDescription(data.fileData),
               size: data.fileData.size
             }}

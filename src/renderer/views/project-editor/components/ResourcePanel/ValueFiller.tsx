@@ -12,7 +12,6 @@ import StringInput from "@/components/ValueFiller/StringInput";
 import ValueHandler from "@/components/ValueFiller/ValueHandler";
 
 import { useSubscribeSrcSingly } from "@/hooks/subscribeFile";
-import { useEditorSelector } from "@/views/project-editor/store";
 
 // 分类编辑控件
 const ValueEditor: React.FC<{
@@ -158,15 +157,11 @@ const ValueFiller: React.FC<{
   xmlItem: TypeXmlNodeData;
   use: TypeXmlValueTags;
   colorFormat: HEX_FORMAT;
+  focusKeyPath: string;
   onHighlight: (keyPath: string) => void;
 }> = props => {
-  const { xmlItem, use, colorFormat, onHighlight } = props;
-  // const xmlValMapper = useEditorSelector(state => {
-  //   const data = state.fileDataMap[xmlItem.sourceData.src];
-  //   return data?.fileType === "application/xml" ? data.valueMapper : {};
-  // });
+  const { xmlItem, use, colorFormat, onHighlight, focusKeyPath } = props;
   const [xmlFileData, setXmlFileData] = useState<TypeXmlFileData>();
-  const focusKeyPath = useEditorSelector(state => state.focusKeyPath);
 
   useSubscribeSrcSingly(xmlItem.sourceData.src, (event, src, fileData) => {
     if (fileData.filetype === "application/xml") {

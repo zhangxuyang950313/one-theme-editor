@@ -33,6 +33,7 @@ const LayoutElement: React.FC<{
   const computedHeight = (Number(element.layout.h) * ratio).toFixed(0);
   const sourceUrl = `${element.sourceUrl}?w=${computedWidth}&h=${computedHeight}&q=best`;
   const isBlur = focusKeyPath ? element.keyPath !== focusKeyPath : false;
+
   switch (element.tag) {
     // 图片类型预览
     case LAYOUT_ELEMENT_TAG.Image: {
@@ -50,9 +51,7 @@ const LayoutElement: React.FC<{
           sourceUrl={sourceUrl}
           sourceData={element.sourceData}
           isBlur={isBlur}
-          onChange={() => {
-            onChange(element.keyPath);
-          }}
+          onChange={() => onChange(element.keyPath)}
         />
       );
       break;

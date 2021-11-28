@@ -2,15 +2,13 @@ import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import { TypePageConfig } from "src/types/config.resource";
 
-// import { useEditorDispatch, useEditorStore } from "../../store";
-// import { ActionSetFocusKeyPath } from "../../store/action";
-
 import LayoutElement from "./LayoutElement";
 
 const Previewer: React.FC<{
   mouseEffect?: boolean;
   focusKeyPath?: string;
   pageConfig: TypePageConfig;
+  onSelect?: (keyPath: string) => void;
 }> = props => {
   const {
     mouseEffect,
@@ -20,10 +18,9 @@ const Previewer: React.FC<{
       layoutElementList,
       previewList,
       forceStaticPreview
-    }
+    },
+    onSelect
   } = props;
-  // const dispatch = useEditorDispatch();
-  // const store = useEditorStore();
   const [ratio, setRatio] = useState(0);
   const layoutRef = useRef<HTMLDivElement | null>(null);
 
@@ -61,17 +58,16 @@ const Previewer: React.FC<{
                 mouseEffect={mouseEffect}
                 focusKeyPath={focusKeyPath}
                 onClick={() => {
-                  // dispatch(ActionSetFocusKeyPath({ keyPath: element.keyPath }));
+                  if (focusKeyPath === element.keyPath) {
+                    onSelect?.("");
+                  } else {
+                    onSelect?.(element.keyPath);
+                  }
                 }}
                 onChange={keyPath => {
-                  // if (store.getState().focusKeyPath) {
-                  //   dispatch(
-                  //     ActionSetFocusKeyPath({
-                  //       keyPath: element.keyPath,
-                  //       ignoreDuplicate: true
-                  //     })
-                  //   );
-                  // }
+                  if (keyPath !== focusKeyPath) {
+                    onSelect?.(keyPath);
+                  }
                 }}
               />
             );

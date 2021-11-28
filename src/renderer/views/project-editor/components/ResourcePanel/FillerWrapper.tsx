@@ -3,9 +3,9 @@ import styled from "styled-components";
 import { HEX_FORMAT, RESOURCE_TAG } from "src/common/enums";
 import { TypeBlockCollection } from "src/types/config.page";
 
-import { useEditorDispatch, useEditorSelector } from "../../store";
+import { useRecoilState } from "recoil";
 
-import { ActionSetFocusKeyPath } from "../../store/action";
+import { selectDataState } from "../../store/rescoil/state";
 
 import FileFiller from "./FileFiller";
 import ValueFiller from "./ValueFiller";
@@ -16,8 +16,16 @@ const FillerWrapper: React.FC<{
   data: TypeBlockCollection;
 }> = props => {
   const { data } = props;
-  const dispatch = useEditorDispatch();
-  const focusKeyPath = useEditorSelector(state => state.focusKeyPath);
+  const [{ focusKeyPath }, setSelectData] = useRecoilState(selectDataState);
+
+  const setFocusKeyPath = (keyPath: string) => {
+    setSelectData(state => ({
+      ...state,
+      // 已选中则取消选中
+      focusKeyPath: focusKeyPath === keyPath ? "" : keyPath
+    }));
+  };
+
   switch (data.tag) {
     case RESOURCE_TAG.File: {
       return (
@@ -27,9 +35,7 @@ const FillerWrapper: React.FC<{
               <FileFiller
                 data={item}
                 isFocus={focusKeyPath === item.keyPath}
-                onHighlight={keyPath => {
-                  dispatch(ActionSetFocusKeyPath({ keyPath }));
-                }}
+                onHighlight={setFocusKeyPath}
               />
             </div>
           ))}
@@ -48,9 +54,8 @@ const FillerWrapper: React.FC<{
               xmlItem={xmlItem}
               use={data.tag}
               colorFormat={HEX_FORMAT.ARGB}
-              onHighlight={keyPath => {
-                dispatch(ActionSetFocusKeyPath({ keyPath }));
-              }}
+              focusKeyPath={focusKeyPath}
+              onHighlight={setFocusKeyPath}
             />
           ))}
         </StyleValueFillerWrapper>
