@@ -15,10 +15,9 @@ import { TypeFileItem } from "src/types/config.page";
 import { TypeFileData } from "src/types/file-data";
 import { FILE_EVENT, PROTOCOL_TYPE } from "src/common/enums";
 
-import ImageDisplay from "./ImageDisplay";
-import FileHandler from "./FileHandler";
-import FileDisplayFrame from "./FileDisplayFrame";
-
+import FileHandler from "@/components/FileFiller/FileHandler";
+import FileDisplayFrame from "@/components/FileFiller/FileDisplayFrame";
+import ImageDisplay from "@/components/FileFiller/ImageDisplay";
 import ImageElement from "@/components/Previewer/ImageElement";
 
 import { useSubscribeFileData } from "@/hooks/subscribeFile";
@@ -81,7 +80,6 @@ const FileFiller: React.FC<{
               <Tooltip
                 title="使用默认素材"
                 placement="top"
-                destroyTooltipOnHide
                 getPopupContainer={getPopupContainer}
               >
                 <IconUndo

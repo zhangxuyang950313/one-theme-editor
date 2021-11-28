@@ -21,16 +21,15 @@ const FileHandler: React.FC<{
   onJumpClick: () => void;
   onDeleteClick: () => void;
 }> = props => {
-  const fileFilterRef = useRef<HTMLDivElement | null>(null);
+  const fileFilterRef = useRef<HTMLDivElement>(null);
 
   const getPopupContainer = () => fileFilterRef.current || document.body;
 
   return (
-    <StyleFileHandler>
+    <StyleFileHandler ref={fileFilterRef}>
       {props.fileInfoVisible && (
         <Tooltip
           placement="top"
-          destroyTooltipOnHide
           overlay={props.fileInfoNode}
           getPopupContainer={getPopupContainer}
           overlayStyle={{ maxWidth: "none" }}
@@ -47,7 +46,7 @@ const FileHandler: React.FC<{
         </Tooltip>
       )}
       {props.exportVisible && (
-        <Tooltip destroyTooltipOnHide overlay="选择文件" placement="right">
+        <Tooltip overlay="选择文件" placement="right">
           {/* 导入按钮 */}
           <IconFindReplace
             className="press btn-normal"
@@ -56,16 +55,16 @@ const FileHandler: React.FC<{
         </Tooltip>
       )}
       {/* .9编辑按钮 */}
-      <Tooltip destroyTooltipOnHide overlay="编辑" placement="right">
+      <Tooltip overlay="编辑" placement="right">
         <IconEdit className="press btn-normal btn-disabled" />
       </Tooltip>
-      <Tooltip destroyTooltipOnHide overlay="染色" placement="right">
+      <Tooltip overlay="染色" placement="right">
         {/* 导入按钮 */}
         <IconBgColors className="press btn-normal btn-disabled" />
       </Tooltip>
       {/* 删除按钮 */}
       {props.deleteVisible && (
-        <Tooltip destroyTooltipOnHide overlay="移除" placement="right">
+        <Tooltip overlay="移除" placement="right">
           <IconDelete
             className="press btn-delete"
             onClick={props.onDeleteClick}

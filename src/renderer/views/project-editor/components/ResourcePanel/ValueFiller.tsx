@@ -5,11 +5,11 @@ import { TypeXmlNodeData, TypeXmlValueTags } from "src/types/config.page";
 import { TypeXmlFileData } from "src/types/file-data";
 import XmlTemplateUtil from "src/common/utils/XmlTemplateUtil";
 
-import ColorPicker from "./ColorPicker";
-import BooleanSelector from "./BooleanSelector";
-import NumberInput from "./NumberInput";
-import StringInput from "./StringInput";
-import ValueHandler from "./ValueHandler";
+import ColorPicker from "@/components/ValueFiller/ColorPicker";
+import BooleanSelector from "@/components/ValueFiller/BooleanSelector";
+import NumberInput from "@/components/ValueFiller/NumberInput";
+import StringInput from "@/components/ValueFiller/StringInput";
+import ValueHandler from "@/components/ValueFiller/ValueHandler";
 
 import { useSubscribeSrcSingly } from "@/hooks/subscribeFile";
 import { useEditorSelector } from "@/views/project-editor/store";

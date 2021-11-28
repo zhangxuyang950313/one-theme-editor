@@ -7,8 +7,8 @@ import { useEditorDispatch, useEditorSelector } from "../../store";
 
 import { ActionSetFocusKeyPath } from "../../store/action";
 
-import FileFiller from "./FileFiller/index";
-import ValueFiller from "./ValueFiller/index";
+import FileFiller from "./FileFiller";
+import ValueFiller from "./ValueFiller";
 
 // 所有填充器的包装器
 // 所有类型及响应都在 switch 处理

@@ -52,7 +52,6 @@ const StyleImage = styled.img`
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
-  transition: all 0.2s ease-in;
   &[data-mouse-effect="true"] {
     outline: 1px dashed var(--color-primary-light-4);
   }
@@ -61,7 +60,6 @@ const StyleImage = styled.img`
     opacity: 1;
     filter: drop-shadow(0 0 10px var(--color-primary-light-4));
     outline: 2px dashed var(--color-primary-light-4);
-    transition: all 0.2s ease-out;
   }
   &[data-is-blur="true"] {
     opacity: 0.5;

@@ -82,12 +82,27 @@ npm run build:linux
 #### 核心文件结构
 
 - src
-  - main - electron 主进程
-    - index.dev.ts 开发环境启动
-    - index.ts     生产环境启动
-  - renderer - 渲染进程（react）
-  - server - 本地服务进程
-  - script - 一些python/c++处理脚本
+  - common              通用文件
+  - data                数据模型
+  - ipc                 ipc 通讯封装
+  - main                electron 主进程
+    - index.ts          入口
+    - database/         数据库
+    - singletons/       单例
+    - menu.ts           菜单
+    - protocol.ts       自定义协议
+    - windowManager.ts  窗口管理
+  - preload             预加载脚本
+    - index.ts
+  - renderer            渲染进程（react）
+    - components        基础组件（不应包含业务，业务组件在 views 中封装）
+    - views             多页面/路由
+      - project-editor  编辑器页面
+        - components    业务组件（处理业务组件，和基础UI组件分离）
+      - project-manager 工程管理
+        - components
+  - store               数据管理（redux/recoil）
+- script              python/c++等处理脚本
 - webpack
   - config.main.ts - 主进程 webpack 配置
   - config.renderer.ts - 渲染进程 webpack 配置

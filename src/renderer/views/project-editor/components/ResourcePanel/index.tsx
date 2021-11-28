@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { TypePageConfig } from "src/types/config.resource";
-// import { TypeLayoutElement } from "src/types/config.page";
 
 import { useRecoilValue } from "recoil";
 
@@ -11,26 +9,11 @@ import FillerWrapper from "./FillerWrapper";
 
 import StickyTab from "@/components/StickyTab";
 import { Tabs } from "@/components/one-ui";
-// import { previewResourceEmitter, PREVIEW_EVENT } from "@/singletons/emitters";
 
 const ResourcePanel: React.FC = () => {
   const { pageSelected } = useRecoilValue(selectDataState);
   const { resourceCategoryList } = pageSelected;
   const [selectTabIndex, setSelectTabIndex] = useState(0);
-
-  // useLayoutEffect(() => {
-  //   previewResourceEmitter.on(
-  //     PREVIEW_EVENT.locateResource,
-  //     (element: TypeLayoutElement) => {
-  //       const index = resourceList.findIndex(
-  //         item => item.key === element.sourceUrl
-  //       );
-  //       console.log(element);
-  //       setSelectTabIndex(index);
-  //       // PREVIEW_EVENT.locateResource
-  //     }
-  //   );
-  // }, []);
 
   useEffect(() => {
     setSelectTabIndex(0);
