@@ -65,7 +65,7 @@ const Previewer: React.FC<{
                   }
                 }}
                 onChange={keyPath => {
-                  if (keyPath !== focusKeyPath) {
+                  if (keyPath !== focusKeyPath && !!focusKeyPath) {
                     onSelect?.(keyPath);
                   }
                 }}

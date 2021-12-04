@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { remote } from "electron";
+import { getCurrentWindow } from "@electron/remote";
 import { Empty } from "@arco-design/web-react";
 import { TypeProjectDataDoc } from "src/types/project";
 
@@ -20,20 +20,18 @@ const ProjectList: React.FC<{ list: TypeProjectDataDoc[] }> = props => {
   return (
     <StyleProjectList>
       {uiVersionWrap.length > 0 ? (
-        uiVersionWrap.map(uiVersionItem => (
-          <div key={uiVersionItem[0]}>
-            <h3 className="ui-version">{uiVersionItem[0]}</h3>
+        uiVersionWrap.map(([version, list]) => (
+          <div key={version}>
+            <h3 className="ui-version">{version}</h3>
             <div className="list-wrapper">
               <div className="list">
-                {uiVersionItem[1].map((item, key) => (
+                {list.map((item, key) => (
                   <div
                     className="project-card"
                     key={key}
-                    onClick={async () => {
-                      await window.$one.$server.openProjectEditorWindow(
-                        item.uuid
-                      );
-                      remote.getCurrentWindow().close();
+                    onClick={() => {
+                      window.$one.$server.openProjectEditorWindow(item.uuid);
+                      getCurrentWindow().close();
                     }}
                   >
                     <ProjectDisplay

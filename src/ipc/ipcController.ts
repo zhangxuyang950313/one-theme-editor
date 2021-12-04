@@ -34,7 +34,7 @@ import { TypeWatchedRecord } from "src/common/classes/DirWatcher";
 import { fileDataCache } from "src/main/singletons/fileCache";
 
 import IPC_EVENT from "./ipc-event";
-import ipcCreator from "./ipcCreator";
+import ipcCreator from "./IpcCreator";
 
 if (ipcRenderer) ipcRenderer.setMaxListeners(9999);
 if (ipcMain) ipcMain.setMaxListeners(9999);

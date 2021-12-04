@@ -5,7 +5,7 @@ import { app } from "electron";
 
 import type projectDatabase from "main/database/project";
 import type dirWatcher from "main/singletons/dirWatcher";
-import type fileCache from "main/singletons/fileCache";
+import type { fileDataCache } from "main/singletons/fileCache";
 import type { createWindow } from "main/windowManager";
 
 export async function chunkProjectDB(): Promise<typeof projectDatabase> {
@@ -16,8 +16,8 @@ export async function chunkDirWatcher(): Promise<typeof dirWatcher> {
   return (await import("main/singletons/dirWatcher")).default;
 }
 
-export async function chunkFileCache(): Promise<typeof fileCache> {
-  return (await import("main/singletons/fileCache")).default;
+export async function chunkFileCache(): Promise<typeof fileDataCache> {
+  return (await import("main/singletons/fileCache")).fileDataCache;
 }
 
 // createWindows 方法内调用了 electron.app 获取路径方法，

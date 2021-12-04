@@ -16,7 +16,7 @@ import {
   Drawer,
   DrawerProps
 } from "@arco-design/web-react";
-import { IconFolderAdd } from "@arco-design/web-react/icon";
+import { IconFindReplace } from "@arco-design/web-react/icon";
 import { FILE_TEMPLATE_TYPE } from "src/common/enums";
 import PathUtil from "src/common/utils/PathUtil";
 import { useToggle } from "ahooks";
@@ -152,7 +152,7 @@ const CreateProject: React.FC<
               />
               <Button
                 type="primary"
-                icon={<IconFolderAdd />}
+                icon={<IconFindReplace />}
                 onClick={selectDir}
               >
                 选择

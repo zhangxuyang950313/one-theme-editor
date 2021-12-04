@@ -65,6 +65,7 @@ const StyleImage = styled.img`
     /* opacity: 0.5; */
     filter: blur(2px);
     outline: none;
+    /* outline: 2px dashed var(--color-primary-light-4); */
     transition: all 0.2s ease-out;
   }
 `;

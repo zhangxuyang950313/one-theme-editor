@@ -3,7 +3,7 @@ import ProjectData from "src/data/ProjectData";
 import { TypeProjectData } from "src/types/project";
 import { TypeResourceConfig } from "src/types/config.resource";
 import { TypeScenarioConfig } from "src/types/config.scenario";
-import { ScenarioOption } from "src/data/ScenarioConfig";
+import ScenarioConfig from "src/data/ScenarioConfig";
 import ResourceConfigData from "src/data/ResourceConfig";
 
 type TypeProjectDataStore = {
@@ -15,7 +15,7 @@ type TypeProjectDataStore = {
 };
 const defaultState: TypeProjectDataStore = {
   projectData: ProjectData.default,
-  scenarioConfig: ScenarioOption.default,
+  scenarioConfig: ScenarioConfig.default,
   resourceConfig: ResourceConfigData.default,
   resourcePath: "",
   projectPath: ""

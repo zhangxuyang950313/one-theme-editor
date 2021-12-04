@@ -6,6 +6,7 @@ import FileType, { FileTypeResult, MimeType } from "file-type";
 import mimeTypes from "mime-types";
 import imageSize from "image-size";
 import dirTree from "directory-tree";
+import { app, ipcRenderer } from "electron";
 import ERR_CODE from "src/common/enums/ErrorCode";
 import RegexpUtil from "src/common/utils/RegexpUtil";
 import {
@@ -17,11 +18,11 @@ import {
 import { FileData, ImageFileData, XmlFileData } from "src/data/ResourceConfig";
 import XmlCompiler from "src/common/classes/XmlCompiler";
 import XmlCompilerExtra from "src/common/classes/XmlCompilerExtra";
-import { app, ipcRenderer, remote } from "electron";
 
 export const isDev = process.env.NODE_ENV !== "production";
 
-export const $app = !!ipcRenderer ? remote.app : app;
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+export const $app = !!ipcRenderer ? require("@electron/remote").app : app;
 
 export const isPackaged = $app.isPackaged;
 

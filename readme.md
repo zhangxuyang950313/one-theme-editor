@@ -7,6 +7,9 @@
 #### 关于 Electron@8.5.5 版本
 由于 React devtools 和 Redux devtools 在 Electron 8 以上版本不能使用，目前没有找到解决方法，直到 12 问题依旧，故 Electron 版本锁定 8 最后一个版本 8.5.5
 
+#### 关于 Electron@latest 版本升级
+Redux 插件不太好使，好在可以不用，Redux 换为 Recoil
+
 #### 关于 webpack@4.x.x 版本
 目前 webpack 5 还有不少坑，暂时锁定 webpack 4 版本使用
 以下包（或类型）严格按照版本使用，因为其内部会指定 webpack ^5，会导致类型报错甚至无法运行

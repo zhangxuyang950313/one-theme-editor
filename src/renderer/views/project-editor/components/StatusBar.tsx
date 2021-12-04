@@ -1,23 +1,24 @@
-import { remote } from "electron";
+import { shell } from "@electron/remote";
 import React from "react";
+import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 import { FolderOpenOutlined } from "@ant-design/icons";
 
-import { useEditorSelector } from "../store";
+import { projectDataState } from "../store/rescoil/state";
 
 const StatusBar: React.FC<React.HTMLAttributes<HTMLDivElement>> = props => {
-  const projectData = useEditorSelector(state => state.projectData);
+  const { projectData } = useRecoilValue(projectDataState);
   return (
     <StyleStatusBar {...props}>
       <span
         className="project-name"
         title="跳转目录"
         onClick={() => {
-          remote.shell.openItem(`${projectData.root}`);
+          shell.openPath(`${projectData.root}`);
         }}
       >
         <FolderOpenOutlined className="icon" />
-        {projectData.description.name}
+        {projectData.root}
       </span>
     </StyleStatusBar>
   );

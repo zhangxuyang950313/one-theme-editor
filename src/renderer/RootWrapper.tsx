@@ -11,7 +11,7 @@ import "@arco-design/theme-one-editor/css/arco.css"; // arco.design
 
 // import { ConfigProvider } from "antd";
 import LogUtil from "src/common/utils/LogUtil";
-import * as electronStore from "src/store";
+// import * as electronStore from "src/store";
 import DarkTheme from "src/common/theme/dark";
 
 import { RecoilRoot, useRecoilSnapshot } from "recoil";
@@ -56,6 +56,7 @@ function useLogInfo() {
     LogUtil.init("[version]node", process.versions.node); // NODE版本
     LogUtil.init("[version]v8", process.versions.v8); // V8 引擎版本
     LogUtil.init("[version]chrome", process.versions.chrome); // chrome版本
+    LogUtil.init("[type]process", process.type);
     LogUtil.init(`[pid]main`, window.$one.$server.getPID());
     LogUtil.init(`[pid]render`, process.pid);
   }, []);
@@ -65,9 +66,9 @@ function useTheme() {
   const [theme, setTheme] = useState(DarkTheme);
   useLayoutEffect(() => {
     document.body.setAttribute("arco-theme", "dark");
-    electronStore.config.set("themeConfig", DarkTheme);
-    const thm = electronStore.config.get("themeConfig");
-    if (thm) setTheme(thm);
+    // electronStore.config.set("themeConfig", DarkTheme);
+    // const thm = electronStore.config.get("themeConfig");
+    // if (thm) setTheme(thm);
   }, []);
   return theme;
 }

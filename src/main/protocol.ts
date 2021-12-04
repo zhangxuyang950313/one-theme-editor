@@ -23,7 +23,7 @@ async function getFilePicResponseData(
   url: string,
   root: string,
   backupRoot?: string
-): Promise<{ mimeType: string; data: Buffer }> {
+): Promise<{ mimeType?: string; data: Buffer }> {
   let file = "";
   const options: Required<ResizeOptions> = {
     width: 0,
@@ -31,7 +31,7 @@ async function getFilePicResponseData(
     // `good`, `better`, * or `best`
     quality: "best"
   };
-  const result = await new Promise<{ mimeType: string; data: Buffer }>(
+  const result = await new Promise<{ mimeType?: string; data: Buffer }>(
     async resolve => {
       try {
         const { hostname, pathname, searchParams } = new URL(url);

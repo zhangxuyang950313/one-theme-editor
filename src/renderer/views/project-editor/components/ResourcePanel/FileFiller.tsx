@@ -1,6 +1,7 @@
 import path from "path";
 
-import { remote } from "electron";
+import { shell, dialog } from "@electron/remote";
+
 import React, { ReactNode, useRef } from "react";
 import styled from "styled-components";
 import { Tooltip } from "antd";
@@ -31,7 +32,7 @@ function resolveProjectFile(relative: string): string {
 
 async function importResource(to: string): Promise<void> {
   // 选择图片导入
-  remote.dialog
+  dialog
     .showOpenDialog({
       title: "选择素材",
       properties: ["openFile", "createDirectory"]
@@ -127,7 +128,7 @@ const FileFiller: React.FC<{
         jumpVisible={!!data.keyPath}
         exportVisible={projectFileData.state !== FILE_EVENT.UNLINK}
         deleteVisible={projectFileData.state !== FILE_EVENT.UNLINK}
-        onJumpClick={() => remote.shell.showItemInFolder(projectFile)} // 定位资源
+        onJumpClick={() => shell.showItemInFolder(projectFile)} // 定位资源
         onImportClick={() => importResource(projectFile)} // 导入资源
         onDeleteClick={() => {
           window.$one.$server.deleteFile(projectFile).catch((err: Error) => {

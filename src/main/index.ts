@@ -1,11 +1,13 @@
 import { app, BrowserWindow, ipcMain, protocol } from "electron";
+import { initialize } from "@electron/remote/main";
 import ipcController from "src/ipc/ipcController";
 
 import { createWindow } from "./windowManager";
 import { moveWindowToCenter, saveCurrentDisplayCenter } from "./utils";
 import registerProtocol from "./protocol";
 
-app.allowRendererProcessReuse = false;
+// app.allowRendererProcessReuse = false;
+initialize();
 
 // 桥接窗口间广播
 ipcMain.on("broadcast", ($event, $data: { event: string; data: unknown }) => {

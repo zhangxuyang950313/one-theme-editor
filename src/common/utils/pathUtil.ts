@@ -2,11 +2,14 @@ import os from "os";
 import path from "path";
 
 import fse from "fs-extra";
-import { app, ipcRenderer, remote } from "electron";
+import { app } from "electron";
 import { TypePathCollection } from "src/types/config.extra";
 
 // 区分主进程和渲染进程
-const $app = !!ipcRenderer ? remote.app : app;
+// const $app = !!ipcRenderer ? remote.app : app;
+const $app =
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  process.type === "renderer" ? require("@electron/remote").app : app;
 
 const PathUtil: TypePathCollection = {
   ELECTRON_LOCAL: $app.getLocale(),

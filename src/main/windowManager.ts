@@ -6,18 +6,21 @@ import {
   BrowserWindowConstructorOptions,
   ipcMain
 } from "electron";
+import * as remoteMain from "@electron/remote/main";
 import IPC_EVENT from "src/ipc/ipc-event";
 import projectDB from "src/main/database/project";
 import { getFileData, isPackaged } from "src/common/utils";
 
-import * as electronStore from "../store/index";
+// import * as electronStore from "../store/index";
 
 import { preloadFile, getUrl } from "./constant";
 import menuTemplate from "./menu";
 import dirWatcher from "./singletons/dirWatcher";
 
-const backgroundColor =
-  electronStore.config.get("themeConfig")?.["@background-color"] ?? "white";
+// const backgroundColor =
+//   electronStore.config.get("themeConfig")?.["@background-color"] ?? "white";
+
+const backgroundColor = "black";
 
 // 用于添加Chromium插件
 async function setupDevTools() {
@@ -32,9 +35,9 @@ async function setupDevTools() {
 
 async function devToolsHandler(win: BrowserWindow): Promise<void> {
   // await new Promise(resolve => win.on("ready-to-show", resolve));
-  if (isPackaged) {
-    // // 打开 dev 工具
-    // win.webContents.openDevTools();
+  if (!isPackaged) {
+    // 打开 dev 工具
+    win.webContents.openDevTools();
     await setupDevTools().catch(err => {
       console.log("Dev tools install failed.", err);
     });
@@ -44,11 +47,11 @@ async function devToolsHandler(win: BrowserWindow): Promise<void> {
       debug.openDevTools();
     });
     // eslint-disable-next-line @typescript-eslint/no-var-requires
-    // require("devtron").install();
+    require("devtron").install();
   } else {
     // 生产环境不允许打开调试工具
     win.webContents.on("devtools-opened", () => {
-      // win.webContents.closeDevTools();
+      win.webContents.closeDevTools();
     });
   }
 }
@@ -56,10 +59,11 @@ async function devToolsHandler(win: BrowserWindow): Promise<void> {
 const windowNormalizeOptions: BrowserWindowConstructorOptions = {
   webPreferences: {
     // https://www.electronjs.org/docs/tutorial/security#6-define-a-content-security-policy
-    webSecurity: false,
+    webSecurity: true,
     nodeIntegration: true,
     nodeIntegrationInWorker: true,
-    enableRemoteModule: true,
+    allowRunningInsecureContent: false,
+    // enableRemoteModule: true,
     contextIsolation: false,
     devTools: isPackaged || true,
     preload: preloadFile,
@@ -96,7 +100,8 @@ export const createWindow = {
       fullscreenable: false,
       show: true
     });
-    // devToolsHandler(win);
+    remoteMain.enable(win.webContents);
+    devToolsHandler(win);
     win.loadURL(getUrl.projectManager());
     // win.loadURL(getUrl.projectEditor("6d312b14-2013-42e2-93d3-3e64beda25d1"));
     win.on("ready-to-show", () => win.show());
@@ -112,6 +117,7 @@ export const createWindow = {
       minWidth: 1000,
       minHeight: 680
     });
+    remoteMain.enable(win.webContents);
     devToolsHandler(win);
     await win.loadURL(getUrl.projectEditor(uuid));
 

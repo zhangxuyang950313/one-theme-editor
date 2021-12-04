@@ -73,6 +73,7 @@ export function useSubscribeSrc(options?: {
   useLayoutEffect(() => {
     setRoot(window.$one.$reactive.get("projectPath"));
   }, []);
+
   useLayoutEffect(() => {
     // 移除监听器
     const removeListener = window.$one.$invoker.onFileChange(data => {

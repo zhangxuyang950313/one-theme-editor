@@ -6,7 +6,7 @@ import { Input, Message } from "@arco-design/web-react";
 import { IconRight } from "@arco-design/web-react/icon";
 import { RGBColor, SketchPicker } from "react-color";
 import ColorUtil, { HEX_FORMAT } from "src/common/utils/ColorUtil";
-import * as electronStore from "src/store";
+// import * as electronStore from "src/store";
 
 import { StyleGirdBackground } from "@/style";
 
@@ -86,9 +86,10 @@ function ColorPickerBox(props: {
   }, [color]);
 
   const appendColorRecently = () => {
-    const colorRecently = electronStore.config.get("colorRecently");
+    // const colorRecently = electronStore.config.get("colorRecently");
+    // const colorRecently = [];
     if (!Array.isArray(colorRecently)) {
-      electronStore.config.set("colorRecently", []);
+      // electronStore.config.set("colorRecently", []);
       return;
     }
     const arr = Array.from(new Set([colorRGBAHex, ...colorRecently])).filter(
@@ -104,7 +105,7 @@ function ColorPickerBox(props: {
     if (arr.length > 55) {
       arr.length = 55;
     }
-    electronStore.config.set("colorRecently", arr);
+    // electronStore.config.set("colorRecently", arr);
     setColorRecently(arr);
   };
 
