@@ -8,7 +8,6 @@ const config: webpack.ConfigurationFactory = () => ({
   entry: {
     main: [
       "electron",
-      "electron-store",
       "electron-debug",
       "electron-devtools-installer",
       "archiver",

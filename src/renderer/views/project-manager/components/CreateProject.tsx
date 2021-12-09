@@ -3,10 +3,9 @@ import path from "path";
 import fse from "fs-extra";
 import { dialog } from "electron";
 import { isDev } from "src/common/utils/index";
-import { TypeProjectDataDoc, TypeProjectInfo } from "src/types/project";
-import { TypeResourceConfig } from "src/types/config.resource";
-import styled from "styled-components";
 import React, { useEffect, useRef, useState } from "react";
+import styled from "styled-components";
+import { useToggle } from "ahooks";
 import {
   Modal,
   Form,
@@ -17,9 +16,10 @@ import {
   DrawerProps
 } from "@arco-design/web-react";
 import { IconFindReplace } from "@arco-design/web-react/icon";
+import { TypeProjectDataDoc, TypeProjectInfo } from "src/types/project";
+import { TypeResourceConfig } from "src/types/config.resource";
 import { FILE_TEMPLATE_TYPE } from "src/common/enums";
 import PathUtil from "src/common/utils/PathUtil";
-import { useToggle } from "ahooks";
 
 import { useScenarioSelected } from "../hooks";
 
@@ -53,12 +53,11 @@ const defaultPath = PathUtil.ELECTRON_DESKTOP;
 // };
 
 // 创建主题按钮
-const CreateProject: React.FC<
-  DrawerProps & {
-    onCreated: (x: TypeProjectDataDoc) => void;
-  }
-> = props => {
-  const { onCreated } = props;
+const CreateProject: React.FC<{
+  drawerProps: DrawerProps;
+  onCreated: (x: TypeProjectDataDoc) => void;
+}> = props => {
+  const { drawerProps } = props;
   const scenario = useScenarioSelected();
   // 当前步骤
   const [curStep, setCurStep] = useState(0);
@@ -164,7 +163,7 @@ const CreateProject: React.FC<
       // 取消
       cancel: {
         disabled: isCreating,
-        handleCancel: () => props.onCancel && props.onCancel()
+        handleCancel: () => drawerProps.onCancel && drawerProps.onCancel()
       },
       next: {
         disabled:
@@ -254,7 +253,7 @@ const CreateProject: React.FC<
             })
             .then(data => {
               console.log("创建工程：", data);
-              onCreated(data);
+              props.onCreated(data);
               // closeCurrentWindow();
               // window.$one.$invoker.sendBroadcast.$projectCreated(data);
             })
@@ -341,7 +340,7 @@ const CreateProject: React.FC<
         <NextButton key="next" />,
         <StartButton key="start" />
       ]}
-      {...props}
+      {...drawerProps}
     >
       <StyleCreateProject>
         <div className="container">

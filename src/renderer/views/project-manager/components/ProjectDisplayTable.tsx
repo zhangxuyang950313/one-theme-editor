@@ -49,8 +49,7 @@ const ProjectDisplayTable: React.FC = () => {
       <ProjectList list={projectList} />
       {/* 创建工程抽屉 */}
       <CreateProject
-        visible={visible}
-        onCancel={visibleToggle.toggle}
+        drawerProps={{ visible, onCancel: visibleToggle.toggle }}
         onCreated={() => {
           fetchProjectList();
           visibleToggle.setLeft();
