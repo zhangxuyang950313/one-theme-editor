@@ -1,11 +1,14 @@
 /**
  * 工具栏
  */
+import path from "path";
+
 import React, { useRef } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import styled from "styled-components";
 import { TOOLS_BAR_BUTTON } from "src/common/enums";
 
+import { Notification } from "@arco-design/web-react";
 import {
   IconExport,
   IconEye,
@@ -18,7 +21,7 @@ import {
 
 import { useToggle } from "ahooks";
 
-import { panelToggleState } from "../store/rescoil/state";
+import { panelToggleState, projectDataState } from "../store/rescoil/state";
 
 import ProjectInfoDrawer from "./ProjectInfoDrawer";
 
@@ -26,6 +29,7 @@ import IconButton from "@/components/one-ui/IconButton";
 
 const ToolsBar: React.FC = () => {
   const [panelToggle, setPanelToggle] = useRecoilState(panelToggleState);
+  const { projectData, scenarioConfig } = useRecoilValue(projectDataState);
   const [modifyInfoVisible, modifyInfoToggle] = useToggle(false);
   const toolsBarRef = useRef<HTMLDivElement>(null);
 
@@ -50,61 +54,83 @@ const ToolsBar: React.FC = () => {
   };
 
   return (
-    <>
-      <StyleToolsBar ref={toolsBarRef}>
-        <div className="btn-group left">
-          <IconButton
-            className="item"
-            name={TOOLS_BAR_BUTTON.MODULE_TOGGLE}
-            icon={<IconMindMapping />}
-            toggle={panelToggle.moduleSelector}
-            onClick={toggleModuleSelector}
-          />
-          <IconButton
-            className="item"
-            name={TOOLS_BAR_BUTTON.PAGE_TOGGLE}
-            icon={<IconFile />}
-            toggle={panelToggle.pageSelector}
-            onClick={togglePageSelector}
-          />
-          <IconButton
-            className="item"
-            name={TOOLS_BAR_BUTTON.PREVIEW_TOGGLE}
-            icon={panelToggle.pagePreview ? <IconEye /> : <IconEyeInvisible />}
-            toggle={panelToggle.pagePreview}
-            onClick={togglePagePreview}
-          />
-        </div>
-        <div className="btn-group right">
-          <IconButton
-            className="item"
-            name={TOOLS_BAR_BUTTON.APPLY}
-            icon={<IconMobile />}
-            onClick={toggleModuleSelector}
-          />
-          <IconButton
-            className="item"
-            name={TOOLS_BAR_BUTTON.EXPORT}
-            icon={<IconExport />}
-            onClick={toggleModuleSelector}
-          />
-          <IconButton
-            className="item"
-            name={TOOLS_BAR_BUTTON.INFO}
-            icon={<IconInfoCircle />}
-            onClick={modifyInfoToggle.toggle}
-          />
-        </div>
-        <ProjectInfoDrawer
-          drawerProps={{
-            className: "drawer",
-            width: 500,
-            visible: modifyInfoVisible,
-            onCancel: modifyInfoToggle.setLeft
+    <StyleToolsBar ref={toolsBarRef}>
+      <div className="btn-group left">
+        <IconButton
+          className="item"
+          name={TOOLS_BAR_BUTTON.MODULE_TOGGLE}
+          icon={<IconMindMapping />}
+          toggle={panelToggle.moduleSelector}
+          onClick={toggleModuleSelector}
+        />
+        <IconButton
+          className="item"
+          name={TOOLS_BAR_BUTTON.PAGE_TOGGLE}
+          icon={<IconFile />}
+          toggle={panelToggle.pageSelector}
+          onClick={togglePageSelector}
+        />
+        <IconButton
+          className="item"
+          name={TOOLS_BAR_BUTTON.PREVIEW_TOGGLE}
+          icon={panelToggle.pagePreview ? <IconEye /> : <IconEyeInvisible />}
+          toggle={panelToggle.pagePreview}
+          onClick={togglePagePreview}
+        />
+      </div>
+      <div className="btn-group right">
+        <IconButton
+          className="item"
+          name={TOOLS_BAR_BUTTON.APPLY}
+          icon={<IconMobile />}
+          onClick={toggleModuleSelector}
+        />
+        <IconButton
+          className="item"
+          name={TOOLS_BAR_BUTTON.EXPORT}
+          icon={<IconExport />}
+          onClick={() => {
+            Notification.info({
+              id: "pack-process",
+              title: "打包中...",
+              content: ""
+            });
+            window.$one.$server.packProject(
+              {
+                packConfig: scenarioConfig.packageConfig,
+                packDir: projectData.root,
+                outputFile: path.join(
+                  projectData.root,
+                  `../${projectData.description.name}.${scenarioConfig.packageConfig.extname}`
+                )
+              },
+              data => {
+                Notification.info({
+                  id: "pack-process",
+                  title: "打包中...",
+                  content: data.msg
+                });
+                console.log(data);
+              }
+            );
           }}
         />
-      </StyleToolsBar>
-    </>
+        <IconButton
+          className="item"
+          name={TOOLS_BAR_BUTTON.INFO}
+          icon={<IconInfoCircle />}
+          onClick={modifyInfoToggle.toggle}
+        />
+      </div>
+      <ProjectInfoDrawer
+        drawerProps={{
+          wrapClassName: "drawer",
+          width: 500,
+          visible: modifyInfoVisible,
+          onCancel: modifyInfoToggle.setLeft
+        }}
+      />
+    </StyleToolsBar>
   );
 };
 
