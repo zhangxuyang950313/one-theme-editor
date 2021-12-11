@@ -71,7 +71,7 @@ export default class ScenarioConfigCompiler extends XmlCompilerExtra {
   getPackageConfig(): TypePackConfig {
     const pkgNode = super
       .getChildrenFirstElementNode()
-      .getChildrenFirstNodeByTagname(ELEMENT_TAG.PackConfig);
+      .getChildrenFirstNodeByTagname(ELEMENT_TAG.PackageConfig);
     const items: TypePackConfig["items"] = pkgNode
       .getChildrenNodesByTagname(ELEMENT_TAG.Item)
       .map(item => ({

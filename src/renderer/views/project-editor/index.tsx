@@ -12,7 +12,7 @@ import PathUtil from "src/common/utils/PathUtil";
 
 import EditorToolsBar from "./components/ToolsBar";
 import ResourcePanel from "./components/ResourcePanel";
-import StatusBar from "./components/StatusBar";
+import StatusBar from "./components/StatusBar/index";
 
 import { panelToggleState, projectDataState } from "./store/rescoil/state";
 
@@ -155,7 +155,7 @@ const EditorFrame: React.FC = () => {
           </div>
         </div>
       </div>
-      {/* 底部工具栏 */}
+      {/* 状态栏 */}
       <div className="editor--status-bar">
         <StatusBar />
       </div>

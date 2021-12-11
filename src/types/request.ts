@@ -22,14 +22,6 @@ export type TypeResponseFrame<S, F = string> =
 
 export type TypeGetCanceler = (c: Canceler) => void;
 
-// 写入 xml 模板参数
-export type TypeWriteXmlTempPayload = {
-  src: string;
-  tag: string;
-  attributes: [string, string][];
-  value: string;
-};
-
 // // 获取模板中 name 的值
 // export type TypeGetValueByNamePayload = {
 //   name: string;

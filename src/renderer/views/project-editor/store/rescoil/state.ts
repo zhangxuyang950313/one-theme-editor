@@ -37,3 +37,12 @@ export const selectDataState = atom({
     pageSelected: PageConfig.default
   }
 });
+
+// 打包进度管理
+export const packProgressState = atom({
+  key: keys.progress,
+  default: {
+    progress: -1,
+    message: ""
+  }
+});

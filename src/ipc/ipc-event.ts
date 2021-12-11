@@ -1,7 +1,7 @@
 enum IPC_EVENT {
   $getPID = "$getPid",
 
-  // 响应书数据变化
+  // 响应数据变化
   $reactiveSet = "$reactiveSet",
 
   // 配置
@@ -19,10 +19,15 @@ enum IPC_EVENT {
   $getProjectList = "$getProjectList",
   $getProject = "$getProject",
   $updateProjectInfo = "$updateProjectInfo",
+  $compact9patch = "$compact9patch",
+  $compact9patchBatch = "$compact9patchBatch",
   $applyProject = "$applyProject",
   $packProject = "$packProject",
+  $exportProject = "$exportProject",
   $unpackProject = "$unpackProject",
   $patchPreview = "$patchPreview",
+
+  $getDeviceList = "$getDeviceList",
 
   // 窗口管理
   $openProjectEditor = "$openProjectEditor",
@@ -40,7 +45,10 @@ enum IPC_EVENT {
   $deleteFile = "$deleteFile",
   $writeXmlTemplate = "$writeXmlTemplate",
   $getFileData = "$getFileData",
-  $getFileDataSync = "$getFileDataSync"
+  $getFileDataSync = "$getFileDataSync",
+
+  // shell
+  $shell = "$shell"
 }
 
 export default IPC_EVENT;

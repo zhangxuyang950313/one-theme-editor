@@ -6,9 +6,7 @@ import path from "path";
 import React, { useRef } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import styled from "styled-components";
-import { TOOLS_BAR_BUTTON } from "src/common/enums";
-
-import { Notification } from "@arco-design/web-react";
+import { useToggle } from "ahooks";
 import {
   IconExport,
   IconEye,
@@ -18,10 +16,13 @@ import {
   IconMindMapping,
   IconMobile
 } from "@arco-design/web-react/icon";
+import { TOOLS_BAR_BUTTON } from "src/common/enums";
 
-import { useToggle } from "ahooks";
+import { dialog } from "@electron/remote";
 
 import { panelToggleState, projectDataState } from "../store/rescoil/state";
+import useApplyProject from "../hooks/useApplyProject";
+import useExportProject from "../hooks/useExportProject";
 
 import ProjectInfoDrawer from "./ProjectInfoDrawer";
 
@@ -29,9 +30,13 @@ import IconButton from "@/components/one-ui/IconButton";
 
 const ToolsBar: React.FC = () => {
   const [panelToggle, setPanelToggle] = useRecoilState(panelToggleState);
-  const { projectData, scenarioConfig } = useRecoilValue(projectDataState);
   const [modifyInfoVisible, modifyInfoToggle] = useToggle(false);
+  const { projectData, scenarioConfig } = useRecoilValue(projectDataState);
   const toolsBarRef = useRef<HTMLDivElement>(null);
+  const handleExport = useExportProject();
+  const handleApply = useApplyProject(progress => {
+    console.log("应用进度", { progress });
+  });
 
   const toggleModuleSelector = () => {
     setPanelToggle(state => ({
@@ -83,36 +88,28 @@ const ToolsBar: React.FC = () => {
           className="item"
           name={TOOLS_BAR_BUTTON.APPLY}
           icon={<IconMobile />}
-          onClick={toggleModuleSelector}
+          onClick={async () => {
+            // 先打包后应用
+            const filepath = await handleExport();
+            console.log(filepath);
+            handleApply({
+              deviceId: "e77d6aba",
+              packagedFile: filepath
+            });
+          }}
         />
         <IconButton
           className="item"
           name={TOOLS_BAR_BUTTON.EXPORT}
           icon={<IconExport />}
           onClick={() => {
-            Notification.info({
-              id: "pack-process",
-              title: "打包中...",
-              content: ""
+            const filename = `${projectData.description.name}.${scenarioConfig.packageConfig.extname}`;
+            const filepath = dialog.showSaveDialogSync({
+              title: "导出",
+              defaultPath: path.join(path.dirname(projectData.root), filename)
             });
-            window.$one.$server.packProject(
-              {
-                packConfig: scenarioConfig.packageConfig,
-                packDir: projectData.root,
-                outputFile: path.join(
-                  projectData.root,
-                  `../${projectData.description.name}.${scenarioConfig.packageConfig.extname}`
-                )
-              },
-              data => {
-                Notification.info({
-                  id: "pack-process",
-                  title: "打包中...",
-                  content: data.msg
-                });
-                console.log(data);
-              }
-            );
+            if (!filepath) return;
+            handleExport(filepath);
           }}
         />
         <IconButton

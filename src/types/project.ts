@@ -1,4 +1,4 @@
-import { TypePackConfig } from "./config.scenario";
+import { TypeApplyConfig, TypePackConfig } from "./config.scenario";
 import { TypeDatabase } from "./utils";
 
 // 版本信息
@@ -35,19 +35,10 @@ export type TypeProjectData = TypeCreateProjectPayload & {
 export type TypeProjectDataDoc = TypeDatabase<TypeProjectData>;
 
 // 打包过程返回信息
-export type TypePackProcess = {
+export type TypeProgressData<T = any> = {
+  code: -1 | 0 | 1;
   msg: string;
-  data: any;
+  data: T;
 };
 
-export type TypePackPayload = {
-  packConfig: TypePackConfig;
-  packDir: string;
-  outputFile: string;
-};
-
-export type TypeUnpackPayload = {
-  packConfig: TypePackConfig;
-  unpackFile: string;
-  outputDir: string;
-};
+export type TypeProgressFn = (x: TypeProgressData) => void;

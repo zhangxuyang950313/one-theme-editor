@@ -1,4 +1,4 @@
-import { ipcMain, ipcRenderer } from "electron";
+import { ipcMain, ipcRenderer, IpcRendererEvent } from "electron";
 import LogUtil from "src/common/utils/LogUtil";
 
 import IPC_EVENT from "./ipc-event";
@@ -140,7 +140,13 @@ export default class ipcCreator {
     };
   }
 
-  // 创建回调 ipc 调用，用于多频次回调
+  /**
+   * 创建回调 ipc 调用，用于多频次回调
+   * TODO: 解决多次调用多次注册 bug，后再去掉 deprecated
+   * @deprecated
+   * @param option
+   * @returns
+   */
   protected createIpcCallback<Params, CP>(option: {
     event: IPC_EVENT;
     server: (p: Params, cb: (cp: CP) => void) => void;
@@ -153,12 +159,11 @@ export default class ipcCreator {
       });
     });
     return (params: Params, callback: (x: CP) => void) => {
-      const start = process.uptime();
-      ipcRenderer.on(option.event, ($event, $data) => {
+      LogUtil.ipc("call", `${option.event}`);
+      console.log("→", params);
+      ipcRenderer.on(option.event, ($event: IpcRendererEvent, $data: CP) => {
         // if (isDev) {
-        const time = (process.uptime() - start) * 1000;
-        LogUtil.ipc("callback", `${option.event}(${time.toFixed(5)}ms)`);
-        console.log("→", params);
+        LogUtil.ipc("back", `${option.event}`);
         console.log("←", $data);
         // }
         callback($data);

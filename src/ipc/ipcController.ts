@@ -1,7 +1,11 @@
 import path from "path";
 
+import ChildProcess from "child_process";
+
 import fse from "fs-extra";
 import { ipcMain, ipcRenderer } from "electron";
+import Adb, { Device } from "@devicefarmer/adbkit";
+
 import PageConfigCompiler from "src/common/classes/PageConfigCompiler";
 import ResourceConfigCompiler from "src/common/classes/ResourceConfigCompiler";
 import ScenarioConfigCompiler from "src/common/classes/ScenarioConfigCompiler";
@@ -9,20 +13,25 @@ import ScenarioOptionCompiler from "src/common/classes/ScenarioOptionCompiler";
 import ERR_CODE from "src/common/enums/ErrorCode";
 import {
   TypeCreateProjectPayload,
-  TypePackPayload,
-  TypePackProcess,
-  TypeProjectDataDoc,
-  TypeUnpackPayload
+  TypeProgressData,
+  TypeProjectDataDoc
 } from "src/types/project";
+import {
+  TypePackPayload,
+  TypeUnpackPayload,
+  TypeCompact9patchPayload,
+  TypeExportPayload,
+  TypeCopyPayload,
+  TypeWriteXmlTempPayload
+} from "src/types/ipc";
 import { TypePageConfig, TypeResourceConfig } from "src/types/config.resource";
 import {
   TypeScenarioConfig,
   TypeScenarioOption
 } from "src/types/config.scenario";
-import { TypeWriteXmlTempPayload } from "src/types/request";
-import XmlTemplateUtil from "src/common/utils/XmlTemplateUtil";
 import { TypeFileData } from "src/types/file-data";
-import PackageUtil from "src/common/utils/PackageUtil";
+import PackageUtil, { PackUtil } from "src/common/utils/PackageUtil";
+import XmlTemplateUtil from "src/common/utils/XmlTemplateUtil";
 import PathUtil from "src/common/utils/PathUtil";
 import {
   chunkCreateWindow,
@@ -33,11 +42,15 @@ import {
 import { TypeWatchedRecord } from "src/common/classes/DirWatcher";
 import { fileDataCache } from "src/main/singletons/fileCache";
 
+import { compactNinePatch } from "src/common/utils/NinePatchUtil";
+
 import IPC_EVENT from "./ipc-event";
 import ipcCreator from "./IpcCreator";
 
 if (ipcRenderer) ipcRenderer.setMaxListeners(9999);
 if (ipcMain) ipcMain.setMaxListeners(9999);
+
+const adbClient = Adb.createClient();
 
 class IpcController extends ipcCreator {
   // 获取进程 id
@@ -182,25 +195,25 @@ class IpcController extends ipcCreator {
     }
   });
 
-  // 拷贝文件
-  copyFile = this.createIpcAsync<{ from: string; to: string }, void>({
+  // 拷贝文件/文件夹
+  copyFile = this.createIpcAsync<TypeCopyPayload, void>({
     event: IPC_EVENT.$copyFile,
-    server: ({ from, to }) => {
+    server: ({ from, to, options }) => {
       if (!fse.existsSync(from)) {
         throw new Error(ERR_CODE[4003]);
       }
-      return fse.copy(from, to);
+      return fse.copy(from, to, options);
     }
   });
 
-  // 删除文件
+  // 删除文件/文件夹
   deleteFile = this.createIpcAsync<string, void>({
     event: IPC_EVENT.$deleteFile,
     server: file => {
       if (!fse.existsSync(file)) {
         throw new Error(ERR_CODE[4003]);
       }
-      return fse.unlink(file);
+      return fse.remove(file);
     }
   });
 
@@ -226,29 +239,81 @@ class IpcController extends ipcCreator {
     server: file => fileDataCache.get(file)
   });
 
-  // 打包并导出
-  packProject = this.createIpcCallback<TypePackPayload, TypePackProcess>({
-    event: IPC_EVENT.$packProject,
-    server: (params, callback) => {
-      PackageUtil.pack(params, callback);
-    }
-  });
-
   // 解包
-  unpackProject = this.createIpcCallback<TypeUnpackPayload, TypePackProcess>({
+  unpackProject = this.createIpcCallback<TypeUnpackPayload, TypeProgressData>({
     event: IPC_EVENT.$unpackProject,
     server: (params, callback) => {
       PackageUtil.unpack(params, callback);
     }
   });
 
-  // // 应用
-  // apply = this.createIpcCallback({
-  //   event: IPC_EVENT.$apply,
-  //   server: () => {
-  //     //
-  //   }
-  // })
+  // 批量处理 .9 信息
+  compact9patchBatch = this.createIpcAsync<TypeCompact9patchPayload, string>({
+    event: IPC_EVENT.$compact9patchBatch,
+    server: async data => {
+      let to = data.to;
+      if (!to) {
+        // 临时目录
+        to = path.join(PathUtil.PACK_TEMPORARY, path.basename(data.from));
+      }
+      // 若目录存在则删掉
+      if (fse.existsSync(to)) {
+        fse.removeSync(to);
+      }
+      await compactNinePatch(data.from, to);
+      return to;
+    }
+  });
+
+  // 打包工程，返回 buffer
+  packProject = this.createIpcAsync<TypePackPayload, Buffer>({
+    event: IPC_EVENT.$packProject,
+    server: data => {
+      return PackUtil.zipByRules(
+        data.packDir,
+        data.packConfig.items,
+        data.packConfig.excludes
+      );
+    }
+  });
+
+  // 导出工程，打包并输出到文件
+  exportProject = this.createIpcAsync<TypeExportPayload, string>({
+    event: IPC_EVENT.$exportProject,
+    server: async data => {
+      const buffer = await PackUtil.zipByRules(
+        data.packDir,
+        data.packConfig.items,
+        data.packConfig.excludes
+      );
+      // 确保输出目录存在
+      fse.ensureDirSync(path.dirname(data.outputFile));
+      // 写入文件
+      fse.outputFileSync(data.outputFile, buffer);
+      return data.outputFile;
+    }
+  });
+
+  // 获取设备列表
+  getDeviceList = this.createIpcAsync<void, Device[]>({
+    event: IPC_EVENT.$getDeviceList,
+    server: () => adbClient.listDevices()
+  });
+
+  // 运行 shell 脚本
+  shellExec = this.createIpcAsync<string, string>({
+    event: IPC_EVENT.$shell,
+    server: async command => {
+      return new Promise((resolve, reject) => {
+        ChildProcess.exec(command, (error, stdout, stderr) => {
+          if (error || stderr) {
+            reject(error || stderr);
+          }
+          resolve(stdout.toString());
+        });
+      });
+    }
+  });
 }
 
 export default Object.freeze(new IpcController());

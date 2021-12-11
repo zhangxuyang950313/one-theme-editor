@@ -4,7 +4,7 @@ import fse from "fs-extra";
 import PathUtil from "src/common/utils/PathUtil";
 import XmlCompiler from "src/common/classes/XmlCompiler";
 import XMLNodeElement from "src/common/classes/XMLNodeElement";
-import { TypeWriteXmlTempPayload } from "src/types/request";
+import { TypeWriteXmlTempPayload } from "src/types/ipc";
 
 import reactiveState from "../singletons/reactiveState";
 

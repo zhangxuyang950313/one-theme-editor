@@ -18,7 +18,7 @@ export enum ELEMENT_TAG {
   Image = "Image",
   Text = "Text",
   // 打包配置
-  PackConfig = "PackConfig",
+  PackageConfig = "PackageConfig",
   Item = "Item",
   // 应用配置
   ApplyConfig = "ApplyConfig",

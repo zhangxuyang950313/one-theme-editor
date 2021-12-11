@@ -1,7 +1,8 @@
 enum keys {
   panelToggle = "panelToggle",
   projectData = "projectData",
-  selectData = "selectData"
+  selectData = "selectData",
+  progress = "progress"
 }
 
 export default keys;

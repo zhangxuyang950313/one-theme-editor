@@ -35,7 +35,7 @@
         extname:        打包后扩展名 (默认 zip)
         execute9patch:  处理.9信息 (默认 true)
     -->
-    <PackConfig extname="mtz" execute9patch="true">
+    <PackageConfig extname="mtz" execute9patch="true">
         <!-- 
             匹配不打包的规则 
             regex:      正则表达式
@@ -55,21 +55,22 @@
         <Item type="pack" pattern="miwallpaper/**"/>
         <Item type="dir"  pattern="wallpaper/**"/>
         <Item type="file" pattern="description.xml"/>
-    </PackConfig>
+    </PackageConfig>
 
     <!-- 应用配置 -->
     <ApplyConfig>
         <!-- 
             编辑器打包时包含环境变量：
-            packaged:  本地打包后的文件路径(固定写法，用于编辑器指定)
+            packaged_path:      本地打包后的文件路径(固定写法，用于编辑器指定)
+            select_device_id:   当前选择应用的设备 id
         -->
         <Step 
             description="推送到手机..." 
-            cmd="adb push ${packaged} /sdcard/mi-theme.mtz"
+            cmd="${adb_path} -s ${select_device_id} push ${packaged_path} /sdcard/mi-theme.mtz"
         />
         <Step 
             description="应用到主题..." 
-            cmd="adb shell am start -n com.android.thememanager/com.android.thememanager.ApplyThemeForScreenshot -e theme_file_path /sdcard/mi-theme.mtz -e api_called_from OneThemeEditor"
+            cmd="${adb_path} -s ${select_device_id} shell am start -n com.android.thememanager/com.android.thememanager.ApplyThemeForScreenshot -e theme_file_path /sdcard/mi-theme.mtz -e api_called_from OneThemeEditor"
         />
     </ApplyConfig>
 </Configuration>
