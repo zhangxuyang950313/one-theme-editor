@@ -72,15 +72,13 @@ export default class ScenarioConfigCompiler extends XmlCompilerExtra {
     const pkgNode = super
       .getChildrenFirstElementNode()
       .getChildrenFirstNodeByTagname(ELEMENT_TAG.PackageConfig);
-    const items: TypePackConfig["items"] = pkgNode
-      .getChildrenNodesByTagname(ELEMENT_TAG.Item)
+    const steps: TypePackConfig["steps"] = pkgNode
+      .getChildrenNodesByTagname(ELEMENT_TAG.Step)
       .map(item => ({
         type: item.getAttributeOf<PACK_TYPE>("type"),
+        dir: item.getAttributeOf("dir"),
         // 匹配模式
-        pattern: item.getAttributeOf("pattern"),
-        // TODO 若没定义 name 正则取 path root
-        // TODO 忘了这是干嘛的，留着以后想
-        name: item.getAttributeOf("name")
+        pattern: item.getAttributeOf("pattern")
       }));
     const excludes: TypePackConfig["excludes"] = pkgNode
       .getChildrenNodesByTagname(ELEMENT_TAG.Exclude)
@@ -89,13 +87,11 @@ export default class ScenarioConfigCompiler extends XmlCompilerExtra {
         pattern: item.getAttributeOf("pattern")
       }));
     const extname = pkgNode.getAttributeOf("extname", "zip");
-    const format = pkgNode.getAttributeOf("format", "zip");
     const exec9pt = pkgNode.getAttributeOf("execute9patch", "true") === "true";
     return new PackageConfig()
-      .set("items", items)
+      .set("steps", steps)
       .set("excludes", excludes)
       .set("extname", extname)
-      .set("format", format)
       .set("execute9patch", exec9pt)
       .create();
   }

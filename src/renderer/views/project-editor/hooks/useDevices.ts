@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useTimeout, useToggle } from "ahooks";
 import { Device } from "@devicefarmer/adbkit";
+import { message } from "antd";
 
 export default function useDevices(): {
   fetchDeviceList: () => Promise<Device[]>;
@@ -17,9 +18,14 @@ export default function useDevices(): {
 
   const fetchDeviceList = async () => {
     setFetching.setRight();
-    const list = await window.$one.$server.getDeviceList();
-    setDeviceList(list);
-    return list;
+    try {
+      const list = await window.$one.$server.getDeviceList();
+      setDeviceList(list);
+      return list;
+    } catch (err: any) {
+      message.error(err.message);
+      return [];
+    }
   };
 
   return {

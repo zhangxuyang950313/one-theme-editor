@@ -1,4 +1,3 @@
-import { TypeApplyConfig, TypePackConfig } from "./config.scenario";
 import { TypeDatabase } from "./utils";
 
 // 版本信息

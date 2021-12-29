@@ -43,18 +43,18 @@
         -->
         <Exclude regex="^\..+" pattern=".DS_Store"/>
         <!-- 
-            type: dir | pack | file     打包文件类型标识，dir 目录，pack 压缩，file 文件
-            pattern:                    匹配模式
+            打包步骤
+            type:  pack | copy     打包文件类型标识， pack 打包，copy 复制
+            dir:                   内联打包目录
+            pattern:               匹配模式
         -->
-        <Item type="dir"  pattern="boots/**"/>
-        <Item type="pack" pattern="clock_2x4/**"/>
-        <Item type="pack" pattern="com.*/**"/>
-        <Item type="pack" pattern="framework.*/**"/>
-        <Item type="pack" pattern="icons/**"/>
-        <Item type="pack" pattern="lockscreen/**"/>
-        <Item type="pack" pattern="miwallpaper/**"/>
-        <Item type="dir"  pattern="wallpaper/**"/>
-        <Item type="file" pattern="description.xml"/>
+        <Step type="pack" dir="clock_2x4"/>
+        <Step type="pack" dir="com.*"/>
+        <Step type="pack" dir="icons"/>
+        <Step type="pack" dir="framework*"/>
+        <Step type="pack" dir="lockscreen"/>
+        <Step type="copy" dir="wallpaper"/>
+        <Step type="copy" dir="." pattern="*.xml"/>
     </PackageConfig>
 
     <!-- 应用配置 -->
@@ -66,7 +66,7 @@
         -->
         <Step 
             description="推送到手机..." 
-            cmd="${adb_path} -s ${select_device_id} push ${packaged_path} /sdcard/mi-theme.mtz"
+            cmd="{{adb_path}} -s {{select_device_id}} push ${packaged_path} /sdcard/mi-theme.mtz"
         />
         <Step 
             description="应用到主题..." 

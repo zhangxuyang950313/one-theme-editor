@@ -1,5 +1,7 @@
 import path from "path";
 
+import { message } from "antd";
+
 import { useRecoilValue } from "recoil";
 
 import { projectDataState } from "../store/rescoil/state";
@@ -24,12 +26,16 @@ export default function useExportProject(): (
   const { packageConfig } = scenarioConfig;
 
   // 默认路径由 工程根路径的父级 + 工程名称 . 扩展名 组成
-  const defPath = path.join(
+  const defaultPath = path.join(
     path.dirname(projectData.root),
     `${projectData.description.name}.${packageConfig.extname}`
   );
 
   return async (targetPath?: string) => {
+    if (packageConfig.steps.length === 0) {
+      message.warning("打包步骤为空，请确认");
+    }
+
     console.time("导出总耗时");
     // 默认打包目录为项目根目录
     // 若处理 .9，则 .9 文件会移动到新的临时目录
@@ -52,10 +58,10 @@ export default function useExportProject(): (
       console.timeEnd("拷贝剩余文件耗时");
     }
     // 导出到文件
-    const outputFile = targetPath || defPath;
+    const outputFile = targetPath || defaultPath;
     console.time("压缩耗时");
     await window.$one.$server.exportProject({
-      packConfig: scenarioConfig.packageConfig,
+      packConfig: packageConfig,
       packDir,
       outputFile
     });

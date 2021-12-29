@@ -25,9 +25,8 @@ export class FileTemplate extends AbstractDataModel<TypeFileTempConfig> {
 export class PackageConfig extends AbstractDataModel<TypePackConfig> {
   protected data: TypePackConfig = {
     extname: "",
-    format: "zip",
     execute9patch: true,
-    items: [],
+    steps: [],
     excludes: []
   };
   static get default(): TypePackConfig {

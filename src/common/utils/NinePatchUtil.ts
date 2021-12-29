@@ -14,42 +14,48 @@ type TypeNinePatchData = {
   xDivs: number[];
   yDivs: number[];
 };
-export default class NinePatchUtil {
-  private readonly PNG_RANGE: TypeRange = [0, 8];
-  private readonly PNG_IDENTIFIER = Buffer.from([
+export class NinePatch {
+  private static readonly PNG_RANGE: TypeRange = [0, 8];
+  // PNG 标识
+  private static readonly PNG_IDENTIFIER = Buffer.from([
     0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a
-  ]); // PNG 标识
-  private readonly npTc_RANGE: TypeRange = [73, 77]; // npTc 区间
-  private readonly npOl_RANGE: TypeRange = [37, 41]; // npOl 区间
-  private readonly npTc_IDENTIFIER = Buffer.from([0x6e, 0x70, 0x54, 0x63]); // npTc 标识
-  private readonly npOl_IDENTIFIER = Buffer.from([0x6e, 0x70, 0x4f, 0x6c]); // npOl 标识
-  private readonly IHDR_OFFSET = 8; // IHDR 起点
-  private readonly IHDR_LENGTH = 8; // IHDR 总长度
-  private readonly IHDR_RANGE: TypeRange = [12, 16]; // IHDR 标识区间
-  private readonly IHDR_IDENTIFIER = Buffer.from([0x49, 0x48, 0x44, 0x52]); // IHDR 标识
-  private readonly IHDR_LENGTH_RANGE: TypeRange = [8, 12]; // IHDR 数据长度数据区间
-  private readonly IHDR_WIDTH_RANGE: TypeRange = [16, 20]; // IHDR 图片宽度数据区间
-  private readonly IHDR_HEIGHT_RANGE: TypeRange = [20, 24]; // IHDR 图片高度数据区间
-  private readonly IHDR_DEPTH_INDEX = 24;
-  private readonly IHDR_COLOR_TYPE_INDEX = 25;
-  private readonly IHDR_COMPRESSION_INDEX = 26;
-  private readonly IHDR_FILTER_INDEX = 27;
-  private readonly IHDR_INTERLACE_INDEX = 28;
-  private readonly X_DIVS_INDEX = 78;
-  private readonly Y_DIVS_INDEX = 79;
-  private readonly X_DIVS_OFFSET = 109;
-  private readonly PAD_LEFT_RANG: TypeRange = [89, 93];
-  private readonly PAD_RIGHT_RANG: TypeRange = [93, 97];
-  private readonly PAD_TOP_RANG: TypeRange = [97, 101];
-  private readonly PAD_BOTTOM_RANG: TypeRange = [101, 105];
+  ]);
+  private static readonly npTc_RANGE: TypeRange = [73, 77]; // npTc 区间
+  private static readonly npOl_RANGE: TypeRange = [37, 41]; // npOl 区间
+  // npTc 标识
+  private static readonly npTc_IDENTIFIER = Buffer.from([
+    0x6e, 0x70, 0x54, 0x63
+  ]);
+  // npOl 标识
+  private static readonly npOl_IDENTIFIER = Buffer.from([
+    0x6e, 0x70, 0x4f, 0x6c
+  ]);
+  private static readonly IHDR_OFFSET = 8; // IHDR 起点
+  private static readonly IHDR_LENGTH = 8; // IHDR 总长度
+  private static readonly IHDR_RANGE: TypeRange = [12, 16]; // IHDR 标识区间
+  // IHDR 标识
+  private static readonly IHDR_IDENTIFIER = Buffer.from([
+    0x49, 0x48, 0x44, 0x52
+  ]);
+  private static readonly IHDR_LENGTH_RANGE: TypeRange = [8, 12]; // IHDR 数据长度数据区间
+  private static readonly IHDR_WIDTH_RANGE: TypeRange = [16, 20]; // IHDR 图片宽度数据区间
+  private static readonly IHDR_HEIGHT_RANGE: TypeRange = [20, 24]; // IHDR 图片高度数据区间
+  private static readonly IHDR_DEPTH_INDEX = 24;
+  private static readonly IHDR_COLOR_TYPE_INDEX = 25;
+  private static readonly IHDR_COMPRESSION_INDEX = 26;
+  private static readonly IHDR_FILTER_INDEX = 27;
+  private static readonly IHDR_INTERLACE_INDEX = 28;
+  private static readonly X_DIVS_INDEX = 78;
+  private static readonly Y_DIVS_INDEX = 79;
+  private static readonly X_DIVS_OFFSET = 109;
+  private static readonly PAD_LEFT_RANG: TypeRange = [89, 93];
+  private static readonly PAD_RIGHT_RANG: TypeRange = [93, 97];
+  private static readonly PAD_TOP_RANG: TypeRange = [97, 101];
+  private static readonly PAD_BOTTOM_RANG: TypeRange = [101, 105];
   private readonly buff: Buffer;
 
   constructor(buff: Buffer) {
     this.buff = buff;
-  }
-
-  static isNinePatch(buff: Buffer): boolean {
-    return new NinePatchUtil(buff).isNinePatch();
   }
 
   // 读取 buff 区间
@@ -74,20 +80,32 @@ export default class NinePatchUtil {
 
   // 从 buffer 文件签名检测是否是 png
   isPNG(): boolean {
-    console.log(this.readBuffByRange(this.PNG_RANGE), this.PNG_IDENTIFIER);
-    return this.readBuffByRange(this.PNG_RANGE).equals(this.PNG_IDENTIFIER);
+    // console.log(
+    //   this.readBuffByRange(NinePatch.PNG_RANGE),
+    //   NinePatch.PNG_IDENTIFIER
+    // );
+    return this.readBuffByRange(NinePatch.PNG_RANGE).equals(
+      NinePatch.PNG_IDENTIFIER
+    );
   }
 
   // 检测是否包含 .9 图必要数据块 npTc && npOl
   isNinePatch(): boolean {
+    const {
+      npTc_RANGE, //
+      npOl_RANGE,
+      npTc_IDENTIFIER,
+      npOl_IDENTIFIER
+    } = NinePatch;
     return (
-      this.readBuffByRange(this.npTc_RANGE).equals(this.npTc_IDENTIFIER) &&
-      this.readBuffByRange(this.npOl_RANGE).equals(this.npOl_IDENTIFIER)
+      this.readBuffByRange(npTc_RANGE).equals(npTc_IDENTIFIER) &&
+      this.readBuffByRange(npOl_RANGE).equals(npOl_IDENTIFIER)
     );
   }
 
   hasIHDR(): boolean {
-    return this.readBuffByRange(this.IHDR_RANGE).equals(this.IHDR_IDENTIFIER);
+    const { IHDR_RANGE, IHDR_IDENTIFIER } = NinePatch;
+    return this.readBuffByRange(IHDR_RANGE).equals(IHDR_IDENTIFIER);
   }
 
   getSize(): { width: number; height: number } {
@@ -105,14 +123,14 @@ export default class NinePatchUtil {
 
     // IHDR DATA
     const IHDR_DATA = {
-      bytLength: this.readInt(this.IHDR_LENGTH_RANGE[0]),
-      width: this.readInt(this.IHDR_WIDTH_RANGE[0]),
-      height: this.readInt(this.IHDR_HEIGHT_RANGE[0]),
+      bytLength: this.readInt(NinePatch.IHDR_LENGTH_RANGE[0]),
+      width: this.readInt(NinePatch.IHDR_WIDTH_RANGE[0]),
+      height: this.readInt(NinePatch.IHDR_HEIGHT_RANGE[0]),
       /**
        * depth （通道深度）代表每个色彩通道用几位数据表示。
        * 一张 PNG 图片是由像素组成的，每个像素由色彩通道组成，每个色彩通道又是由位来组成。
        */
-      depth: this.readByte(this.IHDR_DEPTH_INDEX),
+      depth: this.readByte(NinePatch.IHDR_DEPTH_INDEX),
       /**
        * colorType（色彩类型）PNG 图片一共有 5 种色彩类型
        * 0 代表灰度颜色
@@ -121,21 +139,21 @@ export default class NinePatchUtil {
        * 4 代表灰度和透明度来表示颜色
        * 6 代表用 RGB 和透明度表示颜色，即 (R, G, B, A)。色板的色彩类型里，每个像素是由 1 个色彩通道表示的。
        */
-      colorType: this.readByte(this.IHDR_COLOR_TYPE_INDEX),
+      colorType: this.readByte(NinePatch.IHDR_COLOR_TYPE_INDEX),
       /**
        * compression 代表了压缩算法。
        * 目前只支持 0，表示 deflate/inflate。Deflate/inflate
        * 是一种结合了 LZ77 和霍夫曼编码的无损压缩算法，被广泛运用于 7-zip，zlib，gzip 等场景。
        */
-      compression: this.readByte(this.IHDR_COMPRESSION_INDEX),
+      compression: this.readByte(NinePatch.IHDR_COMPRESSION_INDEX),
       /**
        * filter 代表在压缩前应用的过滤函数类型，目前只支持 0。过滤函数类型 0 里面包括了 5 种过滤函数。
        */
-      filter: this.readByte(this.IHDR_FILTER_INDEX),
+      filter: this.readByte(NinePatch.IHDR_FILTER_INDEX),
       /**
        * interlace 代表图片数据是否经过交错，0 代表没有交错，1 代表交错。
        */
-      interlace: this.readByte(this.IHDR_INTERLACE_INDEX)
+      interlace: this.readByte(NinePatch.IHDR_INTERLACE_INDEX)
     };
     // console.log(4, { IHDR_DATA });
     return {
@@ -144,6 +162,10 @@ export default class NinePatchUtil {
     };
   }
 
+  /**
+   * 解码 .9 信息
+   * @returns
+   */
   decode(): TypeNinePatchData {
     if (!this.isPNG()) {
       throw new Error("buffer is not a png.");
@@ -152,19 +174,19 @@ export default class NinePatchUtil {
       throw new Error("buffer is not a nine patch");
     }
 
-    const xDivCount = this.readByte(this.X_DIVS_INDEX);
-    const yDivCount = this.readByte(this.Y_DIVS_INDEX);
-    const Y_DIVS_OFFSET = this.X_DIVS_OFFSET + xDivCount * 4;
+    const xDivCount = this.readByte(NinePatch.X_DIVS_INDEX);
+    const yDivCount = this.readByte(NinePatch.Y_DIVS_INDEX);
+    const Y_DIVS_OFFSET = NinePatch.X_DIVS_OFFSET + xDivCount * 4;
     const NINE_PATCH_DATA: TypeNinePatchData = {
-      padLeft: this.readInt(this.PAD_LEFT_RANG[0]),
-      padRight: this.readInt(this.PAD_RIGHT_RANG[0]),
-      padTop: this.readInt(this.PAD_TOP_RANG[0]),
-      padBottom: this.readInt(this.PAD_BOTTOM_RANG[0]),
+      padLeft: this.readInt(NinePatch.PAD_LEFT_RANG[0]),
+      padRight: this.readInt(NinePatch.PAD_RIGHT_RANG[0]),
+      padTop: this.readInt(NinePatch.PAD_TOP_RANG[0]),
+      padBottom: this.readInt(NinePatch.PAD_BOTTOM_RANG[0]),
       xDivs: [],
       yDivs: []
     };
     for (let i = 0; i < xDivCount; i++) {
-      NINE_PATCH_DATA.xDivs.push(this.readInt(this.X_DIVS_OFFSET + i * 4));
+      NINE_PATCH_DATA.xDivs.push(this.readInt(NinePatch.X_DIVS_OFFSET + i * 4));
     }
     for (let i = 0; i < yDivCount; i++) {
       NINE_PATCH_DATA.yDivs.push(this.readInt(Y_DIVS_OFFSET + i * 4));
@@ -173,6 +195,7 @@ export default class NinePatchUtil {
   }
 
   /**
+   * 编码 .9 信息
    * @deprecated 暂未实现
    * @param ninePatch
    * @returns
@@ -183,31 +206,57 @@ export default class NinePatchUtil {
   }
 }
 
-export async function compactNinePatch(
-  fromDir: string,
-  toDir: string
-): Promise<void> {
-  const { AAPT_TOOL } = PathUtil;
-  if (!AAPT_TOOL) {
-    throw new Error(`未知系统类型：${os.type()}`);
+export default class NinePatchUtil {
+  // 检测 ninePatch 数据块
+  static isNinePatch(buff: Buffer): boolean {
+    return new NinePatch(buff).isNinePatch();
   }
-  // TODO 目前是粗暴按照文件目录分配进程数，可优化按照实际资源平均分配
-  const dirs = fse.readdirSync(fromDir);
-  const task = dirs.map(targetDir => {
-    console.log("开启一个进程处理: ", targetDir);
-    return new Promise<void>((resolve, reject) => {
-      const from = path.join(fromDir, targetDir);
-      const to = path.join(toDir, targetDir);
+
+  // 编码 .9
+  static async encodeNinePatch(from: string, to: string): Promise<void> {
+    const { AAPT_TOOL } = PathUtil;
+    if (!AAPT_TOOL) {
+      throw new Error(`未知系统类型：${os.type()}`);
+    }
+    return new Promise<void>(async (resolve, reject) => {
       childProcess.execFile(
         AAPT_TOOL,
-        ["c", "-S", from, "-C", to],
+        ["s", "-i", from, "-o", to],
         (err, stdout, stderr) => {
           if (err) reject(err);
-          console.log("进程处理完毕", targetDir);
           resolve();
         }
       );
     });
-  });
-  await Promise.all(task);
+  }
+
+  // 批量编码 .9
+  static async encodeNinePatchBatch(
+    fromDir: string,
+    toDir: string
+  ): Promise<void> {
+    const { AAPT_TOOL } = PathUtil;
+    if (!AAPT_TOOL) {
+      throw new Error(`未知系统类型：${os.type()}`);
+    }
+    // TODO 目前是粗暴按照文件目录分配进程数，可优化按照实际资源平均分配
+    const dirs = fse.readdirSync(fromDir);
+    const task = dirs.map(targetDir => {
+      console.log("开启一个进程处理: ", targetDir);
+      return new Promise<void>(async (resolve, reject) => {
+        const from = path.join(fromDir, targetDir);
+        const to = path.join(toDir, targetDir);
+        childProcess.execFile(
+          AAPT_TOOL,
+          ["c", "-S", from, "-C", to],
+          (err, stdout, stderr) => {
+            if (err) reject(err);
+            console.log("进程处理完毕", targetDir);
+            resolve();
+          }
+        );
+      });
+    });
+    await Promise.all(task);
+  }
 }

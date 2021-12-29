@@ -117,9 +117,8 @@ export enum FILE_EVENT {
 
 // 打包方式类型
 export enum PACK_TYPE {
-  DIR = "dir",
-  PACK = "pack",
-  FILE = "file"
+  COPY = "copy",
+  PACK = "pack"
 }
 
 // 扩展数据字段

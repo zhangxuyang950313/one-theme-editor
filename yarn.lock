@@ -1368,6 +1368,13 @@
   resolved "https://registry.npmmirror.com/@tootallnate/once/download/@tootallnate/once-1.1.2.tgz?cache=0&sync_timestamp=1632734062895&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2F%40tootallnate%2Fonce%2Fdownload%2F%40tootallnate%2Fonce-1.1.2.tgz#ccb91445360179a04e7fe6aff78c00ffc1eeaf82"
   integrity sha1-zLkURTYBeaBOf+av94wA/8Hur4I=
 
+"@types/adm-zip@^0.4.34":
+  version "0.4.34"
+  resolved "https://registry.npmmirror.com/@types/adm-zip/download/@types/adm-zip-0.4.34.tgz#62ac859eb2af6024362a1b3e43527ab79e0c624e"
+  integrity sha1-YqyFnrKvYCQ2Khs+Q1J6t54MYk4=
+  dependencies:
+    "@types/node" "*"
+
 "@types/animejs@^3.1.4":
   version "3.1.4"
   resolved "https://registry.nlark.com/@types/animejs/download/@types/animejs-3.1.4.tgz#92f90d1c800b9041b64a7da9da0e68e690146b0e"
@@ -2210,6 +2217,11 @@ address@1.1.2, address@^1.0.1:
   version "1.1.2"
   resolved "https://registry.nlark.com/address/download/address-1.1.2.tgz#bf1116c9c758c51b7a933d296b72c221ed9428b6"
   integrity sha1-vxEWycdYxRt6kz0pa3LCIe2UKLY=
+
+adm-zip@^0.5.9:
+  version "0.5.9"
+  resolved "https://registry.npmmirror.com/adm-zip/download/adm-zip-0.5.9.tgz#b33691028333821c0cf95c31374c5462f2905a83"
+  integrity sha1-szaRAoMzghwM+VwxN0xUYvKQWoM=
 
 agent-base@6, agent-base@^6.0.2:
   version "6.0.2"

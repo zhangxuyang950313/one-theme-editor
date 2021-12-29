@@ -117,6 +117,7 @@ export default class ipcCreator {
             data: await option.server($data)
           };
         } catch (err: any) {
+          // console.log(err);
           return {
             status: "failed",
             data: err.message

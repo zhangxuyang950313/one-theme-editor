@@ -1,5 +1,3 @@
-import archiver from "archiver";
-
 import { FILE_TEMPLATE_TYPE, PACK_TYPE } from "../common/enums";
 
 import { TypeResourceConfig } from "./config.resource";
@@ -19,9 +17,13 @@ export type TypeFileTempConfig = {
 // 打包配置
 export type TypePackConfig = {
   extname: string;
-  format: archiver.Format;
   execute9patch: boolean;
-  items: Array<{ type: PACK_TYPE; pattern: string }>;
+  steps: Array<{
+    type: PACK_TYPE;
+    dir: string;
+    pattern?: string;
+    cache?: boolean;
+  }>;
   excludes: Array<{ regex: string; pattern: string }>;
 };
 // 应用配置

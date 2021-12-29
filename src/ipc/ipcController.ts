@@ -30,7 +30,7 @@ import {
   TypeScenarioOption
 } from "src/types/config.scenario";
 import { TypeFileData } from "src/types/file-data";
-import PackageUtil, { PackUtil } from "src/common/utils/PackageUtil";
+import PackageUtil from "src/common/utils/PackageUtil";
 import XmlTemplateUtil from "src/common/utils/XmlTemplateUtil";
 import PathUtil from "src/common/utils/PathUtil";
 import {
@@ -42,7 +42,7 @@ import {
 import { TypeWatchedRecord } from "src/common/classes/DirWatcher";
 import { fileDataCache } from "src/main/singletons/fileCache";
 
-import { compactNinePatch } from "src/common/utils/NinePatchUtil";
+import NinePatchUtil from "src/common/utils/NinePatchUtil";
 
 import IPC_EVENT from "./ipc-event";
 import ipcCreator from "./IpcCreator";
@@ -50,7 +50,9 @@ import ipcCreator from "./IpcCreator";
 if (ipcRenderer) ipcRenderer.setMaxListeners(9999);
 if (ipcMain) ipcMain.setMaxListeners(9999);
 
-const adbClient = Adb.createClient();
+const adbClient = Adb.createClient({
+  bin: PathUtil.ADB_TOOL || ""
+});
 
 class IpcController extends ipcCreator {
   // 获取进程 id
@@ -260,7 +262,7 @@ class IpcController extends ipcCreator {
       if (fse.existsSync(to)) {
         fse.removeSync(to);
       }
-      await compactNinePatch(data.from, to);
+      await NinePatchUtil.encodeNinePatchBatch(data.from, to);
       return to;
     }
   });
@@ -268,12 +270,8 @@ class IpcController extends ipcCreator {
   // 打包工程，返回 buffer
   packProject = this.createIpcAsync<TypePackPayload, Buffer>({
     event: IPC_EVENT.$packProject,
-    server: data => {
-      return PackUtil.zipByRules(
-        data.packDir,
-        data.packConfig.items,
-        data.packConfig.excludes
-      );
+    server: async data => {
+      return PackageUtil.pack(data.packDir, data.packConfig).toBuffer();
     }
   });
 
@@ -281,11 +279,7 @@ class IpcController extends ipcCreator {
   exportProject = this.createIpcAsync<TypeExportPayload, string>({
     event: IPC_EVENT.$exportProject,
     server: async data => {
-      const buffer = await PackUtil.zipByRules(
-        data.packDir,
-        data.packConfig.items,
-        data.packConfig.excludes
-      );
+      const buffer = PackageUtil.pack(data.packDir, data.packConfig).toBuffer();
       // 确保输出目录存在
       fse.ensureDirSync(path.dirname(data.outputFile));
       // 写入文件
