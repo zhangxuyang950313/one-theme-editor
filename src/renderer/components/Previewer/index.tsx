@@ -1,8 +1,9 @@
 import React, { useRef, useState } from "react";
 import styled from "styled-components";
-import { TypePageConfig } from "src/types/config.resource";
 
 import LayoutElement from "./LayoutElement";
+
+import type { TypePageConfig } from "src/types/config.resource";
 
 const Previewer: React.FC<{
   mouseEffect?: boolean;

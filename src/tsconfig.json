@@ -32,7 +32,7 @@
     "skipLibCheck": true,
     "downlevelIteration": true,
     "types": ["node"],
-    "typeRoots": ["./types/custom.d.ts"],
+    "typeRoots": ["./types/main.custom.d.ts"],
     "baseUrl": "./",
     "paths": {
       "main/*": ["./main/*"],

@@ -1,5 +1,6 @@
 import { ALIGN_VALUE, ALIGN_V_VALUE } from "src/common/enums";
-import { TypeLayoutData } from "src/types/config.page";
+
+import type { TypeLayoutData } from "src/types/config.page";
 
 type LayoutStyleComputed = {
   display: "inline";

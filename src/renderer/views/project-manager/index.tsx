@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { TypeScenarioOption } from "src/types/config.scenario";
+
 import { Notification } from "@arco-design/web-react";
 
 import { useProjectManagerDispatch } from "./store";
 import { ActionSetScenario } from "./store/action";
 import Sidebar from "./components/Sidebar";
 import ProjectDisplayTable from "./components/ProjectDisplayTable";
+
+import type { TypeScenarioOption } from "src/types/config.scenario";
 
 import RootWrapper from "@/RootWrapper";
 import { StyleTopDrag } from "@/style";

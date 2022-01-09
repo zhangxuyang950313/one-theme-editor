@@ -6,6 +6,9 @@ import { createWindow } from "./windowManager";
 import { moveWindowToCenter, saveCurrentDisplayCenter } from "./utils";
 import registerProtocol from "./protocol";
 
+// 异步启动集群
+import("./singletons/workers");
+
 // app.allowRendererProcessReuse = false;
 initialize();
 

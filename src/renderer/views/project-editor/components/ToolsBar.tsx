@@ -16,9 +16,8 @@ import {
   IconMindMapping,
   IconMobile
 } from "@arco-design/web-react/icon";
-import { TOOLS_BAR_BUTTON } from "src/common/enums";
-
 import { dialog } from "@electron/remote";
+import { TOOLS_BAR_BUTTON } from "src/common/enums";
 
 import { panelToggleState, projectDataState } from "../store/rescoil/state";
 import useApplyProject from "../hooks/useApplyProject";
@@ -90,8 +89,9 @@ const ToolsBar: React.FC = () => {
           icon={<IconMobile />}
           onClick={async () => {
             // 先打包后应用
-            const filepath = await handleExport();
-            console.log(filepath);
+            // const filepath = await handleExport();
+            // console.log(filepath);
+            const filepath = "/Users/zhangxuyang/Desktop/测试text.mtz";
             handleApply({
               deviceId: "e77d6aba",
               packagedFile: filepath

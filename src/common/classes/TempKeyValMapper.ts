@@ -1,4 +1,3 @@
-import { TypeKeyValue } from "src/types/utils";
 import {
   TypeXmlKeyValConfig,
   TypeXmlKeyValMapperMap,
@@ -6,6 +5,8 @@ import {
 } from "src/types/config.page";
 
 import XmlCompiler from "./XmlCompiler";
+
+import type { TypeKeyValue } from "src/types/utils";
 
 export default class TempKeyValMapper extends XmlCompiler {
   private keyValMapData?: TypeXmlKeyValMapperMap;

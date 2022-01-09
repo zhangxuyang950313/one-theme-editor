@@ -27,7 +27,7 @@ import {
   TypeImageFileData,
   TypeXmlFileData
 } from "src/types/file-data";
-import { TypeUiVersion } from "src/types/project";
+
 import {
   ALIGN_VALUE,
   ALIGN_V_VALUE,
@@ -37,6 +37,8 @@ import {
 } from "src/common/enums/index";
 
 import { AbstractDataModel } from "./AbstractDataModel";
+
+import type { TypeUiVersion } from "src/types/project";
 
 export class SourceData extends AbstractDataModel<TypeSourceData> {
   protected data: TypeSourceData = {

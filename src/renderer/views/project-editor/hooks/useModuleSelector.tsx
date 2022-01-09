@@ -1,9 +1,9 @@
 import React, { ReactNode } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 
-import { TypeModuleConfig } from "src/types/config.resource";
-
 import { projectDataState, selectDataState } from "../store/rescoil/state";
+
+import type { TypeModuleConfig } from "src/types/config.resource";
 
 import Interface from "@/components/ModuleSelector";
 

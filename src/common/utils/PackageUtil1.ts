@@ -7,9 +7,9 @@ import micromatch from "micromatch";
 import PathUtil from "src/common/utils/PathUtil";
 import { PACK_TYPE } from "src/common/enums";
 import { asyncQueue } from "src/common/utils";
-import { TypePackConfig } from "src/types/config.scenario";
-import { TypeProgressData } from "src/types/project";
-import { TypeUnpackPayload } from "src/types/ipc";
+import type { TypePackConfig } from "src/types/config.scenario";
+import type { TypeProgressData } from "src/types/project";
+import type { TypeUnpackPayload } from "src/types/ipc";
 
 import { compactNinePatchDir } from "./NinePatchUtil";
 

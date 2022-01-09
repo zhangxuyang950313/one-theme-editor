@@ -1,5 +1,3 @@
-import path from "path";
-
 import {
   Menu,
   BrowserWindow,
@@ -7,30 +5,32 @@ import {
   ipcMain
 } from "electron";
 import * as remoteMain from "@electron/remote/main";
-import IPC_EVENT from "src/ipc/ipc-event";
-import projectDB from "src/main/database/project";
-import { getFileData, isPackaged } from "src/common/utils";
+import { isPackaged } from "src/common/utils";
 
 // import * as electronStore from "../store/index";
 
+import Project from "src/common/classes/Project";
+
 import { preloadFile, getUrl } from "./constant";
 import menuTemplate from "./menu";
-import dirWatcher from "./singletons/dirWatcher";
 
 // const backgroundColor =
 //   electronStore.config.get("themeConfig")?.["@background-color"] ?? "white";
 
-const backgroundColor = "black";
+const backgroundColor = "#000000";
 
 // 用于添加Chromium插件
 async function setupDevTools() {
   // 安装 react 开发者工具
   const {
     default: installExtension,
-    REDUX_DEVTOOLS,
+    // REDUX_DEVTOOLS,
     REACT_DEVELOPER_TOOLS
   } = await import("electron-devtools-installer");
-  return installExtension([REDUX_DEVTOOLS, REACT_DEVELOPER_TOOLS]);
+  return installExtension([
+    // REDUX_DEVTOOLS,
+    REACT_DEVELOPER_TOOLS
+  ]);
 }
 
 async function devToolsHandler(win: BrowserWindow): Promise<void> {
@@ -47,7 +47,7 @@ async function devToolsHandler(win: BrowserWindow): Promise<void> {
       debug.openDevTools();
     });
     // eslint-disable-next-line @typescript-eslint/no-var-requires
-    require("devtron").install();
+    // require("devtron").install();
   } else {
     // 生产环境不允许打开调试工具
     win.webContents.on("devtools-opened", () => {
@@ -121,17 +121,12 @@ export const createWindow = {
     devToolsHandler(win);
     await win.loadURL(getUrl.projectEditor(uuid));
 
-    // 创建目录监听
-    const { root } = await projectDB.findProjectByQuery({ uuid });
-    await dirWatcher.closeWatcher(root);
-    dirWatcher.create(root, (event, src) => {
-      const data = getFileData(path.join(root, src));
-      win.webContents.send(IPC_EVENT.$fileChange, { root, event, src, data });
-    });
+    // 初始化工程实例
+    const project = new Project(uuid);
+    project.initWatcher(win);
 
     // 编辑器窗口管理回到开始页面
     win.on("close", async () => {
-      await dirWatcher.closeWatcher(root);
       await this.projectManager();
     });
 

@@ -1,9 +1,9 @@
 import path from "path";
 
 import { shell, dialog } from "@electron/remote";
-
 import React, { ReactNode, useRef } from "react";
 import styled from "styled-components";
+
 import { Tooltip } from "antd";
 import { Descriptions, Divider, Notification } from "@arco-design/web-react";
 import {
@@ -12,9 +12,10 @@ import {
   IconUndo
 } from "@arco-design/web-react/icon";
 
-import { TypeFileItem } from "src/types/config.page";
-import { TypeFileData } from "src/types/file-data";
 import { FILE_EVENT, PROTOCOL_TYPE } from "src/common/enums";
+
+import type { TypeFileItem } from "src/types/config.page";
+import type { TypeFileData } from "src/types/file-data";
 
 import FileHandler from "@/components/FileFiller/FileHandler";
 import FileDisplayFrame from "@/components/FileFiller/FileDisplayFrame";

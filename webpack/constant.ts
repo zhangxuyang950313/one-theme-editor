@@ -33,6 +33,11 @@ export const rootDir = path.resolve(__dirname, "..");
 export const entryFile = {
   main: path.resolve(rootDir, "src/main/index.ts"),
   preload: path.resolve(rootDir, "src/preload/index.ts"),
+  cluster: path.resolve(rootDir, "src/main/cluster.ts"),
+  // 单独打包 worker 脚本
+  workers: {
+    ninePatch: path.resolve(rootDir, "src/workers/nine-patch.ts")
+  },
   render: {
     projectManager: path.resolve(
       rootDir,

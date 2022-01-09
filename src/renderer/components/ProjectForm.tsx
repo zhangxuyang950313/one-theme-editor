@@ -4,8 +4,9 @@ import fse from "fs-extra";
 import React, { useState, useEffect } from "react";
 import PathUtil from "src/common/utils/PathUtil";
 import { Form } from "@arco-design/web-react";
-import { TypeProjectInfo } from "src/types/project";
-import { TypeFileTempConfig } from "src/types/config.scenario";
+
+import type { TypeProjectInfo } from "src/types/project";
+import type { TypeFileTempConfig } from "src/types/config.scenario";
 
 import { ProjectInput } from "@/components/Forms";
 

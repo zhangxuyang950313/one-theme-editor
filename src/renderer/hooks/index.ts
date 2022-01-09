@@ -4,8 +4,10 @@ import { useEffect, useState } from "react";
 import { ipcRenderer, IpcRendererEvent } from "electron";
 import { Canceler } from "axios";
 import { LOAD_STATUS } from "src/common/enums";
-import { TypeProjectData } from "src/types/project";
+
 import IPC_EVENT from "src/ipc/ipc-event";
+
+import type { TypeProjectData } from "src/types/project";
 
 export function useDocumentTitle(): [string, typeof setTitleMethod] {
   const setTitleMethod = (title: string) => {

@@ -1,7 +1,7 @@
 import { HEX_FORMAT } from "src/common/enums";
 
-import { TypeUiVersion } from "./project";
-import { TypeLayoutElement, TypeResourceCategory } from "./config.page";
+import type { TypeUiVersion } from "./project";
+import type { TypeLayoutElement, TypeResourceCategory } from "./config.page";
 
 // 预览单个页面配置
 export type TypePageOption = {

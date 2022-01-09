@@ -8,7 +8,7 @@ import {
 } from "src/common/enums";
 import XMLNodeBase from "src/common/classes/XMLNodeElement";
 
-import { TypeFileData, TypeImageFileData } from "./file-data";
+import type { TypeFileData, TypeImageFileData } from "./file-data";
 
 /*************************** Resource ***************************/
 

@@ -2,11 +2,12 @@ import path from "path";
 
 import fse from "fs-extra";
 import { useLayoutEffect, useRef, useState, useCallback } from "react";
-import FileDataCache from "src/common/classes/FileDataCache";
 import { FILE_EVENT, PROTOCOL_TYPE } from "src/common/enums";
 import { FileData } from "src/data/ResourceConfig";
-import { TypeFileChangeCallbackData } from "src/ipc/ipcInvoker";
-import { TypeFileData } from "src/types/file-data";
+import FileDataWithCache from "src/common/classes/FileDataWithCache";
+
+import type { TypeFileChangeCallbackData } from "src/ipc/ipcInvoker";
+import type { TypeFileData } from "src/types/file-data";
 
 // 监听文件变化，返回动态的 url state fileData
 export function useSubscribeFileData(
@@ -51,7 +52,9 @@ export function useSubscribeFileData(
   return { url, state, fileData };
 }
 
-const fileDataCache = new FileDataCache(window.$one.$server.getFileDataSync);
+const fileDataWithCache = new FileDataWithCache(
+  window.$one.$server.getFileDataSync
+);
 
 type TypeListener = (
   evt: FILE_EVENT,
@@ -98,7 +101,7 @@ export function useSubscribeSrc(options?: {
     // 首次回调
     if (options?.immediately) {
       if (fse.existsSync(file)) {
-        const fileData = fileDataCache.get(file);
+        const fileData = fileDataWithCache.get(file);
         callback(FILE_EVENT.ADD, src, fileData);
       } else {
         callback(FILE_EVENT.UNLINK, src, FileData.default);

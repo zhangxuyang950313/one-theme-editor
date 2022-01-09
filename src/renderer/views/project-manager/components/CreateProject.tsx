@@ -2,7 +2,6 @@ import path from "path";
 
 import fse from "fs-extra";
 import { dialog } from "electron";
-import { isDev } from "src/common/utils/index";
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { useToggle } from "ahooks";
@@ -16,14 +15,17 @@ import {
   DrawerProps
 } from "@arco-design/web-react";
 import { IconFindReplace } from "@arco-design/web-react/icon";
-import { TypeProjectDataDoc, TypeProjectInfo } from "src/types/project";
-import { TypeResourceConfig } from "src/types/config.resource";
+
+import { isDev } from "src/common/utils/index";
 import { FILE_TEMPLATE_TYPE } from "src/common/enums";
 import PathUtil from "src/common/utils/PathUtil";
 
 import { useScenarioSelected } from "../hooks";
 
 import TemplateList from "./TemplateLIst";
+
+import type { TypeResourceConfig } from "src/types/config.resource";
+import type { TypeProjectDataDoc, TypeProjectInfo } from "src/types/project";
 
 import Steps from "@/components/Steps";
 import ProjectForm from "@/components/ProjectForm";

@@ -2,9 +2,10 @@ import React from "react";
 import styled from "styled-components";
 import { getCurrentWindow } from "@electron/remote";
 import { Empty } from "@arco-design/web-react";
-import { TypeProjectDataDoc } from "src/types/project";
 
 import ProjectDisplay from "./ProjectDisplay";
+
+import type { TypeProjectDataDoc } from "src/types/project";
 
 const ProjectList: React.FC<{ list: TypeProjectDataDoc[] }> = props => {
   const { list } = props;

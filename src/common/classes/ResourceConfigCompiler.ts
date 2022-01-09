@@ -13,13 +13,15 @@ import ResourceConfigData, {
   PageOption,
   UiVersion
 } from "src/data/ResourceConfig";
-import { TypeUiVersion } from "src/types/project";
+
 import { ELEMENT_TAG } from "src/common/enums";
 import PathUtil from "src/common/utils/PathUtil";
 
 import PageConfigCompiler from "./PageConfigCompiler";
 import XMLNodeBase from "./XMLNodeElement";
 import XmlCompiler from "./XmlCompiler";
+
+import type { TypeUiVersion } from "src/types/project";
 
 /**
  * 解析 配置模板的配置文件 ResourceConfig.src
@@ -31,9 +33,9 @@ export default class ResourceConfigCompiler extends XmlCompiler {
   // xiaomi/miui12
   private namespace: string;
   constructor(pathname: string) {
-    super(path.join(PathUtil.RESOURCE_CONFIG_DIR, pathname));
+    super(path.join(PathUtil.RESOURCE_CONFIG, pathname));
     this.namespace = path.relative(
-      PathUtil.RESOURCE_CONFIG_DIR,
+      PathUtil.RESOURCE_CONFIG,
       path.dirname(this.getDescFile())
     );
   }

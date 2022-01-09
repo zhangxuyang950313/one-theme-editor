@@ -1,11 +1,12 @@
 import { Attributes, Element } from "xml-js";
 import { getPlaceholderVal } from "src/common/utils/index";
-import { TypeXmlTempKeyValMap } from "src/types/config.page";
-import { TypeKeyValue } from "src/types/utils";
 
 import XMLNodeElement from "./XMLNodeElement";
 import XmlCompiler from "./XmlCompiler";
 import TempKeyValMapper from "./TempKeyValMapper";
+
+import type { TypeKeyValue } from "src/types/utils";
+import type { TypeXmlTempKeyValMap } from "src/types/config.page";
 
 export default class XmlCompilerExtra extends XMLNodeElement {
   /**

@@ -1,10 +1,13 @@
 import ElectronStore from "electron-store";
 import ProjectData from "src/data/ProjectData";
-import { TypeProjectData } from "src/types/project";
-import { TypeResourceConfig } from "src/types/config.resource";
-import { TypeScenarioConfig } from "src/types/config.scenario";
+
 import ScenarioConfig from "src/data/ScenarioConfig";
+
 import ResourceConfigData from "src/data/ResourceConfig";
+
+import type { TypeProjectData } from "src/types/project";
+import type { TypeResourceConfig } from "src/types/config.resource";
+import type { TypeScenarioConfig } from "src/types/config.scenario";
 
 type TypeProjectDataStore = {
   projectData: TypeProjectData;

@@ -1,9 +1,11 @@
 import { ProjectInfo } from "src/data/ProjectData";
-import { TypeProjectInfo } from "src/types/project";
-import { TypeFileTempConfig } from "src/types/config.scenario";
 
 import XmlCompiler from "./XmlCompiler";
+
 import XmlCompilerExtra from "./XmlCompilerExtra";
+
+import type { TypeProjectInfo } from "src/types/project";
+import type { TypeFileTempConfig } from "src/types/config.scenario";
 
 // TODO: 解析 description.xml 文件为 TypeProjectInfo
 export default class CompileProjectInfo extends XmlCompilerExtra {

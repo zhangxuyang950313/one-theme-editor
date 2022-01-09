@@ -1,4 +1,4 @@
-import { TypeDatabase } from "./utils";
+import type { TypeDatabase } from "./utils";
 
 // 版本信息
 export type TypeUiVersion = {

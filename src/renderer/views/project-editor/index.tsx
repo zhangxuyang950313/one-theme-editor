@@ -48,7 +48,7 @@ const EditorFrame: React.FC = () => {
   useLayoutEffect(() => {
     if (!resourceConfig) return;
     const resourcePath = path.join(
-      PathUtil.RESOURCE_CONFIG_DIR,
+      PathUtil.RESOURCE_CONFIG,
       resourceConfig.namespace
     );
     window.$one.$reactive.set("resourceConfig", resourceConfig);

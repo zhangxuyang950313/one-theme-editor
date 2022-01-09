@@ -3,8 +3,10 @@
  * 图标按钮，使用 antd—icons
  */
 import React from "react";
-import { TOOLS_BAR_BUTTON } from "src/common/enums";
+
 import styled from "styled-components";
+
+import { TOOLS_BAR_BUTTON } from "src/common/enums";
 
 export type TypeIconButtonOption = {
   name: TOOLS_BAR_BUTTON;

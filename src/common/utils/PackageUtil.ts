@@ -6,7 +6,7 @@ import AdmZip from "adm-zip";
 // import glob from 'glob';
 import dirTree from "directory-tree";
 import micromatch from "micromatch";
-import { TypePackConfig } from "src/types/config.scenario";
+import type { TypePackConfig } from "src/types/config.scenario";
 
 import { PACK_TYPE } from "../enums";
 
@@ -44,7 +44,7 @@ export default class PackageUtil {
       const fileList = Array.from(fileMap.keys());
 
       // 匹配出当前 dir 配置所有匹配的 dir
-      // 因为 dir 可能为 patter，例如 com.*。即一条 dir 配置可能对应多个目录
+      // 因为 dir 可能为 pattern，例如 com.*。即一条 dir 配置可能对应多个目录
       const dirList = new Set(
         micromatch.match(fileList, path.join(item.dir, "*")).map(path.dirname)
       );

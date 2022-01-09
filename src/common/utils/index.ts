@@ -1,4 +1,5 @@
 import path from "path";
+import crypto from "crypto";
 
 import md5 from "md5";
 import fse from "fs-extra";
@@ -24,15 +25,30 @@ export const isDev = process.env.NODE_ENV !== "production";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 export const $app = !!ipcRenderer ? require("@electron/remote").app : app;
 
-export const isPackaged = $app.isPackaged;
+export const isPackaged = $app?.isPackaged;
 
 export const base64Regex = /^data:image\/\w+;base64,/;
 
-// 随机字符串，最多11位
+/**
+ * 随机字符串，最多11位
+ * @param len
+ * @returns
+ */
 export function getRandomStr(
   len: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11][number] = 11
 ): string {
   return Math.random().toString(36).slice(2, len);
+}
+
+/**
+ * 封装 crypto 的 uuid  方法
+ * 仅限在 Chrome92+ / Node.js 14.17.0+ 使用
+ * @param prefix;
+ * @returns
+ */
+export function getRandomUUID(prefix?: string): string {
+  const uuid = crypto.randomUUID();
+  return prefix ? `${prefix}_${uuid}` : uuid;
 }
 
 // 数组为空
@@ -40,8 +56,13 @@ export function arrayIsEmpty(data: unknown): boolean {
   return !(Array.isArray(data) && data.length > 0);
 }
 
-// 使用列表项目中的一个键值生成 map
-// 键值如果非 string 类型则该项被忽略
+/**
+ * 使用列表项目中的一个键值生成 map
+ * 键值如果非 string 类型则该项被忽略
+ * @param list
+ * @param key
+ * @returns
+ */
 export function arrayToMapByKey<T, K extends keyof T>(
   list: T[],
   key: K
@@ -96,12 +117,20 @@ export async function asyncQueue<T>(
   return result;
 }
 
-// 去除字符串中空格、回车字符
+/**
+ * 去除字符串中空格、回车字符
+ * @param str
+ * @returns
+ */
 export function replaceUseless(str: string): string {
   return str.replace(/\r\n|\n|\s/g, "");
 }
 
-// 检查路径是否为绝对路径且存在
+/**
+ * 检查路径是否为绝对路径且存在
+ * @param file
+ * @returns
+ */
 export function checkPathExists(file: string): string {
   file = replaceUseless(file);
   return fse.existsSync(file) && path.isAbsolute(file) ? file : "";
@@ -393,6 +422,7 @@ export function getFileData(
         ? getImageFileData(file)
         : ImageFileData.default;
     }
+    // 将 xml 进行解析
     case "application/xml": {
       const xmlFileCompiler = XmlCompiler.fromFile(file);
       // 生成 value 映射
@@ -423,4 +453,35 @@ export function getFileData(
         .create();
     }
   }
+}
+
+/**
+ * 过滤相同的文件
+ * 通过匹配 md5 值
+ * @param files
+ * @returns
+ */
+export function fileRepeatFilter(files: string[]): string[] {
+  const md5Set = new Set();
+  return files.filter(file => {
+    const md5Id = md5(fse.readFileSync(file));
+    if (md5Set.has(md5Id)) {
+      return false;
+    }
+    md5Set.add(md5Id);
+    return true;
+  });
+}
+
+/**
+ * 重置目录
+ * 删除，再重新创建
+ * 危险操作，确保目录是你想删除的目录
+ * @param dir
+ */
+export function resetDirectory(dir: string): void {
+  if (fse.pathExistsSync(dir)) {
+    fse.removeSync(dir);
+  }
+  fse.ensureDirSync(dir);
 }

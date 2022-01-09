@@ -1,5 +1,6 @@
 import { CopyOptions } from "fs-extra";
-import { TypePackConfig } from "src/types/config.scenario";
+
+import type { TypePackConfig } from "src/types/config.scenario";
 
 export type TypeCopyPayload = {
   from: string;
@@ -15,9 +16,8 @@ export type TypeWriteXmlTempPayload = {
   value: string;
 };
 
-export type TypeCompact9patchPayload = {
-  from: string;
-  to?: string;
+export type TypeEncode9patchPayload = {
+  root: string;
 };
 
 export type TypeExportPayload = {

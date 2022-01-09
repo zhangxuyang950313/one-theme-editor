@@ -1,51 +1,55 @@
 import path from "path";
-
 import ChildProcess from "child_process";
 
 import fse from "fs-extra";
+import dirTree from "directory-tree";
 import { ipcMain, ipcRenderer } from "electron";
 import Adb, { Device } from "@devicefarmer/adbkit";
 
-import PageConfigCompiler from "src/common/classes/PageConfigCompiler";
-import ResourceConfigCompiler from "src/common/classes/ResourceConfigCompiler";
-import ScenarioConfigCompiler from "src/common/classes/ScenarioConfigCompiler";
-import ScenarioOptionCompiler from "src/common/classes/ScenarioOptionCompiler";
 import ERR_CODE from "src/common/enums/ErrorCode";
-import {
-  TypeCreateProjectPayload,
-  TypeProgressData,
-  TypeProjectDataDoc
-} from "src/types/project";
-import {
-  TypePackPayload,
-  TypeUnpackPayload,
-  TypeCompact9patchPayload,
-  TypeExportPayload,
-  TypeCopyPayload,
-  TypeWriteXmlTempPayload
-} from "src/types/ipc";
-import { TypePageConfig, TypeResourceConfig } from "src/types/config.resource";
-import {
-  TypeScenarioConfig,
-  TypeScenarioOption
-} from "src/types/config.scenario";
-import { TypeFileData } from "src/types/file-data";
-import PackageUtil from "src/common/utils/PackageUtil";
-import XmlTemplateUtil from "src/common/utils/XmlTemplateUtil";
-import PathUtil from "src/common/utils/PathUtil";
 import {
   chunkCreateWindow,
   chunkDirWatcher,
   chunkFileCache,
   chunkProjectDB
 } from "src/common/asyncChunk";
-import { TypeWatchedRecord } from "src/common/classes/DirWatcher";
-import { fileDataCache } from "src/main/singletons/fileCache";
-
+import { fileCache, fileDataWithCache } from "src/main/singletons/fileCache";
+import PackageUtil from "src/common/utils/PackageUtil";
 import NinePatchUtil from "src/common/utils/NinePatchUtil";
+import XmlTemplateUtil from "src/common/utils/XmlTemplateUtil";
+import PathUtil from "src/common/utils/PathUtil";
+import FileCache from "src/common/classes/FileCache";
+import PageConfigCompiler from "src/common/classes/PageConfigCompiler";
+import ResourceConfigCompiler from "src/common/classes/ResourceConfigCompiler";
+import ScenarioConfigCompiler from "src/common/classes/ScenarioConfigCompiler";
+import ScenarioOptionCompiler from "src/common/classes/ScenarioOptionCompiler";
 
 import IPC_EVENT from "./ipc-event";
 import ipcCreator from "./IpcCreator";
+
+import type { TypeFileData } from "src/types/file-data";
+import type { TypeWatchedRecord } from "src/common/classes/DirWatcher";
+import type {
+  TypeScenarioConfig,
+  TypeScenarioOption
+} from "src/types/config.scenario";
+import type {
+  TypePageConfig,
+  TypeResourceConfig
+} from "src/types/config.resource";
+import type {
+  TypeCreateProjectPayload,
+  TypeProgressData,
+  TypeProjectDataDoc
+} from "src/types/project";
+import type {
+  TypePackPayload,
+  TypeUnpackPayload,
+  TypeEncode9patchPayload,
+  TypeExportPayload,
+  TypeCopyPayload,
+  TypeWriteXmlTempPayload
+} from "src/types/ipc";
 
 if (ipcRenderer) ipcRenderer.setMaxListeners(9999);
 if (ipcMain) ipcMain.setMaxListeners(9999);
@@ -111,10 +115,7 @@ class IpcController extends ipcCreator {
           data.resourceSrc
         ).getPreviewAbsFile();
         if (fse.existsSync(preview)) {
-          const target = path.join(
-            PathUtil.PROJECT_THUMBNAIL_DIR,
-            project.uuid
-          );
+          const target = path.join(PathUtil.PROJECT_THUMBNAIL, project.uuid);
           fse.copyFile(preview, target);
         }
         return project;
@@ -145,7 +146,7 @@ class IpcController extends ipcCreator {
           const preview = ResourceConfigCompiler.from(
             item.resourceSrc
           ).getPreviewAbsFile();
-          const th = path.join(PathUtil.PROJECT_THUMBNAIL_DIR, item.uuid);
+          const th = path.join(PathUtil.PROJECT_THUMBNAIL, item.uuid);
           if (!fse.existsSync(th) && fse.existsSync(preview)) {
             fse.copySync(preview, th);
           }
@@ -238,32 +239,29 @@ class IpcController extends ipcCreator {
   // 同步获取文件数据
   getFileDataSync = this.createIpcSync<string, TypeFileData>({
     event: IPC_EVENT.$getFileDataSync,
-    server: file => fileDataCache.get(file)
+    server: file => fileDataWithCache.get(file)
   });
 
   // 解包
   unpackProject = this.createIpcCallback<TypeUnpackPayload, TypeProgressData>({
     event: IPC_EVENT.$unpackProject,
     server: (params, callback) => {
-      PackageUtil.unpack(params, callback);
+      // PackageUtil.unpack(params, callback);
     }
   });
 
   // 批量处理 .9 信息
-  compact9patchBatch = this.createIpcAsync<TypeCompact9patchPayload, string>({
-    event: IPC_EVENT.$compact9patchBatch,
+  encode9patchBatch = this.createIpcAsync<TypeEncode9patchPayload, void>({
+    event: IPC_EVENT.$encode9patchBatch,
     server: async data => {
-      let to = data.to;
-      if (!to) {
-        // 临时目录
-        to = path.join(PathUtil.PACK_TEMPORARY, path.basename(data.from));
-      }
-      // 若目录存在则删掉
-      if (fse.existsSync(to)) {
-        fse.removeSync(to);
-      }
-      await NinePatchUtil.encodeNinePatchBatch(data.from, to);
-      return to;
+      const files: string[] = [];
+      // dirTree 比 glob.sync 效率高得多
+      dirTree(data.root, {}, file => {
+        if (file.name.endsWith(".9.png")) {
+          files.push(file.path);
+        }
+      });
+      await NinePatchUtil.encode9patchBatch(files);
     }
   });
 
@@ -307,6 +305,14 @@ class IpcController extends ipcCreator {
         });
       });
     }
+  });
+
+  getFileAllCache = this.createIpcAsync<
+    void,
+    ReturnType<FileCache["getCache"]>
+  >({
+    event: IPC_EVENT.$getFileAllCache,
+    server: async () => fileCache.getCache()
   });
 }
 

@@ -1,7 +1,7 @@
-import { TypeResourceConfig } from "src/types/config.resource";
-import { TypeScenarioOption } from "src/types/config.scenario";
-
 import { useProjectManagerSelector } from "./store";
+
+import type { TypeResourceConfig } from "src/types/config.resource";
+import type { TypeScenarioOption } from "src/types/config.scenario";
 
 export function useScenarioSelected(): TypeScenarioOption {
   return useProjectManagerSelector(state => state.scenarioSelected);

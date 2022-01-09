@@ -19,8 +19,8 @@ enum IPC_EVENT {
   $getProjectList = "$getProjectList",
   $getProject = "$getProject",
   $updateProjectInfo = "$updateProjectInfo",
-  $compact9patch = "$compact9patch",
-  $compact9patchBatch = "$compact9patchBatch",
+  $encode9patch = "$encode9patch",
+  $encode9patchBatch = "$encode9patchBatch",
   $applyProject = "$applyProject",
   $packProject = "$packProject",
   $exportProject = "$exportProject",
@@ -46,6 +46,7 @@ enum IPC_EVENT {
   $writeXmlTemplate = "$writeXmlTemplate",
   $getFileData = "$getFileData",
   $getFileDataSync = "$getFileDataSync",
+  $getFileAllCache = "$getFileAllCache",
 
   // shell
   $shell = "$shell"

@@ -4,7 +4,7 @@ import fse from "fs-extra";
 import PathUtil from "src/common/utils/PathUtil";
 import XmlCompiler from "src/common/classes/XmlCompiler";
 import XMLNodeElement from "src/common/classes/XMLNodeElement";
-import { TypeWriteXmlTempPayload } from "src/types/ipc";
+import type { TypeWriteXmlTempPayload } from "src/types/ipc";
 
 import reactiveState from "../singletons/reactiveState";
 
@@ -19,7 +19,7 @@ class XmlTemplateUtil {
     const project = reactiveState.get("projectData");
     const { tag, attributes, value, src } = data;
     const resourceXmlFile = path.join(
-      PathUtil.RESOURCE_CONFIG_DIR,
+      PathUtil.RESOURCE_CONFIG,
       path.dirname(project.resourceSrc),
       src
     );

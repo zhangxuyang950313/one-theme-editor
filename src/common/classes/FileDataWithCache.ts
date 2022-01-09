@@ -1,16 +1,18 @@
 import fse from "fs-extra";
 import { FileData } from "src/data/ResourceConfig";
-import { TypeFileData } from "src/types/file-data";
 
 import LogUtil from "../utils/LogUtil";
+
+import type { TypeFileData } from "src/types/file-data";
 
 type TypeGetFileMethod = (file: string) => TypeFileData;
 
 /**
  * 文件数据缓存
  * 传入获取文件数据方法，第一个参数应为 file，返回标准 fileData @TypeGetFileMethod
+ * 传入方法是为了渲染进程去调用主进程方法，而不要在渲染进程再缓存一份缓存数据
  */
-export default class FileDataCache {
+export default class FileDataWithCache {
   private fileDataMap = new Map<string, { mtime: Date; data: TypeFileData }>();
   private getFileMethod: TypeGetFileMethod;
   constructor(getFileMethod: TypeGetFileMethod) {

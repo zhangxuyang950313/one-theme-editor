@@ -1,8 +1,10 @@
 import ElectronStore from "electron-store";
 import PathCollection from "src/data/PathCollection";
 import defaultTheme from "src/common/theme/dark";
-import { TypePathCollection } from "src/types/config.extra";
+
 import { Point } from "electron";
+
+import type { TypePathCollection } from "src/types/config.extra";
 
 type TypeStore = {
   pathConfig: TypePathCollection;

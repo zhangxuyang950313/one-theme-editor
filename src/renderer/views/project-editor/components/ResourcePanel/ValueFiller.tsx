@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { HEX_FORMAT, RESOURCE_TAG } from "src/common/enums/index";
-import { TypeXmlNodeData, TypeXmlValueTags } from "src/types/config.page";
-import { TypeXmlFileData } from "src/types/file-data";
+
 import XmlTemplateUtil from "src/common/utils/XmlTemplateUtil";
+
+import type { TypeXmlNodeData, TypeXmlValueTags } from "src/types/config.page";
+import type { TypeXmlFileData } from "src/types/file-data";
 
 import ColorPicker from "@/components/ValueFiller/ColorPicker";
 import BooleanSelector from "@/components/ValueFiller/BooleanSelector";

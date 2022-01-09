@@ -7,21 +7,24 @@ import ProjectData from "src/data/ProjectData";
 import ResourceConfig from "src/data/ResourceConfig";
 import ScenarioConfig from "src/data/ScenarioConfig";
 import { asyncQueue } from "src/common/utils";
-import { TypeProjectData } from "src/types/project";
+
 import {
   TypeModuleConfig,
   TypePageConfig,
   TypeResourceConfig
 } from "src/types/config.resource";
-import { TypeScenarioConfig } from "src/types/config.scenario";
+
 import LogUtil from "src/common/utils/LogUtil";
 
-import { useEditorDispatch } from "../store";
+import { useEditorDispatch } from "../store/redux";
 import {
   ActionSetProjectData,
   ActionSetResourceConfig,
   ActionSetScenarioConfig
-} from "../store/action";
+} from "../store/redux/action";
+
+import type { TypeScenarioConfig } from "src/types/config.scenario";
+import type { TypeProjectData } from "src/types/project";
 
 // 加载工程
 export function useLoadProject(uuid: string): {
@@ -92,7 +95,7 @@ export function useLoadProject(uuid: string): {
   useLayoutEffect(() => {
     if (!resourceConfig) return;
     const resourcePath = path.join(
-      PathUtil.RESOURCE_CONFIG_DIR,
+      PathUtil.RESOURCE_CONFIG,
       resourceConfig.namespace
     );
     window.$one.$reactive.set("resourceConfig", resourceConfig);

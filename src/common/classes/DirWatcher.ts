@@ -54,12 +54,17 @@ class DirWatcher {
     return watcher;
   }
 
+  // 关闭一个 watcher，用 dir 来进行区分
   async closeWatcher(root: string): Promise<void> {
-    console.log("关闭 watcher：", root);
-    await this.watcherMap.get(root)?.close();
-    this.watcherMap.delete(root);
+    const watcher = this.watcherMap.get(root);
+    if (watcher) {
+      console.log("关闭 watcher：", root);
+      await watcher.close();
+      this.watcherMap.delete(root);
+    }
   }
 
+  // 关闭所有 watcher
   async closeAllWatcher(): Promise<void> {
     const queue: Array<Promise<void>> = [];
     this.watcherMap.forEach(watcher => {

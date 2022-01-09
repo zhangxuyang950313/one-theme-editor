@@ -2,8 +2,11 @@ import os from "os";
 import path from "path";
 import childProcess from "child_process";
 
+import md5 from "md5";
 import fse from "fs-extra";
+import dirTree from "directory-tree";
 import PathUtil from "src/common/utils/PathUtil";
+import { fileCache } from "main/singletons/fileCache";
 
 type TypeRange = readonly [number, number];
 type TypeNinePatchData = {
@@ -207,13 +210,31 @@ export class NinePatch {
 }
 
 export default class NinePatchUtil {
+  private static suffix = ".9.png";
+  // 读取缓存
+  static readCache(
+    dir = PathUtil.NINEPATCH_TEMPORARY
+  ): Record<string, { getBuffer: () => Buffer }> {
+    const record: Record<string, { getBuffer: () => Buffer }> = {};
+    dirTree(dir, {}, file => {
+      if (!file.name.endsWith(".9.png")) {
+        return;
+      }
+      const fileMd5 = file.name.replace(/\.9\.png$/, "");
+      record[fileMd5] = {
+        getBuffer: () => fileCache.getBuffer(file.path)
+      };
+    });
+    return record;
+  }
+
   // 检测 ninePatch 数据块
   static isNinePatch(buff: Buffer): boolean {
     return new NinePatch(buff).isNinePatch();
   }
 
-  // 编码 .9
-  static async encodeNinePatch(from: string, to: string): Promise<void> {
+  // 编码 .9，从文件输出到文件
+  static async encode9PatchWithFile(from: string, to: string): Promise<void> {
     const { AAPT_TOOL } = PathUtil;
     if (!AAPT_TOOL) {
       throw new Error(`未知系统类型：${os.type()}`);
@@ -230,8 +251,34 @@ export default class NinePatchUtil {
     });
   }
 
-  // 批量编码 .9
-  static async encodeNinePatchBatch(
+  // 编码 .9 目录输出到新的目录
+  static async encode9patchWithDir(
+    fromDir: string,
+    toDir: string
+  ): Promise<void> {
+    const { AAPT_TOOL } = PathUtil;
+    if (!AAPT_TOOL) {
+      throw new Error(`未知系统类型：${os.type()}`);
+    }
+    return new Promise((resolve, reject) => {
+      const worker = childProcess.execFile(
+        AAPT_TOOL,
+        ["c", "-S", fromDir, "-C", toDir],
+        (err, stdout, stderr) => {
+          if (err) reject(err);
+          console.log(`aapt[${worker.pid}]`, `处理完毕`);
+          resolve();
+        }
+      );
+      console.log(
+        `aapt[${worker.pid}]`,
+        `处理 ${fse.readdirSync(fromDir).length} 个文件`
+      );
+    });
+  }
+
+  // 批量编码 .9，从文件夹到文件夹
+  static async encodeNinePatchBatchDir(
     fromDir: string,
     toDir: string
   ): Promise<void> {
@@ -258,5 +305,47 @@ export default class NinePatchUtil {
       });
     });
     await Promise.all(task);
+  }
+
+  // 编码 .9 传入绝对路径或者 buffer，将会返回编码后的 buffer
+  static async encode9patch(data: string): Promise<Buffer>;
+  static async encode9patch(data: Buffer): Promise<Buffer>;
+  static async encode9patch(data: string | Buffer): Promise<Buffer> {
+    // 生成 id 标识
+    const uuid = md5(data);
+    // 临时文件路径
+    let temp = "";
+    // 缓存文件
+    const to = path.join(PathUtil.NINEPATCH_TEMPORARY, `${uuid}.9.png`);
+
+    // 若传入为 buffer 类型，则需要先写入文件
+    // 因为目前使用 aapt 进行编码 .9 信息
+    if (Buffer.isBuffer(data)) {
+      temp = path.join(PathUtil.NINEPATCH_TEMPORARY, `__temp__${uuid}.9.png`);
+      fse.writeFileSync(temp, data);
+    } else if (typeof data === "string") {
+      // 判断文件是否存在
+      if (!fse.existsSync(data)) {
+        throw new Error(`[encode9patch] '${data}' should be a exists path`);
+      }
+      temp = data;
+    } else {
+      throw new Error("[encode9patch] data should be absolute path or buffer");
+    }
+    // 使用 aapt 编码 .9 图片文件
+    await NinePatchUtil.encode9PatchWithFile(temp, to);
+
+    // 返回 buffer
+    return fse.readFileSync(to);
+  }
+
+  /**
+   * 批量 encode .9 信息
+   * 使用多进程技术分配处理
+   * @param files
+   * @returns
+   */
+  static async encode9patchBatch(files: string[]): Promise<void> {
+    return $workers.ninePatch.encodeBatch(files);
   }
 }

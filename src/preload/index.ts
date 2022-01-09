@@ -1,8 +1,9 @@
 import ipcController from "src/ipc/ipcController";
-import ipcInvoker from "src/ipc/ipcInvoker";
+import ipcInvoker from "src/ipc/IpcInvoker";
 import reactiveState from "src/common/singletons/reactiveState";
 import PathUtil from "src/common/utils/PathUtil";
 
+// file://./../renderer/types/react-app-env.d.ts
 Object.defineProperty(global, "$one", {
   value: new Proxy(
     {

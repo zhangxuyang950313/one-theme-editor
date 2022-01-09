@@ -1,12 +1,16 @@
 import ResourceConfigData from "src/data/ResourceConfig";
 import ProjectData from "src/data/ProjectData";
 import ScenarioConfig from "src/data/ScenarioConfig";
-import { TypeProjectDataDoc } from "src/types/project";
-import { TypePageConfig, TypeResourceConfig } from "src/types/config.resource";
-import { TypeScenarioConfig } from "src/types/config.scenario";
-import { TypeFileData } from "src/types/file-data";
 
 import { ACTION_TYPE, TypeEditorActions } from "./action";
+
+import type { TypeProjectDataDoc } from "src/types/project";
+import type {
+  TypePageConfig,
+  TypeResourceConfig
+} from "src/types/config.resource";
+import type { TypeScenarioConfig } from "src/types/config.scenario";
+import type { TypeFileData } from "src/types/file-data";
 
 import { updateState } from "@/store/utils";
 

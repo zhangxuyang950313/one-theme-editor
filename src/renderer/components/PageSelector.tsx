@@ -1,8 +1,9 @@
 import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
-import { TypePageConfig } from "src/types/config.resource";
 
 import Previewer from "./Previewer";
+
+import type { TypePageConfig } from "src/types/config.resource";
 
 // 页面选择器
 const PageSelector: React.FC<{

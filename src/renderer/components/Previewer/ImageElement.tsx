@@ -1,7 +1,8 @@
 import React, { useLayoutEffect, useState } from "react";
 import styled from "styled-components";
 import { PROTOCOL_TYPE } from "src/common/enums";
-import { TypeSourceData } from "src/types/config.page";
+
+import type { TypeSourceData } from "src/types/config.page";
 
 import { useSubscribeSrc } from "@/hooks/subscribeFile";
 

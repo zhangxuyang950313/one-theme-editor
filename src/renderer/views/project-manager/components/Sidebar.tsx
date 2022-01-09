@@ -1,9 +1,10 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
 import { Menu } from "@arco-design/web-react";
-import { TypeScenarioOption } from "src/types/config.scenario";
 
 import TopInfo from "./TopInfo";
+
+import type { TypeScenarioOption } from "src/types/config.scenario";
 
 // 欢迎页侧边栏
 const Sidebar: React.FC<{

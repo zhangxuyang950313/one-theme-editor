@@ -3,11 +3,15 @@ import { Notification } from "@arco-design/web-react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { asyncQueue } from "src/common/utils";
 import { PageConfig } from "src/data/ResourceConfig";
-import { TypeModuleConfig, TypePageConfig } from "src/types/config.resource";
 
 import LogUtil from "src/common/utils/LogUtil";
 
 import { projectDataState, selectDataState } from "../store/rescoil/state";
+
+import type {
+  TypeModuleConfig,
+  TypePageConfig
+} from "src/types/config.resource";
 
 import Interface from "@/components/PageSelector";
 

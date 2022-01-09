@@ -1,3 +1,5 @@
+import process from "process";
+
 export default class LogUtil {
   static addPrefix(prefix: string): void {
     const log = console.log;
@@ -38,6 +40,16 @@ export default class LogUtil {
     if (!content) return;
     console.log(
       `%c[cache]${title}%c${content}%c`,
+      "background: #ff9a00; padding: 1px 5px; border-radius: 3px 0 0 3px;  color: #fff",
+      "background: #35495e; padding: 1px 5px; border-radius: 0 3px 3px 0;  color: #fff",
+      "background: transparent"
+    );
+  }
+
+  static worker(title: string, content: unknown): void {
+    if (!content) return;
+    console.log(
+      `%c[worker:${process.pid}]${title}%c${content}%c`,
       "background: #ff9a00; padding: 1px 5px; border-radius: 3px 0 0 3px;  color: #fff",
       "background: #35495e; padding: 1px 5px; border-radius: 0 3px 3px 0;  color: #fff",
       "background: transparent"

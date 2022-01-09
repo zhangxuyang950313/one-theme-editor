@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import { HEX_FORMAT, RESOURCE_TAG } from "src/common/enums";
-import { TypeBlockCollection } from "src/types/config.page";
 
 import { useRecoilState } from "recoil";
 
@@ -9,6 +8,8 @@ import { selectDataState } from "../../store/rescoil/state";
 
 import FileFiller from "./FileFiller";
 import ValueFiller from "./ValueFiller";
+
+import type { TypeBlockCollection } from "src/types/config.page";
 
 // 所有填充器的包装器
 // 所有类型及响应都在 switch 处理

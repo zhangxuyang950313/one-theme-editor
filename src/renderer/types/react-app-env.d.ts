@@ -3,17 +3,17 @@
 /// <reference types="react" />
 /// <reference types="react-dom" />
 
-declare namespace NodeJS {
-  interface ProcessEnv {
-    readonly VERSION: string;
-    readonly NODE_ENV: "development" | "production" | "test";
-    readonly BUILD_DATE: string;
-    readonly BUILD_USER: string;
-    readonly BUILD_BRANCH: string;
-    readonly BUILD_VERSION: string;
-    readonly PUBLIC_URL: string;
-  }
-}
+// declare namespace NodeJS {
+//   interface ProcessEnv {
+//     readonly VERSION: string;
+//     readonly NODE_ENV: "development" | "production" | "test";
+//     readonly BUILD_DATE: string;
+//     readonly BUILD_USER: string;
+//     readonly BUILD_BRANCH: string;
+//     readonly BUILD_VERSION: string;
+//     readonly PUBLIC_URL: string;
+//   }
+// }
 
 declare module "*.avif" {
   const src: string;
@@ -76,6 +76,7 @@ declare module "*.module.sass" {
   export default classes;
 }
 
+// file://./../../preload/index.ts
 interface Window {
   readonly $one: {
     readonly $server: typeof import("src/ipc/ipcController").default;

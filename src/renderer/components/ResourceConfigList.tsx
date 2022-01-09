@@ -4,9 +4,10 @@ import React from "react";
 import styled from "styled-components";
 import { Descriptions, Empty } from "@arco-design/web-react";
 import PathUtil from "src/common/utils/PathUtil";
-import { TypeResourceConfig } from "src/types/config.resource";
 
 import { PreloadImage } from "./ImageCollection";
+
+import type { TypeResourceConfig } from "src/types/config.resource";
 
 // 配置卡片
 export const ResourceConfigCard: React.FC<
@@ -16,7 +17,7 @@ export const ResourceConfigCard: React.FC<
 > = props => {
   const { resourceConfig } = props;
   const { namespace, preview } = resourceConfig;
-  const resourceDir = PathUtil.RESOURCE_CONFIG_DIR;
+  const resourceDir = PathUtil.RESOURCE_CONFIG;
 
   return (
     <StyleResourceConfigCard {...props}>

@@ -5,7 +5,7 @@ import fse from "fs-extra";
 import { protocol, app, nativeImage, ResizeOptions } from "electron";
 import PathUtil from "src/common/utils/PathUtil";
 import reactiveState from "src/common/singletons/reactiveState";
-import { fileBufferCache } from "src/main/singletons/fileCache";
+import { fileCache } from "src/main/singletons/fileCache";
 
 async function getFileIconData(file: string) {
   const data = await app.getFileIcon(file);
@@ -49,10 +49,10 @@ async function getFilePicResponseData(
           }
         }
         // 获取图片数据
-        const data = await fileBufferCache.getMimeTypedBuffer(file);
+        const data = await fileCache.getElectronMimeTypedBuffer(file);
         resolve(data);
-      } catch (err) {
-        console.log(err);
+      } catch {
+        // console.log(err);
         const def = { mimeType: "image/png", data: Buffer.from("") };
         // 不存在空返回
         if (!fse.existsSync(file)) {
@@ -170,7 +170,7 @@ export default function registerProtocol(): void {
     // uuid = decodeURI(uuid); // Needed in case URL contains spaces
     const data = await getFilePicResponseData(
       request.url,
-      PathUtil.PROJECT_THUMBNAIL_DIR
+      PathUtil.PROJECT_THUMBNAIL
     );
     response(data);
   });

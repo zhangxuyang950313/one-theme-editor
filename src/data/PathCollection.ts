@@ -1,6 +1,6 @@
-import { TypePathCollection } from "src/types/config.extra";
-
 import { AbstractDataModel } from "./AbstractDataModel";
+
+import type { TypePathCollection } from "src/types/config.extra";
 
 export default class PathCollection extends AbstractDataModel<TypePathCollection> {
   protected data: TypePathCollection = {
@@ -19,17 +19,18 @@ export default class PathCollection extends AbstractDataModel<TypePathCollection
     APP_DATA: "",
     CLIENT_STATIC: "",
     CLIENT_CACHE: "",
-    MAIN_PATH: "",
+    ROOT_PATH: "",
     PROJECTS_DB: "",
-    PROJECT_THUMBNAIL_DIR: "",
-    RESOURCE_DIR: "",
-    ASSETS_DIR: "",
-    BINARY_DIR: "",
-    RESOURCE_CONFIG_DIR: "",
+    PROJECT_THUMBNAIL: "",
+    RESOURCE: "",
+    ASSETS: "",
+    BINARY: "",
+    RESOURCE_CONFIG: "",
     RESOURCE_CONFIG_FILE: "",
     AAPT_TOOL: "",
     ADB_TOOL: "",
-    PACK_TEMPORARY: ""
+    PACK_TEMPORARY: "",
+    NINEPATCH_TEMPORARY: ""
   };
   static get default(): TypePathCollection {
     return new PathCollection().create();

@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-
 import { useRecoilValue } from "recoil";
+import styled from "styled-components";
 
 import { selectDataState } from "../../store/rescoil/state";
 
 import FillerWrapper from "./FillerWrapper";
 
-import StickyTab from "@/components/StickyTab";
 import { Tabs } from "@/components/one-ui";
+import StickyTab from "@/components/StickyTab";
 
 const ResourcePanel: React.FC = () => {
   const { pageSelected } = useRecoilValue(selectDataState);

@@ -28,11 +28,13 @@ import PathUtil from "src/common/utils/PathUtil";
 import RegexpUtil from "src/common/utils/RegexpUtil";
 import TempStringUtil from "src/common/utils/TempStringUtil";
 import reactiveState from "src/common/singletons/reactiveState";
-import { TypeImageFileData, TypeFileData } from "src/types/file-data";
-import { TypePageConfig } from "src/types/config.resource";
 
 import XmlCompiler from "./XmlCompiler";
+
 import XmlCompilerExtra from "./XmlCompilerExtra";
+
+import type { TypeImageFileData, TypeFileData } from "src/types/file-data";
+import type { TypePageConfig } from "src/types/config.resource";
 
 import type {
   TypeResourceCategory,
@@ -59,7 +61,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
   private xmlValueItemCache: Map<string, TypeXmlValueData>;
   constructor(data: { namespace: string; config: string }) {
     const file = path.join(
-      PathUtil.RESOURCE_CONFIG_DIR,
+      PathUtil.RESOURCE_CONFIG,
       data.namespace,
       data.config
     );
@@ -67,7 +69,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
     this.configFile = file;
     this.pageNamespace = path.dirname(data.config);
     this.pageConfig = path.normalize(data.config);
-    this.resourceRoot = path.join(PathUtil.RESOURCE_CONFIG_DIR, data.namespace);
+    this.resourceRoot = path.join(PathUtil.RESOURCE_CONFIG, data.namespace);
     this.sourceKeyValCache = new Map();
     this.sourceDataCache = new Map();
     this.fileDataCache = new Map();
@@ -163,7 +165,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
   // 处理当前页面资源的相对路径
   private relativeResourcePath(pathname: string): string {
     const relative = path.relative(
-      PathUtil.RESOURCE_CONFIG_DIR,
+      PathUtil.RESOURCE_CONFIG,
       path.dirname(this.configFile)
     );
     return path.join(relative, pathname);

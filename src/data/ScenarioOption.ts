@@ -1,9 +1,9 @@
 // 场景选项
 
-import { TypeScenarioOption } from "src/types/config.scenario";
-
 import { AbstractDataModel } from "./AbstractDataModel";
 import ScenarioConfig from "./ScenarioConfig";
+
+import type { TypeScenarioOption } from "src/types/config.scenario";
 
 export default class ScenarioOption extends AbstractDataModel<TypeScenarioOption> {
   protected data: TypeScenarioOption = {

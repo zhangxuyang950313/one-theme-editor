@@ -1,11 +1,13 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import styled from "styled-components";
 import { RgbaObject } from "hex-rgb";
+
 import { Tooltip } from "antd";
 import { Input, Message } from "@arco-design/web-react";
 import { IconRight } from "@arco-design/web-react/icon";
 import { RGBColor, SketchPicker } from "react-color";
 import ColorUtil, { HEX_FORMAT } from "src/common/utils/ColorUtil";
+
 // import * as electronStore from "src/store";
 
 import { StyleGirdBackground } from "@/style";

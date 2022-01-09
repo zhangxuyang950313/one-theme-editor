@@ -1,7 +1,7 @@
-import { TypeProjectDataDoc, TypeProjectInfo } from "src/types/project";
-
 import { AbstractDataModel } from "./AbstractDataModel";
 import { UiVersion } from "./ResourceConfig";
+
+import type { TypeProjectDataDoc, TypeProjectInfo } from "src/types/project";
 
 export class ProjectInfo extends AbstractDataModel<TypeProjectInfo> {
   protected data: TypeProjectInfo = {};

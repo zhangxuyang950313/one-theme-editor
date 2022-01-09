@@ -21,7 +21,7 @@ module.exports = {
         "*.jsonc"],
       "options": {
         // "parser": "react",
-        "printWidth": 80, // 将确保你的单行代码不会超过 n 个字符。
+        "printWidth": 120, // 将确保你的单行代码不会超过 n 个字符。
         "singleQuote": false, // 会将所有双引号转换为单引号
         /**
          * "as-needed" - Only add quotes around object properties where required.

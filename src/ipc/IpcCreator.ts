@@ -75,7 +75,7 @@ export default class ipcCreator {
   private serverList: Array<() => void> = [];
 
   // 收集服务
-  private addServerList(server: () => void) {
+  private addServer(server: () => void) {
     if (!ipcMain) return;
     this.serverList.push(server);
   }
@@ -85,7 +85,7 @@ export default class ipcCreator {
     event: IPC_EVENT;
     server: (p: Params) => Result;
   }): (params: Params) => Result {
-    this.addServerList(() => {
+    this.addServer(() => {
       ipcMain.on(option.event, ($event, $data: Params) => {
         $event.returnValue = option.server($data);
       });
@@ -108,8 +108,9 @@ export default class ipcCreator {
     event: IPC_EVENT;
     server: (p: Params) => Promise<Result>;
   }): (params: Params) => Promise<Result> {
-    this.addServerList(() => {
+    this.addServer(() => {
       // 直接 throw 会带上 invoke 原本的错误信息
+      // 所以这里用 status: 'failed' 来标识错误
       ipcMain.handle(option.event, async ($event, $data: Params) => {
         try {
           return {
@@ -152,7 +153,7 @@ export default class ipcCreator {
     event: IPC_EVENT;
     server: (p: Params, cb: (cp: CP) => void) => void;
   }): (params: Params, callback: (cp: CP) => void) => void {
-    this.addServerList(() => {
+    this.addServer(() => {
       ipcMain.on(option.event, async ($event, $data: Params) => {
         option.server($data, data => {
           $event.reply(option.event, data);

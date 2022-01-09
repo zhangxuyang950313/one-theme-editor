@@ -1,10 +1,11 @@
 import React, { useLayoutEffect } from "react";
 import styled from "styled-components";
+
 import { Tooltip } from "antd";
 
-import { TypeModuleConfig } from "src/types/config.resource";
-
 import StaticResourceImage from "./StaticResourceImage";
+
+import type { TypeModuleConfig } from "src/types/config.resource";
 
 // 模块选择器
 const ModuleSelector: React.FC<{
