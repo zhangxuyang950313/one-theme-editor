@@ -6,7 +6,7 @@ import md5 from "md5";
 import fse from "fs-extra";
 import dirTree from "directory-tree";
 import PathUtil from "src/common/utils/PathUtil";
-import { fileCache } from "main/singletons/fileCache";
+import fileCache from "main/singletons/fileCache";
 
 type TypeRange = readonly [number, number];
 type TypeNinePatchData = {

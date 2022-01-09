@@ -1,5 +1,6 @@
-import React, { useLayoutEffect, useState } from "react";
+import React, { useLayoutEffect } from "react";
 import styled from "styled-components";
+import { useSafeState } from "ahooks";
 import { PROTOCOL_TYPE } from "src/common/enums";
 
 import type { TypeSourceData } from "src/types/config.page";
@@ -14,7 +15,7 @@ const ImageElement: React.FC<{
   isBlur?: boolean;
   onChange?: () => void;
 }> = props => {
-  const [url, setUrl] = useState(props.sourceUrl);
+  const [url, setUrl] = useSafeState(props.sourceUrl);
   const {
     mouseEffect, //
     isBlur,

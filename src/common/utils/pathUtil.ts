@@ -28,7 +28,12 @@ const PathUtil = {
    * 开发环境 ${one-theme-editor}/release.main/
    * 打包后 release.main/
    */
-  ELECTRON_APP_PATH: $app?.getAppPath() || "",
+  get ELECTRON_APP_PATH() {
+    if (isRender) {
+      return path.resolve($app?.getAppPath(), "..") || "";
+    }
+    return "";
+  },
   /**
    * 将当前进程的根路径统一为 release.* 所在的目录
    */

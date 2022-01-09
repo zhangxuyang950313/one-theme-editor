@@ -2,9 +2,9 @@ import path from "path";
 
 import fse from "fs-extra";
 import { useLayoutEffect, useRef, useState, useCallback } from "react";
-import { FILE_EVENT, PROTOCOL_TYPE } from "src/common/enums";
 import { FileData } from "src/data/ResourceConfig";
-import FileDataWithCache from "src/common/classes/FileDataWithCache";
+import { getRandomUUID } from "src/common/utils";
+import { FILE_EVENT, PROTOCOL_TYPE } from "src/common/enums";
 
 import type { TypeFileChangeCallbackData } from "src/ipc/ipcInvoker";
 import type { TypeFileData } from "src/types/file-data";
@@ -46,8 +46,6 @@ export function useSubscribeFileData(
   return { url, state, fileData };
 }
 
-const fileDataWithCache = new FileDataWithCache(window.$one.$server.getFileDataSync);
-
 type TypeListener = (evt: FILE_EVENT, src: string, fileData: TypeFileData) => void;
 
 export function useSubscribeSrc(options?: {
@@ -57,7 +55,7 @@ export function useSubscribeSrc(options?: {
   filter?: (data: TypeFileChangeCallbackData) => boolean;
 }): (src: string, callback: TypeListener) => void {
   const [projectRoot, setRoot] = useState(window.$one.$reactive.get("projectPath"));
-  const list = useRef<Array<{ src: string; callback: TypeListener }>>([]);
+  const list = useRef<Array<{ src: string; callback: TypeListener; uuid: string }>>([]);
 
   useLayoutEffect(() => {
     setRoot(window.$one.$reactive.get("projectPath"));
@@ -73,7 +71,7 @@ export function useSubscribeSrc(options?: {
       }
       list.current.forEach(item => {
         if (item.src === data.src) {
-          console.log(`file [${data.event}]:`, data);
+          console.log(`[file:${data.event}][${item.uuid}]:`, data);
           item.callback(data.event, data.src, data.data);
         }
       });
@@ -82,12 +80,12 @@ export function useSubscribeSrc(options?: {
   }, [options, projectRoot]);
 
   return (src: string, callback: TypeListener) => {
-    list.current.push({ src, callback });
+    list.current.push({ src, callback, uuid: getRandomUUID().substring(0, 8) });
     const file = path.join(projectRoot, src);
     // 首次回调
     if (options?.immediately) {
       if (fse.existsSync(file)) {
-        const fileData = fileDataWithCache.get(file);
+        const fileData = window.$one.$server.getFileDataSync(file);
         callback(FILE_EVENT.ADD, src, fileData);
       } else {
         callback(FILE_EVENT.UNLINK, src, FileData.default);

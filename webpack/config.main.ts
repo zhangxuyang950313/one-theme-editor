@@ -12,7 +12,7 @@ const config: webpack.ConfigurationFactory = (env, args) => {
   const isDev = args.mode !== "production";
   return {
     target: "electron-main",
-    devtool: isDev ? "eval-source-map" : false,
+    devtool: isDev ? "source-map" : false,
     node: {
       // 不注入编译前文件的路径，而使用运行时
       __dirname: false,

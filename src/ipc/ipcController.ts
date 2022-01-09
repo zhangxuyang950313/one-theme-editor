@@ -6,14 +6,18 @@ import dirTree from "directory-tree";
 import { ipcMain, ipcRenderer } from "electron";
 import Adb, { Device } from "@devicefarmer/adbkit";
 
+import {
+  chunkCreateWindow, //
+  chunkDirWatcher,
+  chunkFileCache,
+  chunkProjectDB
+} from "src/common/asyncChunk";
+import fileCache from "src/main/singletons/fileCache";
 import ERR_CODE from "src/common/enums/ErrorCode";
-import { chunkCreateWindow, chunkDirWatcher, chunkFileCache, chunkProjectDB } from "src/common/asyncChunk";
-import { fileCache, fileDataWithCache } from "src/main/singletons/fileCache";
+import PathUtil from "src/common/utils/PathUtil";
 import PackageUtil from "src/common/utils/PackageUtil";
 import NinePatchUtil from "src/common/utils/NinePatchUtil";
 import XmlTemplateUtil from "src/common/utils/XmlTemplateUtil";
-import PathUtil from "src/common/utils/PathUtil";
-import FileCache from "src/common/classes/FileCache";
 import PageConfigCompiler from "src/common/classes/PageConfigCompiler";
 import ResourceConfigCompiler from "src/common/classes/ResourceConfigCompiler";
 import ScenarioConfigCompiler from "src/common/classes/ScenarioConfigCompiler";
@@ -208,14 +212,14 @@ class IpcController extends ipcCreator {
     event: IPC_EVENT.$getFileData,
     server: async file => {
       const fileDataCache = await chunkFileCache();
-      return fileDataCache.get(file);
+      return fileDataCache.getFileData(file);
     }
   });
 
   // 同步获取文件数据
   getFileDataSync = this.createIpcSync<string, TypeFileData>({
     event: IPC_EVENT.$getFileDataSync,
-    server: file => fileDataWithCache.get(file)
+    server: file => fileCache.getFileData(file)
   });
 
   // 解包
@@ -281,11 +285,6 @@ class IpcController extends ipcCreator {
         });
       });
     }
-  });
-
-  getFileAllCache = this.createIpcAsync<void, ReturnType<FileCache["getCache"]>>({
-    event: IPC_EVENT.$getFileAllCache,
-    server: async () => fileCache.getCache()
   });
 }
 

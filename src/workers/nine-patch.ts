@@ -7,7 +7,7 @@ import LogUtil from "src/common/utils/LogUtil";
 import PathUtil from "src/common/utils/PathUtil";
 import NinePatchUtil from "src/common/utils/NinePatchUtil";
 import WORKER_TYPES from "src/common/enums/worker-types";
-import { fileCache } from "src/main/singletons/fileCache";
+import fileCache from "src/main/singletons/fileCache";
 import { getRandomUUID, resetDirectory } from "src/common/utils";
 
 import type { TypeMsgData } from "src/types/worker";
@@ -20,6 +20,10 @@ log("start");
 
 process.on("exit", code => {
   log(`stop (${code})`);
+});
+
+process.on("disconnect", () => {
+  log(`disconnect`);
 });
 
 process.on("message", async (data: TypeMsgData<WORKER_TYPES.ENCODE_9_PATCH>) => {
@@ -69,7 +73,7 @@ process.on("message", async (data: TypeMsgData<WORKER_TYPES.ENCODE_9_PATCH>) => 
   // 开启多个 aapt 进程处理任务
   // 由于 aapt 一次只能处理一个目录，（TODO: 是否能有其他指令有待扒 aapt 源码寻找）
   // 生成 cpuCount 目录，开启 aapt 进程处理一个目录
-  const queue = [];
+  const queue = new Array(cpuCount);
   for (let i = 0; i < cpuCount; i++) {
     // 平均分配后写入不同的目录中等待 aapt 进程处理
     const tasks = md5List.slice(taskCount * i, taskCount * i + taskCount);

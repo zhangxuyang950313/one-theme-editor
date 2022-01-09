@@ -3,7 +3,12 @@ import fse from "fs-extra";
 import FileType, { FileTypeResult } from "file-type";
 import { MimeTypedBuffer } from "electron";
 
+import { FileData } from "src/data/ResourceConfig";
+
 import LogUtil from "../utils/LogUtil";
+import { getFileData } from "../utils";
+
+import type { TypeFileData } from "src/types/file-data";
 
 type TypeFileTypeResult = FileTypeResult | { ext: ""; mime: "" };
 
@@ -16,6 +21,19 @@ export default class FileCache {
   private bufferMap = new Map<string, Buffer>();
   private md5Map = new Map<string, string>();
   private mimeTypeMap = new Map<string, TypeFileTypeResult>();
+  private fileDataMap = new Map<string, TypeFileData>();
+  private methods?: {
+    getMimeTypeMethod: (buffer: Buffer) => Promise<TypeFileTypeResult>;
+    getFileDataMethod: (file: string) => TypeFileData;
+  };
+
+  constructor(methods?: FileCache["methods"]) {
+    this.methods = methods;
+    setInterval(() => {
+      this.gc();
+      this.update();
+    }, 10000);
+  }
 
   // 根据最后修改时间进行协商缓存
   private checkExpired(file: string) {
@@ -33,51 +51,46 @@ export default class FileCache {
     return Array.from(this.bufferMap.keys());
   }
 
+  // 删除缓存
+  private deleteCache(file: string) {
+    this.bufferMap.delete(file);
+    this.mtimeMap.delete(file);
+    this.md5Map.delete(file);
+    this.mimeTypeMap.delete(file);
+    this.fileDataMap.delete(file);
+  }
+
   // 垃圾回收，回收不存在的文件
   private gc() {
     this.getFiles().forEach(file => {
       if (fse.existsSync(file)) return;
       console.log("垃圾回收", file);
-      this.bufferMap.delete(file);
-      this.mtimeMap.delete(file);
-      this.md5Map.delete(file);
-      this.mimeTypeMap.delete(file);
+      this.deleteCache(file);
     });
+  }
+
+  // 重新加载缓存
+  private reload(file: string) {
+    this.getBuffer(file);
+    this.getMd5(file);
+    this.getMimeType(file);
+    this.getFileData(file);
   }
 
   // 自动加载，重新加载过期的数据
-  private reload() {
+  private update() {
     this.getFiles().forEach(file => {
       if (this.checkExpired(file)) {
         console.log("重新加载", file);
-        this.getBuffer(file);
-        this.getMd5(file);
-        this.getMimeType(file);
+        this.reload(file);
       }
     });
-  }
-
-  constructor() {
-    setInterval(() => {
-      this.gc();
-      this.reload();
-    }, 10000);
-  }
-
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  getCache() {
-    return {
-      mtimeMap: this.mtimeMap,
-      bufferMap: this.bufferMap,
-      md5Map: this.md5Map,
-      mimeTypeMap: this.mimeTypeMap
-    };
   }
 
   getBuffer(file: string, showLog = true): Buffer {
     // 不存在返回默认数据对象
     if (!fse.existsSync(file)) {
-      this.gc();
+      this.deleteCache(file);
       return Buffer.from("");
     }
 
@@ -110,6 +123,37 @@ export default class FileCache {
     return md5Val;
   }
 
+  getFileData(file: string): TypeFileData {
+    // 不存在返回默认数据对象
+    if (!fse.existsSync(file)) {
+      this.deleteCache(file);
+      return FileData.default;
+    }
+
+    const fileDataCache = this.fileDataMap.get(file);
+    if (fileDataCache && !this.checkExpired(file)) {
+      LogUtil.cache("fileData", file);
+      return fileDataCache;
+    }
+
+    // 获取 fileData
+    const method = this.methods?.getFileDataMethod || getFileData;
+    const fileData = method(file);
+    switch (fileData.filetype) {
+      case "image/webp":
+      case "image/apng":
+      case "image/png":
+      case "image/jpeg":
+      case "application/xml": {
+        this.fileDataMap.set(file, fileData);
+        this.updateMtime(file);
+        break;
+      }
+    }
+
+    return fileData;
+  }
+
   async getMimeType(file: string): Promise<TypeFileTypeResult> {
     const defaultFileType: TypeFileTypeResult = { ext: "", mime: "" };
 
@@ -120,7 +164,8 @@ export default class FileCache {
     }
 
     const buffer = this.getBuffer(file);
-    const mimeType = (await FileType.fromBuffer(buffer)) || defaultFileType;
+    const method = this.methods?.getMimeTypeMethod || FileType.fromBuffer;
+    const mimeType = (await method(buffer)) || defaultFileType;
     this.mimeTypeMap.set(file, mimeType);
     this.updateMtime(file);
 

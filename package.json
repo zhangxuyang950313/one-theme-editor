@@ -55,6 +55,7 @@
     "@devicefarmer/adbkit": "^3.2.1",
     "@electron/remote": "^2.0.1",
     "@pmmmwh/react-refresh-webpack-plugin": "0.5.1",
+    "@stylelint/postcss-css-in-js": "^0.37.2",
     "@types/adm-zip": "^0.4.34",
     "@types/animejs": "^3.1.4",
     "@types/archiver": "^5.1.1",

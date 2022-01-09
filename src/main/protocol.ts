@@ -5,7 +5,7 @@ import fse from "fs-extra";
 import { protocol, app, nativeImage, ResizeOptions } from "electron";
 import PathUtil from "src/common/utils/PathUtil";
 import reactiveState from "src/common/singletons/reactiveState";
-import { fileCache } from "src/main/singletons/fileCache";
+import fileCache from "src/main/singletons/fileCache";
 
 async function getFileIconData(file: string) {
   const data = await app.getFileIcon(file);
