@@ -8,7 +8,6 @@ import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import CopyWebpackPlugin from "copy-webpack-plugin";
 import DotEnvPlugin from "dotenv-webpack";
 import EslintPlugin from "eslint-webpack-plugin";
-import HappyPack from "happypack";
 // import WorkboxPlugin from "workbox-webpack-plugin"; // 引入 PWA 插件
 // import postCssPresetEnv from "postcss-preset-env";
 // import FriendlyErrorsWebpackPlugin from "friendly-errors-webpack-plugin";
@@ -30,6 +29,9 @@ import {
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 // const ArcoWebpackPlugin = require("@arco-design/webpack-plugin");
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const HappyPack = require("happypack");
 
 const webpackDevClientEntry = require.resolve("react-dev-utils/webpackHotDevClient");
 const reactRefreshOverlayEntry = require.resolve("react-dev-utils/refreshOverlayInterop");

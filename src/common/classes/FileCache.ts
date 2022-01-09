@@ -22,13 +22,8 @@ export default class FileCache {
   private md5Map = new Map<string, string>();
   private mimeTypeMap = new Map<string, TypeFileTypeResult>();
   private fileDataMap = new Map<string, TypeFileData>();
-  private methods?: {
-    getMimeTypeMethod: (buffer: Buffer) => Promise<TypeFileTypeResult>;
-    getFileDataMethod: (file: string) => TypeFileData;
-  };
 
-  constructor(methods?: FileCache["methods"]) {
-    this.methods = methods;
+  constructor() {
     setInterval(() => {
       this.gc();
       this.update();
@@ -137,8 +132,7 @@ export default class FileCache {
     }
 
     // 获取 fileData
-    const method = this.methods?.getFileDataMethod || getFileData;
-    const fileData = method(file);
+    const fileData = getFileData(file);
     switch (fileData.filetype) {
       case "image/webp":
       case "image/apng":
@@ -164,8 +158,7 @@ export default class FileCache {
     }
 
     const buffer = this.getBuffer(file);
-    const method = this.methods?.getMimeTypeMethod || FileType.fromBuffer;
-    const mimeType = (await method(buffer)) || defaultFileType;
+    const mimeType = (await FileType.fromBuffer(buffer)) || defaultFileType;
     this.mimeTypeMap.set(file, mimeType);
     this.updateMtime(file);
 

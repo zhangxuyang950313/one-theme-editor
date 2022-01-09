@@ -37,10 +37,10 @@ async function devToolsHandler(win: BrowserWindow): Promise<void> {
       console.log("Dev tools install failed.", err);
     });
     // 利用 electron-debug，添加和Chrome类似的快捷键
-    import("electron-debug").then(debug => {
-      debug.default({ isEnabled: true, showDevTools: true });
-      debug.openDevTools();
-    });
+    // import("electron-debug").then(debug => {
+    //   debug.default({ isEnabled: true, showDevTools: true });
+    //   debug.openDevTools();
+    // });
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     // require("devtron").install();
   } else {
