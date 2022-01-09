@@ -104,6 +104,7 @@ const ToolsBar: React.FC = () => {
           icon={<IconExport />}
           onClick={() => {
             const filename = `${projectData.description.name}.${scenarioConfig.packageConfig.extname}`;
+            // TODO：用主进程调
             const filepath = dialog.showSaveDialogSync({
               title: "导出",
               defaultPath: path.join(path.dirname(projectData.root), filename)

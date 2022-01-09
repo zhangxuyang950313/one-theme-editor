@@ -17,7 +17,7 @@ class XmlTemplateUtil {
   static async writeXmlTemplate(data: TypeWriteXmlTempPayload): Promise<Record<string, string>> {
     const project = reactiveState.get("projectData");
     const { tag, attributes, value, src } = data;
-    const resourceXmlFile = path.join(PathUtil.RESOURCE_CONFIG, path.dirname(project.resourceSrc), src);
+    const resourceXmlFile = path.join(PathUtil.RESOURCE_CONFIG_DIR, path.dirname(project.resourceSrc), src);
     const releaseXmlFile = path.join(project.root, src);
 
     // 确保存在文件

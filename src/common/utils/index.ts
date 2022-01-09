@@ -14,6 +14,7 @@ import { TypeFileData, TypeImageFileData, TypeImageFiletype, TypeXmlFileData } f
 import { FileData, ImageFileData, XmlFileData } from "src/data/ResourceConfig";
 import XmlCompiler from "src/common/classes/XmlCompiler";
 import XmlCompilerExtra from "src/common/classes/XmlCompilerExtra";
+import fileCache from "main/singletons/fileCache";
 
 export const isDev = process.env.NODE_ENV !== "production";
 
@@ -427,7 +428,7 @@ export function getFileData(file: string, options?: { ignoreXmlElement?: boolean
 export function fileRepeatFilter(files: string[]): string[] {
   const md5Set = new Set();
   return files.filter(file => {
-    const md5Id = md5(fse.readFileSync(file));
+    const md5Id = fileCache.getMd5(file);
     if (md5Set.has(md5Id)) {
       return false;
     }

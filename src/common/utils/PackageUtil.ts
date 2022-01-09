@@ -1,16 +1,18 @@
-import fs from "fs";
-
 import path from "path";
 
 import AdmZip from "adm-zip";
 // import glob from 'glob';
 import dirTree from "directory-tree";
 import micromatch from "micromatch";
+import fileCache from "main/singletons/fileCache";
 
 import { PACK_TYPE } from "../enums";
 
 import type { TypePackConfig } from "src/types/config.scenario";
 
+/**
+ * 工程打包工具包
+ */
 export default class PackageUtil {
   // 匹配文件
   // private static getFilesByPattern(root: string,pattern: string): string[] {
@@ -24,7 +26,7 @@ export default class PackageUtil {
     dirTree(root, {}, item => {
       // key 使用绝对路径
       fileMap.set(path.relative(root, item.path), {
-        getBuffer: () => fs.readFileSync(item.path)
+        getBuffer: () => fileCache.getBuffer(item.path)
       });
     });
     return fileMap;
@@ -34,8 +36,9 @@ export default class PackageUtil {
     const zip = new AdmZip();
     const fileMap = PackageUtil.getFileMap(root);
 
-    // 按照配置步骤一依次处理打包逻辑
-    packageConfig.steps.forEach(item => {
+    // 按照配置步骤依次处理打包逻辑
+    for (let i = 0; i < packageConfig.steps.length; i++) {
+      const item = packageConfig.steps[i];
       // 对当前步骤的目录进行打包处理，如果下一步包含当前步骤的打包产物，则这一步叫做内联打包
       const isPack = item.type === PACK_TYPE.PACK;
       const isCopy = item.type === PACK_TYPE.COPY;
@@ -47,8 +50,6 @@ export default class PackageUtil {
       // 匹配出当前 dir 配置所有匹配的 dir
       // 因为 dir 可能为 pattern，例如 com.*。即一条 dir 配置可能对应多个目录
       const dirList = new Set(micromatch.match(fileList, path.join(item.dir, "*")).map(path.dirname));
-
-      console.log({ dirList });
 
       // 对当前步骤多个目录进行打包或拷贝
       dirList.forEach(dir => {
@@ -86,7 +87,7 @@ export default class PackageUtil {
           }
         }
       });
-    });
+    }
     return zip;
   }
 }

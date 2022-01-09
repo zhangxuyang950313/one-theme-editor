@@ -10,5 +10,5 @@ if (cluster.isMaster) {
     });
   }
 } else if (cluster.isWorker) {
-  import("./workers/nine-patch");
+  import("../workers/nine-patch");
 }

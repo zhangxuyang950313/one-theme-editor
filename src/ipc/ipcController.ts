@@ -7,7 +7,8 @@ import { ipcMain, ipcRenderer } from "electron";
 import Adb, { Device } from "@devicefarmer/adbkit";
 
 import {
-  chunkCreateWindow, //
+  chunkCreateProjectManagerWin,
+  chunkCreateProjectEditorWin, //
   chunkDirWatcher,
   chunkFileCache,
   chunkProjectDB
@@ -47,6 +48,13 @@ const adbClient = Adb.createClient({
   bin: PathUtil.ADB_TOOL || ""
 });
 
+/**
+ * ipc 服务调度器，提供 server 服务，server 是运行在主进程中的
+ * ipcCreator 内部通过调用 `ipcMain.on`和`ipcMain.handle` 完成任务的处理及返回
+ * ipcCreator 实现了进程间通讯的 sync 和 async 以及 callback （TODO） 请求
+ *
+ * docs: https://www.electronjs.org/zh/docs/latest/api/ipc-main
+ */
 class IpcController extends ipcCreator {
   // 获取进程 id
   getPID = this.createIpcSync<void, number>({
@@ -156,8 +164,7 @@ class IpcController extends ipcCreator {
   openProjectManager = this.createIpcAsync<void, void>({
     event: IPC_EVENT.$openProjectManager,
     server: async () => {
-      const createWindow = await chunkCreateWindow();
-      await createWindow.projectManager();
+      await chunkCreateProjectManagerWin();
     }
   });
 
@@ -165,8 +172,7 @@ class IpcController extends ipcCreator {
   openProjectEditorWindow = this.createIpcAsync<string, void>({
     event: IPC_EVENT.$openProjectEditor,
     server: async uuid => {
-      const createWindow = await chunkCreateWindow();
-      await createWindow.projectEditor(uuid);
+      await chunkCreateProjectEditorWin(uuid);
     }
   });
 

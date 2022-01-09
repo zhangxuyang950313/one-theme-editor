@@ -25,12 +25,20 @@ export default class PathCollection extends AbstractDataModel<TypePathCollection
     RESOURCE: "",
     ASSETS: "",
     BINARY: "",
-    RESOURCE_CONFIG: "",
+    RESOURCE_CONFIG_DIR: "",
     RESOURCE_CONFIG_FILE: "",
     AAPT_TOOL: "",
     ADB_TOOL: "",
     PACK_TEMPORARY: "",
-    NINEPATCH_TEMPORARY: ""
+    NINEPATCH_TEMPORARY: "",
+    WORKERS: {
+      ninePatch: ""
+    },
+    RELEASE_DIRS: {
+      main: "",
+      renderer: "",
+      workers: ""
+    }
   };
   static get default(): TypePathCollection {
     return new PathCollection().create();

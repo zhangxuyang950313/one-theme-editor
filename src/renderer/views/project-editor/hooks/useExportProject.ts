@@ -1,5 +1,7 @@
 import path from "path";
 
+import workers from "main/singletons/workers";
+
 import { message } from "antd";
 import { useRecoilValue } from "recoil";
 
@@ -41,9 +43,9 @@ export default function useExportProject(): (targetPath?: string) => Promise<str
     // 处理 .9 到临时目录
     if (packageConfig.execute9patch) {
       console.time("处理.9耗时");
-      await window.$one.$server.encode9patchBatch({
-        root: projectData.root
-      });
+      // await window.$one.$server.encode9patchBatch({
+      //   root: projectData.root
+      // });
       console.timeEnd("处理.9耗时");
       // console.time("拷贝剩余文件耗时");
       // // 拷贝目录，.9 处理过的不覆盖

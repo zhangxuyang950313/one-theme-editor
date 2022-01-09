@@ -71,6 +71,12 @@ import IPC_EVENT from "./ipc-event";
 //   }
 // };
 
+/**
+ * ipc 创建器基类，被 ipcController 类继承
+ * 将主进程和渲染进程代码就近管理
+ * 每一条服务中要向 server 中注册 ipcMain 的监听：this.addServer(() => {})
+ * 返回一个调用函数，将会被渲染进程调用
+ */
 export default class ipcCreator {
   private serverList: Array<() => void> = [];
 
@@ -115,13 +121,15 @@ export default class ipcCreator {
         try {
           return {
             status: "success",
-            data: await option.server($data)
+            data: await option.server($data),
+            message: "success"
           };
         } catch (err: any) {
           // console.log(err);
           return {
             status: "failed",
-            data: err.message
+            data: null,
+            message: err.message
           };
         }
       });
@@ -136,7 +144,7 @@ export default class ipcCreator {
       console.log("←", result);
       // }
       if (result.status === "failed") {
-        throw new Error(result.data);
+        throw new Error(result.message);
       }
       return result.data;
     };

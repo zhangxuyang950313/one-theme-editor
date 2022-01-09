@@ -13,7 +13,11 @@ export type TypeFileChangeCallbackData = {
   data: TypeFileData;
 };
 
+/**
+ * 渲染进程调用器
+ */
 class IpcInvoker {
+  // 文件变更监听
   onFileChange = (callback: (data: TypeFileChangeCallbackData) => void) => {
     const cb = ($event: IpcRendererEvent, $data: TypeFileChangeCallbackData) => {
       callback($data);

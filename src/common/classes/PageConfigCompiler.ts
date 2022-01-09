@@ -14,7 +14,6 @@ import {
   ValueBlocker,
   XmlValueData
 } from "src/data/ResourceConfig";
-import { getFileData, getImageFileData } from "src/common/utils/index";
 import {
   ELEMENT_TAG,
   ALIGN_VALUE,
@@ -23,6 +22,7 @@ import {
   RESOURCE_PROTOCOL,
   LAYOUT_ELEMENT_TAG
 } from "src/common/enums/index";
+import { getFileData, getImageFileData } from "src/common/utils/index";
 import XMLNodeElement from "src/common/classes/XMLNodeElement";
 import PathUtil from "src/common/utils/PathUtil";
 import RegexpUtil from "src/common/utils/RegexpUtil";
@@ -60,12 +60,12 @@ export default class PageConfigCompiler extends XMLNodeElement {
   private xmlValueCache: Map<string, string>;
   private xmlValueItemCache: Map<string, TypeXmlValueData>;
   constructor(data: { namespace: string; config: string }) {
-    const file = path.join(PathUtil.RESOURCE_CONFIG, data.namespace, data.config);
+    const file = path.join(PathUtil.RESOURCE_CONFIG_DIR, data.namespace, data.config);
     super(new XmlCompiler(file).getElement());
     this.configFile = file;
     this.pageNamespace = path.dirname(data.config);
     this.pageConfig = path.normalize(data.config);
-    this.resourceRoot = path.join(PathUtil.RESOURCE_CONFIG, data.namespace);
+    this.resourceRoot = path.join(PathUtil.RESOURCE_CONFIG_DIR, data.namespace);
     this.sourceKeyValCache = new Map();
     this.sourceDataCache = new Map();
     this.fileDataCache = new Map();
@@ -156,7 +156,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
 
   // 处理当前页面资源的相对路径
   private relativeResourcePath(pathname: string): string {
-    const relative = path.relative(PathUtil.RESOURCE_CONFIG, path.dirname(this.configFile));
+    const relative = path.relative(PathUtil.RESOURCE_CONFIG_DIR, path.dirname(this.configFile));
     return path.join(relative, pathname);
   }
 

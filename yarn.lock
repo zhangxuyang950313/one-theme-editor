@@ -3791,6 +3791,11 @@ combined-stream@^1.0.8:
   dependencies:
     delayed-stream "~1.0.0"
 
+comlink@^4.3.1:
+  version "4.3.1"
+  resolved "https://registry.nlark.com/comlink/download/comlink-4.3.1.tgz#0c6b9d69bcd293715c907c33fe8fc45aecad13c5"
+  integrity sha1-DGudabzSk3FckHwz/o/EWuytE8U=
+
 commander@2.9.0:
   version "2.9.0"
   resolved "https://registry.npmmirror.com/commander/download/commander-2.9.0.tgz#9c99094176e12240cb22d6c5146098400fe0f7d4"

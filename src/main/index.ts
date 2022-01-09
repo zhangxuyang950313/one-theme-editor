@@ -2,7 +2,7 @@ import { app, BrowserWindow, ipcMain, protocol } from "electron";
 import { initialize } from "@electron/remote/main";
 import ipcController from "src/ipc/ipcController";
 
-import { createWindow } from "./windowManager";
+import { create as createProjectManagerWin } from "./windows/project-manager";
 import { moveWindowToCenter, saveCurrentDisplayCenter } from "./utils";
 import registerProtocol from "./protocol";
 
@@ -47,5 +47,5 @@ app.on("ready", async () => {
   registerProtocol();
   // 注册 ipc 服务
   ipcController.registerIpcServer();
-  await createWindow.projectManager();
+  await createProjectManagerWin();
 });

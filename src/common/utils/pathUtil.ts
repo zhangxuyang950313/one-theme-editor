@@ -87,12 +87,12 @@ const PathUtil = {
     return path.resolve(this.CLIENT_STATIC, "binary");
   },
   // 配置目录
-  get RESOURCE_CONFIG(): string {
+  get RESOURCE_CONFIG_DIR(): string {
     return path.resolve(this.RESOURCE, "config");
   },
   // 模板总配置文件
   get RESOURCE_CONFIG_FILE(): string {
-    return path.resolve(this.RESOURCE_CONFIG, "config.xml");
+    return path.resolve(this.RESOURCE_CONFIG_DIR, "config.xml");
   },
   // aapt 工具
   get AAPT_TOOL(): string | null {
@@ -131,7 +131,7 @@ const PathUtil = {
 export default Object.freeze(PathUtil);
 
 export function resolveResourceConfigPath(relative: string): string {
-  return path.join(PathUtil.RESOURCE_CONFIG, relative);
+  return path.join(PathUtil.RESOURCE_CONFIG_DIR, relative);
 }
 
 export function resolveResourcePath(relative: string): string {
@@ -143,7 +143,7 @@ export function resolveProjectPath(relative: string): string {
 }
 
 export function getSCDescriptionByNamespace(namespace: string): string {
-  return path.join(PathUtil.RESOURCE_CONFIG, namespace, "description.xml");
+  return path.join(PathUtil.RESOURCE_CONFIG_DIR, namespace, "description.xml");
 }
 
 fse.ensureDirSync(PathUtil.APP_DATA);

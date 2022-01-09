@@ -17,7 +17,7 @@ export const ResourceConfigCard: React.FC<
 > = props => {
   const { resourceConfig } = props;
   const { namespace, preview } = resourceConfig;
-  const resourceDir = PathUtil.RESOURCE_CONFIG;
+  const resourceDir = PathUtil.RESOURCE_CONFIG_DIR;
 
   return (
     <StyleResourceConfigCard {...props}>

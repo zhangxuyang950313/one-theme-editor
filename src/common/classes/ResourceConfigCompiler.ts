@@ -1,9 +1,8 @@
 import path from "path";
 
 import { v4 as UUID } from "uuid";
-import { TypeResourceConfig, TypeModuleConfig, TypePageOption, TypeResourceOption } from "src/types/config.resource";
-import ResourceConfigData, { ResourceOption, ModuleConfig, PageOption, UiVersion } from "src/data/ResourceConfig";
 
+import ResourceConfigData, { ResourceOption, ModuleConfig, PageOption, UiVersion } from "src/data/ResourceConfig";
 import { ELEMENT_TAG } from "src/common/enums";
 import PathUtil from "src/common/utils/PathUtil";
 
@@ -11,6 +10,12 @@ import PageConfigCompiler from "./PageConfigCompiler";
 import XMLNodeBase from "./XMLNodeElement";
 import XmlCompiler from "./XmlCompiler";
 
+import type {
+  TypeResourceConfig,
+  TypeModuleConfig,
+  TypePageOption,
+  TypeResourceOption
+} from "src/types/config.resource";
 import type { TypeUiVersion } from "src/types/project";
 
 /**
@@ -23,8 +28,8 @@ export default class ResourceConfigCompiler extends XmlCompiler {
   // xiaomi/miui12
   private namespace: string;
   constructor(pathname: string) {
-    super(path.join(PathUtil.RESOURCE_CONFIG, pathname));
-    this.namespace = path.relative(PathUtil.RESOURCE_CONFIG, path.dirname(this.getDescFile()));
+    super(path.join(PathUtil.RESOURCE_CONFIG_DIR, pathname));
+    this.namespace = path.relative(PathUtil.RESOURCE_CONFIG_DIR, path.dirname(this.getDescFile()));
   }
 
   static from(pathname: string): ResourceConfigCompiler {
