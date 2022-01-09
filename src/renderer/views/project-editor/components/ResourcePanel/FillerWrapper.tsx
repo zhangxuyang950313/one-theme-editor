@@ -33,11 +33,7 @@ const FillerWrapper: React.FC<{
         <StyleFileFillerWrapper>
           {data.items.map((item, key) => (
             <div className="file-display__item" key={key}>
-              <FileFiller
-                data={item}
-                isFocus={focusKeyPath === item.keyPath}
-                onHighlight={setFocusKeyPath}
-              />
+              <FileFiller data={item} isFocus={focusKeyPath === item.keyPath} onHighlight={setFocusKeyPath} />
             </div>
           ))}
         </StyleFileFillerWrapper>

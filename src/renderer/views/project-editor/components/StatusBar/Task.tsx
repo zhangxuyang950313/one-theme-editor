@@ -22,11 +22,7 @@ const Task: React.FC = () => {
       }
     >
       <StyleIconItemArea>
-        <Progress
-          size="mini"
-          showText={false}
-          percent={progressData.progress}
-        />
+        <Progress size="mini" showText={false} percent={progressData.progress} />
         <span className="content">{progressData.message}</span>
       </StyleIconItemArea>
     </Popover>

@@ -18,16 +18,9 @@ const ProjectForm: React.FC<{
   onLocalPathSuggestion?: (p: string) => void;
   onFormValuesChange: (v: Partial<TypeProjectInfo>) => void;
 }> = props => {
-  const {
-    projectInfoConfig,
-    initialValues,
-    onLocalPathSuggestion,
-    onFormValuesChange
-  } = props;
+  const { projectInfoConfig, initialValues, onLocalPathSuggestion, onFormValuesChange } = props;
   // 填写本地目录
-  const [localForSave, setLocalForSave] = useState(
-    path.join(defaultPath, initialValues.name)
-  );
+  const [localForSave, setLocalForSave] = useState(path.join(defaultPath, initialValues.name));
   // 表单实例
   const [form] = Form.useForm<TypeProjectInfo>();
 

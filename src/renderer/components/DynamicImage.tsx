@@ -10,10 +10,10 @@ type TypeReactImageElement = JSX.IntrinsicElements["img"];
  * 动态工程图片
  * @param props 和 img 标签具有相同的属性
  */
-export const DynamicProjectImage = forwardRef<
-  HTMLImageElement,
-  TypeReactImageElement
->(function DynamicProjectImage(props, ref) {
+export const DynamicProjectImage = forwardRef<HTMLImageElement, TypeReactImageElement>(function DynamicProjectImage(
+  props,
+  ref
+) {
   const [src, setSrc] = useState(props.src);
   useSubscribeSrcSingly(props.src, event => {
     if (event === FILE_EVENT.UNLINK) {
@@ -30,10 +30,10 @@ export const DynamicProjectImage = forwardRef<
 /**
  * 动态双向源图片
  */
-export const DynamicBothWayImage = forwardRef<
-  HTMLImageElement,
-  TypeReactImageElement
->(function DynamicBothSourceImage(props, ref) {
+export const DynamicBothWayImage = forwardRef<HTMLImageElement, TypeReactImageElement>(function DynamicBothSourceImage(
+  props,
+  ref
+) {
   const [src, setSrc] = useState(`src://${props.src}`);
   useSubscribeSrcSingly(props.src, event => {
     // if (event === FILE_EVENT.UNLINK) {

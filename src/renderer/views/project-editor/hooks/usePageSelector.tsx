@@ -8,10 +8,7 @@ import LogUtil from "src/common/utils/LogUtil";
 
 import { projectDataState, selectDataState } from "../store/rescoil/state";
 
-import type {
-  TypeModuleConfig,
-  TypePageConfig
-} from "src/types/config.resource";
+import type { TypeModuleConfig, TypePageConfig } from "src/types/config.resource";
 
 import Interface from "@/components/PageSelector";
 
@@ -38,10 +35,7 @@ export default function usePageSelector(): {
     doFetch(moduleSelected).then(([pageConfig]) => {
       setSelectData(state => ({
         ...state,
-        pageSelected:
-          pageSelectCache.get(moduleSelected) ||
-          pageConfig ||
-          PageConfig.default
+        pageSelected: pageSelectCache.get(moduleSelected) || pageConfig || PageConfig.default
       }));
     });
   }, [moduleSelected]);

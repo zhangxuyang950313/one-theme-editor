@@ -39,14 +39,8 @@ export const entryFile = {
     ninePatch: path.resolve(rootDir, "src/workers/nine-patch.ts")
   },
   render: {
-    projectManager: path.resolve(
-      rootDir,
-      "src/renderer/views/project-manager/index.tsx"
-    ),
-    projectEditor: path.resolve(
-      rootDir,
-      "src/renderer/views/project-editor/index.tsx"
-    )
+    projectManager: path.resolve(rootDir, "src/renderer/views/project-manager/index.tsx"),
+    projectEditor: path.resolve(rootDir, "src/renderer/views/project-editor/index.tsx")
   }
 };
 
@@ -65,18 +59,7 @@ export const WDS_SOCKET_HOST = WDS_SERVER_HOST;
 
 export const WDS_SOCKET_PORT = WDS_SERVER_PORT;
 
-export const extensions = [
-  ".js",
-  ".jsx",
-  ".ts",
-  ".tsx",
-  ".d.ts",
-  ".json",
-  ".css",
-  ".less",
-  ".scss",
-  ".frag"
-];
+export const extensions = [".js", ".jsx", ".ts", ".tsx", ".d.ts", ".json", ".css", ".less", ".scss", ".frag"];
 
 export const alias = {
   src: path.resolve(rootDir, "src"),

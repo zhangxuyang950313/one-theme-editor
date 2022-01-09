@@ -23,11 +23,7 @@ const FileDisplayFrame: React.FC<{
   return (
     <StyleFileDisplay>
       {/* 主要展示区域 */}
-      <div
-        ref={primaryRef}
-        className="primary-display"
-        data-is-focus={props.isFocus}
-      >
+      <div ref={primaryRef} className="primary-display" data-is-focus={props.isFocus}>
         {props.primaryNode}
       </div>
       {/* 左上角悬浮展示 */}

@@ -4,12 +4,7 @@ import { Element } from "xml-js";
 import { Diff } from "./utils";
 
 // 图片 filetype
-export type TypeImageFiletype =
-  | "image/jpeg"
-  | "image/png"
-  | "image/apng"
-  | "image/gif"
-  | "image/webp";
+export type TypeImageFiletype = "image/jpeg" | "image/png" | "image/apng" | "image/gif" | "image/webp";
 
 // 图片文件数据
 export type TypeImageFileData = {
@@ -31,17 +26,9 @@ export type TypeXmlFileData = {
 
 // 不支持的文件数据
 export type TypeUnSupportFileData = {
-  filetype:
-    | Diff<
-        MimeType,
-        TypeImageFileData["filetype"] | TypeXmlFileData["filetype"]
-      >
-    | "";
+  filetype: Diff<MimeType, TypeImageFileData["filetype"] | TypeXmlFileData["filetype"]> | "";
   size: number;
 };
 
 // fileData
-export type TypeFileData =
-  | TypeUnSupportFileData
-  | TypeImageFileData
-  | TypeXmlFileData;
+export type TypeFileData = TypeUnSupportFileData | TypeImageFileData | TypeXmlFileData;

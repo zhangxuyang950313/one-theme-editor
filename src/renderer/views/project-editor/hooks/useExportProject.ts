@@ -14,9 +14,7 @@ import { projectDataState } from "../store/rescoil/state";
  * 2、3 步由 window.$one.$server.exportProject 一并处理
  * @returns
  */
-export default function useExportProject(): (
-  targetPath?: string
-) => Promise<string> {
+export default function useExportProject(): (targetPath?: string) => Promise<string> {
   const {
     projectData, //
     scenarioConfig

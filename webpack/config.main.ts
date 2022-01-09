@@ -33,9 +33,7 @@ const config: webpack.ConfigurationFactory = (env, args) => {
       // 输出目录: release.main
       path: outputDir.main,
       filename: "[name].js",
-      chunkFilename: isDev
-        ? "[name].chunk.js"
-        : "[name].[contenthash:8].chunk.js"
+      chunkFilename: isDev ? "[name].chunk.js" : "[name].[contenthash:8].chunk.js"
     },
     externals: {
       fsevents: "fsevents"
@@ -109,17 +107,11 @@ const config: webpack.ConfigurationFactory = (env, args) => {
       }),
       new DllReferencePlugin({
         context: process.cwd(),
-        manifest: require(path.join(
-          __dirname,
-          "../release.dll/main.manifest.json"
-        ))
+        manifest: require(path.join(__dirname, "../release.dll/main.manifest.json"))
       }),
       new DllReferencePlugin({
         context: process.cwd(),
-        manifest: require(path.join(
-          __dirname,
-          "../release.dll/renderer.manifest.json"
-        ))
+        manifest: require(path.join(__dirname, "../release.dll/renderer.manifest.json"))
       })
     ]
   };

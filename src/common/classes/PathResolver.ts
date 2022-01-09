@@ -7,10 +7,7 @@ import RegexpUtil from "../utils/RegexpUtil";
 export default class PathResolver {
   // 格式化模板字符串
   // ${resource}/path/to/xxx -> path.join(this.sourceRoot, 'path/to/xxx')
-  static parse(
-    data: Partial<Record<PLACEHOLDER | string, string>>,
-    pathname: string
-  ): string {
+  static parse(data: Partial<Record<PLACEHOLDER | string, string>>, pathname: string): string {
     let result = pathname;
     const execResult = RegexpUtil.placeholderRegexp.exec(result);
     if (!execResult) return path.normalize(result);

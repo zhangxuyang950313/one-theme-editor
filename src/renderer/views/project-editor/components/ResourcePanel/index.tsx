@@ -32,14 +32,12 @@ const ResourcePanel: React.FC = () => {
         />
       )}
       <div className="resource__content">
-        {(resourceCategoryList[selectTabIndex]?.children || []).map(
-          (blockItem, key) => (
-            <div className="resource__block" key={`${key}.${blockItem.key}`}>
-              <StickyTab content={blockItem.name} />
-              <FillerWrapper data={blockItem} />
-            </div>
-          )
-        )}
+        {(resourceCategoryList[selectTabIndex]?.children || []).map((blockItem, key) => (
+          <div className="resource__block" key={`${key}.${blockItem.key}`}>
+            <StickyTab content={blockItem.name} />
+            <FillerWrapper data={blockItem} />
+          </div>
+        ))}
       </div>
     </StyleResourcePanel>
   );

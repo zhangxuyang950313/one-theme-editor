@@ -17,10 +17,7 @@ class RenderNinePatch {
   private async div(el: HTMLDivElement, borderBoxSize?: iBorderBoxSize) {
     if (!this.ninePatch) {
       el.style.display = "none";
-      const backgroundImageUrl = window
-        .getComputedStyle(el)
-        .getPropertyValue("background-image")
-        .slice(5, -2);
+      const backgroundImageUrl = window.getComputedStyle(el).getPropertyValue("background-image").slice(5, -2);
       // console.time('init耗时');
       this.ninePatch = await new NinePatch(backgroundImageUrl).init();
       this.ninePatchData = this.ninePatch.ninePatchData;

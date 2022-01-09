@@ -41,10 +41,7 @@ const Context = createContext(initialState);
 export function useCurrentKey(): [string, (key: string) => void] {
   const context = useContext(Context);
   const [state, setState] = useReducer(reducer, context);
-  return [
-    state.currentKey,
-    (key: string) => setState(ActionSetCurrentKey(key))
-  ];
+  return [state.currentKey, (key: string) => setState(ActionSetCurrentKey(key))];
 }
 
 export default Context;

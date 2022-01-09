@@ -104,10 +104,8 @@ class ColorUtil {
 
   checkout(): this {
     if (
-      ([HEX_FORMAT.ARGB, HEX_FORMAT.RGBA].includes(this.hexFormat) &&
-        !ColorUtil.isUnit8Hex(this.hexColor)) ||
-      (this.hexFormat === HEX_FORMAT.RGB &&
-        !ColorUtil.isUnit6Hex(this.hexColor))
+      ([HEX_FORMAT.ARGB, HEX_FORMAT.RGBA].includes(this.hexFormat) && !ColorUtil.isUnit8Hex(this.hexColor)) ||
+      (this.hexFormat === HEX_FORMAT.RGB && !ColorUtil.isUnit6Hex(this.hexColor))
     ) {
       throw new Error(`"${this.hexColor}" 非 "${this.hexFormat}" 格式颜色`);
     }

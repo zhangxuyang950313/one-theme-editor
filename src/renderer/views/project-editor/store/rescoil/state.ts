@@ -1,9 +1,6 @@
 import { atom } from "recoil";
 import ProjectData from "src/data/ProjectData";
-import ResourceConfig, {
-  ModuleConfig,
-  PageConfig
-} from "src/data/ResourceConfig";
+import ResourceConfig, { ModuleConfig, PageConfig } from "src/data/ResourceConfig";
 import ScenarioConfig from "src/data/ScenarioConfig";
 
 import keys from "./keys";

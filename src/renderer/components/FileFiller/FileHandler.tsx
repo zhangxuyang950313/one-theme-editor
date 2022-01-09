@@ -38,21 +38,14 @@ const FileHandler: React.FC<{
           {/* 查看信息按钮 */}
           <span className="press btn-normal btn-info">
             <IconInfoCircle className="icon" data-btn-info />
-            <IconDriveFile
-              className="icon"
-              data-btn-jump
-              onClick={props.onJumpClick}
-            />
+            <IconDriveFile className="icon" data-btn-jump onClick={props.onJumpClick} />
           </span>
         </Tooltip>
       )}
       {props.exportVisible && (
         <Tooltip overlay="选择" placement="right">
           {/* 导入按钮 */}
-          <IconFindReplace
-            className="press btn-normal"
-            onClick={props.onImportClick}
-          />
+          <IconFindReplace className="press btn-normal" onClick={props.onImportClick} />
         </Tooltip>
       )}
       {/* .9编辑按钮 */}
@@ -66,10 +59,7 @@ const FileHandler: React.FC<{
       {/* 删除按钮 */}
       {props.deleteVisible && (
         <Tooltip overlay="移除" placement="right">
-          <IconDelete
-            className="press btn-delete"
-            onClick={props.onDeleteClick}
-          />
+          <IconDelete className="press btn-delete" onClick={props.onDeleteClick} />
         </Tooltip>
       )}
     </StyleFileHandler>

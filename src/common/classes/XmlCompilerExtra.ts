@@ -106,19 +106,14 @@ export default class XmlCompilerExtra extends XMLNodeElement {
    * @param tag
    * @param attrsEntries
    */
-  public findNodeByTagAndAttributes(
-    tag: string,
-    attrsEntries: [string, string][]
-  ): XMLNodeElement {
+  public findNodeByTagAndAttributes(tag: string, attrsEntries: [string, string][]): XMLNodeElement {
     const matchedNode = super
       .getChildrenFirstElementNode()
       .getChildrenNodes()
       .find(node => {
         const tagIsEqual = node.getTagname() === tag;
         const attrObj = node.getAttributes(true);
-        const attrsIsEqual = attrsEntries.every(
-          ([key, value]) => attrObj[key] === value
-        );
+        const attrsIsEqual = attrsEntries.every(([key, value]) => attrObj[key] === value);
         return tagIsEqual && attrsIsEqual;
       });
     return matchedNode || XMLNodeElement.emptyNode;
@@ -129,10 +124,7 @@ export default class XmlCompilerExtra extends XMLNodeElement {
    * @param tag
    * @param attrsEntries
    */
-  public findTextByTagAndAttrs(
-    tag: string,
-    attrsEntries: [string, string][]
-  ): string {
+  public findTextByTagAndAttrs(tag: string, attrsEntries: [string, string][]): string {
     const matchedNode = this.findNodeByTagAndAttributes(tag, attrsEntries);
     return matchedNode ? String(matchedNode.getChildrenFirstTextValue()) : "";
   }
@@ -178,20 +170,12 @@ export default class XmlCompilerExtra extends XMLNodeElement {
    * @param opt
    * @returns
    */
-  static generateXmlNodeStr(opt: {
-    tag: string;
-    attributes: Attributes;
-    elements?: Array<Element>;
-  }): string {
-    const nodeTemp = XmlCompilerExtra.createEmptyElementNode(
-      opt.tag
-    ).setAttributes(opt.attributes);
+  static generateXmlNodeStr(opt: { tag: string; attributes: Attributes; elements?: Array<Element> }): string {
+    const nodeTemp = XmlCompilerExtra.createEmptyElementNode(opt.tag).setAttributes(opt.attributes);
     if (Array.isArray(opt.elements)) {
       opt.elements.forEach(nodeTemp.appendChildrenElement);
     }
-    const xmlTemp = XmlCompilerExtra.createEmptyRootNode(false)
-      .appendChild(nodeTemp)
-      .buildXml();
+    const xmlTemp = XmlCompilerExtra.createEmptyRootNode(false).appendChild(nodeTemp).buildXml();
     return xmlTemp;
   }
 }

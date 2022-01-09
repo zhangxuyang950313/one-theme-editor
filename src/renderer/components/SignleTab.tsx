@@ -12,11 +12,7 @@ type TypeSingleTabProps = {
 export default function BaseSingleTab(props: TypeSingleTabProps): JSX.Element {
   return (
     <StyleBaseSingleTab>
-      <div
-        className="tab-wrapper"
-        onClick={props.onClick}
-        is-active={String(props.isActive)}
-      >
+      <div className="tab-wrapper" onClick={props.onClick} is-active={String(props.isActive)}>
         <span className="name">{props.children}</span>
       </div>
     </StyleBaseSingleTab>

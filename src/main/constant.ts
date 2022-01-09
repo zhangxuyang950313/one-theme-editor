@@ -10,10 +10,7 @@ function resolvePath(src: string) {
   return path.join(app.getAppPath(), isDev ? ".." : "", src);
 }
 
-export const devtoolsPath = path.resolve(
-  process.cwd(),
-  "devtools/8921.104.0.3_0"
-);
+export const devtoolsPath = path.resolve(process.cwd(), "devtools/8921.104.0.3_0");
 
 export const rendererDir = resolvePath("release.renderer");
 

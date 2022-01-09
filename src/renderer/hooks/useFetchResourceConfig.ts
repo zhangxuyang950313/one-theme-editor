@@ -17,11 +17,7 @@ import type { TypeResourceConfig } from "src/types/config.resource";
  */
 export default function useFetchResourceConfig(
   resourceSrc?: string
-): [
-  TypeResourceConfig | undefined,
-  LOAD_STATUS,
-  () => Promise<TypeResourceConfig | undefined>
-] {
+): [TypeResourceConfig | undefined, LOAD_STATUS, () => Promise<TypeResourceConfig | undefined>] {
   // const dispatch = useEditorDispatch();
 
   const [resourceConfig, status, doFetch] = useCreatePromiseHook(async () => {

@@ -1,9 +1,6 @@
 import type { TypeFileData } from "src/types/file-data";
 import type { TypeScenarioConfig } from "src/types/config.scenario";
-import type {
-  TypeResourceConfig,
-  TypePageConfig
-} from "src/types/config.resource";
+import type { TypeResourceConfig, TypePageConfig } from "src/types/config.resource";
 import type { TypeProjectDataDoc, TypeProjectInfo } from "src/types/project";
 
 export enum ACTION_TYPE {
@@ -86,48 +83,34 @@ export function ActionInitEditor(): TypeActionInitEditor {
 }
 
 // 设置当前场景配置
-export function ActionSetScenarioConfig(
-  payload: TypeScenarioConfig
-): TypeActionSetScenarioConfig {
+export function ActionSetScenarioConfig(payload: TypeScenarioConfig): TypeActionSetScenarioConfig {
   return { type: ACTION_TYPE.SET_SCENARIO_CONFIG, payload };
 }
 
 // 设置当前资源配置
-export function ActionSetResourceConfig(
-  payload: TypeResourceConfig
-): TypeActionSetResourceConfig {
+export function ActionSetResourceConfig(payload: TypeResourceConfig): TypeActionSetResourceConfig {
   return { type: ACTION_TYPE.SET_RESOURCE_CONFIG, payload };
 }
 
 // 设置工程数据
-export function ActionSetProjectData(
-  payload: TypeProjectDataDoc
-): TypeActionSetProjectData {
+export function ActionSetProjectData(payload: TypeProjectDataDoc): TypeActionSetProjectData {
   return { type: ACTION_TYPE.SET_PROJECT_DATA, payload };
 }
 
 // 设置 description
-export function ActionSetDescription(
-  payload: TypeProjectInfo
-): TypeActionSetProjectInfo {
+export function ActionSetDescription(payload: TypeProjectInfo): TypeActionSetProjectInfo {
   return { type: ACTION_TYPE.SET_PROJECT_INFO, payload };
 }
 
-export function ActionSetFocusKeyPath(
-  payload: TypeActionSetFocusKeyPath["payload"]
-): TypeActionSetFocusKeyPath {
+export function ActionSetFocusKeyPath(payload: TypeActionSetFocusKeyPath["payload"]): TypeActionSetFocusKeyPath {
   return { type: ACTION_TYPE.SET_FOCUS_KEY_PATH, payload };
 }
 
 // 更新页面数据表
-export function ActionPatchPageConfMap(
-  payload: TypePageConfig
-): TypeActionPatchPageConfMap {
+export function ActionPatchPageConfMap(payload: TypePageConfig): TypeActionPatchPageConfMap {
   return { type: ACTION_TYPE.PATCH_PAGE_CONFIG, payload };
 }
 
-export function ActionPatchFileDataMap(
-  payload: TypeActionPatchFileDataMap["payload"]
-): TypeActionPatchFileDataMap {
+export function ActionPatchFileDataMap(payload: TypeActionPatchFileDataMap["payload"]): TypeActionPatchFileDataMap {
   return { type: ACTION_TYPE.PATCH_FILE_DATA, payload };
 }

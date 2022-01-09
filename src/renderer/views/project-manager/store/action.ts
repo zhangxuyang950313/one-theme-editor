@@ -14,8 +14,6 @@ type TypeActionSetScenario = {
 export type TypeStarterActions = TypeActionSetScenario;
 
 // 设置选择的场景信息
-export function ActionSetScenario(
-  payload: TypeScenarioOption
-): TypeActionSetScenario {
+export function ActionSetScenario(payload: TypeScenarioOption): TypeActionSetScenario {
   return { type: ACTION_TYPES.SET_SCENARIO_SELECTED, payload };
 }

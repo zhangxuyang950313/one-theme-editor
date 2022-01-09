@@ -10,12 +10,7 @@ import dirTree from "directory-tree";
 import { app, ipcRenderer } from "electron";
 import ERR_CODE from "src/common/enums/ErrorCode";
 import RegexpUtil from "src/common/utils/RegexpUtil";
-import {
-  TypeFileData,
-  TypeImageFileData,
-  TypeImageFiletype,
-  TypeXmlFileData
-} from "src/types/file-data";
+import { TypeFileData, TypeImageFileData, TypeImageFiletype, TypeXmlFileData } from "src/types/file-data";
 import { FileData, ImageFileData, XmlFileData } from "src/data/ResourceConfig";
 import XmlCompiler from "src/common/classes/XmlCompiler";
 import XmlCompilerExtra from "src/common/classes/XmlCompilerExtra";
@@ -34,9 +29,7 @@ export const base64Regex = /^data:image\/\w+;base64,/;
  * @param len
  * @returns
  */
-export function getRandomStr(
-  len: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11][number] = 11
-): string {
+export function getRandomStr(len: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11][number] = 11): string {
   return Math.random().toString(36).slice(2, len);
 }
 
@@ -63,10 +56,7 @@ export function arrayIsEmpty(data: unknown): boolean {
  * @param key
  * @returns
  */
-export function arrayToMapByKey<T, K extends keyof T>(
-  list: T[],
-  key: K
-): { [k: string]: T } {
+export function arrayToMapByKey<T, K extends keyof T>(list: T[], key: K): { [k: string]: T } {
   const map: { [k: string]: T } = {};
   list.forEach(item => {
     const k = item[key];
@@ -78,11 +68,7 @@ export function arrayToMapByKey<T, K extends keyof T>(
 }
 
 // pick Object with def
-export function pickObjectWithDef<T, U extends keyof T, D>(
-  object: T,
-  props: Array<U>,
-  def: D
-): { [k in U]: T[U] | D } {
+export function pickObjectWithDef<T, U extends keyof T, D>(object: T, props: Array<U>, def: D): { [k in U]: T[U] | D } {
   return props.reduce((t, o) => {
     t[o] = o in object ? object[o] : def;
     return t;
@@ -101,10 +87,7 @@ export async function asyncMap<T, R>(
  * 异步队列
  * @param list
  */
-export async function asyncQueue<T>(
-  list: Array<() => Promise<T>>,
-  space = 0
-): Promise<T[]> {
+export async function asyncQueue<T>(list: Array<() => Promise<T>>, space = 0): Promise<T[]> {
   const result: T[] = [];
   const fail: string[] = [];
   for (const fn of list.filter(item => item instanceof Function)) {
@@ -177,10 +160,7 @@ export function base64ToBuffer(base64: string): Buffer | null {
 // 将图片 base64 写入文件
 // 路径和文件不存在会自动创建并写入
 // 若已存在会返回一个执行覆盖的方法，外部进行二次确认覆盖操作
-export async function base64ToLocalFile(
-  target: string,
-  base64: string
-): Promise<(() => void) | void> {
+export async function base64ToLocalFile(target: string, base64: string): Promise<(() => void) | void> {
   const buff = base64ToBuffer(base64);
   if (!buff) return Promise.reject(new Error("失败"));
   const writeFile = () => {
@@ -325,9 +305,7 @@ export function isURL(str: string): boolean {
  * @param file
  * @returns
  */
-export async function getBufferAndFileType(
-  file: string
-): Promise<{ buff: Buffer; fileType: FileTypeResult }> {
+export async function getBufferAndFileType(file: string): Promise<{ buff: Buffer; fileType: FileTypeResult }> {
   if (!fse.existsSync(file)) {
     throw new Error(ERR_CODE[4003]);
   }
@@ -369,10 +347,7 @@ export function getImageFileData(file: string): TypeImageFileData {
  * @param options
  * @returns
  */
-export function getXmlFileData(
-  file: string,
-  options?: { ignoreXmlElement?: boolean }
-): TypeXmlFileData {
+export function getXmlFileData(file: string, options?: { ignoreXmlElement?: boolean }): TypeXmlFileData {
   if (!file) {
     throw new Error(`${ERR_CODE[4000]}: ${file}`);
   }
@@ -393,9 +368,7 @@ export function getXmlFileData(
       prev[template] = item.getChildrenFirstTextValue();
       return prev;
     }, {});
-  const xmlFileData = new XmlFileData()
-    .set("size", getFileSize(file))
-    .set("valueMapper", valueMapper);
+  const xmlFileData = new XmlFileData().set("size", getFileSize(file)).set("valueMapper", valueMapper);
   if (!options?.ignoreXmlElement) {
     xmlFileData.set("element", xmlFileCompiler.getElement());
   }
@@ -408,19 +381,14 @@ export function getXmlFileData(
  * @param options { ignoreXmlElement:boolean // 忽略解析 xml  element，返回为空，默认为 true }
  * @returns
  */
-export function getFileData(
-  file: string,
-  options?: { ignoreXmlElement?: boolean }
-): TypeFileData {
+export function getFileData(file: string, options?: { ignoreXmlElement?: boolean }): TypeFileData {
   const filetype = (mimeTypes.lookup(file) || "") as MimeType;
   switch (filetype) {
     case "image/webp":
     case "image/png":
     case "image/gif":
     case "image/jpeg": {
-      return fse.existsSync(file)
-        ? getImageFileData(file)
-        : ImageFileData.default;
+      return fse.existsSync(file) ? getImageFileData(file) : ImageFileData.default;
     }
     // 将 xml 进行解析
     case "application/xml": {
@@ -438,19 +406,14 @@ export function getFileData(
           prev[template] = item.getChildrenFirstTextValue();
           return prev;
         }, {});
-      const xmlFileData = new XmlFileData()
-        .set("size", getFileSize(file))
-        .set("valueMapper", valueMapper);
+      const xmlFileData = new XmlFileData().set("size", getFileSize(file)).set("valueMapper", valueMapper);
       if (!options?.ignoreXmlElement) {
         xmlFileData.set("element", xmlFileCompiler.getElement());
       }
       return xmlFileData.create();
     }
     default: {
-      return new FileData()
-        .set("filetype", filetype)
-        .set("size", getFileSize(file))
-        .create();
+      return new FileData().set("filetype", filetype).set("size", getFileSize(file)).create();
     }
   }
 }

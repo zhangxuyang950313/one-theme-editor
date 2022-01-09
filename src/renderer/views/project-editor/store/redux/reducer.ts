@@ -5,10 +5,7 @@ import ScenarioConfig from "src/data/ScenarioConfig";
 import { ACTION_TYPE, TypeEditorActions } from "./action";
 
 import type { TypeProjectDataDoc } from "src/types/project";
-import type {
-  TypePageConfig,
-  TypeResourceConfig
-} from "src/types/config.resource";
+import type { TypePageConfig, TypeResourceConfig } from "src/types/config.resource";
 import type { TypeScenarioConfig } from "src/types/config.scenario";
 import type { TypeFileData } from "src/types/file-data";
 

@@ -20,17 +20,10 @@ export const StyleGirdBackground = styled.span<{ girdSize?: number }>`
       transparent 75%,
       rgba(0, 0, 0, 0.25) 0
     ),
-    linear-gradient(
-      45deg,
-      rgba(0, 0, 0, 0.25) 25%,
-      transparent 0,
-      transparent 75%,
-      rgba(0, 0, 0, 0.25) 0
-    );
+    linear-gradient(45deg, rgba(0, 0, 0, 0.25) 25%, transparent 0, transparent 75%, rgba(0, 0, 0, 0.25) 0);
   /* background-color: #eee; */
   background-color: rgb(var(--color-bg-1));
-  background-size: ${({ girdSize }) =>
-    `${girdSize || 16}px ${girdSize || 16}px`};
+  background-size: ${({ girdSize }) => `${girdSize || 16}px ${girdSize || 16}px`};
   background-position: ${({ girdSize }) => {
     const s = (girdSize || 16) / 2;
     return ` 0 0, ${s}px ${s}px`;

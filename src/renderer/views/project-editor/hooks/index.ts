@@ -8,20 +8,12 @@ import ResourceConfig from "src/data/ResourceConfig";
 import ScenarioConfig from "src/data/ScenarioConfig";
 import { asyncQueue } from "src/common/utils";
 
-import {
-  TypeModuleConfig,
-  TypePageConfig,
-  TypeResourceConfig
-} from "src/types/config.resource";
+import { TypeModuleConfig, TypePageConfig, TypeResourceConfig } from "src/types/config.resource";
 
 import LogUtil from "src/common/utils/LogUtil";
 
 import { useEditorDispatch } from "../store/redux";
-import {
-  ActionSetProjectData,
-  ActionSetResourceConfig,
-  ActionSetScenarioConfig
-} from "../store/redux/action";
+import { ActionSetProjectData, ActionSetResourceConfig, ActionSetScenarioConfig } from "../store/redux/action";
 
 import type { TypeScenarioConfig } from "src/types/config.scenario";
 import type { TypeProjectData } from "src/types/project";
@@ -94,10 +86,7 @@ export function useLoadProject(uuid: string): {
   // 设置进程间响应式数据
   useLayoutEffect(() => {
     if (!resourceConfig) return;
-    const resourcePath = path.join(
-      PathUtil.RESOURCE_CONFIG,
-      resourceConfig.namespace
-    );
+    const resourcePath = path.join(PathUtil.RESOURCE_CONFIG, resourceConfig.namespace);
     window.$one.$reactive.set("resourceConfig", resourceConfig);
     window.$one.$reactive.set("resourcePath", resourcePath);
     return () => {

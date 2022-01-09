@@ -6,9 +6,10 @@ import AdmZip from "adm-zip";
 // import glob from 'glob';
 import dirTree from "directory-tree";
 import micromatch from "micromatch";
-import type { TypePackConfig } from "src/types/config.scenario";
 
 import { PACK_TYPE } from "../enums";
+
+import type { TypePackConfig } from "src/types/config.scenario";
 
 export default class PackageUtil {
   // 匹配文件
@@ -45,9 +46,7 @@ export default class PackageUtil {
 
       // 匹配出当前 dir 配置所有匹配的 dir
       // 因为 dir 可能为 pattern，例如 com.*。即一条 dir 配置可能对应多个目录
-      const dirList = new Set(
-        micromatch.match(fileList, path.join(item.dir, "*")).map(path.dirname)
-      );
+      const dirList = new Set(micromatch.match(fileList, path.join(item.dir, "*")).map(path.dirname));
 
       console.log({ dirList });
 
@@ -57,10 +56,7 @@ export default class PackageUtil {
         const innerZip = new AdmZip();
 
         // 根据 patter 匹配当前 dir 下所有的文件名
-        const files = micromatch.match(
-          fileList,
-          path.join(dir, item.pattern || "**")
-        );
+        const files = micromatch.match(fileList, path.join(dir, item.pattern || "**"));
 
         // 将文件依次压缩进包内，并在文件地图中删除
         files.forEach(file => {

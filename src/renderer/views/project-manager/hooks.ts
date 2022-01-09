@@ -8,7 +8,5 @@ export function useScenarioSelected(): TypeScenarioOption {
 }
 
 export function useResourceConfigList(): TypeResourceConfig[] {
-  return useProjectManagerSelector(
-    state => state.scenarioSelected.resourceConfigList
-  );
+  return useProjectManagerSelector(state => state.scenarioSelected.resourceConfigList);
 }

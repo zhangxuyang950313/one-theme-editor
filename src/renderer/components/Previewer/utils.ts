@@ -14,10 +14,7 @@ type LayoutStyleComputed = {
   boxSizing: "border-box";
 };
 
-export function computeLayoutStyle(
-  layout: TypeLayoutData,
-  scale: number
-): LayoutStyleComputed {
+export function computeLayoutStyle(layout: TypeLayoutData, scale: number): LayoutStyleComputed {
   const numX = Number(layout.x);
   const numY = Number(layout.y);
   const numW = Number(layout.w);

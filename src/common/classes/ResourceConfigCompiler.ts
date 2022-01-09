@@ -1,18 +1,8 @@
 import path from "path";
 
 import { v4 as UUID } from "uuid";
-import {
-  TypeResourceConfig,
-  TypeModuleConfig,
-  TypePageOption,
-  TypeResourceOption
-} from "src/types/config.resource";
-import ResourceConfigData, {
-  ResourceOption,
-  ModuleConfig,
-  PageOption,
-  UiVersion
-} from "src/data/ResourceConfig";
+import { TypeResourceConfig, TypeModuleConfig, TypePageOption, TypeResourceOption } from "src/types/config.resource";
+import ResourceConfigData, { ResourceOption, ModuleConfig, PageOption, UiVersion } from "src/data/ResourceConfig";
 
 import { ELEMENT_TAG } from "src/common/enums";
 import PathUtil from "src/common/utils/PathUtil";
@@ -34,10 +24,7 @@ export default class ResourceConfigCompiler extends XmlCompiler {
   private namespace: string;
   constructor(pathname: string) {
     super(path.join(PathUtil.RESOURCE_CONFIG, pathname));
-    this.namespace = path.relative(
-      PathUtil.RESOURCE_CONFIG,
-      path.dirname(this.getDescFile())
-    );
+    this.namespace = path.relative(PathUtil.RESOURCE_CONFIG, path.dirname(this.getDescFile()));
   }
 
   static from(pathname: string): ResourceConfigCompiler {
@@ -80,10 +67,7 @@ export default class ResourceConfigCompiler extends XmlCompiler {
   getPreviewPic(): string {
     // TODO: 默认预览图
     return path.normalize(
-      super
-        .getChildrenFirstElementNode()
-        .getChildrenFirstNodeByTagname(ELEMENT_TAG.Preview)
-        .getAttributeOf("src")
+      super.getChildrenFirstElementNode().getChildrenFirstNodeByTagname(ELEMENT_TAG.Preview).getAttributeOf("src")
     );
   }
 
@@ -93,9 +77,7 @@ export default class ResourceConfigCompiler extends XmlCompiler {
 
   // UI信息
   getUiVersion(): TypeUiVersion {
-    const uiVersionNode = super
-      .getChildrenFirstElementNode()
-      .getChildrenFirstNodeByTagname(ELEMENT_TAG.UiVersion);
+    const uiVersionNode = super.getChildrenFirstElementNode().getChildrenFirstNodeByTagname(ELEMENT_TAG.UiVersion);
     return new UiVersion()
       .set("name", uiVersionNode.getAttributeOf("name"))
       .set("code", uiVersionNode.getAttributeOf("code"))
@@ -139,9 +121,7 @@ export default class ResourceConfigCompiler extends XmlCompiler {
       .getChildrenFirstElementNode()
       .getChildrenNodesByTagname(ELEMENT_TAG.Module)
       .map(moduleNode => {
-        const pageList = this.getPageList(
-          moduleNode.getChildrenNodesByTagname(ELEMENT_TAG.Page)
-        );
+        const pageList = this.getPageList(moduleNode.getChildrenNodesByTagname(ELEMENT_TAG.Page));
         return new ModuleConfig()
           .set("name", moduleNode.getAttributeOf("name"))
           .set("icon", path.normalize(moduleNode.getAttributeOf("icon")))

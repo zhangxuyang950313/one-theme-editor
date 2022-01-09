@@ -28,14 +28,7 @@ const ValueEditor: React.FC<{
   switch (props.use) {
     // 颜色选择器
     case RESOURCE_TAG.Color: {
-      return (
-        <ColorPicker
-          value={value}
-          defaultValue={defaultValue}
-          colorFormat={colorFormat}
-          onChange={onChange}
-        />
-      );
+      return <ColorPicker value={value} defaultValue={defaultValue} colorFormat={colorFormat} onChange={onChange} />;
     }
     // 布尔选择器
     case RESOURCE_TAG.Boolean: {
@@ -43,24 +36,12 @@ const ValueEditor: React.FC<{
     }
     // 数字输入器
     case RESOURCE_TAG.Number: {
-      return (
-        <NumberInput
-          defaultValue={defaultValue}
-          value={value}
-          onChange={onChange}
-        />
-      );
+      return <NumberInput defaultValue={defaultValue} value={value} onChange={onChange} />;
     }
     // 未注明的都使用通用的字符串输入器
     case RESOURCE_TAG.String:
     default: {
-      return (
-        <StringInput
-          defaultValue={defaultValue}
-          value={value}
-          onChange={onChange}
-        />
-      );
+      return <StringInput defaultValue={defaultValue} value={value} onChange={onChange} />;
     }
   }
 };
@@ -84,25 +65,13 @@ const ValueFillerItem: React.FC<{
   onLocate: () => void;
   iconEyeFocus: boolean;
 }> = props => {
-  const {
-    keyPath,
-    comment,
-    valueTemplate,
-    defaultValue,
-    value,
-    colorFormat,
-    use,
-    onChange,
-    onLocate,
-    iconEyeFocus
-  } = props;
+  const { keyPath, comment, valueTemplate, defaultValue, value, colorFormat, use, onChange, onLocate, iconEyeFocus } =
+    props;
   return (
     <StyleValueFillerItem>
       <div className="info-wrapper">
         <div className="name">{comment}</div>
-        <div className="file">
-          {XmlTemplateUtil.xmlElementTextModify(valueTemplate, value)}
-        </div>
+        <div className="file">{XmlTemplateUtil.xmlElementTextModify(valueTemplate, value)}</div>
         {/* <div className="file">{from}</div> */}
       </div>
       <div className="item">

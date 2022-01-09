@@ -16,9 +16,7 @@ const ProjectDisplayTable: React.FC = () => {
   const [visible, visibleToggle] = useToggle(false);
 
   const fetchProjectList = useCallback(() => {
-    window.$one.$server
-      .findProjectListByQuery({ scenarioSrc: scenario.src })
-      .then(setProjectList);
+    window.$one.$server.findProjectListByQuery({ scenarioSrc: scenario.src }).then(setProjectList);
   }, [scenario.src]);
 
   useEffect(() => {

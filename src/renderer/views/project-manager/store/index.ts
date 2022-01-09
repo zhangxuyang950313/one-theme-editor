@@ -12,6 +12,5 @@ export const ProjectManagerState = ProjectManagerStore.store.getState();
 export const useProjectManagerStore = ProjectManagerStore.storeHook;
 export const useProjectManagerDispatch = ProjectManagerStore.dispatchHook;
 export const useProjectManagerSelector = ProjectManagerStore.selectorHook;
-export const useProjectManagerContext = () =>
-  useContext(ProjectManagerStore.context);
+export const useProjectManagerContext = () => useContext(ProjectManagerStore.context);
 export type TypeProjectManagerState = typeof ProjectManagerState;

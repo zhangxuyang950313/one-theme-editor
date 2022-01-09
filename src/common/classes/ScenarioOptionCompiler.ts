@@ -27,9 +27,7 @@ export default class ScenarioOptionCompiler extends XmlCompilerExtra {
   }
 
   private getScenarioNodes(): XMLNodeElement[] {
-    return super
-      .getChildrenFirstElementNode()
-      .getChildrenNodesByTagname(ELEMENT_TAG.Scenario);
+    return super.getChildrenFirstElementNode().getChildrenNodesByTagname(ELEMENT_TAG.Scenario);
   }
 
   getScenarioSrcList(): string[] {

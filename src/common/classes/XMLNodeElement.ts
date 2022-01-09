@@ -82,14 +82,12 @@ class XMLNodeBase {
 
   // 获取属性所有值
   public getAttributeValues(): string[] {
-    return Object.values(this.getAttributes(true)).flatMap(item =>
-      item === undefined ? [] : String(item)
-    );
+    return Object.values(this.getAttributes(true)).flatMap(item => (item === undefined ? [] : String(item)));
   }
 
   public getAttributeEntries() {
-    return Object.entries(this.getAttributes(true)).flatMap<[string, string]>(
-      item => (item[1] === undefined ? [] : [[item[0], String(item[1])]])
+    return Object.entries(this.getAttributes(true)).flatMap<[string, string]>(item =>
+      item[1] === undefined ? [] : [[item[0], String(item[1])]]
     );
   }
 
@@ -129,9 +127,7 @@ class XMLNodeChildren extends XMLNodeBase {
 
   // 获取所有文本子节点
   public getChildrenTextNodes(): XMLNodeElement[] {
-    return this.getChildrenNodes().filter(
-      item => item.getType() === ELEMENT_TYPE.TEXT
-    );
+    return this.getChildrenNodes().filter(item => item.getType() === ELEMENT_TYPE.TEXT);
   }
 
   // 获取第一个子元素节点（不包含注释）
@@ -151,9 +147,7 @@ class XMLNodeChildren extends XMLNodeBase {
    * @param tagname 指定节点 tagname
    */
   public getChildrenFirstNodeByTagname(tagname: string): XMLNodeElement {
-    const childNode = this.getChildrenNodes().find(
-      item => item.getTagname() === tagname
-    );
+    const childNode = this.getChildrenNodes().find(item => item.getTagname() === tagname);
     return childNode || XMLNodeElement.createEmptyNode();
   }
 
@@ -163,9 +157,7 @@ class XMLNodeChildren extends XMLNodeBase {
    * @returns
    */
   public getChildrenFirstNodeByType(type: ELEMENT_TYPE): XMLNodeElement {
-    const childNode = this.getChildrenNodes().find(
-      item => item.getType() === type
-    );
+    const childNode = this.getChildrenNodes().find(item => item.getType() === type);
     return childNode || XMLNodeElement.createEmptyNode();
   }
 
@@ -174,29 +166,21 @@ class XMLNodeChildren extends XMLNodeBase {
    * @param tagname 指定节点 tagname
    */
   public getChildrenNodesByTagname(tagname: string): XMLNodeElement[] {
-    return this.getChildrenNodes().filter(
-      item => item.getTagname() === tagname
-    );
+    return this.getChildrenNodes().filter(item => item.getTagname() === tagname);
   }
 
   /**
    * 和 getChildrenNodesByTagname 不同，这个方法可同时获取多个 tagname 元素，用于保持顺序
    * @param tagnameList
    */
-  public getChildrenNodeByMultiTagname(
-    tagnameList: string[]
-  ): XMLNodeElement[] {
+  public getChildrenNodeByMultiTagname(tagnameList: string[]): XMLNodeElement[] {
     const tagnameSet = new Set(tagnameList);
-    return this.getChildrenNodes().filter(item =>
-      tagnameSet.has(item.getTagname())
-    );
+    return this.getChildrenNodes().filter(item => tagnameSet.has(item.getTagname()));
   }
 
   // 获取第一个文本节点
   public getChildrenFirstTextNode(): XMLNodeElement {
-    const childNode = this.getChildrenNodes().find(
-      item => item.getType() === ELEMENT_TYPE.TEXT
-    );
+    const childNode = this.getChildrenNodes().find(item => item.getType() === ELEMENT_TYPE.TEXT);
     return childNode || XMLNodeElement.createEmptyNode();
   }
 
@@ -206,24 +190,13 @@ class XMLNodeChildren extends XMLNodeBase {
   }
 
   // 获取属性和值匹配的节点列表
-  public getChildrenNodeByAttrValue(
-    attr: string,
-    val: string
-  ): XMLNodeElement[] {
-    return this.getChildrenNodes().filter(
-      item => item.getAttributeOf(attr) === val
-    );
+  public getChildrenNodeByAttrValue(attr: string, val: string): XMLNodeElement[] {
+    return this.getChildrenNodes().filter(item => item.getAttributeOf(attr) === val);
   }
 
   // 获取第一个属性和值匹配的节点
-  public getChildrenFirstNodeByAttrValue(
-    attr: string,
-    val: string
-  ): XMLNodeElement {
-    return (
-      this.getChildrenNodes().find(item => item.getAttributeOf(attr) === val) ||
-      XMLNodeElement.createEmptyNode()
-    );
+  public getChildrenFirstNodeByAttrValue(attr: string, val: string): XMLNodeElement {
+    return this.getChildrenNodes().find(item => item.getAttributeOf(attr) === val) || XMLNodeElement.createEmptyNode();
   }
 }
 
@@ -338,9 +311,7 @@ export default class XMLNodeElement extends XMLNodeHandler {
 
   // 创建一个空的根节点
   public static createEmptyRootNode(useDeclaration = true): XMLNodeElement {
-    const declaration = useDeclaration
-      ? { declaration: { attributes: { version: "1.0", encoding: "utf-8" } } }
-      : {};
+    const declaration = useDeclaration ? { declaration: { attributes: { version: "1.0", encoding: "utf-8" } } } : {};
     return XMLNodeElement.createNode({
       ...declaration,
       elements: []

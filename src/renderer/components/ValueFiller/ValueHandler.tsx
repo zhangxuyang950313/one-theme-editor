@@ -9,17 +9,10 @@ const ValueHandler: React.FC<{
   onDelete?: () => void;
   iconEyeFocus: boolean;
 }> = props => {
-  const { locateVisible, deleteVisible, onLocate, onDelete, iconEyeFocus } =
-    props;
+  const { locateVisible, deleteVisible, onLocate, onDelete, iconEyeFocus } = props;
   return (
     <StyleValueHandler>
-      {locateVisible && (
-        <IconEye
-          className="btn locate focus"
-          data-eye-focus={iconEyeFocus}
-          onClick={onLocate}
-        />
-      )}
+      {locateVisible && <IconEye className="btn locate focus" data-eye-focus={iconEyeFocus} onClick={onLocate} />}
       {/* 删除 */}
       {deleteVisible && <IconClose className="btn delete" onClick={onDelete} />}
     </StyleValueHandler>

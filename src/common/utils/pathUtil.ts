@@ -47,10 +47,7 @@ const PathUtil = {
   },
   // 配置资源目录
   get RESOURCE(): string {
-    return path.resolve(
-      this.ROOT_PATH,
-      $app?.isPackaged ? "app.resource" : "resource"
-    );
+    return path.resolve(this.ROOT_PATH, $app?.isPackaged ? "app.resource" : "resource");
   },
   // 静态资源目录
   get CLIENT_STATIC(): string {

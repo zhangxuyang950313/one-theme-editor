@@ -25,15 +25,9 @@ const Sidebar: React.FC<{
       <TopInfo />
       {/* 场景选择 */}
       {scenarioList.length > 0 && (
-        <Menu
-          className="menu"
-          defaultSelectedKeys={[`${0}.${scenarioList[0].src}`]}
-        >
+        <Menu className="menu" defaultSelectedKeys={[`${0}.${scenarioList[0].src}`]}>
           {scenarioList.map((item, key) => (
-            <Menu.Item
-              key={`${key}.${item.src}`}
-              onClick={() => onScenarioChange(item)}
-            >
+            <Menu.Item key={`${key}.${item.src}`} onClick={() => onScenarioChange(item)}>
               {item.name}
             </Menu.Item>
           ))}

@@ -21,11 +21,7 @@ const ColorBox: React.FC<{
   const { color, tipColor, onClick } = props;
   return (
     <Tooltip title={tipColor}>
-      <StyleColorBox
-        girdSize={10}
-        color={color}
-        onClick={() => onClick && onClick()}
-      />
+      <StyleColorBox girdSize={10} color={color} onClick={() => onClick && onClick()} />
     </Tooltip>
   );
 };
@@ -38,8 +34,7 @@ const StyleColorBox = styled(StyleGirdBackground)<{ color: string }>`
   height: 36px;
   border-radius: 6px;
   border: 3px solid;
-  border-color: ${({ color }) =>
-    color ? "var(--color-secondary-disabled)" : "transparent"};
+  border-color: ${({ color }) => (color ? "var(--color-secondary-disabled)" : "transparent")};
   box-sizing: border-box;
   &::before {
     content: "×";
@@ -94,16 +89,14 @@ function ColorPickerBox(props: {
       // electronStore.config.set("colorRecently", []);
       return;
     }
-    const arr = Array.from(new Set([colorRGBAHex, ...colorRecently])).filter(
-      item => {
-        try {
-          ColorUtil.create(item, colorFormat);
-          return true;
-        } catch (err) {
-          return false;
-        }
+    const arr = Array.from(new Set([colorRGBAHex, ...colorRecently])).filter(item => {
+      try {
+        ColorUtil.create(item, colorFormat);
+        return true;
+      } catch (err) {
+        return false;
       }
-    );
+    });
     if (arr.length > 55) {
       arr.length = 55;
     }
@@ -198,9 +191,7 @@ const ColorPicker: React.FC<{
   // 选色器和输入框联动
   useLayoutEffect(() => {
     try {
-      setInputColor(
-        ColorUtil.create(colorRGBAHex, HEX_FORMAT.RGBA).format(colorFormat)
-      );
+      setInputColor(ColorUtil.create(colorRGBAHex, HEX_FORMAT.RGBA).format(colorFormat));
     } catch (err: any) {
       // console.log("colorRGBAHex", err);
       // message.warn(err.message);
@@ -268,9 +259,7 @@ const ColorPicker: React.FC<{
           }}
         />
       </div>
-      {!ColorUtil.isHex(value) && value.length > 0 && (
-        <div className="error">{`非合法颜色值("${value}")`}</div>
-      )}
+      {!ColorUtil.isHex(value) && value.length > 0 && <div className="error">{`非合法颜色值("${value}")`}</div>}
     </StyleColorPicker>
   );
 };

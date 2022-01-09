@@ -65,9 +65,7 @@ export async function loadImage(imageUrl: string): Promise<HTMLImageElement> {
 }
 
 // 像素信息二维数组化，每一个元素储存 1px 信息
-export function pixelToDoubleDimensionalArray(
-  pixelData: Uint8ClampedArray
-): number[][] {
+export function pixelToDoubleDimensionalArray(pixelData: Uint8ClampedArray): number[][] {
   const arr: number[][] = [];
   const pixelArr = Array.from(pixelData);
   const count = pixelArr.length / 4;
@@ -190,16 +188,9 @@ type TypeAllDirectUnit8Array = {
 //   return { padLeft, padRight, padTop, padBottom, xDivs, yDivs };
 // }
 // 异步方法
-async function computeNinePatch(
-  pixels: TypeAllDirectUnit8Array
-): Promise<iNinePatch.ninePatch.data> {
+async function computeNinePatch(pixels: TypeAllDirectUnit8Array): Promise<iNinePatch.ninePatch.data> {
   const { top, right, bottom, left } = pixels;
-  const [
-    xDivs,
-    yDivs,
-    { front: padLeft, behind: padRight },
-    { front: padTop, behind: padBottom }
-  ] = await Promise.all([
+  const [xDivs, yDivs, { front: padLeft, behind: padRight }, { front: padTop, behind: padBottom }] = await Promise.all([
     syncToAsync(() => computeDivs(top)),
     syncToAsync(() => computeDivs(left)),
     syncToAsync(() => computePad(bottom)),
@@ -223,13 +214,7 @@ function createCanvas(width: number, height: number) {
 }
 
 // 提取 canvas 指定区域
-function getCanvasArea(
-  cvs: HTMLCanvasElement,
-  left: number,
-  top: number,
-  width: number,
-  height: number
-) {
+function getCanvasArea(cvs: HTMLCanvasElement, left: number, top: number, width: number, height: number) {
   const canvas = createCanvas(width, height);
   const ctx = canvas.getContext("2d");
   ctx?.drawImage(cvs, left, top, width, height, 0, 0, width, height);
@@ -253,9 +238,7 @@ function getContentCanvas(cvs: HTMLCanvasElement) {
 //   return computeNinePatch({ top, bottom, left, right });
 // }
 // 异步方法
-export async function decodeCanvas(
-  canvas: HTMLCanvasElement
-): Promise<iNinePatch.ninePatch.data> {
+export async function decodeCanvas(canvas: HTMLCanvasElement): Promise<iNinePatch.ninePatch.data> {
   const { width, height } = canvas;
   const ctx = canvas.getContext("2d");
   if (!ctx) {
@@ -268,27 +251,18 @@ export async function decodeCanvas(
   return await computeNinePatch({ top, bottom, left, right });
 }
 
-function doubleMapper<T>(
-  list: T[],
-  callback: (left: T, right: T, isLast: boolean) => void
-) {
+function doubleMapper<T>(list: T[], callback: (left: T, right: T, isLast: boolean) => void) {
   for (let i = 0; i < list.length; i += 2) {
     callback(list[i], list[i + 1], i === list.length - 2);
   }
 }
 
 // 生成完整的 chunk 数据
-function getIntactChunkData(
-  divs: iNinePatch.ninePatch.divs,
-  originLength: number
-) {
+function getIntactChunkData(divs: iNinePatch.ninePatch.divs, originLength: number) {
   let offset = 0;
   const directDivData: iNinePatch.directChunkList = [];
   doubleMapper(divs, (left, right, isLast) => {
-    directDivData.push(
-      { isDiv: false, space: [offset, left] },
-      { isDiv: true, space: [left, right] }
-    );
+    directDivData.push({ isDiv: false, space: [offset, left] }, { isDiv: true, space: [left, right] });
     offset = right;
     if (!isLast) return;
     directDivData.push({ isDiv: false, space: [right, originLength] });
@@ -306,11 +280,7 @@ function integrateRatio(ratio: number) {
 }
 
 // 计算缩放后的 div 长度
-function computeDirectScaled(
-  divs: iNinePatch.ninePatch.divs,
-  originLength: number,
-  targetLength: number
-) {
+function computeDirectScaled(divs: iNinePatch.ninePatch.divs, originLength: number, targetLength: number) {
   let totalNormal = 0; // 非 div 区域总长度
   let totalDiv = 0; // div 区域总长度
   doubleMapper(divs, (start, end) => (totalDiv += end - start));
@@ -397,9 +367,7 @@ async function handleScaleDirect(
     const countScaled = endOffset - startOffset;
     if (direct === "align") {
       const chunkCanvas = getCanvasArea(canvas, start, 0, count, canvas.height);
-      const scaleChunk = syncToAsync(() =>
-        scaleCanvas(chunkCanvas, countScaled, canvas.height)
-      );
+      const scaleChunk = syncToAsync(() => scaleCanvas(chunkCanvas, countScaled, canvas.height));
       chunksScaleQueue.push(scaleChunk);
       scaleChunk.then(scaledCanvas => {
         if (scaledCanvas.width === 0 || scaledCanvas.height === 0) return;
@@ -408,9 +376,7 @@ async function handleScaleDirect(
     }
     if (direct === "alignV") {
       const chunkCanvas = getCanvasArea(canvas, 0, start, canvas.width, count);
-      const scaleChunk = syncToAsync(() =>
-        scaleCanvas(chunkCanvas, canvas.width, countScaled)
-      );
+      const scaleChunk = syncToAsync(() => scaleCanvas(chunkCanvas, canvas.width, countScaled));
       chunksScaleQueue.push(scaleChunk);
       scaleChunk.then(scaledCanvas => {
         if (scaledCanvas.width === 0 || scaledCanvas.height === 0) return;
@@ -453,30 +419,14 @@ export async function scaleNinePatchCanvas(
   //   alignV: computeDirectScaled(yDivs, originHeight, targetHeight)
   // };
   // 异步优化
-  const pixelsDataScaled: iNinePatch.directPixelsData = await new Promise(
-    resolve => {
-      Promise.all([
-        syncToAsync(() => computeDirectScaled(xDivs, originWidth, targetWidth)),
-        syncToAsync(() =>
-          computeDirectScaled(yDivs, originHeight, targetHeight)
-        )
-      ]).then(([align, alignV]) => resolve({ align, alignV }));
-    }
-  );
+  const pixelsDataScaled: iNinePatch.directPixelsData = await new Promise(resolve => {
+    Promise.all([
+      syncToAsync(() => computeDirectScaled(xDivs, originWidth, targetWidth)),
+      syncToAsync(() => computeDirectScaled(yDivs, originHeight, targetHeight))
+    ]).then(([align, alignV]) => resolve({ align, alignV }));
+  });
   // 使用缩放数据进行重绘
-  const stackCanvas = await handleScaleDirect(
-    pixelsDataScaled,
-    "align",
-    contentCanvas,
-    targetWidth,
-    originHeight
-  );
-  const finalCanvas = await handleScaleDirect(
-    pixelsDataScaled,
-    "alignV",
-    stackCanvas,
-    targetWidth,
-    targetHeight
-  );
+  const stackCanvas = await handleScaleDirect(pixelsDataScaled, "align", contentCanvas, targetWidth, originHeight);
+  const finalCanvas = await handleScaleDirect(pixelsDataScaled, "alignV", stackCanvas, targetWidth, targetHeight);
   return finalCanvas;
 }

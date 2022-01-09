@@ -19,10 +19,7 @@ const NumberInput: React.FC<{
     <StyleNumberInput>
       <div className="content-wrapper">
         <InputNumber disabled className="input" value={defaultValue} />
-        <IconRight
-          className="middle-button"
-          onClick={() => onChange(defaultValue)}
-        />
+        <IconRight className="middle-button" onClick={() => onChange(defaultValue)} />
         <InputNumber
           className="input"
           placeholder={defaultValue}
@@ -40,9 +37,7 @@ const NumberInput: React.FC<{
           }}
         />
       </div>
-      {isNaN(Number(inputVal)) && (
-        <div className="error">{`非合法数字类型("${inputVal}")`}</div>
-      )}
+      {isNaN(Number(inputVal)) && <div className="error">{`非合法数字类型("${inputVal}")`}</div>}
     </StyleNumberInput>
   );
 };

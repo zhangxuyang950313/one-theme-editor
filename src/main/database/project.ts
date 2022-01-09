@@ -1,9 +1,5 @@
 import { v4 as UUID } from "uuid";
-import {
-  TypeCreateProjectPayload,
-  TypeProjectData,
-  TypeProjectDataDoc
-} from "src/types/project";
+import { TypeCreateProjectPayload, TypeProjectData, TypeProjectDataDoc } from "src/types/project";
 import ResourceConfigCompiler from "src/common/classes/ResourceConfigCompiler";
 import PathUtil from "src/common/utils/PathUtil";
 import ERR_CODE from "src/common/enums/ErrorCode";
@@ -19,9 +15,7 @@ class ProjectDatabase extends Database {
   }
 
   // 创建工程
-  async createProject(
-    data: TypeCreateProjectPayload
-  ): Promise<TypeProjectDataDoc> {
+  async createProject(data: TypeCreateProjectPayload): Promise<TypeProjectDataDoc> {
     const { description, root, scenarioSrc, resourceSrc } = data;
     const uiVersion = ResourceConfigCompiler.from(resourceSrc).getUiVersion();
     return super.insert<TypeProjectData>({
@@ -35,35 +29,21 @@ class ProjectDatabase extends Database {
   }
 
   // 筛选工程
-  async findProjectListByQuery(
-    query: Partial<TypeProjectDataDoc>
-  ): Promise<TypeProjectDataDoc[]> {
+  async findProjectListByQuery(query: Partial<TypeProjectDataDoc>): Promise<TypeProjectDataDoc[]> {
     return super.find<TypeProjectData>(query).sort({ updatedAt: -1 });
   }
 
   // 查找工程
-  async findProjectByQuery(
-    query: Partial<TypeProjectDataDoc>
-  ): Promise<TypeProjectDataDoc> {
+  async findProjectByQuery(query: Partial<TypeProjectDataDoc>): Promise<TypeProjectDataDoc> {
     const project = await super.findOne<TypeProjectData>(query);
     if (!project) throw new Error(ERR_CODE[2001]);
     return project;
   }
 
   // 更新工程数据
-  async updateProject<
-    T extends Partial<TypeProjectData>,
-    O = { [K in keyof T]: T[K] }
-  >(
+  async updateProject<T extends Partial<TypeProjectData>, O = { [K in keyof T]: T[K] }>(
     uuid: string,
-    data:
-      | T
-      | { $push: O }
-      | { $pull: O }
-      | { $addToSet: O }
-      | { $pop: O }
-      | { $set: O }
-      | { $unset: O }
+    data: T | { $push: O } | { $pull: O } | { $addToSet: O } | { $pop: O } | { $set: O } | { $unset: O }
   ): Promise<TypeProjectDataDoc> {
     const updated = await super.update<TypeProjectData>({ uuid }, data, {
       multi: false, // 更新所有匹配项目

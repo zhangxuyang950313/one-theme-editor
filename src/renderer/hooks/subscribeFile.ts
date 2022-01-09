@@ -16,20 +16,14 @@ export function useSubscribeFileData(
     // 双向输出
     isBothWay?: boolean;
     // 过滤器
-    filter?: (
-      event: FILE_EVENT,
-      file: string,
-      fileData: TypeFileData
-    ) => boolean;
+    filter?: (event: FILE_EVENT, file: string, fileData: TypeFileData) => boolean;
   }
 ): {
   url: string;
   state: FILE_EVENT;
   fileData: TypeFileData;
 } {
-  const protocol = options?.isBothWay
-    ? PROTOCOL_TYPE.src
-    : PROTOCOL_TYPE.project;
+  const protocol = options?.isBothWay ? PROTOCOL_TYPE.src : PROTOCOL_TYPE.project;
   const [url, setUrl] = useState(`${protocol}://${src}`);
   const [state, setState] = useState(FILE_EVENT.UNLINK);
   const [fileData, setFileData] = useState(FileData.default);
@@ -52,15 +46,9 @@ export function useSubscribeFileData(
   return { url, state, fileData };
 }
 
-const fileDataWithCache = new FileDataWithCache(
-  window.$one.$server.getFileDataSync
-);
+const fileDataWithCache = new FileDataWithCache(window.$one.$server.getFileDataSync);
 
-type TypeListener = (
-  evt: FILE_EVENT,
-  src: string,
-  fileData: TypeFileData
-) => void;
+type TypeListener = (evt: FILE_EVENT, src: string, fileData: TypeFileData) => void;
 
 export function useSubscribeSrc(options?: {
   // 立即回调当前状态
@@ -68,9 +56,7 @@ export function useSubscribeSrc(options?: {
   // 过滤器
   filter?: (data: TypeFileChangeCallbackData) => boolean;
 }): (src: string, callback: TypeListener) => void {
-  const [projectRoot, setRoot] = useState(
-    window.$one.$reactive.get("projectPath")
-  );
+  const [projectRoot, setRoot] = useState(window.$one.$reactive.get("projectPath"));
   const list = useRef<Array<{ src: string; callback: TypeListener }>>([]);
 
   useLayoutEffect(() => {
@@ -111,10 +97,7 @@ export function useSubscribeSrc(options?: {
 }
 
 // 监听单个 src 文件
-export function useSubscribeSrcSingly(
-  src: string | undefined,
-  callback: TypeListener
-): void {
+export function useSubscribeSrcSingly(src: string | undefined, callback: TypeListener): void {
   const subscribe = useSubscribeSrc({ immediately: true });
   useLayoutEffect(() => {
     if (!src) return;

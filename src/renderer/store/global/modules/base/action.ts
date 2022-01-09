@@ -15,15 +15,11 @@ type TypeActionSetAppPath = {
 export type TypeActions = TypeActionSetServerPort | TypeActionSetAppPath;
 
 // 设置本次服务端口
-export function ActionSetServerPort(
-  port: string | number
-): TypeActionSetServerPort {
+export function ActionSetServerPort(port: string | number): TypeActionSetServerPort {
   return { type: ACTION_TYPES.SET_SERVER_PORT, payload: port };
 }
 
 // 设置编辑器路径配置
-export function ActionSetAppConfig(
-  payload: TypePathCollection
-): TypeActionSetAppPath {
+export function ActionSetAppConfig(payload: TypePathCollection): TypeActionSetAppPath {
   return { type: ACTION_TYPES.SET_PATH_CONFIG, payload };
 }

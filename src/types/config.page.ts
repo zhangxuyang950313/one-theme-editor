@@ -1,11 +1,5 @@
 import { FileTypeResult } from "file-type";
-import {
-  ALIGN_VALUE,
-  ALIGN_V_VALUE,
-  RESOURCE_TAG,
-  RESOURCE_PROTOCOL,
-  LAYOUT_ELEMENT_TAG
-} from "src/common/enums";
+import { ALIGN_VALUE, ALIGN_V_VALUE, RESOURCE_TAG, RESOURCE_PROTOCOL, LAYOUT_ELEMENT_TAG } from "src/common/enums";
 import XMLNodeBase from "src/common/classes/XMLNodeElement";
 
 import type { TypeFileData, TypeImageFileData } from "./file-data";
@@ -39,11 +33,7 @@ export type TypeXmlValueData = {
   template: string;
 };
 
-export type TypeXmlValueTags =
-  | RESOURCE_TAG.String
-  | RESOURCE_TAG.Color
-  | RESOURCE_TAG.Number
-  | RESOURCE_TAG.Boolean;
+export type TypeXmlValueTags = RESOURCE_TAG.String | RESOURCE_TAG.Color | RESOURCE_TAG.Number | RESOURCE_TAG.Boolean;
 
 export type TypeValueBlock<T = TypeXmlValueTags> = {
   readonly tag: T;
@@ -78,12 +68,7 @@ export type TypeFileItem = {
 };
 
 // 块
-export type TypeBlockCollection =
-  | TypeFileBlock
-  | TypeStringBlock
-  | TypeColorBlock
-  | TypeNumberBlock
-  | TypeBooleanBlock;
+export type TypeBlockCollection = TypeFileBlock | TypeStringBlock | TypeColorBlock | TypeNumberBlock | TypeBooleanBlock;
 
 // Resource 分类
 export type TypeResourceCategory = {
@@ -146,10 +131,7 @@ export type TypeXmlValUrlData = TypeUrlData<{ value: string }>;
 /*************************** utils ***************************/
 
 // 键值对配置数据
-export type TypeXmlTempKeyValMap = Map<
-  string,
-  { value: string; description: string }
->;
+export type TypeXmlTempKeyValMap = Map<string, { value: string; description: string }>;
 
 // 键值对映射配置
 export type TypeXmlKeyValConfig = {

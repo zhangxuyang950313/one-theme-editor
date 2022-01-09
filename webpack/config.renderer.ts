@@ -1,11 +1,7 @@
 import path from "path";
 
 import WebpackBar from "webpackbar";
-import webpack, {
-  DefinePlugin,
-  DllReferencePlugin,
-  HotModuleReplacementPlugin
-} from "webpack";
+import webpack, { DefinePlugin, DllReferencePlugin, HotModuleReplacementPlugin } from "webpack";
 import WebpackDevServer from "webpack-dev-server";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
@@ -35,12 +31,8 @@ import {
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 // const ArcoWebpackPlugin = require("@arco-design/webpack-plugin");
 
-const webpackDevClientEntry = require.resolve(
-  "react-dev-utils/webpackHotDevClient"
-);
-const reactRefreshOverlayEntry = require.resolve(
-  "react-dev-utils/refreshOverlayInterop"
-);
+const webpackDevClientEntry = require.resolve("react-dev-utils/webpackHotDevClient");
+const reactRefreshOverlayEntry = require.resolve("react-dev-utils/refreshOverlayInterop");
 
 const getCssLoaders = (options: { isDev: boolean; importLoaders: number }) => {
   return [
@@ -86,9 +78,7 @@ const devServer: WebpackDevServer.Configuration = {
   quiet: false
 };
 
-const htmlPluginOpt: (
-  isDev: boolean
-) => Partial<HtmlWebpackPlugin.ProcessedOptions> = (isDev: boolean) => ({
+const htmlPluginOpt: (isDev: boolean) => Partial<HtmlWebpackPlugin.ProcessedOptions> = (isDev: boolean) => ({
   cache: false,
   scriptLoading: "defer",
   ...(!isDev && {
@@ -130,12 +120,8 @@ const config: webpack.ConfigurationFactory = (env, args) => {
       // 输出目录
       path: outputDir.render,
       // publicPath: "http://localhost:30000/image?file=",
-      filename: isDev
-        ? "scripts/[name].js"
-        : "scripts/[name].[contenthash:8].js",
-      chunkFilename: isDev
-        ? "scripts/[name].chunk.js"
-        : "scripts/[name].[contenthash:8].chunk.js",
+      filename: isDev ? "scripts/[name].js" : "scripts/[name].[contenthash:8].js",
+      chunkFilename: isDev ? "scripts/[name].chunk.js" : "scripts/[name].[contenthash:8].chunk.js",
       hotUpdateChunkFilename: "hmr/[id].hot-update.js",
       hotUpdateMainFilename: "hmr/runtime.hot-update.json",
       /**
@@ -231,17 +217,11 @@ const config: webpack.ConfigurationFactory = (env, args) => {
         },
         {
           test: /\.(sc|sa)ss$/,
-          use: [
-            ...getCssLoaders({ importLoaders: 3, isDev }),
-            { loader: "happypack/loader?id=sass-loader" }
-          ]
+          use: [...getCssLoaders({ importLoaders: 3, isDev }), { loader: "happypack/loader?id=sass-loader" }]
         },
         {
           test: /\.less$/,
-          use: [
-            ...getCssLoaders({ importLoaders: 3, isDev }),
-            { loader: "happypack/loader?id=less-loader" }
-          ]
+          use: [...getCssLoaders({ importLoaders: 3, isDev }), { loader: "happypack/loader?id=less-loader" }]
         },
         {
           test: /\.(png|svg|jpg|jpeg|gif)$/i,
@@ -322,9 +302,7 @@ const config: webpack.ConfigurationFactory = (env, args) => {
       }),
       new MiniCssExtractPlugin({
         filename: isDev ? "css/[name].css" : "css/[name].[contenthash:8].css",
-        chunkFilename: isDev
-          ? "css/[name].chunk.css"
-          : "css/[name].[contenthash:8].chunk.css"
+        chunkFilename: isDev ? "css/[name].chunk.css" : "css/[name].[contenthash:8].chunk.css"
       }),
       new HappyPack({
         id: "file-loader",
@@ -351,11 +329,7 @@ const config: webpack.ConfigurationFactory = (env, args) => {
             options: {
               cacheDirectory: true,
               cacheCompression: true,
-              presets: [
-                "@babel/preset-env",
-                "@babel/preset-react",
-                "@babel/preset-typescript"
-              ],
+              presets: ["@babel/preset-env", "@babel/preset-react", "@babel/preset-typescript"],
               plugins: [
                 [
                   "babel-plugin-import",
@@ -395,17 +369,11 @@ const config: webpack.ConfigurationFactory = (env, args) => {
       }),
       new DllReferencePlugin({
         context: process.cwd(),
-        manifest: require(path.join(
-          __dirname,
-          "../release.dll/renderer.manifest.json"
-        ))
+        manifest: require(path.join(__dirname, "../release.dll/renderer.manifest.json"))
       }),
       new DllReferencePlugin({
         context: process.cwd(),
-        manifest: require(path.join(
-          __dirname,
-          "../release.dll/main.manifest.json"
-        ))
+        manifest: require(path.join(__dirname, "../release.dll/main.manifest.json"))
       }),
       // new ArcoWebpackPlugin({
       //   theme: "@arco-design/theme-one-editor"

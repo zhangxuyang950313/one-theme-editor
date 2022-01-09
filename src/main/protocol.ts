@@ -31,40 +31,38 @@ async function getFilePicResponseData(
     // `good`, `better`, * or `best`
     quality: "best"
   };
-  const result = await new Promise<{ mimeType?: string; data: Buffer }>(
-    async resolve => {
-      try {
-        const { hostname, pathname, searchParams } = new URL(url);
-        options.width = Number(searchParams.get("w") || 0);
-        options.height = Number(searchParams.get("h") || 0);
-        options.quality = searchParams.get("q") || "best";
-        file = decodeURIComponent(path.join(root, hostname, pathname));
-        if (!fse.existsSync(file)) {
-          // 如果获取不到的备份
-          if (backupRoot) {
-            const data = await getFilePicResponseData(url, backupRoot);
-            resolve(data);
-          } else {
-            throw new Error(`${file} is not exists`);
-          }
-        }
-        // 获取图片数据
-        const data = await fileCache.getElectronMimeTypedBuffer(file);
-        resolve(data);
-      } catch {
-        // console.log(err);
-        const def = { mimeType: "image/png", data: Buffer.from("") };
-        // 不存在空返回
-        if (!fse.existsSync(file)) {
-          resolve(def);
-        } else {
-          // 否则使用图标
-          const data = await getFileIconData(file).catch(() => def);
+  const result = await new Promise<{ mimeType?: string; data: Buffer }>(async resolve => {
+    try {
+      const { hostname, pathname, searchParams } = new URL(url);
+      options.width = Number(searchParams.get("w") || 0);
+      options.height = Number(searchParams.get("h") || 0);
+      options.quality = searchParams.get("q") || "best";
+      file = decodeURIComponent(path.join(root, hostname, pathname));
+      if (!fse.existsSync(file)) {
+        // 如果获取不到的备份
+        if (backupRoot) {
+          const data = await getFilePicResponseData(url, backupRoot);
           resolve(data);
+        } else {
+          throw new Error(`${file} is not exists`);
         }
       }
+      // 获取图片数据
+      const data = await fileCache.getElectronMimeTypedBuffer(file);
+      resolve(data);
+    } catch {
+      // console.log(err);
+      const def = { mimeType: "image/png", data: Buffer.from("") };
+      // 不存在空返回
+      if (!fse.existsSync(file)) {
+        resolve(def);
+      } else {
+        // 否则使用图标
+        const data = await getFileIconData(file).catch(() => def);
+        resolve(data);
+      }
     }
-  );
+  });
   // 需要重设尺寸
   if (options.width || options.height) {
     options.width = Math.floor(options.width);
@@ -139,19 +137,13 @@ export default function registerProtocol(): void {
 
   // 根路径为资源路径
   protocol.registerBufferProtocol("resource", async (request, response) => {
-    const data = await getFilePicResponseData(
-      request.url,
-      reactiveState.get("resourcePath")
-    );
+    const data = await getFilePicResponseData(request.url, reactiveState.get("resourcePath"));
     response(data);
   });
 
   // 根路径为工程路径
   protocol.registerBufferProtocol("project", async (request, response) => {
-    const data = await getFilePicResponseData(
-      request.url,
-      reactiveState.get("projectPath")
-    );
+    const data = await getFilePicResponseData(request.url, reactiveState.get("projectPath"));
     response(data);
   });
 
@@ -168,10 +160,7 @@ export default function registerProtocol(): void {
   protocol.registerBufferProtocol("thumbnail", async (request, response) => {
     // let uuid = new URL(request.url).hostname;
     // uuid = decodeURI(uuid); // Needed in case URL contains spaces
-    const data = await getFilePicResponseData(
-      request.url,
-      PathUtil.PROJECT_THUMBNAIL
-    );
+    const data = await getFilePicResponseData(request.url, PathUtil.PROJECT_THUMBNAIL);
     response(data);
   });
   // protocol.registerFileProtocol("one", (request, callback) => {

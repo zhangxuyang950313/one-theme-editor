@@ -15,10 +15,7 @@ export type TypeFileChangeCallbackData = {
 
 class IpcInvoker {
   onFileChange = (callback: (data: TypeFileChangeCallbackData) => void) => {
-    const cb = (
-      $event: IpcRendererEvent,
-      $data: TypeFileChangeCallbackData
-    ) => {
+    const cb = ($event: IpcRendererEvent, $data: TypeFileChangeCallbackData) => {
       callback($data);
     };
     ipcRenderer.on(IPC_EVENT.$fileChange, cb);

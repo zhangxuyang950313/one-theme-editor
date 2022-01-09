@@ -14,12 +14,7 @@ const Previewer: React.FC<{
   const {
     mouseEffect,
     focusKeyPath,
-    pageConfig: {
-      screenWidth,
-      layoutElementList,
-      previewList,
-      forceStaticPreview
-    },
+    pageConfig: { screenWidth, layoutElementList, previewList, forceStaticPreview },
     onSelect
   } = props;
   const [ratio, setRatio] = useState(0);

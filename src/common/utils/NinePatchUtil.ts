@@ -20,26 +20,18 @@ type TypeNinePatchData = {
 export class NinePatch {
   private static readonly PNG_RANGE: TypeRange = [0, 8];
   // PNG 标识
-  private static readonly PNG_IDENTIFIER = Buffer.from([
-    0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a
-  ]);
+  private static readonly PNG_IDENTIFIER = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
   private static readonly npTc_RANGE: TypeRange = [73, 77]; // npTc 区间
   private static readonly npOl_RANGE: TypeRange = [37, 41]; // npOl 区间
   // npTc 标识
-  private static readonly npTc_IDENTIFIER = Buffer.from([
-    0x6e, 0x70, 0x54, 0x63
-  ]);
+  private static readonly npTc_IDENTIFIER = Buffer.from([0x6e, 0x70, 0x54, 0x63]);
   // npOl 标识
-  private static readonly npOl_IDENTIFIER = Buffer.from([
-    0x6e, 0x70, 0x4f, 0x6c
-  ]);
+  private static readonly npOl_IDENTIFIER = Buffer.from([0x6e, 0x70, 0x4f, 0x6c]);
   private static readonly IHDR_OFFSET = 8; // IHDR 起点
   private static readonly IHDR_LENGTH = 8; // IHDR 总长度
   private static readonly IHDR_RANGE: TypeRange = [12, 16]; // IHDR 标识区间
   // IHDR 标识
-  private static readonly IHDR_IDENTIFIER = Buffer.from([
-    0x49, 0x48, 0x44, 0x52
-  ]);
+  private static readonly IHDR_IDENTIFIER = Buffer.from([0x49, 0x48, 0x44, 0x52]);
   private static readonly IHDR_LENGTH_RANGE: TypeRange = [8, 12]; // IHDR 数据长度数据区间
   private static readonly IHDR_WIDTH_RANGE: TypeRange = [16, 20]; // IHDR 图片宽度数据区间
   private static readonly IHDR_HEIGHT_RANGE: TypeRange = [20, 24]; // IHDR 图片高度数据区间
@@ -87,9 +79,7 @@ export class NinePatch {
     //   this.readBuffByRange(NinePatch.PNG_RANGE),
     //   NinePatch.PNG_IDENTIFIER
     // );
-    return this.readBuffByRange(NinePatch.PNG_RANGE).equals(
-      NinePatch.PNG_IDENTIFIER
-    );
+    return this.readBuffByRange(NinePatch.PNG_RANGE).equals(NinePatch.PNG_IDENTIFIER);
   }
 
   // 检测是否包含 .9 图必要数据块 npTc && npOl
@@ -212,9 +202,7 @@ export class NinePatch {
 export default class NinePatchUtil {
   private static suffix = ".9.png";
   // 读取缓存
-  static readCache(
-    dir = PathUtil.NINEPATCH_TEMPORARY
-  ): Record<string, { getBuffer: () => Buffer }> {
+  static readCache(dir = PathUtil.NINEPATCH_TEMPORARY): Record<string, { getBuffer: () => Buffer }> {
     const record: Record<string, { getBuffer: () => Buffer }> = {};
     dirTree(dir, {}, file => {
       if (!file.name.endsWith(".9.png")) {
@@ -240,48 +228,31 @@ export default class NinePatchUtil {
       throw new Error(`未知系统类型：${os.type()}`);
     }
     return new Promise<void>(async (resolve, reject) => {
-      childProcess.execFile(
-        AAPT_TOOL,
-        ["s", "-i", from, "-o", to],
-        (err, stdout, stderr) => {
-          if (err) reject(err);
-          resolve();
-        }
-      );
+      childProcess.execFile(AAPT_TOOL, ["s", "-i", from, "-o", to], (err, stdout, stderr) => {
+        if (err) reject(err);
+        resolve();
+      });
     });
   }
 
   // 编码 .9 目录输出到新的目录
-  static async encode9patchWithDir(
-    fromDir: string,
-    toDir: string
-  ): Promise<void> {
+  static async encode9patchWithDir(fromDir: string, toDir: string): Promise<void> {
     const { AAPT_TOOL } = PathUtil;
     if (!AAPT_TOOL) {
       throw new Error(`未知系统类型：${os.type()}`);
     }
     return new Promise((resolve, reject) => {
-      const worker = childProcess.execFile(
-        AAPT_TOOL,
-        ["c", "-S", fromDir, "-C", toDir],
-        (err, stdout, stderr) => {
-          if (err) reject(err);
-          console.log(`aapt[${worker.pid}]`, `处理完毕`);
-          resolve();
-        }
-      );
-      console.log(
-        `aapt[${worker.pid}]`,
-        `处理 ${fse.readdirSync(fromDir).length} 个文件`
-      );
+      const worker = childProcess.execFile(AAPT_TOOL, ["c", "-S", fromDir, "-C", toDir], (err, stdout, stderr) => {
+        if (err) reject(err);
+        console.log(`aapt[${worker.pid}]`, `处理完毕`);
+        resolve();
+      });
+      console.log(`aapt[${worker.pid}]`, `处理 ${fse.readdirSync(fromDir).length} 个文件`);
     });
   }
 
   // 批量编码 .9，从文件夹到文件夹
-  static async encodeNinePatchBatchDir(
-    fromDir: string,
-    toDir: string
-  ): Promise<void> {
+  static async encodeNinePatchBatchDir(fromDir: string, toDir: string): Promise<void> {
     const { AAPT_TOOL } = PathUtil;
     if (!AAPT_TOOL) {
       throw new Error(`未知系统类型：${os.type()}`);
@@ -293,15 +264,11 @@ export default class NinePatchUtil {
       return new Promise<void>(async (resolve, reject) => {
         const from = path.join(fromDir, targetDir);
         const to = path.join(toDir, targetDir);
-        childProcess.execFile(
-          AAPT_TOOL,
-          ["c", "-S", from, "-C", to],
-          (err, stdout, stderr) => {
-            if (err) reject(err);
-            console.log("进程处理完毕", targetDir);
-            resolve();
-          }
-        );
+        childProcess.execFile(AAPT_TOOL, ["c", "-S", from, "-C", to], (err, stdout, stderr) => {
+          if (err) reject(err);
+          console.log("进程处理完毕", targetDir);
+          resolve();
+        });
       });
     });
     await Promise.all(task);

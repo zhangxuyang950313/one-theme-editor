@@ -7,38 +7,19 @@ import type { TypeMsgData, TypeResponseMsg } from "src/types/worker";
 
 // 重写 ChildProcess.send 和 ChildProcess.on 的 message 类型
 export interface TypeMyChildProcess extends ChildProcess.ChildProcess {
-  send(
-    message: TypeMsgData<WORKER_TYPES>,
-    callback?: (error: Error | null) => void
-  ): boolean;
-  send(
-    message: TypeMsgData<WORKER_TYPES>,
-    sendHandle?: SendHandle,
-    callback?: (error: Error | null) => void
-  ): boolean;
+  send(message: TypeMsgData<WORKER_TYPES>, callback?: (error: Error | null) => void): boolean;
+  send(message: TypeMsgData<WORKER_TYPES>, sendHandle?: SendHandle, callback?: (error: Error | null) => void): boolean;
   send(
     message: TypeMsgData<WORKER_TYPES>,
     sendHandle?: SendHandle,
     options?: MessageOptions,
     callback?: (error: Error | null) => void
   ): boolean;
-  on(
-    event: "message",
-    listener: (
-      message: TypeResponseMsg<WORKER_TYPES>,
-      sendHandle: SendHandle
-    ) => void
-  ): this;
-  on(
-    event: "close",
-    listener: (code: number | null, signal: NodeJS.Signals | null) => void
-  ): this;
+  on(event: "message", listener: (message: TypeResponseMsg<WORKER_TYPES>, sendHandle: SendHandle) => void): this;
+  on(event: "close", listener: (code: number | null, signal: NodeJS.Signals | null) => void): this;
   on(event: "disconnect", listener: () => void): this;
   on(event: "error", listener: (err: Error) => void): this;
-  on(
-    event: "exit",
-    listener: (code: number | null, signal: NodeJS.Signals | null) => void
-  ): this;
+  on(event: "exit", listener: (code: number | null, signal: NodeJS.Signals | null) => void): this;
   on(event: string, listener: (...args: any[]) => void): this;
 }
 

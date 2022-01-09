@@ -5,10 +5,7 @@ import { FSWatcher, WatchOptions } from "chokidar";
 import { FILE_EVENT } from "../enums";
 
 type TypeCallback = (event: FILE_EVENT, src: string) => void;
-export type TypeWatchedRecord = Record<
-  string,
-  ReturnType<FSWatcher["getWatched"]>
->;
+export type TypeWatchedRecord = Record<string, ReturnType<FSWatcher["getWatched"]>>;
 
 /**
  * 目录监听器，单实例支持创建多个目录的监听
@@ -17,11 +14,7 @@ class DirWatcher {
   private watcherMap = new Map<string, FSWatcher>();
   private callbackMap = new Map<string, TypeCallback>();
 
-  create(
-    root: string,
-    callback: TypeCallback,
-    options?: WatchOptions
-  ): FSWatcher | null {
+  create(root: string, callback: TypeCallback, options?: WatchOptions): FSWatcher | null {
     if (!path.isAbsolute(root)) return null;
     this.callbackMap.set(root, callback);
     const same = this.watcherMap.get(root);

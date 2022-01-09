@@ -1,9 +1,4 @@
-import {
-  Menu,
-  BrowserWindow,
-  BrowserWindowConstructorOptions,
-  ipcMain
-} from "electron";
+import { Menu, BrowserWindow, BrowserWindowConstructorOptions, ipcMain } from "electron";
 import * as remoteMain from "@electron/remote/main";
 import { isPackaged } from "src/common/utils";
 

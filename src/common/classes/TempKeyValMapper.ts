@@ -1,8 +1,4 @@
-import {
-  TypeXmlKeyValConfig,
-  TypeXmlKeyValMapperMap,
-  TypeXmlTempKeyValMap
-} from "src/types/config.page";
+import { TypeXmlKeyValConfig, TypeXmlKeyValMapperMap, TypeXmlTempKeyValMap } from "src/types/config.page";
 
 import XmlCompiler from "./XmlCompiler";
 
@@ -52,8 +48,7 @@ export default class TempKeyValMapper extends XmlCompiler {
         const key = item.getAttributeOf("name");
         if (!key) return total;
         total.set(key, {
-          value:
-            item.getAttributeOf("value") || item.getChildrenFirstTextValue(),
+          value: item.getAttributeOf("value") || item.getChildrenFirstTextValue(),
           description: item.getAttributeOf("description")
         });
         return total;

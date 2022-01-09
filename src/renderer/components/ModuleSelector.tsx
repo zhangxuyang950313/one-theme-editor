@@ -29,9 +29,7 @@ const ModuleSelector: React.FC<{
           <div className="icon-wrapper" onClick={() => onChange(config)}>
             <StaticResourceImage
               className="icon"
-              is-active={String(
-                `${k}-${config.name}` === `${k}-${moduleSelect.name}`
-              )}
+              is-active={String(`${k}-${config.name}` === `${k}-${moduleSelect.name}`)}
               src={config.icon}
             />
           </div>

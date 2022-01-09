@@ -25,10 +25,7 @@ const ImageElement: React.FC<{
   const subscribe = useSubscribeSrc({ immediately: true });
   useLayoutEffect(() => {
     if (!shouldSubscribe) return;
-    if (
-      sourceData.protocol === PROTOCOL_TYPE.src ||
-      sourceData.protocol === PROTOCOL_TYPE.project
-    ) {
+    if (sourceData.protocol === PROTOCOL_TYPE.src || sourceData.protocol === PROTOCOL_TYPE.project) {
       subscribe(sourceData.src, () => {
         const u = new URL(url);
         u.searchParams.set("t", Date.now().toString());
@@ -38,14 +35,7 @@ const ImageElement: React.FC<{
     }
   }, []);
 
-  return (
-    <StyleImage
-      alt=""
-      src={url}
-      data-is-blur={isBlur}
-      data-mouse-effect={mouseEffect}
-    />
-  );
+  return <StyleImage alt="" src={url} data-is-blur={isBlur} data-mouse-effect={mouseEffect} />;
 };
 
 const StyleImage = styled.img`

@@ -48,14 +48,7 @@ const NinePatchCanvas: React.FC<
     });
   }, [src, width, height]);
 
-  return (
-    <img
-      {...props}
-      className={props.className}
-      alt=""
-      src={canvas.toDataURL()}
-    />
-  );
+  return <img {...props} className={props.className} alt="" src={canvas.toDataURL()} />;
 };
 
 export default NinePatchCanvas;

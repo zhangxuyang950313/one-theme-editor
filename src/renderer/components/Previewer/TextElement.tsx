@@ -16,15 +16,7 @@ const TextElement: React.FC<{
   mouseEffect?: boolean;
   isBlur?: boolean;
 }> = props => {
-  const {
-    text,
-    fontSize,
-    valueData,
-    sourceData,
-    colorFormat,
-    mouseEffect,
-    isBlur
-  } = props;
+  const { text, fontSize, valueData, sourceData, colorFormat, mouseEffect, isBlur } = props;
   const [defaultColor, setDefaultColor] = useState("");
   const [color, setColor] = useState(defaultColor);
   const [valMapper, setValMapper] = useState<Record<string, string>>({});
@@ -62,11 +54,7 @@ const TextElement: React.FC<{
   }, [valMapper?.[valueData.template]]);
 
   return (
-    <StyleSpan
-      data-mouse-effect={mouseEffect}
-      data-is-blur={isBlur}
-      style={{ display: "inherit", fontSize, color }}
-    >
+    <StyleSpan data-mouse-effect={mouseEffect} data-is-blur={isBlur} style={{ display: "inherit", fontSize, color }}>
       {text}
     </StyleSpan>
   );

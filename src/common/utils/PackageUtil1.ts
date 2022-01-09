@@ -7,11 +7,12 @@ import micromatch from "micromatch";
 import PathUtil from "src/common/utils/PathUtil";
 import { PACK_TYPE } from "src/common/enums";
 import { asyncQueue } from "src/common/utils";
+
+import { compactNinePatchDir } from "./NinePatchUtil";
+
 import type { TypePackConfig } from "src/types/config.scenario";
 import type { TypeProgressData } from "src/types/project";
 import type { TypeUnpackPayload } from "src/types/ipc";
-
-import { compactNinePatchDir } from "./NinePatchUtil";
 
 export class PackUtil {
   // 匹配文件
@@ -108,12 +109,7 @@ export class PackUtil {
             const innerZip = new JsZip();
             const [dir, files] = item;
             if (!files) continue;
-            PackUtil.zipFolderAndFile(
-              innerZip,
-              Array.from(files),
-              root,
-              excludes
-            );
+            PackUtil.zipFolderAndFile(innerZip, Array.from(files), root, excludes);
             zip.file(dir, await innerZip.generateAsync(zipOpt));
           }
           break;
@@ -139,10 +135,7 @@ export class PackUtil {
     data: { packDir: string; packConfig: TypePackConfig },
     callback: (x: TypeProgressData<number>) => void
   ): Promise<Buffer> {
-    const temporaryPath = path.join(
-      PathUtil.PACK_TEMPORARY,
-      path.basename(data.packDir)
-    );
+    const temporaryPath = path.join(PathUtil.PACK_TEMPORARY, path.basename(data.packDir));
     if (fse.existsSync(temporaryPath)) {
       fse.removeSync(temporaryPath);
     }
@@ -161,11 +154,7 @@ export class PackUtil {
 
     // zip 压缩
     console.time("压缩耗时");
-    const content = await PackUtil.zipByRules(
-      temporaryPath,
-      data.packConfig.items,
-      data.packConfig.excludes
-    );
+    const content = await PackUtil.zipByRules(temporaryPath, data.packConfig.items, data.packConfig.excludes);
     console.timeEnd("压缩耗时");
     fse.remove(temporaryPath).then(() => {
       console.log("删除临时目录");
@@ -197,9 +186,7 @@ export class UnpackUtil {
   }
 
   // 获取 zip 中的文件列表
-  static async getFiles(
-    data: JsZip.InputType
-  ): Promise<{ [x: string]: JsZip.JSZipObject }> {
+  static async getFiles(data: JsZip.InputType): Promise<{ [x: string]: JsZip.JSZipObject }> {
     const jsZip = await JsZip.loadAsync(data);
     return jsZip.files;
   }
@@ -262,15 +249,10 @@ export class UnpackUtil {
   }
 
   // 输出文件
-  private async output(
-    files: JsZip.JSZipObject[],
-    outputDir: string
-  ): Promise<string[]> {
+  private async output(files: JsZip.JSZipObject[], outputDir: string): Promise<string[]> {
     // 最后统一过滤一下不符合 pattern 的文件
     files = files.filter(file => {
-      return this.packConfig.items.some(item =>
-        micromatch.contains(file.name, item.pattern)
-      );
+      return this.packConfig.items.some(item => micromatch.contains(file.name, item.pattern));
     });
     // fse.outputJSONSync(
     //   `${path.dirname(this.file)}/a.json`,
@@ -295,10 +277,7 @@ export class UnpackUtil {
 }
 
 export default class PackageUtil {
-  static async unpack(
-    data: TypeUnpackPayload,
-    callback: (x: TypeProgressData) => void
-  ): Promise<string[]> {
+  static async unpack(data: TypeUnpackPayload, callback: (x: TypeProgressData) => void): Promise<string[]> {
     return new UnpackUtil({
       unpackFile: data.unpackFile,
       packConfig: data.packConfig

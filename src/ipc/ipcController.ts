@@ -7,12 +7,7 @@ import { ipcMain, ipcRenderer } from "electron";
 import Adb, { Device } from "@devicefarmer/adbkit";
 
 import ERR_CODE from "src/common/enums/ErrorCode";
-import {
-  chunkCreateWindow,
-  chunkDirWatcher,
-  chunkFileCache,
-  chunkProjectDB
-} from "src/common/asyncChunk";
+import { chunkCreateWindow, chunkDirWatcher, chunkFileCache, chunkProjectDB } from "src/common/asyncChunk";
 import { fileCache, fileDataWithCache } from "src/main/singletons/fileCache";
 import PackageUtil from "src/common/utils/PackageUtil";
 import NinePatchUtil from "src/common/utils/NinePatchUtil";
@@ -29,19 +24,9 @@ import ipcCreator from "./IpcCreator";
 
 import type { TypeFileData } from "src/types/file-data";
 import type { TypeWatchedRecord } from "src/common/classes/DirWatcher";
-import type {
-  TypeScenarioConfig,
-  TypeScenarioOption
-} from "src/types/config.scenario";
-import type {
-  TypePageConfig,
-  TypeResourceConfig
-} from "src/types/config.resource";
-import type {
-  TypeCreateProjectPayload,
-  TypeProgressData,
-  TypeProjectDataDoc
-} from "src/types/project";
+import type { TypeScenarioConfig, TypeScenarioOption } from "src/types/config.scenario";
+import type { TypePageConfig, TypeResourceConfig } from "src/types/config.resource";
+import type { TypeCreateProjectPayload, TypeProgressData, TypeProjectDataDoc } from "src/types/project";
 import type {
   TypePackPayload,
   TypeUnpackPayload,
@@ -97,12 +82,10 @@ class IpcController extends ipcCreator {
 
   // 获取页面配置列表
   getPageConfig = this
-    /**/ .createIpcAsync<{ namespace: string; config: string }, TypePageConfig>(
-      {
-        event: IPC_EVENT.$getPageConfig,
-        server: async data => new PageConfigCompiler(data).getData()
-      }
-    );
+    /**/ .createIpcAsync<{ namespace: string; config: string }, TypePageConfig>({
+      event: IPC_EVENT.$getPageConfig,
+      server: async data => new PageConfigCompiler(data).getData()
+    });
 
   // 创建工程
   createProject = this
@@ -111,9 +94,7 @@ class IpcController extends ipcCreator {
       server: async data => {
         const projectDB = await chunkProjectDB();
         const project = await projectDB.createProject(data);
-        const preview = ResourceConfigCompiler.from(
-          data.resourceSrc
-        ).getPreviewAbsFile();
+        const preview = ResourceConfigCompiler.from(data.resourceSrc).getPreviewAbsFile();
         if (fse.existsSync(preview)) {
           const target = path.join(PathUtil.PROJECT_THUMBNAIL, project.uuid);
           fse.copyFile(preview, target);
@@ -122,10 +103,7 @@ class IpcController extends ipcCreator {
       }
     });
 
-  updateProject = this.createIpcAsync<
-    { uuid: string; data: TypeProjectDataDoc },
-    TypeProjectDataDoc
-  >({
+  updateProject = this.createIpcAsync<{ uuid: string; data: TypeProjectDataDoc }, TypeProjectDataDoc>({
     event: IPC_EVENT.$updateProject,
     server: async ({ uuid, data }) => {
       const projectDB = await chunkProjectDB();
@@ -143,9 +121,7 @@ class IpcController extends ipcCreator {
         // 若不存在缩略图，调用配置的预览图
         // TODO：需要补充配置也没有预览图的情况的默认图
         list.forEach(item => {
-          const preview = ResourceConfigCompiler.from(
-            item.resourceSrc
-          ).getPreviewAbsFile();
+          const preview = ResourceConfigCompiler.from(item.resourceSrc).getPreviewAbsFile();
           const th = path.join(PathUtil.PROJECT_THUMBNAIL, item.uuid);
           if (!fse.existsSync(th) && fse.existsSync(preview)) {
             fse.copySync(preview, th);
@@ -307,10 +283,7 @@ class IpcController extends ipcCreator {
     }
   });
 
-  getFileAllCache = this.createIpcAsync<
-    void,
-    ReturnType<FileCache["getCache"]>
-  >({
+  getFileAllCache = this.createIpcAsync<void, ReturnType<FileCache["getCache"]>>({
     event: IPC_EVENT.$getFileAllCache,
     server: async () => fileCache.getCache()
   });

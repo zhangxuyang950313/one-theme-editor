@@ -21,10 +21,7 @@ export const ResourceConfigCard: React.FC<
 
   return (
     <StyleResourceConfigCard {...props}>
-      <PreloadImage
-        className="preview"
-        src={`local://${path.join(resourceDir, namespace, preview)}`}
-      />
+      <PreloadImage className="preview" src={`local://${path.join(resourceDir, namespace, preview)}`} />
       <Descriptions
         className="description"
         column={1}
@@ -36,9 +33,7 @@ export const ResourceConfigCard: React.FC<
           { label: "UI版本", value: resourceConfig.uiVersion.name },
           {
             label: `模块(${resourceConfig.moduleList.length})`,
-            value: resourceConfig.moduleList
-              .map(_ => `${_.name || "-"}(${_.pageList.length})`)
-              .join("、")
+            value: resourceConfig.moduleList.map(_ => `${_.name || "-"}(${_.pageList.length})`).join("、")
           }
         ]}
       />

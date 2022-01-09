@@ -4,25 +4,20 @@ import fse from "fs-extra";
 import PathUtil from "src/common/utils/PathUtil";
 import XmlCompiler from "src/common/classes/XmlCompiler";
 import XMLNodeElement from "src/common/classes/XMLNodeElement";
-import type { TypeWriteXmlTempPayload } from "src/types/ipc";
 
 import reactiveState from "../singletons/reactiveState";
+
+import type { TypeWriteXmlTempPayload } from "src/types/ipc";
 
 class XmlTemplateUtil {
   /**
    * 输出被 key value 处理过模板字符串的 xml 模板
    * @param data
    */
-  static async writeXmlTemplate(
-    data: TypeWriteXmlTempPayload
-  ): Promise<Record<string, string>> {
+  static async writeXmlTemplate(data: TypeWriteXmlTempPayload): Promise<Record<string, string>> {
     const project = reactiveState.get("projectData");
     const { tag, attributes, value, src } = data;
-    const resourceXmlFile = path.join(
-      PathUtil.RESOURCE_CONFIG,
-      path.dirname(project.resourceSrc),
-      src
-    );
+    const resourceXmlFile = path.join(PathUtil.RESOURCE_CONFIG, path.dirname(project.resourceSrc), src);
     const releaseXmlFile = path.join(project.root, src);
 
     // 确保存在文件
@@ -30,14 +25,10 @@ class XmlTemplateUtil {
     fse.ensureFileSync(releaseXmlFile);
 
     // 目标插入节点 node 备用
-    const targetNode = XMLNodeElement.createEmptyElementNode(tag).setAttributes(
-      Object.fromEntries(attributes)
-    );
+    const targetNode = XMLNodeElement.createEmptyElementNode(tag).setAttributes(Object.fromEntries(attributes));
     const textNode = targetNode.getChildrenFirstTextNode();
     if (textNode.isEmpty) {
-      targetNode.appendChild(
-        XMLNodeElement.createTextNode().setTextNodeValue(value)
-      );
+      targetNode.appendChild(XMLNodeElement.createTextNode().setTextNodeValue(value));
     } else {
       textNode.setTextNodeValue(value);
     }
@@ -49,10 +40,7 @@ class XmlTemplateUtil {
       // 文件存在但为空
       fileIsEmpty() {
         const templateNode = XmlCompiler.fromFile(resourceXmlFile);
-        templateNode
-          .getChildrenFirstElementNode()
-          .removeChildren()
-          .appendChild(targetNode);
+        templateNode.getChildrenFirstElementNode().removeChildren().appendChild(targetNode);
         releaseXml.setElement(templateNode.getElement());
       },
       // 文件有内容
@@ -68,9 +56,7 @@ class XmlTemplateUtil {
           if (nodeKey === targetKey) {
             const textNode = item.getChildrenFirstTextNode();
             if (textNode.isEmpty) {
-              item.appendChild(
-                XMLNodeElement.createTextNode().setTextNodeValue(value)
-              );
+              item.appendChild(XMLNodeElement.createTextNode().setTextNodeValue(value));
             } else {
               textNode.setTextNodeValue(value);
             }
@@ -99,10 +85,7 @@ class XmlTemplateUtil {
 
   static xmlElementTextModify(xmlStr: string, value: string): string {
     const xmlCompiler = XmlCompiler.fromString(xmlStr);
-    xmlCompiler
-      .getChildrenFirstElementNode()
-      .removeChildren()
-      .appendChild(XMLNodeElement.createTextNode(value));
+    xmlCompiler.getChildrenFirstElementNode().removeChildren().appendChild(XMLNodeElement.createTextNode(value));
     return xmlCompiler.buildXml();
   }
 }

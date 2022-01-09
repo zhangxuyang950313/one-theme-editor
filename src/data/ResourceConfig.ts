@@ -22,19 +22,9 @@ import {
   TypeValueBlock,
   TypeXmlValueData
 } from "src/types/config.page";
-import {
-  TypeFileData,
-  TypeImageFileData,
-  TypeXmlFileData
-} from "src/types/file-data";
+import { TypeFileData, TypeImageFileData, TypeXmlFileData } from "src/types/file-data";
 
-import {
-  ALIGN_VALUE,
-  ALIGN_V_VALUE,
-  HEX_FORMAT,
-  LAYOUT_ELEMENT_TAG,
-  RESOURCE_TAG
-} from "src/common/enums/index";
+import { ALIGN_VALUE, ALIGN_V_VALUE, HEX_FORMAT, LAYOUT_ELEMENT_TAG, RESOURCE_TAG } from "src/common/enums/index";
 
 import { AbstractDataModel } from "./AbstractDataModel";
 

@@ -17,10 +17,7 @@ const baseState: Required<TypeBaseState> = {
   appPath: PathCollection.default
 };
 
-export default function BaseReducer(
-  state = baseState,
-  action: TypeActions
-): TypeBaseState {
+export default function BaseReducer(state = baseState, action: TypeActions): TypeBaseState {
   switch (action.type) {
     case ACTION_TYPES.SET_SERVER_PORT: {
       return updateState(state, { port: Number(action.payload) ?? 0 });

@@ -15,10 +15,7 @@ const ImageDisplay: React.FC<{
   const { girdSize, onClick } = props;
 
   return (
-    <StyleImageDisplay
-      girdSize={girdSize || 18}
-      onClick={() => onClick && onClick()}
-    >
+    <StyleImageDisplay girdSize={girdSize || 18} onClick={() => onClick && onClick()}>
       <span className="thumbnail">{props.children}</span>
     </StyleImageDisplay>
   );

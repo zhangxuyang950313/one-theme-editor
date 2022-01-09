@@ -1,14 +1,5 @@
 const isDev = process.env.REACT_APP_ENV !== "production";
-const extensions = [
-  ".js",
-  ".ts",
-  ".jsx",
-  ".tsx",
-  ".json",
-  ".scss",
-  ".less",
-  ".md"
-];
+const extensions = [".js", ".ts", ".jsx", ".tsx", ".json", ".scss", ".less", ".md"];
 
 module.exports = {
   env: {
@@ -84,10 +75,7 @@ module.exports = {
     "@typescript-eslint/no-unused-vars": isDev ? "warn" : "error", // 未使用的值作为警告
     "@typescript-eslint/no-explicit-any": "off",
     "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": [
-      "off",
-      { additionalHooks: "useRecoilCallback" }
-    ], // hooks 规则
+    "react-hooks/exhaustive-deps": ["off", { additionalHooks: "useRecoilCallback" }], // hooks 规则
     "prefer-template": "error", // 使用模板字符串
     "no-useless-concat": "error", // 进制没必要的字符串拼接
     "no-duplicate-imports": "warn", // 禁止重复导入
@@ -95,16 +83,7 @@ module.exports = {
     "import/order": [
       "warn",
       {
-        "groups": [
-          "builtin",
-          "external",
-          "internal",
-          "parent",
-          "sibling",
-          "index",
-          "type",
-          "object"
-        ],
+        "groups": ["builtin", "external", "internal", "parent", "sibling", "index", "type", "object"],
         "newlines-between": "always-and-inside-groups"
       }
     ],

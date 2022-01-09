@@ -60,11 +60,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
   private xmlValueCache: Map<string, string>;
   private xmlValueItemCache: Map<string, TypeXmlValueData>;
   constructor(data: { namespace: string; config: string }) {
-    const file = path.join(
-      PathUtil.RESOURCE_CONFIG,
-      data.namespace,
-      data.config
-    );
+    const file = path.join(PathUtil.RESOURCE_CONFIG, data.namespace, data.config);
     super(new XmlCompiler(file).getElement());
     this.configFile = file;
     this.pageNamespace = path.dirname(data.config);
@@ -84,9 +80,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
    * @returns
    */
   private getRootFirstChildNodeByTagname(tagname: string): XMLNodeElement {
-    return this.getChildrenFirstElementNode().getChildrenFirstNodeByTagname(
-      tagname
-    );
+    return this.getChildrenFirstElementNode().getChildrenFirstNodeByTagname(tagname);
   }
 
   /**
@@ -95,9 +89,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
    * @returns
    */
   public getRootChildrenNodesByTagname(tagname: string): XMLNodeElement[] {
-    return this.getChildrenFirstElementNode().getChildrenNodesByTagname(
-      tagname
-    );
+    return this.getChildrenFirstElementNode().getChildrenNodesByTagname(tagname);
   }
 
   // 生成当前配置中相对于素材根路径的绝对路径
@@ -164,10 +156,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
 
   // 处理当前页面资源的相对路径
   private relativeResourcePath(pathname: string): string {
-    const relative = path.relative(
-      PathUtil.RESOURCE_CONFIG,
-      path.dirname(this.configFile)
-    );
+    const relative = path.relative(PathUtil.RESOURCE_CONFIG, path.dirname(this.configFile));
     return path.join(relative, pathname);
   }
 
@@ -207,12 +196,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
   // }
 
   private getRootAttribute<T extends string>(
-    attribute:
-      | "version"
-      | "name"
-      | "screenWidth"
-      | "disableTab"
-      | "forceStaticPreview"
+    attribute: "version" | "name" | "screenWidth" | "disableTab" | "forceStaticPreview"
   ): T {
     return this.getChildrenFirstElementNode().getAttributeOf<T>(attribute);
   }
@@ -245,9 +229,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
    * @returns
    */
   getPreviewList(): string[] {
-    return this.getRootChildrenNodesByTagname(ELEMENT_TAG.Preview).map(item =>
-      item.getAttributeOf("src")
-    );
+    return this.getRootChildrenNodesByTagname(ELEMENT_TAG.Preview).map(item => item.getAttributeOf("src"));
   }
 
   private getImageFileData(file: string): TypeImageFileData {
@@ -325,10 +307,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
    * @param node
    * @returns
    */
-  private layoutConf(
-    node: XMLNodeElement,
-    size?: { width: string; height: string }
-  ) {
+  private layoutConf(node: XMLNodeElement, size?: { width: string; height: string }) {
     return new ElementLayoutConfig()
       .set("x", node.getAttributeOf("x", "0"))
       .set("y", node.getAttributeOf("y", "0"))
@@ -351,17 +330,11 @@ export default class PageConfigCompiler extends XMLNodeElement {
    * @param node
    * @returns
    */
-  private layoutImageElement(
-    node: XMLNodeElement,
-    source: string,
-    keyPath: string
-  ): TypeLayoutImageElement {
+  private layoutImageElement(node: XMLNodeElement, source: string, keyPath: string): TypeLayoutImageElement {
     const sourceData = this.getUrlSourceData(source);
     const size = { width: "0", height: "0" };
     try {
-      const imageData = this.getImageFileData(
-        this.resolveResourcePath(sourceData.src)
-      );
+      const imageData = this.getImageFileData(this.resolveResourcePath(sourceData.src));
       size.width = String(imageData.width);
       size.height = String(imageData.height);
     } catch (err) {
@@ -387,10 +360,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
    * @param node
    * @returns
    */
-  private layoutTextElement(
-    node: XMLNodeElement,
-    keyPath: string
-  ): TypeLayoutTextElement {
+  private layoutTextElement(node: XMLNodeElement, keyPath: string): TypeLayoutTextElement {
     const textElement = new LayoutTextElement()
       .set("keyPath", keyPath)
       .set("text", node.getAttributeOf("text"))
@@ -425,9 +395,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
       const itemKey = item.getAttributeOf(":key");
       const source = item.getAttributeOf("src");
       const sourceData = this.getUrlSourceData(source);
-      const fileData = this.getFileData(
-        this.resolveResourcePath(sourceData.src)
-      );
+      const fileData = this.getFileData(this.resolveResourcePath(sourceData.src));
       const keyPath = itemKey ? path.join(rootKey, imageKey, itemKey) : "";
       this.sourceKeyValCache.set(keyPath, source);
       return new FileItem()
@@ -447,11 +415,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
   }
 
   // xml 类型的块
-  private getXmlBlocker(
-    node: XMLNodeElement,
-    tag: TypeXmlValueTags,
-    rootKey: string
-  ): TypeValueBlock {
+  private getXmlBlocker(node: XMLNodeElement, tag: TypeXmlValueTags, rootKey: string): TypeValueBlock {
     const xmlItemKey = node.getAttributeOf(":key");
     const xmlItems = node.getChildrenNodes().flatMap((item, k, arr) => {
       // 不接受非 Xml 节点
@@ -459,49 +423,38 @@ export default class PageConfigCompiler extends XMLNodeElement {
       const itemKey = item.getAttributeOf(":key");
       const source = item.getAttributeOf("src");
       const sourceData = this.getUrlSourceData(source);
-      const valueItems = item
-        .getChildrenNodes()
-        .flatMap((XmlChild, kk, arr) => {
-          if (!XmlChild.isElement) return [];
-          const valueKey = XmlChild.getAttributeOf(":key");
-          const tagname = XmlChild.getTagname();
-          const attributes = XmlChild.getAttributeEntries();
-          // 获取 tag 和 attributes 匹配的节点的 text 值作为默认值
-          const cacheKey = JSON.stringify({ source, tagname, attributes });
-          let defaultVal = this.xmlValueCache.get(cacheKey);
-          if (!defaultVal) {
-            defaultVal = new XmlCompilerExtra(
-              XmlCompiler.fromFile(
-                this.resolveResourcePath(sourceData.src)
-              ).getElement()
-            ).findTextByTagAndAttrs(tagname, attributes);
-            this.xmlValueCache.set(cacheKey, defaultVal);
-          }
-          const template = XmlCompilerExtra.generateXmlNodeStr({
-            tag: tagname,
-            attributes: Object.fromEntries(attributes)
-          });
-          const keyPath = valueKey
-            ? path.join(rootKey, xmlItemKey, itemKey, valueKey)
-            : "";
-          const xmlValueItem = new XmlValueData()
-            .set("tag", tagname)
-            .set("keyPath", keyPath)
-            .set("comment", arr[kk - 1]?.getComment())
-            .set("attributes", attributes)
-            .set("value", defaultVal)
-            .set("template", template)
-            .create();
-          this.xmlValueItemCache.set(keyPath, xmlValueItem);
-          return xmlValueItem;
+      const valueItems = item.getChildrenNodes().flatMap((XmlChild, kk, arr) => {
+        if (!XmlChild.isElement) return [];
+        const valueKey = XmlChild.getAttributeOf(":key");
+        const tagname = XmlChild.getTagname();
+        const attributes = XmlChild.getAttributeEntries();
+        // 获取 tag 和 attributes 匹配的节点的 text 值作为默认值
+        const cacheKey = JSON.stringify({ source, tagname, attributes });
+        let defaultVal = this.xmlValueCache.get(cacheKey);
+        if (!defaultVal) {
+          defaultVal = new XmlCompilerExtra(
+            XmlCompiler.fromFile(this.resolveResourcePath(sourceData.src)).getElement()
+          ).findTextByTagAndAttrs(tagname, attributes);
+          this.xmlValueCache.set(cacheKey, defaultVal);
+        }
+        const template = XmlCompilerExtra.generateXmlNodeStr({
+          tag: tagname,
+          attributes: Object.fromEntries(attributes)
         });
-      const fileData = this.getFileData(
-        this.resolveResourcePath(sourceData.src)
-      );
-      this.sourceKeyValCache.set(
-        path.join(rootKey, xmlItemKey, itemKey),
-        source
-      );
+        const keyPath = valueKey ? path.join(rootKey, xmlItemKey, itemKey, valueKey) : "";
+        const xmlValueItem = new XmlValueData()
+          .set("tag", tagname)
+          .set("keyPath", keyPath)
+          .set("comment", arr[kk - 1]?.getComment())
+          .set("attributes", attributes)
+          .set("value", defaultVal)
+          .set("template", template)
+          .create();
+        this.xmlValueItemCache.set(keyPath, xmlValueItem);
+        return xmlValueItem;
+      });
+      const fileData = this.getFileData(this.resolveResourcePath(sourceData.src));
+      this.sourceKeyValCache.set(path.join(rootKey, xmlItemKey, itemKey), source);
       return new XmlNodeData()
         .set("tag", item.getTagname())
         .set("key", itemKey)
@@ -522,43 +475,41 @@ export default class PageConfigCompiler extends XMLNodeElement {
 
   // 解析 Resource 分类定义数据
   getResourceCategoryList(): TypeResourceCategory[] {
-    return this.getRootChildrenNodesByTagname(ELEMENT_TAG.Resource).map(
-      Resource => {
-        // 扩展配置（备用）
-        const extra: Record<string, string> = {};
-        // 空的删掉
-        for (const key in extra) {
-          if (!extra[key]) {
-            delete extra[key];
+    return this.getRootChildrenNodesByTagname(ELEMENT_TAG.Resource).map(Resource => {
+      // 扩展配置（备用）
+      const extra: Record<string, string> = {};
+      // 空的删掉
+      for (const key in extra) {
+        if (!extra[key]) {
+          delete extra[key];
+        }
+      }
+      const key = Resource.getAttributeOf(":key");
+      const resource = new ResourceDefinition()
+        .set("key", key)
+        .set("name", Resource.getAttributeOf("name"))
+        .set("extra", extra);
+      const children = Resource.getChildrenNodes().flatMap(item => {
+        const tag = item.getTagname<RESOURCE_TAG>();
+        switch (tag) {
+          // 图片类型资源
+          case RESOURCE_TAG.File: {
+            return this.getFileBlocker(item, key);
+          }
+          // xml 值类型资源
+          case RESOURCE_TAG.String:
+          case RESOURCE_TAG.Number:
+          case RESOURCE_TAG.Color:
+          case RESOURCE_TAG.Boolean: {
+            return this.getXmlBlocker(item, tag, key);
+          }
+          default: {
+            return [];
           }
         }
-        const key = Resource.getAttributeOf(":key");
-        const resource = new ResourceDefinition()
-          .set("key", key)
-          .set("name", Resource.getAttributeOf("name"))
-          .set("extra", extra);
-        const children = Resource.getChildrenNodes().flatMap(item => {
-          const tag = item.getTagname<RESOURCE_TAG>();
-          switch (tag) {
-            // 图片类型资源
-            case RESOURCE_TAG.File: {
-              return this.getFileBlocker(item, key);
-            }
-            // xml 值类型资源
-            case RESOURCE_TAG.String:
-            case RESOURCE_TAG.Number:
-            case RESOURCE_TAG.Color:
-            case RESOURCE_TAG.Boolean: {
-              return this.getXmlBlocker(item, tag, key);
-            }
-            default: {
-              return [];
-            }
-          }
-        });
-        return resource.set("children", children).create();
-      }
-    );
+      });
+      return resource.set("children", children).create();
+    });
   }
 
   /**
@@ -574,10 +525,7 @@ export default class PageConfigCompiler extends XMLNodeElement {
         // 返回是否替换成功
         const resolveTempStrWithAttr = (attr: string) => {
           const attrVal = node.getAttributeOf(attr);
-          const source = TempStringUtil.replace(
-            attrVal,
-            this.sourceKeyValCache
-          );
+          const source = TempStringUtil.replace(attrVal, this.sourceKeyValCache);
           const matched = TempStringUtil.match(attrVal);
           const keyPath = matched?.[0]?.[1] || "";
           return { source, keyPath };

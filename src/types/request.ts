@@ -16,9 +16,7 @@ export type TypeResultFail<T> = {
   msg: "error";
   data: T;
 };
-export type TypeResponseFrame<S, F = string> =
-  | TypeResultSuccess<S>
-  | TypeResultFail<F>;
+export type TypeResponseFrame<S, F = string> = TypeResultSuccess<S> | TypeResultFail<F>;
 
 export type TypeGetCanceler = (c: Canceler) => void;
 

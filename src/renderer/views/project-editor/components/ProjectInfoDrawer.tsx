@@ -11,9 +11,7 @@ import ProjectForm from "@/components/ProjectForm";
 const ProjectInfoDrawer: React.FC<{ drawerProps: DrawerProps }> = props => {
   const { projectData, scenarioConfig } = useRecoilValue(projectDataState);
   // 工程信息配置
-  const projectInfoConfig = scenarioConfig.fileTempList.find(
-    item => item.type === FILE_TEMPLATE_TYPE.INFO
-  );
+  const projectInfoConfig = scenarioConfig.fileTempList.find(item => item.type === FILE_TEMPLATE_TYPE.INFO);
   return (
     <Drawer width="50%" title="编辑信息" unmountOnExit {...props.drawerProps}>
       {projectInfoConfig && (

@@ -35,10 +35,7 @@ const ProjectList: React.FC<{ list: TypeProjectDataDoc[] }> = props => {
                       getCurrentWindow().close();
                     }}
                   >
-                    <ProjectDisplay
-                      image={`thumbnail://${item.uuid}`}
-                      name={item.description.name}
-                    />
+                    <ProjectDisplay image={`thumbnail://${item.uuid}`} name={item.description.name} />
                   </div>
                 ))}
               </div>

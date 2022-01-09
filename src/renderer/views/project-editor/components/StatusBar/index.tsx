@@ -5,10 +5,7 @@ import { useRecoilValue } from "recoil";
 import { Divider } from "@arco-design/web-react";
 import { FolderOpenOutlined } from "@ant-design/icons";
 
-import {
-  IconNotification,
-  IconQuestionCircle
-} from "@arco-design/web-react/icon";
+import { IconNotification, IconQuestionCircle } from "@arco-design/web-react/icon";
 
 import { projectDataState } from "../../store/rescoil/state";
 

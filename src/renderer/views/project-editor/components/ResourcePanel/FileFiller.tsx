@@ -6,11 +6,7 @@ import styled from "styled-components";
 
 import { Tooltip } from "antd";
 import { Descriptions, Divider, Notification } from "@arco-design/web-react";
-import {
-  IconArrowRight,
-  IconPlus,
-  IconUndo
-} from "@arco-design/web-react/icon";
+import { IconArrowRight, IconPlus, IconUndo } from "@arco-design/web-react/icon";
 
 import { FILE_EVENT, PROTOCOL_TYPE } from "src/common/enums";
 
@@ -75,11 +71,7 @@ const FileFiller: React.FC<{
                   sourceData={data.sourceData}
                 />
               </ImageDisplay>
-              <Tooltip
-                title="使用默认素材"
-                placement="top"
-                getPopupContainer={getPopupContainer}
-              >
+              <Tooltip title="使用默认素材" placement="top" getPopupContainer={getPopupContainer}>
                 <IconUndo
                   className="popup-icon"
                   onClick={() => {
@@ -95,17 +87,11 @@ const FileFiller: React.FC<{
           primaryNode={
             <>
               {projectFileData.state === FILE_EVENT.UNLINK ? (
-                <div
-                  className="empty-display"
-                  onClick={() => importResource(projectFile)}
-                >
+                <div className="empty-display" onClick={() => importResource(projectFile)}>
                   <IconPlus className="plugs-icon" />
                 </div>
               ) : (
-                <ImageDisplay
-                  girdSize={13}
-                  onClick={() => onHighlight(data.keyPath)}
-                >
+                <ImageDisplay girdSize={13} onClick={() => onHighlight(data.keyPath)}>
                   <ImageElement
                     mouseEffect
                     shouldSubscribe
@@ -309,13 +295,9 @@ const ModifierDescriptions: React.FC<{
           label: "大小",
           value: (
             <div className="flex-alignV-center">
-              <div className="item-place">
-                {`${(props.origin.size / 1024).toFixed(2)}kb`}
-              </div>
+              <div className="item-place">{`${(props.origin.size / 1024).toFixed(2)}kb`}</div>
               <div className="placeholder" />
-              <div className="item-place">{`${(
-                props.current.size / 1024
-              ).toFixed(2)}kb`}</div>
+              <div className="item-place">{`${(props.current.size / 1024).toFixed(2)}kb`}</div>
             </div>
           )
         }

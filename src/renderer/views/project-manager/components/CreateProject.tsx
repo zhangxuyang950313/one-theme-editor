@@ -5,15 +5,7 @@ import { dialog } from "electron";
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { useToggle } from "ahooks";
-import {
-  Modal,
-  Form,
-  Input,
-  Message,
-  Button,
-  Drawer,
-  DrawerProps
-} from "@arco-design/web-react";
+import { Modal, Form, Input, Message, Button, Drawer, DrawerProps } from "@arco-design/web-react";
 import { IconFindReplace } from "@arco-design/web-react/icon";
 
 import { isDev } from "src/common/utils/index";
@@ -70,9 +62,7 @@ const CreateProject: React.FC<{
   // 选择的模板
   const [resourceConfig, setResourceConfig] = useState<TypeResourceConfig>();
   // 填写本地目录
-  const [localPath, setLocalPath] = useState(
-    path.join(defaultPath, initialValues.name)
-  );
+  const [localPath, setLocalPath] = useState(path.join(defaultPath, initialValues.name));
   // 表单错误列表
   // const [fieldsError, setFieldsError] = useState([]);
 
@@ -80,9 +70,7 @@ const CreateProject: React.FC<{
   const { resourceConfigList } = scenario;
 
   // 工程信息配置
-  const projectInfoConfig = scenario.fileTempList.find(
-    item => item.type === FILE_TEMPLATE_TYPE.INFO
-  );
+  const projectInfoConfig = scenario.fileTempList.find(item => item.type === FILE_TEMPLATE_TYPE.INFO);
 
   // projectInfo
   const projectInfoRef = useRef<TypeProjectInfo>(initialValues);
@@ -115,9 +103,7 @@ const CreateProject: React.FC<{
       })
       .then(result => {
         if (result.canceled) return;
-        setLocalPath(
-          path.join(result.filePaths[0], form.getFieldValue("name"))
-        );
+        setLocalPath(path.join(result.filePaths[0], form.getFieldValue("name")));
       });
   };
 
@@ -151,11 +137,7 @@ const CreateProject: React.FC<{
                   setLocalPath(value);
                 }}
               />
-              <Button
-                type="primary"
-                icon={<IconFindReplace />}
-                onClick={selectDir}
-              >
+              <Button type="primary" icon={<IconFindReplace />} onClick={selectDir}>
                 选择
               </Button>
             </div>
@@ -168,8 +150,7 @@ const CreateProject: React.FC<{
         handleCancel: () => drawerProps.onCancel && drawerProps.onCancel()
       },
       next: {
-        disabled:
-          isCreating /**|| fieldsError.flatMap(o => o.errors).length > 0 */,
+        disabled: isCreating /**|| fieldsError.flatMap(o => o.errors).length > 0 */,
         async handleNext() {
           return form
             .validate()
@@ -242,10 +223,7 @@ const CreateProject: React.FC<{
             throw new Error("未选择配置模板");
           }
           creatingStatus.setRight();
-          const resourceConfigPath = path.join(
-            resourceConfig.namespace,
-            resourceConfig.src
-          );
+          const resourceConfigPath = path.join(resourceConfig.namespace, resourceConfig.src);
           return window.$one.$server
             .createProject({
               root: localPath,
@@ -273,11 +251,7 @@ const CreateProject: React.FC<{
   const CancelButton = () => {
     if (!step.cancel) return null;
     return (
-      <Button
-        className="button-item"
-        onClick={step.cancel.handleCancel}
-        disabled={step.cancel.disabled}
-      >
+      <Button className="button-item" onClick={step.cancel.handleCancel} disabled={step.cancel.disabled}>
         取消
       </Button>
     );
@@ -286,11 +260,7 @@ const CreateProject: React.FC<{
   const PrevButton = () => {
     if (!step.prev) return null;
     return (
-      <Button
-        className="button-item"
-        onClick={step.prev.handlePrev}
-        disabled={step.prev.disabled}
-      >
+      <Button className="button-item" onClick={step.prev.handlePrev} disabled={step.prev.disabled}>
         上一步
       </Button>
     );
@@ -318,9 +288,7 @@ const CreateProject: React.FC<{
         type="primary"
         className="button-item"
         onClick={() => {
-          step.start
-            .handleStart()
-            .catch(err => Message.error({ content: err.Message }));
+          step.start.handleStart().catch(err => Message.error({ content: err.Message }));
         }}
         disabled={step.start.disabled}
         loading={isCreating}

@@ -15,12 +15,10 @@ const PageSelector: React.FC<{
   const pageConfigRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    pageConfigRef.current
-      ?.querySelector("div[data-active='true']")
-      ?.scrollIntoView({
-        block: "center",
-        behavior: "smooth"
-      });
+    pageConfigRef.current?.querySelector("div[data-active='true']")?.scrollIntoView({
+      block: "center",
+      behavior: "smooth"
+    });
   }, [pageConfigRef.current, pageSelect.config]);
 
   return (

@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  Form,
-  FormItemProps,
-  Input,
-  InputProps,
-  Select,
-  SelectProps
-} from "@arco-design/web-react";
+import { Form, FormItemProps, Input, InputProps, Select, SelectProps } from "@arco-design/web-react";
 
 import { projectInfoConfig } from "@/config/editor";
 
@@ -15,40 +8,26 @@ function getRuleNormalized(label: React.ReactNode) {
 }
 
 function getInputForm(formItemProps: FormItemProps, inputProps: InputProps) {
-  const rules = [
-    getRuleNormalized(formItemProps.label),
-    ...(formItemProps?.rules || [])
-  ];
+  const rules = [getRuleNormalized(formItemProps.label), ...(formItemProps?.rules || [])];
   return (
     <Form.Item
       rules={rules}
       shouldUpdate={(prevValues, currentValues) => prevValues !== currentValues}
       {...formItemProps}
     >
-      <Input
-        placeholder={`请填写${formItemProps.label || ""}`}
-        allowClear
-        {...inputProps}
-      />
+      <Input placeholder={`请填写${formItemProps.label || ""}`} allowClear {...inputProps} />
     </Form.Item>
   );
 }
 
-function getSelectForm(
-  props: FormItemProps,
-  selectProps: SelectProps,
-  selectList: { value: string; label: string }[]
-) {
+function getSelectForm(props: FormItemProps, selectProps: SelectProps, selectList: { value: string; label: string }[]) {
   return (
     <Form.Item
       {...props}
       rules={[getRuleNormalized(props.label), ...(props?.rules || [])]}
       shouldUpdate={(prevValues, currentValues) => prevValues !== currentValues}
     >
-      <Select
-        placeholder={`请选择${props.label || ""}`}
-        onChange={selectProps.onChange}
-      >
+      <Select placeholder={`请选择${props.label || ""}`} onChange={selectProps.onChange}>
         {selectList.map(item => (
           <Select.Option value={item.value} key={item.value}>
             {item.label}
@@ -60,9 +39,7 @@ function getSelectForm(
 }
 
 //
-export function ProjectInput(
-  props: { label: string; field: string } & InputProps
-): JSX.Element {
+export function ProjectInput(props: { label: string; field: string } & InputProps): JSX.Element {
   const { label, field } = props;
   return getInputForm({ label, field }, props);
 }

@@ -13,15 +13,12 @@ class ReactiveState<T extends Record<string, unknown>, K extends keyof T> {
         this.$replyEvent = $event;
       });
     }
-    (ipcMain || ipcRenderer).on(
-      IPC_EVENT.$reactiveSet,
-      ($event, $data: { prop: K; value: T[K] }) => {
-        this.hooks.forEach(hook => {
-          hook(this.state, $data.prop, $data.value);
-        });
-        this.state[$data.prop] = $data.value;
-      }
-    );
+    (ipcMain || ipcRenderer).on(IPC_EVENT.$reactiveSet, ($event, $data: { prop: K; value: T[K] }) => {
+      this.hooks.forEach(hook => {
+        hook(this.state, $data.prop, $data.value);
+      });
+      this.state[$data.prop] = $data.value;
+    });
   }
 
   private get isRenderer() {
@@ -53,15 +50,11 @@ class ReactiveState<T extends Record<string, unknown>, K extends keyof T> {
     return this.state;
   }
 
-  addSetterHook(
-    hook: <K extends keyof T>(obj: T, prop: K, value: T[K]) => void
-  ): void {
+  addSetterHook(hook: <K extends keyof T>(obj: T, prop: K, value: T[K]) => void): void {
     this.hooks.add(hook);
   }
 
-  removeSetterHook(
-    hook: <K extends keyof T>(obj: T, prop: K, value: T[K]) => void
-  ): void {
+  removeSetterHook(hook: <K extends keyof T>(obj: T, prop: K, value: T[K]) => void): void {
     this.hooks.delete(hook);
   }
 }

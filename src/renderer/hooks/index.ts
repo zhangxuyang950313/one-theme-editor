@@ -101,10 +101,7 @@ export function useListenerBroadcast(): {
 }
 
 // 创建带状态的异步函数
-export function useCreatePromiseHook<T>(
-  promise: () => Promise<T>,
-  defaultVal: T
-): [T, LOAD_STATUS, () => Promise<T>] {
+export function useCreatePromiseHook<T>(promise: () => Promise<T>, defaultVal: T): [T, LOAD_STATUS, () => Promise<T>] {
   const [state, setState] = useState<T>(defaultVal);
   const [status, setStatus] = useState<LOAD_STATUS>(LOAD_STATUS.INITIAL);
   const handleFetch: () => Promise<T> = async () => {

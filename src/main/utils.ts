@@ -1,12 +1,5 @@
 // import * as electronStore from "src/store";
-import {
-  app,
-  Display,
-  Point,
-  Rectangle,
-  screen,
-  BrowserWindow
-} from "electron";
+import { app, Display, Point, Rectangle, screen, BrowserWindow } from "electron";
 
 // 保存当前聚焦窗口的屏幕中心坐标
 export async function saveCurrentDisplayCenter(): Promise<void> {
@@ -27,11 +20,7 @@ export function moveWindowToCenter(win: BrowserWindow): void {
   const { x, y } = { x: 200, y: 200 };
   const [width, height] = win.getSize();
   if (x && width && y && height) {
-    win.setPosition(
-      Math.floor(x - width / 2),
-      Math.floor(y - height / 2),
-      false
-    );
+    win.setPosition(Math.floor(x - width / 2), Math.floor(y - height / 2), false);
   }
 }
 

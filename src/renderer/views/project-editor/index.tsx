@@ -47,10 +47,7 @@ const EditorFrame: React.FC = () => {
   // 设置进程间响应式数据
   useLayoutEffect(() => {
     if (!resourceConfig) return;
-    const resourcePath = path.join(
-      PathUtil.RESOURCE_CONFIG,
-      resourceConfig.namespace
-    );
+    const resourcePath = path.join(PathUtil.RESOURCE_CONFIG, resourceConfig.namespace);
     window.$one.$reactive.set("resourceConfig", resourceConfig);
     window.$one.$reactive.set("resourcePath", resourcePath);
     return () => {
@@ -63,35 +60,29 @@ const EditorFrame: React.FC = () => {
   useLayoutEffect(() => {
     if (!uuid) return;
     const fetchProject = async () => {
-      const projectData = await window.$one.$server
-        .findProjectQuery({ uuid })
-        .catch(err => {
-          Notification.error({
-            title: "获取工程信息失败",
-            content: err.message
-          });
+      const projectData = await window.$one.$server.findProjectQuery({ uuid }).catch(err => {
+        Notification.error({
+          title: "获取工程信息失败",
+          content: err.message
         });
+      });
       if (!projectData?.resourceSrc) return;
 
-      const scenarioConfig = await window.$one.$server
-        .getScenarioConfig(projectData.scenarioSrc)
-        .catch(err => {
-          Notification.error({
-            title: "获取场景配置失败",
-            content: err.message
-          });
-          return ScenarioConfig.default;
+      const scenarioConfig = await window.$one.$server.getScenarioConfig(projectData.scenarioSrc).catch(err => {
+        Notification.error({
+          title: "获取场景配置失败",
+          content: err.message
         });
+        return ScenarioConfig.default;
+      });
 
-      const resourceConfig = await window.$one.$server
-        .getResourceConfig(projectData.resourceSrc)
-        .catch(err => {
-          Notification.error({
-            title: "获取资源配置失败",
-            content: err.message
-          });
-          return ResourceConfig.default;
+      const resourceConfig = await window.$one.$server.getResourceConfig(projectData.resourceSrc).catch(err => {
+        Notification.error({
+          title: "获取资源配置失败",
+          content: err.message
         });
+        return ResourceConfig.default;
+      });
 
       setProjectState(() => ({
         projectData,
